@@ -2,7 +2,7 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/devmhanational/public_html
-    - /bin/cp -r * $DEPLOYPATH
+    - /bin/cp -R * $DEPLOYPATH
 
 
 
@@ -15,4 +15,3 @@ deployment:
 # - /bin cp * $DEPLOYPATH                           #copy all from root
 # - /bin cp /<sub_folder>/* $DEPLOYPATH             #copy all from sub folder root
 # - /bin/cp -r * $DEPLOYPATH                        #copy all recursively to $DEPLOYPATH
-
