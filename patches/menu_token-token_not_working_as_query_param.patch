@@ -1,0 +1,42 @@
+diff --git a/menu_token.module b/menu_token.module
+index 6f0d91c..2fbd9b7 100644
+--- a/menu_token.module
++++ b/menu_token.module
+@@ -386,9 +386,17 @@
+   $config_menu = \Drupal::entityTypeManager()->getStorage('link_configuration_storage')->load($uuId_from_link);
+ 
+   // Replace nothing to mess here all action is in hook.
+-  if (!empty($config_menu)) {
++  if (!empty($config_menu)) 
++  {
+     $configuration = unserialize($config_menu->configurationSerialized);
+-    $links[$relevant_link['id']][$replace_with] = $token_service->replace($links[$relevant_link['id']][$replace_with], [], ["configuration" => $configuration], $bubbleableMetadata);
++    if (isset($links[$relevant_link['id']][$replace_with])) 
++    {
++        $links[$relevant_link['id']][$replace_with] = $token_service->replace($config_menu->linkid, [], ["configuration" => $configuration], $bubbleableMetadata);
++    }
++    else if ($replace_with == 'query' && isset($links[$relevant_link['id']]['options'][$replace_with])) 
++    {
++      $links[$relevant_link['id']]['options']['query'] = $token_service->replaceArray($links[$relevant_link['id']]['options']['query'], [], ["configuration" => $configuration], $bubbleableMetadata);
++    }
+     $links[$relevant_link['id']]["options"]["bubleble_metadata"] = $bubbleableMetadata;
+   }
+ }
+@@ -404,6 +412,8 @@
+   foreach ($links as $key => $linkData) {
+     $links[$key]["link"]["url"] = $token_service->replace($linkData["link"]["url"], [], ["configuration" => $linkData["config"]], $bubbleable_metadata);
+     $links[$key]["link"]["title"] = $token_service->replace($linkData["link"]["title"], [], ["configuration" => $linkData["config"]], $bubbleable_metadata);
++    isset($links[$key]["link"]["options"]["query"]) ?
++       $links[$key]["link"]["options"]["query"] = $token_service->replaceArray($linkData["link"]["options"]["query"], [], ["configuration" => $linkData["config"]], $bubbleable_metadata) : $links[$key]["link"]["options"]["query"] = [];
+     $links[$key]["link"]["options"]["bubleble_metadata"] = $bubbleable_metadata;
+     $links[$key] = $links[$key]["link"];
+   }
+@@ -445,7 +455,8 @@
+         $context_manager->prepareContextualLinks($relevant_link, $config);
+         replace_links_with_tokens($token_service, "url", $relevant_link, $links, $bubbleable_metadata);
+         replace_links_with_tokens($token_service, "title", $relevant_link, $links, $bubbleable_metadata);
++        replace_links_with_tokens($token_service, "query", $relevant_link, $links, $bubbleable_metadata);
+       }
+     }
+   }
+ }

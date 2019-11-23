@@ -1,0 +1,13 @@
+name: Salesforce Example
+type: module
+description: Salesforce Examples
+core: 8.x
+package: Salesforce
+dependencies:
+  - salesforce:salesforce_push
+  - salesforce:salesforce_mapping
+
+# Information added by Drupal.org packaging script on 2019-10-29
+version: '8.x-3.5'
+project: 'salesforce'
+datestamp: 1572375191

@@ -1,0 +1,25 @@
+{
+  "name": "drupal/salesforce_soap",
+  "description": "Wrapper for Salesforce SOAP API client.",
+  "type": "drupal-module",
+  "homepage": "https://drupal.org/project/salesforce",
+  "authors": [
+    {
+      "name": "Aaron Bauman (aaronbauman)",
+      "homepage": "https://www.drupal.org/u/aaronbauman",
+      "role": "Maintainer"
+    },
+    {
+      "name": "Alexander Rhodes (ironsizide)",
+      "homepage": "https://www.drupal.org/u/ironsizide",
+      "role": "Maintainer"
+    }
+  ],
+  "support": {
+    "issues": "https://drupal.org/project/issues/salesforce",
+    "source": "http://cgit.drupalcode.org/salesforce"
+  },
+  "require": {
+    "messageagency/force.com-toolkit-for-php": "^1.0.0"
+  }
+}

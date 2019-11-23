@@ -1,0 +1,14 @@
+name: Salesforce Webform
+type: module
+description: Adds support for webforms fields in Salesforce Mapping.
+package: Salesforce
+core: 8.x
+
+dependencies:
+  - salesforce:salesforce_mapping
+  - webform:webform
+
+# Information added by Drupal.org packaging script on 2019-10-29
+version: '8.x-3.5'
+project: 'salesforce'
+datestamp: 1572375191

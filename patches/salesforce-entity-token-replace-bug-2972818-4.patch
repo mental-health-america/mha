@@ -1,0 +1,32 @@
+From d788b200b8d61925541dcc9edbd27f7535b5fec0 Mon Sep 17 00:00:00 2001
+From: Chris Caldwell <chrisolof@gmail.com>
+Date: Tue, 15 May 2018 15:53:50 -0600
+Subject: [PATCH] Fix token support
+
+---
+ .../src/Plugin/SalesforceMappingField/Token.php                  | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/modules/salesforce_mapping/src/Plugin/SalesforceMappingField/Token.php b/modules/salesforce_mapping/src/Plugin/SalesforceMappingField/Token.php
+index 14b8545..51d26da 100644
+--- a/modules/salesforce_mapping/src/Plugin/SalesforceMappingField/Token.php
++++ b/modules/salesforce_mapping/src/Plugin/SalesforceMappingField/Token.php
+@@ -82,11 +82,12 @@ class Token extends SalesforceMappingFieldPluginBase {
+    *
+    */
+   public function value(EntityInterface $entity, SalesforceMappingInterface $mapping) {
+-    // Even though everything is an entity, some token functions expect to
+-    // receive the entity keyed by entity type.
+     $text = $this->config('drupal_field_value');
+-    $data = ['entity' => $entity, get_class($entity) => $entity];
+-    return $this->token->replace($text, $data);
++    $data = [$entity->getEntityTypeId() => $entity];
++    $options = ['clear' => TRUE];
++    $result = $this->token->replace($text, $data, $options);
++    // If we have something, return it.  Otherwise return NULL.
++    return (trim($result) != '') ? $result : NULL;
+   }
+ 
+   /**
+-- 
+2.7.4

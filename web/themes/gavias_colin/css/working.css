@@ -1,0 +1,29 @@
+/* 458px */
+@media (max-width: 458px) {
+  .tp-leftarrow.tparrows.noSwipe,
+  .tp-rightarrow.tparrows.noSwipe {
+    display: none;
+  }
+
+  .tp-caption.text p {
+    max-width: 80% !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px !important;
+  }
+
+  .tp-mask-wrap h1,
+  .tp-mask-wrap h2,
+  .tp-mask-wrap h3 {
+    max-width: 90% !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 20px !important;
+  }
+
+  a.slider-button-white {
+    padding: 2px 15px;
+  }
+}

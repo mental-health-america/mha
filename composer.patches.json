@@ -1,0 +1,16 @@
+{
+  "patches": {
+    "drupal/core":{
+      "Tokens in query string Not Replaced: https://www.drupal.org/project/drupal/issues/2978657": "patches/core-token_not_working_as_query_param.patch"
+    },
+    "drupal/menu_token":{
+       "Token Menu issue: https://www.drupal.org/project/drupal/issues/2790121": "patches/menu_token-no_context_fix-2923651-3.patch"
+      ,"Token Menu issue (query params): https://www.drupal.org/project/menu_token/issues/2948260": "patches/menu_token-token_not_working_as_query_param.patch"
+      ,"Webform Token Token fix": "patches/menu_token-webform_token_token_fix_1.patch"
+   },
+    "drupal/rules":{
+       "Condition UserHasRole throws an error": "patches/2816157-10.patch"
+      ,"Select lists in action & condition configuration forms": "patches/2664280-25.select_lists.patch"
+    }
+  }
+}

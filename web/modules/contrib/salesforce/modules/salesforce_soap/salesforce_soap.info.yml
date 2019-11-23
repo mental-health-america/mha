@@ -1,0 +1,13 @@
+name: Salesforce Soap
+type: module
+description: Exposes a SoapClient service for communicating with the Salesforce SOAP API.
+package: Salesforce
+core: 8.x
+
+dependencies:
+  - salesforce:salesforce
+
+# Information added by Drupal.org packaging script on 2019-10-29
+version: '8.x-3.5'
+project: 'salesforce'
+datestamp: 1572375191
