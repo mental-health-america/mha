@@ -1,2 +1,0 @@
-# mha
-MHA corporate website
