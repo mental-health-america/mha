@@ -2,8 +2,7 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/devmhanational/public_html/
-    - /bin/cp -R /home/devmhanational/repositories/testing $DEPLOYPATH
-
+    - /bin/cp cp -r * $DEPLOYPATH
 
 
 
