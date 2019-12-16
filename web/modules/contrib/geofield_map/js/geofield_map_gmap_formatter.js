@@ -348,8 +348,9 @@
           // Create the DIV to hold the control and call the mapResetControl()
           // constructor passing in this DIV.
           var mapResetControlDiv = document.createElement('div');
-          new self.map_reset_control(mapResetControlDiv, mapid);
+          mapResetControlDiv.style.zIndex = "10";
           mapResetControlDiv.index = 1;
+          new self.map_reset_control(mapResetControlDiv, mapid);
           map.controls[google.maps.ControlPosition[mapResetControlPosition]].push(mapResetControlDiv);
         }
 
