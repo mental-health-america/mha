@@ -26,6 +26,11 @@ if(!class_exists('element_gva_instagram')):
                   'title'     => t('Username'),
                ),
                array(
+                  'id'        => 'access_token',
+                  'type'      => 'text',
+                  'title'     => t('Access Token '),
+               ),
+               array(
                   'id'        => 'number',
                   'type'      => 'text',
                   'title'     => t('Number'),
@@ -80,7 +85,7 @@ if(!class_exists('element_gva_instagram')):
                   'id'        => 'animate_delay',
                   'type'      => 'select',
                   'title'     => t('Animation Delay'),
-                  'options'   => gavias_content_builder_delay_aos(),
+                  'options'   => gavias_content_builder_delay_wow(),
                   'desc'      => '0 = default',
                   'class'     => 'width-1-2'
                ), 
@@ -101,6 +106,7 @@ if(!class_exists('element_gva_instagram')):
             'title'           => '',
             'content'         => '',
             'username'        => '',
+            'access_token'    => '',
             'number'          => '6',
             'columns'         => '5',
             'columns_sm'      => '4',
@@ -114,46 +120,95 @@ if(!class_exists('element_gva_instagram')):
          
          $el_class .= ' ' . $style;
 
-         $results_array = false;
-         if($username){
-            $results_array = scrape_insta_hash($username);
-         }
-         if($link && $results_array){
-            $link = 'https://' . $results_array['hostname'] . '/' . $username;
-         }
-         if($animate) $el_class .= ' wow ' . $animate; 
-         ?>
-         <?php ob_start() ?>
-         <div class="widget gsc-instagram <?php print $el_class; ?>" <?php print gavias_content_builder_print_animate_wow('', $animate_delay) ?>>
-            <div class="widget-heading">
-               <?php if($title){ ?>
-                  <div class="title"><?php print $title ?> <?php if($link) print "<a href=\"{$link}\">{$username}</a>"; ?></div>
-               <?php } ?>
-               <?php if($content){ ?>
-                  <div class="desc"><?php print $content; ?></div>
-               <?php } ?>
-            </div>
-            <?php
-            
+         if(empty($access_token)){ // doesn't using token
+
+            $results_array = false;
+            if($username){
+               $results_array = scrape_insta_hash($username);
+            }
+            if($link && $results_array){
+               $link = 'https://' . $results_array['hostname'] . '/' . $username;
+            }
+            if($animate) $el_class .= ' wow ' . $animate; 
             ?>
-            <div class="widget-content">
-               <div class="owl-carousel init-carousel-owl" data-items="<?php print $columns ?>" data-items_lg="<?php print $columns ?>" data-items_md="<?php print $columns_md ?>" data-items_sm="<?php print $columns_sm ?>" data-items_xs="2" data-loop="1" data-speed="500" data-auto_play="1" data-auto_play_speed="2000" data-auto_play_timeout="3000" data-auto_play_hover="1" data-navigation="0" data-rewind_nav="0" data-pagination="0" data-mouse_drag="1" data-touch_drag="1">
-                  <?php 
-                     if($results_array){
-                        for ($i=0; $i <= $number; $i++) { 
-                           if(isset($results_array['entry_data']['ProfilePage'][0]['graphql']['user']['edge_owner_to_timeline_media']['edges'][$i]['node'])){
+            <?php ob_start() ?>
+            <div class="widget gsc-instagram <?php print $el_class; ?>" <?php print gavias_content_builder_print_animate_wow('', $animate_delay) ?>>
+               <div class="widget-heading">
+                  <?php if($title){ ?>
+                     <div class="title"><?php print $title ?> <?php if($link) print "<a href=\"{$link}\">{$username}</a>"; ?></div>
+                  <?php } ?>
+                  <?php if($content){ ?>
+                     <div class="desc"><?php print $content; ?></div>
+                  <?php } ?>
+               </div>
+               <?php
+               
+               ?>
+               <div class="widget-content">
+                  <div class="owl-carousel init-carousel-owl" data-items="<?php print $columns ?>" data-items_lg="<?php print $columns ?>" data-items_md="<?php print $columns_md ?>" data-items_sm="<?php print $columns_sm ?>" data-items_xs="2" data-loop="1" data-speed="500" data-auto_play="1" data-auto_play_speed="2000" data-auto_play_timeout="3000" data-auto_play_hover="1" data-navigation="0" data-rewind_nav="0" data-pagination="0" data-mouse_drag="1" data-touch_drag="1">
+                     <?php 
+                        if($results_array){
+
+                           for ($i=0; $i <= $number; $i++) { 
                               $image = $results_array['entry_data']['ProfilePage'][0]['graphql']['user']['edge_owner_to_timeline_media']['edges'][$i]['node'];
                               print '<div class="instagram-image item"><a data-rel="prettyPhoto[g_gal]" href="'.$image['display_url'].'"><img src="'.$image['thumbnail_src'].'" alt=""/></a></div>';
                            }
                         }
-                     }
-                  ?>
+                     ?>
+                  </div>
                </div>
             </div>
-         </div>
-         <?php return ob_get_clean() ?>
-       <?php
+            <?php return ob_get_clean() ?>
+          <?php
+
+         }else{
+            $photo_count = $number;
+            $json_link = "https://api.instagram.com/v1/users/self/media/recent/?";
+            $json_link .="access_token={$access_token}&count={$photo_count}";
+            $json = file_get_contents($json_link);
+            $obj = json_decode(preg_replace('/("\w+"):(\d+)/', '\\1:"\\2"', $json), true);
+            if($link && $results_array){
+               $link = 'https://www.instagram.com/'. $username;
+            }
+         ?>
+            <?php ob_start() ?>
+            <div class="widget gsc-instagram <?php print $el_class; ?>" <?php print gavias_content_builder_print_animate_wow('', $animate_delay) ?>>
+               <div class="widget-heading">
+                  <?php if($title){ ?>
+                     <div class="title"><?php print $title ?> <?php if($link) print "<a href=\"{$link}\">{$username}</a>"; ?></div>
+                  <?php } ?>
+                  <?php if($content){ ?>
+                     <div class="desc"><?php print $content; ?></div>
+                  <?php } ?>
+               </div>
+               <?php
+               
+               ?>
+               <div class="widget-content">
+                  <div class="owl-carousel init-carousel-owl" data-items="<?php print $columns ?>" data-items_lg="<?php print $columns ?>" data-items_md="<?php print $columns_md ?>" data-items_sm="<?php print $columns_sm ?>" data-items_xs="2" data-loop="1" data-speed="500" data-auto_play="1" data-auto_play_speed="2000" data-auto_play_timeout="3000" data-auto_play_hover="1" data-navigation="0" data-rewind_nav="0" data-pagination="0" data-mouse_drag="1" data-touch_drag="1">
+                     <?php 
+
+                        foreach ($obj['data'] as $post){
+                           $pic_text = $post['caption']['text'];
+                           $pic_link = $post['link'];
+                           $pic_like_count = $post['likes']['count'];
+                           $pic_comment_count=$post['comments']['count'];
+                           $pic_src=str_replace("http://", "https://", $post['images']['standard_resolution']['url']);
+                           $pic_created_time=date("F j, Y", $post['caption']['created_time']);
+                           $pic_created_time=date("F j, Y", strtotime($pic_created_time . " +1 days"));
+                           print '<div class="instagram-image item"><a data-rel="prettyPhoto[g_gal]" href="'.$pic_src.'"><img src="'.$pic_src.'" alt=""/></a></div>';
+                        }
+                     ?>
+                  </div>
+               </div>
+            </div>
+            <?php return ob_get_clean() ?>
+
+            <?php
+         }
       }
 
    } 
 endif;   
+
+

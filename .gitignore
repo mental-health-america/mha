@@ -6,7 +6,8 @@
 /web/sites/*/*settings*.php
 /web/sites/*/*services*.yml
 /web/sites/development.services.yml
-
+/web/sites/default/settings.local.php
+/web/sites/default/settings.php
 # Ignore paths that may contain user-generated content
 /web/sites/*/files
 /web/sites/*/public
@@ -31,9 +32,7 @@
 #/web/.eslintignore
 #/web/.eslintrc.json
 #/web/.gitattributes
-web/.htaccess
 /web/.htaccess
-.htaccess
 #/autoload.php
 #/composer.lock
 #/web/index.php
@@ -111,6 +110,7 @@ fabric.properties
 
 ### PhpStorm Patch ###
 # Comment Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-215987721
+
 # *.iml
 # modules.xml
 # .idea/misc.xml
