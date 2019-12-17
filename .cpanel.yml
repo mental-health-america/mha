@@ -4,6 +4,7 @@ deployment:
     - export DEPLOYPATH=/home/mhanational/drupal
     - /bin/cp -R * $DEPLOYPATH
 
+######################
 #deployment:
 #tasks:
 #  - export DEPLOYPATH=/home/devmhanational/public_html  # Add /<app_folder> if required
