@@ -3055,67 +3055,6 @@
         }
     },
     {
-        "name": "drupal/back_to_top",
-        "version": "1.0.0",
-        "version_normalized": "1.0.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://git.drupalcode.org/project/back_to_top.git",
-            "reference": "8.x-1.0"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/back_to_top-8.x-1.0.zip",
-            "reference": "8.x-1.0",
-            "shasum": "28e17327f779bad5140ab55ef071a5f6727adbd7"
-        },
-        "require": {
-            "drupal/core": "~8.0"
-        },
-        "type": "drupal-module",
-        "extra": {
-            "branch-alias": {
-                "dev-1.x": "1.x-dev"
-            },
-            "drupal": {
-                "version": "8.x-1.0",
-                "datestamp": "1536664080",
-                "security-coverage": {
-                    "status": "covered",
-                    "message": "Covered by Drupal's security advisory policy"
-                }
-            }
-        },
-        "installation-source": "dist",
-        "notification-url": "https://packages.drupal.org/8/downloads",
-        "license": [
-            "GPL-2.0-or-later"
-        ],
-        "authors": [
-            {
-                "name": "Alsén",
-                "homepage": "https://www.drupal.org/user/1726528"
-            },
-            {
-                "name": "Nitesh Sethia",
-                "homepage": "https://www.drupal.org/user/2474982"
-            },
-            {
-                "name": "acke",
-                "homepage": "https://www.drupal.org/user/765764"
-            },
-            {
-                "name": "sumitmadan",
-                "homepage": "https://www.drupal.org/user/1538790"
-            }
-        ],
-        "description": "Back To Top adds a button that hovers in the bottom of your screen and allow users to smoothly scroll up the page using jQuery.",
-        "homepage": "https://www.drupal.org/project/back_to_top",
-        "support": {
-            "source": "https://git.drupalcode.org/project/back_to_top"
-        }
-    },
-    {
         "name": "drupal/backup_migrate",
         "version": "4.0.0",
         "version_normalized": "4.0.0.0",
@@ -4240,17 +4179,17 @@
     },
     {
         "name": "drupal/core",
-        "version": "8.8.0",
-        "version_normalized": "8.8.0.0",
+        "version": "8.8.1",
+        "version_normalized": "8.8.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/drupal/core.git",
-            "reference": "c4890669449ccbab770818de9c9cb7a9f0ffc32e"
+            "reference": "d339279f4c4b89477e0f4a8b775eb5dcb86b3087"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/drupal/core/zipball/c4890669449ccbab770818de9c9cb7a9f0ffc32e",
-            "reference": "c4890669449ccbab770818de9c9cb7a9f0ffc32e",
+            "url": "https://api.github.com/repos/drupal/core/zipball/d339279f4c4b89477e0f4a8b775eb5dcb86b3087",
+            "reference": "d339279f4c4b89477e0f4a8b775eb5dcb86b3087",
             "shasum": ""
         },
         "require": {
@@ -4275,7 +4214,7 @@
             "ext-xml": "*",
             "guzzlehttp/guzzle": "^6.3",
             "masterminds/html5": "^2.1",
-            "pear/archive_tar": "^1.4.8",
+            "pear/archive_tar": "^1.4.9",
             "php": ">=7.0.8",
             "stack/builder": "^1.0",
             "symfony-cmf/routing": "^1.4",
@@ -4416,7 +4355,7 @@
             "drupal/workflows": "self.version",
             "drupal/workspaces": "self.version"
         },
-        "time": "2019-12-04T08:44:18+00:00",
+        "time": "2019-12-18T10:34:03+00:00",
         "type": "drupal-core",
         "extra": {
             "drupal-scaffold": {
@@ -4955,18 +4894,18 @@
     },
     {
         "name": "drupal/embed",
-        "version": "1.2.0",
-        "version_normalized": "1.2.0.0",
+        "version": "1.3.0",
+        "version_normalized": "1.3.0.0",
         "source": {
             "type": "git",
             "url": "https://git.drupalcode.org/project/embed.git",
-            "reference": "8.x-1.2"
+            "reference": "8.x-1.3"
         },
         "dist": {
             "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/embed-8.x-1.2.zip",
-            "reference": "8.x-1.2",
-            "shasum": "1a5dd3ebe09f392798d3e2ded0c7a3445e449f84"
+            "url": "https://ftp.drupal.org/files/projects/embed-8.x-1.3.zip",
+            "reference": "8.x-1.3",
+            "shasum": "141be860f2d2e1df67904995fa43774fee355328"
         },
         "require": {
             "drupal/core": "^8.7"
@@ -4977,8 +4916,8 @@
                 "dev-1.x": "1.x-dev"
             },
             "drupal": {
-                "version": "8.x-1.2",
-                "datestamp": "1576259580",
+                "version": "8.x-1.3",
+                "datestamp": "1576704484",
                 "security-coverage": {
                     "status": "covered",
                     "message": "Covered by Drupal's security advisory policy"
@@ -6174,59 +6113,6 @@
         "support": {
             "source": "http://cgit.drupalcode.org/fontyourface",
             "issues": "https://drupal.org/project/issues/fontyourface"
-        }
-    },
-    {
-        "name": "drupal/fraction",
-        "version": "1.3.0",
-        "version_normalized": "1.3.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://git.drupalcode.org/project/fraction.git",
-            "reference": "8.x-1.3"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/fraction-8.x-1.3.zip",
-            "reference": "8.x-1.3",
-            "shasum": "a0704da202c6ee0ff1297d063c3056fb0d3ab89d"
-        },
-        "require": {
-            "drupal/core": "*"
-        },
-        "type": "drupal-module",
-        "extra": {
-            "branch-alias": {
-                "dev-1.x": "1.x-dev"
-            },
-            "drupal": {
-                "version": "8.x-1.3",
-                "datestamp": "1539009780",
-                "security-coverage": {
-                    "status": "covered",
-                    "message": "Covered by Drupal's security advisory policy"
-                }
-            }
-        },
-        "installation-source": "dist",
-        "notification-url": "https://packages.drupal.org/8/downloads",
-        "license": [
-            "GPL-2.0+"
-        ],
-        "authors": [
-            {
-                "name": "m.stenta",
-                "homepage": "https://www.drupal.org/user/581414"
-            }
-        ],
-        "description": "Provides a field for storing decimals as fractions, for maximum precision.",
-        "homepage": "https://www.drupal.org/project/fraction",
-        "keywords": [
-            "Drupal"
-        ],
-        "support": {
-            "source": "http://cgit.drupalcode.org/fraction",
-            "issues": "http://drupal.org/project/issues/fraction"
         }
     },
     {
@@ -7845,21 +7731,21 @@
     },
     {
         "name": "drupal/redirect",
-        "version": "1.4.0",
-        "version_normalized": "1.4.0.0",
+        "version": "1.5.0",
+        "version_normalized": "1.5.0.0",
         "source": {
             "type": "git",
             "url": "https://git.drupalcode.org/project/redirect.git",
-            "reference": "8.x-1.4"
+            "reference": "8.x-1.5"
         },
         "dist": {
             "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/redirect-8.x-1.4.zip",
-            "reference": "8.x-1.4",
-            "shasum": "4c7e0dc0ab0cbcc7d66e16cc684882c0eaa71c1c"
+            "url": "https://ftp.drupal.org/files/projects/redirect-8.x-1.5.zip",
+            "reference": "8.x-1.5",
+            "shasum": "7940acfb28bd802235d159f1c7a9a58e89dd3d15"
         },
         "require": {
-            "drupal/core": "~8"
+            "drupal/core": "^8.7.7 || ^9"
         },
         "type": "drupal-module",
         "extra": {
@@ -7867,8 +7753,8 @@
                 "dev-1.x": "1.x-dev"
             },
             "drupal": {
-                "version": "8.x-1.4",
-                "datestamp": "1561757585",
+                "version": "8.x-1.5",
+                "datestamp": "1576656784",
                 "security-coverage": {
                     "status": "covered",
                     "message": "Covered by Drupal's security advisory policy"
@@ -8831,6 +8717,55 @@
         }
     },
     {
+        "name": "drupal/twig_field_value",
+        "version": "1.2.0",
+        "version_normalized": "1.2.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://git.drupalcode.org/project/twig_field_value.git",
+            "reference": "8.x-1.2"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://ftp.drupal.org/files/projects/twig_field_value-8.x-1.2.zip",
+            "reference": "8.x-1.2",
+            "shasum": "dd5bfb64bc455ca262b3bdc6b489fdb08b2b8538"
+        },
+        "require": {
+            "drupal/core": "~8.0"
+        },
+        "type": "drupal-module",
+        "extra": {
+            "branch-alias": {
+                "dev-1.x": "1.x-dev"
+            },
+            "drupal": {
+                "version": "8.x-1.2",
+                "datestamp": "1549817580",
+                "security-coverage": {
+                    "status": "covered",
+                    "message": "Covered by Drupal's security advisory policy"
+                }
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packages.drupal.org/8/downloads",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "authors": [
+            {
+                "name": "Sutharsan",
+                "homepage": "https://www.drupal.org/user/73854"
+            }
+        ],
+        "description": "Twig filters for value(s) and label.",
+        "homepage": "https://www.drupal.org/project/twig_field_value",
+        "support": {
+            "source": "https://git.drupalcode.org/project/twig_field_value"
+        }
+    },
+    {
         "name": "drupal/twitter_feed",
         "version": "1.3.0",
         "version_normalized": "1.3.0.0",
@@ -9370,80 +9305,6 @@
         "homepage": "https://www.drupal.org/project/webform",
         "support": {
             "source": "https://git.drupalcode.org/project/webform"
-        }
-    },
-    {
-        "name": "drupal/webform_score",
-        "version": "2.0.0-alpha1",
-        "version_normalized": "2.0.0.0-alpha1",
-        "source": {
-            "type": "git",
-            "url": "https://git.drupalcode.org/project/webform_score.git",
-            "reference": "8.x-2.0-alpha1"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/webform_score-8.x-2.0-alpha1.zip",
-            "reference": "8.x-2.0-alpha1",
-            "shasum": "39b4a6fca40aa10b3ac7175ecdf399d16d1aec00"
-        },
-        "require": {
-            "drupal/core": "~8.0",
-            "drupal/fraction": "^1.3",
-            "drupal/webform": "^5.0"
-        },
-        "type": "drupal-module",
-        "extra": {
-            "branch-alias": {
-                "dev-2.x": "2.x-dev"
-            },
-            "drupal": {
-                "version": "8.x-2.0-alpha1",
-                "datestamp": "1541513880",
-                "security-coverage": {
-                    "status": "not-covered",
-                    "message": "Alpha releases are not covered by Drupal security advisories."
-                }
-            }
-        },
-        "installation-source": "dist",
-        "notification-url": "https://packages.drupal.org/8/downloads",
-        "license": [
-            "GPL-2.0+"
-        ],
-        "authors": [
-            {
-                "name": "Mike Miles (mikemiles86)",
-                "homepage": "https://www.drupal.org/u/mikemiles86",
-                "role": "Maintainer"
-            },
-            {
-                "name": "Rob Powell (robpowell)",
-                "homepage": "https://www.drupal.org/u/robpowell",
-                "role": "Maintainer"
-            },
-            {
-                "name": "Kay VanValkenburgh (key_v)",
-                "homepage": "https://www.drupal.org/u/kay_v",
-                "role": "Maintainer"
-            },
-            {
-                "name": "mikemiles86",
-                "homepage": "https://www.drupal.org/user/471470"
-            },
-            {
-                "name": "robpowell",
-                "homepage": "https://www.drupal.org/user/3417529"
-            }
-        ],
-        "description": "This module provides scoring functionality to webform elements.",
-        "homepage": "https://www.drupal.org/project/webform_score",
-        "keywords": [
-            "Drupal"
-        ],
-        "support": {
-            "source": "http://cgit.drupalcode.org/webform_score",
-            "issues": "https://www.drupal.org/project/issues/webform_score"
         }
     },
     {
@@ -11413,35 +11274,35 @@
     },
     {
         "name": "phpspec/prophecy",
-        "version": "1.9.0",
-        "version_normalized": "1.9.0.0",
+        "version": "1.10.0",
+        "version_normalized": "1.10.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/phpspec/prophecy.git",
-            "reference": "f6811d96d97bdf400077a0cc100ae56aa32b9203"
+            "reference": "d638ebbb58daba25a6a0dc7969e1358a0e3c6682"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/phpspec/prophecy/zipball/f6811d96d97bdf400077a0cc100ae56aa32b9203",
-            "reference": "f6811d96d97bdf400077a0cc100ae56aa32b9203",
+            "url": "https://api.github.com/repos/phpspec/prophecy/zipball/d638ebbb58daba25a6a0dc7969e1358a0e3c6682",
+            "reference": "d638ebbb58daba25a6a0dc7969e1358a0e3c6682",
             "shasum": ""
         },
         "require": {
             "doctrine/instantiator": "^1.0.2",
             "php": "^5.3|^7.0",
             "phpdocumentor/reflection-docblock": "^2.0|^3.0.2|^4.0|^5.0",
-            "sebastian/comparator": "^1.1|^2.0|^3.0",
+            "sebastian/comparator": "^1.2.3|^2.0|^3.0",
             "sebastian/recursion-context": "^1.0|^2.0|^3.0"
         },
         "require-dev": {
-            "phpspec/phpspec": "^2.5|^3.2",
+            "phpspec/phpspec": "^2.5 || ^3.2",
             "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.5 || ^7.1"
         },
-        "time": "2019-10-03T11:07:50+00:00",
+        "time": "2019-12-17T16:54:23+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "1.8.x-dev"
+                "dev-master": "1.10.x-dev"
             }
         },
         "installation-source": "dist",
@@ -14791,17 +14652,17 @@
     },
     {
         "name": "symfony/var-dumper",
-        "version": "v4.4.1",
-        "version_normalized": "4.4.1.0",
+        "version": "v4.4.2",
+        "version_normalized": "4.4.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/var-dumper.git",
-            "reference": "0a89a1dbbedd9fb2cfb2336556dec8305273c19a"
+            "reference": "be330f919bdb395d1e0c3f2bfb8948512d6bdd99"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/var-dumper/zipball/0a89a1dbbedd9fb2cfb2336556dec8305273c19a",
-            "reference": "0a89a1dbbedd9fb2cfb2336556dec8305273c19a",
+            "url": "https://api.github.com/repos/symfony/var-dumper/zipball/be330f919bdb395d1e0c3f2bfb8948512d6bdd99",
+            "reference": "be330f919bdb395d1e0c3f2bfb8948512d6bdd99",
             "shasum": ""
         },
         "require": {
@@ -14824,7 +14685,7 @@
             "ext-intl": "To show region name in time zone dump",
             "symfony/console": "To use the ServerDumpCommand and/or the bin/var-dump-server script"
         },
-        "time": "2019-11-28T13:33:56+00:00",
+        "time": "2019-12-18T13:41:29+00:00",
         "bin": [
             "Resources/bin/var-dump-server"
         ],
@@ -15145,17 +15006,17 @@
     },
     {
         "name": "webflo/drupal-core-require-dev",
-        "version": "8.8.0",
-        "version_normalized": "8.8.0.0",
+        "version": "8.8.1",
+        "version_normalized": "8.8.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/webflo/drupal-core-require-dev.git",
-            "reference": "175535d94c4580901e153b51571cfd67ef443dc2"
+            "reference": "5685684fd06541b8e4a453371542fe04455a56d2"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/webflo/drupal-core-require-dev/zipball/175535d94c4580901e153b51571cfd67ef443dc2",
-            "reference": "175535d94c4580901e153b51571cfd67ef443dc2",
+            "url": "https://api.github.com/repos/webflo/drupal-core-require-dev/zipball/5685684fd06541b8e4a453371542fe04455a56d2",
+            "reference": "5685684fd06541b8e4a453371542fe04455a56d2",
             "shasum": ""
         },
         "require": {
@@ -15164,7 +15025,7 @@
             "behat/mink-selenium2-driver": "1.3.x-dev",
             "composer/composer": "^1.9.1",
             "drupal/coder": "^8.3.2",
-            "drupal/core": "8.8.0",
+            "drupal/core": "8.8.1",
             "jcalderonzumba/gastonjs": "^1.0.2",
             "jcalderonzumba/mink-phantomjs-driver": "^0.3.1",
             "justinrainbow/json-schema": "^5.2",
@@ -15179,7 +15040,7 @@
             "symfony/lock": "~3.4.0",
             "symfony/phpunit-bridge": "^3.4.3"
         },
-        "time": "2019-12-04T09:01:49+00:00",
+        "time": "2019-12-18T19:01:47+00:00",
         "type": "metapackage",
         "notification-url": "https://packagist.org/downloads/",
         "license": [
