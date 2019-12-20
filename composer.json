@@ -59,6 +59,7 @@
         "drupal/admin_toolbar": "^1.27",
         "drupal/anchor_link": "^2.0",
         "drupal/asset_injector": "^2.4",
+        "drupal/back_to_top": "^1.0",
         "drupal/backup_migrate": "^4.0",
         "drupal/better_exposed_filters": "^3.0",
         "drupal/blazy": "^2.0@RC",
@@ -73,6 +74,7 @@
         "drupal/content_access": "^1.0@alpha",
         "drupal/contribute": "^5.0@beta",
         "drupal/core": "^8.6.0",
+        "drupal/core-dev": "^8.8",
         "drupal/ctools": "^3.2",
         "drupal/date_popup": "^1.0",
         "drupal/devel": "^2.0",
@@ -143,13 +145,13 @@
         "drupal/webform_views": "^5.0",
         "drush/drush": "^9.6",
         "google/charts": "^45.0",
+        "psr/container": "^1.0",
         "vlucas/phpdotenv": "^2.4",
         "webflo/drupal-finder": "^1.0.0",
         "webmozart/path-util": "^2.3",
         "zaporylie/composer-drupal-optimizations": "^1.0"
     },
     "require-dev": {
-        "webflo/drupal-core-require-dev": "^8.6.0"
     },
     "conflict": {
         "drupal/drupal": "*"
