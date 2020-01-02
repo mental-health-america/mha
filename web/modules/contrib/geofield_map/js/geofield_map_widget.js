@@ -249,30 +249,30 @@
       var reverse_geocode_storage = self.get_reverse_geocode_storage(mapid, latlng);
       if (localStorage && self.map_data[mapid].geocode_cache.clientside && self.map_data[mapid].geocode_cache.clientside !== '_none_' && reverse_geocode_storage !== null) {
         self.map_data[mapid].search.val(reverse_geocode_storage);
-        self.setGeoaddressField(latlng, reverse_geocode_storage);
+        self.setGeoaddressField(mapid, reverse_geocode_storage);
       }
       else if (self.map_data[mapid].gmap_geocoder === 1) {
         var providers = self.map_data[mapid].gmap_geocoder_settings.providers.toString();
         var options = self.map_data[mapid].gmap_geocoder_settings.options;
         self.geocoder_reverse_geocode(latlng, providers, options).done(function (results, status, jqXHR) {
           if(status === 'success' && results[0]) {
-            self.set_reverse_geocode_result(mapid, results[0].formatted_address)
+            self.set_reverse_geocode_result(mapid, latlng, results[0].formatted_address)
           }
         });
       }
       else if (self.geocoder) {
         self.geocoder.geocode({latLng: position}, function (results, status) {
           if (status === google.maps.GeocoderStatus.OK && results[0]) {
-            self.set_reverse_geocode_result(mapid, results[0].formatted_address)
+            self.set_reverse_geocode_result(mapid, latlng, results[0].formatted_address)
           }
         });
       }
       return status;
     },
 
-    // Write the Reverese Geocode result in the Search Input field, in the
+    // Write the Reverse Geocode result in the Search Input field, in the
     // Geoaddress-ed field and in the Localstorage.
-    set_reverse_geocode_result: function (mapid, formatted_address) {
+    set_reverse_geocode_result: function (mapid, latlng, formatted_address) {
       var self = this;
       self.map_data[mapid].search.val(formatted_address);
       self.setGeoaddressField(mapid, formatted_address);
@@ -465,7 +465,7 @@
 
     setGeoaddressField: function (mapid, address) {
       var self = this;
-      if (mapid) {
+      if (mapid && self.map_data[mapid].geoaddress_field) {
         self.map_data[mapid].geoaddress_field.val(address);
       }
     },
@@ -493,10 +493,11 @@
 
         // Define the Geocoder Search Field Selector.
         self.map_data[params.mapid].search = $('#' + params.searchid);
+      }
 
-        // Define the Geoaddress Associated Field Selector.
+      // Define the Geoaddress Associated Field Selector, if set.
+      if (params.geoaddress_field_id !== null) {
         self.map_data[params.mapid].geoaddress_field = $('#' + params.geoaddress_field_id);
-
       }
 
       // Define the Geofield Position.
@@ -674,7 +675,7 @@
         });
 
         // Set default search field value (just to the first geofield_map).
-        if (self.map_data[params.mapid].search && params.geoaddress_field_id !== null && !!self.map_data[params.mapid].geoaddress_field.val()) {
+        if (self.map_data[params.mapid].search && self.map_data[params.mapid].geoaddress_field && !!self.map_data[params.mapid].geoaddress_field.val()) {
           // Copy from the geoaddress_field.val.
           self.map_data[params.mapid].search.val(self.map_data[params.mapid].geoaddress_field.val());
         }
