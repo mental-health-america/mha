@@ -74,22 +74,10 @@ class DraggableViews {
   }
 
   /**
-   * Return array of field groups titles.
-   */
-  public function fieldGrouping() {
-    $fieldGrouping = [];
-    $sets = $this->view->style_plugin->renderGrouping($this->view->result, $this->view->style_plugin->options['grouping'], FALSE);
-    foreach ($sets as $title => $rows) {
-      $fieldGrouping[] = $title;
-    }
-    return $fieldGrouping;
-  }
-
-  /**
    * Get HTML id for draggableviews table.
    */
-  public function getHtmlId($index) {
-    return Html::getId('draggableviews-table-' . $this->view->id() . '-' . $this->view->current_display . '-' . $index);
+  public function getHtmlId() {
+    return Html::getId('draggableviews-table-' . $this->view->id() . '-' . $this->view->current_display);
   }
 
 }
