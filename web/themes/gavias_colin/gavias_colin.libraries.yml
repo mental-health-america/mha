@@ -42,12 +42,17 @@ global-styling:
     vendor/jquery.nicescroll.min.js: {}
     vendor/popup-gallery/js/lightgallery.min.js: {}
     js/main.js: {}
-    js/siteimprove.js: {}
     cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js: { type: external }
   dependencies:
     - core/jquery
     - core/drupal
     - core/drupalSettings
+
+global-js:
+    js:
+        js/siteimprove.js: {}        
+    dependencies:
+        - core/drupal
 
 gavias_colin.skin.default:
   version: VERSION

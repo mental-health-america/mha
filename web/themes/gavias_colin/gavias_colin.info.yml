@@ -4,6 +4,7 @@ description: 'A flexible, recolorable theme with many regions and a responsive, 
 package: gaviasthemes
 libraries:
   - gavias_colin/global-styling
+  - gavias_colin/global-js
   - core/jquery
 
 libraries-override:
