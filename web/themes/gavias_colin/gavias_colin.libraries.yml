@@ -42,7 +42,7 @@ global-styling:
     vendor/jquery.nicescroll.min.js: {}
     vendor/popup-gallery/js/lightgallery.min.js: {}
     js/main.js: {}
-    cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js: { type: external }
+    //cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js: { type: external }
   dependencies:
     - core/jquery
     - core/drupal
