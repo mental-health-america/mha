@@ -1,31 +1,6 @@
 ***
 ***
-
-# INSTALLATION
-Install the module as usual, more info can be found on:
-
-[Installing Drupal 8 Modules](https://drupal.org/node/1897420)
-
-Be sure to read the entire docs and form descriptions before working with
-Ultimenu to avoid headaches for just ~5-minute read.
-
-Ultimenu is so simple that it might hurt. Once you tame it, you'll love it!
-
-
-## REQUIREMENTS
-* Drupal core optional menu.module should be enabled.
-* Drupal **Main navigation** like at Standard profile:
-  **/admin/structure/menu/manage/main**
-
-  If not, just have a menu with the same machine name **main**.
-
-
-## RECOMMENDED
-* [Ajaxin](http://dgo.to/ajaxin)
-  To have decent loading animations.
-
-
-## USAGE / CONFIGURATION
+# <a name="configuration"> </a>CONFIGURATION
 Ultimenu supports multiple mega menus for the header, sidebars, or footer.
 
 Check out **OFF-CANVAS MENU** section below for the **Main navigation** part.
@@ -40,18 +15,52 @@ Ultimenu will create two things:
 * **regions** based on enabled Menu items (item titles, if not using HASH).
 
 
-## CONFIGURING OFF-CANVAS MENU (THE MAIN NAVIGATION)
-1. Visit **/admin/structure/ultimenu**.
+## CONFIGURING ULTIMENU BLOCKS
+* `/admin/structure/ultimenu`
+
+  1. *Toggle Ultimenu blocks*, choose *Main navigation*, etc. **Save!**.
+  2. *Toggle Ultimenu regions*. Once a menu is enabled and saved, dynamic
+     regions will be available here to toggle. Only enabled regions (based on
+     enabled menu items) will be visible at block/ context admin.
+  3. *Toggle Ultimenu goodies*. Adjust the rest here.
+
+* `/admin/structure/block`
+
+   Jump to [**OFF-CANVAS MENU**](#offcanvas) below for the Main navigation. Or
+   do the following for non off-canvas:
+   1. Hit *Place Block* at any region (Header, Footer, etc., except Ultimenu
+      regions!).
+   2. Search for *Ultimenu:* block, and hit *Place Block*. Edit + Save!
+      This is the super Ultimenu block which contains other blocks added at step
+      #3 below.
+   3. Scroll to bottom. Search for `Ultimenu:..` regions,
+      e.g.: `Ultimenu:footer: Home`, etc. Add other blocks to these Ultimenu
+      regions one at a time.
+
+To add more megamenus (sidebar, footer, etc), repeat this section for different
+Menus.
+
+
+## <a name="offcanvas"> </a>CONFIGURING OFF-CANVAS MENU (THE MAIN NAVIGATION)
+1. `/admin/structure/ultimenu`
+
    + Enable **Main navigation** under **Ultimenu blocks**.  
      Leave the rest alone till you get a grasp and or need more mega menus.  
      **Save!**
    + Once saved, enable any relevant region under **Ultimenu regions**.  
      **Save!**
 
-2. Visit **/admin/appearance**, and switch your theme temporarily to Bartik
-   to see it working immediately with default values.
-3. Clear cache, your theme needs to know the newly created regions.   
-4. Visit **/admin/structure/block**.    
+2. `/admin/appearance`
+
+   Switch your theme temporarily to Bartik to see it working immediately with
+   default values.
+
+3. `/admin/config/development/performance`
+
+   Clear cache, your theme needs to know the newly created regions.   
+
+4. `/admin/structure/block`
+
    + Under **Header** or any header region like **Primary menu**, hit **Place
      block** button.
    + Search for **Ultimenu: Main navigation**, hit **Place block** button.

@@ -1,7 +1,7 @@
 ***
 ***
 
-# TROUBLESHOOTING
+# <a name="troubleshooting"> </a>TROUBLESHOOTING
 Whenever a menu item is removed/disabled, the relevant region will be removed.
 If you manually copy/store them in theme .info, regions will always be visible,
 which is another case.
@@ -62,4 +62,5 @@ If you don't drush, before any module update, always open:
 [Performance](/admin/config/development/performance)
 
 And so you are ready to hit **Clear all caches** if any issue.
-Only at worst case, know how to run http://dgo.to/registry_rebuild safely.
+Only at worst case, know how to run https://drupal.org/project/registry_rebuild
+safely.

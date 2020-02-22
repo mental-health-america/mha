@@ -378,7 +378,7 @@ class UltimenuManager extends UltimenuBase implements UltimenuManagerInterface {
         $flyout_attributes['data-ultiajax-region'] = $region;
         $link_options['attributes']['data-ultiajax-trigger'] = TRUE;
       }
-      $title_html .= '<span class="caret" area-hidden="true"></span>';
+      $title_html .= '<span class="caret" aria-hidden="true"></span>';
     }
 
     $extra_classes = isset($link_options['attributes']['class']) ? $link_options['attributes']['class'] : [];

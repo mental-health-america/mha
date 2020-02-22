@@ -142,17 +142,17 @@ class UltimenuSkin extends UltimenuBase implements UltimenuSkinInterface {
 
         $files = [];
         if (is_dir($module_skin)) {
-          foreach (file_scan_directory($module_skin, $mask) as $filename => $file) {
+          foreach ($this->fileSystem->scanDirectory($module_skin, $mask) as $filename => $file) {
             $files[$filename] = $file;
           }
         }
         if (!empty($custom_skin) && is_dir($custom_skin)) {
-          foreach (file_scan_directory($custom_skin, $mask) as $filename => $file) {
+          foreach ($this->fileSystem->scanDirectory($custom_skin, $mask) as $filename => $file) {
             $files[$filename] = $file;
           }
         }
         if (is_dir($theme_skin)) {
-          foreach (file_scan_directory($theme_skin, $mask) as $filename => $file) {
+          foreach ($this->fileSystem->scanDirectory($theme_skin, $mask) as $filename => $file) {
             $files[$filename] = $file;
           }
         }

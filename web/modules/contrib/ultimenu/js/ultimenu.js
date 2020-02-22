@@ -84,9 +84,14 @@
           else {
             cleanUp();
           }
+          // Helper for Blazy within the newly loaded AJAX content.
+          var $blazy = $li.find('.b-lazy:not(.b-loaded)');
+          if (Drupal.blazy && $blazy.length) {
+            Drupal.blazy.init.revalidate(true);
+          }
         }, 1500);
 
-        e.preventDefault();
+        e.stopPropagation();
       }
       else {
         cleanUp();
@@ -101,6 +106,7 @@
 
     doClickHamburger: function (e) {
       e.preventDefault();
+      e.stopPropagation();
 
       var $button = $(this);
       var $offCanvas = $('.is-ultimenu-canvas-off');
@@ -116,7 +122,7 @@
         $body.addClass(_isHiding);
         _hidingTimer = window.setTimeout(function () {
           $body.removeClass(_isHiding);
-        }, 600);
+        }, 400);
       }
     },
 
@@ -128,6 +134,7 @@
 
     doClickCaret: function (e) {
       e.preventDefault();
+      e.stopPropagation();
 
       var $caret = $(this);
       var hoverable = $('[data-ultimenu-button]').is(':hidden');
@@ -189,8 +196,9 @@
     }
 
     // Applies to other Ultimenus.
+    // @todo $(elm).off('.ultimenuCaret').on('click.ultimenuCaret', '.caret', me.doClickCaret);
     $('.caret', elm).once('ultimenu-caret').click(me.doClickCaret);
-    $body.off().on('click.ultimenuBackdrop', '.is-ultimenu-canvas-backdrop', me.triggerClickHamburger);
+    $body.off('.ultimenuBackdrop').on('click.ultimenuBackdrop', '.is-ultimenu-canvas-backdrop', me.triggerClickHamburger);
   }
 
   /**
@@ -206,7 +214,7 @@
       $('[data-ultimenu]', context).once('ultimenu').each(doUltimenu);
 
       // Reacts on clicking Ultimenu hamburger button.
-      $hamburger.once('ultimenu-button').click(me.doClickHamburger);
+      $('body').off('.ultimenuBurger').on('click.ultimenuBurger', '[data-ultimenu-button]', me.doClickHamburger);
 
       // Reacts on resizing Ultimenu.
       me.onResize(me.doResizeMain.bind(me))();

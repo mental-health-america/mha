@@ -156,11 +156,13 @@ function ultimenu_preprocess_html(&$variables) {
  */
 function ultimenu_help($route_name) {
   if ($route_name == 'help.page.ultimenu') {
-    $output = file_get_contents(dirname(__FILE__) . '/docs/INSTALL.md');
+    $output = file_get_contents(dirname(__FILE__) . '/docs/README.md');
+    $output .= file_get_contents(dirname(__FILE__) . '/docs/CONFIGURATION.md');
     $output .= file_get_contents(dirname(__FILE__) . '/docs/STYLING.md');
     $output .= file_get_contents(dirname(__FILE__) . '/docs/TROUBLESHOOTING.md');
     $output .= file_get_contents(dirname(__FILE__) . '/docs/UPDATING.md');
-    $output .= file_get_contents(dirname(__FILE__) . '/docs/README.md');
+    $output .= file_get_contents(dirname(__FILE__) . '/docs/FAQ.md');
+    $output .= file_get_contents(dirname(__FILE__) . '/docs/MAINTAINERS.md');
     return function_exists('blazy_parse_markdown') ? blazy_parse_markdown($output) : '<pre>' . $output . '</pre>';
   }
   return '';

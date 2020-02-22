@@ -1,7 +1,9 @@
 ***
 ***
 
-# UPDATING
+# <a name="updating"> </a>UPDATING
+If not updating from 1.x to 2.x, please ignore this section.
+
 Ultimenu 2.x is a major rewrite to update for Drupal 8.6+, and add new features.
 It may not be compatible with 1.x.
 Ultimenu 2.x added few more services, so it may break the site temporarily
@@ -11,8 +13,6 @@ issue.
 * Have backup routines.
 * Test it out at a DEV environment.
 * Be sure to run **/update.php**, or regular `drush updb` and `drush cr`.
-
-If not updating, simply ignore.
 
 The following are changes, in case you are updating from 1.x.
 

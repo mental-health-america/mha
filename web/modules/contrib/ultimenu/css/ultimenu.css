@@ -133,7 +133,7 @@
   .ultimenu--hover li:hover > .ultimenu__flyout,
   .ultimenu--hover li a:active + .ultimenu__flyout,
   .ultimenu--hover li a:focus + .ultimenu__flyout,
-  .ultimenu--hover li .ultimenu__flyout:focus-within {
+  .ultimenu--hover li .ultimenu__flyout:focus {
     max-height: none;
     min-height: 64px;
     padding: 20px 0;
@@ -147,7 +147,7 @@
   .ultimenu--htt li:hover > .ultimenu__flyout,
   .ultimenu--htt li a:active + .ultimenu__flyout,
   .ultimenu--htt li a:focus + .ultimenu__flyout,
-  .ultimenu--htt li .ultimenu__flyout:focus-within {
+  .ultimenu--htt li .ultimenu__flyout:focus {
     bottom: 100%;
     max-height: none;
     top: auto;

@@ -1,7 +1,7 @@
 ***
 ***
 
-# STYLING
+# <a name="styling"> </a>STYLING
 Please ignore any documentation if you are already an expert. This is for the
 sake of documentation completion for those who might need it. If it is not you.
 

@@ -1,7 +1,20 @@
 
-# ABOUT ULTIMENU
-Ultimenu is the UltimatelyDeadSimple&trade; megamenu ever with dynamic region
-creation.
+# CONTENTS OF THIS FILE
+
+ * [Introduction](#introduction)
+ * [Requirements](#requirements)
+ * [Recommended modules](#recommended-modules)
+ * [Installation](#installation)
+ * [Configuration](#configuration)
+ * [Styling](#styling)
+ * [Troubleshooting](#troubleshooting)
+ * [FAQ](#faq)
+ * [Maintainers](#maintainers)
+
+***
+***
+# <a name="introduction"> </a>INTRODUCTION
+Ultimenu is the UltimatelyDeadSimple megamenu ever with dynamic region creation.
 
 An Ultimenu block is based on a menu.
 Ultimenu regions are based on the menu items.
@@ -18,7 +31,57 @@ orientation.
 You don't have to write regions in the theme .info, however you can always
 permanently store resulting region definitions in it.
 
+***
+***
+# <a name="requirements"> </a>REQUIREMENTS
+* Drupal core optional menu.module should be enabled.
+* Drupal **Main navigation** like at Standard profile:
+  **/admin/structure/menu/manage/main**
 
+  If not, just have a menu with the same machine name **main**.
+
+***
+***
+# <a name="recommended-modules"> </a>RECOMMENDED MODULES
+* [Ajaxin](https://drupal.org/project/ajaxin)
+
+  To have decent loading animations for AJAX contents within Ultimenu.
+
+* [Widget](https://drupal.org/project/widget)
+
+  To arrange blocks with layout within Ultimenu.
+
+* [GridStack](https://drupal.org/project/gridstack)
+
+  To have massive blocks with unique layouts for entities, views.
+
+## RELATED MODULES
+* [OM Maximenu](http://drupal.org/project/om_maximenu)
+* [Megamenu](http://drupal.org/project/megamenu)
+* [Superfish](http://drupal.org/project/superfish)
+* [Menu Views](http://drupal.org/project/menu_views)
+* [MuchoMenu](http://drupal.org/project/1077858)
+* [Giga Menu](http://drupal.org/project/gigamenu)
+* [Menu Minipanels](http://drupal.org/project/menu_minipanels)
+* [Mega Dropdown](http://drupal.org/sandbox/ravigupta/1099796)
+* [Menu Attach Block](http://drupal.org/project/menu_attach_block)
+
+
+***
+***
+# <a name="installation"> </a>INSTALLATION
+Install the module as usual, more info can be found on:
+
+[Installing Drupal 8 Modules](https://drupal.org/node/1897420)
+
+Be sure to read the entire docs and form descriptions before working with
+Ultimenu to avoid headaches for just ~5-minute read.
+
+Ultimenu is so simple that it might hurt. Once you tame it, you'll love it!
+
+
+***
+***
 ## FEATURES at 2.x
 * Ajaxified Ultimenu regions, suitable for massive menu contents.
 * Off-canvas menu, mobile only by default. Yet, configurable for both mobile and
@@ -46,48 +109,3 @@ permanently store resulting region definitions in it.
     views, panels, blocks, menu_block, boxes, slideshow..., except a toothpick.
 
 All 1-9 is off by default.
-
-
-## WHY ANOTHER MEGAMENU?
-I tried one or two, not all, and read some, but found no similar approach.
-Unless I missed one. Please file an issue if any similar approach worth a merge.
-
-
-## HOW CAN YOU HELP?
-Please consider helping in the issue queue, provide improvement, or helping with
-documentation. Thanks!
-
-
-## RELATED MODULES
-* [OM Maximenu](http://drupal.org/project/om_maximenu)
-* [Megamenu](http://drupal.org/project/megamenu)
-* [Superfish](http://drupal.org/project/superfish)
-* [Menu Views](http://drupal.org/project/menu_views)
-* [MuchoMenu](http://drupal.org/project/1077858)
-* [Giga Menu](http://drupal.org/project/gigamenu)
-* [Menu Minipanels](http://drupal.org/project/menu_minipanels)
-* [Mega Dropdown](http://drupal.org/sandbox/ravigupta/1099796)
-* [Menu Attach Block](http://drupal.org/project/menu_attach_block)
-
-
-## AUTHOR/MAINTAINER/CREDITS
-* [Gaus Surahman](https://drupal.org/user/159062)
-* [Committers](https://www.drupal.org/node/1897426/committers)
-* CHANGELOG.txt for helpful souls with their patches, suggestions and reports.
-
-
-## DISCLAIMERS
-Like the rest of CSS provided by the module, they are meant basic, not final,
-to get up and running quickly. It is not the module job to match your
-design requirements. It is your own, or your themer's job to make it awesome.
-
-Every theme has different classes and structures. Your site menu contents may
-vary, each menu item may or may not contain regions and their blocks. Unless you
-hire me I have no idea about it. It is all yours.
-
-No supports will be provided for CSS issues. You either have to learn CSS
-yourself if DIY, or hire a themer, if you have no time. I hope you see this from
-the bright side. Patches are welcome, including CSS fixes, if you think
-it would benefit others.
-
-Feel free to get in touch with me for paid customizations.

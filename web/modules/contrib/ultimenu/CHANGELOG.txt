@@ -1,4 +1,23 @@
 
+Ultimenu 8.x-2.0-dev, 2020-01-15
+--------------------------------
+Issue #3106530 by gausarts, kappaluppa2@gmail.com: Links on site don'\''t work
+  when Ultimenu is enabled.
+
+Ultimenu 8.x-2.0-dev, 2020-01-12
+--------------------------------
+- Fixed for deprecated file_scan_directory.
+
+Ultimenu 8.x-2.0-dev, 2020-01-11
+--------------------------------
+- Issue #3067744 by gausarts, W01F, pyxio, codeelegance: Mobile hamburger menu
+  links highlight but don'\''t open.
+- Issue #3081999 by Mohammad Fayoumi: Replace :focus-within pseudo-class with
+  :focus in ultimenu.css file.
+- Issue #3085004 by mlanth, gausarts: Script removes all event handlers from
+  DOM body causing issues with other libraries.
+- Issue #3098436 by PaulDinelle: Incorrect aria-hidden tag on caret.
+
 Ultimenu 8.x-2.0-dev, 2019-04-30
 --------------------------------
 - Minor adjustments to the new clickable caret visible for 944px to 1025px.
