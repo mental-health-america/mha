@@ -38,8 +38,10 @@ function geolocation_yandex_requirements($phase) {
 function geolocation_yandex_update_8001(&$sandbox) {
   $config_factory = \Drupal::configFactory();
   $old_config = $config_factory->getEditable('yandex_maps.settings');
-  if (!$old_config) return;
-  
+  if (!$old_config) {
+    return;
+  }
+
   $new_config = $config_factory->getEditable('geolocation_yandex.settings');
   $new_config->set('api_key', $old_config->get('key'));
   $new_config->save();

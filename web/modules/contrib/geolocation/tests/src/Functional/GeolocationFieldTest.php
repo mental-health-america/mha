@@ -27,9 +27,25 @@ class GeolocationFieldTest extends BrowserTestBase {
     'geolocation_demo',
   ];
 
+  /**
+   * {@inheritdoc}
+   */
   protected $field;
+
+  /**
+   * {@inheritdoc}
+   */
   protected $webUser;
+
+  /**
+   * {@inheritdoc}
+   */
   protected $articleCreator;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $defaultTheme = 'stark';
 
   /**
    * {@inheritdoc}

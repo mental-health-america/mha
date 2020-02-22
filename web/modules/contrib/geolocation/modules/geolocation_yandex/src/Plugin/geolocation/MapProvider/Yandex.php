@@ -17,6 +17,13 @@ use Drupal\Core\Render\BubbleableMetadata;
 class Yandex extends MapProviderBase {
 
   /**
+   * Yandex API Url.
+   *
+   * @var string
+   */
+  public static $apiBaseUrl = 'https://api-maps.yandex.ru/2.1/';
+
+  /**
    * {@inheritdoc}
    */
   public static function getDefaultSettings() {
@@ -162,6 +169,50 @@ class Yandex extends MapProviderBase {
     );
 
     return $render_array;
+  }
+
+  /**
+   * Get Yandex API Base URL.
+   *
+   * @return string
+   *   Base Url.
+   */
+  public function getApiUrl() {
+    $config = \Drupal::config('geolocation_yandex.settings');
+
+    $api_key = $config->get('api_key');
+
+    return self::$apiBaseUrl . '?apikey=' . $api_key . '&lang=' . self::getApiUrlLangcode() . '&coordorder=longlat';
+  }
+
+  /**
+   * Get allowed langcode by language ID.
+   *
+   * @param string $langId
+   *   Two-letter language code.
+   *
+   * @return string
+   *   Yandex API allowed language code.
+   */
+  public static function getApiUrlLangcode($langId = NULL) {
+    if (empty($langId)) {
+      $langId = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    }
+
+    $langId = strtolower((string) $langId);
+
+    $langcode = 'en_US';
+    $langcode_mapping = [
+      'ru' => 'ru_RU',
+      'uk' => 'uk_UA',
+      'tr' => 'tr_TR',
+    ];
+
+    if (!empty($langcode_mapping[$langId])) {
+      return $langcode_mapping[$langId];
+    }
+
+    return $langcode;
   }
 
 }

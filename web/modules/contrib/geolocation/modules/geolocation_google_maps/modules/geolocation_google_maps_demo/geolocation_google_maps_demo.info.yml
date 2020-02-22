@@ -7,7 +7,7 @@ dependencies:
   - geolocation:geolocation_demo
   - geolocation:geolocation_google_maps
 
-# Information added by Drupal.org packaging script on 2019-10-30
-version: '8.x-3.0-rc2'
+# Information added by Drupal.org packaging script on 2020-02-01
+version: '8.x-3.0-rc6'
 project: 'geolocation'
-datestamp: 1572433727
+datestamp: 1580564331

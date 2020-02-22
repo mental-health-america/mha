@@ -4,7 +4,6 @@ namespace Drupal\geolocation_google_maps\Plugin\geolocation\MapFeature;
 
 use Drupal\geolocation\MapFeatureBase;
 use Drupal\Core\Render\BubbleableMetadata;
-use Drupal\Core\Url;
 
 /**
  * Provides Google Maps.

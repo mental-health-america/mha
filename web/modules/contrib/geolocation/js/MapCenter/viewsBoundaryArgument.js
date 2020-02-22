@@ -3,7 +3,7 @@
  * Views boundary argument center.
  */
 
-(function ($, Drupal) {
+(function (Drupal) {
 
   'use strict';
 
@@ -28,7 +28,7 @@
 
     map.fitBoundaries(centerBounds, 'views_boundary_argument');
 
-    return false;
+    return true;
   }
 
-})(jQuery, Drupal);
+})(Drupal);

@@ -131,6 +131,7 @@
  * @property {function({GeolocationMapMarker})} removeMapMarker - Remove single marker.
  * @property {function()} removeMapMarkers - Remove all markers from map.
  *
+ * @property {function():{Promise}} getZoom - Get zoom.
  * @property {function({string}?, {Boolean}?)} setZoom - Set zoom.
  * @property {function():{GeolocationCoordinates}} getCenter - Get map center coordinates.
  * @property {function({string})} setCenter - Center map by plugin.
@@ -221,6 +222,9 @@
     removeControls: function () {
       // Stub.
     },
+    getZoom: function () {
+      // Stub.
+    },
     setZoom: function (zoom, defer) {
       // Stub.
     },
@@ -235,15 +239,20 @@
       this.setZoom();
       this.setCenterByCoordinates({lat: this.lat, lng: this.lng});
 
-      var that = this;
+      if (typeof this.mapCenter !== 'undefined') {
 
-      Object
-        // .values(this.mapCenter) // Reenable once IE11 is dead. Hopefully soon.
-        .keys(that.mapCenter).map(function (item) { return that.mapCenter[item]; }) // IE11 fix from #3046802.
-        .sort(function (a, b) {
-          return a.weight - b.weight;
-        })
-        .forEach(
+        var that = this;
+
+        var centerOptions = Object
+          // .values(this.mapCenter) // Reenable once IE11 is dead. Hopefully soon.
+          .keys(that.mapCenter).map(function (item) {
+            return that.mapCenter[item];
+          }) // IE11 fix from #3046802.
+          .sort(function (a, b) {
+            return a.weight - b.weight;
+          });
+
+        centerOptions.some(
           /**
            * @param {GeolocationCenterOption} centerOption
            */
@@ -253,6 +262,7 @@
             }
           }
         );
+      }
     },
     setCenterByCoordinates: function (coordinates, accuracy, identifier) {
       this.centerUpdatedCallback(coordinates, accuracy, identifier);

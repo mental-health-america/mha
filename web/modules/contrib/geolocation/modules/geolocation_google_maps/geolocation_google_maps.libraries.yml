@@ -42,10 +42,38 @@ widget.google:
     - geolocation/geolocation.widget
     - geolocation_google_maps/widget.api.google
 
+widget.google_maps.geojson:
+  version: 8.x-3.x
+  js:
+    js/geolocation-geometry-widget-google-maps.js: {}
+  dependencies:
+    - core/jquery.once
+    - geolocation/geolocation.map
 
 #
 # Map Features
 #
+
+# Layer bicycle.
+mapfeature.google_maps_layer_bicycling:
+  js:
+    js/MapFeature/geolocation-layer-bicycle.js: {}
+  dependencies:
+    - geolocation_google_maps/googlemapsapi
+
+# Layer transit.
+mapfeature.google_maps_layer_transit:
+  js:
+    js/MapFeature/geolocation-layer-transit.js: {}
+  dependencies:
+    - geolocation_google_maps/googlemapsapi
+
+# Layer traffic.
+mapfeature.google_maps_layer_traffic:
+  js:
+    js/MapFeature/geolocation-layer-traffic.js: {}
+  dependencies:
+    - geolocation_google_maps/googlemapsapi
 
 # Drawing support.
 mapfeature.drawing:
@@ -131,6 +159,13 @@ mapfeature.marker_infobubble:
   dependencies:
     - geolocation_google_maps/googlemapsapi
     - geolocation_google_maps/infobubble
+
+# MarkerOpacity support.
+mapfeature.marker_opacity:
+  js:
+    js/MapFeature/geolocation-marker-opacity.js: {}
+  dependencies:
+    - geolocation_google_maps/googlemapsapi
 
 # MarkerIconAdjustment support.
 mapfeature.marker_icon:
@@ -224,6 +259,13 @@ mapfeature.control_fullscreen:
 mapfeature.control_recenter:
   js:
     js/MapFeature/geolocation-control-recenter.js: {}
+  dependencies:
+    - geolocation_google_maps/googlemapsapi
+
+# ControlLoadingIndicator support.
+mapfeature.control_loading_indicator:
+  js:
+    js/MapFeature/geolocation-control-loading-indicator.js: {}
   dependencies:
     - geolocation_google_maps/googlemapsapi
 

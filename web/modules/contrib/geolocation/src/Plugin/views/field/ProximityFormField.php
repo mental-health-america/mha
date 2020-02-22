@@ -22,6 +22,11 @@ class ProximityFormField extends ProximityField implements ContainerFactoryPlugi
 
   use ProximityTrait;
 
+  /**
+   * Center value.
+   *
+   * @var array
+   */
   protected $centerValue = [];
 
   /**

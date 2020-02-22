@@ -12,7 +12,7 @@
  * @property {String} behavior
  */
 
-(function ($, Drupal) {
+(function (Drupal) {
 
   'use strict';
 
@@ -47,7 +47,6 @@
             else {
               options.rotateControl = undefined;
             }
-console.log(options, "rotate options");
             map.googleMap.setOptions(options);
           });
 
@@ -59,4 +58,4 @@ console.log(options, "rotate options");
     detach: function (context, drupalSettings) {}
   };
 
-})(jQuery, Drupal);
+})(Drupal);

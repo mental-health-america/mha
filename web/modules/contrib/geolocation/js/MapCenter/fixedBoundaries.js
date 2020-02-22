@@ -3,7 +3,7 @@
  * Fit locations.
  */
 
-(function ($, Drupal) {
+(function (Drupal) {
 
   'use strict';
 
@@ -26,7 +26,7 @@
       west: centerOption.settings.west
     });
 
-    return false;
+    return true;
   }
 
-})(jQuery, Drupal);
+})(Drupal);
