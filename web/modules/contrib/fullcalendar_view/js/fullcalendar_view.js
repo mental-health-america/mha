@@ -37,7 +37,7 @@
             dayClick: dayClickCallback,
             eventRender: function(event, $el) {
               // Event title with HTML markup.
-              $el.find("span.fc-title").html($el.find("span.fc-title").text());
+              $el.find(".fc-title, .fc-list-item-title").html(event.title);
               // Popup tooltip.
               if (event.description) {
                 if ($el.fullCalendarTooltip !== "undefined") {
@@ -178,6 +178,31 @@
             eventClick: function(calEvent, jsEvent, view) {
               slotDate = null;
               if (drupalSettings.linkToEntity) {
+                // Open a time slot details in a dialog
+                if (drupalSettings.dialogWindow) {
+                  let dataDialogOptionsDetails = {};
+                  var modalLink = $('<a id="fullcalendar-view-dialog"></a>');
+                  dataDialogOptionsDetails.draggable = true;
+                  dataDialogOptionsDetails.autoResize = false;
+                  dataDialogOptionsDetails.title = calEvent.title.replace(/(<([^>]+)>)/ig,"");
+
+                  modalLink.addClass('use-ajax');
+                  modalLink.attr('href', calEvent.url);
+                  modalLink.attr('data-dialog-type', 'dialog');
+                  modalLink.attr('data-dialog-options', JSON.stringify(dataDialogOptionsDetails));
+                  modalLink.appendTo($('body'));
+
+                  Drupal.attachBehaviors();
+                  modalLink.trigger('click').remove();
+                  // The entry element object.
+                  let $thisEntry = $(this);
+                  if (typeof $thisEntry.qtip === "function") {
+                    // Hide the pop tip.
+                    $thisEntry.qtip("hide");
+                  }
+
+                  return false;
+                }
                 // Open a new window to show the details of the event.
                 if (calEvent.url) {
                   if (drupalSettings.openEntityInNewTab) {

@@ -5,6 +5,7 @@ namespace Drupal\fullcalendar_view\Plugin\views\style;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\fullcalendar_view\TaxonomyColor;
 use Drupal\core\form\FormStateInterface;
+use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\views\Plugin\views\style\StylePluginBase;
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Link;
@@ -95,6 +96,7 @@ class FullCalendarDisplay extends StylePluginBase {
     $options['alloweventOverlap'] = ['default' => 1];
     $options['updateAllowed'] = ['default' => 1];
     $options['updateConfirm'] = ['default' => 1];
+    $options['dialogWindow'] = ['default' => 0];
     $options['createEventLink'] = ['default' => 0];
     $options['openEntityInNewTab'] = ['default' => 1];
     return $options;
@@ -269,6 +271,7 @@ class FullCalendarDisplay extends StylePluginBase {
     ];
     // Language and Localization.
     $locale = [
+      'current_lang' => $this->t('Current active language on the page'),
       'en' => 'English',
       'af' => 'Afrikaans',
       'ar-dz' => 'Arabic - Algeria',
@@ -355,6 +358,13 @@ class FullCalendarDisplay extends StylePluginBase {
       '#default_value' => (empty($this->options['languageSelector'])) ? 0 : $this->options['languageSelector'],
       '#title' => $this->t('Allow client to select language.'),
     ];
+    $form['dialogWindow'] = [
+      '#type' => 'checkbox',
+      '#fieldset' => 'display',
+      '#default_value' => (empty($this->options['dialogWindow'])) ? 0 : $this->options['dialogWindow'],
+      '#title' => $this->t('Open event links in dialog window.'),
+      '#description' => $this->t('If this option is selected and the title field is linked to entity, event links in the calendar will open in a dialog window.'),
+    ];
     // Create new event link.
     $form['createEventLink'] = [
       '#type' => 'checkbox',
@@ -390,42 +400,46 @@ class FullCalendarDisplay extends StylePluginBase {
         $tax_fields[$field_name] = $lable;
       }
     }
-    // Field name of event taxonomy.
-    $form['tax_field'] = [
-      '#title' => $this->t('Event Taxonomy Field'),
-      '#description' => $this->t('In order to specify colors for event taxonomies, you must select a taxonomy reference field for the View.'),
-      '#type' => 'select',
-      '#options' => $tax_fields,
-      '#empty_value' => '',
-      '#disabled' => empty($tax_fields),
-      '#fieldset' => 'colors',
-      '#default_value' => (!empty($this->options['tax_field'])) ? $this->options['tax_field'] : '',
-    ];
-    // Color for vocabularies.
-    $form['vocabularies'] = [
-      '#title' => $this->t('Vocabularies'),
-      '#type' => 'select',
-      '#options' => $cabNames,
-      '#empty_value' => '',
-      '#fieldset' => 'colors',
-      '#description' => $this->t('Specify which vocabulary is using for calendar event color. If the vocabulary selected is not the one that the taxonomy field belonging to, the color setting would be ignored.'),
-      '#default_value' => (!empty($this->options['vocabularies'])) ? $this->options['vocabularies'] : '',
-      '#states' => [
-        // Only show this field when the 'tax_field' is selected.
-        'invisible' => [
-          [':input[name="style_options[tax_field]"]' => ['value' => '']],
+    
+    $moduleHandler = \Drupal::service('module_handler');
+    if ($moduleHandler->moduleExists('taxonomy')) {
+      // Field name of event taxonomy.
+      $form['tax_field'] = [
+        '#title' => $this->t('Event Taxonomy Field'),
+        '#description' => $this->t('In order to specify colors for event taxonomies, you must select a taxonomy reference field for the View.'),
+        '#type' => 'select',
+        '#options' => $tax_fields,
+        '#empty_value' => '',
+        '#disabled' => empty($tax_fields),
+        '#fieldset' => 'colors',
+        '#default_value' => (!empty($this->options['tax_field'])) ? $this->options['tax_field'] : '',
+      ];
+      // Color for vocabularies.
+      $form['vocabularies'] = [
+        '#title' => $this->t('Vocabularies'),
+        '#type' => 'select',
+        '#options' => $cabNames,
+        '#empty_value' => '',
+        '#fieldset' => 'colors',
+        '#description' => $this->t('Specify which vocabulary is using for calendar event color. If the vocabulary selected is not the one that the taxonomy field belonging to, the color setting would be ignored.'),
+        '#default_value' => (!empty($this->options['vocabularies'])) ? $this->options['vocabularies'] : '',
+        '#states' => [
+          // Only show this field when the 'tax_field' is selected.
+          'invisible' => [
+            [':input[name="style_options[tax_field]"]' => ['value' => '']],
+          ],
         ],
-      ],
-      '#ajax' => [
-        'callback' => 'Drupal\fullcalendar_view\Plugin\views\style\FullCalendarDisplay::taxonomyColorCallback',
-        'event' => 'change',
-        'wrapper' => 'color-taxonomies-div',
-        'progress' => [
-          'type' => 'throbber',
-          'message' => $this->t('Verifying entry...'),
+        '#ajax' => [
+          'callback' => 'Drupal\fullcalendar_view\Plugin\views\style\FullCalendarDisplay::taxonomyColorCallback',
+          'event' => 'change',
+          'wrapper' => 'color-taxonomies-div',
+          'progress' => [
+            'type' => 'throbber',
+            'message' => $this->t('Verifying entry...'),
+          ],
         ],
-      ],
-    ];
+      ];
+    }
 
     if (!isset($form_state->getUserInput()['style_options'])) {
       // Taxonomy color input boxes.
@@ -452,7 +466,7 @@ class FullCalendarDisplay extends StylePluginBase {
         '#type' => 'color',
       ];
     }
-    $moduleHandler = \Drupal::service('module_handler');
+
     if ($moduleHandler->moduleExists('calendar_recurring_event')) {
       // Recurring event.
       $form['recurring'] = [
@@ -530,10 +544,10 @@ class FullCalendarDisplay extends StylePluginBase {
     }
     // Datetime fields in Drupal 8 are stored as strings.
     if (isset($options['business_start'])) {
-      $options['business_start'] = $options['business_start']->format(DATETIME_DATETIME_STORAGE_FORMAT);
+      $options['business_start'] = $options['business_start']->format(DateTimeItemInterface::DATETIME_STORAGE_FORMAT );
     }
     if (isset($options['business_end'])) {
-      $options['business_end'] = $options['business_end']->format(DATETIME_DATETIME_STORAGE_FORMAT);
+      $options['business_end'] = $options['business_end']->format(DateTimeItemInterface::DATETIME_STORAGE_FORMAT );
     }
     
     // Sanitize user input.
