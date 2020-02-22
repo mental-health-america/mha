@@ -20,7 +20,7 @@ class AnchorLink extends CKEditorPluginBase {
    * {@inheritdoc}
    */
   public function getFile() {
-    return $this->getLibraryPath() . '/plugin.js';
+    return $this->getLibraryUrl() . '/plugin.js';
   }
 
   /**
@@ -50,20 +50,20 @@ class AnchorLink extends CKEditorPluginBase {
    * {@inheritdoc}
    */
   public function getButtons() {
-    $path = $this->getLibraryPath();
+    $libraryUrl = $this->getLibraryUrl();
 
     return [
       'Link' => [
-        'label' => t('Link'),
-        'image' => $path . '/icons/link.png',
+        'label' => $this->t('Link'),
+        'image' => $libraryUrl . '/icons/link.png',
       ],
       'Unlink' => [
-        'label' => t('Unlink'),
-        'image' => $path . '/icons/unlink.png',
+        'label' => $this->t('Unlink'),
+        'image' => $libraryUrl . '/icons/unlink.png',
       ],
       'Anchor' => [
-        'label' => t('Anchor'),
-        'image' => $path . '/icons/anchor.png',
+        'label' => $this->t('Anchor'),
+        'image' => $libraryUrl . '/icons/anchor.png',
       ],
     ];
   }
@@ -77,17 +77,70 @@ class AnchorLink extends CKEditorPluginBase {
 
   /**
    * Get the CKEditor Link library path.
-   *
-   * @return string
-   *   The library path with support for the Libraries API module.
    */
   protected function getLibraryPath() {
-    // Support for "Libraries API" module.
-    if (\Drupal::moduleHandler()->moduleExists('libraries')) {
-      return libraries_get_path('link');
+
+    $librarayPath = DRUPAL_ROOT . '/libraries/link';
+
+    // Is the library found in the root libraries path.
+    $libraryFound = file_exists($librarayPath . '/plugin.js');
+
+    // If library is not found, then look in the current profile libraries path.
+    if (!$libraryFound) {
+      $profilePath = drupal_get_path('profile', \Drupal::installProfile());
+      $profilePath .= '/libraries/link';
+
+      // Is the library found in the current profile libraries path.
+      if (file_exists(DRUPAL_ROOT . '/' . $profilePath . '/plugin.js')) {
+        $libraryFound = TRUE;
+        $librarayPath = DRUPAL_ROOT . '/' . $profilePath;
+      }
+      else {
+        $libraryFound = FALSE;
+      }
+
     }
 
-    return 'libraries/link';
+    if ($libraryFound) {
+      return $librarayPath;
+    }
+    else {
+      return 'libraries/link';
+    }
+  }
+
+  /**
+   * Get the CKEditor Link library URL.
+   */
+  protected function getLibraryUrl() {
+
+    $originUrl = \Drupal::request()->getSchemeAndHttpHost() . \Drupal::request()->getBaseUrl();
+
+    $librarayPath = DRUPAL_ROOT . '/libraries/link';
+    $librarayUrl = $originUrl . '/libraries/link';
+
+    // Is the library found in the root libraries path.
+    $libraryFound = file_exists($librarayPath . '/plugin.js');
+
+    // If library is not found, then look in the current profile libraries path.
+    if (!$libraryFound) {
+      $profilePath = drupal_get_path('profile', \Drupal::installProfile());
+      $profilePath .= '/libraries/link';
+
+      // Is the library found in the current profile libraries path.
+      if (file_exists(DRUPAL_ROOT . '/' . $profilePath . '/plugin.js')) {
+        $libraryFound = TRUE;
+        $librarayUrl = $originUrl . '/' . $profilePath;
+      }
+
+    }
+
+    if ($libraryFound) {
+      return $librarayUrl;
+    }
+    else {
+      return $originUrl . '/libraries/link';
+    }
   }
 
 }
