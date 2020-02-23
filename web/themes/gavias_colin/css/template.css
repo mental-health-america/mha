@@ -1,4 +1,29 @@
 /****/
+
+
+@media (max-width: 991px) {
+  .webform-progress-tracker .progress-step:not(.is-active) .progress-marker {
+    display: none;
+  }
+
+  .progress-step.is-active .progress-marker {
+    font-size: 30px;
+  }
+
+  .webform-submission-form .form-item label {
+    width: auto;
+  }
+  .webform-submission-form .progress-step {
+    text-shadow: none;
+    padding: 0;
+  }
+  .webform-progress-tracker.progress-tracker {
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+}
+
+
 a {
   -webkit-transition: all 0.35s;
   -o-transition: all 0.35s;
