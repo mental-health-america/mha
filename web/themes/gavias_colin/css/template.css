@@ -4231,7 +4231,6 @@ div.resizable-textarea textarea {
 }
 .webform-submission-form .form-item input {
   line-height: 30px;
-  width: inherit;
   margin: 0 10px 0 0;
 }
 .webform-submission-form .form-item select {

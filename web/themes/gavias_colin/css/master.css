@@ -5746,6 +5746,10 @@ ul.sf-menu.sf-navbar ul ul {
 
   }
 
+  .webform-submission-form .form-item input {
+    width: 300px;
+  }
+
 }
 
 /* ******************************************** END ********************************************** */
