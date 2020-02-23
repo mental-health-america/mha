@@ -129,6 +129,7 @@
         "drupal/search_api": "^1.13",
         "drupal/seckit": "^1.1",
         "drupal/seo_checklist": "^4.1",
+        "drupal/simple_instagram_feed": "^3.1",
         "drupal/simple_popup_blocks": "^1.2",
         "drupal/simple_sitemap": "^3.2",
         "drupal/simple_timeline": "^1.1",
