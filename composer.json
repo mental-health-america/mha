@@ -191,9 +191,13 @@
         "patchLevel": {
             "drupal/core": "-p2"
         },
+
         "patches": {
             "drupal/instagram_api": {
                 "Add basic display":"patches/ig-basic-display-3101622-1.patch"
+            },
+            "drupal/draggableviews": {
+                "Draggableviews":"https://www.drupal.org/files/issues/2019-12-11/not_working_with_group_by-draggableviews-2867348-36.patch"
             }
         },
         "installer-paths": {

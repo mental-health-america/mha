@@ -4902,6 +4902,9 @@
                     "status": "covered",
                     "message": "Covered by Drupal's security advisory policy"
                 }
+            },
+            "patches_applied": {
+                "Draggableviews": "https://www.drupal.org/files/issues/2019-12-11/not_working_with_group_by-draggableviews-2867348-36.patch"
             }
         },
         "installation-source": "dist",

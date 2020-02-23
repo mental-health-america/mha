@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "57500c93fc2ebcc50a52c62adcf82e8f",
+    "content-hash": "6307c7882fe77de138726045682a8861",
     "packages": [
         {
             "name": "alchemy/zippy",
@@ -4767,6 +4767,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Draggableviews": "https://www.drupal.org/files/issues/2019-12-11/not_working_with_group_by-draggableviews-2867348-36.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",

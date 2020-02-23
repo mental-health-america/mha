@@ -846,6 +846,7 @@ span.mailto {
 .body-page #views-exposed-form-search-everything-page-1 input[type="text"] {
   color: #262626;
   font-weight: 600;
+  float: left;
   margin: 0 !important;
   width: 50%;
 }
@@ -922,7 +923,7 @@ span.mailto {
 }
 
 .body-page #views-exposed-form-search-everything-page-1 input[type="text"] {
-  float: right;
+  float: left;
   color: #262626;
   font-weight: 600;
 }
