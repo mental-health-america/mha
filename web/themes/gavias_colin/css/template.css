@@ -4220,7 +4220,7 @@ div.resizable-textarea textarea {
   text-transform: uppercase;
 }
 .webform-submission-form .form-item input, .webform-submission-form .form-item textarea, .webform-submission-form .form-item select {
-  width: 100%;
+  width: inherit;
   background: none;
   border: none;
   border: 1px solid rgba(0, 0, 0, 0.1);
