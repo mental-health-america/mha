@@ -3,12 +3,12 @@
 }
 
 #admin-toolbar-search-tab .toolbar-item:before {
-  background-image: url('../misc/icons/bebebe/loupe.svg');
+  background-image: url('../../misc/icons/bebebe/loupe.svg');
 }
 
 #admin-toolbar-search-tab .toolbar-item:active:before,
 #admin-toolbar-search-tab .toolbar-item.is-active:before {
-  background-image: url('../misc/icons/ffffff/loupe.svg');
+  background-image: url('../../misc/icons/ffffff/loupe.svg');
 }
 
 #toolbar-item-administration-search-tray label {
