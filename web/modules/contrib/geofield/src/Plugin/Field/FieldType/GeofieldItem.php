@@ -47,7 +47,7 @@ class GeofieldItem extends FieldItemBase {
     $backend_plugin = NULL;
 
     /* @var \Drupal\geofield\Plugin\GeofieldBackendPluginInterface $backend_plugin */
-    if (isset($field->settings['backend']) && $backend_manager->getDefinition($field->getSetting('backend')) != NULL) {
+    if (!empty($field->getSetting('backend')) && $backend_manager->getDefinition($field->getSetting('backend')) != NULL) {
       $backend_plugin = $backend_manager->createInstance($field->getSetting('backend'));
     }
 
@@ -190,7 +190,14 @@ class GeofieldItem extends FieldItemBase {
    */
   public function isEmpty() {
     $value = $this->get('value')->getValue();
-    return !isset($value) || $value === '';
+    if (!empty($value)) {
+      /* @var \Drupal\geofield\GeoPHP\GeoPHPInterface $geoPhpWrapper */
+      $geoPhpWrapper = \Drupal::service('geofield.geophp');
+      /* @var \Geometry|null $geometry */
+      $geometry = $geoPhpWrapper->load($value);
+      return  isset($geometry) ? $geometry->isEmpty() : FALSE;
+    }
+    return TRUE;
   }
 
   /**
