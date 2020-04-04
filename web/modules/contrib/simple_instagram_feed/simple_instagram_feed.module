@@ -1,27 +1,39 @@
 <?php
+
 /**
- * Implements hook_theme()
+ * @file
+ * Drupal Module: Simple Instagram Feed.
+ *
+ * Simple Instagram Feed is a module that
+ * provides blocks to display instagram
+ * feeds.
+ *
+ * author: Andrew Wasson <https://drupal.org/user/127091>
+ */
+
+/**
+ * Implements hook_theme().
  */
 function simple_instagram_feed_theme($existing, $type, $theme, $path) {
-  $variables = array(
-    'simple_instagram_block' => array(
+  $variables = [
+    'simple_instagram_block' => [
       'variables' => [
         'markup' => [],
       ],
-    ),
-  );
+    ],
+  ];
   return $variables;
 }
 
-
 /**
- * Implements hook_preprocess_block()
+ * Implements hook_preprocess_block().
  */
 function simple_instagram_feed_preprocess_block(&$variables) {
   if ($variables['plugin_id'] == 'simple_instagram_block') {
     if (isset($variables['elements']['#id'])) {
       $block_id = $variables['elements']['#id'];
-    } elseif (isset($variables['elements']['#plugin_id'])) {
+    }
+    elseif (isset($variables['elements']['#plugin_id'])) {
       $block_id = $variables['elements']['#plugin_id'];
       $variables['#attached']['drupalSettings']['simple_instagram_feed']['simple_instagram_block']['block_without_id'] = 'true';
     }

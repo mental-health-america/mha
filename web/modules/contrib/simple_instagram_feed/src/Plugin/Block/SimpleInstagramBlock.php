@@ -1,10 +1,11 @@
 <?php
 
 namespace Drupal\simple_instagram_feed\Plugin\Block;
+
 use Drupal\Core\Block\BlockBase;
-use Drupal\Core\Url;
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Form\FormStateInterface;
+
 /**
  * Provides a block with a dynamic Instagram Feed.
  *
@@ -14,16 +15,14 @@ use Drupal\Core\Form\FormStateInterface;
  * )
  */
 class SimpleInstagramBlock extends BlockBase implements BlockPluginInterface {
+
   /**
-  * {@inheritdoc}
-  */
+   * {@inheritdoc}
+   */
   public function blockForm($form, FormStateInterface $form_state) {
     $form = parent::blockForm($form, $form_state);
     $config = $this->getConfiguration();
 
-    /**
-    * {@inheritdoc}
-    */
     $form['simple_instagram_username'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Instagram username'),
@@ -32,9 +31,6 @@ class SimpleInstagramBlock extends BlockBase implements BlockPluginInterface {
       '#required' => TRUE,
     ];
 
-    /**
-    * {@inheritdoc}
-    */
     $form['simple_instagram_display_profile'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Display profile?'),
@@ -42,9 +38,6 @@ class SimpleInstagramBlock extends BlockBase implements BlockPluginInterface {
       '#default_value' => isset($config['simple_instagram_display_profile']) ? $config['simple_instagram_display_profile'] : 'true',
     ];
 
-    /**
-    * {@inheritdoc}
-    */
     $form['simple_instagram_display_biography'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Display bio?'),
@@ -52,9 +45,6 @@ class SimpleInstagramBlock extends BlockBase implements BlockPluginInterface {
       '#default_value' => isset($config['simple_instagram_display_biography']) ? $config['simple_instagram_display_biography'] : 'true',
     ];
 
-    /**
-    * {@inheritdoc}
-    */
     $form['simple_instagram_items'] = [
       '#type' => 'textfield',
       '#size' => 3,
@@ -66,10 +56,6 @@ class SimpleInstagramBlock extends BlockBase implements BlockPluginInterface {
     ];
 
     $simple_items_range = range(1, 12);
-
-    /**
-    * {@inheritdoc}
-    */
     $form['simple_instagram_items_per_row'] = [
       '#type' => 'select',
       '#options' => [$simple_items_range],
@@ -78,9 +64,6 @@ class SimpleInstagramBlock extends BlockBase implements BlockPluginInterface {
       '#default_value' => isset($config['simple_instagram_items_per_row']) ? $config['simple_instagram_items_per_row'] : '5',
     ];
 
-    /**
-    * {@inheritdoc}
-    */
     $form['simple_instagram_styling'] = [
       '#type' => 'select',
       '#options' => ['true' => 'True', 'false' => 'False'],
@@ -93,8 +76,8 @@ class SimpleInstagramBlock extends BlockBase implements BlockPluginInterface {
   }
 
   /**
-  * {@inheritdoc}
-  */
+   * {@inheritdoc}
+   */
   public function blockSubmit($form, FormStateInterface $form_state) {
     parent::blockSubmit($form, $form_state);
     $values = $form_state->getValues();
@@ -107,21 +90,22 @@ class SimpleInstagramBlock extends BlockBase implements BlockPluginInterface {
   }
 
   /**
-  * {@inheritdoc}
-  */
+   * {@inheritdoc}
+   */
   public function build() {
     // Return array.
-    return array(
+    return [
       '#theme' => 'simple_instagram_block',
-      '#markup' => t('Simple Instagram Feed'),
-      '#attached' => array(
-        'library' =>  array(
-          'simple_instagram_feed/simple_instagram_block'
-        ),
-      ),
-      '#cache' => [
-        'max-age' => 3600, // one hour in seconds
+      '#markup' => $this->t('Simple Instagram Feed'),
+      '#attached' => [
+        'library' => [
+          'simple_instagram_feed/simple_instagram_block',
+        ],
       ],
-    );
+      '#cache' => [
+        'max-age' => 3600,
+      ],
+    ];
   }
+
 }

@@ -39,20 +39,21 @@ To install library with composer, add the code below to into your project's
 composer.json, under "repositories":
 
 "repositories": [
-    {
-        "type": "package",
-        "package": {
-            "name": "jsanahuja/jqueryinstagramfeed",
-            "version": "dev-master",
-            "type": "drupal-library",
-            "dist": {
-                "url": "https://github.com/jsanahuja/jquery.instagramFeed/archive/master.zip",
-                "type": "zip"
-        }
+  {
+    "type": "package",
+    "package": {
+      "name": "jsanahuja/jqueryinstagramfeed",
+      "version": "dev-master",
+      "type": "drupal-library",
+      "dist": {
+        "url": "https://github.com/jsanahuja/jquery.instagramFeed/archive/master.zip",
+        "type": "zip"
+      }
     }
+  }
 ]
 
-and run 'composer require jsanahuja/jqueryinstagramfeed'.
+and run 'composer require jsanahuja/jqueryinstagramfeed:dev-master'.
 
 If the installer path is not set, use:
 
