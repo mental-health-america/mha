@@ -306,7 +306,7 @@ abstract class GeolocationStyleBase extends StylePluginBase {
     elseif (!empty($data_providers[$this->options['geolocation_field']])) {
       $data_provider = $data_providers[$this->options['geolocation_field']];
     }
-    elseif ($data_providers[reset($geo_options)]) {
+    elseif (!empty($data_providers[reset($geo_options)])) {
       $data_provider = $data_providers[reset($geo_options)];
     }
     else {

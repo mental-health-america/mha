@@ -7,7 +7,7 @@ configure: geolocation_google_maps.settings
 dependencies:
   - geolocation:geolocation
 
-# Information added by Drupal.org packaging script on 2020-02-01
-version: '8.x-3.0-rc6'
+# Information added by Drupal.org packaging script on 2020-03-29
+version: '8.x-3.0-rc7'
 project: 'geolocation'
-datestamp: 1580564331
+datestamp: 1585472290
