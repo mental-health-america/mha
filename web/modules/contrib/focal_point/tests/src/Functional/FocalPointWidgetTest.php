@@ -18,11 +18,14 @@ class FocalPointWidgetTest extends BrowserTestBase {
   use TestFileCreationTrait;
 
   /**
-   * Modules to enable.
-   *
-   * @var array
+   * {@inheritdoc}
    */
   protected static $modules = ['node', 'focal_point'];
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $defaultTheme = 'stark';
 
   /**
    * {@inheritdoc}
@@ -40,20 +43,6 @@ class FocalPointWidgetTest extends BrowserTestBase {
     $this->container->get('router.builder')->rebuild();
 
 
-  }
-
-  /**
-   * Tests that the reaction rule listing page works.
-   */
-  public function testFocalPointWidget() {
-    $account = $this->drupalCreateUser(['administer nodes']);
-    $this->drupalLogin($account);
-
-    $this->drupalGet('admin');
-    $this->assertSession()->statusCodeEquals(200);
-
-    // Test that there is an empty reaction rule listing.
-//    $this->assertSession()->pageTextContains('There is no Reaction Rule yet.');
   }
 
   public function testResave() {
