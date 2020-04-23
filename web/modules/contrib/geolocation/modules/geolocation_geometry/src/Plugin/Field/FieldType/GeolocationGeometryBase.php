@@ -92,8 +92,8 @@ abstract class GeolocationGeometryBase extends FieldItemBase {
       /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
       $query = \Drupal::database()->update($table_mapping->getDedicatedRevisionTableName($field_storage_definition));
       if (!empty($this->values['wkt'])) {
-        $query->expression($field_storage_definition->getName() . '_geometry', 'ST_GeomFromText(' . $field_storage_definition->getName() . '_wkt)');
-        $query->expression($field_storage_definition->getName() . '_geojson', 'ST_AsGeoJSON(ST_GeomFromText(' . $field_storage_definition->getName() . '_wkt))');
+        $query->expression($field_storage_definition->getName() . '_geometry', 'ST_GeomFromText(' . $field_storage_definition->getName() . '_wkt, 4326)');
+        $query->expression($field_storage_definition->getName() . '_geojson', 'ST_AsGeoJSON(ST_GeomFromText(' . $field_storage_definition->getName() . '_wkt, 4326))');
       }
       elseif (!empty($this->values['geojson'])) {
         $query->expression($field_storage_definition->getName() . '_geometry', 'ST_GeomFromGeoJSON(' . $field_storage_definition->getName() . '_geojson)');
@@ -109,8 +109,8 @@ abstract class GeolocationGeometryBase extends FieldItemBase {
 
     $query = \Drupal::database()->update($table_mapping->getDedicatedDataTableName($field_storage_definition));
     if (!empty($this->values['wkt'])) {
-      $query->expression($field_storage_definition->getName() . '_geometry', 'ST_GeomFromText(' . $field_storage_definition->getName() . '_wkt)');
-      $query->expression($field_storage_definition->getName() . '_geojson', 'ST_AsGeoJSON(ST_GeomFromText(' . $field_storage_definition->getName() . '_wkt))');
+      $query->expression($field_storage_definition->getName() . '_geometry', 'ST_GeomFromText(' . $field_storage_definition->getName() . '_wkt, 4326)');
+      $query->expression($field_storage_definition->getName() . '_geojson', 'ST_AsGeoJSON(ST_GeomFromText(' . $field_storage_definition->getName() . '_wkt, 4326))');
     }
     elseif (!empty($this->values['geojson'])) {
       $query->expression($field_storage_definition->getName() . '_geometry', 'ST_GeomFromGeoJSON(' . $field_storage_definition->getName() . '_geojson)');

@@ -12,6 +12,9 @@ dependencies:
       - geolocation_geometry_demo
   module:
     - geolocation
+    - geolocation_demo
+    - geolocation_leaflet
+    - geolocation_geometry_natural_earth_countries
     - geolocation_geometry
     - node
     - taxonomy
@@ -218,7 +221,7 @@ display:
           id: name
           table: taxonomy_term_field_revision
           field: name
-          relationship: field_geometry_data_geometry
+          relationship: taxonomy_term__field_geometry_data_geometry
           group_type: group
           admin_label: ''
           label: ''
@@ -310,11 +313,11 @@ display:
           id: tid
           table: taxonomy_term_field_data
           field: tid
-          relationship: field_geometry_data_geometry
+          relationship: taxonomy_term__field_geometry_data_geometry
           group_type: group
           admin_label: ''
           operator: or
-          value: null
+          value: {  }
           group: 1
           exposed: true
           expose:
@@ -375,16 +378,17 @@ display:
       footer: {  }
       empty: {  }
       relationships:
-        field_geometry_data_geometry:
-          id: field_geometry_data_geometry
+        taxonomy_term__field_geometry_data_geometry:
+          id: taxonomy_term__field_geometry_data_geometry
           table: node__field_geolocation_demo_single
-          field: field_geometry_data_geometry
+          field: taxonomy_term__field_geometry_data_geometry
           relationship: none
           group_type: group
-          admin_label: 'Relate all field_geolocation_demo_single contained in field_geometry_data_geometry'
+          admin_label: 'Vocabulary by field_geolocation_demo_single via field_geometry_data_geometry geometry'
           required: false
+          geometry_join_type: geolocation_geometry_within
           entity_type: node
-          plugin_id: entity_reverse
+          plugin_id: geolocation_geometry
       arguments: {  }
       display_extenders: {  }
       filter_groups:
@@ -464,7 +468,7 @@ display:
           id: field_geometry_data_geometry
           table: taxonomy_term__field_geometry_data_geometry
           field: field_geometry_data_geometry
-          relationship: field_geometry_data_geometry
+          relationship: taxonomy_term__field_geometry_data_geometry
           group_type: group
           admin_label: ''
           label: ''
@@ -628,7 +632,7 @@ display:
                 weight: 0
                 settings:
                   position: topleft
-                  default_label: false
+                  default_label: ''
                   tile_layer_providers:
                     OpenStreetMap:
                       'OpenStreetMap Mapnik':

@@ -98,7 +98,7 @@ plugin.plugin_configuration.geolocation.map_feature.leaflet_control_layer:
       label: 'Settings'
       mapping:
         default_label:
-          type: boolean
+          type: string
           label: 'Label'
         tile_layer_providers:
           type: sequence

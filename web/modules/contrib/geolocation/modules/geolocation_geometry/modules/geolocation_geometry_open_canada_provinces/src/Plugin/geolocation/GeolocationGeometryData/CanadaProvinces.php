@@ -20,17 +20,17 @@ class CanadaProvinces extends GeolocationGeometryDataBase {
   /**
    * {@inheritdoc}
    */
-  public $archiveUri = 'http://ftp.maps.canada.ca/pub/nrcan_rncan/vector/canvec/shp/Admin/canvec_15M_CA_Admin_shp.zip';
+  public $sourceUri = 'http://ftp.maps.canada.ca/pub/nrcan_rncan/vector/canvec/shp/Admin/canvec_15M_CA_Admin_shp.zip';
 
   /**
    * {@inheritdoc}
    */
-  public $archiveFilename = 'canvec_15M_CA_Admin_shp.zip';
+  public $sourceFilename = 'canvec_15M_CA_Admin_shp.zip';
 
   /**
    * {@inheritdoc}
    */
-  public $shapeDirectory = 'geolocation_geometry_open_canadian_provinces';
+  public $localDirectory = 'geolocation_geometry_open_canadian_provinces';
 
   /**
    * {@inheritdoc}

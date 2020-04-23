@@ -308,13 +308,21 @@ abstract class GeolocationMapFormatterBase extends FormatterBase {
 
     $locations = $this->getLocations($items);
 
+    $parent_entity = $items->getEntity();
+
     $element_pattern = [
       '#type' => 'geolocation_map',
       '#settings' => $settings['map_provider_settings'],
       '#maptype' => $settings['map_provider_id'],
       '#centre' => [],
-      '#context' => ['formatter' => $this],
+      '#context' => [
+        'formatter' => $this,
+      ],
     ];
+
+    if (!empty($parent_entity)) {
+      $element_pattern['#context'][$parent_entity->getEntityTypeId()] = $parent_entity;
+    }
 
     if (!empty($settings['common_map'])) {
       $elements = [
@@ -387,7 +395,7 @@ abstract class GeolocationMapFormatterBase extends FormatterBase {
         $location = [
           '#type' => 'geolocation_map_location',
           '#title' => $title,
-          '#disable_marker' => empty($settings['set_marker']) ? TRUE : FALSE,
+          '#disable_marker' => empty($settings['set_marker']),
           '#coordinates' => [
             'lat' => $item_position['lat'],
             'lng' => $item_position['lng'],

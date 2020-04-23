@@ -17,21 +17,21 @@ abstract class GeolocationGeometryDataBase {
    *
    * @var string
    */
-  public $archiveUri = '';
+  public $sourceUri = '';
 
   /**
    * Filename of archive.
    *
    * @var string
    */
-  public $archiveFilename = '';
+  public $sourceFilename = '';
 
   /**
    * Directory extract of archive.
    *
    * @var string
    */
-  public $shapeDirectory = '';
+  public $localDirectory = '';
 
   /**
    * Extracted filename.
@@ -76,22 +76,25 @@ abstract class GeolocationGeometryDataBase {
    *   Batch return.
    */
   public function download() {
-    $destination = \Drupal::service('file_system')->getTempDirectory() . '/' . $this->archiveFilename;
+    $destination = \Drupal::service('file_system')->getTempDirectory() . '/' . $this->sourceFilename;
 
     if (!is_file($destination)) {
       $client = \Drupal::httpClient();
-      $client->get($this->archiveUri, ['save_to' => $destination]);
+      $client->get($this->sourceUri, ['save_to' => $destination]);
     }
 
-    $zip = new \ZipArchive();
-    $res = $zip->open($destination);
-    if ($res === TRUE) {
-      $zip->extractTo(\Drupal::service('file_system')->getTempDirectory() . '/' . $this->shapeDirectory);
-      $zip->close();
+    if (!empty($this->localDirectory) && substr(strtolower($this->sourceFilename), -3) === 'zip') {
+      $zip = new \ZipArchive();
+      $res = $zip->open($destination);
+      if ($res === TRUE) {
+        $zip->extractTo(\Drupal::service('file_system')->getTempDirectory() . '/' . $this->localDirectory);
+        $zip->close();
+      }
+      else {
+        return FALSE;
+      }
     }
-    else {
-      return FALSE;
-    }
+
     return TRUE;
   }
 
@@ -102,15 +105,32 @@ abstract class GeolocationGeometryDataBase {
    *   Batch return.
    */
   public function import() {
-    $logger = \Drupal::logger('geolocation_geometry_natural_earth_us_states');
+    $logger = \Drupal::logger('geolocation_geometry_data');
+
+    if (empty($this->shapeFilename)) {
+      return FALSE;
+    }
 
     try {
-      $this->shapeFile = new ShapeFile(\Drupal::service('file_system')->getTempDirectory() . '/' . $this->shapeDirectory . '/' . $this->shapeFilename);
+      $this->shapeFile = new ShapeFile(\Drupal::service('file_system')->getTempDirectory() . '/' . $this->localDirectory . '/' . $this->shapeFilename);
     }
     catch (ShapeFileException $e) {
       $logger->warning($e->getMessage());
       return FALSE;
     }
+    return TRUE;
+  }
+
+  /**
+   * Batch result handling.
+   *
+   * @param mixed $result
+   *   Batch result.
+   *
+   * @return bool
+   *   Result.
+   */
+  public function finished($result) {
     return TRUE;
   }
 
