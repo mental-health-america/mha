@@ -2,7 +2,6 @@
 
 namespace Drupal\checklistapi;
 
-use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Url;
 use Drupal\user\Entity\User;
@@ -14,8 +13,6 @@ class ChecklistapiChecklist {
 
   /**
    * The configuration key for saved progress.
-   *
-   * @deprecated since version 8.x-1.9, to be removed in 8.x-2.0.
    */
   const PROGRESS_CONFIG_KEY = 'progress';
 
@@ -100,8 +97,6 @@ class ChecklistapiChecklist {
    * The configuration object for saving progress.
    *
    * @var \Drupal\Core\Config\Config
-   *
-   * @deprecated since version 8.x-1.9, to be removed in 8.x-2.0.
    */
   public $config;
 
@@ -121,7 +116,7 @@ class ChecklistapiChecklist {
       if ($property_key === '#storage') {
         continue;
       }
-      $property_name = checklistapi_strtolowercamel(Unicode::substr($property_key, 1));
+      $property_name = checklistapi_strtolowercamel(mb_substr($property_key, 1));
       $this->$property_name = $value;
     }
 
@@ -144,7 +139,7 @@ class ChecklistapiChecklist {
   public function clearSavedProgress() {
     $this->storage->deleteSavedProgress();
 
-    drupal_set_message(t('%title saved progress has been cleared.', [
+    \Drupal::messenger()->addMessage(t('%title saved progress has been cleared.', [
       '%title' => $this->title,
     ]));
   }
@@ -173,17 +168,16 @@ class ChecklistapiChecklist {
    * Gets the name of the last user to update the checklist.
    *
    * @return string
-   *   The themed name of the last user to update the checklist, or 'n/a' if
-   *   there is no record of such a user.
+   *   The themed name of the last user to update the checklist, 'n/a' if there
+   *   is no saved progress, or '[missing user] if the user no longer exists.
    */
   public function getLastUpdatedUser() {
-    if (isset($this->savedProgress['#changed_by'])) {
-      return User::load($this->savedProgress['#changed_by'])
-        ->getUsername();
-    }
-    else {
+    if (!isset($this->savedProgress['#changed_by'])) {
       return t('n/a');
     }
+
+    $user = User::load($this->savedProgress['#changed_by']);
+    return ($user) ? $user->getAccountName() : t('[missing user]');
   }
 
   /**
@@ -194,7 +188,7 @@ class ChecklistapiChecklist {
    *   no saved progress.
    */
   public function getLastUpdatedDate() {
-    return (!empty($this->savedProgress['#changed'])) ? format_date($this->savedProgress['#changed']) : t('n/a');
+    return (!empty($this->savedProgress['#changed'])) ? \Drupal::service('date.formatter')->format($this->savedProgress['#changed']) : t('n/a');
   }
 
   /**
@@ -308,7 +302,7 @@ class ChecklistapiChecklist {
     ksort($progress);
 
     $this->storage->setSavedProgress($progress);
-    drupal_set_message(\Drupal::translation()->formatPlural(
+    \Drupal::messenger()->addMessage(\Drupal::translation()->formatPlural(
       $num_changed_items,
       '%title progress has been saved. 1 item changed.',
       '%title progress has been saved. @count items changed.',

@@ -72,7 +72,7 @@ function checklistapi_add_checklist_items(array $definition) {
       unset($definition[$child]);
     }
     // Invoke the callback function.
-    $definition += call_user_func($definition['#callback']);
+    $definition += call_user_func_array($definition['#callback'], $definition['#callback_arguments'] ?? []);
   }
   return $definition;
 }
@@ -105,7 +105,7 @@ function checklistapi_compact_mode_is_on() {
  */
 function checklistapi_get_checklist_info($id = NULL) {
   $definitions = &drupal_static(__FUNCTION__);
-  if (!isset($definitions)) {
+  if (!is_array($definitions)) {
     // Get definitions.
     $definitions = \Drupal::moduleHandler()->invokeAll('checklistapi_checklist_info');
     foreach ($definitions as $key => $value) {

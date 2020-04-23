@@ -3,6 +3,7 @@
 namespace Drupal\checklistapi\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Link;
 use Drupal\Core\Url;
 
 /**
@@ -43,7 +44,7 @@ class ChecklistapiController extends ControllerBase {
       $row = [];
 
       $row[] = [
-        'data' => ($checklist->userHasAccess()) ? $this->l($checklist->title, $checklist->getUrl()) : drupal_placeholder($checklist->title),
+        'data' => ($checklist->userHasAccess()) ? Link::fromTextAndUrl($checklist->title, $checklist->getUrl()) : $checklist->title,
         'title' => (!empty($checklist->description)) ? $checklist->description : '',
       ];
       $row[] = $this->t('@completed of @total (@percent%)', [
