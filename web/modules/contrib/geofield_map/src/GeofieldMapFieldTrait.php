@@ -29,7 +29,7 @@ trait GeofieldMapFieldTrait {
   ];
 
   /**
-   * Infowindow Filed Types Options.
+   * Infowindow Field Types Options.
    *
    * @var array
    */
