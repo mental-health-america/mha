@@ -23,10 +23,3 @@ body div.body-page {
 header .site-branding-logo img.logo-site {
   display: block !important;
 }
-
-
-.webform-submission-form .form-item input {
-  line-height: 30px;
-  width: 300px;
-  margin: 0 10px 0 0;
-}

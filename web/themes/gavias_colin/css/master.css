@@ -473,10 +473,7 @@ span.mailto {
   width: 50%;
 }
 
-#block-contactusformbutton {
-  float: right;
-  width: 45%;
-}
+
 
 .block .block-title::after {
   display: none;
@@ -987,63 +984,6 @@ span.mailto {
   margin: 0 8px 0;
 }
 
-.clean-web-form h4, .clean-web-form h5, .clean-web-form h6 {
-  line-height: 1;
-  color: rgba(0, 0, 0, 01) !important;
-}
-
-.clean-web-form .node__content h2 {
-  font-size: inherit !important;
-  color: #000 !important;
-}
-.clean-web-form legend {
-  margin: 30px 0 0 0;
-}
-
-.clean-web-form .webform-submission-form p,
-.clean-web-form .webform-submission-form ul li {
-  color: #000 !important;
-}
-.clean-web-form .webform-submission-form .progress-title {
-  color: #000;
-  text-shadow: none;
-}
-.clean-web-form .webform-submission-form .description {
-  color: #000;
-  text-shadow: none;
-}
-.clean-web-form .webform-submission-form .form-item {
-  margin-bottom: 10px;
-}
-.clean-web-form .field.field--name-webform.field--type-webform.field--label-hidden.field__item {
-  background: #fff !important;
-  color: #000 !important;
-  margin: 50px !important;
-  padding: 50px !important;
-  max-width: 100%;
-  border-radius: 15px;
-}
-
-.clean-web-form .field.field--name-webform.field--type-webform.field--label-hidden.field__item {
-  border: 1px solid #fff;
-}
-
-.clean-web-form .webform-submission-form .form-item label {
-  font-size: 14px !important;
-  font-weight: 600 !important;
-  color: #000 !important;
-  text-shadow: none;
-}
-
-.clean-web-form h3, .clean-web-form .h3 {
-  font-size: 18px !important;
-}
-.clean-web-form .field--name-webform legend {
-  font-size: 18px !important;
-  font-weight: 600 !important;
-  color: #000 !important;
-  text-shadow: none;
-}
 .collegiate-link a {
   color: #fff !important;
   background-color: #0086b3 !important;
@@ -1090,52 +1030,6 @@ div.sf-accordion-toggle.sf-style-default > a:after {
 
 div#partner-logo img {
   max-width: 150px;
-}
-
-div#webform-wrapper .webform-submission-form .form-actions {
-  margin: 25px 0 0;
-}
-
-div#webform-wrapper .webform-submission-form .form-actions .webform-button--submit {
-  padding: 0 55px;
-  border-radius: 0;
-  background: transparent;
-  color: #fff;
-  border: 1px solid #fff;
-}
-
-div#webform-wrapper {
-  color: #fff;
-  padding: 100px 0;
-  background: url('/sites/default/files/blue-raised-hands.jpg') top center !important;
-  background-repeat: repeat-x !important;
-  background-size: auto;
-  margin: 50px 0 0;
-}
-
-div#webform-wrapper h1,
-div#webform-wrapper h2,
-div#webform-wrapper h3,
-div#webform-wrapper h4,
-div#webform-wrapper h5,
-div#webform-wrapper h6,
-div#webform-wrapper p {
-  color: #fff;
-}
-
-div#webform-wrapper .webform-submission-form .form-item {
-  margin: 0 auto;
-  width: 50%;
-}
-
-div#webform-wrapper .webform-submission-form .form-item input,
-div#webform-wrapper .webform-submission-form .form-item textarea,
-div#webform-wrapper .webform-submission-form .form-item select {
-  border: 1px solid #fff;
-}
-
-div#webform-wrapper .webform-submission-form .form-item label {
-  color: #fff;
 }
 
 .dateline {
@@ -1296,7 +1190,6 @@ footer .btn {
   max-width: 190px;
 }
 
-
 #footer .footer-second .navigation .gva_menu > li,
 #footer .footer-third .navigation .gva_menu > li,
 #footer .footer-four .navigation .gva_menu > li {
@@ -1311,7 +1204,6 @@ footer .btn {
   font-weight: 300;
   padding: 0 0 4px;
 }
-
 
 #footer .navigation .gva_menu > li:last-child {
   border-right: 1px solid transparent;
@@ -1339,9 +1231,9 @@ body.footer-white #footer .footer-center {
   margin: 0 auto;
   max-width: 100%;
   padding: 25px;
-  background: #f5f5f5;
+  background: #385787;
   border-radius: 15px;
-  border: 1px solid #dcdcdc;
+  border: 1px solid #385787;
 }
 
 
@@ -1378,7 +1270,6 @@ body.footer-white #footer .footer-center {
   margin: 0 0 25px !important;
   line-height: 1.4 !important;
 }
-
 
 .footer span.ext,
 .gsc-button span.ext,
@@ -1562,13 +1453,6 @@ footer .block .block-title {
 #footer p {
   color: #ffffff !important;
   font-size: 14px !important;
-}
-
-.form-checkbox,
-.form-radio {
-  position: absolute;
-  left: 0;
-  top: 5px;
 }
 
 .front .a2a_kit.a2a_kit_size_32.addtoany_list,
@@ -1839,7 +1723,6 @@ footer .block .block-title {
   background: #9ca841;
 }
 
-
 .gsc-button.extra-large {
   color: #346677 !important;
   border-color: #346677 !important;
@@ -1977,9 +1860,8 @@ footer .block .block-title {
 
 .gsc-video-box.style-1 .video-content .left .video-desc {
   font-size: 11px;
-  padding-right: 30px;
   text-align: left;
-  padding: 10px;
+  padding: 10px 30px 10px 10px;
   line-height: 1.4;
   font-weight: 300;
 }
@@ -1993,7 +1875,6 @@ footer .block .block-title {
   font-size: 12px;
   font-weight: 600;
   text-transform: uppercase;
-  padding-right: 30px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   text-align: left;
   padding: 0 10px;
@@ -2761,15 +2642,10 @@ p {
 }
 
 .navigation .gva_menu .sub-menu > li {
-  padding: 0;
-  margin-bottom: 0;
   margin-top: 15px;
-  width: 100%;
-}
-
-.navigation .gva_menu .sub-menu > li {
   padding: 0 0 9px 0;
   margin-bottom: 9px;
+  width: 100%;
 }
 
 .navigation .gva_menu > li.megamenu.menu-columns-2 > ul.sub-menu > li a,
@@ -2821,11 +2697,6 @@ p em {
   margin-top: 0 !important;
 }
 
-.node--type-webform .form-checkbox, .form-radio {
-  position: relative;
-  left: 0;
-  top: 25px;
-}
 
 
 /* ------------------- O ------------------ */
@@ -2936,7 +2807,8 @@ ol.special li::before {
   font-size: 18px !important;
 }
 
-.path-search .node--view-mode-full p, p {
+.path-search .node--view-mode-full p,
+p {
   margin: 0 0 30px !important;
   line-height: 1.6;
   padding: 0 !important;
@@ -4109,39 +3981,6 @@ table > tfoot > tr > td {
   color: #fff !important;
 }
 
-.webform-submission-form .form-item::before,
-.webform-submission-form .form-item::after {
-  content: inherit;
-}
-
-.webform-submission-form .form-item textarea,
-.webform-submission-form .form-item select {
-  background: #fff;
-}
-
-.webform-submission-form p {
-  line-height: 1.4 !important;
-}
-
-.webform-submission-form .form-item input,
-.webform-submission-form .form-item textarea,
-.webform-submission-form .form-item select {
-  background: #fff !important;
-}
-
-.webform-submission-form p,
-.webform-submission-form ul li {
-  color: #fff !important;
-}
-
-.field--type-webform a {
-  color: #fff;
-}
-
-.field--type-webform a:hover {
-  color: #fff;
-}
-
 .w100 {
   font-weight: 100;
 }
@@ -4163,122 +4002,11 @@ table > tfoot > tr > td {
   padding: 0;
 }
 
-.webform-submission-form .form-item input {
-  line-height: 30px;
-  width: inherit;
-  margin: 0 10px 0 0;
-}
-
-.webform-submission-form .form-actions .webform-button--submit {
-  padding: 0 50px;
-}
-
-.webform-submission-form .form-item label {
-  font-size: 16px;
-  font-weight: 600;
-  color: #fff;
-  text-transform: inherit;
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.30);
-  width: 100%;
-}
-
-.webform-submission-form .description {
-  color: #fff;
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.30);
-}
-
-
-#webform-submission-contact-node-2556-add-form #edit-name,
-#webform-submission-contact-node-2556-add-form #edit-email,
-#webform-submission-contact-node-2556-add-form #edit-subject {
-  width: 100%;
-}
-
-.field--name-webform legend {
-  font-size: 25px;
-  color: #fff;
-  border-bottom: 1px solid transparent;
-  font-weight: 600;
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.30);
-}
-
-.webform-submission-form .form-item input {
-  line-height: 30px;
-  margin: 0 10px 0 0;
-}
-
-.webform-submission-form .form-item label {
-  font-size: 16px !important;
-  font-weight: 600 !important;
-  color: #ffffff !important;
-  text-transform: inherit !important;
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.30);
-  width: 100%;
-}
-
-.webform-submission-form .option {
-  margin: 0 0 0 30px;
-}
-
-.field.field--name-webform.field--type-webform.field--label-hidden.field__item {
-  background: #385887 !important;
-  margin: 50px !important;
-  padding: 50px !important;
-  max-width: 100%;
-  border-radius: 15px;
-}
-
-.webform-submission-form .form-actions .webform-button--submit {
-  padding: 0 50px;
-}
-
-.webform-submission-form .description,
-.webform-submission-form .webform-progress,
-.webform-submission-form .progress-step,
-.webform-submission-form .webform-required,
-.webform-submission-form .progress-title {
-  color: #fff;
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.30);
-  padding: 10px 0;
-}
-
-.webform-progress-tracker .progress-step:not(.is-active) .progress-marker, .webform-progress-tracker .progress-step:hover .progress-marker {
-  background-color: #98a927;
-}
-
-.webform-submission-form .form-actions .webform-button--preview {
-  text-transform: uppercase;
-  background: #5468FF;
-  color: #fff;
-  letter-spacing: 1px;
-  border: none;
-  font-size: 12px;
-  font-weight: 600;
-  padding: 0 35px;
-  position: relative;
-  display: inline-block;
-  line-height: 38px;
-  z-index: 1;
-  border-radius: 30px;
-  -webkit-border-radius: 30px;
-  -moz-border-radius: 30px;
-  -ms-border-radius: 30px;
-  -o-border-radius: 30px;
-  -webkit-transition: all 0.3s;
-  -o-transition: all 0.3s;
-  transition: all 0.3s;
-  -moz-transition: all 0.3s;
-  -ms-transition: all 0.3s;
-}
-
 .widget.gsc-heading {
   padding: 0;
 }
 
-.webform-confirmation__message, .webform-confirmation__back {
-  color: #fff;
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.30);
-}
+
 
 /* ------------------- X ------------------ */
 /* ------------------- X ------------------ */
@@ -5221,31 +4949,6 @@ ul.sf-menu.sf-navbar ul ul {
     font-size: 30px !important;
   }
 
-  .webform-progress-tracker .progress-step:not(.is-active) .progress-marker {
-    display: none;
-  }
-
-  .progress-step.is-active .progress-marker {
-    font-size: 30px;
-  }
-
-  .webform-submission-form .form-item label {
-    width: auto;
-  }
-  .webform-submission-form .progress-step {
-    text-shadow: none;
-    padding: 0;
-  }
-  .webform-progress-tracker.progress-tracker {
-    margin-top: 0;
-    margin-bottom: 20px;
-  }
-
-  .webform-progress__status {
-    text-align: center;
-    border-bottom: 1px solid #fff;
-  }
-
   .gsc-heading.style-1 .title {
     font-size: 200% !important;
   }
@@ -5746,10 +5449,6 @@ ul.sf-menu.sf-navbar ul ul {
 
   }
 
-  .webform-submission-form .form-item input {
-    width: 300px;
-  }
-
 }
 
 /* ******************************************** END ********************************************** */
@@ -5839,4 +5538,81 @@ ul.sf-menu.sf-navbar ul ul {
   overflow: auto;
 }
 
+/* WEBFORM */
+.webform-submission-form .form-item label {
+  color: #fff !important;
+}
 
+.webform-submission-form .form-item input {
+  background: #fff !important;
+  color: #000 !important;
+}
+
+.webform-submission-form legend {
+  color: #fff!important;
+  border: 0!important;;
+  border-bottom: 1px solid #fff!important;;
+}
+
+.clean-web-form h4, .clean-web-form h5, .clean-web-form h6 {
+  line-height: 1;
+  color: rgba(0, 0, 0, 01) !important;
+}
+
+.clean-web-form .node__content h2 {
+  font-size: inherit !important;
+  color: #000 !important;
+}
+
+.clean-web-form legend {
+  margin: 30px 0 0 0;
+}
+
+.clean-web-form .webform-submission-form p,
+.clean-web-form .webform-submission-form ul li {
+  color: #000 !important;
+}
+
+.clean-web-form .webform-submission-form .progress-title {
+  color: #000;
+  text-shadow: none;
+}
+
+.clean-web-form .webform-submission-form .description {
+  color: #000;
+  text-shadow: none;
+}
+
+.clean-web-form .webform-submission-form .form-item {
+  margin-bottom: 10px;
+}
+
+.clean-web-form .field.field--name-webform.field--type-webform.field--label-hidden.field__item {
+  background: #fff !important;
+  color: #000 !important;
+  margin: 50px !important;
+  padding: 50px !important;
+  max-width: 100%;
+  border-radius: 15px;
+}
+
+.clean-web-form .field.field--name-webform.field--type-webform.field--label-hidden.field__item {
+  border: 1px solid #fff;
+}
+
+.clean-web-form .webform-submission-form .form-item label {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: #000 !important;
+  text-shadow: none;
+}
+
+.clean-web-form h3, .clean-web-form .h3 {
+  font-size: 18px !important;
+}
+.clean-web-form .field--name-webform legend {
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  color: #000 !important;
+  text-shadow: none;
+}
