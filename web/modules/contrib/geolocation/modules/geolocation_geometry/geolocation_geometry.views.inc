@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Provide views data for geolocation_geometry.module.
+ * Provide views data for geolocation.module.
  */
 
 use Drupal\field\FieldStorageConfigInterface;
@@ -21,125 +21,85 @@ function geolocation_geometry_field_views_data(FieldStorageConfigInterface $fiel
 
   // Loop through all of the results and set our overrides.
   foreach ($data as $table_name => $table_data) {
+    $data[$table_name]['table']['entity type'] = $field_storage->getTargetEntityTypeId();
     foreach ($table_data as $field_name => $field_data) {
       // Only modify fields.
-      if ($field_name != 'delta') {
-        if (isset($field_data['field'])) {
-          // Use our own field handler.
-          $data[$table_name][$field_name]['field']['id'] = 'geolocation_geometry_field';
-          $data[$table_name][$field_name]['field']['click sortable'] = FALSE;
+      if ($field_name == 'delta') {
+        continue;
+      }
+      if (isset($field_data['filter'])) {
+        if (substr($field_name, -9, 9) == '_geometry') {
+          $data[$table_name][$field_name]['title'] = t('Geometry (@field_name)', $args);
+          continue;
         }
-
-        // The default filters are not useful.
+        if (substr($field_name, -4, 4) == '_wkt') {
+          $data[$table_name][$field_name]['title'] = t('WKT/Well Known Text (@field_name)', $args);
+          continue;
+        }
+        if (substr($field_name, -8, 8) == '_geojson') {
+          $data[$table_name][$field_name]['title'] = t('GeoJSON (@field_name)', $args);
+          continue;
+        }
+        // The default filters are mostly not useful except lat/lng.
         unset($data[$table_name][$field_name]['filter']);
-
+      }
+      if (isset($field_data['argument'])) {
         // The default arguments aren't useful at all so remove them.
         unset($data[$table_name][$field_name]['argument']);
-
+      }
+      if (isset($field_data['sort'])) {
         // The default arguments aren't useful at all so remove them.
         unset($data[$table_name][$field_name]['sort']);
       }
     }
-
-    $field_coordinates_table_data = [];
-    $entity_type_id = $field_storage->getTargetEntityTypeId();
-    $target_entity_type = \Drupal::entityTypeManager()->getDefinition($field_storage->getTargetEntityTypeId());
-
-    if (array_key_exists($target_entity_type->getBaseTable() . '__' . $field_storage->getName(), $data)) {
-      $field_coordinates_table_data = $data[$target_entity_type->getBaseTable() . '__' . $field_storage->getName()][$field_storage->getName()];
-    }
-    elseif (array_key_exists($entity_type_id . '__' . $field_storage->getName(), $data)) {
-      // Fall back to using the key format as defined in,
-      // views_field_default_views_data().
-      $field_coordinates_table_data = $data[$entity_type_id . '__' . $field_storage->getName()][$field_storage->getName()];
-    }
-
-    // Add proximity handlers.
-    $data[$table_name][$args['@field_name'] . '_proximity'] = [
-      'group' => $target_entity_type->getLabel(),
-      'title' => t('Proximity (@field_name)', $args),
-      'title short' => isset($field_coordinates_table_data['title short']) ? $field_coordinates_table_data['title short'] . t(":proximity") : '',
-      'help' => isset($field_coordinates_table_data['help']) ? $field_coordinates_table_data['help'] : '',
-      'argument' => [
-        'id' => 'geolocation_argument_proximity',
-        'table' => $table_name,
-        'entity_type' => $entity_type_id,
-        'field_name' => $args['@field_name'] . '_proximity',
-        'real field' => $args['@field_name'],
-        'label' => t('Distance to !field_name', $args),
-        'empty field name' => '- No value -',
-        'additional fields' => [
-          $args['@field_name'] . '_lat',
-          $args['@field_name'] . '_lng',
-          $args['@field_name'] . '_lat_sin',
-          $args['@field_name'] . '_lat_cos',
-          $args['@field_name'] . '_lng_rad',
-        ],
-      ],
-      'filter' => [
-        'id' => 'geolocation_filter_proximity',
-        'table' => $table_name,
-        'entity_type' => $entity_type_id,
-        'field_name' => $args['@field_name'] . '_proximity',
-        'real field' => $args['@field_name'],
-        'label' => t('Distance to !field_name', $args),
-        'allow empty' => TRUE,
-        'additional fields' => [
-          $args['@field_name'] . '_lat',
-          $args['@field_name'] . '_lng',
-          $args['@field_name'] . '_lat_sin',
-          $args['@field_name'] . '_lat_cos',
-          $args['@field_name'] . '_lng_rad',
-        ],
-      ],
-      'field' => [
-        'table' => $table_name,
-        'id' => 'geolocation_field_proximity',
-        'field_name' => $args['@field_name'] . '_proximity',
-        'entity_type' => $entity_type_id,
-        'real field' => $args['@field_name'],
-        'float' => TRUE,
-        'additional fields' => [
-          $args['@field_name'] . '_lat',
-          $args['@field_name'] . '_lng',
-          $args['@field_name'] . '_lat_sin',
-          $args['@field_name'] . '_lat_cos',
-          $args['@field_name'] . '_lng_rad',
-        ],
-        'element type' => 'div',
-        'is revision' => (isset($table_data[$args['@field_name']]['field']['is revision']) && $table_data[$args['@field_name']]['field']['is revision']),
-        'click sortable' => TRUE,
-      ],
-      'sort' => [
-        'table' => $table_name,
-        'id' => 'geolocation_sort_proximity',
-        'field_name' => $args['@field_name'] . '_proximity',
-        'entity_type' => $entity_type_id,
-        'real field' => $args['@field_name'],
-      ],
-    ];
-
-    // Add boundary handlers.
-    $data[$table_name][$args['@field_name'] . '_boundary'] = [
-      'group' => $target_entity_type->getLabel(),
-      'title' => t('Boundary (@field_name)', $args),
-      'title short' => isset($field_coordinates_table_data['title short']) ? $field_coordinates_table_data['title short'] . t(":boundary") : '',
-      'help' => isset($field_coordinates_table_data['help']) ? $field_coordinates_table_data['help'] : '',
-      'filter' => [
-        'id' => 'geolocation_filter_boundary',
-        'table' => $table_name,
-        'entity_type' => $entity_type_id,
-        'field_name' => $args['@field_name'] . '_boundary',
-        'real field' => $args['@field_name'],
-        'label' => t('Boundaries around !field_name', $args),
-        'allow empty' => TRUE,
-        'additional fields' => [
-          $args['@field_name'] . '_lat',
-          $args['@field_name'] . '_lng',
-        ],
-      ],
-    ];
   }
 
   return $data;
+}
+
+/**
+ * Implements hook_field_views_data_views_data_alter().
+ */
+function geolocation_geometry_field_views_data_views_data_alter(array &$data, \Drupal\field\FieldStorageConfigInterface $field) {
+  $source_entity_storage = \Drupal::entityTypeManager()->getStorage($field->getTargetEntityTypeId());
+  $source_entity_definition = \Drupal::entityTypeManager()->getDefinition($field->getTargetEntityTypeId());
+
+  /** @var \Drupal\Core\Entity\Sql\DefaultTableMapping $source_entity_table_mapping */
+  $source_entity_table_mapping = $source_entity_storage->getTableMapping();
+
+  foreach (\Drupal::service('entity_field.manager')->getFieldMapByFieldType('geolocation') as $entity_type => $geolocation_fields) {
+    /** @var \Drupal\Core\Entity\Sql\DefaultTableMapping $geolocation_table_mapping */
+    $geolocation_table_mapping = \Drupal::entityTypeManager()->getStorage($entity_type)->getTableMapping();
+
+    foreach ($geolocation_fields as $geolocation_field_name => $geolocation_field_data) {
+      $geolocation_field_table_name = $geolocation_table_mapping->getFieldTableName($geolocation_field_name);
+      if (empty($data[$geolocation_field_table_name])) {
+        continue;
+      }
+
+      $label = t('Relate all @source_field contained in @field_name', ['@source_field' => $geolocation_field_name, '@field_name' => $field->getName()]);
+
+      $data[$geolocation_field_table_name][$field->getName()] = [
+        'group' => t('Geolocation Geometry'),
+        'title' => $label,
+        'title short' => 'Contains',
+        'help' => '',
+        'relationship' => [
+          'title' => $label,
+          'label' => $label,
+          'group' => t('Geolocation Geometry'),
+          'help' => '',
+          'id' => 'geolocation_geometry',
+          'field field' => $field->getName(),
+          'field' => $geolocation_field_name,
+          'base' => $source_entity_table_mapping->getDataTable(),
+          'base field' => $source_entity_definition->getKey('id'),
+          'entity_type' => $field->getTargetEntityTypeId(),
+          'field_name' => $field->getName(),
+          'field table' => $source_entity_table_mapping->getDedicatedDataTableName($field),
+        ],
+      ];
+    }
+  }
+
 }

@@ -174,6 +174,53 @@
     Drupal.geolocation.GeolocationMapBase.prototype.removeMapMarker.call(this, marker);
     this.markerLayer.removeLayer(marker);
   };
+  GeolocationLeafletMap.prototype.addShape = function (shapeSettings) {
+    if (typeof shapeSettings === 'undefined') {
+      return;
+    }
+
+    var coordinates = [];
+
+    $.each(shapeSettings.coordinates, function (index, coordinate) {
+      coordinates.push([coordinate.lat, coordinate.lng]);
+    });
+
+    var shape;
+
+    switch (shapeSettings.shape) {
+      case 'line':
+        shape = L.polyline(coordinates, {
+          color: shapeSettings.strokeColor,
+          opacity: shapeSettings.strokeOpacity,
+          weight: shapeSettings.strokeWidth
+        }).bindTooltip(shapeSettings.title);
+        break;
+
+      case 'polygon':
+        shape = L.polygon(coordinates, {
+          color: shapeSettings.strokeColor,
+          opacity: shapeSettings.strokeOpacity,
+          weight: shapeSettings.strokeWidth,
+          fillColor: shapeSettings.fillColor,
+          fillOpacity: shapeSettings.fillOpacity
+        }).bindTooltip(shapeSettings.title);
+        break;
+    }
+
+    shape.addTo(this.leafletMap);
+
+    Drupal.geolocation.GeolocationMapBase.prototype.addShape.call(this, shape);
+
+    return shape;
+
+  };
+  GeolocationLeafletMap.prototype.removeShape = function (shape) {
+    if (typeof shape === 'undefined') {
+      return;
+    }
+    Drupal.geolocation.GeolocationMapBase.prototype.removeShape.call(this, shape);
+    shape.remove();
+  };
   GeolocationLeafletMap.prototype.getMarkerBoundaries = function (locations) {
 
     locations = locations || this.mapMarkers;

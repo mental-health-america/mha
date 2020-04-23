@@ -335,7 +335,7 @@ class GeolocationBlock extends BlockBase implements ContainerFactoryPluginInterf
       $build[$index] = [
         '#type' => 'geolocation_map_location',
         '#title' => $location['marker_title'],
-        '#position' => $location['marker_coordinates'],
+        '#coordinates' => $location['marker_coordinates'],
         'content' => [
           '#type' => 'processed_text',
           '#text' => $location['marker_content']['value'],

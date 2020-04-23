@@ -63,9 +63,9 @@ abstract class GeolocationGeometryBase extends FieldItemBase {
       ->setComputed('true')
       ->setLabel(t('Geometry'));
     $properties['wkt'] = DataDefinition::create('string')->setLabel(t('WKT'))
-      ->addConstraint('GeometryType', ['geom_type' => $geom_type, 'type' => 'WKT']);
+      ->addConstraint('GeometryType', ['geometryType' => $geom_type, 'type' => 'WKT']);
     $properties['geojson'] = DataDefinition::create('string')->setLabel(t('GeoJSON'))
-      ->addConstraint('GeometryType', ['geom_type' => $geom_type, 'type' => 'GeoJSON']);
+      ->addConstraint('GeometryType', ['geometryType' => $geom_type, 'type' => 'GeoJSON']);
     $properties['data'] = MapDataDefinition::create()->setLabel(t('Meta data'));
 
     return $properties;

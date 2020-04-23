@@ -108,6 +108,58 @@
     Drupal.geolocation.GeolocationMapBase.prototype.removeMapMarker.call(this, marker);
     this.yandexMap.geoObjects.remove(marker);
   };
+  GeolocationYandexMap.prototype.addShape = function (shapeSettings) {
+    if (typeof shapeSettings === 'undefined') {
+      return;
+    }
+
+    var coordinates = [];
+
+    $.each(shapeSettings.coordinates, function (index, coordinate) {
+      coordinates.push([coordinate.lng, coordinate.lat]);
+    });
+
+    var shape;
+
+    switch (shapeSettings.shape) {
+      case 'line':
+        shape = new ymaps.Polyline(coordinates, {
+          balloonContent: shapeSettings.title
+        }, {
+          balloonCloseButton: false,
+          strokeColor: shapeSettings.strokeColor,
+          strokeWidth: shapeSettings.strokeWidth,
+          strokeOpacity: shapeSettings.strokeOpacity
+        });
+        break;
+
+      case 'polygon':
+        shape = new ymaps.Polygon([coordinates], {
+          hintContent: shapeSettings.title
+        }, {
+          strokeColor: shapeSettings.strokeColor,
+          strokeWidth: shapeSettings.strokeWidth,
+          strokeOpacity: shapeSettings.strokeOpacity,
+          fillColor: shapeSettings.fillColor,
+          fillOpacity: shapeSettings.fillOpacity
+        });
+        break;
+    }
+
+    this.yandexMap.geoObjects.add(shape);
+
+    Drupal.geolocation.GeolocationMapBase.prototype.addShape.call(this, shape);
+
+    return shape;
+
+  };
+  GeolocationYandexMap.prototype.removeShape = function (shape) {
+    if (typeof shape === 'undefined') {
+      return;
+    }
+    Drupal.geolocation.GeolocationMapBase.prototype.removeShape.call(this, shape);
+    this.yandexMap.geoObjects.remove(shape);
+  };
   GeolocationYandexMap.prototype.getCenter = function () {
     return this.yandexMap.getCenter();
   };

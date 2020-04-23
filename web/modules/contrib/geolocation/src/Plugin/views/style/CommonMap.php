@@ -50,7 +50,6 @@ class CommonMap extends GeolocationStyleBase {
 
     $this->mapProviderManager = $map_provider_manager;
     $this->mapCenterManager = $map_center_manager;
-    $this->dataProviderManager = $data_provider_manager;
   }
 
   /**

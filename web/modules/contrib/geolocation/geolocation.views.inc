@@ -21,6 +21,7 @@ function geolocation_field_views_data(FieldStorageConfigInterface $field_storage
 
   // Loop through all of the results and set our overrides.
   foreach ($data as $table_name => $table_data) {
+    $data[$table_name]['table']['entity type'] = $field_storage->getTargetEntityTypeId();
     foreach ($table_data as $field_name => $field_data) {
       // Only modify fields.
       if ($field_name != 'delta') {

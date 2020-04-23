@@ -1,5 +1,5 @@
 {
-    "name": "drupal/address",
+    "name": "drupal/geolocation_geometry_data",
     "type": "drupal-module",
     "description": "Import data from http://www.naturalearthdata.com/.",
     "homepage": "http://drupal.org/project/geolocation",
