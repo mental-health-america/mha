@@ -211,7 +211,7 @@ span.mailto {
 /* BTN */
 .btn-primary {
   color: transparent;
-  background-color: #0099cc;
+  background-color: #09c;
   border-color: #0086b3;
   padding: 0;
   margin: 0;
@@ -472,7 +472,6 @@ span.mailto {
   float: left;
   width: 50%;
 }
-
 
 
 .block .block-title::after {
@@ -1227,16 +1226,6 @@ body.footer-white #footer .footer-center {
   background: #000;
 }
 
-.field.field--name-webform.field--type-webform.field--label-hidden.field__item {
-  margin: 0 auto;
-  max-width: 100%;
-  padding: 25px;
-  background: #385787;
-  border-radius: 15px;
-  border: 1px solid #385787;
-}
-
-
 .field--name-field-speaker-profile a {
   color: #262626;
   font-size: 12px;
@@ -1340,7 +1329,7 @@ body.footer-white #footer .footer-center {
 }
 
 #footer p {
-  color: #ffffff !important;
+  color: #fff !important;
 }
 
 .fa-gift::before {
@@ -1451,7 +1440,7 @@ footer .block .block-title {
 }
 
 #footer p {
-  color: #ffffff !important;
+  color: #fff !important;
   font-size: 14px !important;
 }
 
@@ -1470,7 +1459,7 @@ footer .block .block-title {
 }
 
 #footer p {
-  color: #ffffff !important;
+  color: #fff !important;
   font-size: 14px !important;
 }
 
@@ -2492,7 +2481,7 @@ li:hover {
 }
 
 .menu--annual-conference-2019 li:nth-child(3n+1) a {
-  background: #000000;
+  background: #000;
   text-align: center !important;
 }
 
@@ -2533,13 +2522,13 @@ li:hover {
 
 .main-blog-container h3,
 .main-blog-container a {
-  color: #ffffff;
+  color: #fff;
 }
 
 .main-blog-container {
   position: absolute;
   z-index: 2;
-  color: #ffffff;
+  color: #fff;
   top: 200px;
   width: 100%;
   background: rgba(0, 0, 0, 0.5);
@@ -2696,7 +2685,6 @@ p em {
 .node__content h2:first-of-type {
   margin-top: 0 !important;
 }
-
 
 
 /* ------------------- O ------------------ */
@@ -3228,7 +3216,7 @@ span.country {
 
 .sidebar .block-menu ul li a {
   background: #385887 !important;
-  color: #ffffff !important;
+  color: #fff !important;
   text-decoration: none;
   border: 1px solid #385887 !important;
   -webkit-border-radius: 2px;
@@ -3237,7 +3225,7 @@ span.country {
 }
 
 .sidebar .block-menu ul li a:hover {
-  background: #ffffff !important;
+  background: #fff !important;
   color: #385887 !important;
   text-decoration: none;
 }
@@ -3512,7 +3500,7 @@ td.time-style {
 .text-white h5,
 .text-white.text-hero,
 .text-hero.text-white {
-  color: #ffffff !important;
+  color: #fff !important;
 }
 
 .text-hero,
@@ -4005,7 +3993,6 @@ table > tfoot > tr > td {
 .widget.gsc-heading {
   padding: 0;
 }
-
 
 
 /* ------------------- X ------------------ */
@@ -4694,11 +4681,6 @@ ul.sf-menu.sf-navbar ul ul {
 }
 
 @media (max-width: 998px) {
-  .field.field--name-webform.field--type-webform.field--label-hidden.field__item {
-    margin: 0 !important;
-    padding: 20px !important;
-  }
-
   .sidebar .block-menu ul li a {
     margin: 0 0 0 20px;
     width: 100%;
@@ -5485,11 +5467,11 @@ ul.sf-menu.sf-navbar ul ul {
 .ammapDescriptionWindow {
   font-size: 11px;
   font-family: verdana, helvetica, arial, sans-serif;
-  background-color: #FFFFFF;
+  background-color: #fff;
   border-style: solid;
-  border-color: #DADADA;
+  border-color: #dadada;
   border-width: 1px;
-  color: #000000;
+  color: #000;
   padding: 8px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -5506,7 +5488,7 @@ ul.sf-menu.sf-navbar ul ul {
 .ammapObjectList ul {
   padding-left: 20px;
   list-style: square outside;
-  color: #999999;
+  color: #999;
   font-family: verdana, helvetica, arial, sans-serif;
   font-size: 12px;
 }
@@ -5516,103 +5498,24 @@ ul.sf-menu.sf-navbar ul ul {
 }
 
 .ammapObjectList a {
-  color: #000000;
+  color: #000;
 }
 
 .ammapObjectList a {
-  color: #000000;
+  color: #000;
   text-decoration: none;
   display: block;
   padding: 2px;
 }
 
 .ammapObjectList a:hover {
-  color: #FF9F37;
+  color: #ff9f37;
   text-decoration: none;
-  background: #FFFFFF;
+  background: #fff;
   cursor: pointer;
   display: block;
 }
 
 .ammapDescriptionText {
   overflow: auto;
-}
-
-/* WEBFORM */
-.webform-submission-form .form-item label {
-  color: #fff !important;
-}
-
-.webform-submission-form .form-item input {
-  background: #fff !important;
-  color: #000 !important;
-}
-
-.webform-submission-form legend {
-  color: #fff!important;
-  border: 0!important;;
-  border-bottom: 1px solid #fff!important;;
-}
-
-.clean-web-form h4, .clean-web-form h5, .clean-web-form h6 {
-  line-height: 1;
-  color: rgba(0, 0, 0, 01) !important;
-}
-
-.clean-web-form .node__content h2 {
-  font-size: inherit !important;
-  color: #000 !important;
-}
-
-.clean-web-form legend {
-  margin: 30px 0 0 0;
-}
-
-.clean-web-form .webform-submission-form p,
-.clean-web-form .webform-submission-form ul li {
-  color: #000 !important;
-}
-
-.clean-web-form .webform-submission-form .progress-title {
-  color: #000;
-  text-shadow: none;
-}
-
-.clean-web-form .webform-submission-form .description {
-  color: #000;
-  text-shadow: none;
-}
-
-.clean-web-form .webform-submission-form .form-item {
-  margin-bottom: 10px;
-}
-
-.clean-web-form .field.field--name-webform.field--type-webform.field--label-hidden.field__item {
-  background: #fff !important;
-  color: #000 !important;
-  margin: 50px !important;
-  padding: 50px !important;
-  max-width: 100%;
-  border-radius: 15px;
-}
-
-.clean-web-form .field.field--name-webform.field--type-webform.field--label-hidden.field__item {
-  border: 1px solid #fff;
-}
-
-.clean-web-form .webform-submission-form .form-item label {
-  font-size: 14px !important;
-  font-weight: 600 !important;
-  color: #000 !important;
-  text-shadow: none;
-}
-
-.clean-web-form h3, .clean-web-form .h3 {
-  font-size: 18px !important;
-}
-.clean-web-form .field--name-webform legend {
-  font-size: 18px !important;
-  font-weight: 600 !important;
-  color: #000 !important;
-  text-shadow: none;
 }
