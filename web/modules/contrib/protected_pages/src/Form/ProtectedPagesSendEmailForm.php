@@ -1,19 +1,18 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\protected_pages\Form\ProtectedPagesSendEmailForm.
- */
-
 namespace Drupal\protected_pages\Form;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Language\LanguageManager;
+use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\Core\Mail\MailManagerInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Messenger\Messenger;
 use Drupal\Core\Url;
-use Egulias\EmailValidator\EmailValidator;
 use Drupal\protected_pages\ProtectedPagesStorage;
+use Egulias\EmailValidator\EmailValidator;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides send protected pages details email form.
@@ -42,17 +41,59 @@ class ProtectedPagesSendEmailForm extends FormBase {
   protected $emailValidator;
 
   /**
+   * Provides messenger service.
+   *
+   * @var \Drupal\Core\Messenger\Messenger
+   */
+  protected $messenger;
+
+  /**
+   * Config Factory service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
+   * Language manager service.
+   *
+   * @var \Drupal\Core\Language\LanguageManager
+   */
+  protected $languageManager;
+
+  /**
+   * Logger channel factory.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelFactory
+   */
+  protected $loggerFactory;
+
+  /**
    * Constructs a new ProtectedPagesSendEmailForm.
    *
    * @param \Drupal\Core\Mail\MailManagerInterface $mail_manager
    *   The mail manager.
    * @param \Egulias\EmailValidator\EmailValidator $email_validator
    *   The email validator.
+   * @param \Drupal\protected_pages\ProtectedPagesStorage $protectedPagesStorage
+   *   The protected pages storage.
+   * @param \Drupal\Core\Messenger\Messenger $messenger
+   *   The messenger service.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
+   *   The config factory service interface.
+   * @param \Drupal\Core\Language\LanguageManager $languageManager
+   *   The language manager service.
+   * @param \Drupal\Core\Logger\LoggerChannelFactory $loggerFactory
+   *   The logger channel factory service.
    */
-  public function __construct(MailManagerInterface $mail_manager, EmailValidator $email_validator, ProtectedPagesStorage $protectedPagesStorage) {
+  public function __construct(MailManagerInterface $mail_manager, EmailValidator $email_validator, ProtectedPagesStorage $protectedPagesStorage, Messenger $messenger, ConfigFactoryInterface $configFactory, LanguageManager $languageManager, LoggerChannelFactory $loggerFactory) {
     $this->mailManager = $mail_manager;
     $this->emailValidator = $email_validator;
     $this->protectedPagesStorage = $protectedPagesStorage;
+    $this->messenger = $messenger;
+    $this->configFactory = $configFactory;
+    $this->languageManager = $languageManager;
+    $this->loggerFactory = $loggerFactory;
   }
 
   /**
@@ -60,7 +101,13 @@ class ProtectedPagesSendEmailForm extends FormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-        $container->get('plugin.manager.mail'), $container->get('email.validator'), $container->get('protected_pages.storage')
+      $container->get('plugin.manager.mail'),
+      $container->get('email.validator'),
+      $container->get('protected_pages.storage'),
+      $container->get('messenger'),
+      $container->get('config.factory'),
+      $container->get('language_manager'),
+      $container->get('logger.factory')
     );
   }
 
@@ -75,34 +122,34 @@ class ProtectedPagesSendEmailForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state, $pid = NULL) {
-    $config = \Drupal::config('protected_pages.settings');
+    $config = $this->configFactory->getEditable('protected_pages.settings');
 
-    $form['send_email_box'] = array(
+    $form['send_email_box'] = [
       '#type' => 'details',
       '#title' => $this->t('Send email'),
       '#description' => $this->t('You send details of this protected page by email to multiple users. Please click <a href="@here">here</a> to configure email settings.', [
-        '@here' => Url::fromUri('internal:/admin/config/system/protected_pages/settings', array('query' => $this->getDestinationArray()))
+        '@here' => Url::fromUri('internal:/admin/config/system/protected_pages/settings', ['query' => $this->getDestinationArray()])
           ->toString(),
       ]),
       '#open' => TRUE,
-    );
+    ];
 
     $form_state->set('pid', $pid);
-    $form['send_email_box']['recipents'] = array(
+    $form['send_email_box']['recipents'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Recipents'),
       '#rows' => 5,
       '#description' => $this->t('Enter enter comma separated list of recipents.'),
       '#required' => TRUE,
-    );
-    $form['send_email_box']['subject'] = array(
+    ];
+    $form['send_email_box']['subject'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Subject'),
       '#default_value' => $config->get('email.subject'),
       '#description' => $this->t('Enter subject of email.'),
       '#required' => TRUE,
-    );
-    $form['send_email_box']['body'] = array(
+    ];
+    $form['send_email_box']['body'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Email Body'),
       '#rows' => 15,
@@ -110,12 +157,12 @@ class ProtectedPagesSendEmailForm extends FormBase {
       '#description' => $this->t('Enter the body of the email. Only [protected-page-url] and [site-name] tokens are available.
             Since password is encrypted, therefore we can not provide it by token.'),
       '#required' => TRUE,
-    );
+    ];
 
-    $form['send_email_box']['submit'] = array(
+    $form['send_email_box']['submit'] = [
       '#type' => 'submit',
       '#value' => $this->t('Send Email'),
-    );
+    ];
     return $form;
   }
 
@@ -123,12 +170,12 @@ class ProtectedPagesSendEmailForm extends FormBase {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
-    $emails = explode(',', str_replace(array("\r", "\n"), ',', $form_state->getValue('recipents')));
+    $emails = explode(',', str_replace(["\r", "\n"], ',', $form_state->getValue('recipents')));
     foreach ($emails as $key => $email) {
       $email = trim($email);
       if ($email) {
         if (!$this->emailValidator->isValid($email)) {
-          $form_state->setErrorByName('recipents', $this->t('Invalid email address: @mail. Please correct this email.', array('@mail' => $email)));
+          $form_state->setErrorByName('recipents', $this->t('Invalid email address: @mail. Please correct this email.', ['@mail' => $email]));
           unset($emails[$key]);
         }
         else {
@@ -147,36 +194,33 @@ class ProtectedPagesSendEmailForm extends FormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
 
-    $fields = array('path');
-    $conditions = array();
-    $conditions['general'][] = array(
+    $fields = ['path'];
+    $conditions = [];
+    $conditions['general'][] = [
       'field' => 'pid',
       'value' => $form_state->get('pid'),
       'operator' => '=',
-    );
+    ];
 
     $path = $this->protectedPagesStorage->loadProtectedPage($fields, $conditions, TRUE);
     $module = 'protected_pages';
     $key = 'protected_pages_details_mail';
     $to = $form_state->get('validated_recipents');
-    $from = \Drupal::config('system.site')->get('mail');
-    $language_code = \Drupal::languageManager()->getDefaultLanguage()->getId();
+    $from = $this->configFactory->getEditable('system.site')->get('mail');
+    $language_code = $this->languageManager->getDefaultLanguage()->getId();
     $send = TRUE;
-    $params = array();
+    $params = [];
     $params['subject'] = $form_state->getValue('subject');
     $params['body'] = $form_state->getValue('body');
-    $params['protected_page_url'] = Url::fromUri('internal:' . $path, ['absolute' => TRUE])
-        ->toString();
+    $params['protected_page_url'] = Url::fromUri('internal:' . $path, ['absolute' => TRUE])->toString();
     $result = $this->mailManager->mail($module, $key, $to, $language_code, $params, $from, $send);
     if ($result['result'] !== TRUE) {
-      $message = $this->t('There was a problem sending your email notification to @email.', array('@email' => $to));
-      drupal_set_message($message, 'error');
-      \Drupal::logger('protected_pages')->error($message);
+      $message = $this->t('There was a problem sending your email notification to @email.', ['@email' => $to]);
+      $this->loggerFactory->get('protected_pages')->error($message);
     }
     else {
-      $message = t('The Email has been sent to @email.', array('@email' => $to));
-      drupal_set_message($message);
-      \Drupal::logger('protected_pages')->notice($message);
+      $message = $this->t('The Email has been sent to @email.', ['@email' => $to]);
+      $this->loggerFactory->get('protected_pages')->notice($message);
     }
 
     $form_state->setRedirect('protected_pages_list');
