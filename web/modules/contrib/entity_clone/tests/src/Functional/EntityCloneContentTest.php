@@ -1,9 +1,9 @@
 <?php
 
-namespace Drupal\entity_clone\Tests;
+namespace Drupal\Tests\entity_clone\Functional;
 
 use Drupal\node\Entity\Node;
-use Drupal\node\Tests\NodeTestBase;
+use Drupal\Tests\node\Functional\NodeTestBase;
 
 /**
  * Create a content and test a clone.
@@ -18,6 +18,12 @@ class EntityCloneContentTest extends NodeTestBase {
    * @var array
    */
   public static $modules = ['entity_clone', 'block', 'node', 'datetime'];
+
+  /**
+   * Theme to enable by default
+   * @var string
+   */
+  protected $defaultTheme = 'classy';
 
   /**
    * Permissions to grant admin user.
@@ -40,7 +46,7 @@ class EntityCloneContentTest extends NodeTestBase {
   /**
    * Sets the test up.
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->adminUser = $this->drupalCreateUser($this->permissions);
@@ -66,7 +72,7 @@ class EntityCloneContentTest extends NodeTestBase {
         'title' => $node_title . ' - Cloned',
       ]);
     $node = reset($nodes);
-    $this->assertTrue($node, 'Test node cloned found in database.');
+    $this->assertInstanceOf(Node::class, $node, 'Test node cloned found in database.');
   }
 
 }

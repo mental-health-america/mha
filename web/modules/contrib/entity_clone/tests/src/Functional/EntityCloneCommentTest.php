@@ -1,8 +1,9 @@
 <?php
 
-namespace Drupal\entity_clone\Tests;
+namespace Drupal\Tests\entity_clone\Functional;
 
-use Drupal\comment\Tests\CommentTestBase;
+use Drupal\comment\Entity\Comment;
+use Drupal\Tests\comment\Functional\CommentTestBase;
 use Drupal\comment\Tests\CommentTestTrait;
 
 /**
@@ -30,6 +31,12 @@ class EntityCloneCommentTest extends CommentTestBase {
   ];
 
   /**
+   * Theme to enable by default
+   * @var string
+   */
+  protected $defaultTheme = 'classy';
+
+  /**
    * Permissions to grant admin user.
    *
    * @var array
@@ -51,7 +58,7 @@ class EntityCloneCommentTest extends CommentTestBase {
   /**
    * Sets the test up.
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->adminUser = $this->drupalCreateUser($this->permissions);
@@ -75,7 +82,7 @@ class EntityCloneCommentTest extends CommentTestBase {
         'comment_body' => $body,
       ]);
     $comments = reset($comments);
-    $this->assertTrue($comments, 'Test comment cloned found in database.');
+    $this->assertInstanceOf(Comment::class, $comments, 'Test comment cloned found in database.');
   }
 
 }

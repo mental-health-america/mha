@@ -1,15 +1,16 @@
 <?php
 
-namespace Drupal\entity_clone\Tests;
+namespace Drupal\Tests\entity_clone\Functional;
 
-use Drupal\simpletest\WebTestBase;
+use Drupal\search\Entity\SearchPage;
+use Drupal\Tests\BrowserTestBase;
 
 /**
  * Create a search page and test a clone.
  *
  * @group entity_clone
  */
-class EntityCloneSearchPageTest extends WebTestBase {
+class EntityCloneSearchPageTest extends BrowserTestBase {
 
   /**
    * Modules to enable.
@@ -17,6 +18,12 @@ class EntityCloneSearchPageTest extends WebTestBase {
    * @var array
    */
   public static $modules = ['entity_clone', 'search', 'node'];
+
+  /**
+   * Theme to enable by default
+   * @var string
+   */
+  protected $defaultTheme = 'classy';
 
   /**
    * Permissions to grant admin user.
@@ -38,7 +45,7 @@ class EntityCloneSearchPageTest extends WebTestBase {
   /**
    * Sets the test up.
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->adminUser = $this->drupalCreateUser($this->permissions);
@@ -75,7 +82,7 @@ class EntityCloneSearchPageTest extends WebTestBase {
         'id' => $edit['id'],
       ]);
     $search_page = reset($search_pages);
-    $this->assertTrue($search_page, 'Test search page cloned found in database.');
+    $this->assertInstanceOf(SearchPage::class, $search_page, 'Test search page cloned found in database.');
   }
 
 }

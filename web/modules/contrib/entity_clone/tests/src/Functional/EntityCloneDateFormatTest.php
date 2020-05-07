@@ -1,15 +1,16 @@
 <?php
 
-namespace Drupal\entity_clone\Tests;
+namespace Drupal\Tests\entity_clone\Functional;
 
-use Drupal\simpletest\WebTestBase;
+use Drupal\Core\Datetime\Entity\DateFormat;
+use Drupal\Tests\BrowserTestBase;
 
 /**
  * Create a date format and test a clone.
  *
  * @group entity_clone
  */
-class EntityCloneDateFormatTest extends WebTestBase {
+class EntityCloneDateFormatTest extends BrowserTestBase {
 
   /**
    * Modules to enable.
@@ -17,6 +18,12 @@ class EntityCloneDateFormatTest extends WebTestBase {
    * @var array
    */
   public static $modules = ['entity_clone'];
+
+  /**
+   * Theme to enable by default
+   * @var string
+   */
+  protected $defaultTheme = 'classy';
 
   /**
    * Permissions to grant admin user.
@@ -38,7 +45,7 @@ class EntityCloneDateFormatTest extends WebTestBase {
   /**
    * Sets the test up.
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->adminUser = $this->drupalCreateUser($this->permissions);
@@ -75,7 +82,7 @@ class EntityCloneDateFormatTest extends WebTestBase {
         'id' => $edit['id'],
       ]);
     $date_format = reset($date_formats);
-    $this->assertTrue($date_format, 'Test date format cloned found in database.');
+    $this->assertInstanceOf(DateFormat::class, $date_format, 'Test date format cloned found in database.');
   }
 
 }

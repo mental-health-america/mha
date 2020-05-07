@@ -1,15 +1,16 @@
 <?php
 
-namespace Drupal\entity_clone\Tests;
+namespace Drupal\Tests\entity_clone\Functional;
 
-use Drupal\simpletest\WebTestBase;
+use Drupal\Core\Entity\Entity\EntityFormMode;
+use Drupal\Tests\BrowserTestBase;
 
 /**
  * Test an entity form mode clone.
  *
  * @group entity_clone
  */
-class EntityCloneEntityFormModeTest extends WebTestBase {
+class EntityCloneEntityFormModeTest extends BrowserTestBase {
 
   /**
    * Modules to enable.
@@ -17,6 +18,12 @@ class EntityCloneEntityFormModeTest extends WebTestBase {
    * @var array
    */
   public static $modules = ['entity_clone'];
+
+  /**
+   * Theme to enable by default
+   * @var string
+   */
+  protected $defaultTheme = 'classy';
 
   /**
    * Permissions to grant admin user.
@@ -39,7 +46,7 @@ class EntityCloneEntityFormModeTest extends WebTestBase {
   /**
    * Sets the test up.
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->adminUser = $this->drupalCreateUser($this->permissions);
@@ -69,7 +76,7 @@ class EntityCloneEntityFormModeTest extends WebTestBase {
         'id' => 'user.' . $edit['id'],
       ]);
     $entity_form_mode = reset($entity_form_modes);
-    $this->assertTrue($entity_form_mode, 'Test entity form mode cloned found in database.');
+    $this->assertInstanceOf(EntityFormMode::class, $entity_form_mode, 'Test entity form mode cloned found in database.');
   }
 
 }

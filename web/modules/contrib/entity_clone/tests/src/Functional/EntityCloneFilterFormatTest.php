@@ -1,15 +1,16 @@
 <?php
 
-namespace Drupal\entity_clone\Tests;
+namespace Drupal\Tests\entity_clone\Functional;
 
-use Drupal\simpletest\WebTestBase;
+use Drupal\filter\Entity\FilterFormat;
+use Drupal\Tests\BrowserTestBase;
 
 /**
  * Create a filter format and test a clone.
  *
  * @group entity_clone
  */
-class EntityCloneFilterFormatTest extends WebTestBase {
+class EntityCloneFilterFormatTest extends BrowserTestBase {
 
   /**
    * Modules to enable.
@@ -17,6 +18,12 @@ class EntityCloneFilterFormatTest extends WebTestBase {
    * @var array
    */
   public static $modules = ['entity_clone', 'filter'];
+
+  /**
+   * Theme to enable by default
+   * @var string
+   */
+  protected $defaultTheme = 'classy';
 
   /**
    * Permissions to grant admin user.
@@ -40,7 +47,7 @@ class EntityCloneFilterFormatTest extends WebTestBase {
   /**
    * Sets the test up.
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->adminUser = $this->drupalCreateUser($this->permissions);
@@ -76,7 +83,7 @@ class EntityCloneFilterFormatTest extends WebTestBase {
         'format' => $edit['id'],
       ]);
     $filter_format = reset($filter_formats);
-    $this->assertTrue($filter_format, 'Test filter format cloned found in database.');
+    $this->assertInstanceOf(FilterFormat::class, $filter_format, 'Test filter format cloned found in database.');
   }
 
 }

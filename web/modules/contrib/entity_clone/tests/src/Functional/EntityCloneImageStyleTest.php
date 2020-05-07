@@ -1,15 +1,16 @@
 <?php
 
-namespace Drupal\entity_clone\Tests;
+namespace Drupal\Tests\entity_clone\Functional;
 
-use Drupal\simpletest\WebTestBase;
+use Drupal\image\Entity\ImageStyle;
+use Drupal\Tests\BrowserTestBase;
 
 /**
  * Create an image style and test a clone.
  *
  * @group entity_clone
  */
-class EntityCloneImageStyleTest extends WebTestBase {
+class EntityCloneImageStyleTest extends BrowserTestBase {
 
   /**
    * Modules to enable.
@@ -17,6 +18,12 @@ class EntityCloneImageStyleTest extends WebTestBase {
    * @var array
    */
   public static $modules = ['entity_clone', 'image'];
+
+  /**
+   * Theme to enable by default
+   * @var string
+   */
+  protected $defaultTheme = 'classy';
 
   /**
    * Permissions to grant admin user.
@@ -38,7 +45,7 @@ class EntityCloneImageStyleTest extends WebTestBase {
   /**
    * Sets the test up.
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->adminUser = $this->drupalCreateUser($this->permissions);
@@ -74,7 +81,14 @@ class EntityCloneImageStyleTest extends WebTestBase {
         'name' => $edit['id'],
       ]);
     $image_style = reset($image_styles);
-    $this->assertTrue($image_style, 'Test image style cloned found in database.');
+    $this->assertInstanceOf(ImageStyle::class, $image_style, 'Test image style cloned found in database.');
+
+    $edit = [
+      'id' => 'test_image_style_clone_with_a_really_long_name_that_is_longer_than_the_max_length',
+      'label' => 'Test image style clone with a really long name that is longer than the max length',
+    ];
+    $this->drupalPostForm('entity_clone/image_style/' . $image_style->id(), $edit, t('Clone'));
+    $this->assertText('New Id cannot be longer than 64 characters');
   }
 
 }

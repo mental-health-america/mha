@@ -1,15 +1,16 @@
 <?php
 
-namespace Drupal\entity_clone\Tests;
+namespace Drupal\Tests\entity_clone\Functional;
 
-use Drupal\simpletest\WebTestBase;
+use Drupal\Tests\BrowserTestBase;
+use Drupal\user\Entity\User;
 
 /**
  * Create a user and test a clone.
  *
  * @group entity_clone
  */
-class EntityCloneUserTest extends WebTestBase {
+class EntityCloneUserTest extends BrowserTestBase {
 
   /**
    * Modules to enable.
@@ -17,6 +18,12 @@ class EntityCloneUserTest extends WebTestBase {
    * @var array
    */
   public static $modules = ['entity_clone', 'user'];
+
+  /**
+   * Theme to enable by default
+   * @var string
+   */
+  protected $defaultTheme = 'classy';
 
   /**
    * Permissions to grant admin user.
@@ -37,7 +44,7 @@ class EntityCloneUserTest extends WebTestBase {
   /**
    * Sets the test up.
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->adminUser = $this->drupalCreateUser($this->permissions, 'test_user');
@@ -56,7 +63,7 @@ class EntityCloneUserTest extends WebTestBase {
         'name' => 'test_user_cloned',
       ]);
     $user = reset($users);
-    $this->assertTrue($user, 'Test user cloned found in database.');
+    $this->assertInstanceOf(User::class, $user, 'Test user cloned found in database.');
   }
 
 }

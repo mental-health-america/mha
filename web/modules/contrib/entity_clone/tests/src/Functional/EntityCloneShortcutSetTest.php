@@ -1,15 +1,16 @@
 <?php
 
-namespace Drupal\entity_clone\Tests;
+namespace Drupal\Tests\entity_clone\Functional;
 
-use Drupal\simpletest\WebTestBase;
+use Drupal\shortcut\Entity\ShortcutSet;
+use Drupal\Tests\BrowserTestBase;
 
 /**
  * Create a shortcut set and test a clone.
  *
  * @group entity_clone
  */
-class EntityCloneShortcutSetTest extends WebTestBase {
+class EntityCloneShortcutSetTest extends BrowserTestBase {
 
   /**
    * Modules to enable.
@@ -17,6 +18,12 @@ class EntityCloneShortcutSetTest extends WebTestBase {
    * @var array
    */
   public static $modules = ['entity_clone', 'shortcut'];
+
+  /**
+   * Theme to enable by default
+   * @var string
+   */
+  protected $defaultTheme = 'classy';
 
   /**
    * Permissions to grant admin user.
@@ -37,7 +44,7 @@ class EntityCloneShortcutSetTest extends WebTestBase {
   /**
    * Sets the test up.
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->adminUser = $this->drupalCreateUser($this->permissions);
@@ -60,7 +67,7 @@ class EntityCloneShortcutSetTest extends WebTestBase {
         'id' => $edit['id'],
       ]);
     $shortcut_set = reset($shortcut_sets);
-    $this->assertTrue($shortcut_set, 'Test default shortcut set cloned found in database.');
+    $this->assertInstanceOf(ShortcutSet::class, $shortcut_set, 'Test default shortcut set cloned found in database.');
   }
 
 }

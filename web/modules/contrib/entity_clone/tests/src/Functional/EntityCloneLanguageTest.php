@@ -1,15 +1,16 @@
 <?php
 
-namespace Drupal\entity_clone\Tests;
+namespace Drupal\Tests\entity_clone\Functional;
 
-use Drupal\simpletest\WebTestBase;
+use Drupal\language\Entity\ConfigurableLanguage;
+use Drupal\Tests\BrowserTestBase;
 
 /**
  * Create an language and test a clone.
  *
  * @group entity_clone
  */
-class EntityCloneLanguageTest extends WebTestBase {
+class EntityCloneLanguageTest extends BrowserTestBase {
 
   /**
    * Modules to enable.
@@ -17,6 +18,12 @@ class EntityCloneLanguageTest extends WebTestBase {
    * @var array
    */
   public static $modules = ['entity_clone', 'language'];
+
+  /**
+   * Theme to enable by default
+   * @var string
+   */
+  protected $defaultTheme = 'classy';
 
   /**
    * Permissions to grant admin user.
@@ -38,7 +45,7 @@ class EntityCloneLanguageTest extends WebTestBase {
   /**
    * Sets the test up.
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->adminUser = $this->drupalCreateUser($this->permissions);
@@ -73,7 +80,7 @@ class EntityCloneLanguageTest extends WebTestBase {
         'id' => $edit['id'],
       ]);
     $language = reset($languages);
-    $this->assertTrue($language, 'Test language cloned found in database.');
+    $this->assertInstanceOf(ConfigurableLanguage::class, $language, 'Test language cloned found in database.');
   }
 
 }

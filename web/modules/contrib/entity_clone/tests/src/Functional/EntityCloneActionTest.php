@@ -1,15 +1,16 @@
 <?php
 
-namespace Drupal\entity_clone\Tests;
+namespace Drupal\Tests\entity_clone\Functional;
 
-use Drupal\simpletest\WebTestBase;
+use Drupal\system\Entity\Action;
+use Drupal\Tests\BrowserTestBase;
 
 /**
  * Create an action and test a clone.
  *
  * @group entity_clone
  */
-class EntityCloneActionTest extends WebTestBase {
+class EntityCloneActionTest extends BrowserTestBase {
 
   /**
    * Modules to enable.
@@ -17,6 +18,12 @@ class EntityCloneActionTest extends WebTestBase {
    * @var array
    */
   public static $modules = ['entity_clone', 'action'];
+
+  /**
+   * Theme to enable by default
+   * @var string
+   */
+  protected $defaultTheme = 'classy';
 
   /**
    * Permissions to grant admin user.
@@ -38,7 +45,7 @@ class EntityCloneActionTest extends WebTestBase {
   /**
    * Sets the test up.
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->adminUser = $this->drupalCreateUser($this->permissions);
@@ -84,7 +91,7 @@ class EntityCloneActionTest extends WebTestBase {
         'id' => $edit['id'],
       ]);
     $action = reset($actions);
-    $this->assertTrue($action, 'Test action cloned found in database.');
+    $this->assertInstanceOf(Action::class, $action, 'Test action cloned found in database.');
   }
 
 }

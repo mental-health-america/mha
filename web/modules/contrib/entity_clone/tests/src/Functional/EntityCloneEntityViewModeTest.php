@@ -1,15 +1,16 @@
 <?php
 
-namespace Drupal\entity_clone\Tests;
+namespace Drupal\Tests\entity_clone\Functional;
 
-use Drupal\simpletest\WebTestBase;
+use Drupal\Core\Entity\Entity\EntityViewMode;
+use Drupal\Tests\BrowserTestBase;
 
 /**
  * Test an entity view mode clone.
  *
  * @group entity_clone
  */
-class EntityCloneEntityViewModeTest extends WebTestBase {
+class EntityCloneEntityViewModeTest extends BrowserTestBase {
 
   /**
    * Modules to enable.
@@ -17,6 +18,12 @@ class EntityCloneEntityViewModeTest extends WebTestBase {
    * @var array
    */
   public static $modules = ['entity_clone'];
+
+  /**
+   * Theme to enable by default
+   * @var string
+   */
+  protected $defaultTheme = 'classy';
 
   /**
    * Permissions to grant admin user.
@@ -39,7 +46,7 @@ class EntityCloneEntityViewModeTest extends WebTestBase {
   /**
    * Sets the test up.
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->adminUser = $this->drupalCreateUser($this->permissions);
@@ -69,7 +76,7 @@ class EntityCloneEntityViewModeTest extends WebTestBase {
         'id' => 'user.' . $edit['id'],
       ]);
     $entity_view_mode = reset($entity_view_modes);
-    $this->assertTrue($entity_view_mode, 'Test entity view mode cloned found in database.');
+    $this->assertInstanceOf(EntityViewMode::class, $entity_view_mode, 'Test entity view mode cloned found in database.');
   }
 
 }

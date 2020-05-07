@@ -1,16 +1,16 @@
 <?php
 
-namespace Drupal\entity_clone\Tests;
+namespace Drupal\Tests\entity_clone\Functional;
 
 use Drupal\file\Entity\File;
-use Drupal\simpletest\WebTestBase;
+use Drupal\Tests\BrowserTestBase;
 
 /**
  * Create a filer and test a clone.
  *
  * @group entity_clone
  */
-class EntityCloneFileTest extends WebTestBase {
+class EntityCloneFileTest extends BrowserTestBase {
 
   /**
    * Modules to enable.
@@ -18,6 +18,12 @@ class EntityCloneFileTest extends WebTestBase {
    * @var array
    */
   public static $modules = ['entity_clone', 'file'];
+
+  /**
+   * Theme to enable by default
+   * @var string
+   */
+  protected $defaultTheme = 'classy';
 
   /**
    * Permissions to grant admin user.
@@ -38,7 +44,7 @@ class EntityCloneFileTest extends WebTestBase {
   /**
    * Sets the test up.
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->adminUser = $this->drupalCreateUser($this->permissions);
@@ -68,7 +74,7 @@ class EntityCloneFileTest extends WebTestBase {
         'filename' => 'druplicon.txt - Cloned',
       ]);
     $file = reset($files);
-    $this->assertTrue($file, 'Test file cloned found in database.');
+    $this->assertInstanceOf(File::class, $file, 'Test file cloned found in database.');
 
     $this->assertEqual($file->getFileUri(), 'public://druplicon_0.txt', 'The stored file is also cloned.');
   }

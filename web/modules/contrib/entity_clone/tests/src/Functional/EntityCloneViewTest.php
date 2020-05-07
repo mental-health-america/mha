@@ -1,15 +1,16 @@
 <?php
 
-namespace Drupal\entity_clone\Tests;
+namespace Drupal\Tests\entity_clone\Functional;
 
-use Drupal\simpletest\WebTestBase;
+use Drupal\Tests\BrowserTestBase;
+use Drupal\views\Entity\View;
 
 /**
  * Create a view and test a clone.
  *
  * @group entity_clone
  */
-class EntityCloneViewTest extends WebTestBase {
+class EntityCloneViewTest extends BrowserTestBase {
 
   /**
    * Modules to enable.
@@ -17,6 +18,12 @@ class EntityCloneViewTest extends WebTestBase {
    * @var array
    */
   public static $modules = ['entity_clone', 'views'];
+
+  /**
+   * Theme to enable by default
+   * @var string
+   */
+  protected $defaultTheme = 'classy';
 
   /**
    * Permissions to grant admin user.
@@ -37,7 +44,7 @@ class EntityCloneViewTest extends WebTestBase {
   /**
    * Sets the test up.
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->adminUser = $this->drupalCreateUser($this->permissions);
@@ -60,7 +67,7 @@ class EntityCloneViewTest extends WebTestBase {
         'id' => $edit['id'],
       ]);
     $view = reset($views);
-    $this->assertTrue($view, 'Test default view cloned found in database.');
+    $this->assertInstanceOf(View::class, $view, 'Test default view cloned found in database.');
   }
 
 }

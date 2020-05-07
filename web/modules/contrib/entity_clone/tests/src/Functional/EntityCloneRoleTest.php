@@ -1,15 +1,16 @@
 <?php
 
-namespace Drupal\entity_clone\Tests;
+namespace Drupal\Tests\entity_clone\Functional;
 
-use Drupal\simpletest\WebTestBase;
+use Drupal\Tests\BrowserTestBase;
+use Drupal\user\Entity\Role;
 
 /**
  * Create a role and test a clone.
  *
  * @group entity_clone
  */
-class EntityCloneRoleTest extends WebTestBase {
+class EntityCloneRoleTest extends BrowserTestBase {
 
   /**
    * Modules to enable.
@@ -17,6 +18,12 @@ class EntityCloneRoleTest extends WebTestBase {
    * @var array
    */
   public static $modules = ['entity_clone', 'user'];
+
+  /**
+   * Theme to enable by default
+   * @var string
+   */
+  protected $defaultTheme = 'classy';
 
   /**
    * Permissions to grant admin user.
@@ -38,7 +45,7 @@ class EntityCloneRoleTest extends WebTestBase {
   /**
    * Sets the test up.
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->adminUser = $this->drupalCreateUser($this->permissions);
@@ -74,7 +81,7 @@ class EntityCloneRoleTest extends WebTestBase {
         'id' => $edit['id'],
       ]);
     $role = reset($roles);
-    $this->assertTrue($role, 'Test role cloned found in database.');
+    $this->assertInstanceOf(Role::class, $role, 'Test role cloned found in database.');
   }
 
 }

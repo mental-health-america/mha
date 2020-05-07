@@ -1,16 +1,16 @@
 <?php
 
-namespace Drupal\entity_clone\Tests;
+namespace Drupal\Tests\entity_clone\Functional;
 
 use Drupal\block\Entity\Block;
-use Drupal\simpletest\WebTestBase;
+use Drupal\Tests\BrowserTestBase;
 
 /**
  * Create an block and test a clone.
  *
  * @group entity_clone
  */
-class EntityCloneBlockTest extends WebTestBase {
+class EntityCloneBlockTest extends BrowserTestBase {
 
   /**
    * Modules to enable.
@@ -18,6 +18,12 @@ class EntityCloneBlockTest extends WebTestBase {
    * @var array
    */
   public static $modules = ['entity_clone', 'block'];
+
+  /**
+   * Theme to enable by default
+   * @var string
+   */
+  protected $defaultTheme = 'classy';
 
   /**
    * Permissions to grant admin user.
@@ -39,7 +45,7 @@ class EntityCloneBlockTest extends WebTestBase {
   /**
    * Sets the test up.
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->adminUser = $this->drupalCreateUser($this->permissions);
@@ -73,7 +79,7 @@ class EntityCloneBlockTest extends WebTestBase {
         'id' => $edit['id'],
       ]);
     $block = reset($blocks);
-    $this->assertTrue($block, 'Test block cloned found in database.');
+    $this->assertInstanceOf(Block::class, $block, 'Test block cloned found in database.');
   }
 
 }

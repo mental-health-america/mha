@@ -1,9 +1,9 @@
 <?php
 
-namespace Drupal\entity_clone\Tests;
+namespace Drupal\Tests\entity_clone\Functional;
 
 use Drupal\node\Entity\Node;
-use Drupal\node\Tests\NodeTestBase;
+use Drupal\Tests\node\Functional\NodeTestBase;
 use Drupal\Tests\field\Traits\EntityReferenceTestTrait;
 
 /**
@@ -21,6 +21,12 @@ class EntityCloneContentRecursiveCircularTest extends NodeTestBase {
    * @var array
    */
   public static $modules = ['entity_clone', 'block', 'node', 'datetime'];
+
+  /**
+   * Theme to enable by default
+   * @var string
+   */
+  protected $defaultTheme = 'classy';
 
   /**
    * Profile to install.
@@ -50,7 +56,7 @@ class EntityCloneContentRecursiveCircularTest extends NodeTestBase {
   /**
    * Sets the test up.
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->drupalCreateContentType([
@@ -106,7 +112,7 @@ class EntityCloneContentRecursiveCircularTest extends NodeTestBase {
       ]);
     /** @var \Drupal\node\Entity\Node $node1cloned */
     $node1cloned = reset($nodes);
-    $this->assertTrue($node1cloned, 'Node 1 cloned found in database.');
+    $this->assertInstanceOf(Node::class, $node1cloned, 'Node 1 cloned found in database.');
 
     $nodes = \Drupal::entityTypeManager()
       ->getStorage('node')
@@ -115,10 +121,10 @@ class EntityCloneContentRecursiveCircularTest extends NodeTestBase {
       ]);
     /** @var \Drupal\node\Entity\Node $node2cloned */
     $node2cloned = reset($nodes);
-    $this->assertTrue($node2cloned, 'Node 2 cloned found in database.');
+    $this->assertInstanceOf(Node::class, $node2cloned, 'Node 2 cloned found in database.');
 
     $reference = $node2cloned->get('test_field_reference')->first()->get('entity')->getTarget()->getValue();
-    $this->assertEqual($node1cloned->id(), $reference->id(), "Node 1 reference, from circular reference, is correctly referenced.");
+    $this->assertEquals($node1cloned->id(), $reference->id(), "Node 1 reference, from circular reference, is correctly referenced.");
 
     $node1cloned->delete();
     $node2cloned->delete();
@@ -129,7 +135,7 @@ class EntityCloneContentRecursiveCircularTest extends NodeTestBase {
         'title' => $node1_title,
       ]);
     $node = reset($nodes);
-    $this->assertTrue($node, 'Test original node 1 found in database.');
+    $this->assertInstanceOf(Node::class, $node, 'Test original node 1 found in database.');
 
     $nodes = \Drupal::entityTypeManager()
       ->getStorage('node')
@@ -137,7 +143,7 @@ class EntityCloneContentRecursiveCircularTest extends NodeTestBase {
         'title' => $node2_title,
       ]);
     $node = reset($nodes);
-    $this->assertTrue($node, 'Test original node 2 found in database.');
+    $this->assertInstanceOf(Node::class, $node, 'Test original node 2 found in database.');
   }
 
 }

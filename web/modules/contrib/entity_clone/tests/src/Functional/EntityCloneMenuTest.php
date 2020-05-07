@@ -1,15 +1,16 @@
 <?php
 
-namespace Drupal\entity_clone\Tests;
+namespace Drupal\Tests\entity_clone\Functional;
 
-use Drupal\simpletest\WebTestBase;
+use Drupal\system\Entity\Menu;
+use Drupal\Tests\BrowserTestBase;
 
 /**
  * Create a menu and test a clone.
  *
  * @group entity_clone
  */
-class EntityCloneMenuTest extends WebTestBase {
+class EntityCloneMenuTest extends BrowserTestBase {
 
   /**
    * Modules to enable.
@@ -17,6 +18,12 @@ class EntityCloneMenuTest extends WebTestBase {
    * @var array
    */
   public static $modules = ['entity_clone', 'menu_ui'];
+
+  /**
+   * Theme to enable by default
+   * @var string
+   */
+  protected $defaultTheme = 'classy';
 
   /**
    * Permissions to grant admin user.
@@ -38,7 +45,7 @@ class EntityCloneMenuTest extends WebTestBase {
   /**
    * Sets the test up.
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->adminUser = $this->drupalCreateUser($this->permissions);
@@ -69,7 +76,7 @@ class EntityCloneMenuTest extends WebTestBase {
         'id' => $edit['id'],
       ]);
     $menu = reset($menus);
-    $this->assertTrue($menu, 'Test menu cloned found in database.');
+    $this->assertInstanceOf(Menu::class, $menu, 'Test menu cloned found in database.');
   }
 
 }

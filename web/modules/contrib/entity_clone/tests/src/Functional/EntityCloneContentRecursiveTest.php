@@ -1,9 +1,9 @@
 <?php
 
-namespace Drupal\entity_clone\Tests;
+namespace Drupal\Tests\entity_clone\Functional;
 
 use Drupal\node\Entity\Node;
-use Drupal\node\Tests\NodeTestBase;
+use Drupal\Tests\node\Functional\NodeTestBase;
 use Drupal\taxonomy\Entity\Term;
 
 /**
@@ -19,6 +19,12 @@ class EntityCloneContentRecursiveTest extends NodeTestBase {
    * @var array
    */
   public static $modules = ['entity_clone', 'block', 'node', 'datetime'];
+
+  /**
+   * Theme to enable by default
+   * @var string
+   */
+  protected $defaultTheme = 'classy';
 
   /**
    * Profile to install.
@@ -48,7 +54,7 @@ class EntityCloneContentRecursiveTest extends NodeTestBase {
   /**
    * Sets the test up.
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->adminUser = $this->drupalCreateUser($this->permissions);
@@ -97,7 +103,7 @@ class EntityCloneContentRecursiveTest extends NodeTestBase {
       ]);
     /** @var \Drupal\node\Entity\Node $node */
     $node = reset($nodes);
-    $this->assertTrue($node, 'Test node cloned found in database.');
+    $this->assertInstanceOf(Node::class, $node, 'Test node cloned found in database.');
 
     $terms = \Drupal::entityTypeManager()
       ->getStorage('taxonomy_term')
@@ -106,7 +112,7 @@ class EntityCloneContentRecursiveTest extends NodeTestBase {
       ]);
     /** @var \Drupal\taxonomy\Entity\Term $term */
     $term = reset($terms);
-    $this->assertTrue($term, 'Test term referenced by node cloned too found in database.');
+    $this->assertInstanceOf(Term::class, $term, 'Test term referenced by node cloned too found in database.');
 
     $node->delete();
     $term->delete();
@@ -117,7 +123,7 @@ class EntityCloneContentRecursiveTest extends NodeTestBase {
         'title' => $node_title,
       ]);
     $node = reset($nodes);
-    $this->assertTrue($node, 'Test original node found in database.');
+    $this->assertInstanceOf(Node::class, $node, 'Test original node found in database.');
 
     $terms = \Drupal::entityTypeManager()
       ->getStorage('taxonomy_term')
@@ -125,7 +131,7 @@ class EntityCloneContentRecursiveTest extends NodeTestBase {
         'name' => $term_title,
       ]);
     $term = reset($terms);
-    $this->assertTrue($term, 'Test original term found in database.');
+    $this->assertInstanceOf(Term::class, $term, 'Test original term found in database.');
   }
 
 }

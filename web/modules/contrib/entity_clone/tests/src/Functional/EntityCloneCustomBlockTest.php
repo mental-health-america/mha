@@ -1,8 +1,9 @@
 <?php
 
-namespace Drupal\entity_clone\Tests;
+namespace Drupal\Tests\entity_clone\Functional;
 
-use Drupal\block_content\Tests\BlockContentTestBase;
+use Drupal\block_content\Entity\BlockContent;
+use Drupal\Tests\block_content\Functional\BlockContentTestBase;
 
 /**
  * Creat ea block and test a clone.
@@ -22,6 +23,12 @@ class EntityCloneCustomBlockTest extends BlockContentTestBase {
   public static $modules = ['entity_clone', 'block', 'block_content'];
 
   /**
+   * Theme to enable by default
+   * @var string
+   */
+  protected $defaultTheme = 'classy';
+
+  /**
    * Permissions to grant admin user.
    *
    * @var array
@@ -31,7 +38,7 @@ class EntityCloneCustomBlockTest extends BlockContentTestBase {
   /**
    * Sets the test up.
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->drupalLogin($this->adminUser);
   }
@@ -52,7 +59,7 @@ class EntityCloneCustomBlockTest extends BlockContentTestBase {
         'info' => $edit['info[0][value]'],
       ]);
     $block = reset($blocks);
-    $this->assertTrue($block, 'Test Block for clone found in database.');
+    $this->assertInstanceOf(BlockContent::class, $block, 'Test Block for clone found in database.');
 
     $this->drupalPostForm('entity_clone/block_content/' . $block->id(), [], t('Clone'));
 
@@ -63,7 +70,7 @@ class EntityCloneCustomBlockTest extends BlockContentTestBase {
         'body' => $edit['body[0][value]'],
       ]);
     $block = reset($blocks);
-    $this->assertTrue($block, 'Test Block cloned found in database.');
+    $this->assertInstanceOf(BlockContent::class, $block, 'Test Block cloned found in database.');
   }
 
 }
