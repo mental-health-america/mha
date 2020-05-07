@@ -1,4 +1,4 @@
-name: Geolocation Geometry Data
+name: Geolocation - Geometry Data
 type: module
 description: Requires gasparesganga/php-shapefile library.
 core_version_requirement: ^8.7.7 || ^9
@@ -7,7 +7,7 @@ dependencies:
   - geolocation_geometry
   - taxonomy
 
-# Information added by Drupal.org packaging script on 2020-04-23
-version: '8.x-3.0-rc10'
+# Information added by Drupal.org packaging script on 2020-05-07
+version: '8.x-3.1'
 project: 'geolocation'
-datestamp: 1587680637
+datestamp: 1588850353

@@ -10,7 +10,7 @@ dependencies:
   - geolocation:geolocation_geometry_data
   - geolocation:geolocation_geometry_natural_earth_countries
 
-# Information added by Drupal.org packaging script on 2020-04-23
-version: '8.x-3.0-rc10'
+# Information added by Drupal.org packaging script on 2020-05-07
+version: '8.x-3.1'
 project: 'geolocation'
-datestamp: 1587680637
+datestamp: 1588850353
