@@ -138,7 +138,7 @@ class EncryptServiceTest extends UnitTestCase {
       $this->encryptionProfile->getEncryptionMethod()->shouldNotBeCalled();
       $this->encryptionProfile->validate('text_to_encrypt')->willReturn(['Validation']);
       $this->encryptionProfile->validate('text_to_decrypt')->willReturn(['Validation']);
-      $this->setExpectedException('\Drupal\encrypt\Exception\EncryptException');
+      $this->expectException('\Drupal\encrypt\Exception\EncryptException');
     }
 
     $service = new EncryptService(
@@ -179,7 +179,7 @@ class EncryptServiceTest extends UnitTestCase {
     $this->assertEquals("encrypted_text", $encrypted_text);
 
     // Assert exception is thrown when a method can NOT decrypt.
-    $this->setExpectedException(EncryptionMethodCanNotDecryptException::class);
+    $this->expectException(EncryptionMethodCanNotDecryptException::class);
     $service->decrypt($encrypted_text, $this->encryptionProfile->reveal());
   }
 

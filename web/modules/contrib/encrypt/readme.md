@@ -16,7 +16,7 @@ The service is configured through the settings form, found at
 `/admin/config/system/encryption`.
 
 It requires a key, which is provided by the Key module. To manage keys, visit 
-`admin/config/system/key`.
+`/admin/config/system/keys`.
 
 ## Best practices
 

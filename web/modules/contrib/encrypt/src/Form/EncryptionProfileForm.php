@@ -358,12 +358,12 @@ class EncryptionProfileForm extends EntityForm {
     $status = $encryption_profile->save();
 
     if ($status) {
-      drupal_set_message($this->t('Saved the %label encryption profile.', [
+      $this->messenger()->addMessage($this->t('Saved the %label encryption profile.', [
         '%label' => $encryption_profile->label(),
       ]));
     }
     else {
-      drupal_set_message($this->t('The %label encryption profile was not saved.', [
+      $this->messenger()->addMessage($this->t('The %label encryption profile was not saved.', [
         '%label' => $encryption_profile->label(),
       ]));
     }

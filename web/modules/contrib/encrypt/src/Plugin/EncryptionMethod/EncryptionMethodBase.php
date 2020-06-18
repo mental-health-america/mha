@@ -2,7 +2,8 @@
 
 namespace Drupal\encrypt\Plugin\EncryptionMethod;
 
-use Drupal\Component\Plugin\ConfigurablePluginInterface;
+use Drupal\Component\Plugin\ConfigurableInterface;
+use Drupal\Component\Plugin\DependentPluginInterface;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\encrypt\EncryptionMethodInterface;
@@ -11,7 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Provides a base class for EncryptionMethod plugins.
  */
-abstract class EncryptionMethodBase extends PluginBase implements EncryptionMethodInterface, ConfigurablePluginInterface {
+abstract class EncryptionMethodBase extends PluginBase implements EncryptionMethodInterface, ConfigurableInterface, DependentPluginInterface {
 
   /**
    * {@inheritdoc}

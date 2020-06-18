@@ -10,11 +10,3 @@ services:
   encrypt.encryption_profile.manager:
     class: Drupal\encrypt\EncryptionProfileManager
     arguments: ['@entity_type.manager']
-
-  encrypt.uninstall_validator:
-    class: Drupal\encrypt\EncryptUninstallValidator
-    tags:
-      - { name: module_install.uninstall_validator }
-    arguments: ['@string_translation', '@encryption', '@encrypt.encryption_profile.manager']
-    lazy: true
-

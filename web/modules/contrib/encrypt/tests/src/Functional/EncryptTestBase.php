@@ -1,15 +1,15 @@
 <?php
 
-namespace Drupal\encrypt\Tests;
+namespace Drupal\Tests\encrypt\Functional;
 
 use Drupal\encrypt\Entity\EncryptionProfile;
 use Drupal\key\Entity\Key;
-use Drupal\simpletest\WebTestBase;
+use Drupal\Tests\BrowserTestBase;
 
 /**
  * Defines a base class for tests.
  */
-abstract class EncryptTestBase extends WebTestBase {
+abstract class EncryptTestBase extends BrowserTestBase {
 
   /**
    * Modules to enable for this test.
@@ -38,6 +38,11 @@ abstract class EncryptTestBase extends WebTestBase {
    * @var \Drupal\encrypt\Entity\EncryptionProfile[]
    */
   protected $encryptionProfiles;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $defaultTheme = 'stark';
 
   /**
    * {@inheritdoc}

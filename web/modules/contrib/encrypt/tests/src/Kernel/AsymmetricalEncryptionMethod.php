@@ -70,7 +70,7 @@ class AsymmetricalEncryptionMethod extends KernelTestBase {
 
     // The encryption service throw an exception when trying to decrypt through
     // a method with 'can_decrypt' FALSE.
-    $this->setExpectedException(EncryptionMethodCanNotDecryptException::class);
+    $this->expectException(EncryptionMethodCanNotDecryptException::class);
     $service->decrypt($text_encrypted, $this->encryptionProfile);
 
   }

@@ -6,7 +6,6 @@
  */
 
 use Drupal\encrypt\Entity\EncryptionProfile;
-use Drush\Log\LogLevel;
 
 /**
  * Implements hook_drush_help().
@@ -92,7 +91,7 @@ function encrypt_drush_command() {
  */
 function drush_encrypt_encrypt($encryption_profile_name = FALSE, $text = FALSE) {
 
-  if($encryption_profile_name && $text) {
+  if ($encryption_profile_name && $text) {
     $service = \Drupal::service('encryption');
     $encryption_profile = EncryptionProfile::load($encryption_profile_name);
     if (!$encryption_profile) {
@@ -126,7 +125,7 @@ function drush_encrypt_encrypt($encryption_profile_name = FALSE, $text = FALSE) 
  */
 function drush_encrypt_decrypt($encryption_profile_name = FALSE, $text = FALSE) {
 
-  if($encryption_profile_name && $text) {
+  if ($encryption_profile_name && $text) {
     $service = \Drupal::service('encryption');
     $encryption_profile = EncryptionProfile::load($encryption_profile_name);
     if (!$encryption_profile) {
@@ -158,7 +157,7 @@ function drush_encrypt_decrypt($encryption_profile_name = FALSE, $text = FALSE) 
  */
 function drush_encrypt_validate_profile($encryption_profile_name = FALSE) {
 
-  if($encryption_profile_name) {
+  if ($encryption_profile_name) {
     $output = [];
     $encryption_profile = EncryptionProfile::load($encryption_profile_name);
     if (!$encryption_profile) {
@@ -178,7 +177,7 @@ function drush_encrypt_validate_profile($encryption_profile_name = FALSE) {
         return $output;
       }
       else {
-        drush_log(dt('Encryption profile validates successfully.'), LogLevel::SUCCESS);
+        \Drupal::logger('encrypt')->log('success', 'Encryption profile validates successfully.');
       }
     }
   }

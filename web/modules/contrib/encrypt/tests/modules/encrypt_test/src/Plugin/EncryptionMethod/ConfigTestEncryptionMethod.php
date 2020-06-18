@@ -53,15 +53,6 @@ class ConfigTestEncryptionMethod extends EncryptionMethodBase implements Encrypt
   /**
    * {@inheritdoc}
    */
-  public function defaultConfiguration() {
-    return [
-      'mode' => 'CBC',
-    ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $form['mode'] = [
       '#type' => 'select',
@@ -72,7 +63,7 @@ class ConfigTestEncryptionMethod extends EncryptionMethodBase implements Encrypt
         'CFB' => $this->t('CFB'),
         'OFB' => $this->t('OFB'),
       ],
-      '#default_value' => $this->getConfiguration()['mode'],
+      '#default_value' => 'CBC',
       '#required' => TRUE,
     ];
 
