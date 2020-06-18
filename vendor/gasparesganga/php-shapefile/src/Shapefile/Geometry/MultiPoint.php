@@ -1,10 +1,11 @@
 <?php
+
 /**
  * PHP Shapefile - PHP library to read and write ESRI Shapefiles, compatible with WKT and GeoJSON
- * 
+ *
  * @package Shapefile
  * @author  Gaspare Sganga
- * @version 3.2.0
+ * @version 3.3.0
  * @license MIT
  * @link    https://gasparesganga.com/labs/php-shapefile/
  */
@@ -28,7 +29,7 @@ use Shapefile\ShapefileException;
  *          ]
  *      ]
  *  ]
- *  
+ *
  *  - WKT:
  *      MULTIPOINT [Z][M] (x y z m, x y z m)
  *      N.B.: Points coordinates may be enclosed in additional brackets: MULTIPOINT ((x y z m), (x y z m))
@@ -63,6 +64,7 @@ class MultiPoint extends GeometryCollection
             $Point->initFromArray($coordinates);
             $this->addPoint($Point);
         }
+        return $this;
     }
     
     public function initFromWKT($wkt)
@@ -78,6 +80,7 @@ class MultiPoint extends GeometryCollection
                 $this->addPoint($Point);
             }
         }
+        return $this;
     }
     
     public function initFromGeoJSON($geojson)
@@ -85,13 +88,14 @@ class MultiPoint extends GeometryCollection
         $this->checkInit();
         $geojson = $this->geojsonSanitize($geojson);
         if ($geojson !== null) {
-            $force_m = $this->geojsonIsM($geojson['type']);  
+            $force_m = $this->geojsonIsM($geojson['type']);
             foreach ($geojson['coordinates'] as $geojson_coordinates) {
                 $coordinates = $this->geojsonParseCoordinates($geojson_coordinates, $force_m);
                 $Point = new Point($coordinates['x'], $coordinates['y'], $coordinates['z'], $coordinates['m']);
                 $this->addPoint($Point);
             }
         }
+        return $this;
     }
     
     
@@ -136,19 +140,22 @@ class MultiPoint extends GeometryCollection
     /**
      * Adds a point to the collection.
      *
-     * @param   Point   $Point
+     * @param   \Shapefile\Geometry\Point   $Point
+     *
+     * @return  self    Returns $this to provide a fluent interface.
      */
     public function addPoint(Point $Point)
     {
         $this->addGeometry($Point);
+        return $this;
     }
     
     /**
      * Gets a point at specified index from the collection.
      *
-     * @param   integer $index      The index of the point.
+     * @param   int     $index      The index of the point.
      *
-     * @return  Point
+     * @return  \Shapefile\Geometry\Point
      */
     public function getPoint($index)
     {
@@ -157,8 +164,8 @@ class MultiPoint extends GeometryCollection
     
     /**
      * Gets all the points in the collection.
-     * 
-     * @return  Point[]
+     *
+     * @return  \Shapefile\Geometry\Point[]
      */
     public function getPoints()
     {
@@ -167,8 +174,8 @@ class MultiPoint extends GeometryCollection
     
     /**
      * Gets the number of points in the collection.
-     * 
-     * @return  integer
+     *
+     * @return  int
      */
     public function getNumPoints()
     {
@@ -197,5 +204,4 @@ class MultiPoint extends GeometryCollection
     {
         return __NAMESPACE__ . '\\' . static::COLLECTION_CLASS;
     }
-    
 }

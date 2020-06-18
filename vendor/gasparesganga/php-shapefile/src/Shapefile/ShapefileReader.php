@@ -1,10 +1,11 @@
 <?php
+
 /**
  * PHP Shapefile - PHP library to read and write ESRI Shapefiles, compatible with WKT and GeoJSON
- * 
+ *
  * @package Shapefile
  * @author  Gaspare Sganga
- * @version 3.2.0
+ * @version 3.3.0
  * @license MIT
  * @link    https://gasparesganga.com/labs/php-shapefile/
  */
@@ -18,6 +19,9 @@ use Shapefile\Geometry\MultiLinestring;
 use Shapefile\Geometry\Polygon;
 use Shapefile\Geometry\MultiPolygon;
 
+/**
+ * ShapefileReader class.
+ */
 class ShapefileReader extends Shapefile implements \Iterator
 {
     /** SHP read methods hash */
@@ -44,27 +48,27 @@ class ShapefileReader extends Shapefile implements \Iterator
     private $dbf_fields = [];
     
     /**
-     * @var integer DBF file size in bytes.
+     * @var int     DBF file size in bytes.
      */
     private $dbf_file_size;
     
     /**
-     * @var integer DBF file header size in bytes.
+     * @var int     DBF file header size in bytes.
      */
     private $dbf_header_size;
     
     /**
-     * @var integer DBF file record size in bytes.
+     * @var int     DBF file record size in bytes.
      */
     private $dbf_record_size;
     
     /**
-     * @var integer DBT file size in bytes.
+     * @var int     DBT file size in bytes.
      */
     private $dbt_file_size;
     
     /**
-     * @var integer Pointer to current SHP and DBF files record.
+     * @var int     Pointer to current SHP and DBF files record.
      */
     private $current_record;
     
@@ -73,12 +77,24 @@ class ShapefileReader extends Shapefile implements \Iterator
     /////////////////////////////// PUBLIC ///////////////////////////////
     /**
      * Constructor.
-     * 
+     *
      * @param   string|array    $files      Path to SHP file / Array of paths / Array of handles of individual files.
      * @param   array           $options    Optional associative array of options.
      */
     public function __construct($files, $options = [])
     {
+        // Deprecated options
+        if (isset($options[Shapefile::OPTION_ENFORCE_POLYGON_CLOSED_RINGS])) {
+            $options = array_merge([
+                Shapefile::OPTION_POLYGON_CLOSED_RINGS_ACTION => $options[Shapefile::OPTION_ENFORCE_POLYGON_CLOSED_RINGS] ? Shapefile::ACTION_CHECK : Shapefile::ACTION_IGNORE,
+            ], $options);
+        }
+        if (isset($options[Shapefile::OPTION_INVERT_POLYGONS_ORIENTATION])) {
+            $options = array_merge([
+                Shapefile::OPTION_POLYGON_OUTPUT_ORIENTATION => $options[Shapefile::OPTION_INVERT_POLYGONS_ORIENTATION] ? Shapefile::ORIENTATION_COUNTERCLOCKWISE : Shapefile::ORIENTATION_CLOCKWISE,
+            ], $options);
+        }
+        
         // Options
         $this->initOptions([
             Shapefile::OPTION_DBF_ALLOW_FIELD_SIZE_255,
@@ -88,11 +104,12 @@ class ShapefileReader extends Shapefile implements \Iterator
             Shapefile::OPTION_DBF_NULL_PADDING_CHAR,
             Shapefile::OPTION_DBF_NULLIFY_INVALID_DATES,
             Shapefile::OPTION_DBF_RETURN_DATES_AS_OBJECTS,
-            Shapefile::OPTION_ENFORCE_POLYGON_CLOSED_RINGS,
             Shapefile::OPTION_FORCE_MULTIPART_GEOMETRIES,
+            Shapefile::OPTION_POLYGON_CLOSED_RINGS_ACTION,
+            Shapefile::OPTION_POLYGON_ORIENTATION_READING_AUTOSENSE,
+            Shapefile::OPTION_POLYGON_OUTPUT_ORIENTATION,
             Shapefile::OPTION_IGNORE_GEOMETRIES_BBOXES,
             Shapefile::OPTION_IGNORE_SHAPEFILE_BBOX,
-            Shapefile::OPTION_INVERT_POLYGONS_ORIENTATION,
             Shapefile::OPTION_SUPPRESS_M,
             Shapefile::OPTION_SUPPRESS_Z,
         ], $options);
@@ -127,7 +144,7 @@ class ShapefileReader extends Shapefile implements \Iterator
     
     /**
      * Destructor.
-     * 
+     *
      * Closes all files.
      */
     public function __destruct()
@@ -172,7 +189,7 @@ class ShapefileReader extends Shapefile implements \Iterator
      * Note that records count starts from 1 in Shapefiles.
      * When the last record is reached, the special value Shapefile::EOF will be returned.
      *
-     * @return  integer
+     * @return  int
      */
     public function getCurrentRecord()
     {
@@ -182,7 +199,9 @@ class ShapefileReader extends Shapefile implements \Iterator
     /**
      * Sets current record index. Throws an exception if provided index is out of range.
      *
-     * @param   integer $index   Index of the record to select.
+     * @param   int     $index   Index of the record to select.
+     *
+     * @return  self    Returns $this to provide a fluent interface.
      */
     public function setCurrentRecord($index)
     {
@@ -190,12 +209,13 @@ class ShapefileReader extends Shapefile implements \Iterator
             throw new ShapefileException(Shapefile::ERR_INPUT_RECORD_NOT_FOUND, $index);
         }
         $this->current_record = $index;
+        return $this;
     }
     
     /**
      * Gets current record and moves the cursor to the next one.
      *
-     * @return  Geometry
+     * @return  \Shapefile\Geometry\Geometry
      */
     public function fetchRecord()
     {
@@ -214,7 +234,7 @@ class ShapefileReader extends Shapefile implements \Iterator
      *
      * @param   string  $file_type      File type.
      *
-     * @return  integer
+     * @return  int
      */
     private function readChar($file_type)
     {
@@ -226,7 +246,7 @@ class ShapefileReader extends Shapefile implements \Iterator
      *
      * @param   string  $file_type      File type.
      *
-     * @return  integer
+     * @return  int
      */
     private function readInt16L($file_type)
     {
@@ -238,7 +258,7 @@ class ShapefileReader extends Shapefile implements \Iterator
      *
      * @param   string  $file_type      File type.
      *
-     * @return  integer
+     * @return  int
      */
     private function readInt32B($file_type)
     {
@@ -250,7 +270,7 @@ class ShapefileReader extends Shapefile implements \Iterator
      *
      * @param   string  $file_type      File type.
      *
-     * @return  integer
+     * @return  int
      */
     private function readInt32L($file_type)
     {
@@ -277,7 +297,7 @@ class ShapefileReader extends Shapefile implements \Iterator
      * Reads a string of given length from a resource handle and optionally converts it to UTF-8.
      *
      * @param   string  $file_type          File type.
-     * @param   integer $length             Length of the string to read.
+     * @param   int     $length             Length of the string to read.
      * @param   bool    $flag_utf8_encode   Optional flag to convert output to UTF-8 if OPTION_DBF_CONVERT_TO_UTF8 is enabled.
      *
      * @return  string
@@ -298,7 +318,7 @@ class ShapefileReader extends Shapefile implements \Iterator
     /**
      * Checks whether a record index value is valid or not.
      *
-     * @param   integer $index      The index value to check.
+     * @param   int     $index      The index value to check.
      *
      * @return  bool
      */
@@ -310,6 +330,8 @@ class ShapefileReader extends Shapefile implements \Iterator
     
     /**
      * Reads SHP file header.
+     *
+     * @return  self    Returns $this to provide a fluent interface.
      */
     private function readSHPHeader()
     {
@@ -317,7 +339,7 @@ class ShapefileReader extends Shapefile implements \Iterator
         $this->setFilePointer(Shapefile::FILE_SHP, 32);
         $this->setShapeType($this->readInt32L(Shapefile::FILE_SHP));
         
-        // Bounding Box (Z and M ranges are always present in the Shapefile, although with a 0 value if not used) 
+        // Bounding Box (Z and M ranges are always present in the Shapefile, although with a 0 value if not used)
         if (!$this->getOption(Shapefile::OPTION_IGNORE_SHAPEFILE_BBOX)) {
             $bounding_box = $this->readXYBoundingBox() + $this->readZRange() + $this->readMRange();
             if (!$this->isZ()) {
@@ -330,10 +352,14 @@ class ShapefileReader extends Shapefile implements \Iterator
             }
             $this->setCustomBoundingBox($bounding_box);
         }
+        
+        return $this;
     }
     
     /**
      * Reads DBF file header.
+     *
+     * @return  self    Returns $this to provide a fluent interface.
      */
     private function readDBFHeader()
     {
@@ -373,13 +399,15 @@ class ShapefileReader extends Shapefile implements \Iterator
         if ($this->readChar(Shapefile::FILE_DBF) !== Shapefile::DBF_FIELD_TERMINATOR) {
             throw new ShapefileException(Shapefile::ERR_DBF_FILE_NOT_VALID);
         }
+        
+        return $this;
     }
     
     
     /**
      * Reads current record in both SHP and DBF files and returns a Geometry.
      *
-     * @return  Geometry
+     * @return  \Shapefile\Geometry\Geometry
      */
     private function readCurrentRecord()
     {
@@ -429,7 +457,7 @@ class ShapefileReader extends Shapefile implements \Iterator
                         $value .= $this->readString(Shapefile::FILE_DBT, Shapefile::DBT_BLOCK_SIZE, true);
                     // Some software only sets ONE field terminator instead of TWO, hence the weird loop condition check:
                     } while (ord(substr($value, -1)) != Shapefile::DBT_FIELD_TERMINATOR && ord(substr($value, -2, 1)) != Shapefile::DBT_FIELD_TERMINATOR);
-                    $value = substr($value, 0, -2); 
+                    $value = substr($value, 0, -2);
                 }
                 $Geometry->setData($f['name'], $value);
             }
@@ -465,7 +493,7 @@ class ShapefileReader extends Shapefile implements \Iterator
                         $value = $DateTime;
                     } else {
                         $value = $DateTime->format('Y-m-d');
-                    }  
+                    }
                     break;
                     
                 case Shapefile::DBF_TYPE_LOGICAL:
@@ -516,6 +544,8 @@ class ShapefileReader extends Shapefile implements \Iterator
     /**
      * Parses an M coordinate according to the ESRI specs:
      * «Any floating point number smaller than –10^38 is considered by a shapefile reader to represent a "no data" value»
+     *
+     * @param   float   $value  Value to parse.
      *
      * @return  float|bool
      */
@@ -579,7 +609,7 @@ class ShapefileReader extends Shapefile implements \Iterator
     /**
      * Returns an empty Geometry depending on the base type of the Shapefile.
      *
-     * @return  Geometry
+     * @return  \Shapefile\Geometry\Geometry
      */
     private function readNull()
     {
@@ -602,7 +632,7 @@ class ShapefileReader extends Shapefile implements \Iterator
     /**
      * Reads a Point from the SHP file.
      *
-     * @return  Point
+     * @return  \Shapefile\Geometry\Point
      */
     private function readPoint()
     {
@@ -612,7 +642,7 @@ class ShapefileReader extends Shapefile implements \Iterator
     /**
      * Reads a PointM from the SHP file.
      *
-     * @return  Point
+     * @return  \Shapefile\Geometry\Point
      */
     private function readPointM()
     {
@@ -622,7 +652,7 @@ class ShapefileReader extends Shapefile implements \Iterator
     /**
      * Reads a PointZ from the SHP file.
      *
-     * @return  Point
+     * @return  \Shapefile\Geometry\Point
      */
     private function readPointZ()
     {
@@ -634,7 +664,7 @@ class ShapefileReader extends Shapefile implements \Iterator
      *
      * @param   array   $data   Array with "x", "y" and optional "z" and "m" values.
      *
-     * @return  Point
+     * @return  \Shapefile\Geometry\Point
      */
     private function createPoint($data)
     {
@@ -649,7 +679,7 @@ class ShapefileReader extends Shapefile implements \Iterator
      *
      * @param   bool    $flag_return_geometry   Flag to control return type.
      *
-     * @return  MultiPoint|array
+     * @return  \Shapefile\Geometry\MultiPoint|array
      */
     private function readMultiPoint($flag_return_geometry = true)
     {
@@ -672,7 +702,7 @@ class ShapefileReader extends Shapefile implements \Iterator
     /**
      * Reads a MultiPointM from the SHP file.
      *
-     * @return  MultiPoint
+     * @return  \Shapefile\Geometry\MultiPoint
      */
     private function readMultiPointM()
     {
@@ -692,7 +722,7 @@ class ShapefileReader extends Shapefile implements \Iterator
     /**
      * Reads a MultiPointZ from the SHP file.
      *
-     * @return  MultiPoint
+     * @return  \Shapefile\Geometry\MultiPoint
      */
     private function readMultiPointZ()
     {
@@ -721,7 +751,7 @@ class ShapefileReader extends Shapefile implements \Iterator
      *
      * @param   array   $data   Array with "bbox" and "geometry" values.
      *
-     * @return  MultiPoint
+     * @return  \Shapefile\Geometry\MultiPoint
      */
     private function createMultiPoint($data)
     {
@@ -739,7 +769,7 @@ class ShapefileReader extends Shapefile implements \Iterator
      *
      * @param   bool    $flag_return_geometry   Flag to control return type.
      *
-     * @return  Linestring|MultiLinestring|array
+     * @return  \Shapefile\Geometry\Linestring|\Shapefile\Geometry\MultiLinestring|array
      */
     private function readPolyLine($flag_return_geometry = true)
     {
@@ -781,7 +811,7 @@ class ShapefileReader extends Shapefile implements \Iterator
      *
      * @param   bool    $flag_return_geometry   Flag to control return type.
      *
-     * @return  Linestring|MultiLinestring|array
+     * @return  \Shapefile\Geometry\Linestring|\Shapefile\Geometry\MultiLinestring|array
      */
     private function readPolyLineM($flag_return_geometry = true)
     {
@@ -805,7 +835,7 @@ class ShapefileReader extends Shapefile implements \Iterator
      *
      * @param   bool    $flag_return_geometry   Flag to control return type.
      *
-     * @return  Linestring|MultiLinestring|array
+     * @return  \Shapefile\Geometry\Linestring|\Shapefile\Geometry\MultiLinestring|array
      */
     private function readPolyLineZ($flag_return_geometry = true)
     {
@@ -839,7 +869,7 @@ class ShapefileReader extends Shapefile implements \Iterator
      *
      * @param   array   $data   Array with "bbox" and "geometry" values.
      *
-     * @return  Linestring|MultiLinestring
+     * @return  \Shapefile\Geometry\Linestring|\Shapefile\Geometry\MultiLinestring
      */
     private function createLinestring($data)
     {
@@ -860,7 +890,7 @@ class ShapefileReader extends Shapefile implements \Iterator
     /**
      * Reads a Polygon from the SHP file.
      *
-     * @return  Polygon|MultiPolygon
+     * @return  \Shapefile\Geometry\Polygon|\Shapefile\Geometry\MultiPolygon
      */
     private function readPolygon()
     {
@@ -870,7 +900,7 @@ class ShapefileReader extends Shapefile implements \Iterator
     /**
      * Reads a PolygonM from the SHP file.
      *
-     * @return  Polygon|MultiPolygon
+     * @return  \Shapefile\Geometry\Polygon|\Shapefile\Geometry\MultiPolygon
      */
     private function readPolygonM()
     {
@@ -880,7 +910,7 @@ class ShapefileReader extends Shapefile implements \Iterator
     /**
      * Reads a PolygonZ from the SHP file.
      *
-     * @return  Polygon|MultiPolygon
+     * @return  \Shapefile\Geometry\Polygon|\Shapefile\Geometry\MultiPolygon
      */
     private function readPolygonZ()
     {
@@ -893,52 +923,35 @@ class ShapefileReader extends Shapefile implements \Iterator
      *
      * @param   array   $data   Array with "bbox" and "geometry" values.
      *
-     * @return  Polygon|MultiPolygon
+     * @return  \Shapefile\Geometry\Polygon|\Shapefile\Geometry\MultiPolygon
      */
     private function createPolygon($data)
     {
-        // Parse Polygon
-        $i      = -1;
-        $parts  = [];
-        foreach ($data['geometry']['parts'] as $rawpart) {
-            if ($this->isClockwise($rawpart['points'])) {
-                ++$i;
-                $parts[$i] = [
-                    'numrings'  => 0,
-                    'rings'     => [],
-                ];
+        $MultiPolygon   = new MultiPolygon(null, $this->getOption(Shapefile::OPTION_POLYGON_CLOSED_RINGS_ACTION), $this->getOption(Shapefile::OPTION_POLYGON_OUTPUT_ORIENTATION));
+        $Polygon        = null;
+        $temp_state     = null;
+        foreach ($data['geometry']['parts'] as $part) {
+            $Linestring = new Linestring();
+            $Linestring->initFromArray($part);
+            $is_clockwise = $Linestring->isClockwise();
+            if ($Polygon === null && !$is_clockwise && !$this->getOption(Shapefile::OPTION_POLYGON_ORIENTATION_READING_AUTOSENSE)) {
+                throw new ShapefileException(Shapefile::ERR_GEOM_POLYGON_WRONG_ORIENTATION);
             }
-            if ($i < 0) {
-                throw new ShapefileException(Shapefile::ERR_GEOM_POLYGON_NOT_VALID);
+            if ($temp_state === null || $temp_state === $is_clockwise) {
+                if ($Polygon !== null) {
+                    $MultiPolygon->addPolygon($Polygon);
+                }
+                $Polygon    = new Polygon(null, $this->getOption(Shapefile::OPTION_POLYGON_CLOSED_RINGS_ACTION), $this->getOption(Shapefile::OPTION_POLYGON_OUTPUT_ORIENTATION));
+                $temp_state = $is_clockwise;
             }
-            if ($this->getOption(Shapefile::OPTION_INVERT_POLYGONS_ORIENTATION)) {
-                $rawpart['points'] = array_reverse($rawpart['points']);
-            }
-            $parts[$i]['rings'][] = $rawpart;
+            $Polygon->addRing($Linestring);
         }
-        for ($i = 0; $i < count($parts); ++$i) {
-            $parts[$i]['numrings'] = count($parts[$i]['rings']);
-        }
-        $data = [
-            'bbox'      => $data['bbox'],
-            'geometry'  => [
-                'numparts'  => count($parts),
-                'parts'     => $parts,
-            ],
-        ];
+        $MultiPolygon->addPolygon($Polygon);
         
-        // Create Geometry
-        if (!$this->getOption(Shapefile::OPTION_FORCE_MULTIPART_GEOMETRIES) && $data['geometry']['numparts'] == 1) {
-            $data['geometry'] = $data['geometry']['parts'][0];
-            $Geometry = new Polygon(null, $this->getOption(Shapefile::OPTION_ENFORCE_POLYGON_CLOSED_RINGS));
-        } else {
-            $Geometry = new MultiPolygon(null, $this->getOption(Shapefile::OPTION_ENFORCE_POLYGON_CLOSED_RINGS));
-        }
-        $Geometry->initFromArray($data['geometry']);
+        $Geometry = (!$this->getOption(Shapefile::OPTION_FORCE_MULTIPART_GEOMETRIES) && $MultiPolygon->getNumPolygons() == 1) ? $MultiPolygon->getPolygon(0) : $MultiPolygon;
         if (!$this->getOption(Shapefile::OPTION_IGNORE_GEOMETRIES_BBOXES)) {
             $Geometry->setCustomBoundingBox($data['bbox']);
         }
-        return $Geometry;  
+        return $Geometry;
     }
-    
 }

@@ -1,10 +1,11 @@
 <?php
+
 /**
  * PHP Shapefile - PHP library to read and write ESRI Shapefiles, compatible with WKT and GeoJSON
- * 
+ *
  * @package Shapefile
  * @author  Gaspare Sganga
- * @version 3.2.0
+ * @version 3.3.0
  * @license MIT
  * @link    https://gasparesganga.com/labs/php-shapefile/
  */
@@ -17,7 +18,7 @@ namespace Shapefile;
 class ShapefileAutoloader
 {
     /**
-     * Register the actual autoloader.
+     * Registers the actual autoloader.
      */
     public static function register()
     {
@@ -42,5 +43,7 @@ class ShapefileAutoloader
      * Private constructor, no instances of this class allowed.
      */
     private function __construct()
-    {}
+    {
+        // NOP
+    }
 }

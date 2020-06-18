@@ -1,10 +1,11 @@
 <?php
+
 /**
  * PHP Shapefile - PHP library to read and write ESRI Shapefiles, compatible with WKT and GeoJSON
- * 
+ *
  * @package Shapefile
  * @author  Gaspare Sganga
- * @version 3.2.0
+ * @version 3.3.0
  * @license MIT
  * @link    https://gasparesganga.com/labs/php-shapefile/
  */
@@ -33,13 +34,13 @@ use Shapefile\ShapefileException;
  *          ]
  *      ]
  *  ]
- *  
+ *
  *  - WKT:
  *      MULTILINESTRING [Z][M] ((x y z m, x y z m, x y z m), (x y z m, x y z m))
  *
  *  - GeoJSON:
  *      {
- *          "type": "MultiLinestring" / "MultiLinestringM"
+ *          "type": "MultiLineString" / "MultiLineStringM"
  *          "coordinates": [
  *              [
  *                  [x, y, z] / [x, y, m] / [x, y, z, m]
@@ -76,6 +77,7 @@ class MultiLinestring extends GeometryCollection
             }
             $this->addLinestring($Linestring);
         }
+        return $this;
     }
     
     public function initFromWKT($wkt)
@@ -95,6 +97,7 @@ class MultiLinestring extends GeometryCollection
                 $this->addLinestring($Linestring);
             }
         }
+        return $this;
     }
     
     public function initFromGeoJSON($geojson)
@@ -113,6 +116,7 @@ class MultiLinestring extends GeometryCollection
                 $this->addLinestring($Linestring);
             }
         }
+        return $this;
     }
     
     
@@ -165,19 +169,22 @@ class MultiLinestring extends GeometryCollection
     /**
      * Adds a linestring to the collection.
      *
-     * @param   Linestring  $Linestring
+     * @param   \Shapefile\Geometry\Linestring  $Linestring
+     *
+     * @return  self    Returns $this to provide a fluent interface.
      */
     public function addLinestring(Linestring $Linestring)
     {
         $this->addGeometry($Linestring);
+        return $this;
     }
     
     /**
      * Gets a linestring at specified index from the collection.
      *
-     * @param   integer $index  The index of the linestring.
+     * @param   int     $index  The index of the linestring.
      *
-     * @return  Linestring
+     * @return  \Shapefile\Geometry\Linestring
      */
     public function getLinestring($index)
     {
@@ -186,8 +193,8 @@ class MultiLinestring extends GeometryCollection
     
     /**
      * Gets all the linestrings in the collection.
-     * 
-     * @return  Linestring[]
+     *
+     * @return  \Shapefile\Geometry\Linestring[]
      */
     public function getLinestrings()
     {
@@ -196,8 +203,8 @@ class MultiLinestring extends GeometryCollection
     
     /**
      * Gets the number of linestrings in the collection.
-     * 
-     * @return  integer
+     *
+     * @return  int
      */
     public function getNumLinestrings()
     {
@@ -226,5 +233,4 @@ class MultiLinestring extends GeometryCollection
     {
         return __NAMESPACE__ . '\\' . static::COLLECTION_CLASS;
     }
-    
 }

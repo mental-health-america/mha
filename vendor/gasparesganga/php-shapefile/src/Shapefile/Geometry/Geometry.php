@@ -1,10 +1,11 @@
 <?php
+
 /**
  * PHP Shapefile - PHP library to read and write ESRI Shapefiles, compatible with WKT and GeoJSON
- * 
+ *
  * @package Shapefile
  * @author  Gaspare Sganga
- * @version 3.2.0
+ * @version 3.3.0
  * @license MIT
  * @link    https://gasparesganga.com/labs/php-shapefile/
  */
@@ -57,6 +58,8 @@ abstract class Geometry
      * Initialize the Geometry with a structured array.
      *
      * @param   array   $array      Array structured according to Geometry type.
+     *
+     * @return  self    Returns $this to provide a fluent interface.
      */
     abstract public function initFromArray($array);
     
@@ -64,6 +67,8 @@ abstract class Geometry
      * Initialize the Geometry with WKT.
      *
      * @param   string  $wkt        WKT string.
+     *
+     * @return  self    Returns $this to provide a fluent interface.
      */
     abstract public function initFromWKT($wkt);
     
@@ -71,6 +76,8 @@ abstract class Geometry
      * Initialize the Geometry with GeoJSON.
      *
      * @param   string  $geojson    GeoJSON string.
+     *
+     * @return  self    Returns $this to provide a fluent interface.
      */
     abstract public function initFromGeoJSON($geojson);
     
@@ -97,12 +104,12 @@ abstract class Geometry
      *
      * @return  string
      */
-    abstract public function getGeoJSON($flag_bbox, $flag_feature);
+    abstract public function getGeoJSON($flag_bbox = true, $flag_feature = false);
     
     /**
      * Gets Geometry bounding box.
      * If a custom one is defined, it will be returned instead of a computed one.
-     * 
+     *
      * @return  array   Associative array with the xmin, xmax, ymin, ymax and optional zmin, zmax, mmin, mmax values.
      */
     abstract public function getBoundingBox();
@@ -112,22 +119,22 @@ abstract class Geometry
      * This is not intended for users, but Shapefile requires it for internal mechanisms.
      *
      * @internal
-     * 
-     * @return  integer
+     *
+     * @return  int
      */
     abstract public function getSHPBasetype();
     
     
     /**
      * Gets the WKT base type of the Geometry.
-     * 
+     *
      * @return  string
      */
     abstract protected function getWKTBasetype();
     
     /**
      * Gets the GeoJSON base type of the Geometry.
-     * 
+     *
      * @return  string
      */
     abstract protected function getGeoJSONBasetype();
@@ -137,7 +144,7 @@ abstract class Geometry
     /////////////////////////////// PUBLIC ///////////////////////////////
     /**
      * Gets the state of the Empty flag.
-     * 
+     *
      * @return  bool
      */
     public function isEmpty()
@@ -147,7 +154,7 @@ abstract class Geometry
     
     /**
      * Gets the state of the Z flag.
-     * 
+     *
      * @return  bool
      */
     public function isZ()
@@ -157,7 +164,7 @@ abstract class Geometry
     
     /**
      * Gets the state of the M flag.
-     * 
+     *
      * @return  bool
      */
     public function isM()
@@ -167,7 +174,7 @@ abstract class Geometry
     
     /**
      * Gets the state of the Deleted flag.
-     * 
+     *
      * @return  bool
      */
     public function isDeleted()
@@ -177,12 +184,15 @@ abstract class Geometry
     
     /**
      * Sets the state of the Deleted flag.
-     * 
+     *
      * @param   bool    $value
+     *
+     * @return  self    Returns $this to provide a fluent interface.
      */
     public function setFlagDeleted($value)
     {
         $this->flag_deleted = $value;
+        return $this;
     }
     
     
@@ -190,7 +200,9 @@ abstract class Geometry
      * Sets a custom bounding box for the Geometry.
      * No check is carried out except a formal compliance of dimensions.
      *
-     * @param   array   $bounding_box    Associative array with the xmin, xmax, ymin, ymax and optional zmin, zmax, mmin, mmax values.
+     * @param   array   $bounding_box   Associative array with the xmin, xmax, ymin, ymax and optional zmin, zmax, mmin, mmax values.
+     *
+     * @return  self    Returns $this to provide a fluent interface.
      */
     public function setCustomBoundingBox($bounding_box)
     {
@@ -204,15 +216,19 @@ abstract class Geometry
             throw new ShapefileException(Shapefile::ERR_GEOM_MISMATCHED_BBOX);
         }
         $this->custom_bounding_box = $bounding_box;
+        return $this;
     }
     
     /**
      * Resets custom bounding box for the Geometry.
      * It will cause getBoundingBox() method to return a normally computed bbox instead of a custom one.
+     *
+     * @return  self    Returns $this to provide a fluent interface.
      */
     public function resetCustomBoundingBox()
     {
         $this->custom_bounding_box = null;
+        return $this;
     }
     
     
@@ -236,10 +252,13 @@ abstract class Geometry
      *
      * @param   string  $fieldname  Name of the field.
      * @param   mixed   $value      Value to assign to the field.
+     *
+     * @return  self    Returns $this to provide a fluent interface.
      */
     public function setData($fieldname, $value)
     {
         $this->data[$fieldname] = $value;
+        return $this;
     }
     
     /**
@@ -256,12 +275,15 @@ abstract class Geometry
      * Sets an array of data.
      *
      * @param   array   $data       Associative array of values.
+     *
+     * @return  self    Returns $this to provide a fluent interface.
      */
     public function setDataArray($data)
     {
         foreach ($data as $fieldname => $value) {
             $this->data[$fieldname] = $value;
         }
+        return $this;
     }
     
     
@@ -269,54 +291,69 @@ abstract class Geometry
     /////////////////////////////// PROTECTED ///////////////////////////////
     /**
      * Sets the state of the Empty flag.
-     * 
+     *
      * @param   bool    $value
+     *
+     * @return  self    Returns $this to provide a fluent interface.
      */
     protected function setFlagEmpty($value)
     {
         $this->flag_empty = $value;
+        return $this;
     }
     
     /**
      * Sets the state of the Z flag.
-     * 
+     *
      * @param   bool    $value
+     *
+     * @return  self    Returns $this to provide a fluent interface.
      */
     protected function setFlagZ($value)
     {
         $this->flag_z = $value;
+        return $this;
     }
     
     /**
      * Sets the state of the M flag.
-     * 
+     *
      * @param   bool    $value
+     *
+     * @return  self    Returns $this to provide a fluent interface.
      */
     protected function setFlagM($value)
     {
         $this->flag_m = $value;
+        return $this;
     }
     
     
     /**
-     * Checks if the Geometry has been initialized (it is not empty) and if YES throws and exception.
+     * Checks if the Geometry has been initialized (it is not empty) and if YES throws an exception.
+     *
+     * @return  self    Returns $this to provide a fluent interface.
      */
     protected function checkInit()
     {
         if (!$this->isEmpty()) {
             throw new ShapefileException(Shapefile::ERR_GEOM_NOT_EMPTY);
         }
+        return $this;
     }
     
     
     /**
      * Gets the custom bounding box.
-     * 
+     *
      * @return  array
+     *
+     * @return  self    Returns $this to provide a fluent interface.
      */
     protected function getCustomBoundingBox()
     {
         return $this->custom_bounding_box;
+        return $this;
     }
     
     
@@ -553,7 +590,7 @@ abstract class Geometry
      * @param   float[] $coordinates    The indexed array of coordinates to parse.
      * @param   bool    $force_z        Flag to enforce the presence of Z dimension.
      * @param   bool    $force_m        Flag to enforce the presence of M dimension.
-     * @param   integer $err_code       Error code to throw an exception in case of invalid input.
+     * @param   int     $err_code       Error code to throw an exception in case of invalid input.
      *
      * @return  array
      */
@@ -561,9 +598,9 @@ abstract class Geometry
     {
         $count = count($coordinates);
         if (
-            $count < 2                              || 
-            (($force_z || $force_m) && $count < 3)  || 
-            ($force_z && $force_m && $count < 4)    || 
+            $count < 2                              ||
+            (($force_z || $force_m) && $count < 3)  ||
+            ($force_z && $force_m && $count < 4)    ||
             $count > 4
         ) {
             throw new ShapefileException($err_code);
@@ -588,5 +625,4 @@ abstract class Geometry
         }
         return $ret;
     }
-    
 }
