@@ -1,0 +1,13 @@
+name: Fraction
+type: module
+description: Provides a field for storing decimals as fractions, for maximum precision.
+# core: 8.x
+package: Field types
+dependencies:
+  - drupal:field
+
+# Information added by Drupal.org packaging script on 2018-10-08
+version: '8.x-1.3'
+core: '8.x'
+project: 'fraction'
+datestamp: 1539009784
