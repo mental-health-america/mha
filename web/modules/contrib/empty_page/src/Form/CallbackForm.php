@@ -87,7 +87,7 @@ class CallbackForm extends ConfigFormBase {
     if (empty($this->cid)) {
       $new = TRUE;
       $id = $this->config('empty_page.settings')->get('new_id');
-      $callback['created'] = REQUEST_TIME;
+      $callback['created'] = \Drupal::time()->getRequestTime();
     }
     else {
       $id = $this->cid;
@@ -95,7 +95,7 @@ class CallbackForm extends ConfigFormBase {
     }
 
     $callback['cid'] = $id;
-    $callback['updated'] = REQUEST_TIME;
+    $callback['updated'] = \Drupal::time()->getRequestTime();
     $callback['path'] = $values['empty_page_callback_path'];
     $callback['page_title'] = $values['empty_page_callback_page_title'];
 
@@ -103,7 +103,7 @@ class CallbackForm extends ConfigFormBase {
     $config = $new ? $config->set('new_id', $id + 1) : $config;
     $config->save();
     \Drupal::service('router.builder')->rebuild();
-    drupal_set_message($this->t('Changes saved.'));
+    $this->messenger()->addMessage($this->t('Changes saved.'));
     $form_state->setRedirect('empty_page.administration');
   }
 

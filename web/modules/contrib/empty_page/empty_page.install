@@ -16,7 +16,7 @@ function empty_page_install() {
  * Implements hook_update_N().
  */
 function empty_page_update_8101(&$sandbox) {
-  if (db_table_exists('empty_page')) {
+  if (\Drupal::database()->schema()->tableExists('empty_page')) {
     $id = 0;
     $records = \Drupal::database()->select('empty_page', 't')
              ->fields('t', [])
@@ -28,6 +28,6 @@ function empty_page_update_8101(&$sandbox) {
     }
     $config->set('new_id', $id + 1)->save();
     // Delete the table.
-    db_drop_table('empty_page');
+    \Drupal::database()->schema()->dropTable('empty_page');
   }
 }

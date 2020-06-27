@@ -59,7 +59,7 @@ class CallbackDeleteForm extends ConfirmFormBase {
     $callback = $this->callback;
     \Drupal::configFactory()->getEditable('empty_page.settings')->clear('callback_' . $callback['cid'])->save();
     \Drupal::service('router.builder')->rebuild();
-    drupal_set_message($this->t('Callback <em>:path</em> deleted.', [':path' => $callback->path]));
+    $this->messenger()->addMessage($this->t('Callback <em>:path</em> deleted.', [':path' => $callback->path]));
     $form_state->setRedirect('empty_page.administration');
   }
 

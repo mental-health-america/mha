@@ -30,7 +30,7 @@ class EmptyPageController {
         $delete_url = Url::fromRoute('empty_page.delete_callback', ['cid' => $cid]);
         $title = $callback['page_title'] ?: t('No title');
         $row    = [
-          \Drupal::l($title, $view_url),
+          Link::fromTextAndUrl($title, $view_url),
           Link::fromTextAndUrl(t('Edit'), $edit_url),
           Link::fromTextAndUrl(t('Delete'), $delete_url),
         ];
