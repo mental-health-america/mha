@@ -3,18 +3,27 @@
 namespace Drupal\simple_instagram_feed\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
-use Drupal\Core\Block\BlockPluginInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\simple_instagram_feed\Services\SimpleInstagramFeedLibraryInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a block with a dynamic Instagram Feed.
  *
  * @Block(
- * id = "simple_instagram_block",
- * admin_label = @Translation("Simple Instagram Feed"),
+ *   id = "simple_instagram_block",
+ *   admin_label = @Translation("Simple Instagram Feed"),
  * )
  */
-class SimpleInstagramBlock extends BlockBase implements BlockPluginInterface {
+class SimpleInstagramBlock extends BlockBase implements ContainerFactoryPluginInterface {
+
+  /**
+   * The simple instagram feed library service.
+   *
+   * @var \Drupal\simple_instagram_feed\Services\SimpleInstagramFeedLibraryInterface
+   */
+  private $simpleInstagramFeedLibrary;
 
   /**
    * {@inheritdoc}
@@ -72,6 +81,9 @@ class SimpleInstagramBlock extends BlockBase implements BlockPluginInterface {
       '#default_value' => isset($config['simple_instagram_styling']) ? $config['simple_instagram_styling'] : 'true',
     ];
 
+    // Add a warning if the js library is not available.
+    $this->simpleInstagramFeedLibrary->isAvailable(TRUE);
+
     return $form;
   }
 
@@ -93,19 +105,50 @@ class SimpleInstagramBlock extends BlockBase implements BlockPluginInterface {
    * {@inheritdoc}
    */
   public function build() {
-    // Return array.
+    if (!$this->simpleInstagramFeedLibrary->isAvailable()) {
+      return [];
+    }
+
     return [
       '#theme' => 'simple_instagram_block',
       '#markup' => $this->t('Simple Instagram Feed'),
       '#attached' => [
-        'library' => [
-          'simple_instagram_feed/simple_instagram_block',
-        ],
+        'library' => ['simple_instagram_feed/simple_instagram_block'],
       ],
       '#cache' => [
         'max-age' => 3600,
       ],
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    SimpleInstagramFeedLibraryInterface $simple_instagram_feed_library
+  ) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->simpleInstagramFeedLibrary = $simple_instagram_feed_library;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(
+    ContainerInterface $container,
+    array $configuration,
+    $plugin_id,
+    $plugin_definition
+  ) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('simple_instagram_feed.library')
+    );
   }
 
 }
