@@ -2,31 +2,55 @@
 
 namespace Drupal\content_access\Tests;
 
+use Drupal\Core\Session\AccountInterface;
+use Drupal\simpletest\WebTestBase;
+
 /**
  * Automated SimpleTest Case for content access module.
  *
  * @group Access
  */
-class ContentAccessModuleTestCase extends ContentAccessTestHelp {
+class ContentAccessModuleTestCase extends WebTestBase {
+  use ContentAccessTestHelperTrait;
 
   /**
-   * Implementation of get_info() for information.
+   * Modules to enable.
+   *
+   * @var array
    */
-  public static function getInfo() {
-    return [
-      'name' => t('Content Access Module Tests'),
-      'description' => t(
-        'Various tests to check permission settings on nodes.'
-      ),
-      'group' => t('Content Access'),
-    ];
-  }
+  public static $modules = ['content_access'];
+
+  protected $test_user;
+  protected $admin_user;
+  protected $content_type;
+  protected $node1;
+  protected $node2;
 
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  function setUp() {
     parent::setUp();
+
+    // Create test user with separate role.
+    $this->test_user = $this->drupalCreateUser();
+
+    // Create admin user.
+    $this->admin_user = $this->drupalCreateUser([
+      'access content',
+      'administer content types',
+      'grant content access',
+      'grant own content access',
+      'bypass node access',
+      'access administration pages'
+    ]);
+    $this->drupalLogin($this->admin_user);
+
+    // Rebuild content access permissions.
+    node_access_rebuild();
+
+    // Create test content type.
+    $this->content_type = $this->drupalCreateContentType();
 
     // Create test nodes.
     $this->node1 = $this->drupalCreateNode(['type' => $this->content_type->id()]);
@@ -36,7 +60,7 @@ class ContentAccessModuleTestCase extends ContentAccessTestHelp {
   /**
    * Test for viewing nodes.
    */
-  function testViewAccess() {
+  public function testViewAccess() {
     // Restrict access to the content type.
     $access_permissions = [
       'view[anonymous]' => FALSE,
@@ -95,10 +119,10 @@ class ContentAccessModuleTestCase extends ContentAccessTestHelp {
     // Login admin, swap permissions between content type and node2.
     $this->drupalLogin($this->admin_user);
 
-    // Restrict access to content type
+    // Restrict access to content type.
     $this->changeAccessContentTypeKeyword('view', FALSE);
 
-    // Grant access to node2
+    // Grant access to node2.
     $this->changeAccessNodeKeyword($this->node2, 'view');
 
     // Logout admin and try to access both nodes anonymously.
@@ -121,7 +145,7 @@ class ContentAccessModuleTestCase extends ContentAccessTestHelp {
   /**
    * Test for editing nodes.
    */
-  function testEditAccess() {
+  public function testEditAccess() {
     // Logout admin and try to edit the node anonymously.
     $this->drupalLogout();
     $this->drupalGet('node/' . $this->node1->id() . '/edit');
@@ -154,7 +178,7 @@ class ContentAccessModuleTestCase extends ContentAccessTestHelp {
     // Restrict access for this content type for the test user.
     $this->changeAccessContentTypeKeyword('update', FALSE);
 
-    // Allow acces for node1 only
+    // Allow acces for node1 only.
     $this->changeAccessNodeKeyword($this->node1, 'update');
     $this->changeAccessNodeKeyword($this->node2, 'update', FALSE);
 
@@ -202,7 +226,7 @@ class ContentAccessModuleTestCase extends ContentAccessTestHelp {
   /**
    * Test for deleting nodes.
    */
-  function testDeleteAccess() {
+  public function testDeleteAccess() {
     // Logout admin and try to delete the node anonymously.
     $this->drupalLogout();
     $this->drupalGet('node/' . $this->node1->id() . '/delete');
@@ -296,7 +320,7 @@ class ContentAccessModuleTestCase extends ContentAccessTestHelp {
   /**
    * Test own view access.
    */
-  function testOwnViewAccess() {
+  public function testOwnViewAccess() {
     // Setup 2 test users.
     $test_user1 = $this->test_user;
     $test_user2 = $this->drupalCreateUser();

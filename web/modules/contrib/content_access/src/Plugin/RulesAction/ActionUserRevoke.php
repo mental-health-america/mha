@@ -32,8 +32,9 @@ namespace Drupal\content_access\Plugin\RulesAction;
  *   },
  *   deriver = "\Drupal\content_access\Plugin\Deriver\RulesActionUserAclDeriver"
  * )
-
+ *
  */
+
 class ActionUserRevoke extends ContentAccessUserRulesActionBase {
   use ActionCommonTrait;
 

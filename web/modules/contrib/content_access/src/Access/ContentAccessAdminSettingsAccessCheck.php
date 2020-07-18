@@ -9,8 +9,8 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\node\Entity\NodeType;
 
 /**
- * Determines access to routes based on permissions defined via
- * $module.permissions.yml files.
+ * Determines access to routes based on permissions defined via $module.permissions.yml files.
+ *
  */
 class ContentAccessAdminSettingsAccessCheck implements AccessInterface {
 
@@ -21,7 +21,7 @@ class ContentAccessAdminSettingsAccessCheck implements AccessInterface {
     $node_type_id = $route_match->getParameter('node_type');
     $node_type = NodeType::load($node_type_id);
 
-    $permission_match = $account->hasPermission('administer nodes') && $account->hasPermission('administer content types');
+    $permission_match = $account->hasPermission('bypass node access') && $account->hasPermission('administer content types');
     return AccessResult::allowedIf($permission_match && $node_type);
   }
 

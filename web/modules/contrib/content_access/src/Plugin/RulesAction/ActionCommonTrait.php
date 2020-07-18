@@ -67,7 +67,7 @@ trait ActionCommonTrait {
 
     foreach ($settings as $op => $uid) {
       $acl_id = content_access_get_acl_id($node, $op);
-      acl_node_add_acl($node->nid, $acl_id, (int) ($op == 'view'), (int) ($op == 'update'), (int) ($op == 'delete'), content_access_get_settings('priority', $node->getType()));
+      acl_node_add_acl($node->id(), $acl_id, (int) ($op == 'view'), (int) ($op == 'update'), (int) ($op == 'delete'), content_access_get_settings('priority', $node->getType()));
 
       $this->database->delete('acl_user')
         ->condition('acl_id', $acl_id)
