@@ -61,7 +61,7 @@
         "drupal/asset_injector": "^2.4",
         "drupal/back_to_top": "^1.0",
         "drupal/backup_migrate": "^4.0",
-        "drupal/better_exposed_filters": "^3.0",
+        "drupal/better_exposed_filters": "^5.0@beta",
         "drupal/blazy": "^2.0@RC",
         "drupal/block_class": "^1.0",
         "drupal/block_visibility_groups": "^1.3",
