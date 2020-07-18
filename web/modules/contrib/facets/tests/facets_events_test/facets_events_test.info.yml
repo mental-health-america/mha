@@ -1,6 +1,6 @@
-name: 'Facets query processor'
+name: 'Facets events test'
 type: module
-description: 'Facets query processor'
+description: 'Facets events test'
 package: 'Testing'
 hidden: true
 
