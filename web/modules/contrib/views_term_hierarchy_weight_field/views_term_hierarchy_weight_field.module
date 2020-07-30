@@ -1,0 +1,108 @@
+<?php
+
+/**
+ * @file
+ * Main module file.
+ */
+
+use Drupal\taxonomy\Entity\Term;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\taxonomy\TermInterface;
+
+const VIEWS_TERM_HIERARCHY_WEIGHT_FIELD_NAME = "field_hierarchy_weight";
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function views_term_hierarchy_weight_field_form_taxonomy_overview_terms_alter(&$form, FormStateInterface $form_state) {
+  /** @var \Drupal\taxonomy\Entity\Vocabulary $vocabulary */
+  $vocabulary = \Drupal::routeMatch()->getParameter('taxonomy_vocabulary');
+
+  $form['vid'] = [
+    '#type' => 'value',
+    '#value' => $vocabulary->id(),
+  ];
+
+  $form['actions']['submit']['#submit'] = [
+    '::submitForm',
+    'views_term_hierarchy_weight_field_form_taxonomy_form_submit',
+  ];
+  $form['actions']['reset_alphabetical']['#submit'][] = 'views_term_hierarchy_weight_field_form_taxonomy_form_submit';
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Adds a submit handler to the term edit page
+ * Used instead of hook_entity_update below, since we're updating multiple terms
+ * in each pass.
+ */
+function views_term_hierarchy_weight_field_form_taxonomy_term_form_alter(&$form, FormStateInterface $form_state) {
+  $form['actions']['submit']['#submit'][] = 'views_term_hierarchy_weight_field_form_taxonomy_form_submit';
+}
+
+/**
+ * Custom form submit callback.
+ *
+ * @param array $form
+ *   The form.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The form state.
+ *
+ * @throws \Drupal\Core\Entity\EntityStorageException
+ */
+function views_term_hierarchy_weight_field_form_taxonomy_form_submit(array &$form, FormStateInterface $form_state) {
+  /** @var \Drupal\taxonomy\TermStorage $taxonomy_storage */
+  $taxonomy_storage = \Drupal::service('entity_type.manager')->getStorage('taxonomy_term');
+
+  views_term_hierarchy_weight_field_calculate_and_set_for_tree(
+    $taxonomy_storage->loadTree($form['vid']['#value'])
+  );
+}
+
+/**
+ * Calculate and set term weight field for a vocabulary tree.
+ *
+ * This dies if we try to load all term entities at once, so we have to load and
+ * save them one at a time.
+ *
+ * I have 0 doubts that there are far more efficient ways to do this. Also, the
+ * calculation of actual weight can and should be much smarter.
+ *
+ * @param StdClass[] $tree
+ *   The tree.
+ *
+ * @throws \Drupal\Core\Entity\EntityStorageException
+ */
+function views_term_hierarchy_weight_field_calculate_and_set_for_tree(array $tree) {
+  /** @var \Drupal\taxonomy\TermStorage $taxonomy_storage */
+  $taxonomy_storage = \Drupal::service('entity_type.manager')->getStorage('taxonomy_term');
+
+  foreach ($tree as $hierarchical_weight => $tree_item) {
+    $term = Term::load($tree_item->tid);
+    views_term_hierarchy_weight_field_update($term, $hierarchical_weight);
+  }
+}
+
+/**
+ * Custom function to update a term.
+ *
+ * @param \Drupal\taxonomy\TermInterface $term
+ *   The term.
+ * @param int $hierarchical_weight
+ *   Term's weight at current level.
+ *
+ * @throws \Drupal\Core\Entity\EntityStorageException
+ */
+function views_term_hierarchy_weight_field_update(TermInterface $term, $hierarchical_weight) {
+  // Certainly there is a far better way to check if the functionality is
+  // enabled for this module than this far along in the process.
+  if (!is_numeric($hierarchical_weight) || !$term->hasField(VIEWS_TERM_HIERARCHY_WEIGHT_FIELD_NAME)) {
+    return;
+  }
+
+  // I'm not sure what the most flexible math would be here. Just getting this
+  // started with something that will work for most projects.
+  $term->set(VIEWS_TERM_HIERARCHY_WEIGHT_FIELD_NAME, $hierarchical_weight);
+  $term->save();
+}
