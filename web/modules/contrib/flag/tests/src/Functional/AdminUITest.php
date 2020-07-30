@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\flag\Tests;
+namespace Drupal\Tests\flag\Functional;
 
 /**
  * Tests the Flag admin UI.
@@ -132,9 +132,8 @@ class AdminUITest extends FlagTestBase {
    */
   public function doFlagEdit() {
     $this->drupalGet('admin/structure/flags/manage/' . $this->flagId);
-
-    $elements = $this->xpath('//input[@id=:id]', [':id' => 'edit-global-0']);
-    $this->assertTrue(isset($elements[0]) && !empty($elements[0]['disabled']), 'The global form element is disabled when editing the flag.');
+    // Assert the global form element is disabled when editing the flag.
+    $this->assertSession()->elementAttributeExists('css', '#edit-global-0', 'disabled');
   }
 
   /**
@@ -225,12 +224,14 @@ class AdminUITest extends FlagTestBase {
     $this->drupalPostForm('admin/structure/flags', $edit, $this->t('Save'));
 
     // Load the all the flags.
-    $flag_storage = $this->container->get('entity.manager')->getStorage('flag');
-    $updated_flags = $flag_storage->loadMultiple();
+    $all_flags = $this->container
+      ->get('entity_type.manager')
+      ->getStorage('flag')
+      ->loadMultiple();
 
-    // Check that the weights are saved in the database correctly.
-    foreach ($updated_flags as $id => $flag) {
-      $this->assertEqual($updated_flags[$id]->get('weight'), $flag_weights_to_set[$id], 'The flag weight was changed.');
+    // Check that the weights for each flag are saved in the database correctly.
+    foreach ($all_flags as $id => $flag) {
+      $this->assertEqual($all_flags[$id]->get('weight'), $flag_weights_to_set[$id], 'The flag weight was changed.');
     }
   }
 

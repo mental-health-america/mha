@@ -1,15 +1,19 @@
 <?php
 
-namespace Drupal\flag_follower\Tests;
+namespace Drupal\Tests\flag_follower\Functional;
 
-use Drupal\simpletest\WebTestBase;
-
+use Drupal\Tests\BrowserTestBase;
 /**
  * UI Test for flag_follower.
  *
  * @group flag_follower
  */
-class FlagFollowerUITest extends WebTestBase {
+class FlagFollowerUITest extends BrowserTestBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $defaultTheme = 'stark';
 
   /**
    * Modules to enable.
