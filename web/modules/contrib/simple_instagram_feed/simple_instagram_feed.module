@@ -44,14 +44,22 @@ function simple_instagram_feed_preprocess_block(&$variables) {
     $instagram_display_profile = $settings['simple_instagram_display_profile'];
     $instagram_display_biography = $settings['simple_instagram_display_biography'];
     $instagram_items = $settings['simple_instagram_items'];
-    $instagram_items_per_row = $settings['simple_instagram_items_per_row'] + 1;
+    $instagram_items_per_row_type = $settings['simple_instagram_items_per_row_type'];
+    $instagram_items_per_row_default = $settings['simple_instagram_items_per_row_default'] + 1;
+    $instagram_items_per_row_l_720 = $settings['simple_instagram_items_per_row_l_720'] + 1;
+    $instagram_items_per_row_l_960 = $settings['simple_instagram_items_per_row_l_960'] + 1;
+    $instagram_items_per_row_h_960 = $settings['simple_instagram_items_per_row_h_960'] + 1;
     $instagram_styling = $settings['simple_instagram_styling'];
 
     $variables['#attached']['drupalSettings']['simple_instagram_feed'][$block_instance]['instagram_username'] = $instagram_username;
     $variables['#attached']['drupalSettings']['simple_instagram_feed'][$block_instance]['display_profile'] = $instagram_display_profile;
     $variables['#attached']['drupalSettings']['simple_instagram_feed'][$block_instance]['display_biography'] = $instagram_display_biography;
     $variables['#attached']['drupalSettings']['simple_instagram_feed'][$block_instance]['items'] = $instagram_items;
-    $variables['#attached']['drupalSettings']['simple_instagram_feed'][$block_instance]['items_per_row'] = $instagram_items_per_row;
+    $variables['#attached']['drupalSettings']['simple_instagram_feed'][$block_instance]['items_per_row_type'] = $instagram_items_per_row_type;
+    $variables['#attached']['drupalSettings']['simple_instagram_feed'][$block_instance]['items_per_row_default'] = $instagram_items_per_row_default;
+    $variables['#attached']['drupalSettings']['simple_instagram_feed'][$block_instance]['items_per_row_l_720'] = $instagram_items_per_row_l_720;
+    $variables['#attached']['drupalSettings']['simple_instagram_feed'][$block_instance]['items_per_row_l_960'] = $instagram_items_per_row_l_960;
+    $variables['#attached']['drupalSettings']['simple_instagram_feed'][$block_instance]['items_per_row_h_960'] = $instagram_items_per_row_h_960;
     $variables['#attached']['drupalSettings']['simple_instagram_feed'][$block_instance]['styling'] = $instagram_styling;
     $variables['#attached']['drupalSettings']['simple_instagram_feed'][$block_instance]['block_instance'] = $block_instance;
 

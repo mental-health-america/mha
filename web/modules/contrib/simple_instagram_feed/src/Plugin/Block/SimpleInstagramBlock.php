@@ -64,13 +64,71 @@ class SimpleInstagramBlock extends BlockBase implements ContainerFactoryPluginIn
       '#required' => TRUE,
     ];
 
-    $simple_items_range = range(1, 12);
     $form['simple_instagram_items_per_row'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Items per row'),
+    ];
+
+    $form['simple_instagram_items_per_row']['simple_instagram_items_per_row_type'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Check it if you want to choose how many images to display depends on the window size.'),
+      '#default_value' => isset($config['simple_instagram_items_per_row_type']) ? $config['simple_instagram_items_per_row_type'] : 0,
+      '#attributes' => [
+        'id' => 'simple_instagram_items_per_row_type',
+      ],
+    ];
+
+    $simple_items_range = range(1, 12);
+    $form['simple_instagram_items_per_row']['simple_instagram_items_per_row_default'] = [
       '#type' => 'select',
+      '#title' => $this->t('Number of images per row for all window size.'),
+      '#description' => $this->t('How many images do you wish to feature on each row of this Instagram Feed? You can produce a single row if you set the number of images to equal the number of images per row.'),
       '#options' => [$simple_items_range],
-      '#title' => $this->t('Number of images per row?'),
-      '#description' => $this->t('How many images do you wish to feature on each row of this Instagram Feed? You can produce a single row if you set the numnber of images to equal the number of images per row.'),
-      '#default_value' => isset($config['simple_instagram_items_per_row']) ? $config['simple_instagram_items_per_row'] : '5',
+      '#default_value' => isset($config['simple_instagram_items_per_row_default']) ? $config['simple_instagram_items_per_row_default'] : '5',
+      '#states' => [
+        'visible' => [
+          ':input[id="simple_instagram_items_per_row_type"]' => ['checked' => FALSE],
+        ],
+      ],
+    ];
+
+    $form['simple_instagram_items_per_row']['simple_instagram_items_per_row_l_720'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Number of images per row if window size is <720px.'),
+      '#description' => $this->t('How many images do you wish on each row if the user window size is lower than 720px.'),
+      '#options' => [$simple_items_range],
+      '#default_value' => isset($config['simple_instagram_items_per_row_l_720']) ? $config['simple_instagram_items_per_row_l_720'] : '5',
+      '#states' => [
+        'visible' => [
+          ':input[id="simple_instagram_items_per_row_type"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
+
+    $form['simple_instagram_items_per_row']['simple_instagram_items_per_row_l_960'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Number of images per row if window size is >= 720px and < 960.'),
+      '#description' => $this->t('How many images do you wish on each row if the user window size is lower than 960px and higher than 720px.'),
+      '#options' => [$simple_items_range],
+      '#default_value' => isset($config['simple_instagram_items_per_row_l_960']) ? $config['simple_instagram_items_per_row_l_960'] : '5',
+       '#states' => [
+         'visible' => [
+          ':input[id="simple_instagram_items_per_row_type"]' => ['checked' => TRUE],
+         ],
+       ],
+    ];
+
+    $form['simple_instagram_items_per_row']['simple_instagram_items_per_row_h_960'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Number of images per row if window size is >=960px.'),
+      '#description' => $this->t('How many images do you wish on each row if the user window size is higher than 960px.'),
+      '#options' => [$simple_items_range],
+      '#default_value' => isset($config['simple_instagram_items_per_row_h_960']) ? $config['simple_instagram_items_per_row_h_960'] : '5',
+       '#states' => [
+        'visible' => [
+          ':input[id="simple_instagram_items_per_row_type"]' => ['checked' => TRUE],
+        ],
+      ],
     ];
 
     $form['simple_instagram_styling'] = [
@@ -97,7 +155,11 @@ class SimpleInstagramBlock extends BlockBase implements ContainerFactoryPluginIn
     $this->configuration['simple_instagram_display_profile'] = $values['simple_instagram_display_profile'];
     $this->configuration['simple_instagram_display_biography'] = $values['simple_instagram_display_biography'];
     $this->configuration['simple_instagram_items'] = $values['simple_instagram_items'];
-    $this->configuration['simple_instagram_items_per_row'] = $values['simple_instagram_items_per_row'];
+    $this->configuration['simple_instagram_items_per_row_type'] = $values['simple_instagram_items_per_row']['simple_instagram_items_per_row_type'];
+    $this->configuration['simple_instagram_items_per_row_default'] = $values['simple_instagram_items_per_row']['simple_instagram_items_per_row_default'];
+    $this->configuration['simple_instagram_items_per_row_l_720'] = $values['simple_instagram_items_per_row']['simple_instagram_items_per_row_l_720'];
+    $this->configuration['simple_instagram_items_per_row_l_960'] = $values['simple_instagram_items_per_row']['simple_instagram_items_per_row_l_960'];
+    $this->configuration['simple_instagram_items_per_row_h_960'] = $values['simple_instagram_items_per_row']['simple_instagram_items_per_row_h_960'];
     $this->configuration['simple_instagram_styling'] = $values['simple_instagram_styling'];
   }
 
