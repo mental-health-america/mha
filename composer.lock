@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7c75a34034c74398e53e23a501785aab",
+    "content-hash": "85693f6c4b8b0d3f365f980b2d7fd56c",
     "packages": [
         {
             "name": "alchemy/zippy",
@@ -16679,6 +16679,7 @@
         "drupal/flag": 15,
         "drupal/image_url_formatter": 10,
         "drupal/mimemail": 15,
+        "drupal/rules": 15,
         "drupal/simplenews": 20,
         "drupal/typed_data": 15,
         "drupal/webform_score": 15
