@@ -9,9 +9,9 @@ use Drupal\rules\Core\RulesActionBase;
  *
  * @RulesAction(
  *   id = "rules_test_string",
- *   label = @Translation("Test concatenate action"),
+ *   label = @Translation("Test action string."),
  *   category = @Translation("Tests"),
- *   context_definitions = {
+ *   context = {
  *     "text" = @ContextDefinition("string",
  *       label = @Translation("Text to concatenate")
  *     ),
@@ -19,8 +19,7 @@ use Drupal\rules\Core\RulesActionBase;
  *   configure_permissions = { "access test configuration" },
  *   provides = {
  *     "concatenated" = @ContextDefinition("string",
- *       label = @Translation("Concatenated result"),
- *       description = @Translation("The concatenated text.")
+ *       label = @Translation("Concatenated result")
  *     ),
  *   }
  * )
@@ -28,12 +27,10 @@ use Drupal\rules\Core\RulesActionBase;
 class TestStringAction extends RulesActionBase {
 
   /**
-   * Concatenates the text with itself.
-   *
-   * @param string $text
-   *   The text to concatenate.
+   * {@inheritdoc}
    */
-  protected function doExecute($text) {
+  public function execute() {
+    $text = $this->getContextValue('text');
     $this->setProvidedValue('concatenated', $text . $text);
   }
 

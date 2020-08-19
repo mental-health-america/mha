@@ -1,6 +1,6 @@
-rules.action.context_values.rules_test_debug_log:
+rules.action.context_values.rules_test_log:
   type: mapping
-  label: 'Test debug log action context values'
+  label: Test log context values
   mapping:
     message:
       type: text

@@ -11,22 +11,18 @@ use Drupal\rules\Core\RulesConditionBase;
  *   id = "rules_text_comparison",
  *   label = @Translation("Text comparison"),
  *   category = @Translation("Data"),
- *   context_definitions = {
+ *   context = {
  *     "text" = @ContextDefinition("string",
- *       label = @Translation("Text"),
- *       description = @Translation("Specifies the text data to evaluate."),
- *       assignment_restriction = "selector"
+ *       label = @Translation("Text")
  *     ),
  *     "operator" = @ContextDefinition("string",
  *       label = @Translation("Operator"),
  *       description = @Translation("The comparison operator. One of 'contains', 'starts', 'ends', or 'regex'. Defaults to 'contains'."),
- *       assignment_restriction = "input",
  *       default_value = "contains",
  *       required = FALSE
  *     ),
  *     "match" = @ContextDefinition("string",
- *       label = @Translation("Matching text"),
- *       description = @Translation("A string or pattern (in the case of regex) to search for in the given text data.")
+ *        label = @Translation("Matching text")
  *     ),
  *   }
  * )

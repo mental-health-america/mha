@@ -1,6 +1,4 @@
-system_log:
-  log_level: warning
-debug_log:
-  enabled: false
-  system_debug: false
-  log_level: debug
+log: false
+debug_screen: false
+log_level_system: warning
+log_level_screen: warning

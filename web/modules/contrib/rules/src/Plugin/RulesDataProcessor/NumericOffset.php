@@ -4,7 +4,7 @@ namespace Drupal\rules\Plugin\RulesDataProcessor;
 
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\rules\Context\DataProcessorInterface;
-use Drupal\rules\Context\ExecutionStateInterface;
+use Drupal\rules\Engine\ExecutionStateInterface;
 
 /**
  * A data processor for applying numerical offsets.

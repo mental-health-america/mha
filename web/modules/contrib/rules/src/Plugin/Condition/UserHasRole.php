@@ -13,20 +13,17 @@ use Drupal\user\UserInterface;
  *   id = "rules_user_has_role",
  *   label = @Translation("User has role(s)"),
  *   category = @Translation("User"),
- *   context_definitions = {
+ *   context = {
  *     "user" = @ContextDefinition("entity:user",
- *       label = @Translation("User"),
- *       description = @Translation("Specifies the user account to check."),
+ *       label = @Translation("User")
  *     ),
  *     "roles" = @ContextDefinition("entity:user_role",
  *       label = @Translation("Roles"),
- *       description = @Translation("Specifies the roles to check for."),
  *       multiple = TRUE
  *     ),
  *     "operation" = @ContextDefinition("string",
  *       label = @Translation("Match roles"),
  *       description = @Translation("If matching against all selected roles, the user must have <em>all</em> the roles selected."),
- *       assignment_restriction = "input",
  *       default_value = "AND",
  *       required = FALSE
  *     ),

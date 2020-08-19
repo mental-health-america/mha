@@ -12,11 +12,10 @@ use Drupal\rules\Core\RulesActionBase;
  *   id = "rules_entity_delete",
  *   label = @Translation("Delete entity"),
  *   category = @Translation("Entity"),
- *   context_definitions = {
+ *   context = {
  *     "entity" = @ContextDefinition("entity",
  *       label = @Translation("Entity"),
- *       description = @Translation("Specifies the entity, which should be deleted permanently."),
- *       assignment_restriction = "selector"
+ *       description = @Translation("Specifies the entity, which should be deleted permanently.")
  *     ),
  *   }
  * )

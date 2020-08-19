@@ -9,11 +9,6 @@ use Drupal\Core\Messenger\MessengerInterface;
  */
 class TestMessenger implements MessengerInterface {
 
-  /**
-   * Array of messages.
-   *
-   * @var array
-   */
   protected $messages = NULL;
 
   /**

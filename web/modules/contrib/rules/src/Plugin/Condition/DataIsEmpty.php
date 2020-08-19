@@ -16,11 +16,10 @@ use Drupal\rules\Core\RulesConditionBase;
  *   id = "rules_data_is_empty",
  *   label = @Translation("Data value is empty"),
  *   category = @Translation("Data"),
- *   context_definitions = {
+ *   context = {
  *     "data" = @ContextDefinition("any",
  *       label = @Translation("Data to check"),
- *       description = @Translation("The data to be checked to be empty, specified by using a data selector, e.g. 'node.uid.entity.name.value'."),
- *       assignment_restriction = "selector"
+ *       description = @Translation("The data to be checked to be empty, specified by using a data selector, e.g. 'node.uid.entity.name.value'.")
  *     ),
  *   }
  * )

@@ -30,7 +30,7 @@ class Condition extends CoreConditionAnnotation {
    *     id = "my_module_user_is_blocked",
    *     label = @Translation("My User is blocked"),
    *     category = @Translation("User"),
-   *     context_definitions = {
+   *     context = {
    *       "user" = @ContextDefinition("entity:user",
    *         label = @Translation("User")
    *      ),

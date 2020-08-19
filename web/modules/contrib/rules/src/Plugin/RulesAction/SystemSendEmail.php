@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   id = "rules_send_email",
  *   label = @Translation("Send email"),
  *   category = @Translation("System"),
- *   context_definitions = {
+ *   context = {
  *     "to" = @ContextDefinition("email",
  *       label = @Translation("Send to"),
  *       description = @Translation("Email address(es) drupal will send an email to."),
@@ -28,7 +28,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *     ),
  *     "message" = @ContextDefinition("string",
  *       label = @Translation("Message"),
- *       description = @Translation("The email's message body. Drupal will by default remove all HTML tags. If you want to use HTML you must override this behavior by installing a contributed module such as Mime Mail.")
+ *       description = @Translation("The email's message body.")
  *     ),
  *     "reply" = @ContextDefinition("email",
  *       label = @Translation("Reply to"),
@@ -72,7 +72,7 @@ class SystemSendEmail extends RulesActionBase implements ContainerFactoryPluginI
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
    * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
-   *   The Rules logger channel.
+   *   The alias storage service.
    * @param \Drupal\Core\Mail\MailManagerInterface $mail_manager
    *   The mail manager service.
    */

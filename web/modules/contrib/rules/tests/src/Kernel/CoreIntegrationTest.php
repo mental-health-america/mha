@@ -22,7 +22,7 @@ class CoreIntegrationTest extends RulesKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['node', 'field', 'text', 'user'];
+  public static $modules = ['node', 'field', 'text', 'user'];
 
   /**
    * {@inheritdoc}
@@ -70,15 +70,12 @@ class CoreIntegrationTest extends RulesKernelTestBase {
       ->map('text', 'node.uid.entity.name.value')
     );
 
-    $rule->addAction('rules_test_debug_log');
+    $rule->addAction('rules_test_log');
 
     RulesComponent::create($rule)
       ->addContextDefinition('node', ContextDefinition::create('entity:node'))
       ->setContextValue('node', $node)
       ->execute();
-
-    // Test that the action logged something.
-    $this->assertRulesDebugLogEntryExists('action called');
   }
 
   /**
@@ -261,7 +258,7 @@ class CoreIntegrationTest extends RulesKernelTestBase {
     );
     // Set the title of the new node so that it is marked for auto-saving.
     $nested_rule->addAction('rules_data_set', ContextConfig::create()
-      ->map('data', 'node_created.title')
+      ->map('data', 'entity.title')
       ->setValue('value', 'new title')
     );
 

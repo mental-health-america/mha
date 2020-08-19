@@ -25,7 +25,7 @@ class EventIntegrationTest extends RulesKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['field', 'node', 'text', 'user'];
+  public static $modules = ['field', 'node', 'text', 'user'];
 
   /**
    * {@inheritdoc}
@@ -50,7 +50,7 @@ class EventIntegrationTest extends RulesKernelTestBase {
   public function testUserLoginEvent() {
     $rule = $this->expressionManager->createRule();
     $rule->addCondition('rules_test_true');
-    $rule->addAction('rules_test_debug_log',
+    $rule->addAction('rules_test_log',
       ContextConfig::create()
         ->map('message', 'account.name.0.value')
     );
@@ -63,15 +63,14 @@ class EventIntegrationTest extends RulesKernelTestBase {
     $config_entity->save();
 
     // The logger instance has changed, refresh it.
-    $this->logger = $this->container->get('logger.channel.rules_debug');
-    $this->logger->addLogger($this->debugLog);
+    $this->logger = $this->container->get('logger.channel.rules');
 
     $account = User::create(['name' => 'test_user']);
     // Invoke the hook manually which should trigger the rule.
     rules_user_login($account);
 
     // Test that the action in the rule logged something.
-    $this->assertRulesDebugLogEntryExists('test_user');
+    $this->assertRulesLogEntryExists('test_user');
   }
 
   /**
@@ -80,7 +79,7 @@ class EventIntegrationTest extends RulesKernelTestBase {
   public function testUserLogoutEvent() {
     $rule = $this->expressionManager->createRule();
     $rule->addCondition('rules_test_true');
-    $rule->addAction('rules_test_debug_log');
+    $rule->addAction('rules_test_log');
 
     $config_entity = $this->storage->create([
       'id' => 'test_rule',
@@ -90,15 +89,14 @@ class EventIntegrationTest extends RulesKernelTestBase {
     $config_entity->save();
 
     // The logger instance has changed, refresh it.
-    $this->logger = $this->container->get('logger.channel.rules_debug');
-    $this->logger->addLogger($this->debugLog);
+    $this->logger = $this->container->get('logger.channel.rules');
 
     $account = $this->container->get('current_user');
     // Invoke the hook manually which should trigger the rule.
     rules_user_logout($account);
 
     // Test that the action in the rule logged something.
-    $this->assertRulesDebugLogEntryExists('action called');
+    $this->assertRulesLogEntryExists('action called');
   }
 
   /**
@@ -107,7 +105,7 @@ class EventIntegrationTest extends RulesKernelTestBase {
   public function testCronEvent() {
     $rule = $this->expressionManager->createRule();
     $rule->addCondition('rules_test_true');
-    $rule->addAction('rules_test_debug_log');
+    $rule->addAction('rules_test_log');
 
     $config_entity = $this->storage->create([
       'id' => 'test_rule',
@@ -117,23 +115,22 @@ class EventIntegrationTest extends RulesKernelTestBase {
     $config_entity->save();
 
     // The logger instance has changed, refresh it.
-    $this->logger = $this->container->get('logger.channel.rules_debug');
-    $this->logger->addLogger($this->debugLog);
+    $this->logger = $this->container->get('logger.channel.rules');
 
     // Run cron.
     $this->container->get('cron')->run();
 
     // Test that the action in the rule logged something.
-    $this->assertRulesDebugLogEntryExists('action called');
+    $this->assertRulesLogEntryExists('action called');
   }
 
   /**
-   * Test that a Logger message triggers the Rules debug logger listener.
+   * Test that a Logger message trigger the Rules logger listener.
    */
   public function testSystemLoggerEvent() {
     $rule = $this->expressionManager->createRule();
     $rule->addCondition('rules_test_true');
-    $rule->addAction('rules_test_debug_log');
+    $rule->addAction('rules_test_log');
 
     $config_entity = $this->storage->create([
       'id' => 'test_rule',
@@ -143,24 +140,23 @@ class EventIntegrationTest extends RulesKernelTestBase {
     $config_entity->save();
 
     // The logger instance has changed, refresh it.
-    $this->logger = $this->container->get('logger.channel.rules_debug');
-    $this->logger->addLogger($this->debugLog);
+    $this->logger = $this->container->get('logger.channel.rules');
 
     // Creates a logger-item, that must be dispatched as event.
     $this->container->get('logger.factory')->get('rules_test')
       ->notice("This message must get logged and dispatched as rules_system_logger_event");
 
     // Test that the action in the rule logged something.
-    $this->assertRulesDebugLogEntryExists('action called');
+    $this->assertRulesLogEntryExists('action called');
   }
 
   /**
-   * Test that Drupal initializing triggers the Rules debug logger listener.
+   * Test that Drupal initializing triggers the Rules logger listener.
    */
   public function testInitEvent() {
     $rule = $this->expressionManager->createRule();
     $rule->addCondition('rules_test_true');
-    $rule->addAction('rules_test_debug_log');
+    $rule->addAction('rules_test_log');
 
     $config_entity = $this->storage->create([
       'id' => 'test_rule',
@@ -170,8 +166,7 @@ class EventIntegrationTest extends RulesKernelTestBase {
     $config_entity->save();
 
     // The logger instance has changed, refresh it.
-    $this->logger = $this->container->get('logger.channel.rules_debug');
-    $this->logger->addLogger($this->debugLog);
+    $this->logger = $this->container->get('logger.channel.rules');
 
     $dispatcher = $this->container->get('event_dispatcher');
 
@@ -186,42 +181,7 @@ class EventIntegrationTest extends RulesKernelTestBase {
     $dispatcher->dispatch(KernelEvents::REQUEST);
 
     // Test that the action in the rule logged something.
-    $this->assertRulesDebugLogEntryExists('action called');
-  }
-
-  /**
-   * Test that Drupal terminating triggers the Rules debug logger listener.
-   */
-  public function testTerminateEvent() {
-    $rule = $this->expressionManager->createRule();
-    $rule->addCondition('rules_test_true');
-    $rule->addAction('rules_test_debug_log');
-
-    $config_entity = $this->storage->create([
-      'id' => 'test_rule',
-      'events' => [['event_name' => KernelEvents::TERMINATE]],
-      'expression' => $rule->getConfiguration(),
-    ]);
-    $config_entity->save();
-
-    // The logger instance has changed, refresh it.
-    $this->logger = $this->container->get('logger.channel.rules_debug');
-    $this->logger->addLogger($this->debugLog);
-
-    $dispatcher = $this->container->get('event_dispatcher');
-
-    // Remove all the listeners except Rules before triggering an event.
-    $listeners = $dispatcher->getListeners(KernelEvents::TERMINATE);
-    foreach ($listeners as $listener) {
-      if (empty($listener[1]) || $listener[1] != 'onRulesEvent') {
-        $dispatcher->removeListener(KernelEvents::TERMINATE, $listener);
-      }
-    }
-    // Manually trigger the initialization event.
-    $dispatcher->dispatch(KernelEvents::TERMINATE);
-
-    // Test that the action in the rule logged something.
-    $this->assertRulesDebugLogEntryExists('action called');
+    $this->assertRulesLogEntryExists('action called');
   }
 
   /**
@@ -230,7 +190,7 @@ class EventIntegrationTest extends RulesKernelTestBase {
   public function testMultipleEvents() {
     $rule = $this->expressionManager->createRule();
     $rule->addCondition('rules_test_true');
-    $rule->addAction('rules_test_debug_log');
+    $rule->addAction('rules_test_log');
 
     $config_entity = $this->storage->create([
       'id' => 'test_rule',
@@ -243,8 +203,7 @@ class EventIntegrationTest extends RulesKernelTestBase {
     $config_entity->save();
 
     // The logger instance has changed, refresh it.
-    $this->logger = $this->container->get('logger.channel.rules_debug');
-    $this->logger->addLogger($this->debugLog);
+    $this->logger = $this->container->get('logger.channel.rules');
 
     $account = User::create(['name' => 'test_user']);
     // Invoke the hook manually which should trigger the rules_user_login event.
@@ -254,8 +213,8 @@ class EventIntegrationTest extends RulesKernelTestBase {
     rules_user_logout($account);
 
     // Test that the action in the rule logged something.
-    $this->assertRulesDebugLogEntryExists('action called');
-    $this->assertRulesDebugLogEntryExists('action called', 1);
+    $this->assertRulesLogEntryExists('action called');
+    $this->assertRulesLogEntryExists('action called', 1);
   }
 
   /**
@@ -291,7 +250,7 @@ class EventIntegrationTest extends RulesKernelTestBase {
       ->map('value', 'node_unchanged.title.value')
       ->negateResult()
     );
-    $rule->addAction('rules_test_debug_log');
+    $rule->addAction('rules_test_log');
 
     $config_entity = $this->storage->create([
       'id' => 'test_rule',
@@ -301,84 +260,23 @@ class EventIntegrationTest extends RulesKernelTestBase {
     $config_entity->save();
 
     // The logger instance has changed, refresh it.
-    $this->logger = $this->container->get('logger.channel.rules_debug');
-    $this->logger->addLogger($this->debugLog);
+    $this->logger = $this->container->get('logger.channel.rules');
 
-    // Now change the title and trigger the presave event by saving the node.
+    // Now change the title and trigger the presave event by savoing the node.
     $node->setTitle('new title');
     $node->save();
 
-    $this->assertRulesDebugLogEntryExists('action called');
+    $this->assertRulesLogEntryExists('action called');
   }
 
   /**
-   * Provides test data for testEntityOriginal().
+   * Provides test data for testentityOrigfinal().
    */
   public function providerTestEntityOriginal() {
     return [
       ['rules_entity_presave:node'],
       ['rules_entity_update:node'],
     ];
-  }
-
-  /**
-   * Tests that entity events are fired for the correct bundle.
-   */
-  public function testBundleQualifiedEvents() {
-    // Create an article node type and a page node type.
-    $entity_type_manager = $this->container->get('entity_type.manager');
-    $entity_type_manager->getStorage('node_type')->create([
-      'type' => 'article',
-      'title' => 'Article',
-    ])->save();
-    $entity_type_manager->getStorage('node_type')->create([
-      'type' => 'page',
-      'title' => 'Page',
-    ])->save();
-
-    // Create a rule to fire when a new article is created.
-    $rule = $this->expressionManager->createRule();
-    $rule->addAction('rules_test_debug_log',
-      ContextConfig::create()
-        ->map('message', 'node.title.value')
-    );
-
-    // Create a rule to fire when a new page is created.
-    $rule = $this->expressionManager->createRule();
-    $rule->addAction('rules_test_debug_log',
-      ContextConfig::create()
-        ->map('message', 'node.title.value')
-    );
-
-    $config_entity = $this->storage->create([
-      'id' => 'test_article_rule',
-      'events' => [['event_name' => 'rules_entity_insert:node--article']],
-      'expression' => $rule->getConfiguration(),
-    ]);
-    $config_entity->save();
-
-    $config_entity = $this->storage->create([
-      'id' => 'test_page_rule',
-      'events' => [['event_name' => 'rules_entity_insert:node--page']],
-      'expression' => $rule->getConfiguration(),
-    ]);
-    $config_entity->save();
-
-    // The logger instance has changed, refresh it.
-    $this->logger = $this->container->get('logger.channel.rules_debug');
-    $this->logger->addLogger($this->debugLog);
-
-    // Create a page - this should dispatch a
-    // "rules_entity_insert:node--page" event.
-    $node = $entity_type_manager->getStorage('node')->create([
-      'title' => 'Test page entity bundle event',
-      'type' => 'page',
-    ]);
-    $node->save();
-
-    // Only the rule "test_page_rule" should fire.
-    $this->assertRulesDebugLogEntryExists('Test page entity bundle event');
-    $this->assertRulesDebugLogEntryNotExists('Test article entity bundle event');
   }
 
 }

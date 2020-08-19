@@ -7,7 +7,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\rules\Exception\InvalidArgumentException;
 
 /**
- * Provides an implementation of the component repository service.
+ * Implements the component repository interface.
  */
 class RulesComponentRepository implements RulesComponentRepositoryInterface {
 
@@ -101,19 +101,15 @@ class RulesComponentRepository implements RulesComponentRepositoryInterface {
       }
       if ($cids_missing) {
         $resolved_results = $this->resolvers[$provider]->getMultiple(array_keys($cids_missing));
-        if ($resolved_results) {
-          $cache_items = [];
-          foreach ($resolved_results as $id => $component) {
-            $cid = $cids[$id];
-            $this->components[$cid] = $component;
-            $results[$cid] = $component;
-            $cache_items[$cid]['data'] = $component;
-            // Set tags so that we can use invalidateTags later when needed.
-            $cache_items[$cid]['tags'] = [$id];
-          }
-          // Cache entries to speed up future lookups.
-          $this->cacheBackend->setMultiple($cache_items);
+        $cache_items = [];
+        foreach ($resolved_results as $id => $component) {
+          $cid = $cids[$id];
+          $this->components[$cid] = $component;
+          $results[$cid] = $component;
+          $cache_items[$cid]['data'] = $component;
         }
+        // Cache entries to speed up future lookups.
+        $this->cacheBackend->setMultiple($cache_items);
       }
     }
     return $results;

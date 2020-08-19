@@ -9,20 +9,16 @@ use Drupal\rules\Core\RulesConditionBase;
  *
  * @Condition(
  *   id = "rules_list_count_is",
- *   label = @Translation("List count comparison"),
+ *   label = @Translation("List Count Comparison"),
  *   category = @Translation("Data"),
- *   context_definitions = {
+ *   context = {
  *     "list" = @ContextDefinition("list",
  *       label = @Translation("List"),
- *       description = @Translation("A multi-valued data element to have its count compared, specified by using a data selector, eg 'node.uid.entity.roles'."),
- *       assignment_restriction = "selector"
+ *       description = @Translation("A multi value data element to have its count compared, specified by using a data selector, eg 'node.uid.entity.roles'.")
  *     ),
  *     "operator" = @ContextDefinition("string",
  *       label = @Translation("Operator"),
- *       description = @Translation("The comparison operator."),
- *       assignment_restriction = "input",
- *       default_value = "==",
- *       required = FALSE
+ *       description = @Translation("The comparison operator.")
  *     ),
  *     "value" = @ContextDefinition("integer",
  *       label = @Translation("Count"),
@@ -32,7 +28,9 @@ use Drupal\rules\Core\RulesConditionBase;
  * )
  *
  * @todo Add access callback information from Drupal 7?
+ * @todo set ContextDefinition default value
  * @todo Set ContextDefinition options list
+ * @todo Set ContextDefinition restriction
  */
 class DataListCountIs extends RulesConditionBase {
 

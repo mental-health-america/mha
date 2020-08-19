@@ -6,37 +6,31 @@ use Drupal\rules\Core\RulesActionBase;
 use Drupal\rules\Exception\InvalidArgumentException;
 
 /**
- * Provides an action to convert data from one type to another.
- *
  * @RulesAction(
  *   id = "rules_data_convert",
  *   label = @Translation("Convert data"),
  *   category = @Translation("Data"),
- *   context_definitions = {
+ *   context = {
  *     "value" = @ContextDefinition("any",
- *       label = @Translation("Value"),
- *       description = @Translation("The first input value for the calculation."),
- *       assignment_restriction = "selector"
+ *       label = @Translation("Value")
  *     ),
  *     "target_type" = @ContextDefinition("string",
- *       label = @Translation("Target type"),
- *       description = @Translation("The data type to convert a value to."),
- *       assignment_restriction = "input"
+ *       label = @Translation("Target type")
  *     ),
  *     "rounding_behavior" = @ContextDefinition("string",
  *       label = @Translation("Rounding behavior"),
- *       description = @Translation("For integer target types, specify how the conversion result should be rounded."),
  *       default_value = NULL,
  *       required = FALSE
  *     ),
  *   },
  *   provides = {
  *     "conversion_result" = @ContextDefinition("any",
- *       label = @Translation("Conversion result")
- *     ),
+ *        label = @Translation("Conversion result")
+ *      ),
  *   }
  * )
  * @todo Add rounding_behaviour default value "round".
+ * @todo Add various input restrictions.
  * @todo Add options_list for target type.
  * @todo Specify the right data type for the provided result.
  */
@@ -61,7 +55,7 @@ class DataConvert extends RulesActionBase {
    * @param string $rounding_behavior
    *   The behaviour for rounding.
    */
-  protected function doExecute($value, $target_type, $rounding_behavior = NULL) {
+  protected function doExecute($value, $target_type, $rounding_behavior) {
     // @todo Add support for objects implementing __toString().
     if (!is_scalar($value)) {
       throw new InvalidArgumentException('Only scalar values are supported.');

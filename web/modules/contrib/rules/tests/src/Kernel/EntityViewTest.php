@@ -14,7 +14,7 @@ class EntityViewTest extends RulesKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['field', 'node', 'text', 'user'];
+  public static $modules = ['field', 'node', 'text', 'user'];
 
   /**
    * {@inheritdoc}
