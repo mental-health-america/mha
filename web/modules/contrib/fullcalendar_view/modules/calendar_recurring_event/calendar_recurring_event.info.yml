@@ -7,7 +7,7 @@ core: 8.x
 dependencies:
   - drupal:fullcalendar_view
 
-# Information added by Drupal.org packaging script on 2020-01-30
-version: '8.x-2.6'
+# Information added by Drupal.org packaging script on 2020-08-02
+version: '8.x-2.7'
 project: 'fullcalendar_view'
-datestamp: 1580427717
+datestamp: 1596410913

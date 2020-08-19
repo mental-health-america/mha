@@ -202,7 +202,7 @@ function template_preprocess_views_view_fullcalendar(array &$variables) {
       $end_date = empty($end_field) || !$current_entity->hasField($end_field) ? '' : $current_entity->get($end_field)->getValue();
       // Apart from start date and end date field,
       // other fields might be rewritten by
-      // the field settgins of the view.
+      // the field settings of the view.
       if ($options['use_entity_fields']) {
         // Translate the title and description,
         if ($current_entity->hasTranslation($language->getId())) {
@@ -236,7 +236,7 @@ function template_preprocess_views_view_fullcalendar(array &$variables) {
         }
         // Event title.
         if (empty($options['title']) || $options['title'] == 'title') {
-          $title = $translated_entity->getTitle();
+          $title = $translated_entity->label();
         }
         elseif ($current_entity->hasField($options['title'])) {
           $title = $translated_entity->get($options['title'])->value;
@@ -281,7 +281,7 @@ function template_preprocess_views_view_fullcalendar(array &$variables) {
         if (empty($options['title']) || $options['title'] == 'title') {
           $title = $fields['title']->advancedRender($row);
         }
-        elseif ($current_entity->hasField($options['title'])) {
+        elseif (!empty($fields[$options['title']])) {
           $title = $fields[$options['title']]->advancedRender($row);
         }
         else {
@@ -289,7 +289,7 @@ function template_preprocess_views_view_fullcalendar(array &$variables) {
         }
       }
       $entry = [
-        'title' =>  Xss::filter($title),
+        'title' =>  Xss::filterAdmin($title),
         'description' => $des,
         'id' => $entity_id,
         'url' => $current_entity->toUrl('canonical', ['language' => $language])->toString(),
@@ -511,6 +511,12 @@ function template_preprocess_views_view_fullcalendar(array &$variables) {
       'timeFormat' => $timeFormat,
       'titleFormat' => $title_format,
     ];
+    
+    // Allow to alter $variables
+    // by using hook_fullcalendar_view_variables_alter().
+    // @see fullcalendar_view.services.api.php
+    \Drupal::moduleHandler()
+      ->alter('fullcalendar_view_variables', $variables);
   }
 }
 
