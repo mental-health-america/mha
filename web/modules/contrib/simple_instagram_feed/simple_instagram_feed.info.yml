@@ -7,7 +7,7 @@ core_version_requirement: ^8 || ^9
 dependencies:
   - drupal:block
 
-# Information added by Drupal.org packaging script on 2020-07-20
-version: '8.x-3.7'
+# Information added by Drupal.org packaging script on 2020-08-22
+version: '8.x-3.8'
 project: 'simple_instagram_feed'
-datestamp: 1595225338
+datestamp: 1598122794
