@@ -410,17 +410,17 @@
     },
     {
         "name": "commerceguys/addressing",
-        "version": "v1.0.8",
-        "version_normalized": "1.0.8.0",
+        "version": "v1.0.9",
+        "version_normalized": "1.0.9.0",
         "source": {
             "type": "git",
             "url": "https://github.com/commerceguys/addressing.git",
-            "reference": "cf202c913c10d85085ab5ed9ec88607e312839ce"
+            "reference": "7f6b8780ae20862529a0ceaaf102a3f7ff740b91"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/commerceguys/addressing/zipball/cf202c913c10d85085ab5ed9ec88607e312839ce",
-            "reference": "cf202c913c10d85085ab5ed9ec88607e312839ce",
+            "url": "https://api.github.com/repos/commerceguys/addressing/zipball/7f6b8780ae20862529a0ceaaf102a3f7ff740b91",
+            "reference": "7f6b8780ae20862529a0ceaaf102a3f7ff740b91",
             "shasum": ""
         },
         "require": {
@@ -436,7 +436,7 @@
         "suggest": {
             "symfony/validator": "to validate addresses"
         },
-        "time": "2020-05-26T11:04:04+00:00",
+        "time": "2020-09-12T12:15:49+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -543,17 +543,17 @@
     },
     {
         "name": "composer/composer",
-        "version": "1.10.10",
-        "version_normalized": "1.10.10.0",
+        "version": "1.10.13",
+        "version_normalized": "1.10.13.0",
         "source": {
             "type": "git",
             "url": "https://github.com/composer/composer.git",
-            "reference": "32966a3b1d48bc01472a8321fd6472b44fad033a"
+            "reference": "47c841ba3b2d3fc0b4b13282cf029ea18b66d78b"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/composer/composer/zipball/32966a3b1d48bc01472a8321fd6472b44fad033a",
-            "reference": "32966a3b1d48bc01472a8321fd6472b44fad033a",
+            "url": "https://api.github.com/repos/composer/composer/zipball/47c841ba3b2d3fc0b4b13282cf029ea18b66d78b",
+            "reference": "47c841ba3b2d3fc0b4b13282cf029ea18b66d78b",
             "shasum": ""
         },
         "require": {
@@ -583,7 +583,7 @@
             "ext-zip": "Enabling the zip extension allows you to unzip archives",
             "ext-zlib": "Allow gzip compression of HTTP requests"
         },
-        "time": "2020-08-03T09:35:19+00:00",
+        "time": "2020-09-09T09:46:34+00:00",
         "bin": [
             "bin/composer"
         ],
@@ -768,17 +768,17 @@
     },
     {
         "name": "composer/semver",
-        "version": "1.5.1",
-        "version_normalized": "1.5.1.0",
+        "version": "1.7.0",
+        "version_normalized": "1.7.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/composer/semver.git",
-            "reference": "c6bea70230ef4dd483e6bbcab6005f682ed3a8de"
+            "reference": "114f819054a2ea7db03287f5efb757e2af6e4079"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/composer/semver/zipball/c6bea70230ef4dd483e6bbcab6005f682ed3a8de",
-            "reference": "c6bea70230ef4dd483e6bbcab6005f682ed3a8de",
+            "url": "https://api.github.com/repos/composer/semver/zipball/114f819054a2ea7db03287f5efb757e2af6e4079",
+            "reference": "114f819054a2ea7db03287f5efb757e2af6e4079",
             "shasum": ""
         },
         "require": {
@@ -787,7 +787,7 @@
         "require-dev": {
             "phpunit/phpunit": "^4.5 || ^5.0.5"
         },
-        "time": "2020-01-13T12:06:48+00:00",
+        "time": "2020-09-09T09:34:06+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -827,6 +827,20 @@
             "semver",
             "validation",
             "versioning"
+        ],
+        "funding": [
+            {
+                "url": "https://packagist.com",
+                "type": "custom"
+            },
+            {
+                "url": "https://github.com/composer",
+                "type": "github"
+            },
+            {
+                "url": "https://tidelift.com/funding/github/packagist/composer/composer",
+                "type": "tidelift"
+            }
         ]
     },
     {
@@ -3769,24 +3783,25 @@
     },
     {
         "name": "drupal/coder",
-        "version": "8.3.9",
-        "version_normalized": "8.3.9.0",
+        "version": "8.3.10",
+        "version_normalized": "8.3.10.0",
         "source": {
             "type": "git",
             "url": "https://git.drupalcode.org/project/coder.git",
-            "reference": "d51e0b8c6561e21c0545d04b5410a7bed7ee7c6b"
+            "reference": "e1d71c6bb75b94f9ed00dceb2f4f6cb7e044723d"
         },
         "require": {
             "ext-mbstring": "*",
             "php": ">=7.0.8",
-            "squizlabs/php_codesniffer": "^3.5.5",
+            "sirbrillig/phpcs-variable-analysis": "^2.8",
+            "squizlabs/php_codesniffer": "^3.5.6",
             "symfony/yaml": ">=2.0.5"
         },
         "require-dev": {
-            "phpstan/phpstan": "^0.12.5",
+            "phpstan/phpstan": "^0.12.31",
             "phpunit/phpunit": "^6.0 || ^7.0"
         },
-        "time": "2020-05-08T10:20:59+00:00",
+        "time": "2020-09-03T19:59:53+00:00",
         "type": "phpcodesniffer-standard",
         "installation-source": "source",
         "autoload": {
@@ -3797,7 +3812,7 @@
         },
         "notification-url": "https://packagist.org/downloads/",
         "license": [
-            "GPL-2.0+"
+            "GPL-2.0-or-later"
         ],
         "description": "Coder is a library to review Drupal code.",
         "homepage": "https://www.drupal.org/project/coder",
@@ -4419,17 +4434,17 @@
     },
     {
         "name": "drupal/core",
-        "version": "8.9.3",
-        "version_normalized": "8.9.3.0",
+        "version": "8.9.5",
+        "version_normalized": "8.9.5.0",
         "source": {
             "type": "git",
             "url": "https://github.com/drupal/core.git",
-            "reference": "ee02fd4cbe4ac148b4d7e297ec63b3459983862e"
+            "reference": "c9b9643663b80f02c038f9dea15b8717a22c3339"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/drupal/core/zipball/ee02fd4cbe4ac148b4d7e297ec63b3459983862e",
-            "reference": "ee02fd4cbe4ac148b4d7e297ec63b3459983862e",
+            "url": "https://api.github.com/repos/drupal/core/zipball/c9b9643663b80f02c038f9dea15b8717a22c3339",
+            "reference": "c9b9643663b80f02c038f9dea15b8717a22c3339",
             "shasum": ""
         },
         "require": {
@@ -4596,7 +4611,7 @@
             "drupal/workflows": "self.version",
             "drupal/workspaces": "self.version"
         },
-        "time": "2020-08-05T21:49:40+00:00",
+        "time": "2020-09-03T21:07:45+00:00",
         "type": "drupal-core",
         "extra": {
             "drupal-scaffold": {
@@ -4652,8 +4667,8 @@
     },
     {
         "name": "drupal/core-dev",
-        "version": "8.9.3",
-        "version_normalized": "8.9.3.0",
+        "version": "8.9.5",
+        "version_normalized": "8.9.5.0",
         "source": {
             "type": "git",
             "url": "https://github.com/drupal/core-dev.git",
@@ -6391,18 +6406,18 @@
     },
     {
         "name": "drupal/fontyourface",
-        "version": "3.3.0",
-        "version_normalized": "3.3.0.0",
+        "version": "3.4.0",
+        "version_normalized": "3.4.0.0",
         "source": {
             "type": "git",
             "url": "https://git.drupalcode.org/project/fontyourface.git",
-            "reference": "8.x-3.3"
+            "reference": "8.x-3.4"
         },
         "dist": {
             "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/fontyourface-8.x-3.3.zip",
-            "reference": "8.x-3.3",
-            "shasum": "d29b4b6c3157105a726cb37aea628f6c0da26637"
+            "url": "https://ftp.drupal.org/files/projects/fontyourface-8.x-3.4.zip",
+            "reference": "8.x-3.4",
+            "shasum": "747c710edd301f47be3c5fb3377a4c422a1f487c"
         },
         "require": {
             "drupal/core": "^8 || ^9"
@@ -6410,8 +6425,8 @@
         "type": "drupal-module",
         "extra": {
             "drupal": {
-                "version": "8.x-3.3",
-                "datestamp": "1597334555",
+                "version": "8.x-3.4",
+                "datestamp": "1599818817",
                 "security-coverage": {
                     "status": "covered",
                     "message": "Covered by Drupal's security advisory policy"
@@ -8891,18 +8906,18 @@
     },
     {
         "name": "drupal/simple_instagram_feed",
-        "version": "3.8.0",
-        "version_normalized": "3.8.0.0",
+        "version": "3.9.0",
+        "version_normalized": "3.9.0.0",
         "source": {
             "type": "git",
             "url": "https://git.drupalcode.org/project/simple_instagram_feed.git",
-            "reference": "8.x-3.8"
+            "reference": "8.x-3.9"
         },
         "dist": {
             "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/simple_instagram_feed-8.x-3.8.zip",
-            "reference": "8.x-3.8",
-            "shasum": "9dbdb5ce11e63d511bd9fa89c31ed0f8be4c48cc"
+            "url": "https://ftp.drupal.org/files/projects/simple_instagram_feed-8.x-3.9.zip",
+            "reference": "8.x-3.9",
+            "shasum": "38bb6b69316c29dc7554af79326b510efec7b458"
         },
         "require": {
             "drupal/core": "^8 || ^9"
@@ -8910,8 +8925,8 @@
         "type": "drupal-module",
         "extra": {
             "drupal": {
-                "version": "8.x-3.8",
-                "datestamp": "1598122792",
+                "version": "8.x-3.9",
+                "datestamp": "1599672217",
                 "security-coverage": {
                     "status": "covered",
                     "message": "Covered by Drupal's security advisory policy"
@@ -9874,18 +9889,18 @@
     },
     {
         "name": "drupal/webform",
-        "version": "5.19.0",
-        "version_normalized": "5.19.0.0",
+        "version": "5.20.0",
+        "version_normalized": "5.20.0.0",
         "source": {
             "type": "git",
             "url": "https://git.drupalcode.org/project/webform.git",
-            "reference": "8.x-5.19"
+            "reference": "8.x-5.20"
         },
         "dist": {
             "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/webform-8.x-5.19.zip",
-            "reference": "8.x-5.19",
-            "shasum": "90a2084c2647bca791cc8b18a7e2a3b49f3da7ea"
+            "url": "https://ftp.drupal.org/files/projects/webform-8.x-5.20.zip",
+            "reference": "8.x-5.20",
+            "shasum": "986dc0ba571e926a156390aca8138602dfc285e9"
         },
         "require": {
             "drupal/core": "^8.8"
@@ -9898,9 +9913,10 @@
             "drupal/clientside_validation": "~3.0",
             "drupal/clientside_validation_jquery": "*",
             "drupal/devel": "~3.0",
+            "drupal/entity": "~1.0",
             "drupal/entity_print": "~2.0",
             "drupal/gnode": "*",
-            "drupal/group": "~1.0",
+            "drupal/group": "1.0",
             "drupal/lingotek": "~3.0",
             "drupal/mailsystem": "~4.0",
             "drupal/paragraphs": "~1.0",
@@ -9909,6 +9925,7 @@
             "drupal/styleguide": "~1.0",
             "drupal/telephone_validation": "~2.0",
             "drupal/token": "~1.0",
+            "drupal/variationcache": "~1.0",
             "drupal/webform_access": "*",
             "drupal/webform_attachment": "*",
             "drupal/webform_clientside_validation": "*",
@@ -9924,8 +9941,8 @@
         "type": "drupal-module",
         "extra": {
             "drupal": {
-                "version": "8.x-5.19",
-                "datestamp": "1593681136",
+                "version": "8.x-5.20",
+                "datestamp": "1599851752",
                 "security-coverage": {
                     "status": "covered",
                     "message": "Covered by Drupal's security advisory policy"
@@ -10120,8 +10137,8 @@
     },
     {
         "name": "drupal/webform_node",
-        "version": "5.19.0",
-        "version_normalized": "5.19.0.0",
+        "version": "5.20.0",
+        "version_normalized": "5.20.0.0",
         "require": {
             "drupal/core": "^8.8",
             "drupal/webform": "self.version"
@@ -10129,8 +10146,8 @@
         "type": "metapackage",
         "extra": {
             "drupal": {
-                "version": "8.x-5.19",
-                "datestamp": "1593681136",
+                "version": "8.x-5.20",
+                "datestamp": "1599851752",
                 "security-coverage": {
                     "status": "covered",
                     "message": "Covered by Drupal's security advisory policy"
@@ -10265,8 +10282,8 @@
     },
     {
         "name": "drupal/webform_ui",
-        "version": "5.19.0",
-        "version_normalized": "5.19.0.0",
+        "version": "5.20.0",
+        "version_normalized": "5.20.0.0",
         "require": {
             "drupal/core": "^8.8",
             "drupal/webform": "self.version"
@@ -10274,8 +10291,8 @@
         "type": "metapackage",
         "extra": {
             "drupal": {
-                "version": "8.x-5.19",
-                "datestamp": "1593681136",
+                "version": "8.x-5.20",
+                "datestamp": "1599851752",
                 "security-coverage": {
                     "status": "covered",
                     "message": "Covered by Drupal's security advisory policy"
@@ -10609,17 +10626,17 @@
     },
     {
         "name": "egulias/email-validator",
-        "version": "2.1.19",
-        "version_normalized": "2.1.19.0",
+        "version": "2.1.20",
+        "version_normalized": "2.1.20.0",
         "source": {
             "type": "git",
             "url": "https://github.com/egulias/EmailValidator.git",
-            "reference": "840d5603eb84cc81a6a0382adac3293e57c1c64c"
+            "reference": "f46887bc48db66c7f38f668eb7d6ae54583617ff"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/840d5603eb84cc81a6a0382adac3293e57c1c64c",
-            "reference": "840d5603eb84cc81a6a0382adac3293e57c1c64c",
+            "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/f46887bc48db66c7f38f668eb7d6ae54583617ff",
+            "reference": "f46887bc48db66c7f38f668eb7d6ae54583617ff",
             "shasum": ""
         },
         "require": {
@@ -10635,7 +10652,7 @@
         "suggest": {
             "ext-intl": "PHP Internationalization Libraries are required to use the SpoofChecking validation"
         },
-        "time": "2020-08-08T21:28:19+00:00",
+        "time": "2020-09-06T13:44:32+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -11730,17 +11747,17 @@
     },
     {
         "name": "laminas/laminas-zendframework-bridge",
-        "version": "1.1.0",
-        "version_normalized": "1.1.0.0",
+        "version": "1.1.1",
+        "version_normalized": "1.1.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/laminas/laminas-zendframework-bridge.git",
-            "reference": "4939c81f63a8a4968c108c440275c94955753b19"
+            "reference": "6ede70583e101030bcace4dcddd648f760ddf642"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/laminas/laminas-zendframework-bridge/zipball/4939c81f63a8a4968c108c440275c94955753b19",
-            "reference": "4939c81f63a8a4968c108c440275c94955753b19",
+            "url": "https://api.github.com/repos/laminas/laminas-zendframework-bridge/zipball/6ede70583e101030bcace4dcddd648f760ddf642",
+            "reference": "6ede70583e101030bcace4dcddd648f760ddf642",
             "shasum": ""
         },
         "require": {
@@ -11750,13 +11767,9 @@
             "phpunit/phpunit": "^5.7 || ^6.5 || ^7.5 || ^8.1 || ^9.3",
             "squizlabs/php_codesniffer": "^3.5"
         },
-        "time": "2020-08-18T16:34:51+00:00",
+        "time": "2020-09-14T14:23:00+00:00",
         "type": "library",
         "extra": {
-            "branch-alias": {
-                "dev-master": "1.0.x-dev",
-                "dev-develop": "1.1.x-dev"
-            },
             "laminas": {
                 "module": "Laminas\\ZendFrameworkBridge"
             }
@@ -12518,17 +12531,17 @@
     },
     {
         "name": "pear/archive_tar",
-        "version": "1.4.9",
-        "version_normalized": "1.4.9.0",
+        "version": "1.4.10",
+        "version_normalized": "1.4.10.0",
         "source": {
             "type": "git",
             "url": "https://github.com/pear/Archive_Tar.git",
-            "reference": "c5b00053770e1d72128252c62c2c1a12c26639f0"
+            "reference": "bbb4f10f71a1da2715ec6d9a683f4f23c507a49b"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/pear/Archive_Tar/zipball/c5b00053770e1d72128252c62c2c1a12c26639f0",
-            "reference": "c5b00053770e1d72128252c62c2c1a12c26639f0",
+            "url": "https://api.github.com/repos/pear/Archive_Tar/zipball/bbb4f10f71a1da2715ec6d9a683f4f23c507a49b",
+            "reference": "bbb4f10f71a1da2715ec6d9a683f4f23c507a49b",
             "shasum": ""
         },
         "require": {
@@ -12543,7 +12556,7 @@
             "ext-xz": "Lzma2 compression support.",
             "ext-zlib": "Gzip compression support."
         },
-        "time": "2019-12-04T10:17:28+00:00",
+        "time": "2020-09-15T14:13:23+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -13099,17 +13112,17 @@
     },
     {
         "name": "phpstan/phpstan",
-        "version": "0.12.40",
-        "version_normalized": "0.12.40.0",
+        "version": "0.12.42",
+        "version_normalized": "0.12.42.0",
         "source": {
             "type": "git",
             "url": "https://github.com/phpstan/phpstan.git",
-            "reference": "dce7293ad7b59fc09a9ab9b0b5b44902c092ca17"
+            "reference": "7c43b7c2d5ca6554f6231e82e342a710163ac5f4"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/phpstan/phpstan/zipball/dce7293ad7b59fc09a9ab9b0b5b44902c092ca17",
-            "reference": "dce7293ad7b59fc09a9ab9b0b5b44902c092ca17",
+            "url": "https://api.github.com/repos/phpstan/phpstan/zipball/7c43b7c2d5ca6554f6231e82e342a710163ac5f4",
+            "reference": "7c43b7c2d5ca6554f6231e82e342a710163ac5f4",
             "shasum": ""
         },
         "require": {
@@ -13118,7 +13131,7 @@
         "conflict": {
             "phpstan/phpstan-shim": "*"
         },
-        "time": "2020-08-26T19:06:20+00:00",
+        "time": "2020-09-02T13:14:53+00:00",
         "bin": [
             "phpstan",
             "phpstan.phar"
@@ -14564,6 +14577,56 @@
         "description": "A simple PHP library for GPX import/export"
     },
     {
+        "name": "sirbrillig/phpcs-variable-analysis",
+        "version": "v2.8.3",
+        "version_normalized": "2.8.3.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/sirbrillig/phpcs-variable-analysis.git",
+            "reference": "00b4fa3130faa26762c929989e3d958086c627f1"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/sirbrillig/phpcs-variable-analysis/zipball/00b4fa3130faa26762c929989e3d958086c627f1",
+            "reference": "00b4fa3130faa26762c929989e3d958086c627f1",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.4.0",
+            "squizlabs/php_codesniffer": "^3.1"
+        },
+        "require-dev": {
+            "dealerdirect/phpcodesniffer-composer-installer": "^0.4.4 || ^0.5 || ^0.6",
+            "limedeck/phpunit-detailed-printer": "^3.1 || ^4.0 || ^5.0",
+            "phpstan/phpstan": "^0.11.8",
+            "phpunit/phpunit": "^5.0 || ^6.5 || ^7.0 || ^8.0",
+            "sirbrillig/phpcs-import-detection": "^1.1"
+        },
+        "time": "2020-07-11T23:32:06+00:00",
+        "type": "phpcodesniffer-standard",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "VariableAnalysis\\": "VariableAnalysis/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-2-Clause"
+        ],
+        "authors": [
+            {
+                "name": "Sam Graham",
+                "email": "php-codesniffer-variableanalysis@illusori.co.uk"
+            },
+            {
+                "name": "Payton Swick",
+                "email": "payton@foolord.com"
+            }
+        ],
+        "description": "A PHPCS sniff to detect problems with variables."
+    },
+    {
         "name": "squizlabs/php_codesniffer",
         "version": "3.5.6",
         "version_normalized": "3.5.6.0",
@@ -14923,8 +14986,8 @@
     },
     {
         "name": "symfony/config",
-        "version": "v4.4.12",
-        "version_normalized": "4.4.12.0",
+        "version": "v4.4.13",
+        "version_normalized": "4.4.13.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/config.git",
@@ -17234,8 +17297,8 @@
     },
     {
         "name": "symfony/var-dumper",
-        "version": "v4.4.12",
-        "version_normalized": "4.4.12.0",
+        "version": "v4.4.13",
+        "version_normalized": "4.4.13.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/var-dumper.git",
