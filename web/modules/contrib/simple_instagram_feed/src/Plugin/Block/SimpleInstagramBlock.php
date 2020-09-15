@@ -3,6 +3,7 @@
 namespace Drupal\simple_instagram_feed\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\simple_instagram_feed\Services\SimpleInstagramFeedLibraryInterface;
@@ -24,6 +25,24 @@ class SimpleInstagramBlock extends BlockBase implements ContainerFactoryPluginIn
    * @var \Drupal\simple_instagram_feed\Services\SimpleInstagramFeedLibraryInterface
    */
   private $simpleInstagramFeedLibrary;
+
+  /**
+   * {@inheritDoc}
+   */
+  public function defaultConfiguration() {
+    return [
+        'items' => 12,
+        'styling' => 'true',
+        'instagram_username' => 'instagram',
+        'display_profile' => true,
+        'display_biography' => true,
+        'items_per_row_type' => false,
+        'items_per_row_default' => 5,
+        'items_per_row_l_720' => 5,
+        'items_per_row_l_960' => 5,
+        'items_per_row_h_960' => 5,
+      ] + parent::defaultConfiguration();
+  }
 
   /**
    * {@inheritdoc}
@@ -170,16 +189,46 @@ class SimpleInstagramBlock extends BlockBase implements ContainerFactoryPluginIn
     if (!$this->simpleInstagramFeedLibrary->isAvailable()) {
       return [];
     }
+    $unique_id = Html::getUniqueId($this->getPluginId());
 
-    return [
+    $build = [
+      '#unique_id' => $unique_id,
       '#theme' => 'simple_instagram_block',
       '#markup' => $this->t('Simple Instagram Feed'),
       '#attached' => [
         'library' => ['simple_instagram_feed/simple_instagram_block'],
+        'drupalSettings' => []
       ],
       '#cache' => [
         'max-age' => 3600,
       ],
+    ];
+    $build['#attached']['drupalSettings']['simple_instagram_feed'][$unique_id] = $this->buildAttachedSettings();
+    $build['#attached']['drupalSettings']['simple_instagram_feed'][$unique_id]['unique_id'] = $unique_id;
+
+    return $build;
+  }
+
+  /**
+   * Build instagram attached settings.
+   *
+   * @return array
+   *   An array of the formatted settings.
+   */
+  protected function buildAttachedSettings() {
+    $config = $this->getConfiguration();
+
+    return [
+      'items' => $config['simple_instagram_items'],
+      'styling' => $config['simple_instagram_styling'],
+      'instagram_username' => $config['simple_instagram_username'],
+      'display_profile' => $config['simple_instagram_display_profile'],
+      'display_biography' => $config['simple_instagram_display_biography'],
+      'items_per_row_type' => $config['simple_instagram_items_per_row_type'],
+      'items_per_row_default' => $config['simple_instagram_items_per_row_default'] + 1,
+      'items_per_row_l_720' => $config['simple_instagram_items_per_row_l_720'] + 1,
+      'items_per_row_l_960' => $config['simple_instagram_items_per_row_l_960'] + 1,
+      'items_per_row_h_960' => $config['simple_instagram_items_per_row_h_960'] + 1,
     ];
   }
 

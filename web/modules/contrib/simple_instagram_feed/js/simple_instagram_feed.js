@@ -16,10 +16,8 @@
         var display_biography = simple_instagram_feed_array[i].display_biography;
         var items = simple_instagram_feed_array[i].items;
         var styling = (simple_instagram_feed_array[i].styling === 'true' ? true : false);
-        var block_instance = simple_instagram_feed_array[i].block_instance;
-        var block_target = (simple_instagram_feed_array[i].block_without_id === 'true' ?
-          '.block-' + block_instance : '#block-' + block_instance);
-        block_target = block_target + ' .instagram-feed';
+        var unique_id = simple_instagram_feed_array[i].unique_id;
+
         // Verify items per row.
         var items_per_row;
         if (simple_instagram_feed_array[i].items_per_row_type == 0) {
@@ -37,7 +35,7 @@
 
         var feed_settings = {
           username: instagram_username,
-          container: block_target,
+          container: `#${unique_id}`,
           display_profile: display_profile,
           display_biography: display_biography,
           display_gallery: true,
@@ -46,7 +44,7 @@
           items: items,
           margin: 0.25
         };
-        
+
         if (styling) {
           feed_settings.items_per_row = items_per_row;
         }

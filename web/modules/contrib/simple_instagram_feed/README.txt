@@ -35,8 +35,16 @@ Install the Simple Instagram Feed Block:
 
 * With Composer *
 
-To install library with composer, add the code below to into your project's
-composer.json, under "repositories":
+To install this module and the jquery.instagramFeed library with composer,
+You will need to perform the following four (4) steps:
+
+1) Edit composer.json to include the jquery.instagramFeed repository.
+2) Install the jquery.instagramFeed Library.
+3) Install the Simple Instagram Feed module.
+4) Enable the Simple Instagram Feed module.
+
+1) Add the code below to into your project's composer.json,
+under "repositories":
 
 "repositories": [
   {
@@ -53,8 +61,6 @@ composer.json, under "repositories":
   }
 ]
 
-and run 'composer require jsanahuja/jqueryinstagramfeed:dev-master'.
-
 If the installer path is not set, use:
 
 "extra": {
@@ -62,6 +68,16 @@ If the installer path is not set, use:
         "web/libraries/{$name}": ["type:drupal-library"]
     }
 }
+
+2) Install the jquery.instagramFeed Library, run:
+  $ composer require jsanahuja/jqueryinstagramfeed:dev-master
+
+3) Install the Simple Instagram Feed module, run:
+  $ composer require 'drupal/simple_instagram_feed
+
+4) Within the Administration menu in your website, navigate to Extend and
+enable the Simple Instagram Feed module.
+
 
 CONFIGURATION
 -------------
