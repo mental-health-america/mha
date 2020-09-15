@@ -5,8 +5,6 @@
  * Generate test elements with #states.
  */
 
-use Drupal\webform\Entity\Webform;
-
 /**
  * Generate test elements with #states.
  *

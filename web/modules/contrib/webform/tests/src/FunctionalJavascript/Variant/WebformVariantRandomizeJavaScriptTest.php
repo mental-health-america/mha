@@ -25,7 +25,7 @@ class WebformVariantRandomizeJavaScriptTest extends WebformWebDriverTestBase {
    * @return string|null
    *   The persisted variant id or NULL if one is not persisted.
    */
-  protected function getSavedVariantID() {
+  protected function getSavedVariantId() {
     $script = <<<JS
 (function() {
   var key = 'Drupal.webform.test_variant_randomize.variant.letter';
@@ -44,7 +44,7 @@ JS;
     $this->drupalGet('/webform/test_variant_randomize');
 
     // Check that either 'a' or 'b' is persisted.
-    $saved_variant = $this->getSavedVariantID();
+    $saved_variant = $this->getSavedVariantId();
     $this->assertContains($saved_variant, ['a', 'b']);
 
     // Disable the variant that is saved in the client session.
@@ -56,7 +56,7 @@ JS;
     // Check that the disabled variant is no longer persisted, but rather
     // that the remaining variant is instead.
     $this->drupalGet('/webform/test_variant_randomize');
-    $new_saved_variant = $this->getSavedVariantID();
+    $new_saved_variant = $this->getSavedVariantId();
     $this->assertContains($new_saved_variant, ['a', 'b']);
     $this->assertNotEqual($saved_variant, $new_saved_variant);
 
@@ -68,7 +68,7 @@ JS;
 
     // Check that no variant is now persisted.
     $this->drupalGet('/webform/test_variant_randomize');
-    $null_variant = $this->getSavedVariantID();
+    $null_variant = $this->getSavedVariantId();
     $this->assertNull($null_variant);
   }
 

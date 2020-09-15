@@ -10,22 +10,65 @@ weight: 0
 uid: null
 template: false
 archive: false
-id: test_element_description
-title: 'Test: Element: Description'
-description: 'Test element description.'
-category: 'Test: Element'
+id: test_states_to_text
+title: 'Test: Form API #states to text'
+description: 'Test Drupal''s converting #states API to human readable text.'
+category: 'Test: Form API #states'
 elements: |
-  description_before:
+  some_trigger:
+    '#type': checkbox
+    '#title': some_trigger
+  some_value:
+    '#type': select
+    '#title': some_value
+    '#options':
+      1: one
+      2: two
+      3: three
+  some_number:
+    '#type': number
+    '#title': some_number
+  textfield_and:
     '#type': textfield
-    '#title': description_before
-    '#description': 'This is a description before the element.'
-    '#description_display': before
-  description_after:
+    '#title': textfield_and
+    '#states':
+      required:
+        ':input[name="some_trigger"]':
+          checked: true
+        ':input[name="some_value"]':
+          value: 1
+        ':input[name="some_number"]':
+          value:
+            greater_equal: 1
+  textfield_or:
     '#type': textfield
-    '#title': description_after
-    '#description': 'This is a description after the element.'
-    '#description_display': after
-  
+    '#title': textfield_or
+    '#states':
+      required:
+        - ':input[name="some_trigger"]':
+            checked: true
+        - 'or'
+        - ':input[name="some_value"]':
+            value: 1
+        - 'or'
+        - ':input[name="some_number"]':
+            value:
+              greater_equal: 1
+  textfield_nested:
+    '#type': textfield
+    '#title': textfield_or
+    '#states':
+      required:
+        - ':input[name="some_trigger"]':
+            checked: true
+        -
+          - ':input[name="some_value"]':
+              value: 1
+          - 'or'
+          - ':input[name="some_number"]':
+              value:
+                between: '1:10'
+
 css: ''
 javascript: ''
 settings:
@@ -46,7 +89,7 @@ settings:
   form_previous_submissions: true
   form_confidential: false
   form_confidential_message: ''
-  form_disable_remote_addr: false
+  form_remote_addr: true
   form_convert_anonymous: false
   form_prepopulate: false
   form_prepopulate_source_entity: false
@@ -148,8 +191,8 @@ settings:
   entity_limit_user_interval: null
   purge: none
   purge_days: null
-  results_disabled: false
-  results_disabled_ignore: false
+  results_disabled: true
+  results_disabled_ignore: true
   results_customize: false
   token_view: false
   token_update: false
