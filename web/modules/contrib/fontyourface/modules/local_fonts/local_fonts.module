@@ -102,7 +102,7 @@ function local_fonts_save_and_generate_css(LocalFontConfigEntity $font_entity) {
   $directory = file_build_uri('fontyourface/local_fonts/' . $font_entity->id());
   $css_file = $directory . '/font.css';
   $font_file = $directory . '/font.woff';
-  file_prepare_directory($directory, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
+  \Drupal::service('file_system')->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
 
   $css_file_data = "@font-face {\n";
   $css_file_data .= "font-family: '" . $font_entity->font_family . "';\n";
