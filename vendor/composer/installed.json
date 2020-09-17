@@ -4316,18 +4316,18 @@
     },
     {
         "name": "drupal/content_access",
-        "version": "1.0.0-alpha2",
-        "version_normalized": "1.0.0.0-alpha2",
+        "version": "1.0.0-alpha3",
+        "version_normalized": "1.0.0.0-alpha3",
         "source": {
             "type": "git",
             "url": "https://git.drupalcode.org/project/content_access.git",
-            "reference": "8.x-1.0-alpha2"
+            "reference": "8.x-1.0-alpha3"
         },
         "dist": {
             "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/content_access-8.x-1.0-alpha2.zip",
-            "reference": "8.x-1.0-alpha2",
-            "shasum": "f8ad93ee13bfd7901742071ce9399ac1731c6100"
+            "url": "https://ftp.drupal.org/files/projects/content_access-8.x-1.0-alpha3.zip",
+            "reference": "8.x-1.0-alpha3",
+            "shasum": "38715d271d166cbf7ed801acd6cee6010962bc79"
         },
         "require": {
             "drupal/core": "^8 || ^9"
@@ -4338,8 +4338,8 @@
         "type": "drupal-module",
         "extra": {
             "drupal": {
-                "version": "8.x-1.0-alpha2",
-                "datestamp": "1594551206",
+                "version": "8.x-1.0-alpha3",
+                "datestamp": "1600327758",
                 "security-coverage": {
                     "status": "not-covered",
                     "message": "Project has not opted into security advisory coverage!"
@@ -4434,17 +4434,17 @@
     },
     {
         "name": "drupal/core",
-        "version": "8.9.5",
-        "version_normalized": "8.9.5.0",
+        "version": "8.9.6",
+        "version_normalized": "8.9.6.0",
         "source": {
             "type": "git",
             "url": "https://github.com/drupal/core.git",
-            "reference": "c9b9643663b80f02c038f9dea15b8717a22c3339"
+            "reference": "caf4e756d31dfb0c2e52cd0748e900efe4b57766"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/drupal/core/zipball/c9b9643663b80f02c038f9dea15b8717a22c3339",
-            "reference": "c9b9643663b80f02c038f9dea15b8717a22c3339",
+            "url": "https://api.github.com/repos/drupal/core/zipball/caf4e756d31dfb0c2e52cd0748e900efe4b57766",
+            "reference": "caf4e756d31dfb0c2e52cd0748e900efe4b57766",
             "shasum": ""
         },
         "require": {
@@ -4611,7 +4611,7 @@
             "drupal/workflows": "self.version",
             "drupal/workspaces": "self.version"
         },
-        "time": "2020-09-03T21:07:45+00:00",
+        "time": "2020-09-16T11:22:21+00:00",
         "type": "drupal-core",
         "extra": {
             "drupal-scaffold": {
@@ -4667,17 +4667,17 @@
     },
     {
         "name": "drupal/core-dev",
-        "version": "8.9.5",
-        "version_normalized": "8.9.5.0",
+        "version": "8.8.10",
+        "version_normalized": "8.8.10.0",
         "source": {
             "type": "git",
             "url": "https://github.com/drupal/core-dev.git",
-            "reference": "36370b3f42911c09ffb35f08fc72853d20e6efd7"
+            "reference": "edeec67c12be4b459d2873ac99044787b51ebe42"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/drupal/core-dev/zipball/36370b3f42911c09ffb35f08fc72853d20e6efd7",
-            "reference": "36370b3f42911c09ffb35f08fc72853d20e6efd7",
+            "url": "https://api.github.com/repos/drupal/core-dev/zipball/edeec67c12be4b459d2873ac99044787b51ebe42",
+            "reference": "edeec67c12be4b459d2873ac99044787b51ebe42",
             "shasum": ""
         },
         "require": {
@@ -4685,7 +4685,7 @@
             "behat/mink-goutte-driver": "^1.2",
             "behat/mink-selenium2-driver": "^1.4",
             "composer/composer": "^1.9.1",
-            "drupal/coder": "^8.3.7",
+            "drupal/coder": "^8.3.2",
             "jcalderonzumba/gastonjs": "^1.0.2",
             "jcalderonzumba/mink-phantomjs-driver": "^0.3.1",
             "justinrainbow/json-schema": "^5.2",
@@ -4695,7 +4695,6 @@
             "symfony/browser-kit": "^3.4.0",
             "symfony/css-selector": "^3.4.0",
             "symfony/debug": "^3.4.0",
-            "symfony/dom-crawler": "^3.4.0 !=3.4.38",
             "symfony/filesystem": "~3.4.0",
             "symfony/finder": "~3.4.0",
             "symfony/lock": "~3.4.0",
@@ -4704,7 +4703,7 @@
         "conflict": {
             "webflo/drupal-core-require-dev": "*"
         },
-        "time": "2020-05-09T07:53:22+00:00",
+        "time": "2020-05-19T10:05:59+00:00",
         "type": "metapackage",
         "notification-url": "https://packagist.org/downloads/",
         "license": [
@@ -10743,23 +10742,23 @@
     },
     {
         "name": "gasparesganga/php-shapefile",
-        "version": "v3.3.2",
-        "version_normalized": "3.3.2.0",
+        "version": "v3.3.3",
+        "version_normalized": "3.3.3.0",
         "source": {
             "type": "git",
             "url": "https://github.com/gasparesganga/php-shapefile.git",
-            "reference": "ae86a406f9a8191adc00724f032587b2287a8310"
+            "reference": "839475272ef8c7585f5afa31939c95d6d02371a6"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/gasparesganga/php-shapefile/zipball/ae86a406f9a8191adc00724f032587b2287a8310",
-            "reference": "ae86a406f9a8191adc00724f032587b2287a8310",
+            "url": "https://api.github.com/repos/gasparesganga/php-shapefile/zipball/839475272ef8c7585f5afa31939c95d6d02371a6",
+            "reference": "839475272ef8c7585f5afa31939c95d6d02371a6",
             "shasum": ""
         },
         "require": {
             "php": ">=5.4.0"
         },
-        "time": "2020-08-17T13:52:01+00:00",
+        "time": "2020-09-17T08:22:36+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -12946,17 +12945,17 @@
     },
     {
         "name": "phpdocumentor/reflection-docblock",
-        "version": "5.2.1",
-        "version_normalized": "5.2.1.0",
+        "version": "5.2.2",
+        "version_normalized": "5.2.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
-            "reference": "d870572532cd70bc3fab58f2e23ad423c8404c44"
+            "reference": "069a785b2141f5bcf49f3e353548dc1cce6df556"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/d870572532cd70bc3fab58f2e23ad423c8404c44",
-            "reference": "d870572532cd70bc3fab58f2e23ad423c8404c44",
+            "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/069a785b2141f5bcf49f3e353548dc1cce6df556",
+            "reference": "069a785b2141f5bcf49f3e353548dc1cce6df556",
             "shasum": ""
         },
         "require": {
@@ -12969,7 +12968,7 @@
         "require-dev": {
             "mockery/mockery": "~1.3.2"
         },
-        "time": "2020-08-15T11:14:08+00:00",
+        "time": "2020-09-03T19:13:55+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -13000,17 +12999,17 @@
     },
     {
         "name": "phpdocumentor/type-resolver",
-        "version": "1.3.0",
-        "version_normalized": "1.3.0.0",
+        "version": "1.4.0",
+        "version_normalized": "1.4.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/phpDocumentor/TypeResolver.git",
-            "reference": "e878a14a65245fbe78f8080eba03b47c3b705651"
+            "reference": "6a467b8989322d92aa1c8bf2bebcc6e5c2ba55c0"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/e878a14a65245fbe78f8080eba03b47c3b705651",
-            "reference": "e878a14a65245fbe78f8080eba03b47c3b705651",
+            "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/6a467b8989322d92aa1c8bf2bebcc6e5c2ba55c0",
+            "reference": "6a467b8989322d92aa1c8bf2bebcc6e5c2ba55c0",
             "shasum": ""
         },
         "require": {
@@ -13020,7 +13019,7 @@
         "require-dev": {
             "ext-tokenizer": "*"
         },
-        "time": "2020-06-27T10:12:23+00:00",
+        "time": "2020-09-17T18:55:26+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -15382,35 +15381,39 @@
     },
     {
         "name": "symfony/dom-crawler",
-        "version": "v3.4.44",
-        "version_normalized": "3.4.44.0",
+        "version": "v4.4.13",
+        "version_normalized": "4.4.13.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/dom-crawler.git",
-            "reference": "702ee651db23dc452bf1fd6dea6ca2f671ed2681"
+            "reference": "6dd1e7adef4b7efeeb9691fd619279027d4dcf85"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/702ee651db23dc452bf1fd6dea6ca2f671ed2681",
-            "reference": "702ee651db23dc452bf1fd6dea6ca2f671ed2681",
+            "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/6dd1e7adef4b7efeeb9691fd619279027d4dcf85",
+            "reference": "6dd1e7adef4b7efeeb9691fd619279027d4dcf85",
             "shasum": ""
         },
         "require": {
-            "php": "^5.5.9|>=7.0.8",
+            "php": ">=7.1.3",
             "symfony/polyfill-ctype": "~1.8",
             "symfony/polyfill-mbstring": "~1.0"
         },
+        "conflict": {
+            "masterminds/html5": "<2.6"
+        },
         "require-dev": {
-            "symfony/css-selector": "~2.8|~3.0|~4.0"
+            "masterminds/html5": "^2.6",
+            "symfony/css-selector": "^3.4|^4.0|^5.0"
         },
         "suggest": {
             "symfony/css-selector": ""
         },
-        "time": "2020-08-09T09:13:53+00:00",
+        "time": "2020-08-12T06:20:35+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "3.4-dev"
+                "dev-master": "4.4-dev"
             }
         },
         "installation-source": "dist",
