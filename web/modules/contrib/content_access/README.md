@@ -11,7 +11,8 @@
 
 # INTRODUCTION
 
-The **Content Access** module let you content manage access permission in a flexible and transparant way.
+The **Content Access** module let you content manage access permission
+in a flexible and transparant way.
 
 It provides two new permissions: *view all* (allows anyone to view the
 content) and *view own* (allows only the content creator to see
@@ -20,9 +21,12 @@ permissions *edit* and *delete* on the same settings page.
 
 It provides the following modalities:
 
-* Each *content type* can have its own default content access settings by role.
-* Optionally you can enable role based access control settings per *content node*.
-* Access control can be further customized per *user* if you have the **ACL** module enabled.
+* Each *content type* can have its own default content access settings
+  by role.
+* Optionally you can enable role based access control settings per
+  *content node*.
+* Access control can be further customized per *user* if you have the
+  **ACL** module enabled.
 
 For more information and reporting, please visit:
 

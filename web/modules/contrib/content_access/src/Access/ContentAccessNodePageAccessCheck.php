@@ -8,8 +8,10 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Routing\RouteMatchInterface;
 
 /**
- * Determines access to routes based on permissions defined via $module.permissions.yml files.
+ * Class ContentAccessNodePageAccessCheck.
  *
+ * Determines access to routes based on permissions defined via
+ * $module.permissions.yml files.
  */
 class ContentAccessNodePageAccessCheck implements AccessInterface {
 

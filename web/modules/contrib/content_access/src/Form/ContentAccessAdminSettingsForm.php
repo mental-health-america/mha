@@ -2,10 +2,10 @@
 
 namespace Drupal\content_access\Form;
 
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\Core\Link;
 use Drupal\user\PermissionHandlerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -24,13 +24,23 @@ class ContentAccessAdminSettingsForm extends FormBase {
   protected $permissionHandler;
 
   /**
+   * The module handler service.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * Constructs a new ContentAccessAdminSettingsForm.
    *
    * @param \Drupal\user\PermissionHandlerInterface $permission_handler
    *   The permission handler.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler service.
    */
-  public function __construct(PermissionHandlerInterface $permission_handler) {
+  public function __construct(PermissionHandlerInterface $permission_handler, ModuleHandlerInterface $module_handler) {
     $this->permissionHandler = $permission_handler;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -39,7 +49,7 @@ class ContentAccessAdminSettingsForm extends FormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('user.permissions'),
-      $container->get('entity_type.manager')->getStorage('user_role')
+      $container->get('module_handler')
     );
   }
 
@@ -161,15 +171,18 @@ class ContentAccessAdminSettingsForm extends FormBase {
 
       // If per node has been disabled and we use the ACL integration, we have
       // to remove possible ACLs now.
-      if (!content_access_get_settings('per_node', $node_type) && $form['node']['per_node']['#default_value'] && \Drupal::moduleHandler()->moduleExists('acl')) {
+      if (!content_access_get_settings('per_node', $node_type) && $form['node']['per_node']['#default_value'] && $this->moduleHandler->moduleExists('acl')) {
         _content_access_remove_acls($node_type);
       }
 
       if (content_access_mass_update([$node_type])) {
         $node_types = node_type_get_names();
-	// This does not gurantee a rebuild.
+        // This does not gurantee a rebuild.
         $this->messenger()->addMessage($this->t('Permissions have been changed for the content type @types.<br />You may have to <a href=":rebuild">rebuild permisions</a> for your changes to take effect.',
-	  ['@types' => $node_types[$node_type], ':rebuild' => Url::FromRoute('node.configure_rebuild_confirm')->ToString()]));
+        [
+          '@types' => $node_types[$node_type],
+          ':rebuild' => Url::FromRoute('node.configure_rebuild_confirm')->ToString(),
+        ]));
       }
     }
     else {

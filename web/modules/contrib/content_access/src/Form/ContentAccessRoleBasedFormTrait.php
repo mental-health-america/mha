@@ -16,10 +16,14 @@ trait ContentAccessRoleBasedFormTrait {
   /**
    * Builds the role based permission form for the given defaults.
    *
-   * @param $defaults
+   * @param array $form
+   *   An associative array containing the structure of the form.
+   * @param array $defaults
    *   Array of defaults for all operations.
+   * @param string $type
+   *   The node type id.
    */
-  protected function roleBasedForm(&$form, $defaults = [], $type = NULL) {
+  protected function roleBasedForm(array &$form, array $defaults = [], $type = NULL) {
     $description = [
       t('Note that users need at least the %access_content permission to be able to deal in any way with content.', [
         '%access_content' => t('access content'),
@@ -54,10 +58,16 @@ trait ContentAccessRoleBasedFormTrait {
         '#default_value' => $defaults[$op],
       ];
 
-      $form['per_role'][$op]['#process'] = array(
-        array('\Drupal\Core\Render\Element\Checkboxes', 'processCheckboxes'),
-        array('\Drupal\content_access\Form\ContentAccessRoleBasedFormTrait', 'disableCheckboxes'),
-      );
+      $form['per_role'][$op]['#process'] = [
+        [
+          '\Drupal\Core\Render\Element\Checkboxes',
+          'processCheckboxes',
+        ],
+        [
+          '\Drupal\content_access\Form\ContentAccessRoleBasedFormTrait',
+          'disableCheckboxes',
+        ],
+      ];
     }
 
     $form['per_role']['clearer'] = [
@@ -70,7 +80,10 @@ trait ContentAccessRoleBasedFormTrait {
   }
 
   /**
-   * Formapi #process callback, that disables checkboxes for roles without access to content
+   * Checkboxes access for content.
+   *
+   * Formapi #process callback, that disables checkboxes for roles without
+   * access to content.
    */
   public static function disableCheckboxes(&$element, FormStateInterface $form_state, &$complete_form) {
     $access_roles = content_access_get_permission_access('access content');
@@ -84,16 +97,17 @@ trait ContentAccessRoleBasedFormTrait {
         $element[$key]['#disabled'] = TRUE;
         $element[$key]['#default_value'] = FALSE;
         $element[$key]['#prefix'] = '<span ' . new Attribute([
-          'title' => t("This role is lacking the permission '@perm', so it has no access.", ['@perm' => t('access content')])
+          'title' => t("This role is lacking the permission '@perm', so it has no access.", ['@perm' => t('access content')]),
         ]) . '>';
         $element[$key]['#suffix'] = "</span>";
       }
       elseif (in_array($key, $admin_roles) || ($key != AccountInterface::ANONYMOUS_ROLE && in_array(AccountInterface::AUTHENTICATED_ROLE, $admin_roles))) {
-        // Fix the checkbox to be enabled for users with administer node privileges.
+        // Fix the checkbox to be enabled for users with administer node
+        // privileges.
         $element[$key]['#disabled'] = TRUE;
         $element[$key]['#default_value'] = TRUE;
         $element[$key]['#prefix'] = '<span ' . new Attribute([
-          'title' => t("This role has '@perm' permission, so access is granted.", ['@perm' => t('bypass node access')])
+          'title' => t("This role has '@perm' permission, so access is granted.", ['@perm' => t('bypass node access')]),
         ]) . '>';
         $element[$key]['#suffix'] = "</span>";
       }

@@ -3,19 +3,72 @@
 namespace Drupal\content_access\Form;
 
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Template\Attribute;
+use Drupal\node\NodeGrantDatabaseStorageInterface;
 use Drupal\node\NodeInterface;
-use Drupal\Core\Link;
 use Drupal\Core\Url;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Node Access settings form.
+ *
  * @package Drupal\content_access\Form
  */
 class ContentAccessPageForm extends FormBase {
   use ContentAccessRoleBasedFormTrait;
+
+  /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   *   The entity type manager.
+   */
+  protected $entityTypeManager;
+
+  /**
+   * The module handler service.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
+   * The node grant storage.
+   *
+   * @var \Drupal\node\NodeGrantDatabaseStorageInterface
+   */
+  protected $grantStorage;
+
+  /**
+   * ContentAccessPageForm constructor.
+   *
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler service.
+   * @param \Drupal\node\NodeGrantDatabaseStorageInterface $grant_storage
+   *   The node grant storage.
+   */
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler, NodeGrantDatabaseStorageInterface $grant_storage) {
+    $this->entityTypeManager = $entity_type_manager;
+    $this->moduleHandler = $module_handler;
+    $this->grantStorage = $grant_storage;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('entity_type.manager'),
+      $container->get('module_handler'),
+      $container->get('node.grant_storage')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -36,12 +89,13 @@ class ContentAccessPageForm extends FormBase {
 
     $this->roleBasedForm($form, $defaults, $node->getType());
 
-    // Add an after_build handler that disables checkboxes, which are enforced by permissions.
+    // Add an after_build handler that disables checkboxes, which are enforced
+    // by permissions.
     $build_info = $form_state->getBuildInfo();
     $build_info['files'][] = [
       'module' => 'content_access',
       'type' => 'inc',
-      'name' => 'content_access.admin'
+      'name' => 'content_access.admin',
     ];
     $form_state->setBuildInfo($build_info);
 
@@ -50,12 +104,12 @@ class ContentAccessPageForm extends FormBase {
     }
 
     // ACL form.
-    if (\Drupal::moduleHandler()->moduleExists('acl')) {
+    if ($this->moduleHandler->moduleExists('acl')) {
       // This is disabled when there is no node passed.
       $form['acl'] = [
         '#type' => 'fieldset',
-        '#title' => t('User access control lists'),
-        '#description' => t('These settings allow you to grant access to specific users.'),
+        '#title' => $this->t('User access control lists'),
+        '#description' => $this->t('These settings allow you to grant access to specific users.'),
         '#collapsible' => TRUE,
         '#tree' => TRUE,
       ];
@@ -67,9 +121,9 @@ class ContentAccessPageForm extends FormBase {
         $update = (int) ($op == 'update');
         acl_node_add_acl($node->id(), $acl_id, $view, $update, (int) ($op == 'delete'), content_access_get_settings('priority', $node->getType()));
 
-        $form['acl'][$op] = acl_edit_form($form_state, $acl_id, t('Grant @op access', ['@op' => $op]));
+        $form['acl'][$op] = acl_edit_form($form_state, $acl_id, $this->t('Grant @op access', ['@op' => $op]));
 
-        $post_acl_id = \Drupal::request()->request->get('acl_' . $acl_id, NULL);
+        $post_acl_id = $this->getRequest()->request->get('acl_' . $acl_id, NULL);
         $form['acl'][$op]['#collapsed'] = !isset($post_acl_id) && !unserialize($form['acl'][$op]['user_list']['#default_value']);
       }
     }
@@ -117,44 +171,49 @@ class ContentAccessPageForm extends FormBase {
     // Save per-node settings.
     content_access_save_per_node_settings($node, $settings);
 
-    if (\Drupal::moduleHandler()->moduleExists('acl')) {
-      foreach (array('view', 'update', 'delete') as $op) {
+    if ($this->moduleHandler->moduleExists('acl')) {
+      foreach (['view', 'update', 'delete'] as $op) {
         $values = $form_state->getValues();
         acl_save_form($values['acl'][$op]);
-        \Drupal::moduleHandler()->invokeAll('user_acl', $settings);
+        $this->moduleHandler->invokeAll('user_acl', $settings);
       }
     }
 
     // Apply new settings.
-    \Drupal::entityTypeManager()->getAccessControlHandler('node')->writeGrants($node);
-    \Drupal::moduleHandler()->invokeAll('per_node', $settings);
+    $grants = $this->entityTypeManager->getAccessControlHandler('node')->acquireGrants($node);
+    $this->grantStorage->write($node, $grants);
+    $this->moduleHandler->invokeAll('per_node', $settings);
 
-    foreach (Cache::getBins() as $service_id => $cache_backend) {
+    foreach (Cache::getBins() as $cache_backend) {
       $cache_backend->deleteAll();
     }
-//xxxx
-// route: node.configure_rebuild_confirm:
-// path:  '/admin/reports/status/rebuild'
-    $this->messenger()->addMessage(t('Your changes have been saved. You may have to <a href=":rebuild">rebuild permisions</a> for your changes to take effect.',
-      array(':rebuild' => Url::FromRoute('node.configure_rebuild_confirm')->ToString())));
+    // xxxx
+    // route: node.configure_rebuild_confirm:
+    // path:  '/admin/reports/status/rebuild'.
+    $this->messenger()->addMessage($this->t('Your changes have been saved. You may have to <a href=":rebuild">rebuild permisions</a> for your changes to take effect.',
+      [':rebuild' => Url::FromRoute('node.configure_rebuild_confirm')->ToString()]));
   }
 
   /**
    * Submit callback for reset on content_access_page().
    */
-  function pageResetSubmit(array &$form, FormStateInterface $form_state) {
+  public function pageResetSubmit(array &$form, FormStateInterface $form_state) {
     $storage = $form_state->getStorage();
     content_access_delete_per_node_settings($storage['node']);
-    \Drupal::entityTypeManager()->getAccessControlHandler('node')->writeGrants($storage['node']);
+    $node = $storage['node'];
+    $grants = $this->entityTypeManager->getAccessControlHandler('node')->acquireGrants($node);
+    $this->grantStorage->write($node, $grants);
 
-    $this->messenger()->addMessage(t('The permissions have been reset to the content type defaults.'));
+    $this->messenger()->addMessage($this->t('The permissions have been reset to the content type defaults.'));
   }
 
-
   /**
-   * Formapi #process callback, that disables checkboxes for roles without access to content.
+   * Checkboxes access for content.
+   *
+   * Formapi #process callback, that disables checkboxes for roles without
+   * access to content.
    */
-  function forcePermissions($element, FormStateInterface $form_state, &$complete_form) {
+  public function forcePermissions($element, FormStateInterface $form_state, &$complete_form) {
     $storage = $form_state->getStorage();
     if (!empty($storage['node'] && is_array($element['#parents']))) {
       $node = $storage['node'];
@@ -165,7 +224,7 @@ class ContentAccessPageForm extends FormBase {
         $element[$rid]['#checked'] = TRUE;
 
         $prefix_attr = new Attribute([
-          'title' => t('Permission is granted due to the content type\'s access control settings.'),
+          'title' => $this->t("Permission is granted due to the content type\'s access control settings."),
         ]);
         $element[$rid]['#prefix'] = '<span ' . $prefix_attr . '>';
         $element[$rid]['#suffix'] = "</span>";
@@ -173,4 +232,5 @@ class ContentAccessPageForm extends FormBase {
     }
     return $element;
   }
+
 }

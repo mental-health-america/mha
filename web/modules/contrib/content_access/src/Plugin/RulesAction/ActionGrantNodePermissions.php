@@ -33,8 +33,8 @@ class ActionGrantNodePermissions extends RulesActionBase implements ContainerFac
 
   /**
    * Defined $logger.
-   * @var \Psr\Log\LoggerInterface
    *
+   * @var \Psr\Log\LoggerInterface
    */
   protected $logger;
 
