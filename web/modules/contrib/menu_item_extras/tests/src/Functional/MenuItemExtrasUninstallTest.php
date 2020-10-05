@@ -37,6 +37,11 @@ class MenuItemExtrasUninstallTest extends BrowserTestBase {
   protected $menu;
 
   /**
+   * {@inheritdoc}
+   */
+  protected $defaultTheme = 'stark';
+
+  /**
    * Tests module install and uninstall processes.
    */
   public function testMenuItemExtrasInstallUninstall() {
