@@ -2,12 +2,14 @@
 
 namespace Drupal\block_visibility_groups_admin\Tests;
 
-use Drupal\simpletest\WebTestBase;
+use Drupal\Tests\BrowserTestBase;
 
 /**
  * Provides automated tests for the block_visibility_groups_admin module.
+ *
+ * @group block_visibility_groups_admin
  */
-class GroupListerTest extends WebTestBase {
+class GroupListerTest extends BrowserTestBase {
 
   /**
    * Drupal\block_visibility_groups\GroupEvaluator definition.
@@ -25,13 +27,6 @@ class GroupListerTest extends WebTestBase {
       'description' => 'Test Unit for module block_visibility_groups_admin and controller GroupLister.',
       'group' => 'Other',
     ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setUp() {
-    parent::setUp();
   }
 
   /**
