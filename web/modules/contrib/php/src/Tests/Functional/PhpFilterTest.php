@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\php\Tests;
+namespace Drupal\Tests\php\Functional;
 
 /**
  * Tests to make sure the PHP filter actually evaluates PHP code when used.
@@ -14,7 +14,7 @@ class PhpFilterTest extends PhpTestBase {
    */
   public function testPhpFilter() {
     // Log in as a user with permission to use the PHP code text format.
-    $php_code_permission = entity_load('filter_format', 'php_code')->getPermissionName();
+    $php_code_permission = \Drupal::service('entity_type.manager')->getStorage('filter_format')->load('php_code')->getPermissionName();
     $permissions = [
       'access content',
       'create page content',
@@ -35,7 +35,7 @@ class PhpFilterTest extends PhpTestBase {
     $edit = [];
     $edit['body[0][format]'] = $this->phpCodeFormat->id();
     $this->drupalPostForm('node/' . $node->id() . '/edit', $edit, t('Save'));
-    $this->assertRaw(t('@type %title has been updated.', ['@type' => 'Basic page', '%title' => $node->link($node->getTitle())]), 'PHP code filter turned on.');
+    $this->assertRaw(t('@type %title has been updated.', ['@type' => 'Basic page', '%title' => $node->toLink($node->getTitle())->toString()]), 'PHP code filter turned on.');
 
     // Make sure that the PHP code shows up as text.
     $this->assertNoText('print "SimpleTest PHP was executed!"', "PHP code isn't displayed.");

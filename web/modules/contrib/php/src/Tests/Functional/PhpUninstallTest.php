@@ -1,15 +1,15 @@
 <?php
 
-namespace Drupal\php\Tests;
+namespace Drupal\Tests\php\Functional;
 
-use Drupal\simpletest\WebTestBase;
+use Drupal\Tests\BrowserTestBase;
 
 /**
  * Test uninstall functionality of PHP module.
  *
  * @group PHP
  */
-class PhpUninstallTest extends WebTestBase {
+class PhpUninstallTest extends BrowserTestBase {
 
   /**
    * Modules to enable.

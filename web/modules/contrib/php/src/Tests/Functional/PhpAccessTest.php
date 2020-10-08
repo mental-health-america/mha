@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\php\Tests;
+namespace Drupal\Tests\php\Functional;
 
 /**
  * Tests to make sure access to the PHP filter is properly restricted.

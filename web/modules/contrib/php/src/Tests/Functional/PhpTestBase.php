@@ -1,8 +1,8 @@
 <?php
 
-namespace Drupal\php\Tests;
+namespace Drupal\Tests\php\Functional;
 
-use Drupal\simpletest\WebTestBase;
+use Drupal\Tests\BrowserTestBase;
 use Drupal\user\RoleInterface;
 
 /**
@@ -10,7 +10,7 @@ use Drupal\user\RoleInterface;
  *
  * @group PHP
  */
-abstract class PhpTestBase extends WebTestBase {
+abstract class PhpTestBase extends BrowserTestBase {
 
   /**
    * Modules to enable.
