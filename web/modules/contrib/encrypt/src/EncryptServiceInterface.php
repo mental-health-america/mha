@@ -12,10 +12,13 @@ interface EncryptServiceInterface {
   /**
    * Returns the registered encryption method plugins.
    *
+   * @param bool $with_deprecated
+   *   If TRUE, also return plugins marked as deprecated.
+   *
    * @return array
    *   List of encryption methods.
    */
-  public function loadEncryptionMethods();
+  public function loadEncryptionMethods($with_deprecated = TRUE);
 
   /**
    * Main encrypt function.

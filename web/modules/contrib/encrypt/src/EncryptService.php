@@ -2,8 +2,8 @@
 
 namespace Drupal\encrypt;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\encrypt\Exception\EncryptionMethodCanNotDecryptException;
-use Drupal\key\KeyRepository;
 use Drupal\encrypt\Exception\EncryptException;
 use Drupal\key\KeyRepositoryInterface;
 
@@ -29,23 +29,46 @@ class EncryptService implements EncryptServiceInterface {
   protected $keyRepository;
 
   /**
+   * The configuration factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * {@inheritdoc}
    *
    * @param \Drupal\encrypt\EncryptionMethodManager $encrypt_manager
    *   The EncryptionMethod plugin manager.
-   * @param \Drupal\key\KeyRepository $key_repository
+   * @param \Drupal\key\KeyRepositoryInterface $key_repository
    *   The KeyRepository.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The configuration factory.
    */
-  public function __construct(EncryptionMethodManager $encrypt_manager, KeyRepositoryInterface $key_repository) {
+  public function __construct(EncryptionMethodManager $encrypt_manager, KeyRepositoryInterface $key_repository, ConfigFactoryInterface $config_factory = NULL) {
     $this->encryptManager = $encrypt_manager;
     $this->keyRepository = $key_repository;
+    $this->configFactory = $config_factory ?: \Drupal::configFactory();
   }
 
   /**
    * {@inheritdoc}
    */
-  public function loadEncryptionMethods() {
-    return $this->encryptManager->getDefinitions();
+  public function loadEncryptionMethods($with_deprecated = TRUE) {
+    $encryption_methods = $this->encryptManager->getDefinitions();
+
+    // Unless configured to do so, hide the deprecated encryption plugins.
+    $allow_deprecated = $this->configFactory->get('encrypt.settings')->get('allow_deprecated_plugins');
+    if (!$allow_deprecated && !$with_deprecated) {
+      foreach ($encryption_methods as $plugin_id => $definition) {
+        // Skip deprecated methods.
+        if ($definition['deprecated']) {
+          unset($encryption_methods[$plugin_id]);
+        }
+      }
+    }
+
+    return $encryption_methods;
   }
 
   /**

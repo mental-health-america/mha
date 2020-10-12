@@ -23,6 +23,18 @@ use Drupal\encrypt\EncryptService;
 class EncryptServiceTest extends UnitTestCase {
 
   /**
+   * Default configuration.
+   *
+   * @var array[]
+   */
+  protected $defaultConfig = [
+    'encrypt.settings' => [
+      'check_profile_status' => TRUE,
+      'allow_deprecated_plugins' => FALSE,
+    ],
+  ];
+
+  /**
    * A mocked EncryptionProfile entity.
    *
    * @var \Prophecy\Prophecy\ObjectProphecy
@@ -97,7 +109,8 @@ class EncryptServiceTest extends UnitTestCase {
 
     $service = new EncryptService(
       $this->encryptManager->reveal(),
-      $this->keyRepository->reveal()
+      $this->keyRepository->reveal(),
+      $this->getConfigFactoryStub($this->defaultConfig)
     );
 
     $methods = $service->loadEncryptionMethods();
@@ -143,7 +156,8 @@ class EncryptServiceTest extends UnitTestCase {
 
     $service = new EncryptService(
       $this->encryptManager->reveal(),
-      $this->keyRepository->reveal()
+      $this->keyRepository->reveal(),
+      $this->getConfigFactoryStub($this->defaultConfig)
     );
 
     $encrypted_text = $service->encrypt("text_to_encrypt", $this->encryptionProfile->reveal());
@@ -172,7 +186,8 @@ class EncryptServiceTest extends UnitTestCase {
 
     $service = new EncryptService(
       $this->encryptManager->reveal(),
-      $this->keyRepository->reveal()
+      $this->keyRepository->reveal(),
+      $this->getConfigFactoryStub($this->defaultConfig)
     );
 
     $encrypted_text = $service->encrypt("text_to_encrypt", $this->encryptionProfile->reveal());

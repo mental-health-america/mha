@@ -76,7 +76,7 @@ Drupal::service('encryption')->decrypt($string, $encryption_profile);
 use the following code to retrieve the encryption profile:
 
 ```
-$encryption_profile = \Drupal::service('entity.manager')
+$encryption_profile = \Drupal::service('entity_type.manager')
   ->getStorage('encryption_profile')->load($instance_id);
 ```
 

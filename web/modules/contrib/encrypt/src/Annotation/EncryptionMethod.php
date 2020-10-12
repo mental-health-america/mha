@@ -1,6 +1,6 @@
 <?php
 
-namespace  Drupal\encrypt\Annotation;
+namespace Drupal\encrypt\Annotation;
 
 use Drupal\Component\Annotation\Plugin;
 
@@ -22,18 +22,18 @@ class EncryptionMethod extends Plugin {
   /**
    * The human-readable name of the encryption method.
    *
-   * @ingroup plugin_translatable
-   *
    * @var \Drupal\Core\Annotation\Translation
+   *
+   * @ingroup plugin_translatable
    */
   public $title;
 
   /**
    * The description shown to users.
    *
-   * @ingroup plugin_translatable
-   *
    * @var \Drupal\Core\Annotation\Translation
+   *
+   * @ingroup plugin_translatable
    */
   public $description = '';
 
@@ -42,6 +42,8 @@ class EncryptionMethod extends Plugin {
    *
    * Return an array of KeyType plugin IDs that restrict the allowed key types
    * for usage with this encryption method.
+   *
+   * @var array
    */
   public $key_type = [];
 
@@ -55,5 +57,17 @@ class EncryptionMethod extends Plugin {
    * @var bool
    */
   public $can_decrypt = TRUE;
+
+  /**
+   * Define if the encryption method is considered deprecated.
+   *
+   * As time passes, some encryption methods become obsolete, and it is
+   * necessary that they no longer be used to create new encryption profiles.
+   * Encryption methods marked deprecated can only be used with existing
+   * profiles, and the user will be alerted to change to a better method.
+   *
+   * @var bool
+   */
+  public $deprecated = FALSE;
 
 }

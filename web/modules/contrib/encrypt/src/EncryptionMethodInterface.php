@@ -2,9 +2,7 @@
 
 namespace Drupal\encrypt;
 
-use Drupal\Component\Plugin\ConfigurablePluginInterface;
 use Drupal\Component\Plugin\PluginInspectionInterface;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 
 /**
  * Provides an interface for EncryptionMethod plugins.
@@ -23,6 +21,9 @@ interface EncryptionMethodInterface extends PluginInspectionInterface {
    *
    * @return string
    *   The encrypted text
+   *
+   * @throws \Drupal\encrypt\Exception\EncryptException
+   *   Thrown when encryption fails.
    */
   public function encrypt($text, $key);
 
@@ -37,6 +38,8 @@ interface EncryptionMethodInterface extends PluginInspectionInterface {
    * @return string
    *   The decrypted text
    *
+   * @throws \Drupal\encrypt\Exception\EncryptException
+   *   Thrown when decryption fails.
    * @throws \Drupal\encrypt\Exception\EncryptionMethodCanNotDecryptException
    *   The method should throw this exception when the plugin can not decrypt
    *   (i.e. use a public key).
@@ -71,5 +74,13 @@ interface EncryptionMethodInterface extends PluginInspectionInterface {
    *   TRUE if encryption method decrypt, FALSE otherwise.
    */
   public function canDecrypt();
+
+  /**
+   * Define if encryption method is deprecated.
+   *
+   * @return bool
+   *   TRUE if encryption method is deprecated, FALSE otherwise.
+   */
+  public function isDeprecated();
 
 }

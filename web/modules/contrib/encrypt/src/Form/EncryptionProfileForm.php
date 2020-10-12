@@ -41,7 +41,7 @@ class EncryptionProfileForm extends EntityForm {
   /**
    * The original encryption profile.
    *
-   * @var \Drupal\encrypt\Entity\EncryptionProfile|NULL
+   * @var \Drupal\encrypt\Entity\EncryptionProfile|null
    *   The original EncryptionProfile entity or NULL if this is a new one.
    */
   protected $originalProfile = NULL;
@@ -140,8 +140,13 @@ class EncryptionProfileForm extends EntityForm {
       '#suffix' => '</div>',
     ];
 
-    $encryption_methods = $this->encryptService->loadEncryptionMethods();
+    $encryption_methods = $this->encryptService->loadEncryptionMethods(FALSE);
     $method_options = [];
+    // Show the current encryption plugin, even if deprecated.
+    if (!$encryption_profile->isNew()) {
+      $method = $encryption_profile->getEncryptionMethod();
+      $method_options[$method->getPluginId()] = $method->getLabel();
+    }
     foreach ($encryption_methods as $plugin_id => $definition) {
       $method_options[$plugin_id] = (string) $definition['title'];
     }
@@ -222,10 +227,10 @@ class EncryptionProfileForm extends EntityForm {
   /**
    * Creates a FormStateInterface object for a plugin.
    *
-   * @param FormStateInterface $form_state
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state to copy values from.
    *
-   * @return FormStateInterface
+   * @return \Drupal\Core\Form\FormStateInterface
    *   A clone of the form state object with values from the plugin.
    */
   protected function createPluginFormState(FormStateInterface $form_state) {

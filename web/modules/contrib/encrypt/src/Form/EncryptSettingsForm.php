@@ -39,6 +39,13 @@ class EncryptSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('check_profile_status'),
     ];
 
+    $form['allow_deprecated_plugins'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Allow the use of deprecated plugins.'),
+      '#description' => $this->t('Enable this setting to allow the use of deprecated encryption plugins in new profiles. Leave disabled to only allow their use in existing profiles'),
+      '#default_value' => $config->get('allow_deprecated_plugins'),
+    ];
+
     return $form;
   }
 
@@ -48,6 +55,7 @@ class EncryptSettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->config('encrypt.settings')
       ->set('check_profile_status', $form_state->getValue('check_profile_status'))
+      ->set('allow_deprecated_plugins', $form_state->getValue('allow_deprecated_plugins'))
       ->save();
 
     parent::submitForm($form, $form_state);

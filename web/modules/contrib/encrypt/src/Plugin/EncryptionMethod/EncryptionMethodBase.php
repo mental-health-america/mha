@@ -76,4 +76,11 @@ abstract class EncryptionMethodBase extends PluginBase implements EncryptionMeth
     return $this->pluginDefinition['can_decrypt'];
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function isDeprecated() {
+    return $this->pluginDefinition['deprecated'];
+  }
+
 }

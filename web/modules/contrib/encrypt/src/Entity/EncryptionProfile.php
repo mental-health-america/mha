@@ -101,7 +101,7 @@ class EncryptionProfile extends ConfigEntityBase implements EncryptionProfileInt
   /**
    * Stores a reference to the Key entity for this profile.
    *
-   * @var \Drupal\key\Entity\Key.
+   * @var \Drupal\key\Entity\Key
    */
   protected $encryption_key_entity;
 

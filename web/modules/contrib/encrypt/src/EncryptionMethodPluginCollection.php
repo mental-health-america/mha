@@ -11,16 +11,6 @@ class EncryptionMethodPluginCollection extends DefaultSingleLazyPluginCollection
 
   /**
    * {@inheritdoc}
-   *
-   * @return \Drupal\encrypt\EncryptionMethodInterface
-   *   The Encryption Method plugin to get.
-   */
-  public function &get($instance_id) {
-    return parent::get($instance_id);
-  }
-
-  /**
-   * {@inheritdoc}
    */
   public function addInstanceId($id, $configuration = NULL) {
     $this->instanceId = $id;

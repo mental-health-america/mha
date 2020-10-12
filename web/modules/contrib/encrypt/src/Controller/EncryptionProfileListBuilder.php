@@ -29,7 +29,7 @@ class EncryptionProfileListBuilder extends ConfigEntityListBuilder {
    *   The entity type definition.
    * @param \Drupal\Core\Entity\EntityStorageInterface $storage
    *   The entity storage class.
-   * @param ConfigFactoryInterface $config_factory
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The configuration factory.
    */
   public function __construct(EntityTypeInterface $entity_type, EntityStorageInterface $storage, ConfigFactoryInterface $config_factory) {
@@ -86,11 +86,23 @@ class EncryptionProfileListBuilder extends ConfigEntityListBuilder {
     // Render status report row.
     if ($this->config->get('check_profile_status')) {
       $errors = $entity->validate();
+      $warnings = [];
+      // Check if the encryption plugin is deprecated.
+      if ($encryption_method->isDeprecated()) {
+        $warnings[] = $this->t('The encryption plugin used in this encryption profile is deprecated.');
+      }
       if (!empty($errors)) {
         $row['status']['data'] = [
           '#theme' => 'item_list',
           '#items' => $errors,
           '#attributes' => ["class" => ["color-error"]],
+        ];
+      }
+      elseif (!empty($warnings)) {
+        $row['status']['data'] = [
+          '#theme' => 'item_list',
+          '#items' => $warnings,
+          '#attributes' => ["class" => ["color-warning"]],
         ];
       }
       else {
@@ -109,7 +121,7 @@ class EncryptionProfileListBuilder extends ConfigEntityListBuilder {
 
     if ($entity->hasLinkTemplate('test-form')) {
       $operations['test'] = [
-        'title' => t('Test'),
+        'title' => $this->t('Test'),
         'weight' => 30,
         'url' => $entity->toUrl('test-form'),
       ];

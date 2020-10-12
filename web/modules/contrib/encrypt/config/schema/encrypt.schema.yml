@@ -5,3 +5,6 @@ encrypt.settings:
     check_profile_status:
       type: boolean
       label: 'Check profile validation status.'
+    allow_deprecated_plugins:
+      type: boolean
+      label: 'Deprecated encryption plugins allowed.'

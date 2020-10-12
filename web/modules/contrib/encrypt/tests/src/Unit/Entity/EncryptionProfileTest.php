@@ -234,7 +234,7 @@ class EncryptionProfileTest extends UnitTestCase {
       ->will($this->returnValue('test_encryption_method'));
 
     $result = $encryption_profile->getEncryptionMethod();
-    $this->assertTrue($result instanceof EncryptionMethodInterface);
+    $this->assertInstanceOf(EncryptionMethodInterface::class, $result);
   }
 
   /**
@@ -295,7 +295,7 @@ class EncryptionProfileTest extends UnitTestCase {
       ->will($this->returnValue('test_key'));
 
     $result = $encryption_profile->getEncryptionKey();
-    $this->assertTrue($result instanceof KeyInterface);
+    $this->assertInstanceOf(KeyInterface::class, $result);
   }
 
   /**

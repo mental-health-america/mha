@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * Install and hook_update_nn functions for the encrypt module.
+ */
+
+/**
  * Update keys defined with the "aes_encryption" key type to "encryption".
  */
 function encrypt_update_8001() {
@@ -69,4 +74,14 @@ function encrypt_update_8002() {
   else {
     return t('No changes were made because there were no profiles without a configuration dependency on their key.');
   }
+}
+
+/**
+ * Set new allow_deprecated_plugins configuration property to default value.
+ */
+function encrypt_update_8003() {
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('encrypt.settings');
+  $config->set('allow_deprecated_plugins', FALSE);
+  $config->save(TRUE);
 }

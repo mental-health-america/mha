@@ -45,7 +45,7 @@ class EncryptionProfileTestForm extends EntityForm {
 
     $form['encrypt'] = [
       '#type' => 'details',
-      '#title' => t('Encryption test'),
+      '#title' => $this->t('Encryption test'),
       '#open' => TRUE,
     ];
 
@@ -75,7 +75,7 @@ class EncryptionProfileTestForm extends EntityForm {
 
     $form['decrypt'] = [
       '#type' => 'details',
-      '#title' => t('Decryption test'),
+      '#title' => $this->t('Decryption test'),
       '#open' => TRUE,
     ];
 

@@ -10,6 +10,7 @@ use Drupal\Core\Url;
  * Builds the form to delete profile entities.
  */
 class EncryptionProfileDeleteForm extends EntityConfirmFormBase {
+
   /**
    * {@inheritdoc}
    */
