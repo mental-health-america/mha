@@ -5519,3 +5519,129 @@ ul.sf-menu.sf-navbar ul ul {
 .ammapDescriptionText {
   overflow: auto;
 }
+
+/* OVERIDES */
+.topbar p {
+  margin: 0!important;
+  padding: 0 !important;
+}
+
+.remove-space .item-image {
+  margin: 0;
+}
+
+#drupal-modal img {
+  display: none;
+}
+
+#white-table table {
+  width:70%;
+  margin-left:15%;
+  margin-right:15%;
+}
+
+#white-table .item-image {
+  margin: 0;
+  text-align: center !important;
+}
+
+#white-table .item-image img {
+  border: 0;
+  vertical-align: top;
+  max-width: 50%;
+  height: auto;
+  min-width: 50%;
+  padding: 2rem;
+  margin: 0 auto;
+}
+
+
+#presenting-sponsor .gsc-heading.style-2 .title {
+  color: #385887 !important;
+  font-size: 60px;
+  font-weight: 300;
+  line-height: 38px;
+  text-transform: initial;
+  margin: 0 0 80px !important;
+  font-size: 2.2rem !important;
+  text-transform: uppercase !important;
+  text-decoration: underline;
+}
+
+#white-table .views-element-container table > tbody > tr > td,
+#white-tabletable > tfoot > tr > th,
+#white-table table > tfoot > tr > td {
+  background: #fff;
+}
+
+.column-content.text-white.text-size-medium p {
+  font-size: 20px !important;
+}
+
+.body-page #email-us input[type="email"], .body-page #email-us textarea, .body-page #email-us select {
+  color: #fff;
+}
+
+.body-page #email-us input[type="submit"] {
+  color: #fff;
+  background: #84160d70 !important;
+}
+
+.js-form-required  {
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.30);
+}
+
+.body-page input[type="email"], .body-page textarea, .body-page select {
+  border: 1px solid #fff !important;
+}
+
+#email-us ::-webkit-input-placeholder { /* Edge */
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
+#email-us :-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
+#email-us ::placeholder {
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
+a.mailto:hover {
+  color: #fff !important;
+}
+
+@media (max-width: 1000px) {
+  #white-table .item-image img {
+    max-width: 100%;
+    min-width: 100%;
+  }
+  #white-table table {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+/* FIX SEARCH */
+.gva-search-region .search-content {
+  display: none;
+  width: 500px!important;
+  position: absolute!important;
+  top: -45px!important;
+  right: -100px!important;
+  margin-top: -1px!important;
+  z-index: 999!important;
+  background: transparent!important;
+  padding: 20px!important;
+  -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2)!important;
+  box-shadow: none!important;
+  border: none!important;
+}
+header.header-default .main-menu {
+  z-index: 98 !important;
+}
+
+.gva-search-region .js-form-item.form-item,
+#block-exposedformsearch-everythingpage-1-2 .js-form-item.form-item {
+  padding: 0 !important;
+}
