@@ -432,3 +432,13 @@ p {
     margin-top: -12px !important;
   }
 }
+
+@media (max-width: 480px) {
+  .gva-search-region .search-content {
+    width: 360px !important;
+  }
+
+  .body-page #views-exposed-form-search-everything-page-1 input[type="text"] {
+  width: 60%;
+  }
+}
