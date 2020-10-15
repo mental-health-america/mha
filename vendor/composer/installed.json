@@ -543,17 +543,17 @@
     },
     {
         "name": "composer/composer",
-        "version": "1.10.13",
-        "version_normalized": "1.10.13.0",
+        "version": "1.10.15",
+        "version_normalized": "1.10.15.0",
         "source": {
             "type": "git",
             "url": "https://github.com/composer/composer.git",
-            "reference": "47c841ba3b2d3fc0b4b13282cf029ea18b66d78b"
+            "reference": "547c9ee73fe26c77af09a0ea16419176b1cdbd12"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/composer/composer/zipball/47c841ba3b2d3fc0b4b13282cf029ea18b66d78b",
-            "reference": "47c841ba3b2d3fc0b4b13282cf029ea18b66d78b",
+            "url": "https://api.github.com/repos/composer/composer/zipball/547c9ee73fe26c77af09a0ea16419176b1cdbd12",
+            "reference": "547c9ee73fe26c77af09a0ea16419176b1cdbd12",
             "shasum": ""
         },
         "require": {
@@ -583,7 +583,7 @@
             "ext-zip": "Enabling the zip extension allows you to unzip archives",
             "ext-zlib": "Allow gzip compression of HTTP requests"
         },
-        "time": "2020-09-09T09:46:34+00:00",
+        "time": "2020-10-13T13:59:09+00:00",
         "bin": [
             "bin/composer"
         ],
@@ -7681,6 +7681,9 @@
                 "services": {
                     "drush.services.yml": "^9"
                 }
+            },
+            "patches_applied": {
+                "Menu Items Extras": "https://www.drupal.org/files/issues/2020-04-22/3061342-07-not-found-plugin_0.patch"
             }
         },
         "installation-source": "dist",
@@ -9092,30 +9095,27 @@
     },
     {
         "name": "drupal/simple_timeline",
-        "version": "1.1.0",
-        "version_normalized": "1.1.0.0",
+        "version": "1.2.0",
+        "version_normalized": "1.2.0.0",
         "source": {
             "type": "git",
             "url": "https://git.drupalcode.org/project/simple_timeline.git",
-            "reference": "8.x-1.1"
+            "reference": "8.x-1.2"
         },
         "dist": {
             "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/simple_timeline-8.x-1.1.zip",
-            "reference": "8.x-1.1",
-            "shasum": "3db0ab6ad3bc49d070c28f4067a69e085ad2e551"
+            "url": "https://ftp.drupal.org/files/projects/simple_timeline-8.x-1.2.zip",
+            "reference": "8.x-1.2",
+            "shasum": "a4ea006c6025cd19d1640e1aff185f7a9e5c3dc0"
         },
         "require": {
-            "drupal/core": "*"
+            "drupal/core": "^8 || ^9"
         },
         "type": "drupal-module",
         "extra": {
-            "branch-alias": {
-                "dev-1.x": "1.x-dev"
-            },
             "drupal": {
-                "version": "8.x-1.1",
-                "datestamp": "1494216489",
+                "version": "8.x-1.2",
+                "datestamp": "1602651101",
                 "security-coverage": {
                     "status": "covered",
                     "message": "Covered by Drupal's security advisory policy"
@@ -12524,21 +12524,21 @@
     },
     {
         "name": "paragonie/random_compat",
-        "version": "v9.99.99",
-        "version_normalized": "9.99.99.0",
+        "version": "v9.99.100",
+        "version_normalized": "9.99.100.0",
         "source": {
             "type": "git",
             "url": "https://github.com/paragonie/random_compat.git",
-            "reference": "84b4dfb120c6f9b4ff7b3685f9b8f1aa365a0c95"
+            "reference": "996434e5492cb4c3edcb9168db6fbb1359ef965a"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/paragonie/random_compat/zipball/84b4dfb120c6f9b4ff7b3685f9b8f1aa365a0c95",
-            "reference": "84b4dfb120c6f9b4ff7b3685f9b8f1aa365a0c95",
+            "url": "https://api.github.com/repos/paragonie/random_compat/zipball/996434e5492cb4c3edcb9168db6fbb1359ef965a",
+            "reference": "996434e5492cb4c3edcb9168db6fbb1359ef965a",
             "shasum": ""
         },
         "require": {
-            "php": "^7"
+            "php": ">= 7"
         },
         "require-dev": {
             "phpunit/phpunit": "4.*|5.*",
@@ -12547,7 +12547,7 @@
         "suggest": {
             "ext-libsodium": "Provides a modern crypto API that can be used to generate random bytes."
         },
-        "time": "2018-07-02T15:55:56+00:00",
+        "time": "2020-10-15T08:29:30+00:00",
         "type": "library",
         "installation-source": "dist",
         "notification-url": "https://packagist.org/downloads/",
