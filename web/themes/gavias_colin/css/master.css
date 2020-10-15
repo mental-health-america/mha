@@ -5361,3 +5361,79 @@ a.mailto:hover {
     margin-right: 0;
   }
 }
+
+
+.gva-search-region .search-content #edit-actions {
+  display: inherit;
+}
+
+
+.navigation .gva_menu .sub-menu > li > a:hover, .navigation .gva_menu .sub-menu > li > a:focus, .navigation .gva_menu .sub-menu > li > a:active {
+  color: #fff !important;
+  background: #ea7901 !important;
+}
+
+
+/* HEADER VERSION 2 */
+.header-v2 .header-main-inner .navigation .gva_menu > li.menu-item--active-trail > a {
+  color: #fff !important;
+  background: #0086b3 !important;
+  border: 1px solid transparent;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  padding: 5px 20px !important;
+  margin: 0 8px 5px;
+  text-transform: uppercase;
+  text-decoration: none;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+  letter-spacing: 0.25px;
+}
+
+
+.header-v2 .header-main-inner .navigation .gva_menu > li.menu-item:nth-child(1) a,
+.header-v2 .header-main-inner .navigation .gva_menu > li.menu-item:nth-child(2) a,
+.header-v2 .header-main-inner .navigation .gva_menu > li.menu-item:nth-child(3) a,
+.header-v2 .header-main-inner .navigation .gva_menu > li.menu-item:nth-child(4) a {
+  background: #385887 !important;
+  color: #fff !important;
+  border: 1px solid transparent;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  padding: 5px 20px !important;
+  margin: 0 8px 5px;
+  text-transform: uppercase;
+  text-decoration: none;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+  letter-spacing: 0.25px;
+}
+
+.header-v2 .header-main-inner .navigation .gva_menu > li.menu-item:nth-child(5) a {
+  background: #ea7901!important;
+  color: #fff !important;
+  border: 1px solid transparent;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  padding: 5px 20px !important;
+  margin: 0 8px 5px;
+  text-transform: uppercase;
+  text-decoration: none;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+  letter-spacing: 0.25px;
+}
+
+header.header-v2 .header-main {
+  padding: 15px 0;
+}
+.push-down .slideshow_content.area,
+.pushdown .slideshow_content.area {
+  position: relative;
+  top: 160px !important;
+  margin-top: 19px !important;
+}
+
