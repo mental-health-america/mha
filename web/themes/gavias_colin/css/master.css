@@ -5430,10 +5430,26 @@ a.mailto:hover {
 header.header-v2 .header-main {
   padding: 15px 0;
 }
+
 .push-down .slideshow_content.area,
 .pushdown .slideshow_content.area {
-  position: relative;
   top: 160px !important;
-  margin-top: 19px !important;
 }
 
+.pushdown  #page-main-content,
+.push-down  #page-main-content {
+  min-height: 360px;
+  top: 170px;
+}
+
+.pushdown .main.main-page,
+.push-down .main.main-page {
+  margin: 30px 0 0;
+}
+
+.pushdown .help .drupal-tabs {
+  margin-top: 100px !important;
+}
+.pushdown .main-content-inner {
+  margin-top: 50px;
+}

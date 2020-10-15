@@ -413,6 +413,10 @@ p {
   padding: 0 !important;
 }
 
+.header-v2 .gva-search-region {
+  margin-top: 30px !important;
+}
+
 @media (max-width: 778px) {
     .gva-search-region .search-content {
       width: 100% !important;
