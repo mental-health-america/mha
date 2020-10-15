@@ -5462,7 +5462,8 @@ header.header-v2 .header-main {
     color: #385887 !important;
     width: 100%;
   }
-  .pushdown .main.main-page, .push-down .main.main-page {
+  .pushdown .main.main-page, .push-down .main.main-page,
+  .push-down .main.main-page, .push-down .main.main-page{
     margin: 120px 0 0;
   }
   .header-v2 .gva-search-region {
