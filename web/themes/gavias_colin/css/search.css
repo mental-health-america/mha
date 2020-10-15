@@ -435,6 +435,9 @@ p {
   .gva-search-region {
     margin-top: -12px !important;
   }
+  .header-v2 .gva-search-region {
+    margin-top: -15px !important;
+  }
 }
 
 @media (max-width: 480px) {

@@ -5453,3 +5453,21 @@ header.header-v2 .header-main {
 .pushdown .main-content-inner {
   margin-top: 50px;
 }
+
+@media (max-width: 778px) {
+  .header-v2 .header-main-inner .navigation .gva_menu > li.menu-item:nth-child(1) a, .header-v2 .header-main-inner .navigation .gva_menu > li.menu-item:nth-child(2) a, .header-v2 .header-main-inner .navigation .gva_menu > li.menu-item:nth-child(3) a, .header-v2 .header-main-inner .navigation .gva_menu > li.menu-item:nth-child(4) a {
+    background: #fff !important;
+    color: #385887 !important;
+    width: 100%;
+  }
+  .pushdown .main.main-page, .push-down .main.main-page {
+    margin: 120px 0 0;
+  }
+  .header-v2 .gva-search-region {
+    margin-top: -15px !important;
+  }
+}
+
+@media (max-width: 480px) {
+
+}
