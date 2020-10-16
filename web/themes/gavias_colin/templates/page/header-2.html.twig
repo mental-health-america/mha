@@ -10,11 +10,6 @@
     </div>
   {% endif %}
 
-  {% set class_sticky = '' %}
-  {% if sticky_menu == 1 %}
-    {% set class_sticky = 'gv-sticky-menu' %}
-  {% endif %}
-
   <div class="header-main">
     <div class="container">
       <div class="header-inner clearfix">
@@ -53,11 +48,11 @@
     </div>
   </div>
 
-  <div class="main-menu {{ class_sticky }}">
-    <div class="container header-content-layout">
+  <div class="main-menu">
+    <div class="container-fluid header-content-layout">
       <div class="header-main-inner p-relative">
         <div class="row">
-          <div class="col-md-12 col-sm-12 col-xs-12 p-static">
+          <div class="col-md-12 col-sm-12 col-xs-12 p-static ml-5">
             <div class="area-main-menu">
               <div class="area-inner">
                 <div class="gva-offcanvas-mobile">
