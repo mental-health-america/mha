@@ -5456,6 +5456,12 @@ header.header-v2 .header-main {
 .push-down .help .drupal-tabs {
   margin-top: 200px !important;
 }
+
+.pushdown .gavias-blockbuilder-content,
+.pushdown .gavias-blockbuilder-content {
+  margin: 100px 0 0;
+}
+
 @media (max-width: 778px) {
   .header-v2 .header-main-inner .navigation .gva_menu > li.menu-item:nth-child(1) a, .header-v2 .header-main-inner .navigation .gva_menu > li.menu-item:nth-child(2) a, .header-v2 .header-main-inner .navigation .gva_menu > li.menu-item:nth-child(3) a, .header-v2 .header-main-inner .navigation .gva_menu > li.menu-item:nth-child(4) a {
     background: #fff !important;
