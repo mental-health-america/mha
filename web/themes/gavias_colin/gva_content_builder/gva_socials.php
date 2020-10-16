@@ -88,7 +88,7 @@ if(!class_exists('element_gva_socials')):
          if($animate) $class[] = 'wow ' . $animate; 
          ?>
          <?php ob_start() ?>
-         <div class="widget gsc-socials <?php print implode($class, ' ') ?>" <?php print gavias_content_builder_print_animate_wow('', $animate_delay) ?>>
+         <div class="widget gsc-socials <?php print implode(' ', $class) ?>" <?php print gavias_content_builder_print_animate_wow('', $animate_delay) ?>>
             <?php for($i=1; $i<=10; $i++){ ?>
                <?php $icon = "icon_{$i}"; $link = "link_{$i}"; ?>
                <?php if($$icon && $$link){ ?>

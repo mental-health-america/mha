@@ -5462,6 +5462,11 @@ header.header-v2 .header-main {
   margin: 100px 0 0;
 }
 
+.pushdown #footer .footer-center,
+.push-down #footer .footer-center {
+  margin: 200px 0 0;
+}
+
 @media (max-width: 778px) {
   .header-v2 .header-main-inner .navigation .gva_menu > li.menu-item:nth-child(1) a, .header-v2 .header-main-inner .navigation .gva_menu > li.menu-item:nth-child(2) a, .header-v2 .header-main-inner .navigation .gva_menu > li.menu-item:nth-child(3) a, .header-v2 .header-main-inner .navigation .gva_menu > li.menu-item:nth-child(4) a {
     background: #fff !important;
