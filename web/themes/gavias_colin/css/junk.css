@@ -5374,11 +5374,7 @@ a.mailto:hover {
 }
 
 
-/* HEADER VERSION-2  V-2 */
-header.header-v2 {
-  position: relative !important;
-}
-
+/* HEADER VERSION 2 */
 .header-v2 .header-main-inner .navigation .gva_menu > li.menu-item--active-trail > a {
   color: #fff !important;
   background: #0086b3 !important;
@@ -5429,30 +5425,61 @@ header.header-v2 {
 }
 
 header.header-v2 .header-main {
-  padding: 15px 0 25px 15px;
+  padding: 15px 0;
 }
 
+.push-down .slideshow_content.area,
+.pushdown .slideshow_content.area {
+  top: 160px !important;
+}
+
+.pushdown  #page-main-content,
+.push-down  #page-main-content {
+  min-height: 360px;
+  top: 170px;
+}
+
+.pushdown .main.main-page,
+.push-down .main.main-page {
+  margin: 30px 0 0;
+}
+
+.pushdown .main-content-inner,
+.push-down .main-content-inner{
+  margin-top: 50px;
+}
+
+.pushdown .help .drupal-tabs,
+.push-down .help .drupal-tabs {
+  margin-top: 200px !important;
+}
+
+.pushdown .gavias-blockbuilder-content,
+.pushdown .gavias-blockbuilder-content {
+  margin: 100px 0 0;
+}
+
+.pushdown #footer .footer-center,
+.push-down #footer .footer-center {
+  margin: 200px 0 0;
+}
+
+.pushdown .header-main-inner.p-relative,
+.push-down .header-main-inner.p-relative,
 .header-v2 .header-main-inner.p-relative {
   float: left !important;
 }
 
-.header-v2.slideshow_content.area {
-  top: -50px !important;
-}
-
-.header-v2. .fa-search::before {
-  font-size: 30px !important;
-  color: #385887 !important;
-  -webkit-text-stroke: 3px white !important;
-}
-
 @media (max-width: 778px) {
-  .header-v2 .header-main-inner .navigation .gva_menu > li.menu-item a {
+  .header-v2 .header-main-inner .navigation .gva_menu > li.menu-item:nth-child(1) a, .header-v2 .header-main-inner .navigation .gva_menu > li.menu-item:nth-child(2) a, .header-v2 .header-main-inner .navigation .gva_menu > li.menu-item:nth-child(3) a, .header-v2 .header-main-inner .navigation .gva_menu > li.menu-item:nth-child(4) a {
     background: #fff !important;
     color: #385887 !important;
     width: 100%;
   }
-
+  .pushdown .main.main-page, .push-down .main.main-page,
+  .push-down .main.main-page, .push-down .main.main-page{
+    margin: 120px 0 0;
+  }
   .header-v2 .gva-search-region {
     margin-top: -15px !important;
   }
@@ -5462,8 +5489,9 @@ header.header-v2 .header-main {
 
 }
 
-/* HEADER VERSION-3  V-3 */
+/* Header V3 */
 
-header.header-v3 {
+header.header-v3,
+header.header-v2 {
   position: relative !important;
 }
