@@ -1,5 +1,20 @@
 <header id="header" class="header-v3">
 
+  {% if page.topbar %}
+    <div class="topbar">
+      <div class="topbar-inner">
+        <div class="container">
+          <div class="content">{{ page.topbar }}</div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  {% set class_sticky = '' %}
+  {% if sticky_menu == 1 %}
+    {% set class_sticky = 'gv-sticky-menu' %}
+  {% endif %}
+
   <div class="header-main">
     <div class="container">
       <div class="header-inner clearfix">
@@ -48,16 +63,16 @@
                 <div class="gva-offcanvas-mobile">
                   <div class="close-offcanvas hidden"><i class="fa fa-times"></i></div>
                   {% if page.main_menu %}
-                    {{ page.main_menu }} <h1>MAIN MENU</h1>
+                    {{ page.main_menu }}
                   {% endif %}
                   <div class="hidden-md hidden-lg">
                     {% if page.header_right %}
-                      {{ page.header_right }}<h1>HEADER RIGHT</h1>
+                      {{ page.header_right }}
                     {% endif %}
                   </div>
                   {% if page.offcanvas %}
                     <div class="after-offcanvas hidden">
-                      {{ page.offcanvas }} <h1>OFF CANVAS</h1>
+                      {{ page.offcanvas }}
                     </div>
                   {% endif %}
                 </div>
