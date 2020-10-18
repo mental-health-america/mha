@@ -5463,7 +5463,79 @@ header.header-v2 .header-main {
 }
 
 /* HEADER VERSION-3  V-3 */
+.hamburger .slideshow_content.area {
+  top: 160px !important;
+}
 
-header.header-v3 {
-  position: relative !important;
+.hamburger .fa-navicon:before,
+.hamburger .fa-reorder:before,
+.hamburger .fa-bars:before {
+  color: #355a88;
+  font-size: 30px;
+}
+
+.hamburger .hamit {
+  margin: 35px 0 0 ;
+}
+
+.hamburger .gva-quick-side.open {
+  right: 0;
+  width: 500px;
+}
+
+.hamburger .gva-quick-side .content-inner ul > li a {
+  color: #005696 !important;
+  text-decoration: none !important;
+}
+
+.hamburger .navigation .gva_menu > li.menu-item--active-trail > a {
+  color: #ea7901 !important;
+}
+
+.hamburger .fa-remove:before,
+.hamburger .fa-close:before,
+.hamburger .fa-times:before {
+  content: "\f00d";
+  color: #000;
+  font-size: 25px;
+}
+@media (max-width: 991px) {
+  .hamburger .gva-search-region {
+    right: 30px;
+  }
+
+  .hamburger .gva-search-region {
+    margin-top: -34px !important;
+  }
+
+  .hamburger .gva-quick-side.open {
+    right: 0;
+    width: 375px;
+  }
+
+  .hamburger .slideshow_content.area {
+    top: 0 !important;
+  }
+
+  .hamburger .quick-side-icon {
+    right: 60px !important;
+  }
+
+  .hamburger .gva-search-region .search-content {
+    width: 410px !important;
+    top: 50px !important;
+  }
+
+  .hamburger .hamit {
+    margin: 25px 0 0;
+  }
+
+}
+
+@media (max-width: 778px) {
+
+}
+
+@media (max-width: 480px) {
+
 }
