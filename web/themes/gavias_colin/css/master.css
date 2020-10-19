@@ -5463,6 +5463,16 @@ header.header-v2 .header-main {
 }
 
 /* HEADER VERSION-3  V-3 */
+
+/* login tweaks */
+.hamburger.logged-in .slideshow_content.area {
+  top: 100px !important;
+}
+
+.hamburger.logged-in .gavias-blockbuilder-content {
+  margin: 100px 0 0;
+}
+
 .hamburger .slideshow_content.area {
   top: 160px !important;
 }
