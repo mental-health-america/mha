@@ -3,9 +3,9 @@
 namespace Drupal\imce\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\help\HelpSectionManager;
 
 /**
  * Controller routines for help routes.
@@ -20,23 +20,23 @@ class ImceHelpController extends ControllerBase {
   protected $routeMatch;
 
   /**
-   * The list of available modules.
+   * The help section plugin manager.
    *
-   * @var \Drupal\Core\Extension\ModuleExtensionList
+   * @var \Drupal\help\HelpSectionManager
    */
-  protected $extensionListModule;
+  protected $helpManager;
 
   /**
    * Creates a new HelpController.
    *
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
    *   The current route match.
-   * @param \Drupal\Core\Extension\ModuleExtensionList $extension_list_module
-   *   The list of available modules.
+   * @param \Drupal\help\HelpSectionManager $help_manager
+   *   The help section manager.
    */
-  public function __construct(RouteMatchInterface $route_match, ModuleExtensionList $extension_list_module) {
+  public function __construct(RouteMatchInterface $route_match, HelpSectionManager $help_manager) {
     $this->routeMatch = $route_match;
-    $this->extensionListModule = $extension_list_module;
+    $this->helpManager = $help_manager;
   }
 
   /**
@@ -45,7 +45,7 @@ class ImceHelpController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('current_route_match'),
-      $container->get('extension.list.module')
+      $container->get('plugin.manager.help_section')
     );
   }
 
@@ -74,8 +74,7 @@ class ImceHelpController extends ControllerBase {
 
     // Only print list of administration pages if the module in question has
     // any such pages associated with it.
-    $extension_info = $this->extensionListModule->getExtensionInfo($name);
-    $admin_tasks = system_get_module_admin_tasks($name, $extension_info);
+    $admin_tasks = system_get_module_admin_tasks($name, system_get_info('module', $name));
     if (!empty($admin_tasks)) {
       $links = [];
       foreach ($admin_tasks as $task) {

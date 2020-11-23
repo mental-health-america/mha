@@ -5,11 +5,8 @@ namespace Drupal\Tests\imce\Kernel\Plugin\ImcePlugin;
 use Drupal\Core\StreamWrapper\PublicStream;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\imce\ImceFolder;
-use Drupal\imce\ImcePluginInterface;
 use Drupal\imce\Plugin\ImcePlugin\Resize;
 use Drupal\Tests\imce\Kernel\Plugin\KernelTestBasePlugin;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * Kernel tests for Imce plugins for Imce Plugin Core.
@@ -54,8 +51,9 @@ class ResizeTest extends KernelTestBasePlugin {
     parent::setUp();
     $this->imceFM = $this->getImceFM();
     $this->getTestFileUri();
-    $this->resize = new Resize([], 'resize', []);
-
+    $this->resize = new Resize([], 'resize', $this->getPluginDefinations());
+    $this->setParametersRequest();
+    $this->setActiveFolder();
     $this->setSelection();
   }
 
@@ -67,35 +65,12 @@ class ResizeTest extends KernelTestBasePlugin {
   }
 
   /**
-   * {@inheritDoc}
-   */
-  public function getRequest() {
-    $request = Request::create("/imce", 'POST', [
-      'jsop' => 'resize',
-      'token' => 'LLuA1R0aUOzoduSJkJxN5aoHVdJnQk8LbTBgdivOU4Y',
-      'active_path' => '.',
-      'selection' => [
-        './ciandt.jpg',
-      ],
-      'width' => '315',
-      'height' => '210',
-      'copy' => '0',
-    ]);
-    $session = new Session();
-    $session->set('imce_active_path', '.');
-    $request->setSession($session);
-
-    return $request;
-  }
-
-  /**
    * Set the ImceFM::selection[].
    */
   public function setSelection() {
     $this->imceFM->selection[] = $this->imceFM->createItem(
       'file', "ciandt.jpg", ['path' => '.']
     );
-    // $this->imceFM->getConf()
     $this->imceFM->selection[0]->parent = new ImceFolder('.', $this->getConf());
     $this->imceFM->selection[0]->parent->setFm($this->imceFM);
     $this->imceFM->selection[0]->parent->setPath('.');
@@ -111,6 +86,32 @@ class ResizeTest extends KernelTestBasePlugin {
     return [
       'permissions' => ['all' => TRUE],
     ];
+  }
+
+  /**
+   * Set the active folder.
+   */
+  public function setActiveFolder() {
+    $this->imceFM->activeFolder = new ImceFolder('.', $this->getConf());
+    $this->imceFM->activeFolder->setPath('.');
+    $this->imceFM->activeFolder->setFm($this->imceFM);
+  }
+
+  /**
+   * Set the request parameters.
+   */
+  public function setParametersRequest() {
+    $this->imceFM->request->request->add([
+      'jsop' => 'resize',
+      'token' => 'LLuA1R0aUOzoduSJkJxN5aoHVdJnQk8LbTBgdivOU4Y',
+      'active_path' => '.',
+      'selection' => [
+        './ciandt.jpg',
+      ],
+      'width' => '315',
+      'height' => '210',
+      'copy' => '0',
+    ]);
   }
 
   /**
@@ -141,7 +142,7 @@ class ResizeTest extends KernelTestBasePlugin {
    */
   public function testPermissiomInfo() {
     $permissionInfo = $this->resize->permissionInfo();
-    $this->assertIsArray($permissionInfo);
+    $this->assertTrue(is_array($permissionInfo));
     $this->assertTrue(in_array($this->t('Resize images'), $permissionInfo));
   }
 
@@ -165,29 +166,6 @@ class ResizeTest extends KernelTestBasePlugin {
     list($width, $height) = getimagesize(PublicStream::basePath() . '/ciandt.jpg');
     $this->assertEqual($width, 315);
     $this->assertEqual($height, 210);
-  }
-
-  /**
-   * Teste messages on context ImcePlugin\Resize.
-   */
-  public function testMessages() {
-    $messages = $this->imceFM->getMessages();
-    $this->assertIsArray($messages);
-    $this->assertEquals([], $messages);
-  }
-
-  /**
-   * Test Resize type.
-   */
-  public function testCore() {
-    $this->assertInstanceOf(ImcePluginInterface::class, $this->resize);
-  }
-
-  /**
-   * Test resize operation.
-   */
-  public function testOperation() {
-    $this->assertEquals($this->imceFM->getOp(), 'resize');
   }
 
 }

@@ -50,7 +50,7 @@ class ImceTest extends KernelTestBase {
    */
   public function testGetDependencies() {
     $dependencies = $this->imce->getDependencies($this->createMock(Editor::class));
-    $this->assertIsArray($dependencies);
+    $this->assertTrue(is_array($dependencies));
     $this->assertArraySubset(['drupalimage', 'drupalimagecaption'], $dependencies);;
   }
 
@@ -78,7 +78,7 @@ class ImceTest extends KernelTestBase {
    */
   public function testGetButtons() {
     $buttons = $this->imce->getButtons();
-    $this->assertIsArray($buttons);
+    $this->assertTrue(is_array($buttons));
   }
 
   /**
@@ -86,7 +86,7 @@ class ImceTest extends KernelTestBase {
    */
   public function testGetFile() {
     $pathFile = $this->imce->getFile();
-    $this->assertIsString($pathFile);
+    $this->assertTrue(is_string($pathFile));
   }
 
   /**
@@ -94,7 +94,7 @@ class ImceTest extends KernelTestBase {
    */
   public function testGetConfig() {
     $config = $this->imce->getConfig($this->createMock(Editor::class));
-    $this->assertIsArray($config);
+    $this->assertTrue(is_array($config));
     $this->assertCount(2, $config);
   }
 
@@ -103,7 +103,7 @@ class ImceTest extends KernelTestBase {
    */
   public function testImageIcon() {
     $imageIcon = $this->imce->imageIcon();
-    $this->assertIsString($imageIcon);
+    $this->assertTrue(is_string($imageIcon));
     $this->assertTrue(file_exists($imageIcon));
   }
 
@@ -112,7 +112,7 @@ class ImceTest extends KernelTestBase {
    */
   public function testLinkIcon() {
     $linkIcon = $this->imce->linkIcon();
-    $this->assertIsString($linkIcon);
+    $this->assertTrue(is_string($linkIcon));
     $this->assertTrue(file_exists($linkIcon));
   }
 

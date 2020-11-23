@@ -490,7 +490,6 @@
   Folder.onNameChange = function (oldval) {
     ItemProto.onNameChange.apply(this, arguments);
     this.branchNameEl.innerHTML = Drupal.checkPlain(this.name);
-    this.branchNameEl.title = this.name;
   };
 
   /**

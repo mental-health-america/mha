@@ -148,7 +148,7 @@ if(!class_exists('element_gva_icon_box')):
          <?php ob_start() ?>
          
          <?php if($style == 'style-1' || $style == 'style-2' || $style == 'style-4'){ ?>
-            <div class="widget gsc-icon-box-new <?php if(count($class)>0) print implode( ' ', $class) ?>" <?php if(count($css) > 0) print 'style="'.implode(';', $css).'"' ?> <?php print gavias_content_builder_print_animate_wow('', $animate_delay) ?>>
+            <div class="widget gsc-icon-box-new <?php if(count($class)>0) print implode($class, ' ') ?>" <?php if(count($css) > 0) print 'style="'.implode($css, ';').'"' ?> <?php print gavias_content_builder_print_animate_wow('', $animate_delay) ?>>
                <?php if($icon || $image){ ?>
                   <div class="icon-inner">
                      <?php if($link){ ?><a href="<?php print $link ?>"> <?php } ?>
@@ -165,7 +165,7 @@ if(!class_exists('element_gva_icon_box')):
          <?php } ?>
 
          <?php if($style == 'style-3'){ ?>
-            <div class="widget gsc-icon-box-new <?php if(count($class)>0) print implode(' ', $class) ?>" <?php if(count($css) > 0) print 'style="'.implode(';', $css).'"' ?> <?php print gavias_content_builder_print_animate_wow('', $animate_delay) ?>>
+            <div class="widget gsc-icon-box-new <?php if(count($class)>0) print implode($class, ' ') ?>" <?php if(count($css) > 0) print 'style="'.implode($css, ';').'"' ?> <?php print gavias_content_builder_print_animate_wow('', $animate_delay) ?>>
                <?php if($icon || $image){ ?>
                   <div class="icon-inner">
                      <?php if($link){ ?><a href="<?php print $link ?>"> <?php } ?>
@@ -181,7 +181,7 @@ if(!class_exists('element_gva_icon_box')):
          <?php } ?>   
 
          <?php if($style == 'style-5' || $style == 'style-6'){ ?>
-            <div class="widget gsc-icon-box-new <?php if(count($class)>0) print implode(' ', $class) ?>" <?php if(count($css) > 0) print 'style="'.implode(';', $css).'"' ?> <?php print gavias_content_builder_print_animate_wow('', $animate_delay) ?>>
+            <div class="widget gsc-icon-box-new <?php if(count($class)>0) print implode($class, ' ') ?>" <?php if(count($css) > 0) print 'style="'.implode($css, ';').'"' ?> <?php print gavias_content_builder_print_animate_wow('', $animate_delay) ?>>
                <?php if($icon || $image){ ?>
                   <div class="icon-inner">
                      <?php if($link){ ?><a href="<?php print $link ?>"> <?php } ?>

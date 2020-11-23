@@ -4,20 +4,12 @@ namespace Drupal\imce;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Field\WidgetInterface;
-use Drupal\Core\Security\TrustedCallbackInterface;
 use Drupal\Core\Url;
 
 /**
  * Defines methods for integrating Imce into file field widgets.
  */
-class ImceFileField implements TrustedCallbackInterface {
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function trustedCallbacks() {
-    return ['preRenderWidget'];
-  }
+class ImceFileField {
 
   /**
    * Returns a list of supported widgets.

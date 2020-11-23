@@ -7,7 +7,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\imce\Imce;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\user\Traits\UserCreationTrait;
-use Drupal\text\Plugin\Field\FieldWidget\TextareaWithSummaryWidget;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * The abstract class base to imce kernel tests.
@@ -43,7 +43,8 @@ abstract class KernelTestBasePlugin extends KernelTestBase {
   protected function setUp() {
     parent::setUp();
     $this->installSchema('system', ['sequences']);
-    $this->installConfig(static::$modules);
+    $this->installConfig('system');
+    $this->installConfig('imce');
     $this->installEntitySchema('user');
     $this->installEntitySchema('file');
     $this->installSchema('file', ['file_usage']);
@@ -61,20 +62,12 @@ abstract class KernelTestBasePlugin extends KernelTestBase {
    */
   public function getImceFM() {
     $imceFM = Imce::userFM(
-      $this->container->get('current_user'), NULL, $this->getRequest()
+      $this->container->get('current_user'), NULL, Request::create("/imce")
     );
     $imceFM->setConf("root_uri", "public://");
     $imceFM->setConf("root_url", "/sites/default/files");
     return $imceFM;
   }
-
-  /**
-   * Get the request parameter.
-   *
-   * @return \Symfony\Component\HttpFoundation\Request
-   *   The request object.
-   */
-  abstract public function getRequest();
 
   /**
    * The get conf.

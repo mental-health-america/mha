@@ -47,7 +47,7 @@ class ImceProfileDeleteFormTest extends KernelTestBase {
   public function testCancelUrl() {
     $url = $this->profileDeleteForm->getCancelUrl();
     $this->assertInstanceOf(Url::class, $url);
-    $this->assertIsString($url->toString());
+    $this->assertTrue(is_string($url->toString()));
     $this->assertSame('/admin/config/media/imce', $url->toString());
     $this->assertEquals('/admin/config/media/imce', $url->toString());
   }
@@ -58,7 +58,7 @@ class ImceProfileDeleteFormTest extends KernelTestBase {
   public function testConfirmText() {
     $confirmText = $this->profileDeleteForm->getConfirmText();
     $this->assertInstanceOf(TranslatableMarkup::class, $confirmText);
-    $this->assertIsString($confirmText->__toString());
+    $this->assertTrue(is_string($confirmText->__toString()));
     $this->assertEqual($this->t('Delete'), $confirmText);
   }
 

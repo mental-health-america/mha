@@ -102,7 +102,7 @@ if(!class_exists('element_gva_counter')):
          if($animate) $class[] = 'wow ' . $animate; 
          ?>
          <?php ob_start() ?>
-            <div class="widget milestone-block <?php if(count($class) > 0){ print implode(' ', $class ); } ?>" <?php print gavias_content_builder_print_animate_wow('', $animate_delay) ?>>
+            <div class="widget milestone-block <?php if(count($class) > 0){ print implode($class, ' '); } ?>" <?php print gavias_content_builder_print_animate_wow('', $animate_delay) ?>>
                <?php if($icon){ ?>
                   <div class="milestone-icon"><span <?php print $style ?> class="icon <?php print $icon; ?>"></span></div>
                <?php } ?>   

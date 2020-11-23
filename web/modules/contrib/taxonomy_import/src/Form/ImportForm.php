@@ -84,9 +84,7 @@ class ImportForm extends FormBase {
 function create_taxonomy($voc_name)
 {   
 	global $base_url;
-	// TODO: Drupal Rector Notice: Please delete the following comment after you've made any necessary changes.
-	// You will need to use `\Drupal\core\Database\Database::getConnection()` if you do not yet have access to the container here.
-	$loc = \Drupal::database()->query('SELECT {file_managed.uri} FROM {file_managed} ORDER BY {file_managed.fid} DESC limit 1', array());
+	$loc = db_query('SELECT {file_managed.uri} FROM {file_managed} ORDER BY {file_managed.fid} DESC limit 1', array());
     foreach($loc as $val){
 		$location = $val->uri; // get location of the file
 	}		
@@ -100,9 +98,9 @@ function create_taxonomy($voc_name)
     $machine_readable = strtolower($voc_name);//converting to machine name
     $vid  = preg_replace('@[^a-z0-9_]+@','_',$machine_readable);//Vocabulary machine name
     //creating new vocabulary with the field value 
-    $vocabularies = Vocabulary::loadMultiple();
+    $vocabularies = \Drupal\taxonomy\Entity\Vocabulary::loadMultiple();
     if (!isset($vocabularies[$vid])) {
-      $vocabulary = Vocabulary::create(array(
+      $vocabulary = \Drupal\taxonomy\Entity\Vocabulary::create(array(
             'vid' => $vid,
             'machine_name' => $vid,
             'name' => $name,
@@ -116,19 +114,15 @@ function create_taxonomy($voc_name)
 			{				     
 				$termid = 0;
 				$term_id =0;
-				//Get tid of term with same name
-				// TODO: Drupal Rector Notice: Please delete the following comment after you've made any necessary changes.
-				// You will need to use `\Drupal\core\Database\Database::getConnection()` if you do not yet have access to the container here.
-				$termid = \Drupal::database()->query('SELECT n.tid FROM {taxonomy_term_field_data} n WHERE n.name  = :uid AND n.vid  = :vid', array(':uid' =>  $data[0], ':vid' => $vid));
+				//Get tid of term with same name 
+				$termid = db_query('SELECT n.tid FROM {taxonomy_term_field_data} n WHERE n.name  = :uid AND n.vid  = :vid', array(':uid' =>  $data[0], ':vid' => $vid));
 				foreach($termid as $val){
 					$term_id = $val->tid; // get tid
 				}  
 				//finding parent of new item
 				$parent = 0;
 				if(!empty($data[1])){
-					// TODO: Drupal Rector Notice: Please delete the following comment after you've made any necessary changes.
-					// You will need to use `\Drupal\core\Database\Database::getConnection()` if you do not yet have access to the container here.
-					$parent_id =\Drupal::database()->query('SELECT n.tid FROM {taxonomy_term_field_data} n WHERE n.name  = :uid AND n.vid  = :vid', array(':uid' =>  $data[1], ':vid' => $vid));
+					$parent_id =db_query('SELECT n.tid FROM {taxonomy_term_field_data} n WHERE n.name  = :uid AND n.vid  = :vid', array(':uid' =>  $data[1], ':vid' => $vid));
 					
 					foreach($parent_id as $val){
 						if(!empty($val)){
@@ -160,7 +154,7 @@ function create_taxonomy($voc_name)
 			header('Location:'.$url);exit;			
 		}
 		else{
-			\Drupal::messenger()->addStatus('File contains no data');
+			drupal_set_message('File contains no data');
 		}
 	}
 	else if($mimetype == "text/xml"){ //Code for fetch and save xml file
@@ -198,9 +192,7 @@ function create_taxonomy($voc_name)
 					if(isset($parents) && !empty($parents))
 					{
 						$data = $parents;
-						// TODO: Drupal Rector Notice: Please delete the following comment after you've made any necessary changes.
-						// You will need to use `\Drupal\core\Database\Database::getConnection()` if you do not yet have access to the container here.
-						$parent_id = \Drupal::database()->query('SELECT n.tid FROM {taxonomy_term_field_data} n WHERE n.name  = :uid AND n.vid  = :vid', array(':uid' =>  $data, ':vid' => $vid));
+						$parent_id = db_query('SELECT n.tid FROM {taxonomy_term_field_data} n WHERE n.name  = :uid AND n.vid  = :vid', array(':uid' =>  $data, ':vid' => $vid));
 						foreach($parent_id as $val){
 							if(!empty($val)){
 								$parent = $val->tid; // get tid
@@ -210,9 +202,7 @@ function create_taxonomy($voc_name)
 							}
 						}
 					}
-					// TODO: Drupal Rector Notice: Please delete the following comment after you've made any necessary changes.
-					// You will need to use `\Drupal\core\Database\Database::getConnection()` if you do not yet have access to the container here.
-					$termid = \Drupal::database()->query('SELECT n.tid FROM {taxonomy_term_field_data} n WHERE n.name  = :uid AND n.vid  = :vid', array(':uid' =>  $terms, ':vid' => $vid));
+					$termid = db_query('SELECT n.tid FROM {taxonomy_term_field_data} n WHERE n.name  = :uid AND n.vid  = :vid', array(':uid' =>  $terms, ':vid' => $vid));
 					foreach($termid as $val){
 						$term_id = $val->tid; // get tid
 					}
@@ -236,15 +226,15 @@ function create_taxonomy($voc_name)
 				header('Location:'.$url);exit;
 			}
 			else{
-				\Drupal::messenger()->addStatus('File contains no data'); 				
+				drupal_set_message('File contains no data'); 				
 			}
 		}
 	}
 	else if($mimetype == "application/octet-stream"){
-		\Drupal::messenger()->addStatus('File contains no data');
+		drupal_set_message('File contains no data');
 	}
 	else{
-		\Drupal::messenger()->addStatus('Failed to open the file');
+		drupal_set_message('Failed to open the file');
 	}
 }
 ?>

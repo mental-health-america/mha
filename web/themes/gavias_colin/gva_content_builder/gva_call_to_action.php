@@ -196,7 +196,7 @@ if(!class_exists('element_gva_call_to_action')):
          ?>
 
          <?php ob_start() ?>
-         <div class="widget gsc-call-to-action <?php print implode(' ', $class ) ?>" <?php print $style ?> <?php print gavias_content_builder_print_animate_wow('', $animate_delay) ?>>
+         <div class="widget gsc-call-to-action <?php print implode($class, ' ') ?>" <?php print $style ?> <?php print gavias_content_builder_print_animate_wow('', $animate_delay) ?>>
             <div class="content-inner clearfix" >
                <div class="content">
                   <h2 class="title"><span><?php print $title; ?></span></h2>

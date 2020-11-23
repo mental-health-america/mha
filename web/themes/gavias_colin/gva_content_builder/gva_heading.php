@@ -114,7 +114,7 @@ if(!class_exists('element_gva_heading')):
          if($animate) $class[] = 'wow ' . $animate;
          ?>
          <?php ob_start() ?>
-         <div class="widget gsc-heading <?php print implode(' ', $class) ?>" <?php print gavias_content_builder_print_animate_wow('', $animate_delay) ?>>
+         <div class="widget gsc-heading <?php print implode($class, ' ') ?>" <?php print gavias_content_builder_print_animate_wow('', $animate_delay) ?>>
             <?php if($sub_title){ ?><div class="sub-title"><span><?php print $sub_title; ?></span></div><?php } ?>
             <?php if($title){ ?><h2 class="title"><span><?php print $title; ?></span></h2><?php } ?>
             <?php if($desc){ ?><div class="title-desc"><?php print $desc; ?></div><?php } ?>

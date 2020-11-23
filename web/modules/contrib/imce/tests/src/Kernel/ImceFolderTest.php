@@ -2,18 +2,22 @@
 
 namespace Drupal\Tests\imce\Kernel;
 
+use Drupal\KernelTests\KernelTestBase;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\imce\ImceFM;
 use Drupal\imce\ImceFolder;
-use Drupal\Tests\imce\Kernel\Plugin\KernelTestBasePlugin;
+use Drupal\Tests\user\Traits\UserCreationTrait;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * Kernel tests for ImceFolder.
  *
  * @group imce
  */
-class ImceFolderTest extends KernelTestBasePlugin {
+class ImceFolderTest extends KernelTestBase {
+
+  use StringTranslationTrait;
+  use UserCreationTrait;
 
   /**
    * The form delete profile.
@@ -38,82 +42,46 @@ class ImceFolderTest extends KernelTestBasePlugin {
    */
   protected function setUp() {
     parent::setUp();
+    $this->installConfig(['imce']);
+    $this->installEntitySchema('imce_profile');
+    $this->installEntitySchema('user');
+    $this->setUpCurrentUser();
     $this->imceFolder = new ImceFolder('js', $this->getConf());
-    $this->imceFolder->setFm($this->getImceFM());
+    $this->imceFolder->setFm(new ImceFM($this->getConf(), \Drupal::currentUser(), Request::create("/imce")));
     $this->imceFolder->scan();
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  public function getRequest() {
-    $request = Request::create("/imce", 'POST', []);
-    $session = new Session();
-    $session->set('imce_active_path', '.');
-    $request->setSession($session);
-
-    return $request;
-  }
-
-  /**
-   * Test inherited method ImceFolder::fm().
-   */
-  public function testFM() {
-    $this->assertInstanceOf(ImceFM::class, $this->imceFolder->fm());
-  }
-
-  /**
-   * Test variable ImceFolder::files after scan.
-   */
   public function testFiles() {
     $files = $this->imceFolder->files;
-    $this->assertIsArray(($files));
+    $this->assertTrue(is_array(($files)));
   }
 
-  /**
-   * Test variable ImceFolder::subfolders after scan.
-   */
   public function testSubfolders() {
     $subfolders = $this->imceFolder->subfolders;
-    $this->assertIsArray(($subfolders));
+    $this->assertTrue(is_array(($subfolders)));
   }
 
-  /**
-   * Test variable ImceFolder::name after scan.
-   */
   public function testName() {
-    $this->assertIsString($this->imceFolder->name);
+    $this->assertTrue(is_string($this->imceFolder->name));
     $this->assertEqual($this->imceFolder->name, 'js');
   }
 
-  /**
-   * Test method ImceFolder::getPath().
-   */
   public function testPath() {
     $this->imceFolder->setPath('js');
     $path = $this->imceFolder->getPath();
-    $this->assertIsString($path);
+    $this->assertTrue(is_string($path));
   }
 
-  /**
-   * Test variable ImceFolder::items after scan.
-   */
   public function testItem() {
     $items = $this->imceFolder->items;
-    $this->assertIsArray(($items));
+    $this->assertTrue(is_array(($items)));
   }
 
-  /**
-   * Test variable ImceFolder::scanned after scan.
-   */
   public function testScanned() {
     $this->assertTrue(is_bool($this->imceFolder->scanned));
     $this->assertTrue($this->imceFolder->scanned);
   }
 
-  /**
-   * Settings needed to run tests.
-   */
   public function getConf() {
     return [
       "extensions" => "*",

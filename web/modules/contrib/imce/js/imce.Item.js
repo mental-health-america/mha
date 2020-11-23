@@ -319,9 +319,7 @@
    */
   Item.onNameChange = function (oldname) {
     var Item = this;
-    var name = Item.formatName();
-    Item.nameEl.innerHTML = name;
-    Item.nameEl.title = name;
+    Item.nameEl.innerHTML = Item.formatName();
     if (Item.parent) {
       Item.parent.onItemNameChange(Item, oldname);
     }
@@ -345,36 +343,29 @@
    * Size change handler.
    */
   Item.onSizeChange = function (oldval) {
-    var size = this.formatSize();
-    this.sizeEl.innerHTML = size;
-    this.sizeEl.title = size;
+    this.sizeEl.innerHTML = this.formatSize();
   };
 
   /**
    * Date change handler.
    */
   Item.onDateChange = function (oldval) {
-    var date = this.formatDate(true);
-    this.dateEl.innerHTML = date;
-    this.dateEl.title = date;
+    this.dateEl.innerHTML = this.formatDate(true);
+    this.dateEl.title = this.formatDate();
   };
 
   /**
    * Width change handler.
    */
   Item.onWidthChange = function (oldval) {
-    var width = this.formatWidth();
-    this.widthEl.innerHTML = width;
-    this.widthEl.title = width;
+    this.widthEl.innerHTML = this.formatWidth();
   };
 
   /**
    * Height change handler.
    */
   Item.onHeightChange = function (oldval) {
-    var height = this.formatHeight();
-    this.heightEl.innerHTML = height;
-    this.heightEl.title = height;
+    this.heightEl.innerHTML = this.formatHeight();
   };
 
 

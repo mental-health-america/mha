@@ -10,6 +10,7 @@ use Drupal\Component\Render\MarkupInterface;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\file\Entity\File;
 
 /**
  * Imce File Manager.
@@ -420,8 +421,7 @@ class ImceFM {
    */
   public function addItemToJs(ImceItem $item) {
     if ($parent = $item->parent) {
-      $path = $parent->getPath();
-      if (isset($path)) {
+      if ($path = $parent->getPath()) {
         $name = $item->name;
         $uri = $item->getUri();
         if ($item->type === 'folder') {

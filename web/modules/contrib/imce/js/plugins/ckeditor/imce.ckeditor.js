@@ -5,31 +5,30 @@
    * @file
    * Defines Imce plugin for CKEditor.
    */
-  if (!CKEDITOR.imce) {
-    CKEDITOR.plugins.add('imce', {
-      // Define commands and buttons
-      init: function (editor, context) {
-        // Image
-        editor.addCommand('imceimage', {
-          exec: CKEDITOR.imce.imageDialog
-        });
-        editor.ui.addButton('ImceImage', {
-          label: CKEDITOR.imce.imageLabel(),
-          command: 'imceimage',
-          icon: editor.config.ImceImageIcon
-        });
-        // Link
-        editor.addCommand('imcelink', {
-          exec: CKEDITOR.imce.linkDialog
-        });
-        editor.ui.addButton('ImceLink', {
-          label: CKEDITOR.imce.linkLabel(),
-          command: 'imcelink',
-          icon: editor.config.ImceLinkIcon
-        });
-      }
-    });
-  }
+
+  CKEDITOR.plugins.add('imce', {
+    // Define commands and buttons
+    init: function (editor) {
+      // Image
+      editor.addCommand('imceimage', {
+        exec: CKEDITOR.imce.imageDialog
+      });
+      editor.ui.addButton('ImceImage', {
+        label: CKEDITOR.imce.imageLabel(),
+        command: 'imceimage',
+        icon: editor.config.ImceImageIcon
+      });
+      // Link
+      editor.addCommand('imcelink', {
+        exec: CKEDITOR.imce.linkDialog
+      });
+      editor.ui.addButton('ImceLink', {
+        label: CKEDITOR.imce.linkLabel(),
+        command: 'imcelink',
+        icon: editor.config.ImceLinkIcon
+      });
+    }
+  });
 
   /**
    * Global container for helper methods.

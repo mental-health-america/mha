@@ -94,7 +94,7 @@ class Delete extends ImcePluginBase {
       return TRUE;
     }
     // Unmanaged file.
-    return \Drupal::service('file_system')->delete($uri);
+    return file_unmanaged_delete($uri);
   }
 
   /**
