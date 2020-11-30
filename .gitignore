@@ -32,7 +32,7 @@
 #/web/.eslintignore
 #/web/.eslintrc.json
 #/web/.gitattributes
-/web/.htaccess
+#/web/.htaccess
 #/autoload.php
 #/composer.lock
 #/web/index.php
