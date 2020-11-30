@@ -4,8 +4,8 @@
 
 # Ignore configuration files that may contain sensitive information
 /web/sites/*/*settings*.php
-/web/sites/*/*services*.yml
-/web/sites/development.services.yml
+#/web/sites/*/*services*.yml
+#/web/sites/development.services.yml
 /web/sites/default/settings.local.php
 /web/sites/default/settings.php
 # Ignore paths that may contain user-generated content
@@ -39,14 +39,14 @@
 #/web/robots.txt
 #/web/update.php
 #/web/web.config
-/example.gitignore
-/web/profiles/README.txt
-/web/sites/README.txt
-/web/sites/example.sites.php
-/web/sites/example.settings.local.php
-/web/themes/README.txt
-/web/LICENSE.txt
-/web/README.txt
+#/example.gitignore
+#/web/profiles/README.txt
+#/web/sites/README.txt
+#/web/sites/example.sites.php
+#/web/sites/example.settings.local.php
+#/web/themes/README.txt
+#/web/LICENSE.txt
+#/web/README.txt
 
 # Ignore OS garbage
 .DS_Store
