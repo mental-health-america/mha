@@ -62,7 +62,7 @@ AddEncoding gzip svgz
 <IfModule mod_rewrite.c>
   RewriteEngine on
 
-  RewriteCond %{HTTP_HOST} ^(www\.)?staging.mhanational\.org$ [NC]
+  RewriteCond %{HTTP_HOST} ^(www\.)?mhanational\.org$ [NC]
   RewriteCond %{HTTPS} !=on
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,NE,R=301]
 
