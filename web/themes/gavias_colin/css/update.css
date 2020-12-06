@@ -63,12 +63,7 @@ header .site-branding-logo img.logo-site {
   border: none;
 }
 
-.body-page input[type="text"],
-.body-page input[type="tel"],
-.body-page input[type="password"],
-.body-page input[type="email"],
-.body-page textarea,
-.body-page select {
+.body-page input[type="text"], .body-page input[type="tel"], .body-page input[type="password"], .body-page input[type="email"], .body-page textarea, .body-page select {
   border: 1px solid #bbb !important;
 }
 

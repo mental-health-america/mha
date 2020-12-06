@@ -102,7 +102,7 @@ if(!class_exists('element_gva_drupal_block')):
          if($animate) $class[] = 'wow ' . $animate; 
          
          if($block_drupal){
-            $output .= '<div class=" clearfix widget gsc-block-drupal '.implode($class, ' ') . '" ' . gavias_content_builder_print_animate_wow('', $animate_delay) . '>';
+            $output .= '<div class=" clearfix widget gsc-block-drupal '.implode(' ', $class) . '" ' . gavias_content_builder_print_animate_wow('', $animate_delay) . '>';
               $output .= gavias_content_builder_render_block($block_drupal);
             $output .= '</div>';
          } 

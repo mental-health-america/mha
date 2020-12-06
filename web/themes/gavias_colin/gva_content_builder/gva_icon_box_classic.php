@@ -237,7 +237,7 @@ if(!class_exists('element_gva_icon_box_classic')):
          ?>
          <?php ob_start() ?>
          <?php if($icon_position=='top-center' || $icon_position=='top-left' || $icon_position=='top-right' || $icon_position=='right' || $icon_position=='left'){ ?>
-            <div class="widget gsc-icon-box <?php if(count($class)>0) print implode($class, ' ') ?>" <?php if(count($style) > 0) print 'style="'.implode($style, ';').'"' ?> <?php print gavias_content_builder_print_animate_wow('', $animate_delay) ?>>
+            <div class="widget gsc-icon-box <?php if(count($class)>0) print implode(' ', $class) ?>" <?php if(count($style) > 0) print 'style="'.implode(';', $style).'"' ?> <?php print gavias_content_builder_print_animate_wow('', $animate_delay) ?>>
                
                <?php if(($icon || $image) && $icon_position != 'right'){ ?>
                   <div class="highlight-icon">
@@ -270,7 +270,7 @@ if(!class_exists('element_gva_icon_box_classic')):
          <?php } ?>   
 
          <?php if($icon_position == 'top-left-title' || $icon_position == 'top-right-title'){ ?>
-            <div class="widget gsc-icon-box <?php if(count($class)>0) print implode($class, ' ') ?>" <?php if(count($style) > 0) print 'style="'.implode($style, ';').'"' ?> <?php print gavias_content_builder_print_animate_wow('', $animate_delay) ?>>
+            <div class="widget gsc-icon-box <?php if(count($class)>0) print implode(' ', $class) ?>" <?php if(count($style) > 0) print 'style="'.implode(';', $style).'"' ?> <?php print gavias_content_builder_print_animate_wow('', $animate_delay) ?>>
                
                <div class="highlight_content">
                   <div class="title-inner">

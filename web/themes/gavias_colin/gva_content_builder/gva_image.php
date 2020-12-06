@@ -112,7 +112,7 @@ if(!class_exists('element_gva_image')):
          if($animate) $class_array[] = 'wow ' . $animate; 
          ?>
          <?php ob_start() ?>
-            <div class="widget gsc-image<?php if(count($class_array) > 0) print (' ' . implode($class_array, ' ')) ?>" <?php print $margin ?> <?php print gavias_content_builder_print_animate_wow('', $animate_delay) ?>>
+            <div class="widget gsc-image<?php if(count($class_array) > 0) print (' ' . implode(' ', $class_array)) ?>" <?php print $margin ?> <?php print gavias_content_builder_print_animate_wow('', $animate_delay) ?>>
                <div class="widget-content">
                   <?php if($link){ ?>
                      <a href="<?php print $link ?>" <?php print $target ?>>
