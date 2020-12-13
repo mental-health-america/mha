@@ -1,0 +1,10 @@
+name: 'Upgrade rector test'
+type: module
+description: 'Support module for upgrade rector module testing.'
+package: Testing
+# version: VERSION
+core_version_requirement: ^8 || ^9
+# Information added by Drupal.org packaging script on 2020-06-02
+version: '8.x-1.0-alpha7'
+project: 'upgrade_rector'
+datestamp: 1591108474
