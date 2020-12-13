@@ -37,9 +37,10 @@ function simple_popup_blocks_page_attachments(array &$attachments) {
   // Add libraries if it is not admin paths.
   $route = \Drupal::routeMatch()->getRouteObject();
   $is_admin = \Drupal::service('router.admin_context')->isAdminRoute($route);
+  $database = \Drupal::getContainer()->get('database');
   if (!$is_admin) {
     $popup_settings = [];
-    foreach (SimplePopupBlocksStorage::loadAll() as $entry) {
+    foreach (SimplePopupBlocksStorage::loadAll($database) as $entry) {
       if ($entry->status == 1) {
         if ($entry->type == 0) {
           $identifier = preg_replace('/[_]+/', '-', $entry->identifier);
@@ -48,7 +49,7 @@ function simple_popup_blocks_page_attachments(array &$attachments) {
         $visit_counts = unserialize($entry->visit_counts);
         $entry->visit_counts = implode(",", $visit_counts);
         // Sanitize each entry.
-        $popup_settings[] = array_map('Drupal\Component\Utility\SafeMarkup::checkPlain', (array) $entry);
+        $popup_settings[] = array_map('Drupal\Component\Utility\Html::escape', (array) $entry);
       }
       $attachments['#attached']['library'][] = 'simple_popup_blocks/simple_popup_blocks';
       $attachments['#attached']['drupalSettings']['simple_popup_blocks']['settings'] = $popup_settings;

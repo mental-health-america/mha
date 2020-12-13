@@ -5,13 +5,14 @@ namespace Drupal\r4032login\EventSubscriber;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\EventSubscriber\HttpExceptionSubscriberBase;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Path\PathMatcherInterface;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Routing\RedirectDestinationInterface;
 use Drupal\Core\Url;
 use Drupal\r4032login\Event\RedirectEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Drupal\Component\Utility\Xss;
@@ -36,11 +37,11 @@ class R4032LoginSubscriber extends HttpExceptionSubscriberBase {
   protected $currentUser;
 
   /**
-   * The redirect destination service.
+   * The request stack service.
    *
-   * @var \Drupal\Core\Routing\RedirectDestinationInterface
+   * @var \Symfony\Component\HttpFoundation\RequestStack
    */
-  protected $redirectDestination;
+  protected $requestStack;
 
   /**
    * The path matcher.
@@ -57,25 +58,35 @@ class R4032LoginSubscriber extends HttpExceptionSubscriberBase {
   protected $eventDispatcher;
 
   /**
+   * The messenger service.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
+
+  /**
    * Constructs a new R4032LoginSubscriber.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The configuration factory.
    * @param \Drupal\Core\Session\AccountInterface $current_user
    *   The current user.
-   * @param \Drupal\Core\Routing\RedirectDestinationInterface $redirect_destination
-   *   The redirect destination service.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   The request stack service.
    * @param \Drupal\Core\Path\PathMatcherInterface $path_matcher
    *   The path matcher.
    * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
    *   The event dispatcher.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger service.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, AccountInterface $current_user, RedirectDestinationInterface $redirect_destination, PathMatcherInterface $path_matcher, EventDispatcherInterface $event_dispatcher) {
+  public function __construct(ConfigFactoryInterface $config_factory, AccountInterface $current_user, RequestStack $request_stack, PathMatcherInterface $path_matcher, EventDispatcherInterface $event_dispatcher, MessengerInterface $messenger) {
     $this->configFactory = $config_factory;
     $this->currentUser = $current_user;
-    $this->redirectDestination = $redirect_destination;
+    $this->requestStack = $request_stack;
     $this->pathMatcher = $path_matcher;
     $this->eventDispatcher = $event_dispatcher;
+    $this->messenger = $messenger;
   }
 
   /**
@@ -94,21 +105,13 @@ class R4032LoginSubscriber extends HttpExceptionSubscriberBase {
   public function on403(GetResponseEvent $event) {
     $config = $this->configFactory->get('r4032login.settings');
 
+    $currentPath = $this->requestStack->getCurrentRequest()->getPathInfo();
+
     // Check if the path should be ignored.
-    $noRedirectPages = trim($config->get('match_noredirect_pages'));
-    if ($noRedirectPages !== '') {
-      $pathToMatch = $this->redirectDestination->get();
-
-      try {
-        // Clean up path from possible language prefix, GET arguments, etc.
-        $pathToMatch = '/' . Url::fromUserInput($pathToMatch)->getInternalPath();
-      }
-      catch (\Exception $e) {
-      }
-
-      if ($this->pathMatcher->matchPath($pathToMatch, $noRedirectPages)) {
-        return;
-      }
+    if (($noRedirectPages = trim($config->get('match_noredirect_pages')))
+      && $this->pathMatcher->matchPath($currentPath, $noRedirectPages)
+    ) {
+      return;
     }
 
     // Retrieve the redirect path depending if the user is logged or not.
@@ -123,9 +126,6 @@ class R4032LoginSubscriber extends HttpExceptionSubscriberBase {
       // Determine if the redirect path is external.
       $externalRedirect = UrlHelper::isExternal($redirectPath);
 
-      // Determine the HTTP redirect code.
-      $code = $config->get('default_redirect_code');
-
       // Determine the url options.
       $options = [
         'absolute' => TRUE,
@@ -134,12 +134,17 @@ class R4032LoginSubscriber extends HttpExceptionSubscriberBase {
       // Determine the destination parameter
       // and add it as options for the url build.
       if ($config->get('redirect_to_destination')) {
-        $destination = $this->redirectDestination->get();
-
         if ($externalRedirect) {
-          $destination = Url::fromUserInput($destination, [
+          $destination = Url::fromUserInput($currentPath, [
             'absolute' => TRUE,
           ])->toString();
+        }
+        else {
+          $destination = substr($currentPath, 1);
+        }
+
+        if ($queryString = $this->requestStack->getCurrentRequest()->getQueryString()) {
+          $destination .= '?' . $queryString;
         }
 
         if (empty($config->get('destination_parameter_override'))) {
@@ -166,7 +171,7 @@ class R4032LoginSubscriber extends HttpExceptionSubscriberBase {
         if ($this->currentUser->isAnonymous() && $config->get('display_denied_message')) {
           $message = $config->get('access_denied_message');
           $messageType = $config->get('access_denied_message_type');
-          drupal_set_message(Xss::filterAdmin($message), $messageType);
+          $this->messenger->addMessage(Xss::filterAdmin($message), $messageType);
         }
 
         if ($redirectPath === '<front>') {
@@ -176,6 +181,7 @@ class R4032LoginSubscriber extends HttpExceptionSubscriberBase {
           $url = Url::fromUserInput($redirectPath, $options)->toString();
         }
 
+        $code = $config->get('default_redirect_code');
         $response = new RedirectResponse($url, $code);
       }
 

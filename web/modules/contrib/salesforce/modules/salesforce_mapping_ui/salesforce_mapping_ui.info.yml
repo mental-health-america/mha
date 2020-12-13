@@ -1,0 +1,13 @@
+name: Salesforce Mapping UI
+type: module
+description: User interface for managing Salesforce mappings.
+package: Salesforce
+core_version_requirement: ^8.7.7 || ^9
+configure: entity.salesforce_mapping.list
+dependencies:
+  - salesforce:salesforce_mapping
+
+# Information added by Drupal.org packaging script on 2020-06-10
+version: '8.x-4.1'
+project: 'salesforce'
+datestamp: 1591805948

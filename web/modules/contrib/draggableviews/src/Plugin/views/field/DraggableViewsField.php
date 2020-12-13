@@ -2,13 +2,11 @@
 
 namespace Drupal\draggableviews\Plugin\views\field;
 
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\draggableviews\DraggableViews;
-use Drupal\system\Plugin\views\field\BulkForm;
 use Drupal\Core\Render\Markup;
-use Drupal\Core\Entity\EntityManagerInterface;
-use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\draggableviews\DraggableViews;
+use Drupal\views\Plugin\views\field\BulkForm;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -38,7 +36,6 @@ class DraggableViewsField extends BulkForm {
    * @var \Drupal\Core\Language\LanguageManagerInterface
    */
   protected $languageManager;
-
   /**
    * The Current user.
    *
@@ -119,6 +116,15 @@ class DraggableViewsField extends BulkForm {
         '#tree' => TRUE,
       ];
 
+      // Add weight.
+      $form[$this->options['id']][$row_index]['weight'] = [
+        '#type' => 'textfield',
+        '#size' => '5',
+        '#maxlength' => '5',
+        '#value' => $row->draggableviews_structure_weight,
+        '#attributes' => ['class' => ['draggableviews-weight']],
+      ];
+
       // Item to keep id of the entity.
       $form[$this->options['id']][$row_index]['id'] = [
         '#type' => 'hidden',
@@ -135,19 +141,15 @@ class DraggableViewsField extends BulkForm {
     }
 
     if ($this->currentUser->hasPermission('access draggableviews')) {
-      // Get an array of field group titles.
-      $fieldGrouping = $draggableviews->fieldGrouping();
-      foreach ($fieldGrouping as $key => $row) {
-        $options = [
-          'table_id' => $draggableviews->getHtmlId($key),
-          'action' => 'match',
-          'relationship' => 'parent',
-          'group' => 'draggableviews-parent',
-          'subgroup' => 'draggableviews-parent',
-          'source' => 'draggableviews-id',
-        ];
-        drupal_attach_tabledrag($form, $options);
-      }
+      $options = [
+        'table_id' => $draggableviews->getHtmlId(),
+        'action' => 'match',
+        'relationship' => 'group',
+        'group' => 'draggableviews-parent',
+        'subgroup' => 'draggableviews-parent',
+        'source' => 'draggableviews-id',
+      ];
+      drupal_attach_tabledrag($form, $options);
     }
   }
 

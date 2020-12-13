@@ -25,8 +25,8 @@ simple_popup_blocks.edit:
     _permission: 'administer site configuration'
   options:
     _admin_route: TRUE   
-    no_cache: 'TRUE'    
-
+    no_cache: 'TRUE'
+    
 simple_popup_blocks.delete:
   path: 'admin/config/media/simple_popup_blocks/delete/{first}'
   defaults:
@@ -35,4 +35,4 @@ simple_popup_blocks.delete:
     _permission: 'administer site configuration'
   options:
     _admin_route: TRUE   
-    no_cache: 'TRUE'  
+    no_cache: 'TRUE'

@@ -24,7 +24,7 @@ class SimplePopupBlocksEditForm extends SimplePopupBlocksAddForm {
    */
   public function buildForm(array $form, FormStateInterface $form_state, $first = NULL) {
     // Query for items to display.
-    $entry = SimplePopupBlocksStorage::load($first);
+    $entry = SimplePopupBlocksStorage::load($first, $this->database);
 
     // Tell the user if there is nothing to display.
     if (empty($entry)) {
@@ -58,6 +58,7 @@ class SimplePopupBlocksEditForm extends SimplePopupBlocksAddForm {
     $form['trigger_selector']['#default_value'] = $entry->trigger_selector;
     $form['delay']['#default_value'] = $entry->delay;
     $form['width']['#default_value'] = $entry->width;
+    $form['cookie_expiry']['#default_value'] = $entry->cookie_expiry;
 
     $block_id_append = '';
     if ($entry->type == 0) {
@@ -161,7 +162,7 @@ class SimplePopupBlocksEditForm extends SimplePopupBlocksAddForm {
         $form_state->setError($form[$selector], $this->t('Selector should not start with . or # in %field.', ['%field' => $identifier]));
       }
     }
-    $check = SimplePopupBlocksStorage::loadCountByIdentifier($identifier);
+    $check = SimplePopupBlocksStorage::loadCountByIdentifier($identifier, $this->database, $this->messenger);
     if (!empty($check) && $check[0]->pid != $first) {
       $form_state->setError($form[$selector], $this->t('Already popup created with this identifier %field.', ['%field' => $identifier]));
     }
@@ -197,6 +198,10 @@ class SimplePopupBlocksEditForm extends SimplePopupBlocksAddForm {
     if (empty($width) || $width < 0) {
       $width = 400;
     }
+    $cookie_expiry = $form_state->getValue('cookie_expiry');
+    if (strlen($cookie_expiry) == 0 || $cookie_expiry < 0) {
+      $cookie_expiry = 100;
+    }
     // Save the submitted entry.
     $entry = [
       'pid' => $first,
@@ -213,17 +218,17 @@ class SimplePopupBlocksEditForm extends SimplePopupBlocksAddForm {
       'minimize' => $form_state->getValue('minimize'),
       'close' => $form_state->getValue('close'),
       'width' => $width,
+      'cookie_expiry' => $cookie_expiry,
       'status' => $form_state->getValue('status'),
     ];
-    $return = SimplePopupBlocksStorage::update($entry);
+    $return = SimplePopupBlocksStorage::update($entry, $this->database, $this->messenger);
     if ($return) {
-      drupal_set_message($this->t('Popup settings has been updated Successfully.'));
+      $this->messenger->addMessage($this->t('Popup settings has been updated Successfully.'));
       $url = Url::fromRoute('simple_popup_blocks.manage');
       $form_state->setRedirectUrl($url);
     }
     else {
-      drupal_set_message($this->t('Error while creating.'), 'error');
+      $this->messenger->addError($this->t('Error while creating.'), 'error');
     }
   }
-
 }
