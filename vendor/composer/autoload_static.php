@@ -70,6 +70,7 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
         ),
         'W' => 
         array (
+            'Wikimedia\\Composer\\' => 19,
             'Webmozart\\PathUtil\\' => 19,
             'Webmozart\\Assert\\' => 17,
         ),
@@ -154,6 +155,7 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
         'J' => 
         array (
             'JsonSchema\\' => 11,
+            'Jawira\\CaseConverter\\' => 21,
         ),
         'I' => 
         array (
@@ -183,6 +185,7 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
             'Drupal\\Console\\' => 15,
             'Drupal\\Component\\' => 17,
             'Drupal\\' => 7,
+            'DrupalRector\\' => 13,
             'DrupalPractice\\' => 15,
             'DrupalComposer\\DrupalScaffold\\' => 30,
             'DrupalCodeGenerator\\' => 20,
@@ -257,6 +260,10 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
         'XdgBaseDir\\' => 
         array (
             0 => __DIR__ . '/..' . '/dnoegel/php-xdg-base-dir/src',
+        ),
+        'Wikimedia\\Composer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/wikimedia/composer-merge-plugin/src',
         ),
         'Webmozart\\PathUtil\\' => 
         array (
@@ -499,6 +506,10 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
         array (
             0 => __DIR__ . '/..' . '/justinrainbow/json-schema/src/JsonSchema',
         ),
+        'Jawira\\CaseConverter\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/jawira/case-converter/src',
+        ),
         'Interop\\Container\\' => 
         array (
             0 => __DIR__ . '/..' . '/container-interop/container-interop/src/Interop/Container',
@@ -566,6 +577,10 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
         'Drupal\\' => 
         array (
             0 => __DIR__ . '/..' . '/drupal/coder/coder_sniffer/Drupal',
+        ),
+        'DrupalRector\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/palantirnet/drupal-rector/src',
         ),
         'DrupalPractice\\' => 
         array (
