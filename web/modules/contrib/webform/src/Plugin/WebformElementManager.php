@@ -57,7 +57,7 @@ class WebformElementManager extends DefaultPluginManager implements FallbackPlug
   protected $instances = [];
 
   /**
-   * Constructs a WebformElementManager object.
+   * Constructs a WebformElementManager.
    *
    * @param \Traversable $namespaces
    *   An object that implements \Traversable which contains the root paths
@@ -126,7 +126,7 @@ class WebformElementManager extends DefaultPluginManager implements FallbackPlug
     // Webform element plugin.
     if (empty($configuration)) {
       if (!isset($this->instances[$plugin_id])) {
-        $this->instances[$plugin_id] = parent::createInstance($plugin_id);
+        $this->instances[$plugin_id] = parent::createInstance($plugin_id, $configuration);
       }
       return $this->instances[$plugin_id];
     }
@@ -258,7 +258,7 @@ class WebformElementManager extends DefaultPluginManager implements FallbackPlug
     $plugin_id = $this->getElementPluginId($element);
 
     /** @var \Drupal\webform\Plugin\WebformElementInterface $element_plugin */
-    $element_plugin = $this->createInstance($plugin_id);
+    $element_plugin = $this->createInstance($plugin_id, $element);
 
     if ($entity) {
       $element_plugin->setEntities($entity);

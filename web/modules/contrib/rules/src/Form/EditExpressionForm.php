@@ -61,7 +61,7 @@ class EditExpressionForm extends FormBase {
     $form_state->set('component', $this->component);
     $form_state->set('uuid', $this->uuid);
 
-    $expression = $this->getEditedExpression($this->component);
+    $expression = $this->getEditedExpression($this->component, $form_state);
 
     if (!$expression) {
       throw new NotFoundHttpException();

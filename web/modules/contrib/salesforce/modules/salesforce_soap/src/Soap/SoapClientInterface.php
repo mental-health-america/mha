@@ -37,9 +37,6 @@ interface SoapClientInterface {
    *   The return value from $function.
    *
    * @see \SforcePartnerClient
-   *
-   * @throws \SoapFault
-   * @throws \Exception
    */
   public function trySoap($function, array $params = [], $refresh = FALSE);
 

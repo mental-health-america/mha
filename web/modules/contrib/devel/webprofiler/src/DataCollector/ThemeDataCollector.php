@@ -14,7 +14,7 @@ use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 use Symfony\Component\HttpKernel\DataCollector\LateDataCollectorInterface;
 
 /**
- * Class ThemeDataCollector.
+ * Class ThemeDataCollector
  */
 class ThemeDataCollector extends DataCollector implements DrupalDataCollectorInterface, LateDataCollectorInterface {
 
@@ -62,9 +62,9 @@ class ThemeDataCollector extends DataCollector implements DrupalDataCollectorInt
       'path' => $activeTheme->getPath(),
       'engine' => $activeTheme->getEngine(),
       'owner' => $activeTheme->getOwner(),
-      'baseThemes' => $activeTheme->getBaseThemeExtensions(),
+      'baseThemes' => $activeTheme->getBaseThemes(),
       'extension' => $activeTheme->getExtension(),
-      'styleSheetsRemove' => $activeTheme->styleSheetsRemove(),
+      'styleSheetsRemove' => $activeTheme->getStyleSheetsRemove(),
       'libraries' => $activeTheme->getLibraries(),
       'regions' => $activeTheme->getRegions(),
     ];
@@ -254,5 +254,4 @@ class ThemeDataCollector extends DataCollector implements DrupalDataCollectorInt
 
     return $data;
   }
-
 }

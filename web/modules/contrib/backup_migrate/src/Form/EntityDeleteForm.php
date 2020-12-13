@@ -40,7 +40,7 @@ class EntityDeleteForm extends EntityConfirmFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->entity->delete();
 
-    \Drupal::messenger()->addMessage(
+    drupal_set_message(
       $this->t('Deleted @label.', ['@label' => $this->entity->label()])
     );
 

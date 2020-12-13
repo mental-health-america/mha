@@ -8,8 +8,8 @@ namespace Drupal\Tests\r4032login\Unit {
   use Drupal\Tests\UnitTestCase;
   use Symfony\Component\EventDispatcher\EventDispatcher;
   use Symfony\Component\HttpFoundation\Request;
-  use Symfony\Component\HttpFoundation\RequestStack;
   use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+  use Symfony\Component\HttpKernel\Exception;
   use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
   use Symfony\Component\HttpKernel\HttpKernelInterface;
   use Symfony\Component\HttpKernel\KernelEvents;
@@ -42,11 +42,11 @@ namespace Drupal\Tests\r4032login\Unit {
     protected $currentUser;
 
     /**
-     * The mocked request stack service.
+     * The mocked redirect destination service.
      *
-     * @var \Symfony\Component\HttpFoundation\RequestStack|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Drupal\Core\Routing\RedirectDestinationInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $requestStack;
+    protected $redirectDestination;
 
     /**
      * The path matcher.
@@ -61,13 +61,6 @@ namespace Drupal\Tests\r4032login\Unit {
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
     protected $eventDispatcher;
-
-    /**
-     * The messenger service.
-     *
-     * @var \Drupal\Core\Messenger\MessengerInterface
-     */
-    protected $messenger;
 
     /**
      * The mocked unrouted URL assembler.
@@ -87,7 +80,7 @@ namespace Drupal\Tests\r4032login\Unit {
      * {@inheritdoc}
      */
     protected function setUp() {
-      $this->kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+      $this->kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
       $this->configFactory = $this->getConfigFactoryStub([
         'r4032login.settings' => [
           'display_denied_message' => TRUE,
@@ -99,21 +92,17 @@ namespace Drupal\Tests\r4032login\Unit {
           'match_noredirect_pages' => '',
         ],
       ]);
-      $this->currentUser = $this->createMock('Drupal\Core\Session\AccountInterface');
+      $this->currentUser = $this->getMock('Drupal\Core\Session\AccountInterface');
+      $this->redirectDestination = $this->getMock('\Drupal\Core\Routing\RedirectDestinationInterface');
+      $this->pathMatcher = $this->getMock('\Drupal\Core\Path\PathMatcherInterface');
+      $this->eventDispatcher = $this->getMock('\Symfony\Component\EventDispatcher\EventDispatcherInterface');
 
-      $this->requestStack = new RequestStack();
-      $this->requestStack->push(new Request());
-
-      $this->pathMatcher = $this->createMock('\Drupal\Core\Path\PathMatcherInterface');
-      $this->eventDispatcher = $this->createMock('\Symfony\Component\EventDispatcher\EventDispatcherInterface');
-      $this->messenger = $this->createMock('\Drupal\Core\Messenger\MessengerInterface');
-
-      $this->urlAssembler = $this->createMock('Drupal\Core\Utility\UnroutedUrlAssemblerInterface');
+      $this->urlAssembler = $this->getMock('Drupal\Core\Utility\UnroutedUrlAssemblerInterface');
       $this->urlAssembler->expects($this->any())->method('assemble')->will($this->returnArgument(0));
-      $this->router = $this->createMock('Drupal\Tests\Core\Routing\TestRouterInterface');
+      $this->router = $this->getMock('Drupal\Tests\Core\Routing\TestRouterInterface');
 
       $container = new ContainerBuilder();
-      $container->set('path.validator', $this->createMock('Drupal\Core\Path\PathValidatorInterface'));
+      $container->set('path.validator', $this->getMock('Drupal\Core\Path\PathValidatorInterface'));
       $container->set('router.no_access_checks', $this->router);
       $container->set('unrouted_url_assembler', $this->urlAssembler);
       \Drupal::setContainer($container);
@@ -125,7 +114,7 @@ namespace Drupal\Tests\r4032login\Unit {
      * @covers ::__construct
      */
     public function testConstruct() {
-      $r4032login = new R4032LoginSubscriber($this->configFactory, $this->currentUser, $this->requestStack, $this->pathMatcher, $this->eventDispatcher, $this->messenger);
+      $r4032login = new R4032LoginSubscriber($this->configFactory, $this->currentUser, $this->redirectDestination, $this->pathMatcher, $this->eventDispatcher);
       $this->assertInstanceOf('\Drupal\r4032login\EventSubscriber\R4032LoginSubscriber', $r4032login);
     }
 
@@ -149,7 +138,7 @@ namespace Drupal\Tests\r4032login\Unit {
       ]);
       $this->currentUser->expects($this->any())->method('isAnonymous')->willReturn(TRUE);
 
-      $r4032login = new R4032LoginSubscriber($config, $this->currentUser, $this->requestStack, $this->pathMatcher, $this->eventDispatcher, $this->messenger);
+      $r4032login = new R4032LoginSubscriber($config, $this->currentUser, $this->redirectDestination, $this->pathMatcher, $this->eventDispatcher);
       $event = new GetResponseForExceptionEvent($this->kernel, $request, HttpKernelInterface::MASTER_REQUEST, new AccessDeniedHttpException());
       $dispatcher = new EventDispatcher();
       $dispatcher->addListener(KernelEvents::EXCEPTION, [
@@ -183,7 +172,7 @@ namespace Drupal\Tests\r4032login\Unit {
       ]);
       $this->currentUser->expects($this->any())->method('isAuthenticated')->willReturn(TRUE);
 
-      $r4032login = new R4032LoginSubscriber($config, $this->currentUser, $this->requestStack, $this->pathMatcher, $this->eventDispatcher, $this->messenger);
+      $r4032login = new R4032LoginSubscriber($config, $this->currentUser, $this->redirectDestination, $this->pathMatcher, $this->eventDispatcher);
       $event = new GetResponseForExceptionEvent($this->kernel, $request, HttpKernelInterface::MASTER_REQUEST, new AccessDeniedHttpException());
       $dispatcher = new EventDispatcher();
       $dispatcher->addListener(KernelEvents::EXCEPTION, [
@@ -261,17 +250,30 @@ namespace Drupal\Tests\r4032login\Unit {
      *   An array of GetResponseForExceptionEvent exception events.
      */
     public function providerInvalidExceptions() {
-      $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+      $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
       $exceptions = [];
       foreach (get_declared_classes() as $name) {
         $class = new \ReflectionClass($name);
         if ($class->isSubclassOf('Exception')) {
           $exceptions[] = [
-            new GetResponseForExceptionEvent($kernel, new Request(), HttpKernelInterface::MASTER_REQUEST, $this->createMock($name)->disableOriginalConstructor()->getMock()),
+            new GetResponseForExceptionEvent($kernel, new Request(), HttpKernelInterface::MASTER_REQUEST, $this->getMockBuilder($name)->disableOriginalConstructor()->getMock()),
           ];
         }
       }
       return $exceptions;
+    }
+
+  }
+}
+
+namespace {
+
+  if (!function_exists('drupal_set_message')) {
+
+    /**
+     * Replaces drupal_set_message().
+     */
+    function drupal_set_message() {
     }
 
   }

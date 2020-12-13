@@ -23,7 +23,7 @@ rules.context.values:
   label: 'Context values'
   mapping:
   # The entries depend on the plugin here. Plugins have to extend this and
-  # provide a suitable schema.
+  # provide a suiting schema.
 
 rules.context.processors:
   type: ignore

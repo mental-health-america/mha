@@ -1,12 +1,10 @@
 <?php
 namespace Drupal\gavias_content_builder\Form;
-
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\HttpFoundation;
 use Drupal\file\Entity\File;
-use Drupal\Core\Url;
 
 class ImportForm implements FormInterface {
    /**
@@ -24,7 +22,7 @@ class ImportForm implements FormInterface {
       if(\Drupal::request()->attributes->get('bid')) $bid = \Drupal::request()->attributes->get('bid');
 
       if (is_numeric($bid)) {
-        $bblock = \Drupal::database()->select('{gavias_content_builder}', 'd')
+        $bblock = db_select('{gavias_content_builder}', 'd')
            ->fields('d')
            ->condition('id', $bid, '=')
            ->execute()
@@ -33,7 +31,7 @@ class ImportForm implements FormInterface {
         $bblock = array('id' => 0, 'title' => '');
       }
       if($bblock['id']==0){
-        \Drupal::messenger()->addMessage('Not found gavias block builder !');
+        drupal_set_message('Not found gavias block builder !');
         return false;
       }
       $form = array();
@@ -89,15 +87,15 @@ class ImportForm implements FormInterface {
       }
 
       $id = $form['id']['#value'];
-      $builder = \Drupal::database()->update("gavias_content_builder")
+      db_update("gavias_content_builder")
       ->fields(array(
         'params' => $params,
       ))
       ->condition('id', $id)
       ->execute();
       \Drupal::service('plugin.manager.block')->clearCachedDefinitions();
-      \Drupal::messenger()->addMessage("Block Builder '{$form['title']['#value']}' has been updated");
-      $response = new \Symfony\Component\HttpFoundation\RedirectResponse(Url::fromRoute('gavias_content_builder.admin.edit', array('bid'=>$id))->toString());
+      drupal_set_message("Block Builder '{$form['title']['#value']}' has been updated");
+      $response = new \Symfony\Component\HttpFoundation\RedirectResponse(\Drupal::url('gavias_content_builder.admin.edit', array('bid'=>$id)));
       $response->send();
     }  
   }

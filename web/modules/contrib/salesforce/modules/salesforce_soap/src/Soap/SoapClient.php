@@ -2,7 +2,7 @@
 
 namespace Drupal\salesforce_soap\Soap;
 
-use Drupal\salesforce\SalesforceAuthProviderPluginManagerInterface;
+use Drupal\salesforce\Rest\RestClientInterface;
 use SforcePartnerClient;
 
 /**
@@ -18,6 +18,13 @@ class SoapClient extends SforcePartnerClient implements SoapClientInterface {
   protected $isConnected;
 
   /**
+   * Salesforce REST API client.
+   *
+   * @var \Drupal\salesforce\Rest\RestClientInterface
+   */
+  protected $restApi;
+
+  /**
    * Path to the WSDL that should be used.
    *
    * @var string
@@ -25,26 +32,18 @@ class SoapClient extends SforcePartnerClient implements SoapClientInterface {
   protected $wsdl;
 
   /**
-   * Auth manager.
-   *
-   * @var \Drupal\salesforce\SalesforceAuthProviderPluginManagerInterface
-   */
-  protected $authMan;
-
-  /**
    * Constructor which initializes the consumer.
    *
-   * @param \Drupal\salesforce\SalesforceAuthProviderPluginManagerInterface $authMan
-   *   Auth manager.
+   * @param \Drupal\salesforce\Rest\RestClientInterface $rest_api
+   *   The Salesforce REST API client.
    * @param string $wsdl
    *   (Optional) Path to the WSDL that should be used.  Defaults to using the
    *   partner WSDL from the developerforce/force.com-toolkit-for-php package.
-   *
-   * @throws \ReflectionException
    */
-  public function __construct(SalesforceAuthProviderPluginManagerInterface $authMan, $wsdl = NULL) {
+  public function __construct(RestClientInterface $rest_api, $wsdl = NULL) {
     parent::__construct();
-    $this->authMan = $authMan;
+
+    $this->restApi = $rest_api;
 
     if ($wsdl) {
       $this->wsdl = $wsdl;
@@ -65,13 +64,19 @@ class SoapClient extends SforcePartnerClient implements SoapClientInterface {
   public function connect() {
     $this->isConnected = FALSE;
     // Use the "isAuthorized" callback to initialize session headers.
-    if (!$token = $this->authMan->getToken()) {
+    if ($this->restApi->isAuthorized()) {
+      $this->createConnection($this->wsdl);
+      $token = $this->restApi->getAccessToken();
+      if (!$token) {
+        $token = $this->restApi->refreshToken();
+      }
+      $this->setSessionHeader($token);
+      $this->setEndPoint($this->restApi->getApiEndPoint('partner'));
+      $this->isConnected = TRUE;
+    }
+    else {
       throw new \Exception('Salesforce needs to be authorized to connect to this website.');
     }
-    $this->createConnection($this->wsdl);
-    $this->setSessionHeader($token->getAccessToken());
-    $this->setEndpoint($this->authMan->getProvider()->getApiEndpoint('partner'));
-    $this->isConnected = TRUE;
   }
 
   /**
@@ -86,7 +91,7 @@ class SoapClient extends SforcePartnerClient implements SoapClientInterface {
    */
   public function trySoap($function, array $params = [], $refresh = FALSE) {
     if ($refresh) {
-      $this->authMan->refreshToken();
+      $this->restApi->refreshToken();
     }
     if (!$this->isConnected) {
       $this->connect();
@@ -95,7 +100,7 @@ class SoapClient extends SforcePartnerClient implements SoapClientInterface {
       $results = call_user_func_array([$this, $function], $params);
       return $results;
     }
-    catch (\SoapFault $e) {
+    catch (SoapFault $e) {
       // sf:INVALID_SESSION_ID is thrown on expired login (and other reasons).
       // Our only recourse is to try refreshing our auth token. If we get any
       // other exception, bubble it up.

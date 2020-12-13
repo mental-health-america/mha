@@ -4,6 +4,7 @@ namespace Drupal\webform;
 
 use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\webform\Plugin\WebformElement\TextBase;
 use Drupal\webform\Plugin\WebformElement\WebformCompositeBase;
@@ -302,7 +303,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
   protected function validateFormRecursive(array $form, FormStateInterface $form_state) {
     foreach ($form as $key => $element) {
       if (!WebformElementHelper::isElement($element, $key)
-        || !WebformElementHelper::isAccessibleElement($element)) {
+        || !Element::isVisibleElement($element)) {
         continue;
       }
       $this->validateFormElement($element, $form_state);
@@ -674,7 +675,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
     // If no element is found try checking file uploads which use
     // :input[name="files[ELEMENT_KEY].
     // @see \Drupal\webform\Plugin\WebformElement\WebformManagedFileBase::getElementSelectorOptions
-    if (!$element && strpos($selector, ':input[name="files[') !== FALSE) {
+    if (!$element && strpos($selector, ':input[name="files[') === 0) {
       $element_key = static::getInputNameAsArray($input_name, 1);
       $element = $webform_submission->getWebform()->getElement($element_key);
     }
@@ -875,15 +876,8 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
    *   Visible elements.
    */
   protected function &getBuildElements(array &$form) {
-    if (isset($form['#webform_id']) && isset($form['elements'])) {
-      $form_elements =& $form['elements'];
-    }
-    else {
-      $form_elements =& $form;
-    }
-
     $elements = [];
-    $this->getBuildElementsRecursive($elements, $form_elements);
+    $this->getBuildElementsRecursive($elements, $form);
     return $elements;
   }
 
@@ -966,8 +960,8 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
         $element['#_webform_access'] = $element['#access'];
       }
 
-      // Skip if element is not accessible.
-      if (!WebformElementHelper::isAccessibleElement($element)) {
+      // Skip if element is not visible.
+      if (!Element::isVisibleElement($element)) {
         continue;
       }
 

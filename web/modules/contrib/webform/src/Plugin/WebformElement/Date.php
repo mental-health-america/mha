@@ -32,20 +32,15 @@ class Date extends DateBase {
       }
     }
 
-    $properties = [
+    return [
       // Date settings.
+      'datepicker' => FALSE,
+      'datepicker_button' => FALSE,
       'date_date_format' => $date_format,
       'placeholder' => '',
       'step' => '',
       'size' => '',
     ] + parent::defineDefaultProperties();
-    if ($this->datePickerExists()) {
-      $properties += [
-        'datepicker' => FALSE,
-        'datepicker_button' => FALSE,
-      ];
-    }
-    return $properties;
   }
 
   /****************************************************************************/
@@ -78,7 +73,7 @@ class Date extends DateBase {
     $element['#attributes']['type'] = 'date';
 
     // Convert date element into textfield with date picker.
-    if ($this->datePickerExists() && !empty($element['#datepicker'])) {
+    if (!empty($element['#datepicker'])) {
       $element['#attributes']['type'] = 'text';
 
       // Must manually set 'data-drupal-date-format' to trigger date picker.
@@ -94,7 +89,7 @@ class Date extends DateBase {
     parent::setDefaultValue($element);
 
     // Format date picker default value.
-    if ($this->datePickerExists() && !empty($element['#datepicker'])) {
+    if (!empty($element['#datepicker'])) {
       if (isset($element['#default_value'])) {
         if ($this->hasMultipleValues($element)) {
           foreach ($element['#default_value'] as $index => $default_value) {
@@ -126,9 +121,6 @@ class Date extends DateBase {
    */
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
-    if (!$this->datePickerExists()) {
-      return $form;
-    }
 
     $form['date']['datepicker'] = [
       '#type' => 'checkbox',

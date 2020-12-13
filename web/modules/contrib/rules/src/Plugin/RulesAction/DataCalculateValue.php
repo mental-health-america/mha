@@ -11,15 +11,14 @@ use Drupal\rules\Core\RulesActionBase;
  *   id = "rules_data_calculate_value",
  *   label = @Translation("Calculates a numeric value"),
  *   category = @Translation("Data"),
- *   context_definitions = {
+ *   context = {
  *     "input_1" = @ContextDefinition("float",
  *       label = @Translation("Input value 1"),
  *       description = @Translation("The first input value for the calculation.")
  *     ),
  *     "operator" = @ContextDefinition("string",
  *       label = @Translation("Operator"),
- *       description = @Translation("The calculation operator."),
- *       assignment_restriction = "input"
+ *       description = @Translation("The calculation operator.")
  *     ),
  *     "input_2" = @ContextDefinition("float",
  *       label = @Translation("Input value 2"),

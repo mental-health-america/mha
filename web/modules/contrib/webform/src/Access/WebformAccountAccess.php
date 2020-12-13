@@ -4,7 +4,6 @@ namespace Drupal\webform\Access;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\user\UserInterface;
 
 /**
  * Defines the custom access control handler for the user accounts.
@@ -70,15 +69,13 @@ class WebformAccountAccess {
    *
    * @param \Drupal\Core\Session\AccountInterface $account
    *   Run access checks for this account.
-   * @param \Drupal\user\UserInterface $user
-   *   The access checked routes' associated user account.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  public static function checkUserSubmissionsAccess(AccountInterface $account, UserInterface $user) {
+  public static function checkUserSubmissionsAccess(AccountInterface $account) {
     $condition = ($account->hasPermission('administer webform') || $account->hasPermission('administer webform submission') || $account->hasPermission('view any webform submission'))
-      || ($account->hasPermission('access webform submission user') && $account->id() === $user->id());
+      || ($account->hasPermission('access webform submission user') && \Drupal::currentUser()->id() === $account->id());
     return AccessResult::allowedIf($condition)->cachePerPermissions();
   }
 

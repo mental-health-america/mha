@@ -673,8 +673,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    * {@inheritdoc}
    */
   public function hasRemoteAddr() {
-    $disable_remote_addr = $this->getSetting('form_disable_remote_addr', TRUE);
-    return (!$this->isConfidential() && !$disable_remote_addr) ? TRUE : FALSE;
+    return (!$this->isConfidential() && $this->getSetting('form_remote_addr')) ? TRUE : FALSE;
   }
 
   /**
@@ -1043,7 +1042,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       'form_previous_submissions' => TRUE,
       'form_confidential' => FALSE,
       'form_confidential_message' => '',
-      'form_disable_remote_addr' => FALSE,
+      'form_remote_addr' => TRUE,
       'form_convert_anonymous' => FALSE,
       'form_prepopulate' => FALSE,
       'form_prepopulate_source_entity' => FALSE,
@@ -1152,7 +1151,6 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       'results_customize' => FALSE,
       'token_view' => FALSE,
       'token_update' => FALSE,
-      'token_delete' => FALSE,
       'serial_disabled' => FALSE,
     ];
   }
@@ -2292,8 +2290,8 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       return;
     }
 
-    $page_submit_path = $this->settings['page_submit_path'];
-    $default_page_base_path = \Drupal::config('webform.settings')->get('settings.default_page_base_path');
+    $page_submit_path = trim($this->settings['page_submit_path'], '/');
+    $default_page_base_path = trim(\Drupal::config('webform.settings')->get('settings.default_page_base_path'), '/');
 
     // Skip generating paths if submit path and base path are empty.
     if (empty($page_submit_path) && empty($default_page_base_path)) {
@@ -2301,13 +2299,13 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     }
 
     // Update webform base, confirmation, submissions and drafts paths.
-    $path_base_alias = ($page_submit_path ?: $default_page_base_path . '/' . str_replace('_', '-', $this->id()));
+    $path_base_alias = '/' . ($page_submit_path ?: $default_page_base_path . '/' . str_replace('_', '-', $this->id()));
     $path_suffixes = ['', '/confirmation', '/submissions', '/drafts'];
     foreach ($path_suffixes as $path_suffix) {
       $path_source = '/webform/' . $this->id() . $path_suffix;
       $path_alias = $path_base_alias . $path_suffix;
       if ($path_suffix === '/confirmation' && $this->settings['page_confirm_path']) {
-        $path_alias = $this->settings['page_confirm_path'];
+        $path_alias = '/' . trim($this->settings['page_confirm_path'], '/');
       }
       $this->updatePath($path_source, $path_alias, $this->langcode);
       $this->updatePath($path_source, $path_alias, LanguageInterface::LANGCODE_NOT_SPECIFIED);
@@ -2820,10 +2818,10 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     // Apply variants.
     $is_applied = FALSE;
     $variant_element_keys = $this->getElementsVariant();
-    foreach ($variant_element_keys as $variant_element_key) {
-      if (!empty($variants[$variant_element_key])) {
-        $instance_id = $variants[$variant_element_key];
-        if ($this->applyVariant($variant_element_key, $instance_id, $force)) {
+    foreach ($variant_element_keys as $varient_element_key) {
+      if (!empty($variants[$varient_element_key])) {
+        $instance_id = $variants[$varient_element_key];
+        if ($this->applyVariant($varient_element_key, $instance_id, $force)) {
           $is_applied = TRUE;
         }
       }
@@ -2891,7 +2889,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     }
 
     // Apply the variant.
-    return $variant_plugin->applyVariant();
+    $variant_plugin->applyVariant();
   }
 
   /****************************************************************************/
@@ -3079,8 +3077,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
         $plugin_definition = $handler->getPluginDefinition();
         $provider = $plugin_definition['provider'];
         if (in_array($provider, $dependencies['module'])) {
-          $handler->setWebform($this);
-          $this->getHandlers()->removeInstanceId($handler->getHandlerId());
+          $this->deleteWebformHandler($handler);
           $changed = TRUE;
         }
       }
@@ -3092,8 +3089,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
         $plugin_definition = $variant->getPluginDefinition();
         $provider = $plugin_definition['provider'];
         if (in_array($provider, $dependencies['module'])) {
-          $variant->setWebform($this);
-          $this->getVariants()->removeInstanceId($variant->getVariantId());
+          $this->deleteWebformVariant($variant);
           $changed = TRUE;
         }
       }

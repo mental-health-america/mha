@@ -15,10 +15,10 @@ function gavias_content_builder_delete_confirm_form($form_state) {
 
 function gavias_content_builder_delete_confirm_form_submit($form, &$form_state){
   $gid = $form['id']['#value'];
-  \Drupal::database()->delete('gavias_content_builder')
+  db_delete('gavias_content_builder')
           ->condition('id', $gid)
           ->execute();
-  \Drupal::messenger()->addMessage('The block bulider has been deleted');
+  drupal_set_message('The block bulider has been deleted');
   drupal_goto('admin/gavias_content_builder');
 }
 
@@ -34,7 +34,7 @@ function gavias_content_builder_export($gid){
 function gavias_content_builder_import($bid) {
   $bid = arg(2);
   if (is_numeric($bid)) {
-    $bblock = \Drupal::database()->select('{gavias_content_builder}', 'd')
+    $bblock = db_select('{gavias_content_builder}', 'd')
        ->fields('d')
        ->condition('id', $bid, '=')
        ->execute()
@@ -44,7 +44,7 @@ function gavias_content_builder_import($bid) {
   }
 
   if($bblock['id']==0){
-    \Drupal::messenger()->addMessage('Not found gavias block builder !');
+    drupal_set_message('Not found gavias block builder !');
     return false;
   }
 
@@ -68,13 +68,13 @@ function gavias_content_builder_import($bid) {
 function gavias_content_builder_import_submit($form, $form_state) {
   if ($form['id']['#value']) {
     $id = $form['id']['#value'];
-    $builder = \Drupal::database()->update("gavias_content_builder")
+    db_update("gavias_content_builder")
       ->fields(array(
           'params' => $form['params']['#value'],
       ))
       ->condition('id', $id)
       ->execute();
     drupal_goto('admin/gavias_content_builder/'.$id.'/edit');
-    \Drupal::messenger()->addMessage("Block Builder '{$form['title']['#value']}' has been updated");
+    drupal_set_message("Block Builder '{$form['title']['#value']}' has been updated");
   } 
 }

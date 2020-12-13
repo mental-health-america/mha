@@ -2,13 +2,10 @@
 
 namespace Drupal\simple_popup_blocks\Controller;
 
-use Drupal\Core\Database\Connection;
-use Drupal\Core\Messenger\Messenger;
 use Drupal\Core\Url;
 use Drupal\Core\Link;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\simple_popup_blocks\SimplePopupBlocksStorage;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Controller routines for manage page routes.
@@ -16,43 +13,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class SimplePopupBlocksController extends ControllerBase {
 
   /**
-   * Messenger object.
-   *
-   * @var Messenger
-   */
-  protected $messenger;
-
-  /**
-   * Connection object.
-   *
-   * @var Connection
-   */
-  private $database;
-
-  /**
-   * {@inheritdoc}
-   */
-  public function __construct(Messenger $messenger, Connection $database) {
-    $this->messenger = $messenger;
-    $this->database = $database;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('messenger'),
-      $container->get('database')
-    );
-  }
-
-
-  /**
    * Manage page controller method to list the data.
    */
   public function manage() {
-    $trigger_method = '';
     $header = [
       ['data' => $this->t('S.No')],
       ['data' => $this->t('Popup selector')],
@@ -64,7 +27,7 @@ class SimplePopupBlocksController extends ControllerBase {
       ['data' => $this->t('Delete')],
     ];
 
-    $result = SimplePopupBlocksStorage::loadAll($this->database);
+    $result = SimplePopupBlocksStorage::loadAll();
 
     $rows = [];
     $increment = 1;
@@ -142,10 +105,11 @@ class SimplePopupBlocksController extends ControllerBase {
    * Delete page controller.
    */
   public function delete($first) {
-    $result = SimplePopupBlocksStorage::delete($first, $this->database);
+    $result = SimplePopupBlocksStorage::delete($first);
     if ($result) {
-      $this->messenger->addMessage($this->t('Successfully deleted the popup settings.'));
+      drupal_set_message($this->t('Successfully deleted the popup settings.'));
     }
     return $this->redirect('simple_popup_blocks.manage');
   }
+
 }

@@ -9,14 +9,8 @@ function gavias_slider_makeid($length = 5){
 }
 
 function gavias_slider_writecache( $folder, $file, $value, $e='css' ){
-  $file   = $folder  . preg_replace('/[^A-Z0-9\._-]/i', '', $file).'.'.$e ;
-  $handle = fopen($file, 'w+');
-    fwrite($handle, ($value));
-    fclose($handle);
-}
-
-if(!function_exists('file_default_scheme')){
-  function file_default_scheme(){
-    return \Drupal::config('system.file')->get('default_scheme');
+    $file   = $folder  . preg_replace('/[^A-Z0-9\._-]/i', '', $file).'.'.$e ;
+    $handle = fopen($file, 'w+');
+      fwrite($handle, ($value));
+      fclose($handle);
   }
-}

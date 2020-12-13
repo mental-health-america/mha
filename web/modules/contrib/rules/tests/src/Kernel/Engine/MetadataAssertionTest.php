@@ -19,7 +19,7 @@ class MetadataAssertionTest extends RulesKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'rules',
     'typed_data',
     'system',

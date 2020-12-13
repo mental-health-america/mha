@@ -4,7 +4,9 @@ namespace Drupal\webform\Utility;
 
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\Component\Serialization\Json;
+use Drupal\Component\Utility\Xss;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Markup;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Template\Attribute;
 use Drupal\webform\Plugin\WebformElement\WebformCompositeBase;
@@ -84,21 +86,6 @@ class WebformElementHelper {
    */
   public static function isElement($element, $key) {
     return (Element::child($key) && is_array($element));
-  }
-
-  /**
-   * Determine if an element is accessible.
-   *
-   * @param array|mixed $element
-   *   An element.
-   *
-   * @return bool
-   *   TRUE if an element is accessible.
-   *
-   * @see \Drupal\Core\Render\Element::isVisibleElement
-   */
-  public static function isAccessibleElement($element) {
-    return (isset($element['#access']) && $element['#access'] === FALSE) ? FALSE : TRUE;
   }
 
   /**
@@ -259,9 +246,7 @@ class WebformElementHelper {
   public static function getProperties(array $element) {
     $properties = [];
     foreach ($element as $key => $value) {
-      // Make sure the element key is a string.
-      $key = (string) $key;
-      if ($key && Element::property($key)) {
+      if (Element::property($key)) {
         $properties[$key] = $value;
       }
     }
@@ -575,7 +560,7 @@ class WebformElementHelper {
   public static function getFlattened(array $elements) {
     $flattened_elements = [];
     foreach ($elements as $key => &$element) {
-      if (!self::isElement($element, $key)) {
+      if (!WebformElementHelper::isElement($element, $key)) {
         continue;
       }
 

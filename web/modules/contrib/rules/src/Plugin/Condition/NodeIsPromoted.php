@@ -11,12 +11,10 @@ use Drupal\rules\Core\RulesConditionBase;
  * @Condition(
  *   id = "rules_node_is_promoted",
  *   label = @Translation("Node is promoted"),
- *   category = @Translation("Content"),
- *   context_definitions = {
+ *   category = @Translation("Node"),
+ *   context = {
  *     "node" = @ContextDefinition("entity:node",
- *       label = @Translation("Node"),
- *       description = @Translation("Specifies the node for which to evaluate the condition."),
- *       assignment_restriction = "selector"
+ *       label = @Translation("Node")
  *     ),
  *   }
  * )

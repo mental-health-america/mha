@@ -2,8 +2,8 @@
 
 namespace Drupal\rules\Plugin\RulesExpression;
 
-use Drupal\rules\Context\ExecutionStateInterface;
 use Drupal\rules\Engine\ActionExpressionContainer;
+use Drupal\rules\Engine\ExecutionStateInterface;
 
 /**
  * Holds a set of actions and executes all of them.
@@ -27,9 +27,7 @@ class ActionSetExpression extends ActionExpressionContainer {
    * {@inheritdoc}
    */
   public function executeWithState(ExecutionStateInterface $state) {
-    // Use the iterator to ensure the actions are sorted.
-    foreach ($this as $action) {
-      /* @var \Drupal\rules\Engine\ExpressionInterface $action */
+    foreach ($this->actions as $action) {
       $action->executeWithState($state);
     }
   }

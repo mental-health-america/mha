@@ -41,9 +41,7 @@
           // All of the above.
           if ($options_all.length) {
             $options_all.on('click', toggleCheckAllEventHandler);
-            if ($options_all.prop('checked')) {
-              toggleCheckAllEventHandler();
-            }
+            toggleCheckAllEventHandler();
           }
 
           // None of the above.

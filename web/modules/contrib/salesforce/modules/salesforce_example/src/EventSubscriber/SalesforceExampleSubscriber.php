@@ -2,8 +2,6 @@
 
 namespace Drupal\salesforce_example\EventSubscriber;
 
-use Drupal\Core\File\FileSystemInterface;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\salesforce\Event\SalesforceEvents;
 use Drupal\salesforce_mapping\Event\SalesforcePullEvent;
 use Drupal\salesforce_mapping\Event\SalesforcePushOpEvent;
@@ -21,8 +19,6 @@ use Drupal\salesforce_mapping\Event\SalesforceQueryEvent;
  * @package Drupal\salesforce_example
  */
 class SalesforceExampleSubscriber implements EventSubscriberInterface {
-
-  use StringTranslationTrait;
 
   /**
    * SalesforcePushAllowedEvent callback.
@@ -79,7 +75,7 @@ class SalesforceExampleSubscriber implements EventSubscriberInterface {
         // Do Y.
         break;
     }
-    \Drupal::messenger()->addStatus('push success example subscriber!: ' . $event->getMappedObject()->sfid());
+    drupal_set_message('push success example subscriber!: ' . $event->getMappedObject()->sfid());
   }
 
   /**
@@ -89,7 +85,7 @@ class SalesforceExampleSubscriber implements EventSubscriberInterface {
    *   The event.
    */
   public function pushFail(SalesforcePushOpEvent $event) {
-    \Drupal::messenger()->addStatus('push fail example: ' . $event->getMappedObject()->id());
+    drupal_set_message('push fail example: ' . $event->getMappedObject()->id());
   }
 
   /**
@@ -156,16 +152,16 @@ class SalesforceExampleSubscriber implements EventSubscriberInterface {
         }
         catch (\Exception $e) {
           // Unable to fetch file data from SF.
-          \Drupal::logger('db')->error($this->t('failed to fetch attachment for user @user', ['@user' => $account->id()]));
+          \Drupal::logger('db')->error(t('failed to fetch attachment for user @user', ['@user' => $account->id()]));
           return;
         }
 
         // Fetch file destination from account settings.
         $destination = "public://user_picture/profilepic-" . $sf_data->id() . ".jpg";
 
-        // Attach the new file id to the user entity.
+        // Attach the new file id to the user entity
         /* var \Drupal\file\FileInterface */
-        if ($file = file_save_data($file_data, $destination, FileSystemInterface::EXISTS_REPLACE)) {
+        if ($file = file_save_data($file_data, $destination, FILE_EXISTS_REPLACE)) {
           $account->user_picture->target_id = $file->id();
         }
         else {

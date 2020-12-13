@@ -57,4 +57,11 @@ class ConfigurableEventHandlerEntityBundle extends ConfigurableEventHandlerBase 
     // Nothing to refine by default.
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function calculateDependencies() {
+    // Nothing to calculate by default.
+  }
+
 }

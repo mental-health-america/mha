@@ -6,7 +6,6 @@ use Drupal\Component\Utility\Xss;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element\FormElement;
 use Drupal\webform\Utility\WebformElementHelper;
-use Drupal\webform\Utility\WebformFormHelper;
 use Drupal\webform\Utility\WebformXss;
 
 /**
@@ -144,7 +143,7 @@ class WebformHtmlEditor extends FormElement {
     }
 
     if (!empty($element['#states'])) {
-      WebformFormHelper::processStates($element, '#wrapper_attributes');
+      webform_process_states($element, '#wrapper_attributes');
     }
 
     return $element;

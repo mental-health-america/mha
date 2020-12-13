@@ -12,11 +12,10 @@ use Drupal\Core\Entity\EntityInterface;
  *   id = "rules_list_contains",
  *   label = @Translation("List contains item"),
  *   category = @Translation("Data"),
- *   context_definitions = {
+ *   context = {
  *     "list" = @ContextDefinition("list",
  *       label = @Translation("List"),
- *       description = @Translation("The list to be checked."),
- *       assignment_restriction = "selector"
+ *       description = @Translation("The list to be checked.")
  *     ),
  *     "item" = @ContextDefinition("any",
  *       label = @Translation("Item"),
@@ -27,6 +26,7 @@ use Drupal\Core\Entity\EntityInterface;
  *
  * @todo Add access callback information from Drupal 7?
  * @todo Add group information from Drupal 7?
+ * @todo Set ContextDefinition restriction
  * @todo Add info alter
  */
 class DataListContains extends RulesConditionBase {
@@ -34,7 +34,7 @@ class DataListContains extends RulesConditionBase {
   /**
    * Evaluate whether the list has the item.
    *
-   * @param array|\Drupal\Core\TypedData\ListInterface $list
+   * @param array|ListInterface $list
    *   List to be searched.
    * @param mixed $item
    *   Item to be found in list.

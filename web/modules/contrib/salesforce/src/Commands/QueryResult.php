@@ -11,25 +11,8 @@ use Drupal\salesforce\SelectQueryResult;
  */
 class QueryResult extends RowsOfFieldsWithMetadata {
 
-  /**
-   * Size of query result.
-   *
-   * @var int
-   */
   protected $size;
-
-  /**
-   * Total records returned by query.
-   *
-   * @var int
-   */
   protected $total;
-
-  /**
-   * The query.
-   *
-   * @var \Drupal\salesforce\SelectQueryInterface
-   */
   protected $query;
 
   /**

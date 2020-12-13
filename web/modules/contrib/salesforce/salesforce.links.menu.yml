@@ -1,3 +1,9 @@
+salesforce.structure_index:
+  route_name: salesforce.structure_index
+  parent: system.admin_structure
+  title: Salesforce
+  description: 'Manage Salesforce mappings.'
+
 salesforce.admin_config_salesforce:
   route_name: salesforce.admin_config_salesforce
   parent: system.admin_config
@@ -11,14 +17,16 @@ salesforce.global_settings:
   description: 'Manage global settings for Salesforce Suite.'
   weight: -100
 
-salesforce.auth_config:
-  route_name: salesforce.auth_config
+salesforce.authorize:
+  route_name: salesforce.authorize
   parent: salesforce.admin_config_salesforce
   title: Salesforce Authorization
-  description: 'Salesforce Authorization.'
+  description: 'Manage OAuth consumer key and secret and authorize. View existing authorization details.'
+  weight: 99
 
-entity.salesforce_auth.collection:
-  route_name: entity.salesforce_auth.collection
-  parent: salesforce.auth_config
-  title: Salesforce Authorization Providers
-  description: 'Salesforce Authorization Providers.'
+salesforce.revoke:
+  route_name: salesforce.revoke
+  parent: salesforce.admin_config_salesforce
+  title: Revoke Salesforce Authorization
+  description: 'Revoke OAuth tokens.'
+  weight: 100

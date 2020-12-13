@@ -31,7 +31,7 @@ class WebformElementTextFormatTest extends WebformElementBrowserTestBase {
   protected static $testWebforms = ['test_element_text_format'];
 
   /**
-   * The file usage service.
+   * File usage manager.
    *
    * @var \Drupal\file\FileUsage\FileUsageInterface
    */

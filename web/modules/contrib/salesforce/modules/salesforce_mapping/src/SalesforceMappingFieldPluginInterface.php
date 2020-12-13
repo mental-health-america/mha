@@ -2,18 +2,14 @@
 
 namespace Drupal\salesforce_mapping;
 
-use Drupal\Component\Plugin\ConfigurableInterface;
-use Drupal\Component\Plugin\DependentPluginInterface;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\salesforce\SObject;
 use Drupal\salesforce_mapping\Entity\SalesforceMappingInterface;
 
 /**
  * Defines an interface for salesforce mapping plugins.
  */
-interface SalesforceMappingFieldPluginInterface extends PluginFormInterface, DependentPluginInterface, ConfigurableInterface, ContainerFactoryPluginInterface {
+interface SalesforceMappingFieldPluginInterface {
 
   /**
    * Returns label of the mapping field plugin.
@@ -143,14 +139,15 @@ interface SalesforceMappingFieldPluginInterface extends PluginFormInterface, Dep
   public function pull();
 
   /**
-   * On dependency removal, determine if this plugin needs to be removed.
+   * Return an array of dependencies.
    *
-   * @param array $dependencies
-   *   Dependencies, as provided to ConfigEntityInterface::onDependencyRemoval.
+   * Compatible with DependentPluginInterface::calculateDependencies().
    *
-   * @return bool
-   *   TRUE if the field should be removed, otherwise false.
+   * @return array
+   *   Depdencies.
+   *
+   * @see \Drupal\Component\Plugin\DependentPluginInterface::calculateDependencies
    */
-  public function checkFieldMappingDependency(array $dependencies);
+  public function getDependencies(SalesforceMappingInterface $mapping);
 
 }

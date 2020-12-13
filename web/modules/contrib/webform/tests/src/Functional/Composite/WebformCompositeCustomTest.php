@@ -49,7 +49,7 @@ class WebformCompositeCustomTest extends WebformBrowserTestBase {
 webform_custom_composite_advanced:
   - first_name: John
     last_name: Smith
-    sex: Male
+    gender: Male
     martial_status: Single
     employment_status: Unemployed
     age: '20'");

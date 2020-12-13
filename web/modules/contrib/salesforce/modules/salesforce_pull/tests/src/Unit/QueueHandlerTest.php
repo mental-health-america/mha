@@ -25,12 +25,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * @group salesforce_pull
  */
 class QueueHandlerTest extends UnitTestCase {
-
-  /**
-   * Required modules.
-   *
-   * @var array
-   */
   static public $modules = ['salesforce_pull'];
 
   /**
@@ -65,7 +59,7 @@ class QueueHandlerTest extends UnitTestCase {
       ->willReturn($this->sqrDone);
     $this->sfapi = $prophecy->reveal();
 
-    $this->mapping = $this->getMockBuilder(SalesforceMappingInterface::CLASS)->getMock();
+    $this->mapping = $this->getMock(SalesforceMappingInterface::CLASS);
     $this->mapping->expects($this->any())
       ->method('__get')
       ->with($this->equalTo('id'))
@@ -121,7 +115,7 @@ class QueueHandlerTest extends UnitTestCase {
     $prophecy->dispatch(Argument::any(), Argument::any())->willReturn();
     $this->ed = $prophecy->reveal();
 
-    $this->time = $this->getMockBuilder(TimeInterface::CLASS)->getMock();
+    $this->time = $this->getMock(TimeInterface::CLASS);
 
     $this->qh = $this->getMockBuilder(QueueHandler::CLASS)
       ->setMethods(['parseUrl'])

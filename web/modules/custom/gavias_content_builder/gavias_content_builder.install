@@ -1,6 +1,7 @@
 <?php
+
 function gavias_content_builder_schema() {
-  if(!\Drupal::database()->schema()->tableExists('gavias_content_builder')){
+  if(!db_table_exists('gavias_content_builder')){
     $schema['gavias_content_builder'] = array(
       'fields' => array(
         'id' => array(

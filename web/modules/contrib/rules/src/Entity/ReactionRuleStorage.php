@@ -2,8 +2,6 @@
 
 namespace Drupal\rules\Entity;
 
-use Drupal\Core\Cache\Cache;
-use Drupal\Core\Cache\MemoryCache\MemoryCacheInterface;
 use Drupal\Core\Config\Entity\ConfigEntityStorage;
 use Drupal\Core\DrupalKernelInterface;
 use Drupal\Core\State\StateInterface;
@@ -57,14 +55,12 @@ class ReactionRuleStorage extends ConfigEntityStorage {
    * @param \Drupal\Core\State\StateInterface $state_service
    *   The state service.
    * @param \Drupal\Core\DrupalKernelInterface $drupal_kernel
-   *   The Drupal kernel.
+   *   The drupal kernel.
    * @param \Drupal\rules\Core\RulesEventManager $event_manager
    *   The Rules event manager.
-   * @param \Drupal\Core\Cache\MemoryCache\MemoryCacheInterface|null $memory_cache
-   *   The memory cache backend.
    */
-  public function __construct(EntityTypeInterface $entity_type, ConfigFactoryInterface $config_factory, UuidInterface $uuid_service, LanguageManagerInterface $language_manager, StateInterface $state_service, DrupalKernelInterface $drupal_kernel, RulesEventManager $event_manager, MemoryCacheInterface $memory_cache = NULL) {
-    parent::__construct($entity_type, $config_factory, $uuid_service, $language_manager, $memory_cache);
+  public function __construct(EntityTypeInterface $entity_type, ConfigFactoryInterface $config_factory, UuidInterface $uuid_service, LanguageManagerInterface $language_manager, StateInterface $state_service, DrupalKernelInterface $drupal_kernel, RulesEventManager $event_manager) {
+    parent::__construct($entity_type, $config_factory, $uuid_service, $language_manager);
 
     $this->stateService = $state_service;
     $this->drupalKernel = $drupal_kernel;
@@ -82,8 +78,7 @@ class ReactionRuleStorage extends ConfigEntityStorage {
       $container->get('language_manager'),
       $container->get('state'),
       $container->get('kernel'),
-      $container->get('plugin.manager.rules_event'),
-      $container->get('entity.memory_cache')
+      $container->get('plugin.manager.rules_event')
     );
   }
 
@@ -95,8 +90,7 @@ class ReactionRuleStorage extends ConfigEntityStorage {
    */
   protected function getRegisteredEvents() {
     $events = [];
-    // 'status' == TRUE when the reaction rule is active.
-    foreach ($this->loadByProperties(['status' => TRUE]) as $rules_config) {
+    foreach ($this->loadMultiple() as $rules_config) {
       foreach ($rules_config->getEventNames() as $event_name) {
         $event_name = $this->eventManager->getEventBaseName($event_name);
         if (!isset($events[$event_name])) {
@@ -116,28 +110,20 @@ class ReactionRuleStorage extends ConfigEntityStorage {
     // not.
     $events_before = $this->getRegisteredEvents();
     $return = parent::save($entity);
-    $events_after = $this->getRegisteredEvents();
 
     // Update the state of registered events.
-    $this->stateService->set('rules.registered_events', $events_after);
+    $this->stateService->set('rules.registered_events', $this->getRegisteredEvents());
 
-    // After the reaction rule is saved, we may need to rebuild the container,
+    // After the reaction rule is saved, we need to rebuild the container,
     // otherwise the reaction rule will not fire. However, we can do an
-    // optimization: Only rebuild the container if there is a new event which
-    // was not already registered before. Similarly if the rule is being
-    // disabled and there are no other active rules with this event, then also
-    // rebuild the container.
+    // optimization: if every event was already registered before, we do not
+    // have to rebuild the container.
     foreach ($entity->getEventNames() as $event_name) {
-      if (empty($events_before[$event_name]) || empty($events_after[$event_name])) {
+      if (empty($events_before[$event_name])) {
         $this->drupalKernel->rebuildContainer();
         break;
       }
     }
-
-    // When a reaction rule is saved (either added, updated or enabled/disabled)
-    // the cache for its event(s) needs to be invalidated. These tags are set in
-    // RulesComponentRepository::getMultiple()
-    Cache::invalidateTags($entity->getEventNames());
 
     return $return;
   }
@@ -146,11 +132,6 @@ class ReactionRuleStorage extends ConfigEntityStorage {
    * {@inheritdoc}
    */
   public function delete(array $entities) {
-    // When a rule is deleted the cache for its event(s) must be invalidated.
-    foreach ($entities as $entity) {
-      Cache::invalidateTags($entity->getEventNames());
-    }
-
     // After deleting a set of reaction rules, sometimes we may need to rebuild
     // the container, to clean it up, so that the generic subscriber is not
     // registered in the container for the rule events which we do not use

@@ -27,10 +27,10 @@ elements: |
       '#title': 'Last Name'
       '#type': textfield
       '#required': true
-    sex:
+    gender:
       '#type': webform_radios_other
-      '#title': Sex
-      '#options': sex
+      '#title': Gender
+      '#options': gender
       '#required': true
   contact_information:
     '#title': 'Contact Information'
@@ -84,7 +84,7 @@ elements: |
     '#type': webform_actions
     '#title': 'Submit button(s)'
     '#submit__label': Apply
-  
+
 css: ''
 javascript: ''
 settings:
@@ -105,7 +105,7 @@ settings:
   form_previous_submissions: true
   form_confidential: false
   form_confidential_message: ''
-  form_disable_remote_addr: false
+  form_remote_addr: true
   form_convert_anonymous: false
   form_prepopulate: false
   form_prepopulate_source_entity: false
@@ -214,7 +214,6 @@ settings:
   results_customize: false
   token_view: false
   token_update: false
-  token_delete: false
   serial_disabled: false
 access:
   create:

@@ -10,7 +10,7 @@ abstract class SalesforceExceptionEvent extends SalesforceBaseEvent implements S
   /**
    * Exception.
    *
-   * @var \Throwable|null
+   * @var \Exception|null
    */
   protected $exception;
 
@@ -40,14 +40,14 @@ abstract class SalesforceExceptionEvent extends SalesforceBaseEvent implements S
    *
    * @param string $level
    *   Values are RfcLogLevel::NOTICE, RfcLogLevel::WARNING, RfcLogLevel::ERROR.
-   * @param \Throwable|null $e
+   * @param \Exception|null $e
    *   A related Exception, if available.
    * @param string $message
    *   The translatable message string, suitable for t().
    * @param array $context
    *   Parameter array suitable for t(), to be translated for $message.
    */
-  public function __construct($level, \Throwable $e = NULL, $message = '', array $context = []) {
+  public function __construct($level, \Exception $e = NULL, $message = '', array $context = []) {
     $this->exception = $e;
     $this->level = $level;
     $this->message = $message;

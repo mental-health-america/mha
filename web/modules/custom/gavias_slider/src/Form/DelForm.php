@@ -70,12 +70,12 @@ class DelForm extends ConfirmFormBase  {
   public function submitForm(array &$form, FormStateInterface $form_state) {
      $sid = $this->sid;
     if(!$sid && \Drupal::request()->attributes->get('sid')) $sid = \Drupal::request()->attributes->get('sid');
-    \Drupal::database()->delete('gavias_slider')
+    db_delete('gavias_slider')
             ->condition('id', $sid)
             ->execute();
     \Drupal::service('plugin.manager.block')->clearCachedDefinitions();
-    \Drupal::messenger()->addMessage("Slider '#{$sid}' has been delete");
-    $response = new \Symfony\Component\HttpFoundation\RedirectResponse(Url::fromRoute('gavias_slider.admin')->toString());
+    drupal_set_message("Slider '#{$sid}' has been delete");
+    $response = new \Symfony\Component\HttpFoundation\RedirectResponse(\Drupal::url('gavias_slider.admin'));
     $response->send();
   }
 

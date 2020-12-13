@@ -2,4 +2,4 @@ name: Webform Stess Screen
 type: module
 description: 'Redirect Webform based on score'
 package: Custom
-core_version_requirement: ^8 || ^9
+core: 8.x

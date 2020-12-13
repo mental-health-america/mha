@@ -92,6 +92,7 @@ class WebformSubmissionAccessTest extends WebformAccessTestBase {
     // Check wizard page access.
     $this->assertEquals(AccessResult::neutral(), WebformSubmissionAccess::checkWizardPagesAccess($webform_submission));
     $this->assertEquals(AccessResult::allowed(), WebformSubmissionAccess::checkWizardPagesAccess($webform_wizard_submission));
+
   }
 
 }

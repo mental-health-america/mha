@@ -9,7 +9,6 @@ namespace Drupal\gavias_content_builder\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Url;
 
 /**
  * Provides blocks which belong to Gavias BuilderBlock.
@@ -44,7 +43,7 @@ class GaviasContentBuilderBlock extends BlockBase {
         $url = \Drupal::request()->getRequestUri();
         $edit_url = '';
         if($user->hasPermission('administer gavias_content_builder')){
-          $edit_url = Url::fromRoute('gavias_content_builder.admin.edit', array('bid' => $bid, 'destination' =>  $url))->toString();
+          $edit_url = \Drupal::url('gavias_content_builder.admin.edit', array('bid' => $bid, 'destination' =>  $url));
         }
         $block = array(
           '#theme' => 'builder',

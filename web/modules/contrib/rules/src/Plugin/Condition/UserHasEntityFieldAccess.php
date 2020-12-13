@@ -16,29 +16,18 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   id = "rules_entity_field_access",
  *   label = @Translation("User has entity field access"),
  *   category = @Translation("User"),
- *   context_definitions = {
+ *   context = {
  *     "entity" = @ContextDefinition("entity",
- *       label = @Translation("Entity"),
- *       description = @Translation("Specifies the entity for which to evaluate the condition."),
- *       assignment_restriction = "selector"
+ *       label = @Translation("Entity")
  *     ),
  *     "field" = @ContextDefinition("string",
- *       label = @Translation("Field"),
- *       description = @Translation("The name of the field to check for."),
- *       assignment_restriction = "input"
+ *       label = @Translation("Field")
  *     ),
  *     "operation" = @ContextDefinition("string",
- *       label = @Translation("Access operation"),
- *       description = @Translation("The access type to check."),
- *       assignment_restriction = "input",
- *       default_value = "view",
- *       required = FALSE
+ *       label = @Translation("Operation")
  *     ),
  *     "user" = @ContextDefinition("entity:user",
- *       label = @Translation("User"),
- *       description = @Translation("Specifies the user account for which to check access. If left empty, the currently logged in user will be used."),
- *       assignment_restriction = "selector",
- *       required = FALSE
+ *       label = @Translation("User")
  *     ),
  *   }
  * )

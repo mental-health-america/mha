@@ -38,23 +38,31 @@ use Drupal\salesforce_mapping\PushParams;
  *     "storage" = "Drupal\salesforce_mapping\MappedObjectStorage",
  *     "storage_schema" = "Drupal\salesforce_mapping\MappedObjectStorageSchema",
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
- *     "views_data" = "Drupal\views\EntityViewsData",
+ *      "views_data" = "Drupal\views\EntityViewsData",
+ *     "list_builder" = "Drupal\salesforce_mapping\MappedObjectList",
+ *     "form" = {
+ *       "default" = "Drupal\salesforce_mapping\Form\MappedObjectForm",
+ *       "add" = "Drupal\salesforce_mapping\Form\MappedObjectForm",
+ *       "edit" = "Drupal\salesforce_mapping\Form\MappedObjectForm",
+ *       "delete" = "Drupal\salesforce_mapping\Form\MappedObjectDeleteForm",
+ *      },
  *     "access" = "Drupal\salesforce_mapping\MappedObjectAccessControlHandler",
  *   },
  *   base_table = "salesforce_mapped_object",
  *   revision_table = "salesforce_mapped_object_revision",
  *   admin_permission = "administer salesforce mapping",
+ *   links = {
+ *     "canonical" = "/admin/content/salesforce/{salesforce_mapped_object}",
+ *     "add-form" = "/admin/content/salesforce/add",
+ *     "edit-form" = "/admin/content/salesforce/{salesforce_mapped_object}/edit",
+ *     "delete-form" = "/admin/content/salesforce/{salesforce_mapped_object}/delete"
+ *   },
  *   entity_keys = {
  *      "id" = "id",
  *      "entity_id" = "drupal_entity__target_id",
  *      "salesforce_id" = "salesforce_id",
  *      "revision" = "revision_id",
  *      "label" = "salesforce_id"
- *   },
- *   revision_metadata_keys = {
- *     "revision_user" = "revision_user",
- *     "revision_created" = "revision_created",
- *     "revision_log_message" = "revision_log_message"
  *   },
  *   constraints = {
  *     "MappingSfid" = {},
@@ -101,24 +109,6 @@ class MappedObject extends RevisionableContentEntityBase implements MappedObject
   /**
    * {@inheritdoc}
    */
-  public function preSaveRevision(EntityStorageInterface $storage, \stdClass $record) {
-    // Revision uid, timestamp, and message are required for D9.
-    if ($this->isNewRevision()) {
-      if (empty($this->getRevisionUserId())) {
-        $this->setRevisionUserId(1);
-      }
-      if (empty($this->getRevisionCreationTime())) {
-        $this->setRevisionCreationTime(time());
-      }
-      if (empty($this->getRevisionLogMessage())) {
-        $this->setRevisionLogMessage('New revision');
-      }
-    }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function save() {
     $this->changed = $this->getRequestTime();
     if ($this->isNew()) {
@@ -146,7 +136,7 @@ class MappedObject extends RevisionableContentEntityBase implements MappedObject
       ->get('limit_mapped_object_revisions');
     if ($limit <= 0) {
       // Limit 0 means no limit.
-      return $this;
+      return;
     }
     $count = $storage
       ->getQuery()
@@ -157,7 +147,7 @@ class MappedObject extends RevisionableContentEntityBase implements MappedObject
 
     // Query for any revision id beyond the limit.
     if ($count <= $limit) {
-      return $this;
+      return;
     }
     $vids_to_delete = $storage
       ->getQuery()
@@ -167,7 +157,7 @@ class MappedObject extends RevisionableContentEntityBase implements MappedObject
       ->sort('changed', 'DESC')
       ->execute();
     if (empty($vids_to_delete)) {
-      return $this;
+      return;
     }
     foreach ($vids_to_delete as $vid => $dummy) {
       /** @var \Drupal\Core\Entity\RevisionableInterface $revision */
@@ -187,22 +177,24 @@ class MappedObject extends RevisionableContentEntityBase implements MappedObject
    */
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
     $i = 0;
-    $fields['drupal_entity'] = BaseFieldDefinition::create('dynamic_entity_reference')
-      ->setLabel(t('Mapped Entity'))
-      ->setDescription(t('Reference to the Drupal entity mapped by this mapped object.'))
-      ->setRevisionable(FALSE)
-      ->setCardinality(1)
-      ->setDisplayOptions('form', [
-        'type' => 'dynamic_entity_reference_default',
-        'weight' => $i,
-      ])
-      ->setDisplayOptions('view', [
-        'label' => 'above',
-        'type' => 'dynamic_entity_reference_label',
-        'weight' => $i++,
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
+    if (\Drupal::moduleHandler()->moduleExists('dynamic_entity_reference')) {
+      $fields['drupal_entity'] = BaseFieldDefinition::create('dynamic_entity_reference')
+        ->setLabel(t('Mapped Entity'))
+        ->setDescription(t('Reference to the Drupal entity mapped by this mapped object.'))
+        ->setRevisionable(FALSE)
+        ->setCardinality(1)
+        ->setDisplayOptions('form', [
+          'type' => 'dynamic_entity_reference_default',
+          'weight' => $i,
+        ])
+        ->setDisplayOptions('view', [
+          'label' => 'above',
+          'type' => 'dynamic_entity_reference_label',
+          'weight' => $i++,
+        ])
+        ->setDisplayConfigurable('form', TRUE)
+        ->setDisplayConfigurable('view', TRUE);
+    }
 
     $fields['salesforce_mapping'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Salesforce mapping'))
@@ -364,15 +356,8 @@ class MappedObject extends RevisionableContentEntityBase implements MappedObject
   /**
    * {@inheritdoc}
    */
-  public function authMan() {
-    return \Drupal::service('plugin.manager.salesforce.auth_providers');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getSalesforceUrl() {
-    return $this->authMan()->getProvider()->getInstanceUrl() . '/' . $this->salesforce_id->value;
+    return $this->client()->getInstanceUrl() . '/' . $this->salesforce_id->value;
   }
 
   /**
@@ -405,6 +390,9 @@ class MappedObject extends RevisionableContentEntityBase implements MappedObject
     //    set?  Update.
     // 2. Not mapped, but upsert key is defined?  Upsert.
     // 3. Not mapped & no upsert key?  Create.
+    $result = FALSE;
+    $action = '';
+
     if ($this->sfid() && !$mapping->alwaysUpsert()) {
       $action = 'update';
       $result = $this->client()->objectUpdate(

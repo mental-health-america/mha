@@ -25,7 +25,7 @@ trait TokenTestTrait {
     foreach ($tokens as $name => $expected) {
       $token = $input[$name];
       if (!isset($expected)) {
-        $this->assertArrayNotHasKey($token, $replacements, t("Token value for @token was not generated.", ['@token' => $token]));
+        $this->assertTrue(!isset($replacements[$token]), t("Token value for @token was not generated.", ['@type' => $type, '@token' => $token]));
       }
       elseif (!isset($replacements[$token])) {
         $this->fail(t("Token value for @token was not generated.", ['@type' => $type, '@token' => $token]));

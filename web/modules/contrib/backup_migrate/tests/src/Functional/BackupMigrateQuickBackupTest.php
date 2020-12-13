@@ -2,8 +2,6 @@
 
 namespace Drupal\Tests\backup_migrate\Functional;
 
-use Drupal\Core\File\FileSystemInterface;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Tests\BrowserTestBase;
 
 /**
@@ -12,7 +10,6 @@ use Drupal\Tests\BrowserTestBase;
  * @group backup_migrate
  */
 class BackupMigrateQuickBackupTest extends BrowserTestBase {
-  use StringTranslationTrait;
 
   /**
    * {@inheritdoc}
@@ -27,35 +24,23 @@ class BackupMigrateQuickBackupTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected $defaultTheme = 'stark';
-
-  /**
-   * {@inheritdoc}
-   */
   public function setUp() {
     parent::setUp();
 
     // Ensure backup_migrate folder exists.
     $path = 'private://backup_migrate/';
-    \Drupal::service('file_system')
-      ->prepareDirectory($path, FileSystemInterface::CREATE_DIRECTORY);
-
-    // Log in as an admin.
-    $this->drupalLogin($this->drupalCreateUser([
-      'perform backup',
-      'access backup files',
-      'administer backup and migrate',
-      // Required for the file admin page.
-      'administer site configuration',
-    ]));
-    $this->drupalGet('admin/config/media/file-system');
+    file_prepare_directory($path, FILE_CREATE_DIRECTORY);
   }
 
   /**
    * Tests quick backup.
    */
   public function testQuickBackup() {
-    // Load the main B&M admin page.
+    $this->drupalLogin($this->drupalCreateUser([
+      'perform backup',
+      'access backup files',
+      'administer backup and migrate',
+    ]));
     $this->drupalGet('admin/config/development/backup_migrate');
     $this->assertSession()->statusCodeEquals(200);
 
@@ -64,10 +49,7 @@ class BackupMigrateQuickBackupTest extends BrowserTestBase {
       'source_id' => 'default_db',
       'destination_id' => 'private_files',
     ];
-    $this->submitForm($data, $this->t('Backup now'));
-
-    // Confirm that the form submitted.
-    $this->assertSession()->pageTextContains('Backup Complete.');
+    $this->submitForm($data, t('Backup now'));
 
     // Get backups page.
     $this->drupalGet('admin/config/development/backup_migrate/backups');

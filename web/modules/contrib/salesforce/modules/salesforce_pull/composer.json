@@ -1,11 +1,11 @@
 {
-    "name": "drupal/salesforce_pull",
-    "description": "Pull data from salesforce to drupal.",
-    "type": "drupal-module",
+    "name": "org/salesforce_pull",
+    "description": "This extension provides new commands for Drush.",
+    "type": "drupal-drush",
     "authors": [
         {
-            "name": "Aaron Bauman",
-            "email": "aaron@messageagency.com"
+            "name": "Author name",
+            "email": "author@example.com"
         }
     ],
     "require": {

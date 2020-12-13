@@ -31,7 +31,9 @@ class DelimitedWebformExporter extends TabularBaseWebformExporter {
    */
   public function setConfiguration(array $configuration) {
     parent::setConfiguration($configuration);
-    $this->configuration['delimiter'] = ($this->configuration['delimiter'] === '\t') ? "\t" : $this->configuration['delimiter'];
+    if ($this->configuration['delimiter'] === '\t') {
+      $this->configuration['delimiter'] = "\t";
+    }
     return $this;
   }
 
@@ -59,12 +61,12 @@ class DelimitedWebformExporter extends TabularBaseWebformExporter {
         '.'  => $this->t('Period (.)'),
         ' '  => $this->t('Space ( )'),
       ],
-      '#default_value' => ($this->configuration['delimiter'] === "\t") ? '\t' : $this->configuration['delimiter'],
+      '#default_value' => $this->configuration['delimiter'],
     ];
     $form['excel'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Generate Excel compatible file'),
-      '#description' => $this->t("If checked, the generated file's carriage returns will be compatible with Excel and a marker flagging the data as UTF-8 will be added at the beginning."),
+      '#description' => $this->t("If checked, the generated file's carriage returns will be compatible with Excel."),
       '#return_value' => TRUE,
       '#default_value' => $this->configuration['excel'],
     ];
@@ -88,9 +90,6 @@ class DelimitedWebformExporter extends TabularBaseWebformExporter {
    * {@inheritdoc}
    */
   public function writeHeader() {
-    if ($this->configuration['excel']) {
-      fwrite($this->fileHandle, "\xEF\xBB\xBF");
-    }
     $header = $this->buildHeader();
     fputcsv($this->fileHandle, $header, $this->configuration['delimiter']);
   }

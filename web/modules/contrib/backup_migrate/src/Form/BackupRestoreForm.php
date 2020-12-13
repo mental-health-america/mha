@@ -2,7 +2,8 @@
 
 namespace Drupal\backup_migrate\Form;
 
-use Drupal\backup_migrate\Drupal\Config\DrupalConfigHelper;
+use BackupMigrate\Drupal\Config\DrupalConfigHelper;
+use Drupal\backup_migrate\Entity\Destination;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
@@ -12,14 +13,14 @@ use Drupal\Core\Form\FormStateInterface;
 class BackupRestoreForm extends ConfirmFormBase {
 
   /**
-   * @var \Drupal\backup_migrate\Entity\Destination
+   * @var Destination
    */
-  public $destination;
+  var $destination;
 
   /**
    * @var string
    */
-  public $backupId;
+  var $backup_id;
 
   /**
    * Returns the question to ask the user.
@@ -61,14 +62,13 @@ class BackupRestoreForm extends ConfirmFormBase {
   /**
    * @param array $form
    * @param \Drupal\Core\Form\FormStateInterface $form_state
-   * @param $backup_migrate_destination
-   * @param $backupId
-   *
+   * @param null $backup_migrate_destination
+   * @param null $backup_id
    * @return array
    */
-  public function buildForm(array $form, FormStateInterface $form_state, $backup_migrate_destination = NULL, $backupId = NULL) {
+  public function buildForm(array $form, FormStateInterface $form_state, $backup_migrate_destination = NULL, $backup_id = NULL) {
     $this->destination = $backup_migrate_destination;
-    $this->backupId = $backupId;
+    $this->backup_id = $backup_id;
 
     $bam = backup_migrate_get_service_object();
     $form['source_id'] = DrupalConfigHelper::getPluginSelector($bam->sources(), $this->t('Restore To'));
@@ -90,7 +90,7 @@ class BackupRestoreForm extends ConfirmFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $form_state->getValues();
-    backup_migrate_perform_restore($config['source_id'], $this->destination->id(), $this->backupId, $config);
+    backup_migrate_perform_restore($config['source_id'], $this->destination->id(), $this->backup_id, $config);
 
     $form_state->setRedirectUrl($this->getCancelUrl());
   }

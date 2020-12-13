@@ -137,7 +137,9 @@ elements: |
       '#title': BMI
       '#ajax': true
       '#template': '{% if data.weight|length and data.height|length %}{{ (data.weight / (data.height * data.height) * 703)|number_format(2) }}{% endif %}'
-  
+
+
+
 css: |
   .calculation {
     font-size: 2em;
@@ -146,7 +148,7 @@ css: |
     width: 4em;
     text-align: right;
   }
-  
+
 javascript: ''
 settings:
   ajax: false
@@ -166,7 +168,7 @@ settings:
   form_previous_submissions: true
   form_confidential: false
   form_confidential_message: ''
-  form_disable_remote_addr: false
+  form_remote_addr: true
   form_convert_anonymous: false
   form_prepopulate: false
   form_prepopulate_source_entity: false
@@ -275,7 +277,6 @@ settings:
   results_customize: false
   token_view: false
   token_update: false
-  token_delete: false
   serial_disabled: false
 access:
   create:

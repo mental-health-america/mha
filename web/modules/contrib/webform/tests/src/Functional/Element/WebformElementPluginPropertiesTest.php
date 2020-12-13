@@ -21,7 +21,6 @@ class WebformElementPluginPropertiesTest extends WebformElementBrowserTestBase {
     'address',
     'captcha',
     'image',
-    'jquery_ui_datepicker',
     'taxonomy',
     'webform',
     'webform_attachment',
@@ -1850,41 +1849,6 @@ url:
 value:
   title: ''
   value: ''
-vertical_tabs:
-  access: true
-  access_create_permissions: {  }
-  access_create_roles:
-    - anonymous
-    - authenticated
-  access_create_users: {  }
-  access_update_permissions: {  }
-  access_update_roles:
-    - anonymous
-    - authenticated
-  access_update_users: {  }
-  access_view_permissions: {  }
-  access_view_roles:
-    - anonymous
-    - authenticated
-  access_view_users: {  }
-  admin_notes: ''
-  admin_title: ''
-  default_tab: ''
-  description: ''
-  description_display: ''
-  flex: 1
-  help: ''
-  help_display: ''
-  help_title: ''
-  label_attributes: {  }
-  more: ''
-  more_title: ''
-  private: false
-  required: false
-  states: {  }
-  title: 'Vertical Tabs'
-  title_display: invisible
-  wrapper_attributes: {  }
 view:
   access: true
   access_create_permissions: {  }

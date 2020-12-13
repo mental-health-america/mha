@@ -50,12 +50,12 @@ webform_element_composite_advanced:
   last_name:
     '#type': textfield
     '#title': 'Last name'
-  sex:
+  gender:
     '#type': select
     '#options':
       Male: Male
       Female: Female
-    '#title': Sex
+    '#title': Gender
   martial_status:
     '#type': webform_select_other
     '#options': marital_status
@@ -90,12 +90,12 @@ webform_element_composite_advanced:
   last_name:
     '#type': textfield
     '#title': 'Last name'
-  sex:
+  gender:
     '#type': select
     '#options':
       Male: Male
       Female: Female
-    '#title': Sex
+    '#title': Gender
   martial_status:
     '#type': webform_select_other
     '#options': marital_status

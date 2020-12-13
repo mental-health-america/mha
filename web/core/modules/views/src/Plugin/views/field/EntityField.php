@@ -363,20 +363,12 @@ class EntityField extends FieldPluginBase implements CacheableDependencyInterfac
     }
 
     // The list of field storage definitions above does not include computed
-    // fields, so we need to explicitly fetch a list of all fields in order to
-    // support them. If a bundle was specified as part of the definition, check
-    // all the field definitions, else only base fields can be checked.
+    // base fields, so we need to explicitly fetch a list of all base fields in
+    // order to support them.
     // @see \Drupal\Core\Entity\EntityFieldManager::getFieldStorageDefinitions()
-    if (isset($this->definition['field_name'])) {
-      if (isset($this->definition['bundle'])) {
-        $fields = $this->entityFieldManager->getFieldDefinitions($entity_type_id, $this->definition['bundle']);
-      }
-      else {
-        $fields = $this->entityFieldManager->getBaseFieldDefinitions($entity_type_id);
-      }
-      if (isset($fields[$this->definition['field_name']])) {
-        return $fields[$this->definition['field_name']]->getFieldStorageDefinition();
-      }
+    $base_fields = $this->entityFieldManager->getBaseFieldDefinitions($entity_type_id);
+    if (isset($this->definition['field_name']) && isset($base_fields[$this->definition['field_name']])) {
+      return $base_fields[$this->definition['field_name']]->getFieldStorageDefinition();
     }
   }
 

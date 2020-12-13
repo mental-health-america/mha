@@ -23,12 +23,6 @@ use Prophecy\Argument;
  * @group salesforce_pull
  */
 class DeleteHandlerTest extends UnitTestCase {
-
-  /**
-   * Required modules.
-   *
-   * @var array
-   */
   protected static $modules = ['salesforce_pull'];
 
   /**
@@ -54,14 +48,13 @@ class DeleteHandlerTest extends UnitTestCase {
     $this->sfapi = $prophecy->reveal();
 
     // Mock an atribtary Drupal entity.
-    $this->entity = $this->getMockBuilder(User::CLASS)
-      ->disableOriginalConstructor()
-      ->getMock();
-    $this->entity->expects($this->any())->method('delete')->willReturn(TRUE);
-    $this->entity->expects($this->any())->method('id')->willReturn(1);
-    $this->entity->expects($this->any())->method('label')->willReturn('foo');
+    $prophecy = $this->prophesize(User::CLASS);
+    $prophecy->delete()->willReturn(TRUE);
+    $prophecy->id()->willReturn(1);
+    $prophecy->label()->willReturn('foo');
+    $this->entity = $prophecy->reveal();
 
-    $this->mapping = $this->getMockBuilder(SalesforceMappingInterface::CLASS)->getMock();
+    $this->mapping = $this->getMock(SalesforceMappingInterface::CLASS);
     $this->mapping->expects($this->any())
       ->method('__get')
       ->with($this->equalTo('id'))
@@ -89,7 +82,7 @@ class DeleteHandlerTest extends UnitTestCase {
     $this->entityId->value = '1';
     $this->entityRef->entity = $this->mapping;
 
-    $this->mappedObject = $this->getMockBuilder(MappedObjectInterface::CLASS)->getMock();
+    $this->mappedObject = $this->getMock(MappedObjectInterface::CLASS);
     $this->mappedObject
       ->expects($this->any())
       ->method('delete')

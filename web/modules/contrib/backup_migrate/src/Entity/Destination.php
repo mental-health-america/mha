@@ -2,6 +2,8 @@
 
 namespace Drupal\backup_migrate\Entity;
 
+use Drupal\backup_migrate\DestinationInterface;
+
 /**
  * Defines the Backup Destination entity.
  *
@@ -27,15 +29,9 @@ namespace Drupal\backup_migrate\Entity;
  *   links = {
  *     "edit-form" = "/admin/config/development/backup_migrate/settings/destination/edit/{backup_migrate_destination}",
  *     "delete-form" = "/admin/config/development/backup_migrate/settings/destination/delete/{backup_migrate_destination}",
- *     "collection" = "/admin/config/development/backup_migrate/settings/destination",
+ *     "collection" =
+ *            "/admin/config/development/backup_migrate/settings/destination",
  *     "backups" = "/admin/config/development/backup_migrate/settings/destination/backups/{backup_migrate_destination}",
- *   },
- *   config_export = {
- *     "id",
- *     "label",
- *     "uuid",
- *     "type",
- *     "config"
  *   }
  * )
  */

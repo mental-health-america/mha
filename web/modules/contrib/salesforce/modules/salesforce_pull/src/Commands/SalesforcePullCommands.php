@@ -12,8 +12,6 @@ use Drupal\salesforce_mapping\Event\SalesforceQueryEvent;
 use Drupal\salesforce_pull\QueueHandler;
 use Symfony\Component\Console\Input\Input;
 use Symfony\Component\Console\Output\Output;
-use Drupal\salesforce\SalesforceAuthProviderPluginManagerInterface;
-use Drupal\salesforce\Storage\SalesforceAuthTokenStorageInterface;
 
 /**
  * A Drush commandfile.
@@ -49,10 +47,6 @@ class SalesforcePullCommands extends SalesforceMappingCommandsBase {
    *   Salesforce client.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $etm
    *   Entity type manager.
-   * @param \Drupal\salesforce\SalesforceAuthProviderPluginManagerInterface $auth_man
-   *   Auth plugin manager.
-   * @param \Drupal\salesforce\Storage\SalesforceAuthTokenStorageInterface $token_storage
-   *   Token storage.
    * @param \Drupal\salesforce_pull\QueueHandler $pullQueue
    *   Pull queue handler service.
    * @param \Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher $eventDispatcher
@@ -61,8 +55,8 @@ class SalesforcePullCommands extends SalesforceMappingCommandsBase {
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function __construct(RestClient $client, EntityTypeManagerInterface $etm, SalesforceAuthProviderPluginManagerInterface $auth_man, SalesforceAuthTokenStorageInterface $token_storage, QueueHandler $pullQueue, ContainerAwareEventDispatcher $eventDispatcher) {
-    parent::__construct($client, $etm, $auth_man, $token_storage);
+  public function __construct(RestClient $client, EntityTypeManagerInterface $etm, QueueHandler $pullQueue, ContainerAwareEventDispatcher $eventDispatcher) {
+    parent::__construct($client, $etm);
     $this->pullQueue = $pullQueue;
     $this->eventDispatcher = $eventDispatcher;
   }
@@ -123,8 +117,6 @@ class SalesforcePullCommands extends SalesforceMappingCommandsBase {
    * @param array $options
    *   An associative array of options whose values come from cli, aliases,
    *   config, etc.
-   *
-   * @throws \Exception
    *
    * @option where
    *   A WHERE clause to add to the SOQL pull query. Default behavior is to
@@ -246,6 +238,7 @@ class SalesforcePullCommands extends SalesforceMappingCommandsBase {
     // condition, etc.
     $queries = [];
     foreach (array_chunk($rows, 1000) as $i => $chunk) {
+      $base = $i * 1000;
       // Reset our base query:
       $soql = $mapping->getPullQuery([], 1, 0);
 
@@ -317,9 +310,6 @@ class SalesforcePullCommands extends SalesforceMappingCommandsBase {
    *   An associative array of options whose values come from cli, aliases,
    *   config, etc.
    *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
-   *
    * @option delete
    *   Reset delete date timestamp (instead of pull date timestamp)
    * @usage drush sf-pull-reset
@@ -359,8 +349,6 @@ class SalesforcePullCommands extends SalesforceMappingCommandsBase {
    *   Timestamp.
    * @param array $options
    *   Assoc array of options.
-   *
-   * @throws \Exception
    *
    * @option delete
    *   Reset delete date timestamp (instead of pull date timestamp)

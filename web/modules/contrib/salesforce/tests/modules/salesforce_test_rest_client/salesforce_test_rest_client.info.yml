@@ -2,11 +2,11 @@ name: 'Salesforce Test Rest Client'
 type: module
 description: 'Provides a dummy Rest Client for functional tests.'
 package: Testing
-core_version_requirement: ^8.7.7 || ^9
+core: 8.x
 dependencies:
   - salesforce:salesforce
 
-# Information added by Drupal.org packaging script on 2020-06-10
-version: '8.x-4.1'
+# Information added by Drupal.org packaging script on 2020-01-03
+version: '8.x-3.6'
 project: 'salesforce'
-datestamp: 1591805948
+datestamp: 1578083292

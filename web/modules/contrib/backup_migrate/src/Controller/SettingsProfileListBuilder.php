@@ -15,10 +15,6 @@ class SettingsProfileListBuilder extends ConfigEntityListBuilder {
    */
   public function buildHeader() {
     $header['label'] = $this->t('Profile Name');
-    $header['id'] = $this->t('Machine name');
-    $header['compression'] = $this->t('Compression');
-    $header['offline'] = $this->t('Take site offline');
-    $header['description'] = $this->t('Description');
     return $header + parent::buildHeader();
   }
 
@@ -27,10 +23,7 @@ class SettingsProfileListBuilder extends ConfigEntityListBuilder {
    */
   public function buildRow(EntityInterface $entity) {
     $row['label'] = $entity->label();
-    $row['id'] = $entity->id();
-    $row['compression'] = $entity->config['compressor']['compression'];
-    $row['offline'] = $entity->config['utils']['site_offline'];
-    $row['description'] = $entity->config['metadata']['description'];
+    // You probably want a few more properties here...
     return $row + parent::buildRow($entity);
   }
 

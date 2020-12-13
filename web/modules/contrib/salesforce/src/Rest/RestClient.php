@@ -4,11 +4,13 @@ namespace Drupal\salesforce\Rest;
 
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\State\StateInterface;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\salesforce\SalesforceAuthProviderPluginManagerInterface;
+use Drupal\Core\Url;
+use Drupal\salesforce\Exception;
+use Drupal\salesforce\SalesforceAuthProviderPluginManager;
 use Drupal\salesforce\SelectQueryInterface;
 use Drupal\salesforce\SFID;
 use Drupal\salesforce\SObject;
@@ -16,14 +18,13 @@ use Drupal\salesforce\SelectQuery;
 use Drupal\salesforce\SelectQueryResult;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Psr7\Response;
 use Drupal\Component\Datetime\TimeInterface;
 
 /**
  * Objects, properties, and methods to communicate with the Salesforce REST API.
  */
 class RestClient implements RestClientInterface {
-
-  use StringTranslationTrait;
 
   /**
    * Response object.
@@ -54,6 +55,13 @@ class RestClient implements RestClientInterface {
   protected $url;
 
   /**
+   * Salesforce mutable config object.  Useful for sets.
+   *
+   * @var \Drupal\Core\Config\Config
+   */
+  protected $mutableConfig;
+
+  /**
    * Salesforce immutable config object.  Useful for gets.
    *
    * @var \Drupal\Core\Config\ImmutableConfig
@@ -81,40 +89,16 @@ class RestClient implements RestClientInterface {
    */
   protected $json;
 
-  /**
-   * Auth provider manager.
-   *
-   * @var \Drupal\salesforce\SalesforceAuthProviderPluginManagerInterface
-   */
-  protected $authManager;
-
-  /**
-   * Active auth provider.
-   *
-   * @var \Drupal\salesforce\SalesforceAuthProviderInterface
-   */
-  protected $authProvider;
-
-  /**
-   * Active auth provider config.
-   *
-   * @var \Drupal\salesforce\Entity\SalesforceAuthConfig
-   */
-  protected $authConfig;
-
-  /**
-   * Active auth token.
-   *
-   * @var \OAuth\OAuth2\Token\TokenInterface
-   */
-  protected $authToken;
-
-  /**
-   * HTTP client options.
-   *
-   * @var array
-   */
   protected $httpClientOptions;
+
+  /**
+   * Token storage.
+   *
+   * @var \Drupal\salesforce\Storage\SalesforceAuthTokenStorage
+   *
+   * @deprecated BC legacy auth scheme only, do not use, will be removed.
+   */
+  private $storage;
 
   const CACHE_LIFETIME = 300;
   const LONGTERM_CACHE_LIFETIME = 86400;
@@ -134,51 +118,55 @@ class RestClient implements RestClientInterface {
    *   The JSON serializer service.
    * @param \Drupal\Component\Datetime\TimeInterface $time
    *   The Time service.
-   * @param \Drupal\salesforce\SalesforceAuthProviderPluginManagerInterface $authManager
-   *   Auth manager service.
    */
-  public function __construct(ClientInterface $http_client, ConfigFactoryInterface $config_factory, StateInterface $state, CacheBackendInterface $cache, Json $json, TimeInterface $time, SalesforceAuthProviderPluginManagerInterface $authManager) {
+  public function __construct(ClientInterface $http_client, ConfigFactoryInterface $config_factory, StateInterface $state, CacheBackendInterface $cache, Json $json, TimeInterface $time) {
     $this->configFactory = $config_factory;
     $this->httpClient = $http_client;
+    $this->mutableConfig = $this->configFactory->getEditable('salesforce.settings');
     $this->immutableConfig = $this->configFactory->get('salesforce.settings');
     $this->state = $state;
     $this->cache = $cache;
     $this->json = $json;
     $this->time = $time;
     $this->httpClientOptions = [];
-    $this->authManager = $authManager;
-    $this->authProvider = $authManager->getProvider();
-    $this->authConfig = $authManager->getConfig();
-    $this->authToken = $authManager->getToken();
     return $this;
+  }
+
+  /**
+   * Storage helper.
+   *
+   * @return \Drupal\salesforce\Storage\SalesforceAuthTokenStorage
+   *   The auth token storage service.
+   *
+   * @deprecated BC legacy auth scheme only, do not use, will be removed.
+   */
+  private function storage() {
+    if (!$this->storage) {
+      $this->storage = \Drupal::service('salesforce.auth_token_storage');
+    }
+    return $this->storage;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function isInit() {
-    if (!$this->authProvider || !$this->authToken || !$this->authManager) {
-      return FALSE;
-    }
-    return TRUE;
+  public function isAuthorized() {
+    return $this->getConsumerKey() && $this->getConsumerSecret() && $this->getRefreshToken();
   }
 
   /**
    * {@inheritdoc}
    */
   public function apiCall($path, array $params = [], $method = 'GET', $returnObject = FALSE) {
-    if (!$this->isInit()) {
-      throw new RestException(NULL, $this->t('RestClient is not initialized.'));
-    }
-    if (!$this->authToken) {
-      $this->authToken = $this->authManager->refreshToken();
+    if (!$this->getAccessToken()) {
+      $this->refreshToken();
     }
 
     if (strpos($path, '/') === 0) {
-      $url = $this->authProvider->getInstanceUrl() . $path;
+      $url = $this->getInstanceUrl() . $path;
     }
     else {
-      $url = $this->authProvider->getApiEndpoint() . $path;
+      $url = $this->getApiEndPoint() . $path;
     }
 
     try {
@@ -196,9 +184,9 @@ class RestClient implements RestClientInterface {
 
     if ($this->response->getStatusCode() == 401) {
       // The session ID or OAuth token used has expired or is invalid: refresh
-      // token. If refresh_token() throws an exception, or if apiHttpRequest()
+      // token. If refreshToken() throws an exception, or if apiHttpRequest()
       // throws anything but a RequestException, let it bubble up.
-      $this->authToken = $this->authManager->refreshToken();
+      $this->refreshToken();
       try {
         $this->response = new RestResponse($this->apiHttpRequest($url, $params, $method));
       }
@@ -210,11 +198,7 @@ class RestClient implements RestClientInterface {
 
     if (empty($this->response)
     || ((int) floor($this->response->getStatusCode() / 100)) != 2) {
-      throw new RestException($this->response, $this->t('Unknown error occurred during API call "@call": status code @code : @reason', [
-        '@call' => $path,
-        '@code' => $this->response->getStatusCode(),
-        '@reason' => $this->response->getReasonPhrase(),
-      ]));
+      throw new RestException($this->response, 'Unknown error occurred during API call');
     }
 
     $this->updateApiUsage($this->response);
@@ -244,12 +228,12 @@ class RestClient implements RestClientInterface {
    * @throws \GuzzleHttp\Exception\RequestException
    */
   protected function apiHttpRequest($url, array $params, $method) {
-    if (!$this->authToken) {
-      throw new \Exception($this->t('Missing OAuth Token'));
+    if (!$this->getAccessToken()) {
+      throw new \Exception('Missing OAuth Token');
     }
 
     $headers = [
-      'Authorization' => 'OAuth ' . $this->authToken->getAccessToken(),
+      'Authorization' => 'OAuth ' . $this->getAccessToken(),
       'Content-type' => 'application/json',
     ];
     $data = NULL;
@@ -263,11 +247,11 @@ class RestClient implements RestClientInterface {
    * {@inheritdoc}
    */
   public function httpRequestRaw($url) {
-    if (!$this->authManager->getToken()) {
-      throw new \Exception($this->t('Missing OAuth Token'));
+    if (!$this->getAccessToken()) {
+      throw new \Exception('Missing OAuth Token');
     }
     $headers = [
-      'Authorization' => 'OAuth ' . $this->authToken->getAccessToken(),
+      'Authorization' => 'OAuth ' . $this->getAccessToken(),
       'Content-type' => 'application/json',
     ];
     $response = $this->httpRequest($url, NULL, $headers);
@@ -353,16 +337,279 @@ class RestClient implements RestClientInterface {
   /**
    * {@inheritdoc}
    */
+  public function getApiEndPoint($api_type = 'rest') {
+    $url = &drupal_static(__FUNCTION__ . $api_type);
+    if (!isset($url)) {
+      $identity = $this->getIdentity();
+      if (empty($identity)) {
+        return FALSE;
+      }
+      if (is_string($identity)) {
+        $url = $identity;
+      }
+      elseif (isset($identity['urls'][$api_type])) {
+        $url = $identity['urls'][$api_type];
+      }
+      $url = str_replace('{version}', $this->getApiVersion(), $url);
+    }
+    return $url;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getApiVersion() {
+    if ($this->immutableConfig->get('use_latest')) {
+      $versions = $this->getVersions();
+      $version = end($versions);
+      return $version['version'];
+    }
+    return $this->immutableConfig->get('rest_api_version.version');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setApiVersion($use_latest = TRUE, $version = NULL) {
+    if ($use_latest) {
+      $this->mutableConfig->set('use_latest', $use_latest);
+    }
+    else {
+      $versions = $this->getVersions();
+      if (empty($versions[$version])) {
+        throw new \Exception("Version $version is not available.");
+      }
+      $version = $versions[$version];
+      $this->mutableConfig->set('rest_api_version', $version);
+    }
+    $this->mutableConfig->save();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getConsumerKey() {
+    return $this->immutableConfig->get('consumer_key');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setConsumerKey($value) {
+    $this->mutableConfig->set('consumer_key', $value)->save();
+    SalesforceAuthProviderPluginManager::updateAuthConfig();
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getConsumerSecret() {
+    return $this->immutableConfig->get('consumer_secret');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setConsumerSecret($value) {
+    $this->mutableConfig->set('consumer_secret', $value)->save();
+    SalesforceAuthProviderPluginManager::updateAuthConfig();
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getLoginUrl() {
+    $login_url = $this->immutableConfig->get('login_url');
+    return empty($login_url) ? 'https://login.salesforce.com' : $login_url;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setLoginUrl($value) {
+    $this->mutableConfig->set('login_url', $value)->save();
+    SalesforceAuthProviderPluginManager::updateAuthConfig();
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getInstanceUrl() {
+    return $this->state->get('salesforce.instance_url');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setInstanceUrl($url) {
+    $this->state->set('salesforce.instance_url', $url);
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getAccessToken() {
+    $access_token = $this->state->get('salesforce.access_token');
+    return isset($access_token) && mb_strlen($access_token) !== 0 ? $access_token : FALSE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setAccessToken($token) {
+    $this->state->set('salesforce.access_token', $token);
+    $this->storage()->updateToken();
+    return $this;
+  }
+
+  /**
+   * Get refresh token.
+   */
+  public function getRefreshToken() {
+    return $this->state->get('salesforce.refresh_token');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setRefreshToken($token) {
+    $this->state->set('salesforce.refresh_token', $token);
+    $this->storage()->updateToken();
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function refreshToken() {
+    $refresh_token = $this->getRefreshToken();
+    if (empty($refresh_token)) {
+      throw new \Exception(t('There is no refresh token.'));
+    }
+
+    $data = UrlHelper::buildQuery([
+      'grant_type' => 'refresh_token',
+      'refresh_token' => urldecode($refresh_token),
+      'client_id' => $this->getConsumerKey(),
+      'client_secret' => $this->getConsumerSecret(),
+    ]);
+
+    $url = $this->getAuthTokenUrl();
+    $headers = [
+      // This is an undocumented requirement on Salesforce's end.
+      'Content-Type' => 'application/x-www-form-urlencoded',
+    ];
+    $response = $this->httpRequest($url, $data, $headers, 'POST');
+
+    $this->handleAuthResponse($response);
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function handleAuthResponse(Response $response) {
+    if ($response->getStatusCode() != 200) {
+      throw new \Exception($response->getReasonPhrase(), $response->getStatusCode());
+    }
+
+    $data = (new RestResponse($response))->data;
+
+    $this
+      ->setAccessToken($data['access_token'])
+      ->initializeIdentity($data['id'])
+      ->setInstanceUrl($data['instance_url']);
+
+    // Do not overwrite an existing refresh token with an empty value.
+    if (!empty($data['refresh_token'])) {
+      $this->setRefreshToken($data['refresh_token']);
+    }
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function initializeIdentity($id) {
+    $headers = [
+      'Authorization' => 'OAuth ' . $this->getAccessToken(),
+      'Content-type' => 'application/json',
+    ];
+    $response = $this->httpRequest($id, NULL, $headers);
+
+    if ($response->getStatusCode() != 200) {
+      throw new \Exception(t('Unable to access identity service.'), $response->getStatusCode());
+    }
+    $data = (new RestResponse($response))->data;
+
+    $this->setIdentity($data);
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setIdentity($data) {
+    $this->state->set('salesforce.identity', $data);
+    $this->storage()->updateIdentity();
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getIdentity() {
+    $identity = $this->state->get('salesforce.identity');
+    if (!$identity) {
+      return FALSE;
+    }
+    $id_url_scheme = parse_url($identity['id']);
+    $allowed_endpoint = $this->getLoginUrl();
+    $allowed_endpoint_url_scheme = parse_url($allowed_endpoint);
+    if ($this->immutableConfig->get('endpoint_verification') && $id_url_scheme['host'] != $allowed_endpoint_url_scheme['host']) {
+      throw new Exception('Salesforce identity does not match salesforce endpoint: you need to re-authenticate.');
+    }
+    return $identity;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getAuthCallbackUrl() {
+    return Url::fromRoute('salesforce.oauth_callback', [], [
+      'absolute' => TRUE,
+      'https' => TRUE,
+    ])->toString();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getAuthEndpointUrl() {
+    return $this->getLoginUrl() . '/services/oauth2/authorize';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getAuthTokenUrl() {
+    return $this->getLoginUrl() . '/services/oauth2/token';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getVersions($reset = FALSE) {
     if (!$reset && ($cache = $this->cache->get('salesforce:versions'))) {
       return $cache->data;
     }
 
     $versions = [];
-    if (!$this->authProvider) {
-      return [];
-    }
-    $id = $this->authProvider->getIdentity();
+    $id = $this->getIdentity();
     if (!empty($id)) {
       $url = str_replace('v{version}/', '', $id['urls']['rest']);
       $response = new RestResponse($this->httpRequest($url));
@@ -463,7 +710,7 @@ class RestClient implements RestClientInterface {
         'records' => [],
       ]);
     }
-    $version_path = parse_url($this->authProvider->getApiEndpoint(), PHP_URL_PATH);
+    $version_path = parse_url($this->getApiEndPoint(), PHP_URL_PATH);
     $next_records_url = str_replace($version_path, '', $results->nextRecordsUrl());
     return new SelectQueryResult($this->apiCall($next_records_url));
   }
@@ -473,7 +720,7 @@ class RestClient implements RestClientInterface {
    */
   public function objectDescribe($name, $reset = FALSE) {
     if (empty($name)) {
-      throw new \Exception($this->t('No name provided to describe'));
+      throw new \Exception('No name provided to describe');
     }
 
     if (!$reset && ($cache = $this->cache->get('salesforce:object:' . $name))) {
@@ -606,11 +853,11 @@ class RestClient implements RestClientInterface {
 
     if ($name != NULL) {
       if (!isset($record_types[$name])) {
-        return FALSE;
+        throw new \Exception("No record types for $name");
       }
       return $record_types[$name];
     }
-    return $record_types ?: FALSE;
+    return $record_types;
   }
 
   /**
@@ -619,7 +866,7 @@ class RestClient implements RestClientInterface {
   public function getRecordTypeIdByDeveloperName($name, $devname, $reset = FALSE) {
     $record_types = $this->getRecordTypes($name, $reset);
     if (empty($record_types[$devname])) {
-      return FALSE;
+      throw new \Exception("No record type $devname for $name");
     }
     return $record_types[$devname]->id();
   }
@@ -635,7 +882,7 @@ class RestClient implements RestClientInterface {
         return $object['name'];
       }
     }
-    return FALSE;
+    throw new \Exception('No matching object type');
   }
 
   /**

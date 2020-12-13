@@ -2,68 +2,18 @@
 
 namespace Drupal\simple_popup_blocks\Form;
 
-use Drupal\Core\Database\Connection;
-use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
-use Drupal\Core\Entity\EntityTypeManager;
-use Drupal\Core\Messenger\Messenger;
 use Drupal\Core\Url;
 use Drupal\Core\Form\FormInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\simple_popup_blocks\SimplePopupBlocksStorage;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Form to add a popup entry.
  */
-class SimplePopupBlocksAddForm implements FormInterface, ContainerInjectionInterface {
+class SimplePopupBlocksAddForm implements FormInterface {
 
   use StringTranslationTrait;
-
-  /**
-   * Object of EntityTypeManager.
-   *
-   * @var EntityTypeManager
-   */
-  protected $typeManager;
-
-  /**
-   * Messanger object.
-   *
-   * @var Messenger
-   */
-  protected $messenger;
-
-  /**
-   * Database object.
-   *
-   * @var Connection
-   */
-  protected $database;
-
-  /**
-   * SimplePopupBlocksAddForm constructor.
-   *
-   * @param EntityTypeManager $typeManager
-   * @param Messenger $messenger
-   * @param Connection $database
-   */
-  public function __construct(EntityTypeManager $typeManager, Messenger $messenger, Connection $database ) {
-    $this->typeManager = $typeManager;
-    $this->messenger = $messenger;
-    $this->database = $database;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-        $container->get('entity_type.manager'),
-        $container->get('messenger'),
-        $container->get('database')
-    );
-  }
 
   /**
    * {@inheritdoc}
@@ -76,9 +26,7 @@ class SimplePopupBlocksAddForm implements FormInterface, ContainerInjectionInter
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $visit_counts = [];
-    $block_ids = $this->typeManager->getStorage('block')->getQuery()->execute();
-
+    $block_ids = \Drupal::entityQuery('block')->execute();
     $form = [];
     for ($i = 0; $i < 101; $i++) {
       $visit_counts[] = $i;
@@ -237,13 +185,6 @@ class SimplePopupBlocksAddForm implements FormInterface, ContainerInjectionInter
       '#default_value' => 400,
       '#description' => $this->t("Add popup width in pixels"),
     ];
-    $form['cookie_expiry'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Cookie expiry'),
-      '#size' => 5,
-      '#default_value' => 100,
-      '#description' => $this->t("Delete the cookie after x days. Choose 0 to delete the cookie after the browser closes."),
-    ];
     $form['adjustments'] = [
       '#type' => 'details',
       '#title' => $this->t('Adjustment class'),
@@ -279,7 +220,7 @@ class SimplePopupBlocksAddForm implements FormInterface, ContainerInjectionInter
         $form_state->setError($form[$selector], $this->t('Selector should not start with . or # in %field.', ['%field' => $identifier]));
       }
     }
-    $check = SimplePopupBlocksStorage::loadCountByIdentifier($identifier, $this->database, $this->messenger);
+    $check = SimplePopupBlocksStorage::loadCountByIdentifier($identifier);
     if ($check) {
       $form_state->setError($form[$selector], $this->t('Already popup created with this identifier %field.', ['%field' => $identifier]));
     }
@@ -313,10 +254,6 @@ class SimplePopupBlocksAddForm implements FormInterface, ContainerInjectionInter
     if (empty($width) || $width < 0) {
       $width = 400;
     }
-    $cookie_expiry = $form_state->getValue('cookie_expiry');
-    if (strlen($cookie_expiry) == 0 || $cookie_expiry < 0) {
-      $cookie_expiry = 100;
-    }
     // Save the submitted entry.
     $entry = [
       'identifier' => $identifier,
@@ -332,18 +269,17 @@ class SimplePopupBlocksAddForm implements FormInterface, ContainerInjectionInter
       'minimize' => $form_state->getValue('minimize'),
       'close' => $form_state->getValue('close'),
       'width' => $width,
-      'cookie_expiry' => $cookie_expiry,
       'status' => 1,
     ];
-    $return = SimplePopupBlocksStorage::insert($entry, $this->database, $this->messenger);
+    $return = SimplePopupBlocksStorage::insert($entry);
     if ($return) {
-      $this->messenger->addMessage($this->t('Popup settings has been created Successfully. Please place the css code mentioned below under the ADJUSTMENT CLASS Section.'));
+      drupal_set_message($this->t('Popup settings has been created Successfully. Please place the css code mentioned below under the ADJUSTMENT CLASS Section.'));
       $url = Url::fromRoute('simple_popup_blocks.edit')
         ->setRouteParameters(['first' => $return]);
       $form_state->setRedirectUrl($url);
     }
     else {
-      $this->messenger->addError($this->t('Error while creating.'));
+      drupal_set_message($this->t('Error while creating.'), 'error');
     }
   }
 

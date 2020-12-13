@@ -2,9 +2,7 @@
 
 /**
  * @file
- * Examples.
- *
- * @noinspection ALL
+ * This line for "security" purposes:.
  */
 
 exit;
@@ -20,7 +18,7 @@ $path = '/services/apexrest/MyEndpoint?getParam1=getValue1&getParam2=getValue2';
 
 // Create your POST body appropriately, if necessary.
 // This must be an array, which will be json-encoded before POSTing.
-$payload = ['postParam1' => 'postValue1', 'postParam2' => 'postValue2', 'etc...'];
+$payload = ['postParam1' => 'postValue1', 'postParam2' => 'postValue2', ...];
 
 $returnObject = FALSE;
 // Uncomment the following line to get Drupal\salesforce\Rest\RestResponse object instead of json-decoded value:

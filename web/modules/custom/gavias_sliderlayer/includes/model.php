@@ -1,6 +1,6 @@
 <?php
 function gavias_sliderlayer_load($sid) {
-  $result = \Drupal::database()->select('{gavias_sliderlayers}', 'd')
+  $result = db_select('{gavias_sliderlayers}', 'd')
       ->fields('d')
       ->condition('id', $sid, '=')
       ->orderBy('sort_index', 'ESC')
@@ -20,7 +20,7 @@ function gavias_sliderlayer_load($sid) {
 }
 
 function gavias_sliders_by_group($gid=0) {
-  $result = \Drupal::database()->select('{gavias_sliderlayers}', 'd')
+  $result = db_select('{gavias_sliderlayers}', 'd')
           ->fields('d')
           ->condition('group_id', $gid, '=')
           ->orderBy('sort_index', 'ESC')
@@ -29,13 +29,13 @@ function gavias_sliders_by_group($gid=0) {
 }
 
 function gavias_slider_load_frontend($sid=0) {
-  $group = \Drupal::database()->select('{gavias_sliderlayergroups}', 'd')
+  $group = db_select('{gavias_sliderlayergroups}', 'd')
           ->fields('d')
           ->condition('id', $sid, '=')
           ->execute()
           ->fetchObject();
 
-  $slides = \Drupal::database()->select('{gavias_sliderlayers}', 'd')
+  $slides = db_select('{gavias_sliderlayers}', 'd')
             ->fields('d')
             ->condition('group_id', $sid, '=')
             ->orderBy('sort_index', 'ESC')
@@ -54,7 +54,6 @@ function gavias_slider_load_frontend($sid=0) {
     $json_slide = base64_decode($slide->params);
     $slideparams = json_decode($json_slide);
     $slideshow->slides[$i] = $slideparams;
-    $slideshow->slides[$i]->id = $slide->id;
     if (!empty($slideshow->slides[$i]->background_image_uri)) {
       $slideshow->slides[$i]->background_image = ($slideshow->slides[$i]->background_image_uri);
     }
@@ -77,7 +76,7 @@ function gavias_slider_load_frontend($sid=0) {
 }
 
 function getListSliderGroups(){
-    $result = \Drupal::database()->select('{gavias_sliderlayergroups}', 'd')
+    $result = db_select('{gavias_sliderlayergroups}', 'd')
           ->fields('d')
           ->execute()
           ->fetchObject();
@@ -85,7 +84,7 @@ function getListSliderGroups(){
 }
 
 function getSliderGroup($gid){
-    $result = \Drupal::database()->select('{gavias_sliderlayergroups}', 'd')
+    $result = db_select('{gavias_sliderlayergroups}', 'd')
           ->fields('d')
           ->condition('id', $gid, '=')
           ->execute()

@@ -8,7 +8,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Locale\CountryManager;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a 'tel' element.
@@ -23,32 +22,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class Telephone extends TextBase {
 
   /**
-   * The library discovery service.
-   *
-   * @var \Drupal\Core\Asset\LibraryDiscoveryInterface
-   */
-  protected $libraryDiscovery;
-
-  /**
-   * The telephone validation service.
-   *
-   * @var null|\Drupal\telephone_validation\Validator
-   */
-  protected $telephoneValidator;
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
-    $instance->libraryDiscovery = $container->get('library.discovery');
-    $instance->telephoneValidator = ($instance->moduleHandler->moduleExists('telephone_validation'))
-      ? $container->get('telephone_validation.validator')
-      : NULL;
-    return $instance;
-  }
-
-  /**
    * {@inheritdoc}
    */
   protected function defineDefaultProperties() {
@@ -60,7 +33,7 @@ class Telephone extends TextBase {
         'international_preferred_countries' => [],
       ] + parent::defineDefaultProperties() + $this->defineDefaultMultipleProperties();
     // Add support for telephone_validation.module.
-    if ($this->moduleHandler->moduleExists('telephone_validation')) {
+    if (\Drupal::moduleHandler()->moduleExists('telephone_validation')) {
       $properties += [
         'telephone_validation_format' => '',
         'telephone_validation_country' => '',
@@ -102,21 +75,20 @@ class Telephone extends TextBase {
       // The utilsScript is fetched when the page has finished loading to
       // prevent blocking.
       // @see https://github.com/jackocnr/intl-tel-input
-      $library_path = $this->librariesManager->find('jquery.intl-tel-input');
-      $utils_script = ($library_path) ? '/' . $library_path . '/build/js/utils.js' : FALSE;
+      $utils_script = '/libraries/jquery.intl-tel-input/build/js/utils.js';
       // Load utils.js from CDN defined in webform.libraries.yml.
-      if (!$utils_script || !file_exists(DRUPAL_ROOT . $utils_script)) {
-        $intl_tel_input_library = $this->libraryDiscovery->getLibraryByName('webform', 'libraries.jquery.intl-tel-input');
+      if (!file_exists(DRUPAL_ROOT . $utils_script)) {
+        /** @var \Drupal\Core\Asset\LibraryDiscoveryInterface $library_discovery */
+        $library_discovery = \Drupal::service('library.discovery');
+        $intl_tel_input_library = $library_discovery->getLibraryByName('webform', 'libraries.jquery.intl-tel-input');
         $cdn = reset($intl_tel_input_library['cdn']);
         $utils_script = $cdn . 'build/js/utils.js';
-      }
-      else {
-        $utils_script = base_path() . $library_path . '/build/js/utils.js';
       }
       $element['#attached']['drupalSettings']['webform']['intlTelInput']['utilsScript'] = $utils_script;
     }
 
-    if ($this->moduleHandler->moduleExists('telephone_validation')) {
+    // Add support for telephone_validation.module.
+    if (\Drupal::moduleHandler()->moduleExists('telephone_validation')) {
       $format = $this->getElementProperty($element, 'telephone_validation_format');
       $format = ($format !== '') ? (int) $format : '';
       if ($format === \libphonenumber\PhoneNumberFormat::NATIONAL) {
@@ -183,7 +155,7 @@ class Telephone extends TextBase {
     }
 
     // Add support for telephone_validation.module.
-    if ($this->moduleHandler->moduleExists('telephone_validation')) {
+    if (\Drupal::moduleHandler()->moduleExists('telephone_validation')) {
       $form['telephone']['telephone_validation_format'] = [
         '#type' => 'select',
         '#title' => $this->t('Valid format'),
@@ -197,7 +169,8 @@ class Telephone extends TextBase {
       $form['telephone']['telephone_validation_country'] = [
         '#type' => 'select',
         '#title' => $this->t('Valid country'),
-        '#options' => $this->telephoneValidator->getCountryList(),
+        '#options' => \Drupal::service('telephone_validation.validator')
+          ->getCountryList(),
         '#states' => [
           'visible' => [
             ':input[name="properties[telephone_validation_format]"]' => ['value' => \libphonenumber\PhoneNumberFormat::NATIONAL],
@@ -210,8 +183,9 @@ class Telephone extends TextBase {
       $form['telephone']['telephone_validation_countries'] = [
         '#type' => 'select',
         '#title' => $this->t('Valid countries'),
-        '#description' => t('If no country selected all countries are valid.'),
-        '#options' => $this->telephoneValidator->getCountryList(),
+        '#description' => $this->t('If no country selected all countries are valid.'),
+        '#options' => \Drupal::service('telephone_validation.validator')
+          ->getCountryList(),
         '#select2' => TRUE,
         '#multiple' => TRUE,
         '#states' => [
@@ -222,7 +196,7 @@ class Telephone extends TextBase {
       ];
       $this->elementManager->processElement($form['telephone']['telephone_validation_countries']);
     }
-    elseif ($this->currentUser->hasPermission('administer modules')) {
+    elseif (\Drupal::currentUser()->hasPermission('administer modules')) {
       $t_args = [':href' => 'https://www.drupal.org/project/telephone_validation'];
       $form['telephone']['telephone_validation_message'] = [
         '#type' => 'webform_message',

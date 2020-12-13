@@ -13,7 +13,6 @@ use Drupal\webform\Utility\WebformOptionsHelper;
 use Drupal\webform\Plugin\WebformElementBase;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a 'mapping' element.
@@ -28,22 +27,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class WebformMapping extends WebformElementBase {
-
-  /**
-   * The webform submission generation service.
-   *
-   * @var \Drupal\webform\WebformSubmissionGenerateInterface
-   */
-  protected $generate;
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
-    $instance->generate = $container->get('webform_submission.generate');
-    return $instance;
-  }
 
   /**
    * {@inheritdoc}
@@ -344,6 +327,9 @@ class WebformMapping extends WebformElementBase {
    * {@inheritdoc}
    */
   public function getTestValues(array $element, WebformInterface $webform, array $options = []) {
+    /** @var \Drupal\webform\WebformSubmissionGenerateInterface $generate */
+    $generate = \Drupal::service('webform_submission.generate');
+
     $form_state = new FormState();
     $form_completed = [];
     $element += [
@@ -356,7 +342,7 @@ class WebformMapping extends WebformElementBase {
     for ($i = 1; $i <= 3; $i++) {
       $value = [];
       foreach (RenderElement::children($element['table']) as $source_key) {
-        $value[$source_key] = $this->generate->getTestValue($webform, $source_key, $element['table'][$source_key][$source_key], $options);
+        $value[$source_key] = $generate->getTestValue($webform, $source_key, $element['table'][$source_key][$source_key], $options);
       }
       $values[] = $value;
     }

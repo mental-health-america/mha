@@ -4,7 +4,6 @@ namespace Drupal\rules\Form\Expression;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\rules\Context\Form\ContextFormTrait;
 use Drupal\rules\Core\RulesActionManagerInterface;
 use Drupal\rules\Engine\ActionExpressionInterface;
 use Drupal\rules\Ui\RulesUiHandlerTrait;
@@ -13,6 +12,7 @@ use Drupal\rules\Ui\RulesUiHandlerTrait;
  * UI form for adding/editing a Rules action.
  */
 class ActionForm implements ExpressionFormInterface {
+
   use ContextFormTrait;
   use StringTranslationTrait;
   use RulesUiHandlerTrait;
@@ -82,39 +82,14 @@ class ActionForm implements ExpressionFormInterface {
     $action = $this->actionManager->createInstance($action_id);
 
     $form['summary'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Summary'),
-    ];
-    $form['summary']['description'] = [
-      '#type' => 'container',
-      '#plain_text' => $this->t('Action: @summary', ['@summary' => $action->summary()]),
-      '#attributes' => ['class' => ['form-item']],
+      '#markup' => $action->summary(),
     ];
 
     $context_definitions = $action->getContextDefinitions();
-    if (!empty($context_definitions)) {
-      $form['context_definitions'] = [
-        '#type' => 'details',
-        '#title' => $this->t('Context variables'),
-        '#open' => TRUE,
-        '#tree' => TRUE,
-      ];
-      foreach ($context_definitions as $context_name => $context_definition) {
-        $form = $this->buildContextForm($form, $form_state, $context_name, $context_definition, $configuration);
-      }
-    }
 
-    $provides_definitions = $action->getProvidedContextDefinitions();
-    if (!empty($provides_definitions)) {
-      $form['provides'] = [
-        '#type' => 'details',
-        '#title' => $this->t('Provided variables'),
-        '#description' => $this->t('Adjust the name of provided variables, but note that renaming of already utilized variables invalidates the existing uses.'),
-        '#tree' => TRUE,
-      ];
-      foreach ($provides_definitions as $provides_name => $provides_definition) {
-        $form = $this->buildProvidedContextForm($form, $form_state, $provides_name, $provides_definition, $configuration);
-      }
+    $form['context']['#tree'] = TRUE;
+    foreach ($context_definitions as $context_name => $context_definition) {
+      $form = $this->buildContextForm($form, $form_state, $context_name, $context_definition, $configuration);
     }
 
     $form['save'] = [
@@ -158,18 +133,7 @@ class ActionForm implements ExpressionFormInterface {
     }
 
     $action_definition = $this->actionManager->getDefinition($action_id);
-    $context_config = $this->getContextConfigFromFormValues($form_state, $action_definition['context_definitions']);
-
-    // Rename provided variables, if any.
-    if ($provided_variables = $form_state->getValue('provides')) {
-      foreach ($provided_variables as $provides_name => $provides_context) {
-        // Do this only on rename.
-        if ($provides_name !== $provides_context['name']) {
-          \Drupal::messenger()->addWarning("providing '" . $provides_name . "' as '" . $provides_context['name'] . "'");
-          $context_config->provideAs($provides_name, $provides_context['name']);
-        }
-      }
-    }
+    $context_config = $this->getContextConfigFromFormValues($form_state, $action_definition['context']);
 
     $configuration = $context_config->toArray();
     $configuration['action_id'] = $action_id;

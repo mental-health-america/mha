@@ -16,22 +16,17 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   id = "rules_system_message",
  *   label = @Translation("Show a message on the site"),
  *   category = @Translation("System"),
- *   context_definitions = {
+ *   context = {
  *     "message" = @ContextDefinition("string",
- *       label = @Translation("Message"),
- *       description = @Translation("The text to display. HTML is allowed.")
+ *       label = @Translation("Message")
  *     ),
  *     "type" = @ContextDefinition("string",
- *       label = @Translation("Message type"),
- *       description = @Translation("The message type: status, warning, or error."),
- *       default_value = "status",
- *       required = FALSE
+ *       label = @Translation("Message type")
  *     ),
  *     "repeat" = @ContextDefinition("boolean",
  *       label = @Translation("Repeat message"),
  *       description = @Translation("If disabled and the message has been already shown, then the message won't be repeated."),
- *       assignment_restriction = "input",
- *       default_value = TRUE,
+ *       default_value = NULL,
  *       required = FALSE
  *     ),
  *   }

@@ -3,7 +3,6 @@
 namespace Drupal\Tests\webform\Functional\States;
 
 use Drupal\Component\Utility\Crypt;
-use Drupal\Tests\TestFileCreationTrait;
 use Drupal\webform\Element\WebformOtherBase;
 use Drupal\webform\Entity\Webform;
 use Drupal\Tests\webform\Functional\WebformBrowserTestBase;
@@ -15,8 +14,6 @@ use Drupal\Tests\webform\Functional\WebformBrowserTestBase;
  */
 class WebformStatesServerTest extends WebformBrowserTestBase {
 
-  use TestFileCreationTrait;
-
   /**
    * Webforms to load.
    *
@@ -26,8 +23,6 @@ class WebformStatesServerTest extends WebformBrowserTestBase {
     'test_states_crosspage',
     'test_states_server_custom',
     'test_states_server_comp',
-    'test_states_server_file',
-    'test_states_server_file',
     'test_states_server_likert',
     'test_states_server_nested',
     'test_states_server_multiple',
@@ -40,7 +35,7 @@ class WebformStatesServerTest extends WebformBrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['filter', 'file', 'webform'];
+  public static $modules = ['filter', 'webform'];
 
   /**
    * {@inheritdoc}
@@ -451,20 +446,6 @@ class WebformStatesServerTest extends WebformBrowserTestBase {
     $this->assertRaw('webform_name_nested_first field is required.');
     $this->assertRaw('webform_name_nested_last field is required.');
     $this->assertRaw(' <input data-drupal-selector="edit-webform-name-nested-last" type="text" id="edit-webform-name-nested-last" name="webform_name_nested[last]" value="" size="60" maxlength="255" class="form-text error" aria-invalid="true" data-drupal-states="{&quot;required&quot;:{&quot;.webform-submission-test-states-server-comp-add-form :input[name=\u0022webform_name_nested_trigger\u0022]&quot;:{&quot;checked&quot;:true}}}" />');
-
-    /**************************************************************************/
-    // file_trigger.
-    /**************************************************************************/
-
-    $webform = Webform::load('test_states_server_file');
-
-    // Check required error.
-    $files = $this->getTestFiles('text');;
-    $edit = [
-      'files[trigger_file]' => \Drupal::service('file_system')->realpath($files[0]->uri),
-    ];
-    $this->postSubmission($webform, $edit);
-    $this->assertRaw('textfield_dependent_required field is required.');
 
     /**************************************************************************/
     // likert element.

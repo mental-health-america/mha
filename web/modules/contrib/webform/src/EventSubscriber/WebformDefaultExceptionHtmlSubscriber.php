@@ -68,7 +68,7 @@ class WebformDefaultExceptionHtmlSubscriber extends DefaultExceptionHtmlSubscrib
   protected $messenger;
 
   /**
-   * Constructs a WebformDefaultExceptionHtmlSubscriber object.
+   * Constructs a new WebformExceptionHtmlSubscriber.
    *
    * @param \Symfony\Component\HttpKernel\HttpKernelInterface $http_kernel
    *   The HTTP kernel.

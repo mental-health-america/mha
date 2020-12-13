@@ -9,13 +9,7 @@ namespace Drupal\salesforce;
  */
 class SFID {
 
-  /**
-   * The id string value.
-   *
-   * @var string
-   */
   protected $id;
-
   const MAX_LENGTH = 18;
 
   /**
@@ -32,37 +26,8 @@ class SFID {
     }
     $this->id = $id;
     if (strlen($this->id) == 15) {
-      $this->id = static::convertId($id);
+      $this->id = self::convertId($id);
     }
-  }
-
-  /**
-   * Given a potential SFID, return a new SFID object if it's valid.
-   *
-   * @param string $id
-   *   A potential sfid.
-   *
-   * @return \Drupal\salesforce\SFID|false
-   *   A new SFID if $id is valid, otherwise FALSE.
-   */
-  public static function createIfValid($id) {
-    if (static::isValid($id)) {
-      return new static($id);
-    }
-    return FALSE;
-  }
-
-  /**
-   * Returns TRUE if $id is a valid length.
-   *
-   * @param string $id
-   *   An sfid.
-   *
-   * @return bool
-   *   Returns TRUE if $id is a valid length.
-   */
-  public static function isValid($id) {
-    return strlen($id) == 15 || strlen($id) == self::MAX_LENGTH;
   }
 
   /**

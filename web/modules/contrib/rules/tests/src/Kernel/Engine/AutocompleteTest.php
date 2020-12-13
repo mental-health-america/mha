@@ -19,7 +19,7 @@ class AutocompleteTest extends RulesKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['field', 'rules', 'node', 'user'];
+  public static $modules = ['field', 'rules', 'node', 'user'];
 
   /**
    * {@inheritdoc}

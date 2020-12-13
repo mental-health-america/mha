@@ -7,8 +7,6 @@ use Drupal\Core\TypedData\DataDefinition;
 use Drupal\link\Plugin\Field\FieldType\LinkItem;
 
 /**
- * Salesforce link to external record.
- *
  * @FieldType(
  *   id = "salesforce_link",
  *   label = @Translation("Salesforce Record"),

@@ -11,7 +11,7 @@ use Drupal\rules\Core\RulesActionBase;
  *   id = "rules_data_set",
  *   label = @Translation("Set a data value"),
  *   category = @Translation("Data"),
- *   context_definitions = {
+ *   context = {
  *     "data" = @ContextDefinition("any",
  *       label = @Translation("Data"),
  *       description = @Translation("Specifies the data to be modified using a data selector, e.g. 'node.author.name'."),
@@ -27,6 +27,7 @@ use Drupal\rules\Core\RulesActionBase;
  *   }
  * )
  *
+ * @todo Add various input restrictions: selector on 'data'.
  * @todo 'allow NULL' for both 'data' and 'value'?
  */
 class DataSet extends RulesActionBase {

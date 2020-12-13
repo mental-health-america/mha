@@ -4,8 +4,6 @@ use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\HttpFoundation;
-use Drupal\Core\Url;
-
 class ImportForm implements FormInterface {
    /**
    * Implements \Drupal\Core\Form\FormInterface::getFormID().
@@ -22,7 +20,7 @@ class ImportForm implements FormInterface {
       if(\Drupal::request()->attributes->get('bid')) $bid = \Drupal::request()->attributes->get('bid');
 
       if (is_numeric($bid)) {
-        $bblock = \Drupal::database()->select('{gavias_slider}', 'd')
+        $bblock = db_select('{gavias_slider}', 'd')
            ->fields('d')
            ->condition('id', $bid, '=')
            ->execute()
@@ -32,7 +30,7 @@ class ImportForm implements FormInterface {
       }
 
       if($bblock['id']==0){
-        \Drupal::messenger()->addMessage('Not found gavias block slider !');
+        drupal_set_message('Not found gavias block slider !');
         return false;
       }
 
@@ -73,14 +71,14 @@ class ImportForm implements FormInterface {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     if ($form['id']['#value']) {
       $id = $form['id']['#value'];
-      \Drupal::database()->update("gavias_slider")
+      db_update("gavias_slider")
       ->fields(array(
         'params' => $form['params']['#value'],
       ))
       ->condition('id', $id)
       ->execute();
-      \Drupal::messenger()->addMessage("Block Builder '{$form['title']['#value']}' has been updated");
-      $response = new \Symfony\Component\HttpFoundation\RedirectResponse(Url::fromRoute('gavias_slider.admin.edit', array('bid'=>$id))->toString());
+      drupal_set_message("Block Builder '{$form['title']['#value']}' has been updated");
+      $response = new \Symfony\Component\HttpFoundation\RedirectResponse(\Drupal::url('gavias_slider.admin.edit', array('bid'=>$id)));
       $response->send();
     }  
   }

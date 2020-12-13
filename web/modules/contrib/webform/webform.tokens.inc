@@ -72,19 +72,14 @@ function webform_token_info() {
     'description' => t('The URL the user submitted the webform submission.'),
     'type' => 'url',
   ];
-  $webform_submission['token-view-url'] = [
+  $webform_submission['view-url'] = [
     'name' => t('View (token) URL'),
     'description' => t('The URL that can used to view the webform submission. The webform must be configured to allow users to view a submission using a secure token.'),
     'type' => 'url',
   ];
-  $webform_submission['token-update-url'] = [
+  $webform_submission['update-url'] = [
     'name' => t('Update (token) URL'),
     'description' => t('The URL that can used to update the webform submission. The webform must be configured to allow users to update a submission using a secure token.'),
-    'type' => 'url',
-  ];
-  $webform_submission['token-delete-url'] = [
-    'name' => t('Delete (token) URL'),
-    'description' => t('The URL that can used to delete the webform submission. The webform must be configured to allow users to delete a submission using a secure token.'),
     'type' => 'url',
   ];
   $webform_submission['langcode'] = [
@@ -542,10 +537,12 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
           $replacements[$original] = $webform_submission->getSourceUrl()->toString();
           break;
 
-        case 'token-view-url':
-        case 'token-update-url':
-        case 'token-delete-url':
-          $replacements[$original] = $webform_submission->getTokenUrl(preg_replace('/^token-(view|update|delete)-url$/', '\1', $name))->toString();
+        case 'view-url':
+          $replacements[$original] = $webform_submission->getTokenUrl('view')->toString();
+          break;
+
+        case 'update-url':
+          $replacements[$original] = $webform_submission->getTokenUrl('update')->toString();
           break;
 
         case 'token':
@@ -733,21 +730,21 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
       $replacements += $token_service->generate('webform', $webform_tokens, ['webform' => $webform], $options, $bubbleable_metadata);
     }
     if (($source_entity_tokens = $token_service->findWithPrefix($tokens, 'source-entity')) && ($source_entity = $webform_submission->getSourceEntity(TRUE))) {
-      $type = $source_entity->getEntityType()->get('token_type') ?: $source_entity->getEntityTypeId();
-      $replacements += $token_service->generate($type, $source_entity_tokens, [$type => $source_entity], $options, $bubbleable_metadata);
+      $replacements += $token_service->generate($source_entity->getEntityTypeId(), $source_entity_tokens, [$source_entity->getEntityTypeId() => $source_entity], $options, $bubbleable_metadata);
     }
     if (($submitted_to_tokens = $token_service->findWithPrefix($tokens, 'submitted-to')) && ($submitted_to = $webform_submission->getSourceEntity(TRUE) ?: $webform_submission->getWebform())) {
-      $type = $submitted_to->getEntityType()->get('token_type') ?: $submitted_to->getEntityTypeId();
-      $replacements += $token_service->generate($type, $submitted_to_tokens, [$type => $submitted_to], $options, $bubbleable_metadata);
+      $replacements += $token_service->generate($submitted_to->getEntityTypeId(), $submitted_to_tokens, [$submitted_to->getEntityTypeId() => $submitted_to], $options, $bubbleable_metadata);
     }
-    foreach (['token-view-url', 'token-update-url', 'token-delete-url', 'source-url'] as $token) {
+    foreach (['view-url', 'update-url', 'source-url'] as $token) {
       if ($url_tokens = $token_service->findWithPrefix($tokens, $token)) {
         $url = NULL;
         switch ($token) {
-          case 'token-view-url':
-          case 'token-update-url':
-          case 'token-delete-url':
-            $url = $webform_submission->getTokenUrl(preg_replace('/^token-(view|update|delete)-url$/', '\1', $token));
+          case 'view-url':
+            $url = $webform_submission->getTokenUrl('view');
+            break;
+
+          case 'update-url':
+            $url = $webform_submission->getTokenUrl('update');
             break;
 
           case 'source-url':

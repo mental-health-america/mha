@@ -9,32 +9,9 @@ namespace Drupal\salesforce;
  */
 class SelectQueryResult {
 
-  /**
-   * Total number of records for this query.
-   *
-   * @var int
-   */
   protected $totalSize;
-
-  /**
-   * Indicates whether the current result set is the complete set.
-   *
-   * @var bool
-   */
   protected $done;
-
-  /**
-   * The current result set.
-   *
-   * @var array
-   */
   protected $records;
-
-  /**
-   * If there are additional records, the URL of the query to fetch them.
-   *
-   * @var string
-   */
   protected $nextRecordsUrl;
 
   /**
@@ -51,20 +28,14 @@ class SelectQueryResult {
     }
     $this->records = [];
     foreach ($results['records'] as $record) {
-      if ($sobj = SObject::createIfValid($record)) {
-        $this->records[$record['Id']] = $sobj;
-      }
+      $this->records[$record['Id']] = new SObject($record);
     }
   }
 
   /**
-   * Convenience method a SelectQueryResult from a single SObject record.
+   * Create a SelectQueryResult from a single SObject record.
    *
    * @param \Drupal\salesforce\SObject $record
-   *   The record to be created.
-   *
-   * @return \Drupal\salesforce\SelectQueryResult
-   *   A query result containing the given record.
    */
   public static function createSingle(SObject $record) {
     $results = [
@@ -73,7 +44,7 @@ class SelectQueryResult {
       'records' => []
     ];
     $result = new static($results);
-    $result->records[(string) $record->id()] = $record;
+    $result->records[(string)$record->id()] = $record;
     return $result;
   }
 
@@ -123,11 +94,17 @@ class SelectQueryResult {
    * @param \Drupal\salesforce\SFID $id
    *   The SFID.
    *
-   * @return \Drupal\salesforce\SObject|false
-   *   The record, or FALSE if no record exists for given id.
+   * @return \Drupal\salesforce\SObject
+   *   The record.
+   *
+   * @throws \Exception
+   *   If the given SFID doesn't exist in these results.
    */
   public function record(SFID $id) {
-    return isset($this->records[(string) $id]) ? $this->records[(string) $id] : FALSE;
+    if (!isset($this->records[(string) $id])) {
+      throw new \Exception('No record found');
+    }
+    return $this->records[(string) $id];
   }
 
 }

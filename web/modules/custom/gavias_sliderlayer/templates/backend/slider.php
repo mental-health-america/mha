@@ -35,7 +35,7 @@
           </tr>
 
           <tr>
-            <td style="position: relative;">
+            <td>
               <label>Background image</label>
               <?php print gavias_sliderlayer_field_upload_slider(); ?>
             </td>

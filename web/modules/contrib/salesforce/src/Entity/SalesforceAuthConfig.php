@@ -3,9 +3,7 @@
 namespace Drupal\salesforce\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityBase;
-use Drupal\Core\Entity\EntityWithPluginCollectionInterface;
-use Drupal\Core\Plugin\DefaultSingleLazyPluginCollection;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Entity\EntityInterface;
 
 /**
  * Defines a Salesforce Auth entity.
@@ -33,17 +31,9 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
  *     "revoke" = "/admin/config/salesforce/authorize/revoke/{salesforce_auth}"
  *   },
  *   admin_permission = "authorize salesforce",
- *   config_export = {
- *    "id",
- *    "label",
- *    "provider",
- *    "provider_settings"
- *   },
  * )
  */
-class SalesforceAuthConfig extends ConfigEntityBase implements EntityWithPluginCollectionInterface {
-
-  use StringTranslationTrait;
+class SalesforceAuthConfig extends ConfigEntityBase implements EntityInterface {
 
   /**
    * Auth id. e.g. "oauth_full_sandbox".
@@ -76,16 +66,9 @@ class SalesforceAuthConfig extends ConfigEntityBase implements EntityWithPluginC
   /**
    * Auth manager.
    *
-   * @var \Drupal\salesforce\SalesforceAuthProviderPluginManagerInterface
+   * @var \Drupal\salesforce\SalesforceAuthProviderPluginManager
    */
   protected $manager;
-
-  /**
-   * The plugin provider.
-   *
-   * @var \Drupal\salesforce\SalesforceAuthProviderInterface
-   */
-  protected $plugin;
 
   /**
    * Id getter.
@@ -106,24 +89,11 @@ class SalesforceAuthConfig extends ConfigEntityBase implements EntityWithPluginC
    *
    * @return \Drupal\salesforce\SalesforceAuthProviderInterface|null
    *   The auth provider plugin, or null.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
   public function getPlugin() {
-    if (!$this->plugin) {
-      $this->plugin = $this->provider ? $this->authManager()->createInstance($this->provider, $this->getProviderSettings()) : NULL;
-    }
-    return $this->plugin;
-  }
-
-  /**
-   * Wrapper for provider settings to inject instance id, from auth config.
-   *
-   * @return array
-   *   Provider settings.
-   */
-  public function getProviderSettings() {
-    return $this->provider_settings + ['id' => $this->id()];
+    $settings = $this->provider_settings ?: [];
+    $settings += ['id' => $this->id()];
+    return $this->provider ? $this->authManager()->createInstance($this->provider, $settings) : NULL;
   }
 
   /**
@@ -137,21 +107,16 @@ class SalesforceAuthConfig extends ConfigEntityBase implements EntityWithPluginC
   }
 
   /**
-   * Get credentials.
-   *
-   * @return \Drupal\salesforce\Consumer\SalesforceCredentialsInterface|false
-   *   Credentials or FALSE.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\PluginException
+   * {@inheritdoc}
    */
-  public function getCredentials() {
-    return $this->getPlugin() ? $this->getPlugin()->getCredentials() : FALSE;
+  public function getLoginUrl() {
+    return $this->getPlugin() ? $this->getPlugin()->getLoginUrl() : '';
   }
 
   /**
    * Auth manager wrapper.
    *
-   * @return \Drupal\salesforce\SalesforceAuthProviderPluginManagerInterface|mixed
+   * @return \Drupal\salesforce\SalesforceAuthProviderPluginManager|mixed
    *   The auth provider plugin manager.
    */
   public function authManager() {
@@ -168,26 +133,11 @@ class SalesforceAuthConfig extends ConfigEntityBase implements EntityWithPluginC
    *   The list of plugins, indexed by ID.
    */
   public function getPluginsAsOptions() {
+    $options = ['' => t('- Select -')];
     foreach ($this->authManager()->getDefinitions() as $id => $definition) {
-      if ($id == 'broken') {
-        // Do not add the fallback provider.
-        continue;
-      }
       $options[$id] = ($definition['label']);
     }
-    if (!empty($options)) {
-      return ['' => $this->t('- Select -')] + $options;
-    }
-    return [];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getPluginCollections() {
-    return [
-      'auth_provider' => new DefaultSingleLazyPluginCollection($this->authManager(), $this->provider, $this->getProviderSettings()),
-    ];
+    return $options;
   }
 
 }

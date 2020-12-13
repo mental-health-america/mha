@@ -2,8 +2,7 @@
 
 namespace Drupal\backup_migrate\Form;
 
-use Drupal\backup_migrate\Drupal\Config\DrupalConfigHelper;
-use Drupal\Component\Utility\Environment;
+use BackupMigrate\Drupal\Config\DrupalConfigHelper;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 
@@ -30,8 +29,10 @@ class BackupMigrateRestoreForm extends FormBase {
     $form['backup_migrate_restore_upload'] = [
       '#title' => $this->t('Upload a Backup File'),
       '#type' => 'file',
-      '#description' => $this->t("Upload a backup file created by Backup and Migrate. For other database or file backups please use another tool for import. Max file size: %size",
-        ["%size" => format_size(Environment::getUploadMaxSize())]
+      '#description' => $this->t("Upload a backup file created by Backup
+      and Migrate. For other database or file backups please use another
+      tool for import. Max file size: %size",
+       ["%size" => format_size(file_upload_max_size())]
       ),
     ];
 
@@ -47,6 +48,13 @@ class BackupMigrateRestoreForm extends FormBase {
     ];
 
     return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function validateForm(array &$form, FormStateInterface $form_state) {
+    parent::validateForm($form, $form_state);
   }
 
   /**

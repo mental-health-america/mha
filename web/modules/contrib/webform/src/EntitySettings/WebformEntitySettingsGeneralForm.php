@@ -10,6 +10,8 @@ use Drupal\Core\Render\Element;
 use Drupal\Core\Url;
 use Drupal\webform\Plugin\WebformHandlerInterface;
 use Drupal\webform\WebformMessageManagerInterface;
+use Drupal\webform\WebformThemeManagerInterface;
+use Drupal\webform\WebformThirdPartySettingsManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -39,14 +41,30 @@ class WebformEntitySettingsGeneralForm extends WebformEntitySettingsBaseForm {
   protected $themeManager;
 
   /**
+   * Constructs a WebformEntitySettingsGeneralForm.
+   *
+   * @param \Drupal\webform\WebformMessageManagerInterface $message_manager
+   *   The webform message manager.
+   * @param \Drupal\webform\WebformThirdPartySettingsManagerInterface $third_party_settings_manager
+   *   The webform third party settings manager.
+   * @param \Drupal\webform\WebformThemeManagerInterface $theme_manager
+   *   The webform theme manager.
+   */
+  public function __construct(WebformMessageManagerInterface $message_manager, WebformThirdPartySettingsManagerInterface $third_party_settings_manager, WebformThemeManagerInterface $theme_manager) {
+    $this->messageManager = $message_manager;
+    $this->thirdPartySettingsManager = $third_party_settings_manager;
+    $this->themeManager = $theme_manager;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    $instance = parent::create($container);
-    $instance->messageManager = $container->get('webform.message_manager');
-    $instance->thirdPartySettingsManager = $container->get('webform.third_party_settings_manager');
-    $instance->themeManager = $container->get('webform.theme_manager');
-    return $instance;
+    return new static(
+      $container->get('webform.message_manager'),
+      $container->get('webform.third_party_settings_manager'),
+      $container->get('webform.theme_manager')
+    );
   }
 
   /**
@@ -168,9 +186,9 @@ class WebformEntitySettingsGeneralForm extends WebformEntitySettingsBaseForm {
       '#title' => $this->t('URL path settings'),
       '#open' => TRUE,
     ];
-    $default_page_base_path = $default_settings['default_page_base_path'];
+    $default_page_base_path = trim($default_settings['default_page_base_path'], '/');
     if ($default_page_base_path) {
-      $default_page_submit_path = $default_page_base_path . '/' . str_replace('_', '-', $webform->id());
+      $default_page_submit_path = trim($default_settings['default_page_base_path'], '/') . '/' . str_replace('_', '-', $webform->id());
       $default_settings['default_page_submit_path'] = $default_page_submit_path;
       $default_settings['default_page_confirm_path'] = $default_page_submit_path . '/confirmation';
       $form_state->set('default_settings', $default_settings);
@@ -217,9 +235,7 @@ class WebformEntitySettingsGeneralForm extends WebformEntitySettingsBaseForm {
       $form['page_settings']['page_submit_path'] = [
         '#type' => 'textfield',
         '#title' => $this->t('Webform URL alias'),
-        '#description' => $this->t('Optionally specify an alternative URL by which the webform submit page can be accessed. Any value entered here will overwrite ALL aliases you may have created for this form via the <a href=":path_alias">path</a> module.', $t_args)
-           . ' ' . $this->t('The URL alias has to start with a slash and cannot end with a slash.'),
-       '#pattern' => '^/.+(?<!/)$',
+        '#description' => $this->t('Optionally specify an alternative URL by which the webform submit page can be accessed. Any value entered here will overwrite ALL aliases you may have created for this form via the <a href=":path_alias">path</a> module.', $t_args),
         '#default_value' => $settings['page_submit_path'],
         '#states' => [
           'visible' => [
@@ -230,9 +246,7 @@ class WebformEntitySettingsGeneralForm extends WebformEntitySettingsBaseForm {
       $form['page_settings']['page_confirm_path'] = [
         '#type' => 'textfield',
         '#title' => $this->t('Confirmation page URL alias'),
-        '#description' => $this->t('Optionally specify an alternative URL by which the webform confirmation page can be accessed.', $t_args)
-           . ' ' . $this->t('The URL alias has to start with a slash and cannot end with a slash.'),
-       '#pattern' => '^/.+(?<!/)$',
+        '#description' => $this->t('Optionally specify an alternative URL by which the webform confirmation page can be accessed.', $t_args),
         '#default_value' => $settings['page_confirm_path'],
         '#states' => [
           'visible' => [
@@ -280,18 +294,6 @@ class WebformEntitySettingsGeneralForm extends WebformEntitySettingsBaseForm {
         ],
       ],
     ];
-    $form['ajax_settings']['ajax_container']['ajax_progress_type'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Ajax progress type'),
-      '#description' => $this->t("Select the progress indicator displayed when Ajax is triggered."),
-      '#options' => [
-        '' => '',
-        'throbber' => $this->t('Throbber'),
-        'fullscreen' => $this->t('Full screen'),
-
-      ],
-      '#default_value' => $settings['ajax_progress_type'],
-    ];
     $form['ajax_settings']['ajax_container']['ajax_scroll_top'] = [
       '#type' => 'select',
       '#title' => $this->t('On Ajax load, scroll to the top of the…'),
@@ -303,6 +305,18 @@ class WebformEntitySettingsGeneralForm extends WebformEntitySettingsBaseForm {
       ],
       '#default_value' => $settings['ajax_scroll_top'],
       '#attributes' => ['data-webform-states-no-clear' => TRUE],
+    ];
+    $form['ajax_settings']['ajax_container']['ajax_progress_type'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Ajax progress type'),
+      '#description' => $this->t("Select the progress indicator displayed when Ajax is triggered."),
+      '#options' => [
+        '' => '',
+        'throbber' => $this->t('Throbber'),
+        'fullscreen' => $this->t('Full screen'),
+
+      ],
+      '#default_value' => $settings['ajax_progress_type'],
     ];
     $form['ajax_settings']['ajax_container']['ajax_effect'] = [
       '#type' => 'select',

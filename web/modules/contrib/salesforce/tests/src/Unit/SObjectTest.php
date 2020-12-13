@@ -11,12 +11,6 @@ use Drupal\salesforce\SObject;
  * @group salesforce_pull
  */
 class SObjectTest extends UnitTestCase {
-
-  /**
-   * Required modules.
-   *
-   * @var array
-   */
   static public $modules = ['salesforce'];
 
   /**
@@ -31,7 +25,7 @@ class SObjectTest extends UnitTestCase {
   /**
    * Test object instantiation wth no ID.
    *
-   * @expectedException \Exception
+   * @expectedException Exception
    */
   public function testObjectNoId() {
     new SObject(['attributes' => ['type' => 'dummy']]);
@@ -40,7 +34,7 @@ class SObjectTest extends UnitTestCase {
   /**
    * Test object instantiation with bad ID.
    *
-   * @expectedException \Exception
+   * @expectedException Exception
    */
   public function testObjectBadId() {
     new SObject(['id' => '1234567890', 'attributes' => ['type' => 'dummy']]);
@@ -49,7 +43,7 @@ class SObjectTest extends UnitTestCase {
   /**
    * Test object instantiation with no type.
    *
-   * @expectedException \Exception
+   * @expectedException Exception
    */
   public function testObjectNoType() {
     new SObject(['id' => '1234567890abcde']);
@@ -57,10 +51,12 @@ class SObjectTest extends UnitTestCase {
 
   /**
    * Test invalid field call.
+   *
+   * @expectedException Exception
    */
   public function testFieldNotExists() {
     $sobject = new SObject(['id' => '1234567890abcde', 'attributes' => ['type' => 'dummy']]);
-    $this->assertNull($sobject->field('key'));
+    $sobject->field('key');
   }
 
   /**

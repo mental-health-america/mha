@@ -16,10 +16,6 @@ title: 'Test: Translations'
 description: 'Test translating a webform.'
 category: null
 elements: |
-  processed_text:
-    '#type': processed_text
-    '#text': '<p><strong>Some text</strong></p>'
-    '#format': basic_html
   textfield:
     '#type': textfield
     '#title': 'Text field'
@@ -35,19 +31,6 @@ elements: |
       5: Five
       6: Six
     '#other__option_label': 'Custom number…'
-  webform_image_select:
-    '#type': webform_image_select
-    '#title': 'Image select'
-    '#images':
-      kitten_1:
-        text: 'Cute Kitten 1'
-        src: 'http://placekitten.com/220/200'
-      kitten_2:
-        text: 'Cute Kitten 2'
-        src: 'http://placekitten.com/180/200'
-      kitten_3:
-        text: 'Cute Kitten 3'
-        src: 'http://placekitten.com/130/200'
   details:
     '#type': details
     '#title': Details
@@ -72,7 +55,7 @@ elements: |
   address:
     '#type': webform_address
     '#title': Address
-  computed_token:
+  token:
     '#type': webform_computed_token
     '#title': 'Computed (token)'
     '#value': 'Site name: [site:name]'
@@ -101,7 +84,7 @@ settings:
   form_previous_submissions: true
   form_confidential: false
   form_confidential_message: ''
-  form_disable_remote_addr: false
+  form_remote_addr: true
   form_convert_anonymous: false
   form_prepopulate: false
   form_prepopulate_source_entity: false
@@ -210,7 +193,6 @@ settings:
   results_customize: false
   token_view: false
   token_update: false
-  token_delete: false
   serial_disabled: false
 access:
   create:

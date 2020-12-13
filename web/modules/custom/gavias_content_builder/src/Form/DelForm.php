@@ -70,12 +70,12 @@ class DelForm extends ConfirmFormBase  {
   public function submitForm(array &$form, FormStateInterface $form_state) {
      $bid = $this->bid;
     if(!$bid && \Drupal::request()->attributes->get('bid')) $bid = \Drupal::request()->attributes->get('bid');
-    \Drupal::database()->delete('gavias_content_builder')
+    db_delete('gavias_content_builder')
             ->condition('id', $bid)
             ->execute();
     \Drupal::service('plugin.manager.block')->clearCachedDefinitions();
-    \Drupal::messenger()->addMessage("blockbuilder '#{$bid}' has been delete");
-    $response = new \Symfony\Component\HttpFoundation\RedirectResponse(Url::fromRoute('gavias_content_builder.admin')->toString());
+    drupal_set_message("blockbuilder '#{$bid}' has been delete");
+    $response = new \Symfony\Component\HttpFoundation\RedirectResponse(\Drupal::url('gavias_content_builder.admin'));
     $response->send();
   }
 

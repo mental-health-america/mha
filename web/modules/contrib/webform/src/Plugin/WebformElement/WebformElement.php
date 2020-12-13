@@ -12,7 +12,6 @@ use Drupal\webform\Plugin\WebformElementBase;
  *   id = "webform_element",
  *   label = @Translation("Generic element"),
  *   description = @Translation("Provides a generic form element."),
- *   hidden = TRUE,
  * )
  */
 class WebformElement extends WebformElementBase {

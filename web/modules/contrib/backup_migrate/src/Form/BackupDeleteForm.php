@@ -2,23 +2,23 @@
 
 namespace Drupal\backup_migrate\Form;
 
+use Drupal\backup_migrate\Entity\Destination;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
-
 /**
  *
  */
 class BackupDeleteForm extends ConfirmFormBase {
 
   /**
-   * @var \Drupal\backup_migrate\Entity\Destination
+   * @var Destination
    */
-  public $destination;
+  var $destination;
 
   /**
    * @var string
    */
-  public $backupId;
+  var $backup_id;
 
   /**
    * Returns the question to ask the user.
@@ -34,10 +34,10 @@ class BackupDeleteForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function getDescription() {
-    return $this->t('This will permanently remove %backupId from %destination_name.',
+    return $this->t('This will permanently remove %backup_id from %destination_name.',
       [
-        '%backupId' => $this->backupId,
-        '%destination_name' => $this->destination->label(),
+        '%backup_id' => $this->backup_id,
+        '%destination_name' => $this->destination->label()
       ]
     );
   }
@@ -69,12 +69,9 @@ class BackupDeleteForm extends ConfirmFormBase {
     return 'backup_migrate_backup_delete_confirm';
   }
 
-  /**
-   *
-   */
-  public function buildForm(array $form, FormStateInterface $form_state, $backup_migrate_destination = NULL, $backupId = NULL) {
+  public function buildForm(array $form, FormStateInterface $form_state, $backup_migrate_destination = NULL, $backup_id = NULL) {
     $this->destination = $backup_migrate_destination;
-    $this->backupId = $backupId;
+    $this->backup_id = $backup_id;
 
     return parent::buildForm($form, $form_state);
   }
@@ -89,7 +86,7 @@ class BackupDeleteForm extends ConfirmFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $destination = $this->destination->getObject();
-    $destination->deleteFile($this->backupId);
+    $destination->deleteFile($this->backup_id);
     $form_state->setRedirectUrl($this->getCancelUrl());
   }
 

@@ -11,8 +11,6 @@ use Symfony\Component\Console\Output\Output;
 use Drupal\salesforce\Commands\SalesforceCommandsBase;
 use Drupal\salesforce\Commands\QueryResult;
 use Drupal\salesforce\Commands\QueryResultTableFormatter;
-use Drupal\salesforce\SalesforceAuthProviderPluginManagerInterface;
-use Drupal\salesforce\Storage\SalesforceAuthTokenStorageInterface;
 
 /**
  * Shared command base for Salesforce Drush commands.
@@ -34,36 +32,18 @@ abstract class SalesforceMappingCommandsBase extends SalesforceCommandsBase {
   protected $mappedObjectStorage;
 
   /**
-   * Salesforce Auth Provider plugin manager service.
-   *
-   * @var \Drupal\salesforce\SalesforceAuthProviderPluginManagerInterface
-   */
-  protected $authMan;
-
-  /**
-   * Salesforce Auth Token Storage service.
-   *
-   * @var \Drupal\salesforce\Storage\SalesforceAuthTokenStorageInterface
-   */
-  protected $tokenStorage;
-
-  /**
    * SalesforceMappingCommandsBase constructor.
    *
    * @param \Drupal\salesforce\Rest\RestClient $client
    *   SF client.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $etm
    *   Entity type manager.
-   * @param \Drupal\salesforce\SalesforceAuthProviderPluginManagerInterface $auth_man
-   *   Auth plugin manager.
-   * @param \Drupal\salesforce\Storage\SalesforceAuthTokenStorageInterface $token_storage
-   *   Token storage.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function __construct(RestClient $client, EntityTypeManagerInterface $etm, SalesforceAuthProviderPluginManagerInterface $auth_man, SalesforceAuthTokenStorageInterface $token_storage) {
-    parent::__construct($client, $etm, $auth_man, $token_storage);
+  public function __construct(RestClient $client, EntityTypeManagerInterface $etm) {
+    parent::__construct($client, $etm);
 
     $this->mappingStorage = $etm->getStorage('salesforce_mapping');
     $this->mappedObjectStorage = $etm->getStorage('salesforce_mapped_object');
@@ -144,10 +124,9 @@ abstract class SalesforceMappingCommandsBase extends SalesforceCommandsBase {
    *
    * @return \Drupal\salesforce_mapping\Entity\SalesforceMappingInterface[]
    *   The mappings.
-   *
-   * @throws \Exception
    */
   protected function getMappingsFromName($name, $dir = NULL) {
+    $mappings = [];
     if ($name == 'ALL') {
       if ($dir == 'pull') {
         $mappings = $this->mappingStorage->loadPullMappings();

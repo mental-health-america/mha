@@ -2,10 +2,11 @@
 
 namespace Drupal\webform\Form;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\webform\EntityStorage\WebformEntityStorageTrait;
+use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -13,8 +14,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  * Provides a webform submission deletion confirmation form.
  */
 class WebformSubmissionDeleteMultiple extends ConfirmFormBase {
-
-  use WebformEntityStorageTrait;
 
   /**
    * The array of webform_submissions to delete.
@@ -31,13 +30,33 @@ class WebformSubmissionDeleteMultiple extends ConfirmFormBase {
   protected $tempStoreFactory;
 
   /**
+   * The webform submission storage.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected $storage;
+
+  /**
+   * Constructs a WebformSubmissionDeleteMultiple object.
+   *
+   * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $temp_store_factory
+   *   The tempstore factory.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
+   */
+  public function __construct(PrivateTempStoreFactory $temp_store_factory, EntityTypeManagerInterface $entity_type_manager) {
+    $this->tempStoreFactory = $temp_store_factory;
+    $this->storage = $entity_type_manager->getStorage('webform_submission');
+  }
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    $instance = parent::create($container);
-    $instance->tempStoreFactory = $container->get('tempstore.private');
-    $instance->entityTypeManager = $container->get('entity_type.manager');
-    return $instance;
+    return new static(
+      $container->get('tempstore.private'),
+      $container->get('entity_type.manager')
+    );
   }
 
   /**
@@ -95,7 +114,7 @@ class WebformSubmissionDeleteMultiple extends ConfirmFormBase {
     /** @var \Drupal\webform\WebformSubmissionInterface[] $webform_submissions */
     $webform_submissions = $this->tempStoreFactory->get('webform_submission_multiple_delete_confirm')->get(\Drupal::currentUser()->id());
     if ($form_state->getValue('confirm') && !empty($webform_submissions)) {
-      $this->getSubmissionStorage()->delete($webform_submissions);
+      $this->storage->delete($webform_submissions);
       $this->logger('content')->notice('Deleted @count submission.', ['@count' => count($webform_submissions)]);
       $this->tempStoreFactory->get('webform_submission_multiple_delete_confirm')->delete(\Drupal::currentUser()->id());
     }

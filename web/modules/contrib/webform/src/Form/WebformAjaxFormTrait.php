@@ -22,7 +22,7 @@ use Drupal\webform\WebformSubmissionForm;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- * Trait for webform ajax support.
+ * Trait class for Webform Ajax support.
  */
 trait WebformAjaxFormTrait {
 
@@ -408,11 +408,12 @@ trait WebformAjaxFormTrait {
    * @see \Drupal\webform\Form\WebformAjaxFormTrait::submitAjaxForm
    */
   protected function announce($text, $priority = 'polite') {
-    $announcements =& drupal_static('webform_announcements', []);
+    $announcements = $this->getAnnouncements();
     $announcements[] = [
       'text' => $text,
       'priority' => $priority,
     ];
+    $this->setAnnouncements($announcements);
   }
 
   /**
@@ -422,7 +423,8 @@ trait WebformAjaxFormTrait {
    *   An associative array of announcements.
    */
   protected function getAnnouncements() {
-    return drupal_static('webform_announcements', []);
+    $session = $this->getRequest()->getSession();
+    return $session->get('announcements') ?: [];
   }
 
   /**
@@ -432,15 +434,18 @@ trait WebformAjaxFormTrait {
    *   An associative array of announcements.
    */
   protected function setAnnouncements(array $announcements) {
-    $this->resetAnnouncements();
-    drupal_static('webform_announcements', $announcements);
+    $session = $this->getRequest()->getSession();
+    $session->set('announcements', $announcements);
+    $session->save();
   }
 
   /**
    * Reset announcements.
    */
   protected function resetAnnouncements() {
-    drupal_static_reset('webform_announcements');
+    $session = $this->getRequest()->getSession();
+    $session->remove('announcements');
+    $session->save();
   }
 
 }

@@ -5,20 +5,19 @@ namespace Drupal\rules\Engine;
 use Drupal\Core\Entity\DependencyTrait;
 use Drupal\rules\Context\ContextDefinition;
 use Drupal\rules\Context\ContextDefinitionInterface;
-use Drupal\rules\Context\ExecutionMetadataState;
-use Drupal\rules\Context\ExecutionState;
 use Drupal\rules\Exception\LogicException;
 
 /**
  * Handles executable Rules components.
  */
 class RulesComponent {
+
   use DependencyTrait;
 
   /**
    * The rules execution state.
    *
-   * @var \Drupal\rules\Context\ExecutionStateInterface
+   * @var \Drupal\rules\Engine\ExecutionStateInterface
    */
   protected $state;
 
@@ -126,7 +125,7 @@ class RulesComponent {
   /**
    * Gets the execution state.
    *
-   * @return \Drupal\rules\Context\ExecutionStateInterface
+   * @return \Drupal\rules\Engine\ExecutionStateInterface
    *   The execution state for this component.
    */
   public function getState() {
@@ -172,7 +171,7 @@ class RulesComponent {
       // @todo Correctly handle multiple events to intersect available context.
       // @todo Use setter injection for the service.
       $event_definition = \Drupal::service('plugin.manager.rules_event')->getDefinition($event_name);
-      foreach ($event_definition['context_definitions'] as $context_name => $context_definition) {
+      foreach ($event_definition['context'] as $context_name => $context_definition) {
         $this->addContextDefinition($context_name, $context_definition);
       }
     }
@@ -233,20 +232,7 @@ class RulesComponent {
    *   Thrown if the Rules expression triggers errors during execution.
    */
   public function execute() {
-    // @todo Use injection for the service.
-    $rulesDebugLogger = \Drupal::service('logger.channel.rules_debug');
-    $rulesDebugLogger->info('RulesComponent: Rule %label fires.', [
-      '%label' => $this->expression->getLabel(),
-      'element' => $this->expression,
-      'scope' => TRUE,
-    ]);
     $this->expression->executeWithState($this->state);
-    $rulesDebugLogger->info('RulesComponent: Rule %label has fired.', [
-      '%label' => $this->expression->getLabel(),
-      'element' => $this->expression,
-      'scope' => FALSE,
-    ]);
-
     $this->state->autoSave();
     $result = [];
     foreach ($this->providedContext as $name) {
@@ -275,7 +261,6 @@ class RulesComponent {
     foreach ($arguments as $name => $value) {
       $this->setContextValue($name, $value);
     }
-
     return $this->execute();
   }
 
@@ -296,7 +281,7 @@ class RulesComponent {
    * Describes the metadata state before execution - only context definitions
    * are set as variables.
    *
-   * @return \Drupal\rules\Context\ExecutionMetadataStateInterface
+   * @return \Drupal\rules\Engine\ExecutionMetadataStateInterface
    *   The execution metadata state populated with context definitions.
    */
   public function getMetadataState() {

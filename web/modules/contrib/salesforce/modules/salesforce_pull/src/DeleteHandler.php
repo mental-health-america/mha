@@ -10,7 +10,7 @@ use Drupal\salesforce\Event\SalesforceErrorEvent;
 use Drupal\salesforce\Event\SalesforceNoticeEvent;
 use Drupal\salesforce\Rest\RestClientInterface;
 use Drupal\salesforce\SFID;
-use Drupal\salesforce_mapping\Event\SalesforceDeleteAllowedEvent;
+
 use Drupal\salesforce_mapping\MappingConstants;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -63,11 +63,6 @@ class DeleteHandler {
    */
   protected $time;
 
-  /**
-   * Event dispatcher service.
-   *
-   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-   */
   protected $eventDispatcher;
 
   /**
@@ -136,8 +131,6 @@ class DeleteHandler {
    *   Array of deleted records.
    * @param string $type
    *   Salesforce object type.
-   *
-   * @throws \Drupal\Core\Entity\EntityStorageException
    */
   protected function handleDeletedRecords(array $deleted, $type) {
     if (empty($deleted['deletedRecords'])) {
@@ -163,8 +156,6 @@ class DeleteHandler {
    *   Record array.
    * @param string $type
    *   Salesforce object type.
-   *
-   * @throws \Drupal\Core\Entity\EntityStorageException
    */
   protected function handleDeletedRecord(array $record, $type) {
     $mapped_objects = $this->mappedObjectStorage->loadBySfid(new SFID($record['id']));
@@ -201,13 +192,6 @@ class DeleteHandler {
       }
 
       if (!$sf_mapping->checkTriggers([MappingConstants::SALESFORCE_MAPPING_SYNC_SF_DELETE])) {
-        return;
-      }
-
-      // Before attempting the final delete, give other modules a chance to disallow it.
-      $deleteAllowedEvent = new SalesforceDeleteAllowedEvent($mapped_object);
-      $this->eventDispatcher->dispatch(SalesforceEvents::DELETE_ALLOWED, $deleteAllowedEvent);
-      if ($deleteAllowedEvent->isDeleteAllowed() === FALSE) {
         return;
       }
 

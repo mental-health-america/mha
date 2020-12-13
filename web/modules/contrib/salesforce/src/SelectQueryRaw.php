@@ -2,16 +2,8 @@
 
 namespace Drupal\salesforce;
 
-/**
- * Class SelectQueryRaw to construct SOQL manually from a string.
- */
 class SelectQueryRaw implements SelectQueryInterface {
 
-  /**
-   * The query.
-   *
-   * @var string
-   */
   protected $query;
 
   /**
@@ -30,5 +22,4 @@ class SelectQueryRaw implements SelectQueryInterface {
   public function __toString() {
     return str_replace(' ', '+', $this->query);
   }
-
 }
