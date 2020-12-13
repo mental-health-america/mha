@@ -6,10 +6,12 @@ global-styling:
       //stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css: { type: external }
       //fonts.googleapis.com/css?family=Montserrat:100,300,400,600,800,900": { type: external }
       //cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css: { type: external }
+      //fonts.googleapis.com/css?family=Work+Sans:400,500,600,700: { type: external }
+      //fonts.googleapis.com/css?family=Roboto:400,700: { type: external }
       css/sliderlayer.css: {}
+      css/font-awesome/css/all.min.css: {}
       css/ionicon/css/ionicons.min.css: {}
       css/animate.css: {}
-      css/bootstrap-four.css: {}
       vendor/owl-carousel/assets/owl.carousel.min.css: {}
       vendor/owl-carousel/assets/owl.theme.default.min.css: {}
       vendor/prettyphoto/css/prettyPhoto.css: {}
@@ -17,9 +19,9 @@ global-styling:
       vendor/magnific/magnific-popup.css: {}
       vendor/popup-gallery/css/lightgallery.min.css: {}
       vendor/popup-gallery/css/lg-transitions.min.css: {}
-      css/update.css: {}
-      css/master.css: {}
-      css/search.css: {}
+      css/update.css: { }
+      css/master.css: { }
+      css/search.css: { }
   js:
     vendor/jquery-migrate.min.js: {}
     js/bootstrap.js: {}
@@ -34,7 +36,7 @@ global-styling:
     vendor/isotope.pkgd.min.js: {}
     vendor/aos.js: {}
     vendor/prettyphoto/js/jquery.prettyPhoto.js: {}
-    vendor/ytplayer/js/jquery.mb.YTPlayer.min.js: {}
+    vendor/ytplayer/js/jquery.mb.YTPlayer.js: {}
     vendor/jquery.typer/src/jquery.typer.js: {}
     vendor/magnific/jquery.magnific-popup.min.js: {}
     vendor/particles/particles.min.js: {}
@@ -42,18 +44,12 @@ global-styling:
     vendor/quotes_rotator/js/jquery.cbpQTRotator.min.js: {}
     vendor/jquery.nicescroll.min.js: {}
     vendor/popup-gallery/js/lightgallery.min.js: {}
+    vendor/InstagramFeed.js: {}
     js/main.js: {}
-    //cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js: { type: external }
   dependencies:
     - core/jquery
     - core/drupal
     - core/drupalSettings
-
-global-js:
-    js:
-        js/siteimprove.js: {}
-    dependencies:
-        - core/drupal
 
 gavias_colin.skin.default:
   version: VERSION

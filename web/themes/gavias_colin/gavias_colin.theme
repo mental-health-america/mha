@@ -7,7 +7,7 @@
 
 use Drupal\Core\Template\Attribute;
 use Drupal\block\Entity\Block;
-use Drupal\Core\Database\Connection;
+use Drupal\Core\Url;
 
 $theme_path = drupal_get_path('theme', 'gavias_colin');
 
@@ -32,11 +32,6 @@ function gavias_colin_preprocess_page(&$variables) {
   $variables['footer_second_size'] = theme_get_setting('footer_second_size');
   $variables['footer_third_size'] = theme_get_setting('footer_third_size');
   $variables['footer_four_size'] = theme_get_setting('footer_four_size');
-
-  // Define {{ js_map_id }}  in the template.
-  if (!empty($variables['node']) && !empty($variables['node']->field_js_map_id)) {
-    $variables['js_map_id'] = $variables['node']->field_js_map_id->value;
-  }
 
   //Header setting -----------
   $header = 'header';
@@ -118,9 +113,9 @@ function gavias_colin_preprocess_html(&$variables) {
   $user = \Drupal::currentUser();
 
   if(theme_get_setting('enable_customize') == 1 &&  \Drupal::moduleHandler()->moduleExists('gaviasthemer') && ($user->hasPermission('administer gavias_customize') || $user->hasPermission('administer gavias_customize preview')) ){
-    $url_customize_save = \Drupal::url('gaviasthemer.admin.customize_save', array(), array('absolute' => TRUE));
+    $url_customize_save = Url::fromRoute('gaviasthemer.admin.customize_save', array(), array('absolute' => TRUE))->toString();
     $variables['#attached']['drupalSettings']['gavias_customize']['save'] = $url_customize_save;  
-    $url_customize_preview = \Drupal::url('gaviasthemer.admin.customize_preview', array(), array('absolute' => TRUE));
+    $url_customize_preview = Url::fromRoute('gaviasthemer.admin.customize_preview', array(), array('absolute' => TRUE))->toString();
     $variables['#attached']['drupalSettings']['gavias_customize']['preview'] = $url_customize_preview;  
     $variables['#attached']['library'][] = 'gaviasthemer/customize';
  
@@ -264,7 +259,7 @@ function gavias_colin_preprocess_block__system_breadcrumb_block(&$variables){
   if(($node = \Drupal::routeMatch()->getParameter('node'))){
     if(is_object($node)){
       if($node->getType() == 'article'){
-        $variables['breadcrumb_title'] = t('Blog');
+        $variables['breadcrumb_title'] = t('Blog'); 
         $variables['custom_classes'] = 'hidden-breadcrumb-links';
       }else if($node->getType() == 'portfolio'){
         $variables['breadcrumb_title'] = t('Portfolio');
