@@ -28,6 +28,7 @@ function gavias_content_builder_frontend( $params ) {
 
  	function gavias_content_builder_render_el( $data = array(), $content = '' ) {
 		$settings = ! empty( $data['settings'] ) ? $data['settings'] : array();
+		$data['settings']['first_level'] = true;
 		$content_columns = '';
 		//print "<pre>"; print_r($data);
 		// if ( ! empty( $data['row'] ) ) {

@@ -5,6 +5,7 @@ gavias_slider.assets.admin:
       assets/admin.css: {}
   js:
     vendor/jquery-migrate.min.js: {}
+    vendor/jquery.ui.sortable.min.js: {}
     assets/admin.js: { scope: footer }
     assets/js/upload/jquery.ui.widget.js: { scope: footer }
     assets/js/upload/jquery.iframe-transport.js: { scope: footer }
@@ -15,10 +16,7 @@ gavias_slider.assets.admin:
     - core/drupal
     - core/drupalSettings
     - core/jquery.once
-    - core/jquery.ui.sortable
-    - core/jquery.ui.draggable
-    - core/jquery.ui.dropable
-    - core/jquery.ui.dialog
+    - core/jquery.ui.dialog 
 
 gavias_slider.assets.frontend:
   version: 1.x

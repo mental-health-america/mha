@@ -2,7 +2,7 @@
 // function gavias_slider_add_form($bid) {
 //   $bid = arg(2);
 //   if (is_numeric($bid)) {
-//     $bblock = db_select('{gavias_slider}', 'd')
+//     $bblock = \Drupal::database()->select('{gavias_slider}', 'd')
 //        ->fields('d')
 //        ->condition('id', $bid, '=')
 //        ->execute()
@@ -36,7 +36,7 @@
 
 // function gavias_slider_add_form_submit($form, $form_state) {
 //   if ($form['id']['#value']) {
-//     $pid = db_update("gavias_slider")
+//     $pid = \Drupal::database()->update("gavias_slider")
 //             ->fields(array(
 //                 'title' => $form['title']['#value'],
 //                 'body_class'  => $form['body_class']['#value']
@@ -44,9 +44,9 @@
 //             ->condition('id', $form['id']['#value'])
 //             ->execute();
 //     drupal_goto('admin/gavias_slider');
-//     drupal_set_message("Block Builder '{$form['title']['#value']}' has been updated");
+//     \Drupal::messenger()->addMessage("Block Builder '{$form['title']['#value']}' has been updated");
 //   } else {
-//     $pid = db_insert("gavias_slider")
+//     $pid = \Drupal::database()->insert("gavias_slider")
 //             ->fields(array(
 //                 'title' => $form['title']['#value'],
 //                 'body_class'  => $form['body_class']['#value'],
@@ -55,7 +55,7 @@
 //             ->execute();
 //       drupal_goto('admin/gavias_slider/'.$pid.'/edit');
 
-//     drupal_set_message("blockbuilder '{$form['title']['#value']}' has been created");
+//     \Drupal::messenger()->addMessage("blockbuilder '{$form['title']['#value']}' has been created");
 //   }
 // }
 
@@ -200,7 +200,7 @@
 //   } 
 //   if($params==null) $params = '';
 
-//   db_update("gavias_slider")
+//   \Drupal::database()->update("gavias_slider")
 //         ->fields(array(
 //             'params' => $params,
 //         ))
@@ -230,10 +230,10 @@ function gavias_slider_delete_confirm_form($form_state) {
 
 function gavias_slider_delete_confirm_form_submit($form, &$form_state){
   $gid = $form['id']['#value'];
-  db_delete('gavias_slider')
+  \Drupal::database()->delete('gavias_slider')
           ->condition('id', $gid)
           ->execute();
-  drupal_set_message('The block bulider has been deleted');
+  \Drupal::messenger()->addMessage('The block bulider has been deleted');
   drupal_goto('admin/gavias_slider');
 }
 
@@ -249,7 +249,7 @@ function gavias_slider_export($gid){
 function gavias_slider_import($bid) {
   $bid = arg(2);
   if (is_numeric($bid)) {
-    $bblock = db_select('{gavias_slider}', 'd')
+    $bblock = \Drupal::database()->select('{gavias_slider}', 'd')
        ->fields('d')
        ->condition('id', $bid, '=')
        ->execute()
@@ -259,7 +259,7 @@ function gavias_slider_import($bid) {
   }
 
   if($bblock['id']==0){
-    drupal_set_message('Not found gavias slider !');
+    \Drupal::messenger()->addMessage('Not found gavias slider !');
     return false;
   }
 
@@ -283,13 +283,13 @@ function gavias_slider_import($bid) {
 function gavias_slider_import_submit($form, $form_state) {
   if ($form['id']['#value']) {
     $id = $form['id']['#value'];
-    db_update("gavias_slider")
+    \Drupal::database()->update("gavias_slider")
       ->fields(array(
           'params' => $form['params']['#value'],
       ))
       ->condition('id', $id)
       ->execute();
     drupal_goto('admin/gavias_slider/'.$id.'/edit');
-    drupal_set_message("Block Builder '{$form['title']['#value']}' has been updated");
+    \Drupal::messenger()->addMessage("Block Builder '{$form['title']['#value']}' has been updated");
   } 
 }
