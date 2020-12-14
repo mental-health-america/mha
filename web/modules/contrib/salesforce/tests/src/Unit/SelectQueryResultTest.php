@@ -12,6 +12,12 @@ use Drupal\salesforce\SelectQueryResult;
  * @group salesforce_pull
  */
 class SelectQueryResultTest extends UnitTestCase {
+
+  /**
+   * Required modules.
+   *
+   * @var array
+   */
   static public $modules = ['salesforce'];
 
   /**
@@ -46,13 +52,11 @@ class SelectQueryResultTest extends UnitTestCase {
   }
 
   /**
-   * Test object instantiation with no ID.
-   *
-   * @expectedException Exception
+   * Test object instantiation with non-existent ID.
    */
   public function testNoId() {
     $sfid = new SFID('1234567890abcdg');
-    $this->sqr->record($sfid);
+    $this->assertFalse($this->sqr->record($sfid));
   }
 
 }

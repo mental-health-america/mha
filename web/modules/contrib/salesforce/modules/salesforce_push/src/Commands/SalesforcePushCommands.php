@@ -6,9 +6,12 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\salesforce_mapping\Commands\SalesforceMappingCommandsBase;
 use Drupal\salesforce\Rest\RestClient;
+use Drupal\salesforce_mapping\MappingConstants;
 use Drupal\salesforce_push\PushQueue;
 use Symfony\Component\Console\Input\Input;
 use Symfony\Component\Console\Output\Output;
+use Drupal\salesforce\SalesforceAuthProviderPluginManagerInterface;
+use Drupal\salesforce\Storage\SalesforceAuthTokenStorageInterface;
 
 /**
  * A Drush commandfile.
@@ -44,6 +47,10 @@ class SalesforcePushCommands extends SalesforceMappingCommandsBase {
    *   Salesforce service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $etm
    *   ETM service.
+   * @param \Drupal\salesforce\SalesforceAuthProviderPluginManagerInterface $auth_man
+   *   Auth plugin manager.
+   * @param \Drupal\salesforce\Storage\SalesforceAuthTokenStorageInterface $token_storage
+   *   Token storage.
    * @param \Drupal\salesforce_push\PushQueue $pushQueue
    *   Push queue service.
    * @param \Drupal\Core\Database\Connection $database
@@ -52,8 +59,8 @@ class SalesforcePushCommands extends SalesforceMappingCommandsBase {
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function __construct(RestClient $client, EntityTypeManagerInterface $etm, PushQueue $pushQueue, Connection $database) {
-    parent::__construct($client, $etm);
+  public function __construct(RestClient $client, EntityTypeManagerInterface $etm, SalesforceAuthProviderPluginManagerInterface $auth_man, SalesforceAuthTokenStorageInterface $token_storage, PushQueue $pushQueue, Connection $database) {
+    parent::__construct($client, $etm, $auth_man, $token_storage);
     $this->pushQueue = $pushQueue;
     $this->database = $database;
   }
@@ -77,10 +84,21 @@ class SalesforcePushCommands extends SalesforceMappingCommandsBase {
   }
 
   /**
+   * Collect a mapping interactively.
+   *
+   * @hook interact salesforce_push:requeue
+   */
+  public function interactRequeue(Input $input, Output $output) {
+    return $this->interactPushMappings($input, $output, 'Choose a Salesforce mapping', 'Push All');
+  }
+
+  /**
    * Process push queues for one or all Salesforce Mappings.
    *
    * @param string $name
    *   Mapping name.
+   *
+   * @throws \Exception
    *
    * @usage drush sfpushq
    *   Process all push queue items.
@@ -100,6 +118,59 @@ class SalesforcePushCommands extends SalesforceMappingCommandsBase {
   }
 
   /**
+   * Requeue mapped entities for asynchronous push.
+   *
+   * Addresses the frequent need to re-push all entities for a given mapping.
+   * Given a mapping, re-queue all the mapped objects to the Salesforce push
+   * queue. The push queue will not be processed by this command, and no data
+   * will be pushed to salesforce. Run salesforce_push:push-queue to proceess
+   * the records queued by this command.
+   *
+   * NOTE: Existing push queue records will be replaced by this operation.
+   *
+   * @param string $name
+   *   The Drupal machine name of the mapping for the entities.
+   * @param array $options
+   *   An associative array of options whose values come from cli, aliases,
+   *   config, etc.
+   *
+   * @option ids
+   *   If provided, only requeue the entities given by these ids.
+   *   Comma-delimited.
+   * @usage drush sfpu foo
+   *   Requeue all drupal entities mapped objects for mapping "foo".
+   * @usage drush sfpu foo --ids=1,2,3,4
+   *   Requeue entities for mapping "foo" with ids 1, 2, 3, 4, if they exist.
+   *
+   * @command salesforce_push:requeue
+   * @aliases sfrq,salesforce-push-requeue
+   * @see salesforce_push:push-queue
+   */
+  public function requeue($name, array $options = ['ids' => '']) {
+    // Dummy call to create item, to ensure table exists.
+    try {
+      \Drupal::service('queue.salesforce_push')->createItem(NULL);
+    }
+    catch (\Exception $e) {
+
+    }
+    $mappings = $this->getPushMappingsFromName($name);
+    foreach ($mappings as $mapping) {
+      $ids = array_filter(array_map('intval', explode(',', $options['ids'])));
+      $mapping_name = $mapping->id();
+      $op = MappingConstants::SALESFORCE_MAPPING_SYNC_DRUPAL_UPDATE;
+      $time = time();
+      $insertQuery = "REPLACE INTO salesforce_push_queue (name, entity_id, mapped_object_id, op, failures, expire, created, updated) 
+          (SELECT '$mapping_name', drupal_entity__target_id, id, '$op', 0, 0, $time, $time FROM salesforce_mapped_object WHERE salesforce_mapping = '$mapping_name' ";
+      if (!empty($ids)) {
+        $insertQuery .= " AND drupal_entity__target_id IN (" . implode(',', $ids) . ")";
+      }
+      $insertQuery .= ")";
+      $this->database->query($insertQuery)->execute();
+    }
+  }
+
+  /**
    * Push entities of a mapped type that are not linked to Salesforce Objects.
    *
    * @param string $name
@@ -107,6 +178,9 @@ class SalesforcePushCommands extends SalesforceMappingCommandsBase {
    * @param array $options
    *   An associative array of options whose values come from cli, aliases,
    *   config, etc.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    *
    * @option count
    *   The number of entities to try to sync. (Default is 50).
@@ -118,7 +192,7 @@ class SalesforcePushCommands extends SalesforceMappingCommandsBase {
    * @command salesforce_push:push-unmapped
    * @aliases sfpu,salesforce-push-unmapped,salesforce_push:unmapped
    */
-  public function pushUnmapped($name, array $options = ['count' => NULL]) {
+  public function pushUnmapped($name, array $options = ['count' => 50]) {
     $mappings = $this->getPushMappingsFromName($name);
     foreach ($mappings as $mapping) {
       $entity_type = $mapping->get('drupal_entity_type');
@@ -133,12 +207,11 @@ class SalesforcePushCommands extends SalesforceMappingCommandsBase {
       }
       $query->fields('b', [$id_key]);
       $query->isNull('m.drupal_entity__target_id');
-      $results = $query->range(0, drush_get_option('count', 50))
+      $results = $query->range(0, $options['count'])
         ->execute()
         ->fetchAllAssoc($id_key);
       $entities = $entity_storage->loadMultiple(array_keys($results));
       $log = [];
-      print_r($entities);
       foreach ($entities as $entity) {
         salesforce_push_entity_crud($entity, 'push_create');
         $log[] = $entity->id();

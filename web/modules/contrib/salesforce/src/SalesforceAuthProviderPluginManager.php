@@ -5,9 +5,7 @@ namespace Drupal\salesforce;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
-
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\salesforce\Entity\SalesforceAuthConfig as SalesforceAuthEntity;
 use Drupal\salesforce\Entity\SalesforceAuthConfig;
 use OAuth\Common\Storage\Exception\TokenNotFoundException;
 use OAuth\OAuth2\Token\StdOAuth2Token;
@@ -15,7 +13,7 @@ use OAuth\OAuth2\Token\StdOAuth2Token;
 /**
  * Auth provider plugin manager.
  */
-class SalesforceAuthProviderPluginManager extends DefaultPluginManager {
+class SalesforceAuthProviderPluginManager extends DefaultPluginManager implements SalesforceAuthProviderPluginManagerInterface {
 
   /**
    * Config from salesforce.settings.
@@ -39,6 +37,34 @@ class SalesforceAuthProviderPluginManager extends DefaultPluginManager {
   protected $authStorage;
 
   /**
+   * Active auth config.
+   *
+   * @var \Drupal\salesforce\Entity\SalesforceAuthConfig
+   */
+  protected $authConfig;
+
+  /**
+   * Active auth provider.
+   *
+   * @var \Drupal\salesforce\SalesforceAuthProviderInterface
+   */
+  protected $authProvider;
+
+  /**
+   * Active credentials.
+   *
+   * @var \Drupal\salesforce\Consumer\SalesforceCredentialsInterface
+   */
+  protected $authCredentials;
+
+  /**
+   * Active auth token.
+   *
+   * @var \OAuth\OAuth2\Token\TokenInterface|null
+   */
+  protected $authToken;
+
+  /**
    * Constructor.
    *
    * @param \Traversable $namespaces
@@ -59,47 +85,6 @@ class SalesforceAuthProviderPluginManager extends DefaultPluginManager {
   }
 
   /**
-   * Backwards-compatibility for legacy singleton auth.
-   *
-   * @deprecated BC legacy auth scheme only, do not use, will be removed.
-   */
-  public static function updateAuthConfig() {
-    $oauth = self::getAuthConfig();
-    $config = \Drupal::configFactory()->getEditable('salesforce.settings');
-    $settings = [
-      'consumer_key' => $config->get('consumer_key'),
-      'consumer_secret' => $config->get('consumer_secret'),
-      'login_url' => $config->get('login_url'),
-    ];
-    $oauth
-      ->set('provider_settings', $settings)
-      ->save();
-  }
-
-  /**
-   * Backwards-compatibility for legacy singleton auth.
-   *
-   * @deprecated BC legacy auth scheme only, do not use, will be removed.
-   */
-  public static function getAuthConfig() {
-    $config = \Drupal::configFactory()->getEditable('salesforce.settings');
-    $auth_provider = $config->get('salesforce_auth_provider');
-    if (!$auth_provider || !$oauth = SalesforceAuthConfig::load($auth_provider)) {
-      // Config to new plugin config system.
-      $values = [
-        'id' => 'oauth_default',
-        'label' => 'OAuth Default',
-        'provider' => 'oauth',
-      ];
-      $oauth = SalesforceAuthConfig::create($values);
-      $config
-        ->set('salesforce_auth_provider', 'oauth_default')
-        ->save();
-    }
-    return $oauth;
-  }
-
-  /**
    * Wrapper for salesforce_auth storage service.
    *
    * @return \Drupal\Core\Config\Entity\ConfigEntityStorageInterface
@@ -116,84 +101,82 @@ class SalesforceAuthProviderPluginManager extends DefaultPluginManager {
   }
 
   /**
-   * All Salesforce auth providers.
-   *
-   * @return \Drupal\salesforce\Entity\SalesforceAuthConfig[]
-   *   All auth provider plugins.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * {@inheritdoc}
    */
   public function getProviders() {
     return $this->authStorage()->loadMultiple();
   }
 
   /**
-   * TRUE if any auth providers are defined.
-   *
-   * @return bool
-   *   TRUE if any auth providers are defined.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * {@inheritdoc}
    */
   public function hasProviders() {
     return $this->authStorage()->hasData();
   }
 
   /**
-   * Get the active auth service provider, or null if it has not been assigned.
-   *
-   * @return \Drupal\salesforce\Entity\SalesforceAuthConfig|null
-   *   The active service provider, or null if it has not been assigned.
+   * {@inheritdoc}
    */
   public function getConfig() {
-    $provider_id = $this->config()->get('salesforce_auth_provider');
-    if (empty($provider_id)) {
-      return NULL;
+    if (!$this->authConfig) {
+      $provider_id = $this->config()->get('salesforce_auth_provider');
+      if (empty($provider_id)) {
+        return NULL;
+      }
+      $this->authConfig = SalesforceAuthConfig::load($provider_id);
     }
-    return SalesforceAuthEntity::load($provider_id);
+    return $this->authConfig;
   }
 
   /**
-   * The auth provider plugin of the active service provider, or null.
-   *
-   * @return \Drupal\salesforce\SalesforceAuthProviderInterface|null
-   *   The auth provider plugin of the active service provider, or null.
+   * {@inheritdoc}
    */
   public function getProvider() {
-    if (!$this->getConfig()) {
-      return NULL;
+    if (!$this->authProvider) {
+      if (!$this->getConfig()) {
+        return NULL;
+      }
+      $this->authProvider = $this->getConfig()->getPlugin();
     }
-    return $this->getConfig()->getPlugin();
+    return $this->authProvider;
   }
 
   /**
-   * Get the active token, or null if it has not been assigned.
-   *
-   * @return \OAuth\OAuth2\Token\TokenInterface
-   *   The token of the plugin of the active config, or null.
+   * {@inheritdoc}
+   */
+  public function getCredentials() {
+    if (!$this->authCredentials) {
+      if (!$this->getProvider()) {
+        return NULL;
+      }
+      $this->authCredentials = $this->getProvider()->getCredentials();
+    }
+    return $this->authCredentials;
+  }
+
+  /**
+   * {@inheritdoc}
    */
   public function getToken() {
-    if (!$config = $this->getConfig()) {
-      return NULL;
+    if (!$this->authToken) {
+      if (!$config = $this->getConfig()) {
+        return NULL;
+      }
+      if (!$provider = $config->getPlugin()) {
+        return NULL;
+      }
+      try {
+        $this->authToken = $provider->getAccessToken();
+      }
+      catch (TokenNotFoundException $e) {
+        return NULL;
+      }
     }
-    if (!$provider = $config->getPlugin()) {
-      return NULL;
-    }
-    try {
-      return $provider->getAccessToken();
-    }
-    catch (TokenNotFoundException $e) {
-      return NULL;
-    }
+    return $this->authToken;
   }
 
   /**
-   * Force a refresh of the active token and return the fresh token.
-   *
-   * @return \OAuth\OAuth2\Token\TokenInterface|null
-   *   The token.
+   * {@inheritdoc}
    */
   public function refreshToken() {
     if (!$config = $this->getConfig()) {
@@ -203,7 +186,8 @@ class SalesforceAuthProviderPluginManager extends DefaultPluginManager {
       return NULL;
     }
     $token = $this->getToken() ?: new StdOAuth2Token();
-    return $provider->refreshAccessToken($token);
+    $this->authToken = $provider->refreshAccessToken($token);
+    return $this->authToken;
   }
 
   /**
@@ -217,6 +201,13 @@ class SalesforceAuthProviderPluginManager extends DefaultPluginManager {
       $this->config = \Drupal::config('salesforce.settings');
     }
     return $this->config;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getFallbackPluginId($plugin_id, array $configuration = []) {
+    return 'broken';
   }
 
 }

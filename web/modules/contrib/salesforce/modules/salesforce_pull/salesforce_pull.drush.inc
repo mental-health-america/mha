@@ -92,8 +92,6 @@ function salesforce_pull_drush_command() {
  *
  * @param string $name
  *   Mapping name.
- *
- * @deprecated Support for drush 8 is deprecated and will be removed in a future release.
  */
 function drush_salesforce_pull_sf_pull_query($name) {
   _drush_salesforce_deprecated();
@@ -101,15 +99,20 @@ function drush_salesforce_pull_sf_pull_query($name) {
     return;
   }
 
-  $start = 0;
   if ($start = drush_get_option('start')) {
     $start = strtotime($start);
   }
+  else {
+    $start = 0;
+  }
 
-  $stop = 0;
   if ($stop = drush_get_option('stop')) {
     $stop = strtotime($stop);
   }
+  else {
+    $stop = 0;
+  }
+
   $where = drush_get_option('where');
 
   if (!($soql = $mapping->getPullQuery([], $start, $stop))) {
@@ -149,8 +152,6 @@ function drush_salesforce_pull_sf_pull_query($name) {
  *   File name with IDs.
  * @param string $name
  *   Mapping name.
- *
- * @deprecated Support for drush 8 is deprecated and will be removed in a future release.
  */
 function drush_salesforce_pull_sf_pull_file($file, $name = NULL) {
   _drush_salesforce_deprecated();
@@ -188,7 +189,6 @@ function drush_salesforce_pull_sf_pull_file($file, $name = NULL) {
   // etc.
   $queries = [];
   foreach (array_chunk($rows, 1000) as $i => $chunk) {
-    $base = $i * 1000;
     // Reset our base query:
     $soql = $mapping->getPullQuery([], 1, 0);
 
@@ -254,10 +254,14 @@ function drush_salesforce_pull_sf_pull_file($file, $name = NULL) {
 /**
  * Get an array of all pull mappings, or the given mapping by name.
  *
- * @deprecated Support for drush 8 is deprecated and will be removed in a future release.
+ * @param string $name
+ *   Mapping name.
  *
  * @return \Drupal\salesforce_mapping\Entity\SalesforceMappingInterface[]
  *   Mappings.
+ *
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
  */
 function _salesforce_pull_load_single_mapping_array_or_all_pull_mappings($name = NULL) {
   if ($name != NULL) {
@@ -279,8 +283,6 @@ function _salesforce_pull_load_single_mapping_array_or_all_pull_mappings($name =
 
 /**
  * Reset pull time on all mappings, or the given mapping by name.
- *
- * @deprecated Support for drush 8 is deprecated and will be removed in a future release.
  */
 function drush_salesforce_pull_sf_pull_reset($name = NULL) {
   $mappings = _salesforce_pull_load_single_mapping_array_or_all_pull_mappings($name);
@@ -297,8 +299,6 @@ function drush_salesforce_pull_sf_pull_reset($name = NULL) {
 
 /**
  * Set pull time on all mappings, or the given mapping by name.
- *
- * @deprecated Support for drush 8 is deprecated and will be removed in a future release.
  */
 function drush_salesforce_pull_sf_pull_set($name, $time = NULL) {
   _drush_salesforce_deprecated();

@@ -5,6 +5,7 @@ namespace Drupal\salesforce\Tests;
 use Drupal\Component\Utility\Random;
 use Drupal\salesforce\Rest\RestResponse;
 use Drupal\salesforce\Rest\RestResponseDescribe;
+use Drupal\salesforce\SelectQueryInterface;
 use Drupal\salesforce\SelectQueryResult;
 use Drupal\salesforce\SFID;
 use GuzzleHttp\Psr7\Response;
@@ -21,10 +22,26 @@ class TestRestClient extends RestClient {
   const AUTH_TOKEN_URL = 'https://example.com/fake/token/url/for/testing';
 
   /**
-   * Always return TRUE for test client.
+   * {@inheritdoc}
    */
-  public function isAuthorized() {
+  public function isInit() {
     return TRUE;
+  }
+
+  /**
+   * Wrapper for test results.
+   */
+  public static function getContactQueryResults() {
+    return json_decode(file_get_contents(__DIR__ . '/contactQuery.json'), JSON_OBJECT_AS_ARRAY);
+  }
+
+  /**
+   * Mock a query result for test_mapping.
+   *
+   * @see modules/salesforce_mapping/tests/modules/salesforce_mapping_test/config/install/salesforce_mapping.salesforce_mapping.test_mapping.yml
+   */
+  public function query(SelectQueryInterface $query) {
+    return new SelectQueryResult(self::getContactQueryResults());
   }
 
   /**
@@ -37,7 +54,7 @@ class TestRestClient extends RestClient {
    * Hard-code a short list of objects for testing.
    */
   public function objects(array $conditions = ['updateable' => TRUE], $reset = FALSE) {
-    return json_decode(file_get_contents(__DIR__ . '/objects.json'),  JSON_OBJECT_AS_ARRAY);
+    return json_decode(file_get_contents(__DIR__ . '/objects.json'), JSON_OBJECT_AS_ARRAY);
   }
 
   /**
@@ -45,14 +62,14 @@ class TestRestClient extends RestClient {
    */
   public function objectDescribe($name, $reset = FALSE) {
     $contents = file_get_contents(__DIR__ . '/objectDescribe.json');
-    return new RestResponseDescribe(new RestResponse(new Response(200, ['Content-Type'=>'application/json;charset=UTF-8'], $contents)));
+    return new RestResponseDescribe(new RestResponse(new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], $contents)));
   }
 
   /**
    * Hard-code record types for testing.
    */
   public function getRecordTypes($name = NULL, $reset = FALSE) {
-    $json = json_decode(file_get_contents(__DIR__ . '/recordTypes.json'),  JSON_OBJECT_AS_ARRAY);
+    $json = json_decode(file_get_contents(__DIR__ . '/recordTypes.json'), JSON_OBJECT_AS_ARRAY);
     $result = new SelectQueryResult($json);
     $record_types = [];
     foreach ($result->records() as $rt) {
@@ -107,7 +124,7 @@ class TestRestClient extends RestClient {
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   public function objectCreate($name, array $params) {
     $random = new Random();
@@ -115,7 +132,7 @@ class TestRestClient extends RestClient {
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   public function objectUpsert($name, $key, $value, array $params) {
     $random = new Random();
@@ -123,7 +140,7 @@ class TestRestClient extends RestClient {
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   public function objectUpdate($name, $id, array $params) {
     // Object update does... NOTHING!
@@ -131,12 +148,11 @@ class TestRestClient extends RestClient {
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   public function objectDelete($name, $id, $throw_exception = FALSE) {
     // Object delete does... NOTHING!
     return NULL;
   }
-
 
 }

@@ -5,7 +5,6 @@ namespace Drupal\salesforce_mapping\Plugin\SalesforceMappingField;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -16,10 +15,13 @@ use Drupal\Core\TypedData\DataDefinitionInterface;
 use Drupal\Core\TypedData\Exception\MissingDataException;
 use Drupal\Core\TypedData\ListDataDefinitionInterface;
 use Drupal\Core\TypedData\TypedDataInterface;
+use Drupal\field\Entity\FieldConfig;
 use Drupal\salesforce\Rest\RestClientInterface;
 use Drupal\salesforce\SObject;
 use Drupal\salesforce_mapping\SalesforceMappingFieldPluginBase;
 use Drupal\salesforce_mapping\Entity\SalesforceMappingInterface;
+use Drupal\typed_data\DataFetcherInterface;
+use Drupal\typed_data\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -62,8 +64,6 @@ class PropertiesExtended extends SalesforceMappingFieldPluginBase {
    *   Entity field manager.
    * @param \Drupal\salesforce\Rest\RestClientInterface $rest_client
    *   Salesforce client.
-   * @param \Drupal\Core\Entity\EntityManagerInterface $entity_manager
-   *   Entity manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $etm
    *   ETM service.
    * @param \Drupal\Core\Datetime\DateFormatterInterface $dateFormatter
@@ -72,13 +72,16 @@ class PropertiesExtended extends SalesforceMappingFieldPluginBase {
    *   Event dispatcher service.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
    *   Module handler service.
+   * @param \Drupal\typed_data\DataFetcherInterface $dataFetcher
+   *   Data fetcher.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function __construct(array $configuration, $plugin_id, array $plugin_definition, EntityTypeBundleInfoInterface $entity_type_bundle_info, EntityFieldManagerInterface $entity_field_manager, RestClientInterface $rest_client, EntityManagerInterface $entity_manager, EntityTypeManagerInterface $etm, DateFormatterInterface $dateFormatter, EventDispatcherInterface $event_dispatcher, ModuleHandlerInterface $moduleHandler) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $entity_type_bundle_info, $entity_field_manager, $rest_client, $entity_manager, $etm, $dateFormatter, $event_dispatcher);
+  public function __construct(array $configuration, $plugin_id, array $plugin_definition, EntityTypeBundleInfoInterface $entity_type_bundle_info, EntityFieldManagerInterface $entity_field_manager, RestClientInterface $rest_client, EntityTypeManagerInterface $etm, DateFormatterInterface $dateFormatter, EventDispatcherInterface $event_dispatcher, ModuleHandlerInterface $moduleHandler, DataFetcherInterface $dataFetcher) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $entity_type_bundle_info, $entity_field_manager, $rest_client, $etm, $dateFormatter, $event_dispatcher);
     $this->moduleHandler = $moduleHandler;
+    $this->dataFetcher = $dataFetcher;
   }
 
   /**
@@ -89,26 +92,48 @@ class PropertiesExtended extends SalesforceMappingFieldPluginBase {
       $container->get('entity_type.bundle.info'),
       $container->get('entity_field.manager'),
       $container->get('salesforce.client'),
-      $container->get('entity.manager'),
       $container->get('entity_type.manager'),
       $container->get('date.formatter'),
       $container->get('event_dispatcher'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('typed_data.data_fetcher')
     );
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getDependencies(SalesforceMappingInterface $mapping) {
-    return ['module' => ['typed_data']];
+  public function getPluginDefinition() {
+    $definition = parent::getPluginDefinition();
+    $field_name = $this->config('drupal_field_value');
+    if (strpos($field_name, '.')) {
+      list($field_name, $dummy) = explode('.', $field_name, 2);
+    }
+    // Add reference field.
+    if ($field = FieldConfig::loadByName($this->mapping->getDrupalEntityType(), $this->mapping->getDrupalBundle(), $field_name)) {
+      $definition['config_dependencies']['config'][] = $field->getConfigDependencyName();
+      // Add dependencies of referenced field.
+      foreach ($field->getDependencies() as $type => $dependency) {
+        foreach ($dependency as $item) {
+          $definition['config_dependencies'][$type][] = $item;
+        }
+      }
+    }
+    return $definition;
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function isAllowed(SalesforceMappingInterface $mapping) {
-    return \Drupal::service('module_handler')->moduleExists('typed_data');
+  public function checkFieldMappingDependency(array $dependencies) {
+    $definition = $this->getPluginDefinition();
+    foreach ($definition['config_dependencies'] as $type => $dependency) {
+      foreach ($dependency as $item) {
+        if (!empty($dependencies[$type][$item])) {
+          return TRUE;
+        }
+      }
+    }
   }
 
   /**
@@ -116,10 +141,6 @@ class PropertiesExtended extends SalesforceMappingFieldPluginBase {
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $pluginForm = parent::buildConfigurationForm($form, $form_state);
-    if (!$this->moduleHandler->moduleExists('typed_data')) {
-      $this->messenger()->addError('Install Typed Data module to use Extended Properties fields.');
-      return $this->buildBrokenConfigurationForm($pluginForm, $form_state);
-    }
     $mapping = $form['#entity'];
 
     // Display the plugin config form here:
@@ -170,10 +191,10 @@ class PropertiesExtended extends SalesforceMappingFieldPluginBase {
     $vals = $form_state->getValues();
     $config = $vals['config'];
     if (empty($config['salesforce_field'])) {
-      $form_state->setError($form['config']['salesforce_field'], t('Salesforce field is required.'));
+      $form_state->setError($form['config']['salesforce_field'], $this->t('Salesforce field is required.'));
     }
     if (empty($config['drupal_field_value'])) {
-      $form_state->setError($form['config']['drupal_field_value'], t('Drupal field is required.'));
+      $form_state->setError($form['config']['drupal_field_value'], $this->t('Drupal field is required.'));
     }
     // @TODO: Should we validate the $config['drupal_field_value']['setting'] property?
   }
@@ -215,25 +236,6 @@ class PropertiesExtended extends SalesforceMappingFieldPluginBase {
   }
 
   /**
-   * Data Fetcher wrapper.
-   *
-   * @return \Drupal\typed_data\DataFetcherInterface
-   *   Data fetcher service.
-   *
-   * @throws \Exception
-   *   If typed_data.data_fetcher service does not exist.
-   */
-  protected function getDataFetcher() {
-    if (!\Drupal::hasService('typed_data.data_fetcher')) {
-      throw new \Exception('Module typed_data must be installed to use Extended Properties');
-    }
-    if (empty($this->dataFetcher)) {
-      $this->dataFetcher = \Drupal::service('typed_data.data_fetcher');
-    }
-    return $this->dataFetcher;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public function pullValue(SObject $sf_object, EntityInterface $entity, SalesforceMappingInterface $mapping) {
@@ -241,14 +243,14 @@ class PropertiesExtended extends SalesforceMappingFieldPluginBase {
     $pullValue = parent::pullValue($sf_object, $entity, $mapping);
     try {
       // Fetch the TypedData property and set its value.
-      $data = $this->getDataFetcher()->fetchDataByPropertyPath($entity->getTypedData(), $field_selector);
+      $data = $this->dataFetcher->fetchDataByPropertyPath($entity->getTypedData(), $field_selector);
       $data->setValue($pullValue);
       return $data;
     }
     catch (MissingDataException $e) {
 
     }
-    catch (\Drupal\typed_data\Exception\InvalidArgumentException $e) {
+    catch (InvalidArgumentException $e) {
 
     }
     // Allow any other exception types to percolate.
@@ -328,7 +330,7 @@ class PropertiesExtended extends SalesforceMappingFieldPluginBase {
    */
   protected function getStringValue(EntityInterface $entity, $drupal_field_value) {
     try {
-      return $this->getDataFetcher()->fetchDataByPropertyPath($entity->getTypedData(), $drupal_field_value)->getString();
+      return $this->dataFetcher->fetchDataByPropertyPath($entity->getTypedData(), $drupal_field_value)->getString();
     }
     catch (\Exception $e) {
       return NULL;
@@ -339,7 +341,7 @@ class PropertiesExtended extends SalesforceMappingFieldPluginBase {
    * {@inheritdoc}
    */
   protected function getFieldDataDefinition(EntityInterface $entity) {
-    $data_definition = $this->getDataFetcher()->fetchDefinitionByPropertyPath($entity->getTypedData()->getDataDefinition(), $this->config('drupal_field_value'));
+    $data_definition = $this->dataFetcher->fetchDefinitionByPropertyPath($entity->getTypedData()->getDataDefinition(), $this->config('drupal_field_value'));
     if ($data_definition instanceof ListDataDefinitionInterface) {
       $data_definition = $data_definition->getItemDefinition();
     }
