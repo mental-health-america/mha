@@ -183,7 +183,7 @@ function gavias_sliderlayer_slide($vars, $index){
       $vars['attributes_video_array']['data-forcerewind'] = 'on';
       $vars['attributes_video_array']['data-volume'] = 'mute';
       if(!isset($slide->video_youtube_args) && empty($slide->video_youtube_args)){
-        $slide->video_youtube_args = 'version=3&enablejsapi=1&html5=1&hd=1&wmode=opaque&showinfo=0&ref=0;origin=http://server.local;autoplay=1;';
+        $slide->video_youtube_args = 'version=3&enablejsapi=1&html5=1&hd=1&wmode=opaque&showinfo=0&ref=0;autoplay=1;';
       }
       if(!isset($slide->video_vimeo_args) && empty($slide->video_vimeo_args)){
         $slide->video_vimeo_args = 'title=0&byline=0&portrait=0&api=1';
