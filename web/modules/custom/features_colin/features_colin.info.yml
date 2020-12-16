@@ -1,7 +1,7 @@
 name: 'Features Colin'
 description: 'Features Colin - Import content type, field, view ... for Colin theme'
 type: module
-core: 8.x
+core_version_requirement: ^8.8 || ^9
 dependencies:
   - block
   - block_content
@@ -32,4 +32,4 @@ dependencies:
   - webform
   - config_update
   - features
-version: 8.x-1.0
+version: 9.x
