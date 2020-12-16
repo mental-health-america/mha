@@ -13,31 +13,46 @@ module_load_include('php','gavias_content_builder', 'includes/frontend');
 function gavias_content_builder_theme_name(){
   $default_theme = \Drupal::config('system.theme')->get('default');
   $theme_name = $default_theme;
+  $sub_theme = false;
   $theme_handler = \Drupal::service('theme_handler');
   if($theme_handler->themeExists($default_theme)){
     $theme_handler = $theme_handler->getTheme($default_theme);
     $theme_info = $theme_handler->info;
     if(isset($theme_info['base theme']) && !empty($theme_info['base theme']) && strpos($theme_info['base theme'], 'avias_')){
       $theme_name = $theme_info['base theme'];
+      $sub_theme = $default_theme;
     }
   }
-  return $theme_name;
+  return array('theme_name' => $theme_name, 'sub_theme' => $sub_theme);
 }
 
-
 $theme_load_elements = gavias_content_builder_theme_name();
-if(file_exists(drupal_get_path('theme', $theme_load_elements) . '/gva_content_builder/_elements.php')){
-  require drupal_get_path('theme', $theme_load_elements) . '/gva_content_builder/_elements.php';
+if(file_exists(drupal_get_path('theme', $theme_load_elements['theme_name']) . '/gva_content_builder/_elements.php')){
+  require drupal_get_path('theme', $theme_load_elements['theme_name']) . '/gva_content_builder/_elements.php';
   $elements = [];
   if(function_exists('gavias_content_builder_set_elements')){
     $elements = gavias_content_builder_set_elements();
   }
-  foreach( $elements as $el ){
-    if(file_exists(drupal_get_path('theme', $theme_load_elements) . '/gva_content_builder/' . $el . '.php')){
-      $sc_path = drupal_get_path('theme', $theme_load_elements) . '/gva_content_builder/' . $el . '.php';
-      require($sc_path);
+  if($theme_load_elements['sub_theme']){ //If use sub theme
+    foreach( $elements as $el ){
+      $sc_path = '';
+      if(file_exists(drupal_get_path('theme', $theme_load_elements['sub_theme']) . '/gva_content_builder/' . $el . '.php')){
+        $sc_path = drupal_get_path('theme', $theme_load_elements['sub_theme']) . '/gva_content_builder/' . $el . '.php';
+      }elseif(file_exists(drupal_get_path('theme', $theme_load_elements['theme_name']) . '/gva_content_builder/' . $el . '.php')){
+        $sc_path = drupal_get_path('theme', $theme_load_elements['theme_name']) . '/gva_content_builder/' . $el . '.php';
+      }
+      if($sc_path){
+        require($sc_path);
+      }
     }
-  }
+  }else{
+    foreach( $elements as $el ){ //if don't use sub theme
+      if(file_exists(drupal_get_path('theme', $theme_load_elements['theme_name']) . '/gva_content_builder/' . $el . '.php')){
+        $sc_path = drupal_get_path('theme', $theme_load_elements['theme_name']) . '/gva_content_builder/' . $el . '.php';
+        require($sc_path);
+      }
+    }
+  }  
 }
 
 function gavias_pagebuilder_get_el_fields(){
@@ -46,7 +61,7 @@ function gavias_pagebuilder_get_el_fields(){
   if(function_exists('gavias_content_builder_set_elements')){
     $elements = gavias_content_builder_set_elements();
     foreach( $elements as $el ){
-      if(file_exists(drupal_get_path('theme', $theme_load_elements) . '/gva_content_builder/' . $el . '.php')){
+      if(file_exists(drupal_get_path('theme', $theme_load_elements['theme_name']) . '/gva_content_builder/' . $el . '.php')){
         $_class = 'element_' . $el;
         if( class_exists($_class) ){
           $s = new $_class;
