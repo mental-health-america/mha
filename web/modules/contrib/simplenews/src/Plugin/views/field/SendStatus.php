@@ -2,6 +2,7 @@
 
 namespace Drupal\simplenews\Plugin\views\field;
 
+use Drupal\node\Entity\Node;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\views\ResultRow;
 
@@ -23,19 +24,21 @@ class SendStatus extends FieldPluginBase {
       // Get elements to render.
       $message = $this->getMessage($node);
       if (!empty($message['uri'])) {
-        $output['image'] = array(
+        $output['image'] = [
           '#theme' => 'image',
           '#uri' => $message['uri'],
           '#alt' => $message['description'],
           '#title' => $message['description'],
           '#getsize' => TRUE,
-        );
+        ];
       }
-      $output['text'] = array(
+
+      $error_count = $message['error_count'] ? ' ❌{{ error_count }}' : '';
+      $output['text'] = [
         '#type' => 'inline_template',
-        '#template' => '<span title="{{ description }}">{{ sent_count }}/{{ count }}</span>',
+        '#template' => "<span title=\"{{ description }}\">{{ sent_count }}/{{ count }}$error_count</span>",
         '#context' => $message,
-      );
+      ];
       return $output;
     }
   }
@@ -43,20 +46,20 @@ class SendStatus extends FieldPluginBase {
   /**
    * Return a compiled message to display.
    *
-   * @param $node
+   * @param \Drupal\node\Entity\Node $node
    *   The node object.
    *
    * @return array
    *   An array containing the elements of the message to be rendered.
    */
-  protected function getMessage($node) {
+  protected function getMessage(Node $node) {
     $status = $node->simplenews_issue->status;
     $message = \Drupal::service('simplenews.spool_storage')->issueSummary($node);
 
-    $images = array(
+    $images = [
       SIMPLENEWS_STATUS_SEND_PENDING => 'images/sn-cron.png',
       SIMPLENEWS_STATUS_SEND_READY => 'images/sn-sent.png',
-    );
+    ];
     if (isset($images[$status])) {
       $message['uri'] = drupal_get_path('module', 'simplenews') . '/' . $images[$status];
     }
@@ -66,4 +69,5 @@ class SendStatus extends FieldPluginBase {
 
     return $message;
   }
+
 }

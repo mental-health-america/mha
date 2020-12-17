@@ -70,6 +70,22 @@ entity.simplenews_newsletter.delete_form:
   requirements:
     _entity_access: 'simplenews_newsletter.delete'
 
+entity.simplenews_subscriber.collection:
+  path: /admin/people/simplenews
+  defaults:
+    _entity_list: 'simplenews_subscriber'
+    _title: 'Subscribers'
+  requirements:
+    _permission: 'administer simplenews subscriptions'
+
+entity.simplenews_subscriber.add_form:
+  path: '/admin/people/simplenews/create'
+  defaults:
+    _entity_form: 'simplenews_subscriber.add'
+    _title: 'Add subscriber'
+  requirements:
+    _entity_create_access: 'simplenews_subscriber'
+
 entity.simplenews_subscriber.edit_form:
   path: '/admin/people/simplenews/edit/{simplenews_subscriber}'
   defaults:
@@ -138,13 +154,16 @@ simplenews.newsletter_subscriptions_user:
       user:
         type: entity:user
 
+# The next 4 confirmation routes have no access check because the access is
+# verified by the hash. It's not good UX to force a user to login in order to
+# unsubscribe.
 simplenews.newsletter_confirm_combined:
   path: '/newsletter/confirm/combined/{snid}/{timestamp}/{hash}'
   defaults:
     _controller: '\Drupal\simplenews\Controller\ConfirmationController::confirmCombined'
     _title: 'Confirm newsletter subscriptions'
   requirements:
-    _permission: 'subscribe to newsletters'
+    _access: 'TRUE'
   options:
     no_cache: TRUE
 
@@ -154,7 +173,7 @@ simplenews.newsletter_confirm_subscription:
     _controller: '\Drupal\simplenews\Controller\ConfirmationController::confirmSubscription'
     _title: 'Confirm newsletter subscriptions'
   requirements:
-    _permission: 'subscribe to newsletters'
+    _access: 'TRUE'
   options:
     no_cache: TRUE
 
@@ -165,7 +184,7 @@ simplenews.newsletter_confirm_combined_immediate:
     _title: 'Confirm newsletter subscriptions'
     immediate: true
   requirements:
-    _permission: 'subscribe to newsletters'
+    _access: 'TRUE'
   options:
     no_cache: TRUE
 
@@ -176,7 +195,7 @@ simplenews.newsletter_confirm_subscription_immediate:
     _title: 'Confirm newsletter subscriptions'
     immediate: true
   requirements:
-    _permission: 'subscribe to newsletters'
+    _access: 'TRUE'
   options:
     no_cache: TRUE
 

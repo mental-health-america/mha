@@ -8,6 +8,8 @@
  * @{
  */
 
+use Drupal\simplenews\Entity\Subscriber;
+
 /**
  * Implements hook_rules_action_info().
  */
@@ -21,8 +23,8 @@ function simplenews_rules_rules_action_info() {
           'type' => 'node',
           'label' => t('The newsletter node to be sent.'),
           'description' => t('The newsletter node that should be sent.'),
-        )
-      )
+        ),
+      ),
     ),
     'simplenews_rules_action_subscribe' => array(
       'label' => t('Subscribe an e-mail adress to a newsletter'),
@@ -186,10 +188,7 @@ function simplenews_rules_rules_event_info() {
  * Action implementation, send a newsletter node.
  */
 function simplenews_rules_action_send($node) {
-  $newsletter = simplenews_newsletter_load($node->nid);
-  if ($newsletter && ($newsletter->status != SIMPLENEWS_STATUS_SEND_PENDING || $newsletter->status != SIMPLENEWS_STATUS_SEND_PENDING)) {
-    \Drupal::service('simplenews.spool_storage')->addFromEntity($node);
-  }
+  \Drupal::service('simplenews.spool_storage')->addIssue($node);
 }
 
 /**
@@ -207,7 +206,7 @@ function simplenews_rules_action_subscribe($args, $settings) {
 }
 
 /**
- * Action Implementation: Unsubscribe an e-mail adress to a Simplenews newsletter.
+ * Action Implementation: Unsubscribe an e-mail adress to a newsletter.
  */
 function simplenews_rules_action_unsubscribe($args, $settings) {
   if ($args['language'] == LANGUAGE_NONE) {
@@ -221,20 +220,19 @@ function simplenews_rules_action_unsubscribe($args, $settings) {
 }
 
 /**
- * Action Implementation: Delete an email address from a specific Simplenews newsletter
+ * Action Implementation: Delete an email address from a specific newsletter.
  */
 function simplenews_rules_action_subscription_delete($args, $settings) {
-  if (!empty($args['mail']) && !empty($args['tid'])){
+  if (!empty($args['mail']) && !empty($args['tid'])) {
     \Drupal::entityTypeManager()->getStorage('simplenews_subscriber')->deleteSubscriptions(array('mail' => $args['mail'], 'tid' => $args['tid']));
   }
 }
 
 /**
- * Action Implementation: Delete an email address from all Simplenews newsletters
+ * Action Implementation: Delete an email address from all newsletters.
  */
 function simplenews_rules_action_subscriber_delete($args, $settings) {
-  $subscriber = simplenews_subscriber_load_by_mail($args['mail']);
-  if ($subscriber) {
+  if ($subscriber = Subscriber::loadByMail($args['mail'])) {
     $subscriber->delete();
   }
 }
@@ -247,9 +245,11 @@ function simplenews_rules_map_confirmation($args) {
     case SIMPLENEWS_RULES_CONFIRMATION_YES:
       $confirmation = TRUE;
       break;
+
     case SIMPLENEWS_RULES_CONFIRMATION_NO:
       $confirmation = FALSE;
       break;
+
     case SIMPLENEWS_RULES_CONFIRMATION_DEFAULT:
       $confirmation = NULL;
       break;

@@ -14,8 +14,10 @@ abstract class MailCacheStatic implements MailCacheInterface {
 
   /**
    * The static cache.
+   *
+   * @var array
    */
-  protected $cache = array();
+  protected $cache = [];
 
   /**
    * Returns the cache identifier for the mail.
@@ -24,10 +26,11 @@ abstract class MailCacheStatic implements MailCacheInterface {
    *   The mail object.
    *
    * @return string
+   *   Cache identifier.
    */
   protected function getCid(MailInterface $mail) {
-    $entity_id = $mail->getEntity()->id();
-    return $mail->getEntity()->getEntityTypeId() . ':' . $entity_id . ':' . $mail->getLanguage();
+    $entity_id = $mail->getIssue()->id();
+    return $mail->getIssue()->getEntityTypeId() . ':' . $entity_id . ':' . $mail->getLanguage();
   }
 
   /**
@@ -72,5 +75,6 @@ abstract class MailCacheStatic implements MailCacheInterface {
    * @return bool
    *   TRUE if it should be cached, FALSE otherwise.
    */
-  abstract function isCacheable(MailInterface $mail, $group, $key);
+  abstract public function isCacheable(MailInterface $mail, $group, $key);
+
 }
