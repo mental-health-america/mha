@@ -17,6 +17,6 @@ search_api_sorts.search_api_display.sorts:
 entity.search_api_sorts_field.edit_form:
   path: '/admin/config/search/search-api/sorts/{search_api_sorts_field}'
   defaults:
-    _entity_form: 'search_api_sorts_field.edit'
+    _controller: '\Drupal\search_api_sorts\Controller\AdminController::redirectEditForm'
   requirements:
       _permission: 'administer search_api'

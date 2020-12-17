@@ -2,8 +2,16 @@
 
 namespace Drupal\Tests\search_api_sorts\Unit;
 
+use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
+use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\search_api\Display\DisplayInterface;
+use Drupal\search_api\Display\DisplayPluginManagerInterface;
 use Drupal\search_api_sorts\Entity\SearchApiSortsField;
 use Drupal\search_api_sorts\SearchApiSortsManager;
+use Drupal\Tests\UnitTestCase;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -11,72 +19,126 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * Tests the sorts manager.
  *
  * @group search_api_sorts
+ *
+ * @coversDefaultClass \Drupal\search_api_sorts\SearchApiSortsManager
  */
-class SearchApiSortsManagerTest extends \PHPUnit_Framework_TestCase {
+class SearchApiSortsManagerTest extends UnitTestCase {
+
+  /**
+   * ModuleHandler object.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  private $moduleHandler;
+
+  /**
+   * Entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  private $entityTypeManagerProphecy;
+
+  /**
+   * A display object.
+   *
+   * @var \Drupal\search_api\Display\DisplayInterface
+   */
+  private $display;
+
+  /**
+   * A request object to use for each test case.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
+   */
+  private $request;
+
+  /**
+   * A request stack object to store requests.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  private $requestStack;
+
+  /**
+   * The search API Display manager.
+   *
+   * @var \Drupal\search_api\Display\DisplayPluginManagerInterface
+   */
+  private $searchApiDisplayManager;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp(): void {
+    parent::setUp();
+
+    $this->moduleHandler = $this->prophesize(ModuleHandlerInterface::class)->reveal();
+
+    $this->display = $this->prophesize(DisplayInterface::class)->reveal();
+
+    $this->requestStack = new RequestStack();
+
+    // Only set up the prophecy for now,
+    // it will need to be configured differently for each test function.
+    $this->entityTypeManagerProphecy = $this->prophesize(EntityTypeManagerInterface::class);
+
+    $this->request = new Request();
+
+    $this->searchApiDisplayManager = $this->prophesize(DisplayPluginManagerInterface::class)->reveal();
+  }
 
   /**
    * Tests getActiveSort.
    *
    * @dataProvider provideSortOrders
+   *
+   * @covers ::getActiveSort
    */
   public function testGetActiveSort($order_argument, $expected) {
-    $request_stack = new RequestStack();
-    $request = new Request(['sort' => 'sort_field', 'order' => $order_argument]);
-    $request_stack->push($request);
+    $this->request->query = new ParameterBag(['sort' => 'sort_field', 'order' => $order_argument]);
+    $this->requestStack->push($this->request);
 
-    $display = $this->getMockBuilder('\Drupal\search_api\Display\DisplayInterface')
-      ->disableOriginalConstructor()
-      ->getMock();
-    $module_handler = $this->getMockBuilder('Drupal\Core\Extension\ModuleHandlerInterface')
-      ->disableOriginalConstructor()
-      ->getMock();
+    $manager = $this->entityTypeManagerProphecy->reveal();
 
-    $manager = $this->getMockBuilder('\Drupal\Core\Entity\EntityTypeManagerInterface')
-      ->disableOriginalConstructor()
-      ->getMock();
-
-    $sut = new SearchApiSortsManager($request_stack, $manager, $module_handler);
-    $sorts = $sut->getActiveSort($display);
+    $searchApiSortsManager = new SearchApiSortsManager($this->requestStack, $manager, $this->moduleHandler, $this->searchApiDisplayManager);
+    $sorts = $searchApiSortsManager->getActiveSort($this->display);
     $this->assertEquals('sort_field', $sorts->getFieldName());
     $this->assertEquals($expected, $sorts->getOrder());
   }
 
   /**
    * Tests getEnabledSorts.
+   *
+   * @covers ::getEnabledSorts
    */
   public function testGetEnabledSorts() {
-    $sorts_field = new SearchApiSortsField(['id' => 'test'], 'search_api_sorts_field');
+    $this->requestStack->push($this->request);
 
-    $request_stack = new RequestStack();
-    $request = new Request();
-    $request_stack->push($request);
+    $sortsField = new SearchApiSortsField(['id' => $this->randomMachineName()], 'search_api_sorts_field');
 
-    $index = $this->getMockBuilder('\Drupal\search_api\Display\DisplayInterface')
+    $storage = $this->getMockBuilder(EntityStorageInterface::class)
       ->disableOriginalConstructor()
       ->getMock();
 
-    $module_handler = $this->getMockBuilder('Drupal\Core\Extension\ModuleHandlerInterface')
-      ->disableOriginalConstructor()
-      ->getMock();
-
-    $storage = $this->getMockBuilder('\Drupal\Core\Entity\EntityStorageInterface')
-      ->disableOriginalConstructor()
-      ->getMock();
     $storage->expects($this->once())
       ->method('loadByProperties')
-      ->willReturn($sorts_field);
-    $manager = $this->getMockBuilder('Drupal\Core\Entity\EntityTypeManagerInterface')
-      ->disableOriginalConstructor()
-      ->getMock();
-    $manager->expects($this->once())
-      ->method('getStorage')
-      ->with('search_api_sorts_field')
-      ->willReturn($storage);
+      ->willReturn($sortsField);
 
-    $sut = new SearchApiSortsManager($request_stack, $manager, $module_handler);
-    $enabled_sorts = $sut->getEnabledSorts($index);
+    try {
+      $this->entityTypeManagerProphecy
+        ->getStorage('search_api_sorts_field')
+        ->willReturn($storage);
+    }
+    catch (InvalidPluginDefinitionException $e) {
+      $this->fail("search_api_sorts storage not found.");
+    }
 
-    $this->assertEquals($sorts_field, $enabled_sorts);
+    $manager = $this->entityTypeManagerProphecy->reveal();
+
+    $searchApiSortsManager = new SearchApiSortsManager($this->requestStack, $manager, $this->moduleHandler, $this->searchApiDisplayManager);
+    $enabledSorts = $searchApiSortsManager->getEnabledSorts($this->display);
+
+    $this->assertEquals($sortsField, $enabledSorts);
   }
 
   /**

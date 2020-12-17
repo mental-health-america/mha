@@ -40,7 +40,7 @@ abstract class SortsFunctionalBase extends SearchApiBrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
 
     // Create an index and server to work with.
@@ -58,8 +58,8 @@ abstract class SortsFunctionalBase extends SearchApiBrowserTestBase {
     $this->setUpExampleStructure();
     $this->insertExampleContent();
 
-    $this->escapedDisplayId = 'views_page---search_api_test_view__page_1';
-    $this->displayId = 'views_page:search_api_test_view__page_1';
+    $this->escapedDisplayId = 'views_page---search_api_sorts_test_view__page_1';
+    $this->displayId = 'views_page:search_api_sorts_test_view__page_1';
 
     // Log in, so we can test all the things.
     $this->drupalLogin($this->adminUser);

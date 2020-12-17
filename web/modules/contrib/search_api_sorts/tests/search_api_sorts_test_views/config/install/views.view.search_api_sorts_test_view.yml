@@ -1,8 +1,17 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - search_api
+    - search_api_sorts_test_views
+id: search_api_sorts_test_view
+label: 'Search API Sorts Test search view'
+module: views
+tag: ''
 base_field: search_api_id
 base_table: search_api_index_database_search_index
 core: 8.x
 description: ''
-status: true
 display:
   default:
     display_plugin: default
@@ -279,12 +288,3 @@ display:
       defaults:
         use_ajax: false
       use_ajax: true
-label: 'Search API Test search view'
-module: views
-id: search_api_test_view
-tag: ''
-langcode: en
-dependencies:
-  module:
-    - search_api
-    - search_api_sorts_test_views
