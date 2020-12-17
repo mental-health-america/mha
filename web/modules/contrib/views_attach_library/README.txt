@@ -1,12 +1,45 @@
-Overview:
--------------------------------
+CONTENTS OF THIS FILE
+---------------------
+
+ * Introduction
+ * Requirements
+ * Recommended modules
+ * Installation
+ * Configuration
+ * Maintainers
+
+
+INTRODUCTION
+------------
+
 
 The library in views module is designed to attach JS and CSS library in views,
 by providing just library name.
 
+REQUIREMENTS
+------------
 
-Installation and configuration:
--------------------------------
+No special requirements.
+
+
+RECOMMENDED MODULES
+-------------------
+
+ views.
+
+
+INSTALLATION
+------------
+
+ * Install as you would normally install a contributed Drupal module.
+   See: https://www.drupal.org/node/895232 for further information.
+
+
+
+
+CONFIGURATION
+-------------
+
 
 Installation is as simple as copying the module into your 'modules' contrib
 directory, then enabling the module.
@@ -17,33 +50,14 @@ To add library in view follow below steps
 3) Click on add library or edit library 
 4) Add or edit library name in textfield.
 
-########## default view section ######### 
 
 For example there is a custom module called "abc" and this module has
-library called "abc-js" and this library has 2 js(abc1.js , abc2.js)
-and 1 css(abc.css) file.
+library called "xyz" and this library has 2 js(abc1.js , abc2.js)
+and 1 css(abc1.css) file.
 
-so add "portal_abc/abc-js" in textfield which is nothing but just library name,
-where "abc" is module or theme name and "abc-js" is library name.
-so this view will include 2 js(abc1.js , abc2.js) and 1 css(abc.css) file.
-
-########## default view section end ########
-
-#########  View display section ############
-
-If view has block or page display where you want add another library ,
-so just go to that block or page display and click on add library or edit library,
-then add or edit library name in textfield.
-
-For example there is a custom module called xyz and this module has
-library called xyz-js and this library has 2 js(xyz1.js , xyz2.js)
-and 1 css(xyz.css) file. 
-
-so add "xyz/xyz-js" in textfield which is nothing but just library name.
-where "xyz" is module or theme name and "xyz-js" is library name.
-so this view display will include 2 js(xyz1.js , xyz2.js) and 1 css(xyz.css) file.
-
-########## View display section end ######## 
+so add "portal_abc/xyz" in textfield which is nothing but just library name,
+where "abc" is module or theme name and "xyz" is library name.
+so this view will include 2 js(abc1.js , abc2.js) and 1 css(abc1.css) file.
 
 
 For a full description visit project page:
@@ -53,16 +67,11 @@ Bug reports, feature suggestions and latest developments:
 http://drupal.org/project/issues/library_in_views
 
 
----REQUIREMENTS---
-
-*View & view UI
  
-
 MAINTAINERS
 -----------
+
 Current maintainers:
 * Hardik Patel - https://www.drupal.org/user/3316709/
 * Yogesh Chougule - https://www.drupal.org/user/724666/
 * Rahul Lamkhade - https://www.drupal.org/user/2718915/
-
-
