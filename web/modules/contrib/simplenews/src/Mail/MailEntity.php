@@ -17,11 +17,11 @@ class MailEntity implements MailInterface {
   use DependencySerializationTrait;
 
   /**
-   * The entity object.
+   * The newsletter issue.
    *
    * @var \Drupal\Core\Entity\ContentEntityInterface
    */
-  protected $entity;
+  protected $issue;
 
   /**
    * The cached build render array.
@@ -61,24 +61,14 @@ class MailEntity implements MailInterface {
   /**
    * Constructs a MailEntity object.
    */
-  public function __construct(ContentEntityInterface $entity, SubscriberInterface $subscriber, MailCacheInterface $mail_cache) {
-    $this->setSubscriber($subscriber);
-    $this->setEntity($entity);
-    $this->cache = $mail_cache;
-    $this->newsletter = $entity->simplenews_issue->entity;
-  }
-
-  /**
-   * Set the entity of this mail.
-   *
-   * @param \Drupal\Core\Entity\ContentEntityInterface $entity
-   *   The entity of this mail.
-   */
-  public function setEntity(ContentEntityInterface $entity) {
-    $this->entity = $entity;
-    if ($this->entity->hasTranslation($this->getLanguage())) {
-      $this->entity = $this->entity->getTranslation($this->getLanguage());
+  public function __construct(ContentEntityInterface $issue, SubscriberInterface $subscriber, MailCacheInterface $mail_cache) {
+    $this->subscriber = $subscriber;
+    $this->issue = $issue;
+    if ($this->issue->hasTranslation($this->getLanguage())) {
+      $this->issue = $this->issue->getTranslation($this->getLanguage());
     }
+    $this->cache = $mail_cache;
+    $this->newsletter = $issue->simplenews_issue->entity;
   }
 
   /**
@@ -92,20 +82,7 @@ class MailEntity implements MailInterface {
   }
 
   /**
-   * Set the active subscriber.
-   *
-   * @param \Drupal\simplenews\SubscriberInterface $subscriber
-   *   The active subscriber.
-   */
-  public function setSubscriber(SubscriberInterface $subscriber) {
-    $this->subscriber = $subscriber;
-  }
-
-  /**
-   * Return the subscriber object.
-   *
-   * @return \Drupal\simplenews\SubscriberInterface
-   *   The subscriber object.
+   * {@inheritdoc}
    */
   public function getSubscriber() {
     return $this->subscriber;
@@ -129,21 +106,25 @@ class MailEntity implements MailInterface {
         $headers['X-Priority'] = '1';
         $headers['X-MSMail-Priority'] = 'Highest';
         break;
+
       case SIMPLENEWS_PRIORITY_HIGH:
         $headers['Priority'] = 'urgent';
         $headers['X-Priority'] = '2';
         $headers['X-MSMail-Priority'] = 'High';
         break;
+
       case SIMPLENEWS_PRIORITY_NORMAL:
         $headers['Priority'] = 'normal';
         $headers['X-Priority'] = '3';
         $headers['X-MSMail-Priority'] = 'Normal';
         break;
+
       case SIMPLENEWS_PRIORITY_LOW:
         $headers['Priority'] = 'non-urgent';
         $headers['X-Priority'] = '4';
         $headers['X-MSMail-Priority'] = 'Low';
         break;
+
       case SIMPLENEWS_PRIORITY_LOWEST:
         $headers['Priority'] = 'non-urgent';
         $headers['X-Priority'] = '5';
@@ -153,9 +134,9 @@ class MailEntity implements MailInterface {
 
     // Add user specific header data.
     $headers['From'] = $this->getFromFormatted();
-    $headers['List-Unsubscribe'] = '<' . \Drupal::token()->replace('[simplenews-subscriber:unsubscribe-url]', $this->getTokenContext(), array('sanitize' => FALSE)) . '>';
+    $headers['List-Unsubscribe'] = '<' . \Drupal::token()->replace('[simplenews-subscriber:unsubscribe-url]', $this->getTokenContext(), ['sanitize' => FALSE]) . '>';
 
-    // Add general headers
+    // Add general headers.
     $headers['Precedence'] = 'bulk';
     return $headers;
   }
@@ -163,32 +144,32 @@ class MailEntity implements MailInterface {
   /**
    * {@inheritdoc}
    */
-  function getTokenContext() {
-    return array(
+  public function getTokenContext() {
+    return [
       'newsletter' => $this->getNewsletter(),
       'simplenews_subscriber' => $this->getSubscriber(),
-      $this->getEntity()->getEntityTypeId() => $this->getEntity(),
-    );
+      $this->getIssue()->getEntityTypeId() => $this->getIssue(),
+    ];
   }
 
   /**
    * {@inheritdoc}
    */
-  function setKey($key) {
+  public function setKey($key) {
     $this->key = $key;
   }
 
   /**
    * {@inheritdoc}
    */
-  function getKey() {
+  public function getKey() {
     return $this->key;
   }
 
   /**
    * {@inheritdoc}
    */
-  function getFromFormatted() {
+  public function getFromFormatted() {
     // Windows based PHP systems don't accept formatted email addresses.
     if (mb_substr(PHP_OS, 0, 3) == 'WIN') {
       return $this->getFromAddress();
@@ -199,50 +180,50 @@ class MailEntity implements MailInterface {
   /**
    * {@inheritdoc}
    */
-  function getFromAddress() {
+  public function getFromAddress() {
     return $this->getNewsletter()->from_address;
   }
 
   /**
    * {@inheritdoc}
    */
-  function getRecipient() {
+  public function getRecipient() {
     return $this->getSubscriber()->getMail();
   }
 
   /**
    * {@inheritdoc}
    */
-  function getFormat() {
+  public function getFormat() {
     return $this->getNewsletter()->format;
   }
 
   /**
    * {@inheritdoc}
    */
-  function getLanguage() {
+  public function getLanguage() {
     return $this->getSubscriber()->getLangcode();
   }
 
   /**
    * {@inheritdoc}
    */
-  function getEntity() {
-    return $this->entity;
+  public function getIssue() {
+    return $this->issue;
   }
 
   /**
    * {@inheritdoc}
    */
-  function getSubject() {
+  public function getSubject() {
     // Build email subject and perform some sanitizing.
     // Use the requested language if enabled.
     $langcode = $this->getLanguage();
-    $subject = \Drupal::token()->replace($this->getNewsletter()->subject, $this->getTokenContext(), array('sanitize' => FALSE, 'langcode' => $langcode));
+    $subject = \Drupal::token()->replace($this->getNewsletter()->subject, $this->getTokenContext(), ['sanitize' => FALSE, 'langcode' => $langcode]);
 
     // Line breaks are removed from the email subject to prevent injection of
     // malicious data into the email header.
-    $subject = str_replace(array("\r", "\n"), '', $subject);
+    $subject = str_replace(["\r", "\n"], '', $subject);
     return $subject;
   }
 
@@ -251,12 +232,13 @@ class MailEntity implements MailInterface {
    */
   protected function setContext() {
 
-    // Switch to the user
+    // Switch to the user.
     if ($this->uid = $this->getSubscriber()->getUserId()) {
       \Drupal::service('account_switcher')->switchTo(User::load($this->uid));
     }
 
     // Change language if the requested language is enabled.
+    // @codingStandardsIgnoreStart
     /*$language = $this->getLanguage();
     $languages = LanguageManagerInterface::getLanguages();
     if (isset($languages[$language])) {
@@ -268,6 +250,7 @@ class MailEntity implements MailInterface {
         $GLOBALS['language_content'] = $languages[$language];
       }
     }*/
+    // @codingStandardsIgnoreEnd
   }
 
   /**
@@ -307,16 +290,16 @@ class MailEntity implements MailInterface {
     }
 
     // Build message body
-    // Supported view modes: 'email_plain', 'email_html', 'email_textalt'
-    $build = \Drupal::entityTypeManager()->getViewBuilder($this->getEntity()->getEntityTypeId())->view($this->getEntity(), 'email_' . $format, $this->getLanguage());
-    $build['#entity_type'] = $this->getEntity()->getEntityTypeId();
+    // Supported view modes: 'email_plain', 'email_html', 'email_textalt'.
+    $build = \Drupal::entityTypeManager()->getViewBuilder($this->getIssue()->getEntityTypeId())->view($this->getIssue(), 'email_' . $format, $this->getLanguage());
+    $build['#entity_type'] = $this->getIssue()->getEntityTypeId();
     // @todo: Consider using render caching.
     unset($build['#cache']);
 
     // We need to prevent the standard theming hooks, but we do want to allow
     // modules such as panelizer that override it, so only clear the standard
     // entity hook and entity type hooks.
-    if ($build['#theme'] == 'entity' || $build['#theme'] == $this->getEntity()->getEntityTypeId()) {
+    if ($build['#theme'] == 'entity' || $build['#theme'] == $this->getIssue()->getEntityTypeId()) {
       unset($build['#theme']);
     }
 
@@ -340,14 +323,14 @@ class MailEntity implements MailInterface {
     if ($cache = $this->cache->get($this, 'build', 'body:' . $format)) {
       return $cache;
     }
-    $body = $this->build($format) + array(
+    $body = $this->build($format) + [
       '#theme' => 'simplenews_newsletter_body',
       '#newsletter' => $this->getNewsletter(),
       '#language' => $this->getLanguage(),
       '#simplenews_subscriber' => $this->getSubscriber(),
       '#key' => $this->getKey(),
       '#format' => $format,
-    );
+    ];
     $markup = \Drupal::service('renderer')->renderPlain($body);
     $this->cache->set($this, 'build', 'body:' . $format, $markup);
     return $markup;
@@ -387,7 +370,7 @@ class MailEntity implements MailInterface {
     $body = $this->buildBody($format);
 
     // Build message body, replace tokens.
-    $body = \Drupal::token()->replace($body, $this->getTokenContext(), array('langcode' => $this->getLanguage()));
+    $body = \Drupal::token()->replace($body, $this->getTokenContext(), ['langcode' => $this->getLanguage()]);
     if ($format == 'plain') {
       // Convert HTML to text if requested to do so.
       $body = MailFormatHelper::htmlToText($body, $this->getNewsletter()->hyperlinks);
@@ -401,23 +384,23 @@ class MailEntity implements MailInterface {
   }
 
   /**
-   * {@inhertidoc}
+   * {@inheritdoc}
    */
-  function getAttachments() {
+  public function getAttachments() {
     if ($cache = $this->cache->get($this, 'data', 'attachments')) {
       return $cache;
     }
 
-    $attachments = array();
+    $attachments = [];
     $build = $this->build();
-    $fids = array();
-    foreach ($this->getEntity()->getFieldDefinitions() as $field_name => $field_definition) {
+    $fids = [];
+    foreach ($this->getIssue()->getFieldDefinitions() as $field_name => $field_definition) {
       // @todo: Find a better way to support more field types.
       // Only add fields of type file which are enabled for the current view
       // mode as attachments.
       if ($field_definition->getType() == 'file' && isset($build[$field_name])) {
 
-        if ($items = $this->getEntity()->get($field_name)) {
+        if ($items = $this->getIssue()->get($field_name)) {
           foreach ($items as $item) {
             $fids[] = $item->target_id;
           }

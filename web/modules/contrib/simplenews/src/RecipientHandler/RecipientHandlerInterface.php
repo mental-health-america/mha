@@ -10,17 +10,19 @@ use Drupal\Component\Plugin\PluginInspectionInterface;
 interface RecipientHandlerInterface extends \Countable, PluginInspectionInterface {
 
   /**
-   * Build the query that gets the list of recipients.
+   * Adds a newsletter issue to the mail spool.
    *
-   * @return A SelectQuery object with the columns 'snid', 'mail' and
-   * 'newsletter_id' for each recipient.
+   * @return int
+   *   Number of recipients added.
    */
-  function buildRecipientQuery();
+  public function addToSpool();
 
   /**
-   * Build a query to count the number of recipients.
+   * Returns the elements to add to the settings form for handler settings.
    *
-   * @return A SelectQuery object to count the number of recipients.
+   * @return array
+   *   The form elements.
    */
-  function buildRecipientCountQuery();
+  public function settingsForm();
+
 }

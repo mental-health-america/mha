@@ -54,7 +54,7 @@ class SearchApiSortsBlockDeriver implements ContainerDeriverInterface {
     if (!isset($this->derivatives[$base_plugin_id])) {
       $plugin_derivatives = [];
 
-      /** @var \Drupal\search_api\Display\DisplayPluginManager $sapi_display_manager */
+      /** @var \Drupal\search_api\Display\DisplayPluginManagerInterface $sapi_display_manager */
       $sapi_display_manager = \Drupal::service('plugin.manager.search_api.display');
       foreach ($sapi_display_manager->getInstances() as $display) {
         $machine_name = $display->getPluginId();

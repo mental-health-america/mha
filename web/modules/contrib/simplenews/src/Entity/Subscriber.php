@@ -6,8 +6,8 @@ use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\simplenews\Plugin\Field\FieldType\SubscriptionItem;
 use Drupal\simplenews\SubscriberInterface;
 use Drupal\user\Entity\User;
 use Drupal\user\UserInterface;
@@ -22,6 +22,7 @@ use Drupal\user\UserInterface;
  *     "storage" = "Drupal\simplenews\Subscription\SubscriptionStorage",
  *     "access" = "Drupal\simplenews\SubscriberAccessControlHandler",
  *     "form" = {
+ *       "add" = "Drupal\simplenews\Form\SubscriberForm",
  *       "default" = "Drupal\simplenews\Form\SubscriberForm",
  *       "account" = "Drupal\simplenews\Form\SubscriptionsAccountForm",
  *       "block" = "Drupal\simplenews\Form\SubscriptionsBlockForm",
@@ -42,7 +43,8 @@ use Drupal\user\UserInterface;
  *   links = {
  *     "edit-form" = "/admin/people/simplenews/edit/{simplenews_subscriber}",
  *     "delete-form" = "/admin/people/simplenews/delete/{simplenews_subscriber}",
- *   }
+ *   },
+ *   token_type = "simplenews-subscriber"
  * )
  */
 class Subscriber extends ContentEntityBase implements SubscriberInterface {
@@ -72,14 +74,14 @@ class Subscriber extends ContentEntityBase implements SubscriberInterface {
    * {@inheritdoc}
    */
   public function getStatus() {
-    return $this->get('status')->value;
+    return $this->get('status')->value == SubscriberInterface::ACTIVE;
   }
 
   /**
    * {@inheritdoc}
    */
   public function setStatus($status) {
-    $this->set('status', $status);
+    $this->set('status', $status ? SubscriberInterface::ACTIVE : SubscriberInterface::INACTIVE);
   }
 
   /**
@@ -100,35 +102,23 @@ class Subscriber extends ContentEntityBase implements SubscriberInterface {
    * {@inheritdoc}
    */
   public function getUserId() {
-    $value = $this->get('uid')->getValue();
-    if (isset($value[0]['target_id'])) {
-      return $value[0]['target_id'];
-    }
-    return '0';
+    return $this->get('uid')->target_id;
   }
 
   /**
    * {@inheritdoc}
    */
   public function getUser() {
-    $mail = $this->getMail();
-
-    if (empty($mail)) {
-      return NULL;
-    }
-    if ($user = User::load($this->getUserId())) {
+    $uid = $this->getUserId();
+    if ($uid && ($user = User::load($uid))) {
       return $user;
     }
-    else {
-      return user_load_by_mail($this->getMail()) ?: NULL;
+    elseif ($mail = $this->getMail()) {
+      return user_load_by_mail($mail) ?: NULL;
     }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setUserId($uid) {
-    $this->set('uid', $uid);
+    else {
+      return NULL;
+    }
   }
 
   /**
@@ -149,10 +139,40 @@ class Subscriber extends ContentEntityBase implements SubscriberInterface {
    * {@inheritdoc}
    */
   public function fillFromAccount(AccountInterface $account) {
-    $this->setUserId($account->id());
+    if (static::$syncing) {
+      return $this;
+    }
+
+    static::$syncing = TRUE;
+    $this->set('uid', $account->id());
     $this->setMail($account->getEmail());
     $this->setLangcode($account->getPreferredLangcode());
+    $this->setStatus($account->isActive());
+
+    // Copy values for shared fields to existing subscriber.
+    foreach ($this->getUserSharedFields($account) as $field_name) {
+      $this->set($field_name, $account->get($field_name)->getValue());
+    }
+
+    static::$syncing = FALSE;
     return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function copyToAccount(AccountInterface $account) {
+    // Copy values for shared fields to existing user.
+    if (!static::$syncing && ($fields = $this->getUserSharedFields($account))) {
+      static::$syncing = TRUE;
+      foreach ($fields as $field_name) {
+        $account->set($field_name, $this->get($field_name)->getValue());
+      }
+      if (!$account->isNew()) {
+        $account->save();
+      }
+      static::$syncing = FALSE;
+    }
   }
 
   /**
@@ -167,20 +187,6 @@ class Subscriber extends ContentEntityBase implements SubscriberInterface {
    */
   public function setChanges($changes) {
     $this->set('changes', serialize($changes));
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function isSyncing() {
-    return static::$syncing;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setSyncing($sync = TRUE) {
-    static::$syncing = $sync;
   }
 
   /**
@@ -223,7 +229,7 @@ class Subscriber extends ContentEntityBase implements SubscriberInterface {
    * {@inheritdoc}
    */
   public function getSubscribedNewsletterIds() {
-    $ids = array();
+    $ids = [];
     foreach ($this->subscriptions as $item) {
       if ($item->status == SIMPLENEWS_SUBSCRIPTION_STATUS_SUBSCRIBED) {
         $ids[] = $item->target_id;
@@ -240,16 +246,16 @@ class Subscriber extends ContentEntityBase implements SubscriberInterface {
       $subscription->status = $status;
     }
     else {
-      $data = array(
+      $data = [
         'target_id' => $newsletter_id,
         'status' => $status,
         'source' => $source,
         'timestamp' => $timestamp,
-      );
+      ];
       $this->subscriptions->appendItem($data);
     }
     if ($status == SIMPLENEWS_SUBSCRIPTION_STATUS_SUBSCRIBED) {
-      \Drupal::moduleHandler()->invokeAll('simplenews_subscribe', array($this, $newsletter_id));
+      \Drupal::moduleHandler()->invokeAll('simplenews_subscribe', [$this, $newsletter_id]);
     }
   }
 
@@ -261,18 +267,18 @@ class Subscriber extends ContentEntityBase implements SubscriberInterface {
       $subscription->status = SIMPLENEWS_SUBSCRIPTION_STATUS_UNSUBSCRIBED;
     }
     else {
-      $data = array(
+      $data = [
         'target_id' => $newsletter_id,
         'status' => SIMPLENEWS_SUBSCRIPTION_STATUS_UNSUBSCRIBED,
         'source' => $source,
         'timestamp' => $timestamp,
-      );
+      ];
       $this->subscriptions->appendItem($data);
     }
     // Clear eventually existing mail spool rows for this subscriber.
-    \Drupal::service('simplenews.spool_storage')->deleteMails(array('snid' => $this->id(), 'newsletter_id' => $newsletter_id));
+    \Drupal::service('simplenews.spool_storage')->deleteMails(['snid' => $this->id(), 'newsletter_id' => $newsletter_id]);
 
-    \Drupal::moduleHandler()->invokeAll('simplenews_unsubscribe', array($this, $newsletter_id));
+    \Drupal::moduleHandler()->invokeAll('simplenews_unsubscribe', [$this, $newsletter_id]);
   }
 
   /**
@@ -282,13 +288,8 @@ class Subscriber extends ContentEntityBase implements SubscriberInterface {
     parent::postSave($storage, $update);
 
     // Copy values for shared fields to existing user.
-    if (!static::$syncing === TRUE && \Drupal::config('simplenews.settings')->get('subscriber.sync_fields') && $user = $this->getUser()) {
-      static::$syncing = TRUE;
-      foreach ($this->getUserSharedFields($user) as $field_name) {
-        $user->set($field_name, $this->get($field_name)->getValue());
-      }
-      $user->save();
-      static::$syncing = FALSE;
+    if ($user = $this->getUser()) {
+      $this->copyToAccount($user);
     }
   }
 
@@ -298,36 +299,37 @@ class Subscriber extends ContentEntityBase implements SubscriberInterface {
   public function postCreate(EntityStorageInterface $storage) {
     parent::postCreate($storage);
 
-    // Set the uid field if there is a user with the same email.
-    $user_ids = \Drupal::entityQuery('user')
-      ->condition('mail', $this->getMail())
-      ->execute();
-    if (!empty($user_ids)) {
-      $this->setUserId(array_pop($user_ids));
-    }
-
-    // Copy values for shared fields from existing user.
-    if (\Drupal::config('simplenews.settings')->get('subscriber.sync_fields') && $user = $this->getUser()) {
-      foreach ($this->getUserSharedFields($user) as $field_name) {
-        $this->set($field_name, $user->get($field_name)->getValue());
-      }
+    // Fill from a User account with matching uid or email.
+    if ($user = $this->getUser()) {
+      $this->fillFromAccount($user);
     }
   }
 
   /**
-   * {@inheritdoc}
+   * Identifies configurable fields shared with a user.
+   *
+   * @param \Drupal\user\UserInterface $user
+   *   The user to match fields against.
+   *
+   * @return string[]
+   *   An indexed array of the names of each field for which there is also a
+   *   field on the given user with the same name and type.
    */
-  public function getUserSharedFields(UserInterface $user) {
-    $field_names = array();
-    // Find any fields sharing name and type.
-    foreach ($this->getFieldDefinitions() as $field_definition) {
-      /** @var \Drupal\Core\Field\FieldDefinitionInterface $field_definition */
-      $field_name = $field_definition->getName();
-      $user_field = $user->getFieldDefinition($field_name);
-      if ($field_definition->getTargetBundle() && isset($user_field) && $user_field->getType() == $field_definition->getType()) {
-        $field_names[] = $field_name;
+  protected function getUserSharedFields(UserInterface $user) {
+    $field_names = [];
+
+    if (\Drupal::config('simplenews.settings')->get('subscriber.sync_fields')) {
+      // Find any fields sharing name and type.
+      foreach ($this->getFieldDefinitions() as $field_definition) {
+        /** @var \Drupal\Core\Field\FieldDefinitionInterface $field_definition */
+        $field_name = $field_definition->getName();
+        $user_field = $user->getFieldDefinition($field_name);
+        if ($field_definition->getTargetBundle() && isset($user_field) && $user_field->getType() == $field_definition->getType()) {
+          $field_names[] = $field_name;
+        }
       }
     }
+
     return $field_names;
   }
 
@@ -356,11 +358,10 @@ class Subscriber extends ContentEntityBase implements SubscriberInterface {
       ->setDescription(t("The subscriber's email address."))
       ->setSetting('default_value', '')
       ->setRequired(TRUE)
-      ->setDisplayOptions('form', array(
+      ->setDisplayOptions('form', [
         'type' => 'email_default',
-        'settings' => array(),
-        'weight' => 5,
-      ))
+        'settings' => [],
+      ])
       ->setDisplayConfigurable('form', TRUE);
 
     $fields['uid'] = BaseFieldDefinition::create('entity_reference')
@@ -381,7 +382,53 @@ class Subscriber extends ContentEntityBase implements SubscriberInterface {
       ->setLabel(t('Created'))
       ->setDescription(t('The time that the subscriber was created.'));
 
+    $fields['subscriptions'] = BaseFieldDefinition::create('simplenews_subscription')
+      ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
+      ->setLabel(t('Subscriptions'))
+      ->setSetting('target_type', 'simplenews_newsletter')
+      ->setDisplayOptions('form', [
+        'type' => 'simplenews_subscription_select',
+        'weight' => '0',
+        'settings' => [],
+        'third_party_settings' => [],
+      ]);
+
     return $fields;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function loadByMail($mail, $create = FALSE, $default_langcode = NULL) {
+    $subscriber = FALSE;
+    if ($mail) {
+      $subscribers = \Drupal::entityTypeManager()->getStorage('simplenews_subscriber')->loadByProperties(['mail' => $mail]);
+      $subscriber = reset($subscribers);
+    }
+
+    if ($create && !$subscriber) {
+      $subscriber = static::create(['mail' => $mail]);
+      if ($default_langcode) {
+        $subscriber->setLangcode($default_langcode);
+      }
+    }
+    return $subscriber;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function loadByUid($uid, $create = FALSE) {
+    $subscriber = FALSE;
+    if ($uid) {
+      $subscribers = \Drupal::entityTypeManager()->getStorage('simplenews_subscriber')->loadByProperties(['uid' => $uid]);
+      $subscriber = reset($subscribers);
+    }
+
+    if ($create && !$subscriber) {
+      $subscriber = static::create(['uid' => $uid]);
+    }
+    return $subscriber;
   }
 
 }

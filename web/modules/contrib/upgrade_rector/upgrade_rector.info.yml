@@ -1,0 +1,10 @@
+type: module
+name: 'Upgrade Rector'
+description: 'Get automated code fix suggestions for deprecations.'
+package: Administration
+core_version_requirement: ^8.7.7 || ^9
+
+# Information added by Drupal.org packaging script on 2020-06-02
+version: '8.x-1.0-alpha7'
+project: 'upgrade_rector'
+datestamp: 1591108474

@@ -15,21 +15,21 @@ class SubscriberDeleteForm extends ContentEntityConfirmFormBase {
    * {@inheritdoc}
    */
   public function getQuestion() {
-    return t('Are you sure you want to delete %name?', array('%name' => $this->entity->label()));
+    return $this->t('Are you sure you want to delete %name?', ['%name' => $this->entity->label()]);
   }
 
   /**
    * {@inheritdoc}
    */
   public function getCancelUrl() {
-    return new Url('view.simplenews_subscribers.page_1');
+    return new Url('entity.simplenews_subscriber.collection');
   }
 
   /**
    * {@inheritdoc}
    */
   public function getConfirmText() {
-    return t('Delete');
+    return $this->t('Delete');
   }
 
   /**
@@ -37,9 +37,9 @@ class SubscriberDeleteForm extends ContentEntityConfirmFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->entity->delete();
-    $this->messenger()->addMessage(t('Subscriber %label has been deleted.', array('%label' => $this->entity->label())));
-    \Drupal::logger('simplenews')->notice('Subscriber %label has been deleted.', array('%label' => $this->entity->label()));
-    $form_state->setRedirect('view.simplenews_subscribers.page_1');
+    $this->messenger()->addMessage($this->t('Subscriber %label has been deleted.', ['%label' => $this->entity->label()]));
+    \Drupal::logger('simplenews')->notice('Subscriber %label has been deleted.', ['%label' => $this->entity->label()]);
+    $form_state->setRedirect('entity.simplenews_subscriber.collection');
   }
 
 }

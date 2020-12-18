@@ -17,15 +17,12 @@ class SubscriptionsPageForm extends SubscriptionsFormBase {
   public function buildForm(array $form, FormStateInterface $form_state, $snid = NULL, $timestamp = NULL, $hash = NULL) {
     $user = \Drupal::currentUser();
 
-    if ($subscriber = simplenews_subscriber_load_by_uid($user->id())) {
-      $this->setEntity($subscriber);
-    }
-    elseif ($mail = $user->getEmail()) {
-      $this->setEntity(Subscriber::create(array('mail' => $mail)));
+    if (!$user->isAnonymous()) {
+      $this->setEntity(Subscriber::loadByUid($user->id(), 'create'));
     }
     // If a hash is provided, try to load the corresponding subscriber.
     elseif ($snid && $timestamp && $hash) {
-      $subscriber = simplenews_subscriber_load($snid);
+      $subscriber = Subscriber::load($snid);
       if ($subscriber && $hash == simplenews_generate_hash($subscriber->getMail(), 'manage', $timestamp)) {
         $this->setEntity($subscriber);
       }
@@ -59,7 +56,7 @@ class SubscriptionsPageForm extends SubscriptionsFormBase {
           return $this->t('You will receive a confirmation e-mail shortly containing further instructions on how to cancel your subscription.');
       }
     }
-    return $this->t('The newsletter subscriptions for %mail have been updated.', array('%mail' => $form_state->getValue('mail')[0]['value']));
+    return $this->t('The newsletter subscriptions for %mail have been updated.', ['%mail' => $form_state->getValue('mail')[0]['value']]);
   }
 
 }

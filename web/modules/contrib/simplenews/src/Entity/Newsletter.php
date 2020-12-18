@@ -38,6 +38,7 @@ use Drupal\simplenews\NewsletterInterface;
  *     "subject",
  *     "from_address",
  *     "hyperlinks",
+ *     "allowed_handlers",
  *     "new_account",
  *     "opt_inout",
  *     "weight",
@@ -79,7 +80,7 @@ class Newsletter extends ConfigEntityBase implements NewsletterInterface {
   public $format;
 
   /**
-   * Priority indicator
+   * Priority indicator.
    *
    * @var int
    */
@@ -88,7 +89,7 @@ class Newsletter extends ConfigEntityBase implements NewsletterInterface {
   /**
    * TRUE if a read receipt should be requested.
    *
-   * @var boolean
+   * @var bool
    */
   public $receipt;
 
@@ -116,9 +117,18 @@ class Newsletter extends ConfigEntityBase implements NewsletterInterface {
   /**
    * Indicates if hyperlinks should be kept inline or extracted.
    *
-   * @var boolean
+   * @var bool
    */
   public $hyperlinks = TRUE;
+
+  /**
+   * Allowed recipient handlers.
+   *
+   * If none are selected, then all of them will be available.
+   *
+   * @var array
+   */
+  public $allowed_handlers = [];
 
   /**
    * Indicates how to integrate with the register form.
@@ -146,13 +156,13 @@ class Newsletter extends ConfigEntityBase implements NewsletterInterface {
    */
   public static function preCreate(EntityStorageInterface $storage, array &$values) {
     $config = \Drupal::config('simplenews.settings');
-    $values += array(
+    $values += [
       'format' => $config->get('newsletter.format'),
       'priority' => $config->get('newsletter.priority'),
       'receipt' => $config->get('newsletter.receipt'),
       'from_name' => $config->get('newsletter.from_name'),
       'from_address' => $config->get('newsletter.from_address'),
-    );
+    ];
     parent::preCreate($storage, $values);
   }
 
@@ -167,8 +177,8 @@ class Newsletter extends ConfigEntityBase implements NewsletterInterface {
       ->getStorage('simplenews_subscriber');
 
     foreach ($entities as $newsletter) {
-      $subscription_storage->deleteSubscriptions(array('subscriptions_target_id' => $newsletter->id()));
-      \Drupal::messenger()->addMessage(t('All subscriptions to newsletter %newsletter have been deleted.', array('%newsletter' => $newsletter->label())));
+      $subscription_storage->deleteSubscriptions(['subscriptions_target_id' => $newsletter->id()]);
+      \Drupal::messenger()->addMessage(t('All subscriptions to newsletter %newsletter have been deleted.', ['%newsletter' => $newsletter->label()]));
     }
 
     if (\Drupal::moduleHandler()->moduleExists('block')) {

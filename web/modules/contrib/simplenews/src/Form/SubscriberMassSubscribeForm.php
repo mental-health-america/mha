@@ -2,10 +2,14 @@
 
 namespace Drupal\simplenews\Form;
 
+use Drupal\Component\Utility\EmailValidatorInterface;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\simplenews\Entity\Newsletter;
+use Drupal\simplenews\Entity\Subscriber;
+use Drupal\simplenews\Subscription\SubscriptionManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -21,13 +25,33 @@ class SubscriberMassSubscribeForm extends FormBase {
   protected $languageManager;
 
   /**
+   * The subscription manager.
+   *
+   * @var \Drupal\simplenews\Subscription\SubscriptionManagerInterface
+   */
+  protected $subscriptionManager;
+
+  /**
+   * The email validator.
+   *
+   * @var \Drupal\Component\Utility\EmailValidatorInterface
+   */
+  protected $emailValidator;
+
+  /**
    * Constructs a new SubscriberMassSubscribeForm.
    *
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
+   * @param \Drupal\simplenews\Subscription\SubscriptionManagerInterface $subscription_manager
+   *   The subscription manager.
+   * @param \Drupal\Component\Utility\EmailValidatorInterface $email_validator
+   *   The email validator.
    */
-  public function __construct(LanguageManagerInterface $language_manager) {
+  public function __construct(LanguageManagerInterface $language_manager, SubscriptionManagerInterface $subscription_manager, EmailValidatorInterface $email_validator) {
     $this->languageManager = $language_manager;
+    $this->subscriptionManager = $subscription_manager;
+    $this->emailValidator = $email_validator;
   }
 
   /**
@@ -35,7 +59,9 @@ class SubscriberMassSubscribeForm extends FormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('language_manager')
+      $container->get('language_manager'),
+      $container->get('simplenews.subscription_manager'),
+      $container->get('email.validator')
     );
   }
 
@@ -50,59 +76,59 @@ class SubscriberMassSubscribeForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $form['emails'] = array(
+    $form['emails'] = [
       '#type' => 'textarea',
-      '#title' => t('Email addresses'),
+      '#title' => $this->t('Email addresses'),
       '#cols' => 60,
       '#rows' => 5,
-      '#description' => t('Email addresses must be separated by comma, space or newline.'),
-    );
+      '#description' => $this->t('Email addresses must be separated by comma, space or newline.'),
+    ];
 
-    $form['newsletters'] = array(
+    $form['newsletters'] = [
       '#type' => 'checkboxes',
-      '#title' => t('Subscribe to'),
+      '#title' => $this->t('Subscribe to'),
       '#options' => simplenews_newsletter_list(),
       '#required' => TRUE,
-    );
+    ];
 
     foreach (simplenews_newsletter_get_all() as $id => $newsletter) {
       $form['newsletters'][$id]['#description'] = Html::escape($newsletter->description);
     }
 
-    $form['resubscribe'] = array(
+    $form['resubscribe'] = [
       '#type' => 'checkbox',
-      '#title' => t('Force resubscription'),
-      '#description' => t('If checked, previously unsubscribed e-mail addresses will be resubscribed. Consider that this might be against the will of your users.'),
-    );
+      '#title' => $this->t('Force resubscription'),
+      '#description' => $this->t('If checked, previously unsubscribed e-mail addresses will be resubscribed. Consider that this might be against the will of your users.'),
+    ];
 
     // Include language selection when the site is multilingual.
     // Default value is the empty string which will result in receiving emails
     // in the site's default language.
     if ($this->languageManager->isMultilingual()) {
-      $options[''] = t('Site default language');
+      $options[''] = $this->t('Site default language');
       $languages = $this->languageManager->getLanguages();
       foreach ($languages as $langcode => $language) {
         $options[$langcode] = $language->getName();
       }
-      $form['language'] = array(
+      $form['language'] = [
         '#type' => 'radios',
-        '#title' => t('Anonymous user preferred language'),
+        '#title' => $this->t('Anonymous user preferred language'),
         '#default_value' => '',
         '#options' => $options,
-        '#description' => t('New subscriptions will be subscribed with the selected preferred language. The language of existing subscribers is unchanged.'),
-      );
+        '#description' => $this->t('New subscriptions will be subscribed with the selected preferred language. The language of existing subscribers is unchanged.'),
+      ];
     }
     else {
-      $form['language'] = array(
+      $form['language'] = [
         '#type' => 'value',
         '#value' => '',
-      );
+      ];
     }
 
-    $form['submit'] = array(
+    $form['submit'] = [
       '#type' => 'submit',
-      '#value' => t('Subscribe'),
-    );
+      '#value' => $this->t('Subscribe'),
+    ];
 
     return $form;
   }
@@ -110,17 +136,10 @@ class SubscriberMassSubscribeForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function validateForm(array &$form, FormStateInterface $form_state) {
-    parent::validateForm($form, $form_state);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $added = array();
-    $invalid = array();
-    $unsubscribed = array();
+    $added = [];
+    $invalid = [];
+    $unsubscribed = [];
     $checked_newsletters = array_keys(array_filter($form_state->getValue('newsletters')));
     $langcode = $form_state->getValue('language');
 
@@ -130,19 +149,17 @@ class SubscriberMassSubscribeForm extends FormBase {
       if ($email == '') {
         continue;
       }
-      if (valid_email_address($email)) {
-        $subscriber = simplenews_subscriber_load_by_mail($email);
+      if ($this->emailValidator->isValid($email)) {
+        $subscriber = Subscriber::loadByMail($email);
 
-        /** @var \Drupal\simplenews\Subscription\SubscriptionManagerInterface $subscription_manager */
-        $subscription_manager = \Drupal::service('simplenews.subscription_manager');
-
-        foreach (simplenews_newsletter_load_multiple($checked_newsletters) as $newsletter) {
-          // If there is a valid subscriber, check if there is a subscription for
-          // the current newsletter and if this subscription has the status
+        /** @var \Drupal\simplenews\Entity\Newsletter $newsletter */
+        foreach (Newsletter::loadMultiple($checked_newsletters) as $newsletter) {
+          // If there is a valid subscriber, check if there is a subscription
+          // for the current newsletter and if this subscription has the status
           // unsubscribed.
           $is_unsubscribed = $subscriber ? $subscriber->isUnsubscribed($newsletter->id()) : FALSE;
           if (!$is_unsubscribed || $form_state->getValue('resubscribe') == TRUE) {
-            $subscription_manager->subscribe($email, $newsletter->id(), FALSE, 'mass subscribe', $langcode);
+            $this->subscriptionManager->subscribe($email, $newsletter->id(), FALSE, 'mass subscribe', $langcode);
             $added[] = $email;
           }
           else {
@@ -156,32 +173,33 @@ class SubscriberMassSubscribeForm extends FormBase {
     }
     if ($added) {
       $added = implode(", ", $added);
-      $this->messenger()->addMessage(t('The following addresses were added or updated: %added.', array('%added' => $added)));
+      $this->messenger()->addMessage($this->t('The following addresses were added or updated: %added.', ['%added' => $added]));
 
-      $list_names = array();
-      foreach (simplenews_newsletter_load_multiple($checked_newsletters) as $newsletter) {
+      $list_names = [];
+      foreach (Newsletter::loadMultiple($checked_newsletters) as $newsletter) {
         $list_names[] = $newsletter->label();
       }
-      $this->messenger()->addMessage(t('The addresses were subscribed to the following newsletters: %newsletters.', array('%newsletters' => implode(', ', $list_names))));
+      $this->messenger()->addMessage($this->t('The addresses were subscribed to the following newsletters: %newsletters.', ['%newsletters' => implode(', ', $list_names)]));
     }
     else {
-      $this->messenger()->addMessage(t('No addresses were added.'));
+      $this->messenger()->addMessage($this->t('No addresses were added.'));
     }
     if ($invalid) {
       $invalid = implode(", ", $invalid);
-      $this->messenger()->addError(t('The following addresses were invalid: %invalid.', array('%invalid' => $invalid)));
+      $this->messenger()->addError($this->t('The following addresses were invalid: %invalid.', ['%invalid' => $invalid]));
     }
 
     foreach ($unsubscribed as $name => $subscribers) {
       $subscribers = implode(", ", $subscribers);
-      $this->messenger()->addWarning(t('The following addresses were skipped because they have previously unsubscribed from %name: %unsubscribed.', array('%name' => $name, '%unsubscribed' => $subscribers)));
+      $this->messenger()->addWarning($this->t('The following addresses were skipped because they have previously unsubscribed from %name: %unsubscribed.', ['%name' => $name, '%unsubscribed' => $subscribers]));
     }
 
     if (!empty($unsubscribed)) {
-      $this->messenger()->addWarning(t("If you would like to resubscribe them, use the 'Force resubscription' option."));
+      $this->messenger()->addWarning($this->t("If you would like to resubscribe them, use the 'Force resubscription' option."));
     }
 
     // Return to the parent page.
-    $form_state->setRedirect('view.simplenews_subscribers.page_1');
+    $form_state->setRedirect('entity.simplenews_subscriber.collection');
   }
+
 }

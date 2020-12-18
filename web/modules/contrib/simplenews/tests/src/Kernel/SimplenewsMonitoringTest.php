@@ -1,10 +1,4 @@
 <?php
-/**
- * @file
- * Simplenews monitoring test functions.
- *
- * @ingroup simplenews
- */
 
 namespace Drupal\Tests\simplenews\Kernel;
 
@@ -23,16 +17,18 @@ class SimplenewsMonitoringTest extends KernelTestBase {
    *
    * @var array
    */
-  public static $modules = array('node', 'system', 'views', 'user', 'field', 'text', 'simplenews', 'monitoring', 'monitoring_test');
+  public static $modules = [
+    'node', 'system', 'views', 'user', 'field', 'text', 'simplenews', 'monitoring', 'monitoring_test',
+  ];
 
   /**
    * Tests individual sensors.
    */
-  function testSensors() {
+  public function testSensors() {
 
-    $this->installConfig(array('system'));
-    $this->installConfig(array('node'));
-    $this->installConfig(array('simplenews'));
+    $this->installConfig(['system']);
+    $this->installConfig(['node']);
+    $this->installConfig(['simplenews']);
     $this->installEntitySchema('monitoring_sensor_result');
     $this->installSchema('simplenews', 'simplenews_mail_spool');
 
@@ -41,14 +37,12 @@ class SimplenewsMonitoringTest extends KernelTestBase {
     $this->assertEqual($result->getValue(), 0);
 
     // Crate a spool item in state pending.
-    \Drupal::service('simplenews.spool_storage')->addMail(array(
-      'mail' => 'mail@example.com',
+    \Drupal::service('simplenews.spool_storage')->addMail([
       'entity_type' => 'node',
       'entity_id' => 1,
       'newsletter_id' => 'default',
       'snid' => 1,
-      'data' => array('data' => 'data'),
-    ));
+    ]);
 
     $result = $this->runSensor('simplenews_pending');
     $this->assertEqual($result->getValue(), 1);
@@ -68,4 +62,5 @@ class SimplenewsMonitoringTest extends KernelTestBase {
     monitoring_sensor_manager()->enableSensor($sensor_name);
     return monitoring_sensor_run($sensor_name, TRUE, TRUE);
   }
+
 }

@@ -9,6 +9,11 @@ use Drupal\Core\Form\FormStateInterface;
  */
 class SubscriptionsBlockForm extends SubscriptionsFormBase {
 
+  /**
+   * Form unique ID.
+   *
+   * @var string
+   */
   protected $uniqueId;
 
   /**
@@ -29,7 +34,10 @@ class SubscriptionsBlockForm extends SubscriptionsFormBase {
   }
 
   /**
-   * {@inheritdoc}
+   * Setup unique ID.
+   *
+   * @param string $id
+   *   Subscription block unique form ID.
    */
   public function setUniqueId($id) {
     $this->uniqueId = $id;
@@ -46,10 +54,12 @@ class SubscriptionsBlockForm extends SubscriptionsFormBase {
 
     $form = parent::form($form, $form_state);
 
-    $form['message'] = array(
-      '#type' => 'item',
-      '#markup' => $this->message,
-    );
+    if ($this->message) {
+      $form['message'] = [
+        '#type' => 'item',
+        '#markup' => $this->message,
+      ];
+    }
 
     return $form;
   }
@@ -69,7 +79,7 @@ class SubscriptionsBlockForm extends SubscriptionsFormBase {
   protected function getSubmitMessage(FormStateInterface $form_state, $op, $confirm) {
     switch ($op) {
       case static::SUBMIT_UPDATE:
-        return $this->t('The newsletter subscriptions for %mail have been updated.', array('%mail' => $form_state->getValue('mail')[0]['value']));
+        return $this->t('The newsletter subscriptions for %mail have been updated.', ['%mail' => $form_state->getValue('mail')[0]['value']]);
 
       case static::SUBMIT_SUBSCRIBE:
         if ($confirm) {

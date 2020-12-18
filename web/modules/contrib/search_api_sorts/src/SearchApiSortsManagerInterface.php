@@ -3,6 +3,7 @@
 namespace Drupal\search_api_sorts;
 
 use Drupal\search_api\Display\DisplayInterface;
+use Drupal\search_api\IndexInterface;
 
 /**
  * Defines the interface for the search api sort manager.
@@ -38,5 +39,13 @@ interface SearchApiSortsManagerInterface {
    *   The display where the enabled sorts should be returned for.
    */
   public function getEnabledSorts(DisplayInterface $display);
+
+  /**
+   * Remove all deleted sorts for the given index.
+   *
+   * @param \Drupal\search_api\IndexInterface $index
+   *   The search api index.
+   */
+  public function cleanupSortFields(IndexInterface $index);
 
 }

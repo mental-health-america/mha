@@ -29,6 +29,10 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *   },
  *   links = {
  *     "edit-form" = "/admin/config/search/search-api/sorts/{search_api_sorts_field}",
+ *   },
+ *   lookup_keys = {
+ *     "display_id",
+ *     "status"
  *   }
  * )
  */

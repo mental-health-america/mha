@@ -2,7 +2,9 @@
 
 namespace Drupal\simplenews\EventSubscriber;
 
+use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\migrate\Event\MigrateEvents;
@@ -18,6 +20,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class MigrationSubscriber implements EventSubscriberInterface {
 
+  use StringTranslationTrait;
+
   /**
    * The entity field manager.
    *
@@ -26,13 +30,23 @@ class MigrationSubscriber implements EventSubscriberInterface {
   protected $entityFieldManager;
 
   /**
+   * The entity display repository.
+   *
+   * @var \Drupal\Core\Entity\EntityDisplayRepositoryInterface
+   */
+  protected $entityDisplayRepository;
+
+  /**
    * Constructs a new migration subscriber.
    *
    * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entityFieldManager
    *   The entity field manager service.
+   * @param \Drupal\Core\Entity\EntityDisplayRepositoryInterface $entity_display_repository
+   *   The entity display repository.
    */
-  public function __construct(EntityFieldManagerInterface $entityFieldManager) {
+  public function __construct(EntityFieldManagerInterface $entityFieldManager, EntityDisplayRepositoryInterface $entity_display_repository) {
     $this->entityFieldManager = $entityFieldManager;
+    $this->entityDisplayRepository = $entity_display_repository;
   }
 
   /**
@@ -56,14 +70,14 @@ class MigrationSubscriber implements EventSubscriberInterface {
     $field_storage = FieldStorageConfig::loadByName('node', 'simplenews_issue');
     $field = FieldConfig::create([
       'field_storage' => $field_storage,
-      'label' => t('Issue'),
+      'label' => $this->t('Issue'),
       'bundle' => $node_type,
       'translatable' => TRUE,
     ]);
     $field->save();
 
     // Set the default widget.
-    entity_get_form_display('node', $node_type, 'default')
+    $this->entityDisplayRepository->getFormDisplay('node', $node_type)
       ->setComponent($field->getName())
       ->save();
   }
@@ -78,4 +92,5 @@ class MigrationSubscriber implements EventSubscriberInterface {
     }
     return $return;
   }
+
 }

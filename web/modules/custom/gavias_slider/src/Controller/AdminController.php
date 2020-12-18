@@ -15,13 +15,21 @@ use Symfony\Component\HttpFoundation\Response;
 class AdminController extends ControllerBase {
 
   public function gavias_slider_list(){
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> master
     if(!\Drupal::database()->schema()->tableExists('gavias_slider')){
       return "";
     }
 
     $header = array( 'ID', 'Name', 'Action');
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> master
     $results = \Drupal::database()->select('{gavias_slider}', 'd')
             ->fields('d', array('id', 'name'))
             ->execute();
@@ -52,7 +60,11 @@ class AdminController extends ControllerBase {
     global $base_url;
     $page['#attached']['library'][] = 'gavias_slider/gavias_slider.assets.admin';
     $slideshow = gavias_slider_load($sid);
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> master
     $abs_url_config = Url::fromRoute('gavias_slider.admin.save', array(), array('absolute' => FALSE))->toString();
     $page['#attached']['drupalSettings']['gavias_slider']['base_url'] = $base_url;
     $page['#attached']['drupalSettings']['gavias_slider']['saveConfigURL'] = $abs_url_config;
@@ -73,7 +85,11 @@ class AdminController extends ControllerBase {
     global $base_url;
     $page['#attached']['library'][] = 'gavias_slider/gavias_slider.assets.admin';
     $slideshow = gavias_slider_load($sid);
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> master
     $abs_url_config = Url::fromRoute('gavias_slider.admin.save', array(), array('absolute' => FALSE))->toString();
     $page['#attached']['drupalSettings']['gavias_slider']['base_url'] = $base_url;
     $page['#attached']['drupalSettings']['gavias_slider']['saveConfigURL'] = $abs_url_config;
@@ -106,20 +122,20 @@ class AdminController extends ControllerBase {
       \Drupal::database()->update('{gavias_slider}')->fields(array(
           'data' => $data,
       ))->condition('id', $sid, '=')->execute();
-    }  
+    }
     $result = array(
         'data' => 'saved'
     );
-    
+
      // Clear all cache
-    \Drupal::service('plugin.manager.block')->clearCachedDefinitions();     
+    \Drupal::service('plugin.manager.block')->clearCachedDefinitions();
     $module_handler = \Drupal::moduleHandler();
     $module_handler->invokeAll('rebuild');
 
     print json_encode($result);
     exit(0);
   }
- 
+
   public function gavias_upload_file(){
     // A list of permitted file extensions
     global $base_url;
@@ -132,13 +148,13 @@ class AdminController extends ControllerBase {
       if(!in_array(strtolower($extension), $allowed)){
         echo '{"status":"error extension"}';
         exit;
-      }  
-      $path_folder = \Drupal::service('file_system')->realpath(file_default_scheme(). "://gva-slider-upload");
-    
+      }
+      $path_folder = \Drupal::service('file_system')->realpath(\Drupal::config('system.file')->get('default_scheme'). "://gva-slider-upload");
+
       $file_path = $path_folder . '/' . $_id . '-' . $_FILES['upl']['name'];
-      $file_url = str_replace($base_url, '',file_create_url(file_default_scheme(). "://gva-slider-upload") . '/' .  $_id .'-'. $_FILES['upl']['name']); 
+      $file_url = str_replace($base_url, '',file_create_url(\Drupal::config('system.file')->get('default_scheme'). "://gva-slider-upload") . '/' .  $_id .'-'. $_FILES['upl']['name']);
       if (!is_dir($path_folder)) {
-       @mkdir($path_folder); 
+       @mkdir($path_folder);
       }
       if(move_uploaded_file($_FILES['upl']['tmp_name'], $file_path)){
         $result = array(
