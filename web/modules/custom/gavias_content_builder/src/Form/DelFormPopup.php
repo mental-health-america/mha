@@ -24,7 +24,7 @@ class DelFormPopup extends FormBase{
    public function getFormID() {
       return 'del_form_popup';
    }
-  
+
   /**
    * {@inheritdoc}
    */
@@ -97,11 +97,11 @@ class DelFormPopup extends FormBase{
   public function submitForm(array &$form, FormStateInterface $form_state) {
      $bid = $this->bid;
     if(!$bid && \Drupal::request()->attributes->get('bid')) $bid = \Drupal::request()->attributes->get('bid');
-    db_delete('gavias_content_builder')
+    \Drupal::database()->delete('gavias_content_builder')
             ->condition('id', $bid)
             ->execute();
     \Drupal::service('plugin.manager.block')->clearCachedDefinitions();
-    drupal_set_message("blockbuilder '#{$bid}' has been delete");
+    \Drupal::messenger()->addMessage("blockbuilder '#{$bid}' has been delete");
   }
 
   public function getFormArgs($form_state){
@@ -122,7 +122,7 @@ class DelFormPopup extends FormBase{
 
     if (!empty($errors)) {
       $form_state->clearErrors();
-      drupal_get_messages('error'); // clear next message session;
+      \Drupal\Core\Messenger\MessengerInterface::messagesByType('error'); // clear next message session;
       $content = '<div class="messages messages--error" aria-label="Error message" role="contentinfo"><div role="alert"><ul>';
       foreach ($errors as $name => $error) {
           $response = new AjaxResponse();
@@ -147,9 +147,9 @@ class DelFormPopup extends FormBase{
     $response = new AjaxResponse();
 
     $content['#attached']['library'][] = 'core/drupal.dialog.ajax';
-    
+
     $content['#attached']['library'][] = 'core/drupal.dialog';
-    
+
     $response->addCommand(new CloseDialogCommand('.ui-dialog-content'));
 
     $response->addCommand(new InvokeCommand('.field--type-gavias-content-builder .gva-choose-gbb .gbb-item.id-' . $pid, 'remove'));
@@ -162,7 +162,7 @@ class DelFormPopup extends FormBase{
     $response->addCommand(new InvokeCommand('.quickedit-toolbar .action-save', 'attr', array('aria-hidden', false)));
 
     return $response;
-    
+
     }
 
 }

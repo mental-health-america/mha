@@ -26,7 +26,7 @@ class ImportFormPopup extends FormBase{
     if(\Drupal::request()->attributes->get('bid')) $bid = \Drupal::request()->attributes->get('bid');
 
     if (is_numeric($bid)) {
-      $bblock = db_select('{gavias_content_builder}', 'd')
+      $bblock = \Drupal::database()->select('{gavias_content_builder}', 'd')
          ->fields('d')
          ->condition('id', $bid, '=')
          ->execute()
@@ -35,7 +35,7 @@ class ImportFormPopup extends FormBase{
       $bblock = array('id' => 0, 'title' => '');
     }
     if($bblock['id']==0){
-      drupal_set_message('Not found gavias block builder !');
+      \Drupal::messenger()->addMessage('Not found gavias block builder !');
       return false;
     }
 
@@ -96,14 +96,14 @@ class ImportFormPopup extends FormBase{
       }
 
       $id = $form['id']['#value'];
-      db_update("gavias_content_builder")
+      $builder = \Drupal::database()->update("gavias_content_builder")
       ->fields(array(
         'params' => $params,
       ))
       ->condition('id', $id)
       ->execute();
       \Drupal::service('plugin.manager.block')->clearCachedDefinitions();
-    }  
+    }
   }
 
   public function getFormArgs($form_state){
@@ -124,7 +124,7 @@ class ImportFormPopup extends FormBase{
 
     if (!empty($errors)) {
       $form_state->clearErrors();
-      drupal_get_messages('error'); // clear next message session;
+      \Drupal\Core\Messenger\MessengerInterface::messagesByType('error'); // clear next message session;
       $content = '<div class="messages messages--error" aria-label="Error message" role="contentinfo"><div role="alert"><ul>';
       foreach ($errors as $name => $error) {
           $response = new AjaxResponse();
@@ -147,16 +147,16 @@ class ImportFormPopup extends FormBase{
     $response = new AjaxResponse();
 
     $content['#attached']['library'][] = 'core/drupal.dialog.ajax';
-    
+
     $content['#attached']['library'][] = 'core/drupal.dialog';
-    
+
     $response->addCommand(new CloseDialogCommand('.ui-dialog-content'));
 
     // quick edit compatible.
     $response->addCommand(new InvokeCommand('.quickedit-toolbar .action-save', 'attr', array('aria-hidden', false)));
 
     return $response;
-    
+
     }
 
 }

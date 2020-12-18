@@ -15,14 +15,14 @@ use  Drupal\Core\Cache\Cache;
 class SliderController extends ControllerBase {
 
   public function gavias_sl_sliders_list($gid){
-  
-    if(!db_table_exists('gavias_sliderlayers')){
+
+    if(!\Drupal::database()->schema()->tableExists('gavias_sliderlayers')){
       return "";
     }
 
     $header = array( 'ID', 'Name', 'Action');
-    
-    $results = db_select('{gavias_sliderlayers}', 'd')
+
+    $results = \Drupal::database()->select('{gavias_sliderlayers}', 'd')
             ->fields('d', array('id', 'title'))
             ->condition('group_id', $gid, '=')
             ->execute();
@@ -34,9 +34,9 @@ class SliderController extends ControllerBase {
       $tmp[] = $row->id;
       $tmp[] = $row->title;
       $tmp[] = t('<a href="@link_1">Edit Silder</a> | <a href="@link_2">Duplicate</a> | <a href="@link_3">Delete</a>', array(
-          '@link_1' => \Drupal::url('gavias_sl_sliders.admin.form', array('sid' => $row->id, 'gid' => $gid)),
-          '@link_2' => \Drupal::url('gavias_sl_sliders.admin.duplicate', array('id' => $row->id)),
-          '@link_3' => \Drupal::url('gavias_sl_group.admin.delete', array('sid' => $row->id, 'gid' => $gid, 'action' => 'slider'))
+          '@link_1' => Url::fromRoute('gavias_sl_sliders.admin.form', array('sid' => $row->id, 'gid' => $gid))->toString(),
+          '@link_2' => Url::fromRoute('gavias_sl_sliders.admin.duplicate', array('id' => $row->id))->toString(),
+          '@link_3' => Url::fromRoute('gavias_sl_group.admin.delete', array('sid' => $row->id, 'gid' => $gid, 'action' => 'slider'))->toString()
       ));
       $rows[] = $tmp;
     }
@@ -44,32 +44,32 @@ class SliderController extends ControllerBase {
       '#theme' => 'table',
       '#header' => $header,
       '#rows' => $rows,
-      '#empty' => t('No Slider available. <a href="@link">Add Slider</a>.', array('@link' => \Drupal::url('gavias_sl_sliders.admin.form', array('sid'=>0, 'gid'=>$gid)))),
+      '#empty' => t('No Slider available. <a href="@link">Add Slider</a>.', array('@link' => Url::fromRoute('gavias_sl_sliders.admin.form', array('sid'=>0, 'gid'=>$gid))->toString())),
     );
   }
 
   public function gavias_sl_sliders_edit($gid=0, $sid=0) {
-   
+
     global $base_url;
     $page['#attached']['library'][] = 'gavias_sliderlayer/gavias_sliderlayer.assets.admin';
     $theme_name = \Drupal::config('system.theme')->get('default');
-   
+
     $group = getSliderGroup($gid);
     $group_settings = (isset($group->params) && $group->params) ? base64_decode($group->params):'null';
     $group_settings_decode = (isset($group->params) && $group->params) ? json_decode(base64_decode($group->params)):'null';
-    
+
     $sliderlayers = gavias_sliderlayer_load($sid);
-    
+
     $layers = (isset($sliderlayers->layers) && $sliderlayers->layers) ? ($sliderlayers->layers) : 'null';
     //print"<pre>";print_r($layers); die();
     $settings = (isset($sliderlayers->settings) && $sliderlayers->settings) ? ($sliderlayers->settings):'null';
-    
-    $abs_url_save = \Drupal::url('gavias_sl_sliders.admin.save', array(), array('absolute' => FALSE));
-    $abs_url_edit = \Drupal::url('gavias_sl_sliders.admin.form', array('gid'=>$gid, 'sid'=>$sid), array('absolute' => FALSE));
 
-    $abs_url_config = \Drupal::url('gavias_sliderlayer.admin.get_images_upload', array(), array('absolute' => FALSE));
+    $abs_url_save = Url::fromRoute('gavias_sl_sliders.admin.save', array(), array('absolute' => FALSE))->toString();
+    $abs_url_edit = Url::fromRoute('gavias_sl_sliders.admin.form', array('gid'=>$gid, 'sid'=>$sid), array('absolute' => FALSE))->toString();
+
+    $abs_url_config = Url::fromRoute('gavias_sliderlayer.admin.get_images_upload', array(), array('absolute' => FALSE))->toString();
     $page['#attached']['drupalSettings']['gavias_sliderlayer']['get_images_upload_url'] = $abs_url_config;
-
+    $page['#attached']['drupalSettings']['gavias_sliderlayer']['base_path'] = base_path();
     $page['#attached']['drupalSettings']['gavias_sliderlayer']['base_url'] = $base_url;
     $page['#attached']['drupalSettings']['gavias_sliderlayer']['save_url'] = $abs_url_save;
     $page['#attached']['drupalSettings']['gavias_sliderlayer']['edit_url'] = $abs_url_edit;
@@ -88,14 +88,14 @@ class SliderController extends ControllerBase {
       'data_transition' => 'random',
       'slide_easing_in' => 'Power0.easeIn',
       'slide_easing_out' => 'Power1.easeOut',
-      'delay' => '300',
+      'delay' => '1000',
       'video_source' => '',
       'youtube_video' => '',
       'vimeo_video' => '',
       'html5_mp4'   => '',
       'mp4_nextslideatend' => 'true',
       'mp4_videoloop' => 'true',
-      'video_youtube_args' => 'version=3&enablejsapi=1&html5=1&hd=1&wmode=opaque&showinfo=0&ref=0;;origin=http://server.local;autoplay=1;',
+      'video_youtube_args' => '&loop=1&autoplay=1&playlist=',
       'video_vimeo_args' => 'title=0&byline=0&portrait=0&api=1',
       'video_start_at' => '',
       'video_end_at' => '',
@@ -118,11 +118,11 @@ class SliderController extends ControllerBase {
       'data_time_start' => 500,
       'data_time_end' => 50000,
       'incomingclasses' => 'SlideMaskFromTop',
-      'outgoingclasses' => '',
+      'outgoingclasses' => 'Fade-Out',
       'data_speed' => 600,
-      'data_end' => 300,
+      'data_end' => 600,
       'data_easing' => 'easeOutExpo',
-      'data_endeasing' => '',
+      'data_endeasing' => 'Power0.easeIn',
       'removed' => 0,
       'width' => 200,
       'height' => 100,
@@ -134,7 +134,7 @@ class SliderController extends ControllerBase {
     $page['#attached']['drupalSettings']['gavias_sliderlayer']['delayer'] = $delayer;
 
     $style_fontend = drupal_get_path('theme', $theme_name) . '/css/sliderlayer.css';
-    
+
     ob_start();
     include GAV_SLIDERLAYER_PATH . '/templates/backend/slider.php';
     $content = ob_get_clean();
@@ -157,7 +157,7 @@ class SliderController extends ControllerBase {
     $datalayers = $_REQUEST['datalayers'];
     $background_image_uri = $_REQUEST['background_image_uri'];
     if($sid > 0){
-      db_update("gavias_sliderlayers")
+      $builder = \Drupal::database()->update("gavias_sliderlayers")
           ->fields(array(
             ' sort_index' => $sort_index,
             'status' => $status,
@@ -168,15 +168,15 @@ class SliderController extends ControllerBase {
           ))
           ->condition('id', $sid, '=')
           ->execute();
-      
-      $abs_url_edit = \Drupal::url('gavias_sl_sliders.admin.form', array('gid'=>$gid, 'sid'=>$sid), array('absolute' => TRUE));
+
+      $abs_url_edit = Url::fromRoute('gavias_sl_sliders.admin.form', array('gid'=>$gid, 'sid'=>$sid), array('absolute' => TRUE))->toString();
       $result = array(
         'data' => 'insert saved',
         'action' => 'edit',
         'url_edit'  => $abs_url_edit
       );
     }else{
-    $sid = db_insert("gavias_sliderlayers")
+    $sid = $builder = \Drupal::database()->insert("gavias_sliderlayers")
             ->fields(array(
                 'sort_index' => $sort_index,
                 'status' => $status,
@@ -187,7 +187,7 @@ class SliderController extends ControllerBase {
                 'background_image_uri' => $background_image_uri
             ))
             ->execute();
-    $abs_url_edit = \Drupal::url('gavias_sl_sliders.admin.form', array('gid'=>$gid, 'sid'=>$sid), array('absolute' => TRUE));
+    $abs_url_edit = Url::fromRoute('gavias_sl_sliders.admin.form', array('gid'=>$gid, 'sid'=>$sid), array('absolute' => TRUE))->toString();
      $result = array(
         'data' => 'insert saved',
         'sid'  => $sid,
@@ -195,10 +195,10 @@ class SliderController extends ControllerBase {
         'action' => 'add',
         'url_edit'  => $abs_url_edit
     );
-    drupal_set_message("SliderLayers has been created");
+    \Drupal::messenger()->addMessage("SliderLayers has been created");
   }
   // Clear all cache
-  \Drupal::service('plugin.manager.block')->clearCachedDefinitions();     
+  \Drupal::service('plugin.manager.block')->clearCachedDefinitions();
   foreach (Cache::getBins() as $service_id => $cache_backend) {
     if($service_id == 'render' || $service_id == 'page'){
       $cache_backend->deleteAll();
@@ -208,7 +208,7 @@ class SliderController extends ControllerBase {
   exit(0);
   }
 
- 
+
   public function gavias_upload_file(){
     // A list of permitted file extensions
     global $base_url;
@@ -221,13 +221,13 @@ class SliderController extends ControllerBase {
       if(!in_array(strtolower($extension), $allowed)){
         echo '{"status":"error extension"}';
         exit;
-      }  
-      $path_folder = \Drupal::service('file_system')->realpath(file_default_scheme(). "://gva-slider-upload");
-    
+      }
+      $path_folder = \Drupal::service('file_system')->realpath(\Drupal::config('system.file')->get('default_scheme'). "://gva-slider-upload");
+
       $file_path = $path_folder . '/' . $_id . '-' . $_FILES['upl']['name'];
-      $file_url = str_replace($base_url, '',file_create_url(file_default_scheme(). "://gva-slider-upload") . '/' .  $_id .'-'. $_FILES['upl']['name']); 
+      $file_url = str_replace($base_url, '',file_create_url(\Drupal::config('system.file')->get('default_scheme'). "://gva-slider-upload") . '/' .  $_id .'-'. $_FILES['upl']['name']);
       if (!is_dir($path_folder)) {
-       @mkdir($path_folder); 
+       @mkdir($path_folder);
       }
       if(move_uploaded_file($_FILES['upl']['tmp_name'], $file_path)){
         $result = array(

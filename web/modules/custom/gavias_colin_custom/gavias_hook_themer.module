@@ -183,5 +183,6 @@ function gavias_hook_themer_sliderlayer_styles_alter(&$variables){
 
 function gavias_hook_themer_update_projects_alter(&$projects){
   unset($projects['gavias_hook_themer']);
+  unset($projects['gavias_slider']);
 }
 
