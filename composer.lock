@@ -5,9 +5,13 @@
         "This file is @generated automatically"
     ],
 <<<<<<< HEAD
+<<<<<<< HEAD
     "content-hash": "17dcc27a289c4d5c2b6f5d5b3059ee2b",
 =======
     "content-hash": "db6946f873294e6b01144c5e92dcd2be",
+>>>>>>> master
+=======
+    "content-hash": "c603b41729a7472fccd30f6258c4f0be",
 >>>>>>> master
     "packages": [
         {
@@ -4716,6 +4720,7 @@
             }
         },
         {
+<<<<<<< HEAD
             "name": "drupal/devel",
             "version": "4.0.1",
             "source": {
@@ -4919,6 +4924,8 @@
             }
         },
         {
+>>>>>>> master
+=======
 >>>>>>> master
             "name": "drupal/draggableviews",
             "version": "1.2.0",
@@ -17257,10 +17264,7 @@
         "drupal/image_url_formatter": 10,
         "drupal/mimemail": 15,
         "drupal/rules": 15,
-<<<<<<< HEAD
-=======
         "drupal/simplenews": 10,
->>>>>>> master
         "drupal/typed_data": 15,
         "drupal/upgrade_rector": 15,
         "drupal/webform_score": 15
