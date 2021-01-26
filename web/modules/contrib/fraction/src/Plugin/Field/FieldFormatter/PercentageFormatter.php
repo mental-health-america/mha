@@ -3,6 +3,7 @@
 namespace Drupal\fraction\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\fraction\Fraction;
 
 /**
  * Format fraction as percentage.
@@ -21,17 +22,20 @@ class PercentageFormatter extends FractionDecimalFormatter {
    * {@inheritdoc}
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
-    $elements = array();
+    $elements = [];
 
     // Iterate through the items.
     foreach ($items as $delta => $item) {
+      /** @var \Drupal\fraction\Fraction $percentage */
       $percentage = clone $item->fraction;
-      $percentage->multiply(fraction_from_decimal('100'));
+      $percentage->multiply(Fraction::createFromDecimal('100'));
 
       $auto_precision = !empty($this->getSetting('auto_precision'));
-      $elements[$delta] = array(
-        '#markup' => $percentage->toDecimal($this->getSetting('precision'), $auto_precision) . '%',
-      );
+      $output = $percentage->toDecimal($this->getSetting('precision'), $auto_precision) . '%';
+
+      $elements[$delta] = [
+        '#markup' => $this->viewOutput($item, $output),
+      ];
     }
 
     return $elements;

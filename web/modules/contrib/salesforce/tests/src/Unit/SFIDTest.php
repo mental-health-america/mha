@@ -11,6 +11,12 @@ use Drupal\salesforce\SFID;
  * @group salesforce_pull
  */
 class SFIDTest extends UnitTestCase {
+
+  /**
+   * Required modules.
+   *
+   * @var array
+   */
   static public $modules = ['salesforce'];
 
   /**
@@ -24,7 +30,7 @@ class SFIDTest extends UnitTestCase {
   /**
    * Test object instantiation with bad ID.
    *
-   * @expectedException Exception
+   * @expectedException \Exception
    */
   public function testBadId() {
     new SFID('1234567890');

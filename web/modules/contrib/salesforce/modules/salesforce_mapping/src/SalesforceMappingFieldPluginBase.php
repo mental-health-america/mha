@@ -2,20 +2,16 @@
 
 namespace Drupal\salesforce_mapping;
 
-use Drupal\Component\Plugin\ConfigurablePluginInterface;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityReferenceSelection\SelectionInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginBase;
-use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\Core\TypedData\DataDefinitionInterface;
 use Drupal\salesforce\Event\SalesforceEvents;
 use Drupal\salesforce\Event\SalesforceWarningEvent;
@@ -37,7 +33,7 @@ use DateTime;
  * @see \Drupal\salesforce_mapping\SalesforceMappingFieldPluginInterface
  * @see \Drupal\Core\Plugin\PluginFormInterface
  */
-abstract class SalesforceMappingFieldPluginBase extends PluginBase implements SalesforceMappingFieldPluginInterface, PluginFormInterface, ConfigurablePluginInterface, ContainerFactoryPluginInterface {
+abstract class SalesforceMappingFieldPluginBase extends PluginBase implements SalesforceMappingFieldPluginInterface {
 
   /**
    * The label of the mapping.
@@ -103,6 +99,13 @@ abstract class SalesforceMappingFieldPluginBase extends PluginBase implements Sa
   protected $eventDispatcher;
 
   /**
+   * The mapping to which this instance is attached.
+   *
+   * @var \Drupal\salesforce_mapping\Entity\SalesforceMappingInterface
+   */
+  protected $mapping;
+
+  /**
    * SalesforceMappingFieldPluginBase constructor.
    *
    * @param array $configuration
@@ -117,8 +120,6 @@ abstract class SalesforceMappingFieldPluginBase extends PluginBase implements Sa
    *   Entity field manager.
    * @param \Drupal\salesforce\Rest\RestClientInterface $rest_client
    *   Salesforce client.
-   * @param \Drupal\Core\Entity\EntityManagerInterface $entity_manager
-   *   Entity manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $etm
    *   ETM service.
    * @param \Drupal\Core\Datetime\DateFormatterInterface $dateFormatter
@@ -129,15 +130,17 @@ abstract class SalesforceMappingFieldPluginBase extends PluginBase implements Sa
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function __construct(array $configuration, $plugin_id, array $plugin_definition, EntityTypeBundleInfoInterface $entity_type_bundle_info, EntityFieldManagerInterface $entity_field_manager, RestClientInterface $rest_client, EntityManagerInterface $entity_manager, EntityTypeManagerInterface $etm, DateFormatterInterface $dateFormatter, EventDispatcherInterface $event_dispatcher) {
+  public function __construct(array $configuration, $plugin_id, array $plugin_definition, EntityTypeBundleInfoInterface $entity_type_bundle_info, EntityFieldManagerInterface $entity_field_manager, RestClientInterface $rest_client, EntityTypeManagerInterface $etm, DateFormatterInterface $dateFormatter, EventDispatcherInterface $event_dispatcher) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
+    if (!empty($configuration['mapping'])) {
+      $this->mapping = $configuration['mapping'];
+    }
     $this->entityTypeBundleInfo = $entity_type_bundle_info;
     $this->entityFieldManager = $entity_field_manager;
     $this->salesforceClient = $rest_client;
-    $this->entityManager = $entity_manager;
     $this->entityTypeManager = $etm;
-    $this->mappingStorage = $entity_manager->getStorage('salesforce_mapping');
-    $this->mappedObjectStorage = $entity_manager->getStorage('salesforce_mapped_object');
+    $this->mappingStorage = $etm->getStorage('salesforce_mapping');
+    $this->mappedObjectStorage = $etm->getStorage('salesforce_mapped_object');
     $this->dateFormatter = $dateFormatter;
     $this->eventDispatcher = $event_dispatcher;
   }
@@ -150,7 +153,6 @@ abstract class SalesforceMappingFieldPluginBase extends PluginBase implements Sa
       $container->get('entity_type.bundle.info'),
       $container->get('entity_field.manager'),
       $container->get('salesforce.client'),
-      $container->get('entity.manager'),
       $container->get('entity_type.manager'),
       $container->get('date.formatter'),
       $container->get('event_dispatcher')
@@ -168,7 +170,7 @@ abstract class SalesforceMappingFieldPluginBase extends PluginBase implements Sa
    * {@inheritdoc}
    */
   public function pushValue(EntityInterface $entity, SalesforceMappingInterface $mapping) {
-    // @TODO to provide for better extensibility, this would be better implemented as some kind of constraint or plugin system. That would also open new possibilities for injecting business logic into he mapping layer.
+    // @TODO to provide for better extensibility, this would be better implemented as some kind of constraint or plugin system. That would also open new possibilities for injecting business logic into the mapping layer.
 
     // If this field plugin doesn't support salesforce_field config type, or
     // doesn't do push, then return the raw value from the mapped entity.
@@ -202,8 +204,10 @@ abstract class SalesforceMappingFieldPluginBase extends PluginBase implements Sa
 
       case 'date':
       case 'datetime':
-        $date = new DrupalDateTime($value, 'UTC');
-        $value = $date->format(DateTime::ISO8601);
+        if (!empty($value)) {
+          $date = new DrupalDateTime($value, 'UTC');
+          $value = $date->format(DateTime::ISO8601);
+        }
         break;
 
       case 'double':
@@ -247,7 +251,7 @@ abstract class SalesforceMappingFieldPluginBase extends PluginBase implements Sa
    * {@inheritdoc}
    */
   public function pullValue(SObject $sf_object, EntityInterface $entity, SalesforceMappingInterface $mapping) {
-    // @TODO to provide for better extensibility, this would be better implemented as some kind of constraint or plugin system. That would also open new possibilities for injecting business logic into he mapping layer.
+    // @TODO to provide for better extensibility, this would be better implemented as some kind of constraint or plugin system. That would also open new possibilities for injecting business logic into the mapping layer.
 
     if (!$this->pull() || empty($this->config('salesforce_field'))) {
       throw new SalesforceException('No data to pull. Salesforce field mapping is not defined.');
@@ -381,21 +385,21 @@ abstract class SalesforceMappingFieldPluginBase extends PluginBase implements Sa
 
     $options = $this->getSalesforceFieldOptions($form['#entity']->getSalesforceObjectType());
     $pluginForm['salesforce_field'] = [
-      '#title' => t('Salesforce field'),
+      '#title' => $this->t('Salesforce field'),
       '#type' => 'select',
-      '#description' => t('Select a Salesforce field to map.'),
+      '#description' => $this->t('Select a Salesforce field to map.'),
       '#options' => $options,
       '#default_value' => $this->config('salesforce_field'),
       '#empty_option' => $this->t('- Select -'),
     ];
 
     $pluginForm['direction'] = [
-      '#title' => t('Direction'),
+      '#title' => $this->t('Direction'),
       '#type' => 'radios',
       '#options' => [
-        MappingConstants::SALESFORCE_MAPPING_DIRECTION_DRUPAL_SF => t('Drupal to SF'),
-        MappingConstants::SALESFORCE_MAPPING_DIRECTION_SF_DRUPAL => t('SF to Drupal'),
-        MappingConstants::SALESFORCE_MAPPING_DIRECTION_SYNC => t('Sync'),
+        MappingConstants::SALESFORCE_MAPPING_DIRECTION_DRUPAL_SF => $this->t('Drupal to SF'),
+        MappingConstants::SALESFORCE_MAPPING_DIRECTION_SF_DRUPAL => $this->t('SF to Drupal'),
+        MappingConstants::SALESFORCE_MAPPING_DIRECTION_SYNC => $this->t('Sync'),
       ],
       '#required' => TRUE,
       '#default_value' => $this->config('direction') ? $this->config('direction') : MappingConstants::SALESFORCE_MAPPING_DIRECTION_SYNC,
@@ -520,8 +524,9 @@ abstract class SalesforceMappingFieldPluginBase extends PluginBase implements Sa
   /**
    * {@inheritdoc}
    */
-  public function getDependencies(SalesforceMappingInterface $mapping) {
-    return [];
+  public function checkFieldMappingDependency(array $dependencies) {
+    // No config dependencies by default.
+    return FALSE;
   }
 
   /**

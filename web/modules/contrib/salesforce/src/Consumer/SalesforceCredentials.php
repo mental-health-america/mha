@@ -5,7 +5,7 @@ namespace Drupal\salesforce\Consumer;
 use OAuth\Common\Consumer\Credentials;
 
 /**
- * Salesforce credentials extension, for drupalisms.
+ * Stub class SalesforceCredentials. Used for broken / fallback plugin only.
  */
 class SalesforceCredentials extends Credentials implements SalesforceCredentialsInterface {
 
@@ -40,13 +40,6 @@ class SalesforceCredentials extends Credentials implements SalesforceCredentials
   /**
    * {@inheritdoc}
    */
-  public function getCallbackUrl() {
-    return Url::fromRoute('salesforce.oauth_callback', [], [
-      'absolute' => TRUE,
-      'https' => TRUE,
-    ])->toString();
-  }
-
   public function isValid() {
     // This class is a stub.
     return FALSE;

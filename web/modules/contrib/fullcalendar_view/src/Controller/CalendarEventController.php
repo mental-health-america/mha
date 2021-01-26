@@ -20,7 +20,7 @@ class CalendarEventController extends ControllerBase {
    *
    * @var \Drupal\Core\Access\CsrfTokenGenerator
    */
-  private $csrfToken;
+  protected $csrfToken;
 
   /**
    * Construct the Controller.
@@ -84,16 +84,16 @@ class CalendarEventController extends ControllerBase {
             // Multiple value of start field.
             if (is_array($entity->$start_field)) {
               if ($start_type === 'datetime' || $start_type === 'daterange') {
-                $length = strlen($entity->$start_field[0]);
+                $length = strlen(($entity->$start_field)[0]);
 
                 if ($length > 10) {
                   // Only update the first value.
-                  $entity->$start_field[0] = [
+                  ($entity->$start_field)[0] = [
                     'value' => gmdate("Y-m-d\TH:i:s", strtotime($start_date)),
                   ];
                 }
                 else {
-                  $entity->$start_field[0] = ['value' => $start_date];
+                  ($entity->$start_field)[0] = ['value' => substr($start_date, 0, $length)];
                 }
               }
             }
@@ -111,7 +111,7 @@ class CalendarEventController extends ControllerBase {
                   $entity->$start_field->value = gmdate("Y-m-d\TH:i:s", strtotime($start_date));
                 }
                 else {
-                  $entity->$start_field->value = $start_date;
+                  $entity->$start_field->value = substr($start_date, 0, $length);
                 }
               }
             }
@@ -121,33 +121,40 @@ class CalendarEventController extends ControllerBase {
               // Multiple value of end field.
               if (is_array($entity->$end_field)) {
                 if ($end_type === 'datetime') {
-                  $length = strlen($entity->$end_field[0]);
+                  $length = strlen(($entity->$end_field)[0]);
 
                   if ($length > 10) {
                     // Only update the first value.
-                    $entity->$end_field[0] = [
+                    ($entity->$end_field)[0] = [
                       'value' => gmdate("Y-m-d\TH:i:s", strtotime($end_date)),
                     ];
                   }
                   else {
-                    $entity->$end_field[0] = ['value' => $end_date];
+                    ($entity->$end_field)[0] = ['value' => substr($end_date, 0, $length)];
                   }
                 }
                 // Daterange field.
                 elseif ($end_type === 'daterange') {
-                  $length = strlen($entity->$end_field[0]->end_value);
+                  $length = strlen(($entity->$end_field)[0]->end_value);
 
                   if ($length > 10) {
                     // UTC Date with time.
-                    $entity->$end_field[0]->end_value = gmdate("Y-m-d\TH:i:s", strtotime($end_date));
+                    ($entity->$end_field)[0]->end_value = gmdate("Y-m-d\TH:i:s", strtotime($end_date));
                   }
                   else {
-                    $entity->$end_field[0]->end_value = $end_date;
+                    if ($length == strlen($end_date))
+                    {
+                      ($entity->$end_field)[0]->end_value = $end_date;
+                    }
+                    else {
+                      ($entity->$end_field)[0]->end_value = substr($end_date, 0, $length ? : strlen($end_date));
+                    }
+                    
                   }
                 }
                 // Timestamp field.
-                elseif (is_numeric($entity->$end_field[0]->value)) {
-                  $entity->$end_field[0]->value = strtotime($end_date);
+                elseif (is_numeric(($entity->$end_field)[0]->value)) {
+                  ($entity->$end_field)[0]->value = strtotime($end_date);
                 }
               }
               // Single value field.
@@ -161,7 +168,13 @@ class CalendarEventController extends ControllerBase {
                     $entity->$end_field->value = gmdate("Y-m-d\TH:i:s", strtotime($end_date));
                   }
                   else {
-                    $entity->$end_field->value = $end_date;
+                    if ($length == strlen($end_date))
+                    {
+                      $entity->$end_field->value = $end_date;
+                    }
+                    else {
+                      $entity->$end_field->value = substr($end_date, 0, $length ? : strlen($end_date));
+                    }
                   }
                 }
                 // Daterange field.
@@ -173,7 +186,13 @@ class CalendarEventController extends ControllerBase {
                     $entity->$end_field->end_value = gmdate("Y-m-d\TH:i:s", strtotime($end_date));
                   }
                   else {
-                    $entity->$end_field->end_value = $end_date;
+                    if ($length == strlen($end_date))
+                    {
+                      $entity->$end_field->end_value = $end_date;
+                    }
+                    else {
+                      $entity->$end_field->end_value = substr($end_date, 0, $length ? : strlen($end_date));
+                    }
                   }
                 }
                 // Timestamp field.
@@ -186,14 +205,11 @@ class CalendarEventController extends ControllerBase {
             $entity->save();
             // Log the content changed.
             $this->loggerFactory->get($entity_type)->notice('%entity_type: updated %title', [
-              '%entity_type' => $entity->getType(),
-              '%title' => $entity->getTitle(),
+              '%entity_type' => $entity->getEntityType()->getLabel(),
+              '%title' => $entity->label(),
             ]);
-            return new Response($this->t('%title is updated to from %start to %end', [
-              '%title' => $entity->getTitle(),
-              '%start' => $start_date,
-              '%end' => $end_date,
-            ]));
+            // Returen 1 as success.
+            return new Response(1);
           }
 
         }
@@ -224,7 +240,6 @@ class CalendarEventController extends ControllerBase {
     $bundle = $request->get('bundle', '');
     $start_field = $request->get('start_field', '');
     $end_field = $request->get('end_field', '');
-    $form = [];
 
     if (!empty($bundle) && !empty($entity_type_id)) {
       $access_control_handler = $this->entityTypeManager()->getAccessControlHandler($entity_type_id);

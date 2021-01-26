@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 3.6.3 - 2021-01-25
+
+
+-----
+
+### Release Notes for [3.6.3](https://github.com/laminas/laminas-servicemanager/milestone/11)
+
+3.6.x bugfix release (patch)
+
+### 3.6.3
+
+- Total issues resolved: **0**
+- Total pull requests resolved: **1**
+- Total contributors: **1**
+
+#### Bug
+
+ - [78: Regression in 3.6.x regarding aliased services in combination with non-shared services](https://github.com/laminas/laminas-servicemanager/pull/78) thanks to @boesing
+
 ## 3.6.2 - 2021-01-17
 
 

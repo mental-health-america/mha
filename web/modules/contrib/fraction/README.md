@@ -44,7 +44,7 @@ for further information.
 Usage:
 
 ```
-$fraction = fraction(1, 2);
+$fraction = new \Drupal\fraction\Fraction(1, 2);
 ```
 
 Get the numerator and denominator (as strings):
@@ -64,8 +64,8 @@ $decimal =  $fraction->toDecimal($precision);
 Multiply fractions:
 
 ```
-$fraction1 = fraction(2, 3);
-$fraction2 = fraction(1, 2);
+$fraction1 = new \Drupal\fraction\Fraction(2, 3);
+$fraction2 = new \Drupal\fraction\Fraction(1, 2);
 $fraction1->multiply($fraction2);
 ```
 
