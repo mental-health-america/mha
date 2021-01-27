@@ -15,21 +15,13 @@ use  Drupal\Core\Cache\Cache;
 class SliderController extends ControllerBase {
 
   public function gavias_sl_sliders_list($gid){
-<<<<<<< HEAD
   
-=======
-
->>>>>>> master
     if(!\Drupal::database()->schema()->tableExists('gavias_sliderlayers')){
       return "";
     }
 
     $header = array( 'ID', 'Name', 'Action');
-<<<<<<< HEAD
     
-=======
-
->>>>>>> master
     $results = \Drupal::database()->select('{gavias_sliderlayers}', 'd')
             ->fields('d', array('id', 'title'))
             ->condition('group_id', $gid, '=')
@@ -57,31 +49,24 @@ class SliderController extends ControllerBase {
   }
 
   public function gavias_sl_sliders_edit($gid=0, $sid=0) {
-
+   
     global $base_url;
     $page['#attached']['library'][] = 'gavias_sliderlayer/gavias_sliderlayer.assets.admin';
     $theme_name = \Drupal::config('system.theme')->get('default');
-
+   
     $group = getSliderGroup($gid);
     $group_settings = (isset($group->params) && $group->params) ? base64_decode($group->params):'null';
     $group_settings_decode = (isset($group->params) && $group->params) ? json_decode(base64_decode($group->params)):'null';
-
+    
     $sliderlayers = gavias_sliderlayer_load($sid);
-
+    
     $layers = (isset($sliderlayers->layers) && $sliderlayers->layers) ? ($sliderlayers->layers) : 'null';
     //print"<pre>";print_r($layers); die();
     $settings = (isset($sliderlayers->settings) && $sliderlayers->settings) ? ($sliderlayers->settings):'null';
-<<<<<<< HEAD
     
     $abs_url_save = Url::fromRoute('gavias_sl_sliders.admin.save', array(), array('absolute' => FALSE))->toString();
     $abs_url_edit = Url::fromRoute('gavias_sl_sliders.admin.form', array('gid'=>$gid, 'sid'=>$sid), array('absolute' => FALSE))->toString();
 
-=======
-
-    $abs_url_save = Url::fromRoute('gavias_sl_sliders.admin.save', array(), array('absolute' => FALSE))->toString();
-    $abs_url_edit = Url::fromRoute('gavias_sl_sliders.admin.form', array('gid'=>$gid, 'sid'=>$sid), array('absolute' => FALSE))->toString();
-
->>>>>>> master
     $abs_url_config = Url::fromRoute('gavias_sliderlayer.admin.get_images_upload', array(), array('absolute' => FALSE))->toString();
     $page['#attached']['drupalSettings']['gavias_sliderlayer']['get_images_upload_url'] = $abs_url_config;
     $page['#attached']['drupalSettings']['gavias_sliderlayer']['base_path'] = base_path();
@@ -149,7 +134,7 @@ class SliderController extends ControllerBase {
     $page['#attached']['drupalSettings']['gavias_sliderlayer']['delayer'] = $delayer;
 
     $style_fontend = drupal_get_path('theme', $theme_name) . '/css/sliderlayer.css';
-
+    
     ob_start();
     include GAV_SLIDERLAYER_PATH . '/templates/backend/slider.php';
     $content = ob_get_clean();
@@ -183,11 +168,7 @@ class SliderController extends ControllerBase {
           ))
           ->condition('id', $sid, '=')
           ->execute();
-<<<<<<< HEAD
       
-=======
-
->>>>>>> master
       $abs_url_edit = Url::fromRoute('gavias_sl_sliders.admin.form', array('gid'=>$gid, 'sid'=>$sid), array('absolute' => TRUE))->toString();
       $result = array(
         'data' => 'insert saved',
@@ -217,7 +198,7 @@ class SliderController extends ControllerBase {
     \Drupal::messenger()->addMessage("SliderLayers has been created");
   }
   // Clear all cache
-  \Drupal::service('plugin.manager.block')->clearCachedDefinitions();
+  \Drupal::service('plugin.manager.block')->clearCachedDefinitions();     
   foreach (Cache::getBins() as $service_id => $cache_backend) {
     if($service_id == 'render' || $service_id == 'page'){
       $cache_backend->deleteAll();
@@ -227,7 +208,7 @@ class SliderController extends ControllerBase {
   exit(0);
   }
 
-
+ 
   public function gavias_upload_file(){
     // A list of permitted file extensions
     global $base_url;
@@ -240,13 +221,13 @@ class SliderController extends ControllerBase {
       if(!in_array(strtolower($extension), $allowed)){
         echo '{"status":"error extension"}';
         exit;
-      }
-      $path_folder = \Drupal::service('file_system')->realpath(\Drupal::config('system.file')->get('default_scheme'). "://gva-slider-upload");
-
+      }  
+      $path_folder = \Drupal::service('file_system')->realpath(file_default_scheme(). "://gva-slider-upload");
+    
       $file_path = $path_folder . '/' . $_id . '-' . $_FILES['upl']['name'];
-      $file_url = str_replace($base_url, '',file_create_url(\Drupal::config('system.file')->get('default_scheme'). "://gva-slider-upload") . '/' .  $_id .'-'. $_FILES['upl']['name']);
+      $file_url = str_replace($base_url, '',file_create_url(file_default_scheme(). "://gva-slider-upload") . '/' .  $_id .'-'. $_FILES['upl']['name']); 
       if (!is_dir($path_folder)) {
-       @mkdir($path_folder);
+       @mkdir($path_folder); 
       }
       if(move_uploaded_file($_FILES['upl']['tmp_name'], $file_path)){
         $result = array(

@@ -23,7 +23,7 @@ class DuplicateFormPopup extends FormBase{
   */
   public function buildForm(array $form, FormStateInterface $form_state){
     $args = $this->getFormArgs($form_state);
-
+    
     $bid = 0;
     $random = '';
     if(\Drupal::request()->attributes->get('bid')) $bid = \Drupal::request()->attributes->get('bid');
@@ -36,7 +36,7 @@ class DuplicateFormPopup extends FormBase{
           ->fetchAssoc();
     } else {
       $builder = array('id' => 0, 'title' => '', 'machine_name'=>'', 'use_field' => 1);
-    }
+    }  
 
     $form['builder-dialog-messages'] = array(
       '#markup' => '<div id="builder-dialog-messages"></div>',
@@ -96,7 +96,7 @@ class DuplicateFormPopup extends FormBase{
     if (!$form_state->getValue('title')  ) {
         $errors[] ='Please enter title for buider block.';
       }
-
+    
     $bid = '';
     if($errors){
     }else{
@@ -110,7 +110,7 @@ class DuplicateFormPopup extends FormBase{
             ->fetchAssoc();
       } else {
         $buider = array('id' => 0, 'title' => '', 'machine_name'=>'', 'params'=>'', 'use_field' => 1);
-      }
+      }    
 
       $pid = $builder = \Drupal::database()->insert("gavias_content_builder")
       ->fields(array(
@@ -144,14 +144,14 @@ class DuplicateFormPopup extends FormBase{
   public function modal(&$form, FormStateInterface $form_state){
     $values = $form_state->getValues();
     $errors = array();
-
+   
     if (!$form_state->getValue('title')  ) {
         $errors[] ='Please enter title for buider block.';
       }
 
     if (!empty($errors)) {
       $form_state->clearErrors();
-      \Drupal\Core\Messenger\MessengerInterface::messagesByType('error'); // clear next message session;
+      drupal_get_messages('error'); // clear next message session;
       $content = '<div class="messages messages--error" aria-label="Error message" role="contentinfo"><div role="alert"><ul>';
       foreach ($errors as $name => $error) {
           $response = new AjaxResponse();
@@ -179,11 +179,11 @@ class DuplicateFormPopup extends FormBase{
     $response = new AjaxResponse();
 
     $content['#attached']['library'][] = 'core/drupal.dialog.ajax';
-
+    
     $content['#attached']['library'][] = 'core/drupal.dialog';
-
+    
     $response->addCommand(new CloseDialogCommand('.ui-dialog-content'));
-
+    
     $response->addCommand(new InvokeCommand('.field--type-gavias-content-builder .gva-choose-gbb.gva-id-'.$random . ' span', 'removeClass', array('active')));
 
     $html = '';
@@ -194,14 +194,14 @@ class DuplicateFormPopup extends FormBase{
     $html .= '</span>';
 
     $response->addCommand(new InvokeCommand('.field--type-gavias-content-builder .gva-choose-gbb', 'append', array($html)));
-
+    
     $response->addCommand(new InvokeCommand('.field_gavias_content_builder.gva-id-'.$random, 'val', array($pid)));
 
     // quick edit compatible.
     $response->addCommand(new InvokeCommand('.quickedit-toolbar .action-save', 'attr', array('aria-hidden', false)));
 
     return $response;
-
+    
     }
 
 }

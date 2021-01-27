@@ -113,14 +113,14 @@ class AddFormPopup extends FormBase{
   public function modal(&$form, FormStateInterface $form_state){
     $values = $form_state->getValues();
     $errors = array();
-
+   
     if (!$form_state->getValue('title')  ) {
       $errors[] ='Please enter title for buider block.';
     }
 
     if (!empty($errors)) {
       $form_state->clearErrors();
-      \Drupal\Core\Messenger\MessengerInterface::messagesByType()('error'); // clear next message session;
+      drupal_get_messages('error'); // clear next message session;
       $content = '<div class="messages messages--error" aria-label="Error message" role="contentinfo"><div role="alert"><ul>';
       foreach ($errors as $name => $error) {
           $response = new AjaxResponse();
@@ -148,11 +148,11 @@ class AddFormPopup extends FormBase{
     $response = new AjaxResponse();
 
     $content['#attached']['library'][] = 'core/drupal.dialog.ajax';
-
+    
     $content['#attached']['library'][] = 'core/drupal.dialog';
-
+    
     $response->addCommand(new CloseDialogCommand('.ui-dialog-content'));
-
+    
     $response->addCommand(new InvokeCommand('.field--type-gavias-content-builder .gva-choose-gbb.gva-id-'.$random . ' span', 'removeClass', array('active')));
 
     $html = '';
@@ -163,7 +163,7 @@ class AddFormPopup extends FormBase{
     $html .= '</span>';
 
     $response->addCommand(new InvokeCommand('.field--type-gavias-content-builder .gva-choose-gbb', 'append', array($html)));
-
+    
     $response->addCommand(new InvokeCommand('.field_gavias_content_builder.gva-id-'.$random, 'val', array($pid)));
 
     // quick edit compatible.
