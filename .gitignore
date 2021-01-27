@@ -48,11 +48,11 @@ web/README.txt
 #files/*
 
 # Ignore paths that may contain user-generated content <updated Brad>
-#/web/sites/*/files
-#/web/sites/*/public
-#/web/sites/*/private
-#/web/sites/*/files-public
-#/web/sites/*/files-private
+/web/sites/*/files
+/web/sites/*/public
+/web/sites/*/private
+/web/sites/*/files-public
+/web/sites/*/files-private
 
 # Place local settings in settings.local.php
 sites/*/settings.local.php

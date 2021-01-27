@@ -5,7 +5,7 @@
  *
  * @package Shapefile
  * @author  Gaspare Sganga
- * @version 3.3.3
+ * @version 3.4.0
  * @license MIT
  * @link    https://gasparesganga.com/labs/php-shapefile/
  */
@@ -188,8 +188,8 @@ class Linestring extends MultiPoint
      */
     private function computeGaussArea($points, $exp = 0)
     {
-        // If a coefficient of 10^9 is not enough, give up!
-        if ($exp > 9) {
+        // If a coefficient of 10^12 is not enough, give up!
+        if ($exp > 12) {
             return 0;
         }
         $coef = pow(10, $exp);

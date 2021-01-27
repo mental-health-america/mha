@@ -13,6 +13,11 @@
       "name": "Alexander Rhodes (ironsizide)",
       "homepage": "https://www.drupal.org/u/ironsizide",
       "role": "Maintainer"
+    },
+    {
+      "name": "Colin Corrigan",
+      "homepage": "https://www.drupal.org/u/cwcorrigan",
+      "role": "Maintainer"
     }
   ],
   "support": {
@@ -28,9 +33,13 @@
   },
   "require": {
     "consolidation/output-formatters": "^3.2.0",
-    "drupal/dynamic_entity_reference": "^2.0@alpha",
-    "drupal/encrypt": "^3.0@rc",
-    "drupal/typed_data": "^1.0@alpha",
-    "lusitanian/oauth": "^0.8.11"
+    "lusitanian/oauth": "^0.8.11",
+    "ext-json": "*"
+  },
+  "suggest": {
+    "drupal/dynamic_entity_reference": "Required for salesforce_mapping.",
+    "drupal/typed_data": "Required for salesforce_mapping.",
+    "drupal/key": "Required to use salesforce_jwt, recommended auth provider.",
+    "firebase/php-jwt": "Required for salesforce_jwt, recommended auth provider."
   }
 }

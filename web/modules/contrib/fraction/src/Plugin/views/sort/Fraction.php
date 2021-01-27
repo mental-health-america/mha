@@ -31,4 +31,5 @@ class Fraction extends SortPluginBase {
     // Add the orderby.
     $this->query->addOrderBy(NULL, $formula, $this->options['order'], $this->tableAlias . '_decimal');
   }
+
 }

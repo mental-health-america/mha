@@ -45,11 +45,11 @@ class Fraction extends NumericFilter {
   protected function opBetween($field) {
     if ($this->operator == 'between') {
       $expression = $field . ' BETWEEN :min AND :max';
-      $this->query->addWhereExpression($this->options['group'], $expression, array(':min' => $this->value['min'], ':max' => $this->value['max']));
+      $this->query->addWhereExpression($this->options['group'], $expression, [':min' => $this->value['min'], ':max' => $this->value['max']]);
     }
     else {
       $expression = $field . ' <= :min OR ' . $field . ' >= :max';
-      $this->query->addWhereExpression($this->options['group'], $expression, array(':min' => $this->value['min'], ':max' => $this->value['max']));
+      $this->query->addWhereExpression($this->options['group'], $expression, [':min' => $this->value['min'], ':max' => $this->value['max']]);
     }
   }
 
@@ -58,7 +58,7 @@ class Fraction extends NumericFilter {
    */
   protected function opSimple($field) {
     $expression = $field . ' ' . $this->operator . ' :value';
-    $this->query->addWhereExpression($this->options['group'], $expression, array(':value' => $this->value['value']));
+    $this->query->addWhereExpression($this->options['group'], $expression, [':value' => $this->value['value']]);
   }
 
   /**
@@ -66,6 +66,7 @@ class Fraction extends NumericFilter {
    */
   protected function opRegex($field) {
     $expression = $field . ' RLIKE :value';
-    $this->query->addWhereExpression($this->options['group'], $expression, array(':value' => $this->value['value']));
+    $this->query->addWhereExpression($this->options['group'], $expression, [':value' => $this->value['value']]);
   }
+
 }

@@ -3,7 +3,9 @@
 namespace Drupal\salesforce\Rest;
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use GuzzleHttp\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class RestResponse.
@@ -11,6 +13,8 @@ use GuzzleHttp\Psr7\Response;
  * @package Drupal\salesforce\Rest
  */
 class RestResponse extends Response {
+
+  use StringTranslationTrait;
 
   /**
    * The original Response used to build this object.
@@ -31,10 +35,10 @@ class RestResponse extends Response {
   /**
    * RestResponse constructor.
    *
-   * @param \GuzzleHttp\Psr7\Response $response
+   * @param \Psr\Http\Message\ResponseInterface $response
    *   A response.
    */
-  public function __construct(Response $response) {
+  public function __construct(ResponseInterface $response) {
     $this->response = $response;
     parent::__construct($response->getStatusCode(), $response->getHeaders(), $response->getBody(), $response->getProtocolVersion(), $response->getReasonPhrase());
     $this->handleJsonResponse();
@@ -81,8 +85,8 @@ class RestResponse extends Response {
       throw new RestException($this, $e->getMessage(), $e->getCode(), $e);
     }
 
-    if (empty($data)) {
-      throw new RestException($this, t('Invalid response'));
+    if (empty($data) || !is_array($data)) {
+      throw new RestException($this, $this->t('Invalid response'));
     }
 
     if (!empty($data['error'])) {

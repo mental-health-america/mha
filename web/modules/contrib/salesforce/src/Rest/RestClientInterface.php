@@ -5,7 +5,6 @@ namespace Drupal\salesforce\Rest;
 use Drupal\salesforce\SelectQueryInterface;
 use Drupal\salesforce\SFID;
 use Drupal\salesforce\SelectQueryResult;
-use GuzzleHttp\Psr7\Response;
 
 /**
  * Objects, properties, and methods to communicate with the Salesforce REST API.
@@ -13,11 +12,16 @@ use GuzzleHttp\Psr7\Response;
 interface RestClientInterface {
 
   /**
-   * Determine if this SF instance is fully configured.
+   * Check if the client is ready to perform API calls.
    *
-   * @deprecated in 8.x-4.0 and does not have an exact analog, refer to \Drupal\salesforce\Consumer\SalesforceCredentials::isValid instead.
+   * TRUE indicates that the various dependencies are in place to initiate an
+   * API call. It does NOT indicate that the API call will be successful, or
+   * return a 200 status.
+   *
+   * @return bool
+   *   FALSE if the client is not initialized. TRUE otherwise.
    */
-  public function isAuthorized();
+  public function isInit();
 
   /**
    * Make a call to the Salesforce REST API.
@@ -107,44 +111,6 @@ interface RestClientInterface {
   public function getHttpClientOption($option_name);
 
   /**
-   * Get the API end point for a given type of the API.
-   *
-   * @param string $api_type
-   *   E.g., rest, partner, enterprise.
-   *
-   * @return string
-   *   Complete URL endpoint for API access.
-   *
-   * @deprecated in 8.x-4.0, use \Drupal\salesforce\SalesforceAuthProviderInterface::getApiEndpoint instead.
-   */
-  public function getApiEndPoint($api_type = 'rest');
-
-  /**
-   * Wrapper for config rest_api_version.version.
-   *
-   * @return string
-   *   The SF API version.
-   *
-   * @deprecated in 8.x-4.0, use \Drupal\salesforce\SalesforceAuthProviderInterface::getApiVersion instead.
-   */
-  public function getApiVersion();
-
-  /**
-   * Setter for config salesforce.settings rest_api_version and use_latest.
-   *
-   * @param bool $use_latest
-   *   Use the latest version, instead of an explicit version number.
-   * @param int $version
-   *   The explicit version number. Mutually exclusive with $use_latest.
-   *
-   * @throws \Exception
-   * @throws \GuzzleHttp\Exception\RequestException
-   *
-   * @deprecated in 8.x-4.0 and does not have an exact analog, refer to \Drupal::config('salesforce.settings')->set('rest_api_version.version') instead.
-   */
-  public function setApiVersion($use_latest = TRUE, $version = NULL);
-
-  /**
    * Get the api usage, as returned in the most recent API request header.
    *
    * @return string|null
@@ -152,207 +118,6 @@ interface RestClientInterface {
    *   e.g. "api-usage=123/45678"
    */
   public function getApiUsage();
-
-  /**
-   * Consumer key getter.
-   *
-   * @return string|null
-   *   Consumer key.
-   *
-   * @deprecated in 8.x-4.0, use \Drupal\salesforce\SalesforceAuthProviderInterface::getConsumerKey instead.
-   */
-  public function getConsumerKey();
-
-  /**
-   * Consumer key setter.
-   *
-   * @param string $value
-   *   Consumer key value.
-   *
-   * @return $this
-   *
-   * @deprecated in 8.x-4.0 and does not have an exact analog, refer to \Drupal\salesforce\SalesforceAuthProviderInterface instead.
-   */
-  public function setConsumerKey($value);
-
-  /**
-   * Comsumer secret getter.
-   *
-   * @return string|null
-   *   Consumer secret.
-   *
-   * @deprecated in 8.x-4.0, use \Drupal\salesforce\SalesforceAuthProviderInterface::getConsumerSecret instead.
-   */
-  public function getConsumerSecret();
-
-  /**
-   * Consumer key setter.
-   *
-   * @param string $value
-   *   Consumer secret value.
-   *
-   * @return $this
-   *
-   * @deprecated in 8.x-4.0 and does not have an exact analog, refer to \Drupal\salesforce\SalesforceAuthProviderInterface instead.
-   */
-  public function setConsumerSecret($value);
-
-  /**
-   * Login url getter.
-   *
-   * @return string|null
-   *   Login url.
-   *
-   * @deprecated in 8.x-4.0, use \Drupal\salesforce\SalesforceAuthProviderInterface::getLoginUrl instead.
-   */
-  public function getLoginUrl();
-
-  /**
-   * Login url setter.
-   *
-   * @param string $value
-   *   The login url.
-   *
-   * @return $this
-   *
-   * @deprecated in 8.x-4.0 and does not have an exact analog, refer to \Drupal\salesforce\SalesforceAuthProviderInterface instead.
-   */
-  public function setLoginUrl($value);
-
-  /**
-   * Get the SF instance URL. Useful for linking to objects.
-   *
-   * @return string|null
-   *   The instance url.
-   *
-   * @deprecated in 8.x-4.0 and does not have an exact analog, refer to \Drupal\salesforce\getInstanceUrl instead.
-   */
-  public function getInstanceUrl();
-
-  /**
-   * Set the SF instance URL.
-   *
-   * @param string $url
-   *   The url.
-   *
-   * @return $this
-   *
-   * @deprecated in 8.x-4.0 and does not have an exact analog, refer to \Drupal\salesforce\SalesforceAuthProviderInterface instead.
-   */
-  public function setInstanceUrl($url);
-
-  /**
-   * Get the access token.
-   *
-   * @return string|null
-   *   The access token.
-   *
-   * @deprecated in 8.x-4.0 and does not have an exact analog, refer to \Drupal\salesforce\SalesforceAuthProviderInterface::getAccessToken instead.
-   */
-  public function getAccessToken();
-
-  /**
-   * Set the access token.
-   *
-   * @param string $token
-   *   Access token from Salesforce.
-   *
-   * @deprecated in 8.x-4.0 and does not have an exact analog, refer to \Drupal\salesforce\SalesforceAuthProviderInterface instead.
-   */
-  public function setAccessToken($token);
-
-  /**
-   * Set the refresh token.
-   *
-   * @param string $token
-   *   Refresh token from Salesforce.
-   *
-   * @deprecated in 8.x-4.0 and does not have an exact analog, refer to \Drupal\salesforce\SalesforceAuthProviderInterface instead.
-   */
-  public function setRefreshToken($token);
-
-  /**
-   * Refresh access token based on the refresh token.
-   *
-   * @throws \Exception
-   *
-   * @deprecated in 8.x-4.0, use \Drupal\salesforce\SalesforceAuthProviderInterface::refreshAccessToken instead.
-   */
-  public function refreshToken();
-
-  /**
-   * Helper callback for OAuth handshake, and refreshToken()
-   *
-   * @param \GuzzleHttp\Psr7\Response $response
-   *   Response object from refreshToken or authToken endpoints.
-   *
-   * @see SalesforceController::oauthCallback()
-   * @see self::refreshToken()
-   *
-   * @deprecated in 8.x-4.0 and does not have an exact analog, refer to \OAuth\Common\Http\Client\StreamClient::retrieveResponse instead.
-   */
-  public function handleAuthResponse(Response $response);
-
-  /**
-   * Retrieve and store the Salesforce identity given an ID url.
-   *
-   * @param string $id
-   *   Identity URL.
-   *
-   * @throws \Exception
-   *
-   * @deprecated in 8.x-4.0 and does not have an exact analog, refer to \Drupal\salesforce\SalesforceAuthProviderPluginBase::parseIdentityResponse instead.
-   */
-  public function initializeIdentity($id);
-
-  /**
-   * Return the Salesforce identity, which is stored in a variable.
-   *
-   * @return array|FALSE
-   *   Returns FALSE is no identity has been stored.
-   *
-   * @deprecated in 8.x-4.0, use \Drupal\salesforce\Storage\SalesforceAuthTokenStorageInterface::retrieveIdentity instead.
-   */
-  public function getIdentity();
-
-  /**
-   * Set the Salesforce identity, which is stored in a variable.
-   *
-   * @deprecated in 8.x-4.0, use \Drupal\salesforce\Storage\SalesforceAuthTokenStorageInterface::storeIdentity instead.
-   */
-  public function setIdentity($data);
-
-  /**
-   * Helper to build the redirect URL for OAUTH workflow.
-   *
-   * @return string
-   *   Redirect URL.
-   *
-   * @see \Drupal\salesforce\Controller\SalesforceController
-   *
-   * @deprecated in 8.x-4.0, use \Drupal\salesforce\Consumer\SalesforceCredentials::getCallbackUrl instead.
-   */
-  public function getAuthCallbackUrl();
-
-  /**
-   * Get Salesforce oauth login endpoint. (OAuth step 1)
-   *
-   * @return string
-   *   REST OAuth Login URL.
-   *
-   * @deprecated in 8.x-4.0, use \Drupal\salesforce\SalesforceAuthProviderInterface::getAuthorizationEndpoint instead.
-   */
-  public function getAuthEndpointUrl();
-
-  /**
-   * Get Salesforce oauth token endpoint. (OAuth step 2)
-   *
-   * @return string
-   *   REST OAuth Token URL.
-   *
-   * @deprecated in 8.x-4.0, use \Drupal\salesforce\SalesforceAuthProviderInterface::getAccessTokenEndpoint instead.
-   */
-  public function getAuthTokenUrl();
 
   /**
    * Wrapper for "Versions" resource to list information about API releases.
@@ -606,9 +371,10 @@ interface RestClientInterface {
    * @param string $name
    *   Object type name, e.g. Contact, Account, etc.
    *
-   * @return array
+   * @return array|false
    *   If $name is given, a record type array indexed by developer name.
    *   Otherwise, an array of record type arrays, indexed by object type name.
+   *   FALSE if no record types found.
    */
   public function getRecordTypes($name = NULL);
 
@@ -625,11 +391,8 @@ interface RestClientInterface {
    * @param bool $reset
    *   If true, clear the local cache and fetch record types from API.
    *
-   * @return \Drupal\salesforce\SFID
-   *   The Salesforce ID of the given Record Type, or null.
-   *
-   * @throws \Exception
-   *   If record type is not found.
+   * @return \Drupal\salesforce\SFID|false
+   *   The Salesforce ID of the given Record Type, or FALSE if not found.
    */
   public function getRecordTypeIdByDeveloperName($name, $devname, $reset = FALSE);
 
@@ -639,11 +402,8 @@ interface RestClientInterface {
    * @param \Drupal\salesforce\SFID $id
    *   The SFID.
    *
-   * @return string
-   *   The object type name.
-   *
-   * @throws \Exception
-   *   If SFID doesn't match any object type.
+   * @return string|false
+   *   The object type name, or FALSE if not found.
    */
   public function getObjectTypeName(SFID $id);
 
