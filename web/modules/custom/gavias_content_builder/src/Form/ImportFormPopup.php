@@ -103,7 +103,7 @@ class ImportFormPopup extends FormBase{
       ->condition('id', $id)
       ->execute();
       \Drupal::service('plugin.manager.block')->clearCachedDefinitions();
-    }
+    }  
   }
 
   public function getFormArgs($form_state){
@@ -124,7 +124,7 @@ class ImportFormPopup extends FormBase{
 
     if (!empty($errors)) {
       $form_state->clearErrors();
-      \Drupal\Core\Messenger\MessengerInterface::messagesByType('error'); // clear next message session;
+      drupal_get_messages('error'); // clear next message session;
       $content = '<div class="messages messages--error" aria-label="Error message" role="contentinfo"><div role="alert"><ul>';
       foreach ($errors as $name => $error) {
           $response = new AjaxResponse();
@@ -147,16 +147,16 @@ class ImportFormPopup extends FormBase{
     $response = new AjaxResponse();
 
     $content['#attached']['library'][] = 'core/drupal.dialog.ajax';
-
+    
     $content['#attached']['library'][] = 'core/drupal.dialog';
-
+    
     $response->addCommand(new CloseDialogCommand('.ui-dialog-content'));
 
     // quick edit compatible.
     $response->addCommand(new InvokeCommand('.quickedit-toolbar .action-save', 'attr', array('aria-hidden', false)));
 
     return $response;
-
+    
     }
 
 }
