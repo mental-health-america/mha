@@ -13,8 +13,8 @@ function salesforce_pull_cron() {
     // If global standalone processing is enabled, stop here.
     return;
   }
-  $sfapi = \Drupal::service('salesforce.client');
-  if ($sfapi->isAuthorized()) {
+
+  if (\Drupal::service('plugin.manager.salesforce.auth_providers')->getToken()) {
     \Drupal::service('salesforce_pull.queue_handler')->getUpdatedRecords();
     \Drupal::service('salesforce_pull.delete_handler')->processDeletedRecords();
   }

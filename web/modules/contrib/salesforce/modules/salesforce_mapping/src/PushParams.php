@@ -12,8 +12,25 @@ use Drupal\Core\Entity\EntityInterface;
  */
 class PushParams {
 
+  /**
+   * Key-value array of raw data.
+   *
+   * @var array
+   */
   protected $params;
+
+  /**
+   * Mapping for this push params.
+   *
+   * @var \Drupal\salesforce_mapping\Entity\SalesforceMappingInterface
+   */
   protected $mapping;
+
+  /**
+   * The Drupal entity being parameterized.
+   *
+   * @var \Drupal\Core\Entity\EntityInterface
+   */
   protected $drupalEntity;
 
   /**
@@ -75,17 +92,26 @@ class PushParams {
    * @param string $key
    *   A param key.
    *
-   * @return mixed
-   *   The given param value for $key
+   * @return mixed|null
+   *   The given param value for $key, or NULL if $key is not set.
    *
-   * @throws \Exception
-   *   If the key doesn't exist.
+   * @see hasParam()
    */
   public function getParam($key) {
-    if (!array_key_exists($key, $this->params)) {
-      throw new \Exception("Param key $key does not exist");
-    }
-    return $this->params[$key];
+    return static::hasParam($key) ? $this->params[$key] : NULL;
+  }
+
+  /**
+   * Return TRUE if the given $key is set.
+   *
+   * @param string $key
+   *   A key.
+   *
+   * @return bool
+   *   TRUE if $key is set.
+   */
+  public function hasParam($key) {
+    return array_key_exists($key, $this->params);
   }
 
   /**

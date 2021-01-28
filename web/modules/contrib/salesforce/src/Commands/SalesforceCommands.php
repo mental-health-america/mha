@@ -5,6 +5,7 @@ namespace Drupal\salesforce\Commands;
 use Consolidation\OutputFormatters\StructuredData\PropertyList;
 use Consolidation\OutputFormatters\StructuredData\RowsOfFields;
 use Drupal\salesforce\Rest\RestException;
+use Drupal\salesforce\Entity\SalesforceAuthConfig;
 use Drupal\salesforce\SelectQuery;
 use Drupal\salesforce\SelectQueryRaw;
 use Drupal\salesforce\SFID;
@@ -12,6 +13,7 @@ use Drush\Exceptions\UserAbortException;
 use Symfony\Component\Console\Helper\TableCell;
 use Symfony\Component\Console\Input\Input;
 use Symfony\Component\Console\Output\Output;
+use OAuth\OAuth2\Token\StdOAuth2Token;
 
 /**
  * A Drush commandfile.
@@ -43,14 +45,14 @@ class SalesforceCommands extends SalesforceCommandsBase {
    *   The version info.
    */
   public function restVersion() {
-    $version_id = $this->client->getApiVersion();
+    $version_id = $this->authMan->getProvider()->getApiVersion();
     $versions = $this->client->getVersions();
     $version = $versions[$version_id];
     $latest = array_pop($versions);
     foreach ($version as $key => $value) {
       $rows[$key] = $value;
     }
-    $rows['login_url'] = $this->client->getLoginUrl();
+    $rows['login_url'] = $this->authMan->getCredentials()->getLoginUrl();
     $rows['latest'] = strcmp($version_id, $latest['version']) ? $latest['version'] : 'Yes';
     return new PropertyList($rows);
   }
@@ -89,6 +91,8 @@ class SalesforceCommands extends SalesforceCommandsBase {
    *
    * @return \Consolidation\OutputFormatters\StructuredData\RowsOfFields
    *   The objects.
+   *
+   * @throws \Exception
    */
   public function listObjects() {
     if ($objects = $this->client->objects()) {
@@ -174,7 +178,11 @@ class SalesforceCommands extends SalesforceCommandsBase {
    *   Display the full metadata for Contact SObject type.
    *
    * @command salesforce:describe-object-deprecated
-   * @deprecated Use describeFields, describeMetadata, describeRecordTypes...
+   *
+   * @return \Consolidation\OutputFormatters\StructuredData\RowsOfFields|null
+   *   Describe result.
+   *
+   * @throws \Exception
    */
   public function describeObject($object, array $options = [
     'output' => NULL,
@@ -206,6 +214,11 @@ class SalesforceCommands extends SalesforceCommandsBase {
    * @param string $object
    *   The object name in Salesforce.
    *
+   * @return \Consolidation\OutputFormatters\StructuredData\RowsOfFields|null
+   *   The record types, or null if the object was not found.
+   *
+   * @throws \Exception
+   *
    * @command salesforce:describe-record-types
    * @aliases sfdrt,sf-describe-record-types
    *
@@ -220,9 +233,6 @@ class SalesforceCommands extends SalesforceCommandsBase {
    *   urls: URLs
    *
    * @default-fields name,recordTypeId,developerName,active,available,defaultRecordTypeMapping,master
-   *
-   * @return \Consolidation\OutputFormatters\StructuredData\RowsOfFields|null
-   *   The record types, or null if the object was not found.
    */
   public function describeRecordTypes($object) {
     $objectDescription = $this->client->objectDescribe($object);
@@ -246,6 +256,11 @@ class SalesforceCommands extends SalesforceCommandsBase {
    *
    * @param string $object
    *   The object name in Salesforce.
+   *
+   * @return \Consolidation\OutputFormatters\StructuredData\PropertyList|null
+   *   The metadata, or null if object was not found.
+   *
+   * @throws \Exception
    *
    * @command salesforce:describe-metadata
    * @aliases sfdom,sf-describe-metadata
@@ -283,9 +298,6 @@ class SalesforceCommands extends SalesforceCommandsBase {
    *   undeletable: Undeletable
    *   updateable: Updateable
    *   urls: Urls
-   *
-   * @return \Consolidation\OutputFormatters\StructuredData\PropertyList|null
-   *   The metadata, or null if object was not found.
    */
   public function describeMetadata($object) {
     $objectDescription = $this->client->objectDescribe($object);
@@ -319,6 +331,11 @@ class SalesforceCommands extends SalesforceCommandsBase {
    *
    * @param string $object
    *   The object name in Salesforce.
+   *
+   * @return \Consolidation\OutputFormatters\StructuredData\RowsOfFields|null
+   *   The fields, or null if the object was not found.
+   *
+   * @throws \Exception
    *
    * @command salesforce:describe-fields
    * @aliases salesforce:describe-object,sfdo,sfdf,sf-describe-fields
@@ -385,9 +402,6 @@ class SalesforceCommands extends SalesforceCommandsBase {
    *   writeRequiresMasterRead: WriteRequiresMasterRead
    *
    * @default-fields label,name,type
-   *
-   * @return \Consolidation\OutputFormatters\StructuredData\RowsOfFields|null
-   *   The fields, or null if the object was not found.
    */
   public function describeFields($object) {
     $objectDescription = $this->client->objectDescribe($object);
@@ -459,6 +473,8 @@ class SalesforceCommands extends SalesforceCommandsBase {
    *
    * @param string $id
    *   A Salesforce ID.
+   *
+   * @throws \Exception
    *
    * @todo create a proper StructuredData return value
    *
@@ -581,6 +597,11 @@ class SalesforceCommands extends SalesforceCommandsBase {
    *   An associative array of options whose values come from cli, aliases,
    *   config, etc.
    *
+   * @return \Drupal\salesforce\Commands\QueryResult
+   *   The query result.
+   *
+   * @throws \Exception
+   *
    * @option where
    *   A WHERE clause to add to the SOQL query
    * @option fields
@@ -591,9 +612,6 @@ class SalesforceCommands extends SalesforceCommandsBase {
    * @option order
    *   Comma-separated fields by which to sort results. Make sure to enclose in
    *   quotes for any whitespace.
-   *
-   * @return \Drupal\salesforce\Commands\QueryResult
-   *   The query result.
    *
    * @command salesforce:query-object
    * @aliases sfqo,sf-query-object
@@ -651,6 +669,95 @@ class SalesforceCommands extends SalesforceCommandsBase {
   public function executeQuery($query) {
     $query = new SelectQueryRaw($query);
     return $this->returnQueryResult(new QueryResult($query, $this->client->query($query)));
+  }
+
+  /**
+   * Lists authentication providers.
+   *
+   * @command salesforce:list-providers
+   * @aliases sflp
+   * @field-labels
+   *   default: Default
+   *   label: Label
+   *   name: Name
+   *   status: Token Status
+   * @default-fields label,name,default,status
+   *
+   * @return \Consolidation\OutputFormatters\StructuredData\RowsOfFields
+   *   The auth provider details.
+   */
+  public function listAuthProviders() {
+    $rows = [];
+    foreach ($this->authMan->getProviders() as $provider) {
+
+      $rows[] = [
+        'default' => $this->authMan->getConfig()->id() == $provider->id() ? '✓' : '',
+        'label' => $provider->label(),
+        'name' => $provider->id(),
+        'status' => $provider->getPlugin()->hasAccessToken() ? 'Authorized' : 'Missing',
+      ];
+    }
+
+    return new RowsOfFields($rows);
+  }
+
+  /**
+   * Refresh the named authentication token, or the default if none specified.
+   *
+   * @param string $providerName
+   *   The name of the authentication provider.
+   *
+   * @command salesforce:refresh-token
+   * @aliases sfrt
+   *
+   * @return string
+   *   Message indicating success or failure.
+   *
+   * @throws \OAuth\OAuth2\Service\Exception\MissingRefreshTokenException
+   *   For missing token.
+   */
+  public function refreshToken($providerName = '') {
+    // If no provider name given, use the default.
+    if (empty($providerName)) {
+      $providerName = $this->authMan->getConfig()->id();
+    }
+
+    if ($provider = SalesforceAuthConfig::load($providerName)) {
+      $auth = $provider->getPlugin();
+      $token = $auth->hasAccessToken() ? $auth->getAccessToken() : new StdOAuth2Token();
+      $auth->refreshAccessToken($token);
+      return "Access token refreshed for $providerName";
+    }
+    return "Provider $providerName not found.";
+  }
+
+  /**
+   * Revoke the named authentication token, or the default if none specified.
+   *
+   * @param string $providerName
+   *   The name of the authentication provider.
+   *
+   * @command salesforce:revoke-token
+   * @aliases sfrvk
+   *
+   * @return string
+   *   Message indicating success or failure.
+   *
+   * @throws \OAuth\OAuth2\Service\Exception\MissingRefreshTokenException
+   *   For missing token.
+   */
+  public function revokeToken($providerName = '') {
+    // If no provider name given, use the default.
+    if (empty($providerName)) {
+      $providerName = $this->authMan->getConfig()->id();
+    }
+
+    if ($provider = SalesforceAuthConfig::load($providerName)) {
+      $auth = $provider->getPlugin();
+      $auth->revokeAccessToken();
+      return "Access token revoked for $providerName";
+    }
+    return "Provider $providerName not found.";
   }
 
 }

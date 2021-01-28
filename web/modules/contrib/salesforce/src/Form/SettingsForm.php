@@ -82,13 +82,6 @@ class SettingsForm extends ConfigFormBase {
     $definition = \Drupal::service('config.typed')->getDefinition('salesforce.settings');
     $definition = $definition['mapping'];
 
-    $form['endpoint_verification'] = [
-      '#title' => $this->t($definition['endpoint_verification']['label']),
-      '#type' => 'checkbox',
-      '#description' => $this->t($definition['endpoint_verification']['description']),
-      '#default_value' => $config->get('endpoint_verification'),
-    ];
-
     $form['use_latest'] = [
       '#title' => $this->t($definition['use_latest']['label']),
       '#type' => 'checkbox',
@@ -100,8 +93,8 @@ class SettingsForm extends ConfigFormBase {
       $versions = $this->getVersionOptions();
     }
     catch (\Exception $e) {
-      $href = new Url('salesforce.authorize');
-      drupal_set_message($this->t('Error when connecting to Salesforce. Please <a href="@href">check your credentials</a> and try again: %message', ['@href' => $href->toString(), '%message' => $e->getMessage()]), 'error');
+      $href = new Url('salesforce.admin_config_salesforce');
+      $this->messenger()->addError($this->t('Error when connecting to Salesforce. Please <a href="@href">check your credentials</a> and try again: %message', ['@href' => $href->toString(), '%message' => $e->getMessage()]));
     }
 
     $form['rest_api_version'] = [
@@ -217,7 +210,6 @@ class SettingsForm extends ConfigFormBase {
     $config->set('global_push_limit', $form_state->getValue('global_push_limit'));
     $config->set('pull_max_queue_size', $form_state->getValue('pull_max_queue_size'));
     $config->set('limit_mapped_object_revisions', $form_state->getValue('limit_mapped_object_revisions'));
-    $config->set('endpoint_verification', $form_state->getValue('endpoint_verification'));
     $use_latest = $form_state->getValue('use_latest');
     $config->set('use_latest', $use_latest);
     if (!$use_latest) {

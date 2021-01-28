@@ -4,6 +4,7 @@ namespace Drupal\salesforce_mapping\Plugin\SalesforceMappingField;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\field\Entity\FieldConfig;
 use Drupal\salesforce_mapping\SalesforceMappingFieldPluginBase;
 use Drupal\salesforce_mapping\Entity\SalesforceMappingInterface;
 
@@ -28,7 +29,7 @@ class Properties extends SalesforceMappingFieldPluginBase {
     // Display the plugin config form here:
     if (empty($options)) {
       $pluginForm['drupal_field_value'] = [
-        '#markup' => t('No available properties.'),
+        '#markup' => $this->t('No available properties.'),
       ];
     }
     else {
@@ -52,10 +53,10 @@ class Properties extends SalesforceMappingFieldPluginBase {
     $vals = $form_state->getValues();
     $config = $vals['config'];
     if (empty($config['salesforce_field'])) {
-      $form_state->setError($form['config']['salesforce_field'], t('Salesforce field is required.'));
+      $form_state->setError($form['config']['salesforce_field'], $this->t('Salesforce field is required.'));
     }
     if (empty($config['drupal_field_value'])) {
-      $form_state->setError($form['config']['drupal_field_value'], t('Drupal field is required.'));
+      $form_state->setError($form['config']['drupal_field_value'], $this->t('Drupal field is required.'));
     }
   }
 
@@ -101,6 +102,26 @@ class Properties extends SalesforceMappingFieldPluginBase {
     }
     asort($options);
     return $options;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPluginDefinition() {
+    $definition = parent::getPluginDefinition();
+    if ($field = FieldConfig::loadByName($this->mapping->getDrupalEntityType(), $this->mapping->getDrupalBundle(), $this->config('drupal_field_value'))) {
+      $definition['config_dependencies']['config'][] = $field->getConfigDependencyName();
+    }
+    return $definition;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function checkFieldMappingDependency(array $dependencies) {
+    if ($field = FieldConfig::loadByName($this->mapping->getDrupalEntityType(), $this->mapping->getDrupalBundle(), $this->config('drupal_field_value'))) {
+      return !empty($dependencies['config'][$field->getConfigDependencyName()]);
+    }
   }
 
 }

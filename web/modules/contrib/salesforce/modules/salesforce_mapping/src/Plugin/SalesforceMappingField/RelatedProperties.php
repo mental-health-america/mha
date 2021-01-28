@@ -5,6 +5,7 @@ namespace Drupal\salesforce_mapping\Plugin\SalesforceMappingField;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 
+use Drupal\field\Entity\FieldConfig;
 use Drupal\salesforce_mapping\Entity\SalesforceMappingInterface;
 use Drupal\salesforce_mapping\SalesforceMappingFieldPluginBase;
 
@@ -29,7 +30,7 @@ class RelatedProperties extends SalesforceMappingFieldPluginBase {
 
     if (empty($options)) {
       $pluginForm['drupal_field_value'] += [
-        '#markup' => t('No available entity reference fields.'),
+        '#markup' => $this->t('No available entity reference fields.'),
       ];
     }
     else {
@@ -92,6 +93,42 @@ class RelatedProperties extends SalesforceMappingFieldPluginBase {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function getPluginDefinition() {
+    $definition = parent::getPluginDefinition();
+    $field_name = $this->config('drupal_field_value');
+    if (strpos($field_name, ':')) {
+      list($field_name, $dummy) = explode(':', $field_name, 2);
+    }
+    // Add reference field.
+    if ($field = FieldConfig::loadByName($this->mapping->getDrupalEntityType(), $this->mapping->getDrupalBundle(), $field_name)) {
+      $definition['config_dependencies']['config'][] = $field->getConfigDependencyName();
+      // Add dependencies of referenced field.
+      foreach ($field->getDependencies() as $type => $dependency) {
+        foreach ($dependency as $item) {
+          $definition['config_dependencies'][$type][] = $item;
+        }
+      }
+    }
+    return $definition;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function checkFieldMappingDependency(array $dependencies) {
+    $definition = $this->getPluginDefinition();
+    foreach ($definition['config_dependencies'] as $type => $dependency) {
+      foreach ($dependency as $item) {
+        if (!empty($dependencies[$type][$item])) {
+          return TRUE;
+        }
+      }
+    }
+  }
+
+  /**
    * Form options helper.
    */
   protected function getConfigurationOptions($mapping) {
@@ -132,15 +169,9 @@ class RelatedProperties extends SalesforceMappingFieldPluginBase {
           $properties += $this
             ->entityFieldManager
             ->getBaseFieldDefinitions($entity_type);
-          $bundles = array_keys($this->entityTypeBundleInfo->getBundleInfo($entity_type));
-          foreach ($bundles as $bundle) {
-            $properties += $this
-              ->entityFieldManager
-              ->getFieldDefinitions($entity_type, $bundle);
-          }
         }
       }
-      catch (\Exception $e) {
+      catch (\LogicException $e) {
         // @TODO is there a better way to exclude non-fieldables?
         continue;
       }

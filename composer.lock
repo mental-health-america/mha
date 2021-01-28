@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "92362127ac33df5f96a3445c096f4cde",
+    "content-hash": "36b4dbec0ec0b0482db23b1e804fe12e",
     "packages": [
         {
             "name": "alchemy/zippy",
@@ -8482,38 +8482,43 @@
         },
         {
             "name": "drupal/salesforce",
-            "version": "3.6.0",
+            "version": "4.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/salesforce.git",
-                "reference": "8.x-3.6"
+                "reference": "8.x-4.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/salesforce-8.x-3.6.zip",
-                "reference": "8.x-3.6",
-                "shasum": "55b531f0abcea982db3b95c1c44d3e6ba12db7af"
+                "url": "https://ftp.drupal.org/files/projects/salesforce-8.x-4.1.zip",
+                "reference": "8.x-4.1",
+                "shasum": "498e359586e196402e5c74fe3da4f2ce19aba732"
             },
             "require": {
                 "consolidation/output-formatters": "^3.2.0",
-                "drupal/core": "~8.0",
-                "drupal/dynamic_entity_reference": "^2.0@alpha",
-                "drupal/encrypt": "^3.0@rc",
-                "drupal/typed_data": "^1.0@alpha",
+                "drupal/core": "^8.7.7 || ^9",
+                "ext-json": "*",
                 "lusitanian/oauth": "^0.8.11"
             },
             "require-dev": {
-                "drupal/dynamic_entity_reference": "~2.0",
-                "drupal/encrypt": "*",
+                "drupal/dynamic_entity_reference": "^2.0.0-alpha10",
+                "drupal/key": "^1.14",
                 "drupal/salesforce_mapping": "*",
                 "drupal/salesforce_push": "*",
-                "drupal/webform": "*"
+                "drupal/typed_data": "^1.0.0-alpha5",
+                "drupal/webform": "^5.9.0-beta1"
+            },
+            "suggest": {
+                "drupal/dynamic_entity_reference": "Required for salesforce_mapping.",
+                "drupal/key": "Required to use salesforce_jwt, recommended auth provider.",
+                "drupal/typed_data": "Required for salesforce_mapping.",
+                "firebase/php-jwt": "Required for salesforce_jwt, recommended auth provider."
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-3.6",
-                    "datestamp": "1578083283",
+                    "version": "8.x-4.1",
+                    "datestamp": "1591805945",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -8541,8 +8546,9 @@
                     "role": "Maintainer"
                 },
                 {
-                    "name": "ironsizide",
-                    "homepage": "https://www.drupal.org/user/787980"
+                    "name": "Colin Corrigan",
+                    "homepage": "https://www.drupal.org/u/cwcorrigan",
+                    "role": "Maintainer"
                 },
                 {
                     "name": "mariacha1",

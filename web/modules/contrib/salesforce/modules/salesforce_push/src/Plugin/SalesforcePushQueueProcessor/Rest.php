@@ -2,13 +2,13 @@
 
 namespace Drupal\salesforce_push\Plugin\SalesforcePushQueueProcessor;
 
+use Drupal\salesforce\SalesforceAuthProviderPluginManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Queue\SuspendQueueException;
 use Drupal\salesforce\EntityNotFoundException;
 use Drupal\salesforce\Event\SalesforceEvents;
-use Drupal\salesforce\Rest\RestClientInterface;
 use Drupal\salesforce_mapping\Entity\MappedObject;
 use Drupal\salesforce_mapping\Entity\SalesforceMappingInterface;
 use Drupal\salesforce_mapping\Event\SalesforcePushOpEvent;
@@ -33,13 +33,6 @@ class Rest extends PluginBase implements PushQueueProcessorInterface {
    * @var \Drupal\salesforce_push\PushQueueInterface
    */
   protected $queue;
-
-  /**
-   * Salesforce client service.
-   *
-   * @var \Drupal\salesforce\Rest\RestClientInterface
-   */
-  protected $client;
 
   /**
    * Storage handler for SF mappings.
@@ -70,6 +63,13 @@ class Rest extends PluginBase implements PushQueueProcessorInterface {
   protected $etm;
 
   /**
+   * Auth manager.
+   *
+   * @var \Drupal\salesforce\SalesforceAuthProviderPluginManagerInterface
+   */
+  protected $authMan;
+
+  /**
    * Rest constructor.
    *
    * @param array $configuration
@@ -80,24 +80,24 @@ class Rest extends PluginBase implements PushQueueProcessorInterface {
    *   Plugin definition.
    * @param \Drupal\salesforce_push\PushQueueInterface $queue
    *   Push queue service.
-   * @param \Drupal\salesforce\Rest\RestClientInterface $client
-   *   Salesforce client service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $etm
    *   ETM service.
    * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
    *   Event dispatcher service.
+   * @param \Drupal\salesforce\SalesforceAuthProviderPluginManagerInterface $authMan
+   *   Auth manager.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function __construct(array $configuration, $plugin_id, array $plugin_definition, PushQueueInterface $queue, RestClientInterface $client, EntityTypeManagerInterface $etm, EventDispatcherInterface $eventDispatcher) {
+  public function __construct(array $configuration, $plugin_id, array $plugin_definition, PushQueueInterface $queue, EntityTypeManagerInterface $etm, EventDispatcherInterface $eventDispatcher, SalesforceAuthProviderPluginManagerInterface $authMan) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->queue = $queue;
-    $this->client = $client;
     $this->etm = $etm;
     $this->mappingStorage = $etm->getStorage('salesforce_mapping');
     $this->mappedObjectStorage = $etm->getStorage('salesforce_mapped_object');
     $this->eventDispatcher = $eventDispatcher;
+    $this->authMan = $authMan;
   }
 
   /**
@@ -106,9 +106,9 @@ class Rest extends PluginBase implements PushQueueProcessorInterface {
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     return new static($configuration, $plugin_id, $plugin_definition,
       $container->get('queue.salesforce_push'),
-      $container->get('salesforce.client'),
       $container->get('entity_type.manager'),
-      $container->get('event_dispatcher')
+      $container->get('event_dispatcher'),
+      $container->get('plugin.manager.salesforce.auth_providers')
     );
   }
 
@@ -116,7 +116,7 @@ class Rest extends PluginBase implements PushQueueProcessorInterface {
    * Process push queue items.
    */
   public function process(array $items) {
-    if (!$this->client->isAuthorized()) {
+    if (!$this->authMan->getToken()) {
       throw new SuspendQueueException('Salesforce client not authorized.');
     }
     foreach ($items as $item) {
@@ -133,7 +133,7 @@ class Rest extends PluginBase implements PushQueueProcessorInterface {
   /**
    * Push queue item process callback.
    *
-   * @param \stdClass $item
+   * @param object $item
    *   The push queue item.
    *
    * @throws \Drupal\Core\Entity\EntityStorageException

@@ -229,7 +229,7 @@ class PushQueue extends DatabaseQueue implements PushQueueInterface {
    *
    * @TODO convert $data to a proper class and make sure that's what we get for this argument.
    */
-  protected function doCreateItem($data) {
+  protected function doCreateItem($data) { // @codingStandardsIgnoreLine
     if (empty($data['name'])
     || empty($data['entity_id'])
     || empty($data['op'])) {
@@ -258,7 +258,7 @@ class PushQueue extends DatabaseQueue implements PushQueueInterface {
     $ret = $query->execute();
 
     // Drupal still doesn't support now() https://www.drupal.org/node/215821
-    // 9 years.
+    // 11 years.
     if ($ret == Merge::STATUS_INSERT) {
       $this->connection->merge(static::TABLE_NAME)
         ->key(['name' => $this->name, 'entity_id' => $data['entity_id']])
@@ -428,6 +428,8 @@ class PushQueue extends DatabaseQueue implements PushQueueInterface {
    * @return int
    *   The number of items procesed, or -1 if there was any error, And also
    *   dispatches a SalesforceEvents::ERROR event.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
   public function processQueue(SalesforceMappingInterface $mapping) {
     if (!$this->connection->schema()->tableExists(static::TABLE_NAME)) {
@@ -503,7 +505,7 @@ class PushQueue extends DatabaseQueue implements PushQueueInterface {
   /**
    * {@inheritdoc}
    */
-  public function failItem(\Exception $e, \stdClass $item) {
+  public function failItem(\Throwable $e, \stdClass $item) {
     $mapping = $this->mappingStorage->load($item->name);
 
     if ($e instanceof EntityNotFoundException) {
@@ -550,6 +552,11 @@ class PushQueue extends DatabaseQueue implements PushQueueInterface {
    * @param array $items
    *   Indexes must be item ids. Values are ignored. Return from claimItems()
    *   is acceptable.
+   *
+   * @return bool
+   *   TRUE if the items were released, FALSE otherwise.
+   *
+   * @throws \Exception
    */
   public function releaseItems(array $items) {
     try {
@@ -611,7 +618,7 @@ class PushQueue extends DatabaseQueue implements PushQueueInterface {
           'expire' => 0,
         ])
         ->condition('expire', 0, '<>')
-        ->condition('expire', REQUEST_TIME, '<')
+        ->condition('expire', $this->time->getRequestTime(), '<')
         ->execute();
       $this->garbageCollected = TRUE;
     }

@@ -10,6 +10,8 @@ use Drupal\salesforce\SelectQuery;
 use Drush\Exceptions\UserAbortException;
 use Symfony\Component\Console\Input\Input;
 use Symfony\Component\Console\Output\Output;
+use Drupal\salesforce\SalesforceAuthProviderPluginManagerInterface;
+use Drupal\salesforce\Storage\SalesforceAuthTokenStorageInterface;
 
 /**
  * A Drush commandfile.
@@ -24,7 +26,18 @@ use Symfony\Component\Console\Output\Output;
  */
 class SalesforceMappingCommands extends SalesforceMappingCommandsBase {
 
+  /**
+   * Salesforce settings.
+   *
+   * @var \Drupal\Core\Config\ImmutableConfig
+   */
   protected $salesforceConfig;
+
+  /**
+   * Database service.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
   protected $database;
 
   /**
@@ -34,6 +47,10 @@ class SalesforceMappingCommands extends SalesforceMappingCommandsBase {
    *   The salesforce.client service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $etm
    *   The entity_type.manager service.
+   * @param \Drupal\salesforce\SalesforceAuthProviderPluginManagerInterface $auth_man
+   *   Auth plugin manager.
+   * @param \Drupal\salesforce\Storage\SalesforceAuthTokenStorageInterface $token_storage
+   *   Token storage.
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
    *   The config.factory service.
    * @param \Drupal\Core\Database\Connection $database
@@ -42,8 +59,8 @@ class SalesforceMappingCommands extends SalesforceMappingCommandsBase {
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function __construct(RestClient $client, EntityTypeManagerInterface $etm, ConfigFactory $configFactory, Connection $database) {
-    parent::__construct($client, $etm);
+  public function __construct(RestClient $client, EntityTypeManagerInterface $etm, SalesforceAuthProviderPluginManagerInterface $auth_man, SalesforceAuthTokenStorageInterface $token_storage, ConfigFactory $configFactory, Connection $database) {
+    parent::__construct($client, $etm, $auth_man, $token_storage);
     $this->database = $database;
     $this->salesforceConfig = $configFactory->get('salesforce.settings');
   }
@@ -83,6 +100,8 @@ class SalesforceMappingCommands extends SalesforceMappingCommandsBase {
    *   If $limit is not specified,
    *   salesforce.settings.limit_mapped_object_revisions is used.
    *
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   *
    * @command salesforce_mapping:prune-revisions
    * @aliases sfprune,sf-prune-revisions
    */
@@ -113,8 +132,9 @@ class SalesforceMappingCommands extends SalesforceMappingCommandsBase {
         $this->logger()->info(dt("Pruned !i of !total records.", ['!i' => $i, '!total' => $total]));
       }
       /** @var \Drupal\salesforce_mapping\Entity\MappedObject $mapped_object */
-      $mapped_object = $this->mappedObjectStorage->load($id);
-      $mapped_object->pruneRevisions($this->mappedObjectStorage);
+      if ($mapped_object = $this->mappedObjectStorage->load($id)) {
+        $mapped_object->pruneRevisions($this->mappedObjectStorage);
+      }
     }
   }
 
@@ -159,6 +179,8 @@ class SalesforceMappingCommands extends SalesforceMappingCommandsBase {
    *
    * @param string $name
    *   Id of the salesforce mapping whose mapped objects should be purged.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    *
    * @command salesforce_mapping:purge-drupal
    * @aliases sfpd,sf-purge-drupal
@@ -243,6 +265,8 @@ class SalesforceMappingCommands extends SalesforceMappingCommandsBase {
    * @param string $name
    *   Id of the salesforce mapping whose mapped objects should be purged.
    *
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   *
    * @command salesforce_mapping:purge-salesforce
    * @aliases sfpsf,sf-purge-salesforce
    */
@@ -316,6 +340,8 @@ class SalesforceMappingCommands extends SalesforceMappingCommandsBase {
    * @param string $name
    *   Mapping id.
    *
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   *
    * @command sf:purge-mapping
    * @aliases sfpmap,sf-purge-mapping
    */
@@ -367,6 +393,8 @@ class SalesforceMappingCommands extends SalesforceMappingCommandsBase {
    *
    * @command salesforce_mapping:purge-all
    * @aliases sfpall,sf-purge-all
+   *
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function purgeAll($name) {
     $this->purgeDrupal($name);

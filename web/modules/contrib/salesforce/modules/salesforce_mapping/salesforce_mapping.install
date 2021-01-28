@@ -9,24 +9,6 @@ use Drupal\salesforce_mapping\Entity\SalesforceMapping;
 use Drupal\views\Views;
 
 /**
- * Implements hook_requirements().
- */
-function salesforce_mapping_requirements($phase) {
-  $requirements = [];
-  if ($phase === 'runtime') {
-    if (!\Drupal::service('module_handler')->moduleExists('typed_data')) {
-      $requirements['salesforce_mapping'] = [
-        'title' => t('Salesforce Mapping'),
-        'value' => t('Enable Typed Data module to map extended field properties (like link URL or address details)'),
-        'severity' => REQUIREMENT_WARNING,
-      ];
-    }
-  }
-
-  return $requirements;
-}
-
-/**
  * Copy entity_id-entity_type_id data into new mapped_entity field.
  */
 function salesforce_mapping_update_8001(&$sandbox) {
@@ -40,7 +22,7 @@ function salesforce_mapping_update_8001(&$sandbox) {
   if (empty($sandbox['progress'])) {
     $sandbox['progress'] = 0;
     $sandbox['current_id'] = 0;
-    $sandbox['max'] = db_query("SELECT count(*) FROM salesforce_mapped_object")->fetchField();
+    $sandbox['max'] = \Drupal::service('database')->query("SELECT count(*) FROM {salesforce_mapped_object}")->fetchField();
     if (empty($sandbox['max'])) {
       $sandbox['#finished'] = 1;
       return t('No mapped objects to update.');
@@ -50,7 +32,7 @@ function salesforce_mapping_update_8001(&$sandbox) {
   // Have to go directly to the database for the entity values because they've
   // been removed from baseFieldDefinitions, therefore they don't get attached
   // to the entity on load.
-  $mapped_objects = db_query("SELECT id, entity_type_id, entity_id FROM salesforce_mapped_object WHERE id > {$sandbox['current_id']} ORDER BY id ASC LIMIT 3");
+  $mapped_objects = \Drupal::service('database')->query("SELECT id, entity_type_id, entity_id FROM {salesforce_mapped_object} WHERE id > {$sandbox['current_id']} ORDER BY id ASC LIMIT 3");
 
   foreach ($mapped_objects as $mapped_object_data) {
     $sandbox['current_id'] = $mapped_object_data->id;
@@ -79,17 +61,18 @@ function salesforce_mapping_update_8001(&$sandbox) {
  * Drop vestigial fields manually, since entity update refuses to do it.
  */
 function salesforce_mapping_update_8002() {
+  $database = \Drupal::service('database');
   try {
     // Drop this index if it exists.
-    db_drop_index('salesforce_mapped_object', 'entity__mapping');
+    $database->schema()->dropIndex('salesforce_mapped_object', 'entity__mapping');
   }
   catch (\Exception $e) {
     // Noop.
   }
-  db_drop_field('salesforce_mapped_object', 'entity_id');
-  db_drop_field('salesforce_mapped_object', 'entity_type_id');
-  db_drop_field('salesforce_mapped_object_revision', 'entity_id');
-  db_drop_field('salesforce_mapped_object_revision', 'entity_type_id');
+  $database->schema()->dropField('salesforce_mapped_object', 'entity_id');
+  $database->schema()->dropField('salesforce_mapped_object', 'entity_type_id');
+  $database->schema()->dropField('salesforce_mapped_object_revision', 'entity_id');
+  $database->schema()->dropField('salesforce_mapped_object_revision', 'entity_type_id');
 }
 
 /**
@@ -107,7 +90,6 @@ function salesforce_mapping_update_8003() {
  * Verify Salesforce admin content permissions.
  */
 function salesforce_mapping_update_8004() {
-  $view = FALSE;
   try {
     $view = Views::getView('salesforce_mapped_objects');
   }

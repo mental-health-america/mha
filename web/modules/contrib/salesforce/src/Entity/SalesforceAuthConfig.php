@@ -3,7 +3,9 @@
 namespace Drupal\salesforce\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityBase;
-use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityWithPluginCollectionInterface;
+use Drupal\Core\Plugin\DefaultSingleLazyPluginCollection;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Defines a Salesforce Auth entity.
@@ -31,9 +33,17 @@ use Drupal\Core\Entity\EntityInterface;
  *     "revoke" = "/admin/config/salesforce/authorize/revoke/{salesforce_auth}"
  *   },
  *   admin_permission = "authorize salesforce",
+ *   config_export = {
+ *    "id",
+ *    "label",
+ *    "provider",
+ *    "provider_settings"
+ *   },
  * )
  */
-class SalesforceAuthConfig extends ConfigEntityBase implements EntityInterface {
+class SalesforceAuthConfig extends ConfigEntityBase implements EntityWithPluginCollectionInterface {
+
+  use StringTranslationTrait;
 
   /**
    * Auth id. e.g. "oauth_full_sandbox".
@@ -66,9 +76,16 @@ class SalesforceAuthConfig extends ConfigEntityBase implements EntityInterface {
   /**
    * Auth manager.
    *
-   * @var \Drupal\salesforce\SalesforceAuthProviderPluginManager
+   * @var \Drupal\salesforce\SalesforceAuthProviderPluginManagerInterface
    */
   protected $manager;
+
+  /**
+   * The plugin provider.
+   *
+   * @var \Drupal\salesforce\SalesforceAuthProviderInterface
+   */
+  protected $plugin;
 
   /**
    * Id getter.
@@ -89,11 +106,24 @@ class SalesforceAuthConfig extends ConfigEntityBase implements EntityInterface {
    *
    * @return \Drupal\salesforce\SalesforceAuthProviderInterface|null
    *   The auth provider plugin, or null.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
   public function getPlugin() {
-    $settings = $this->provider_settings ?: [];
-    $settings += ['id' => $this->id()];
-    return $this->provider ? $this->authManager()->createInstance($this->provider, $settings) : NULL;
+    if (!$this->plugin) {
+      $this->plugin = $this->provider ? $this->authManager()->createInstance($this->provider, $this->getProviderSettings()) : NULL;
+    }
+    return $this->plugin;
+  }
+
+  /**
+   * Wrapper for provider settings to inject instance id, from auth config.
+   *
+   * @return array
+   *   Provider settings.
+   */
+  public function getProviderSettings() {
+    return $this->provider_settings + ['id' => $this->id()];
   }
 
   /**
@@ -107,16 +137,21 @@ class SalesforceAuthConfig extends ConfigEntityBase implements EntityInterface {
   }
 
   /**
-   * {@inheritdoc}
+   * Get credentials.
+   *
+   * @return \Drupal\salesforce\Consumer\SalesforceCredentialsInterface|false
+   *   Credentials or FALSE.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
-  public function getLoginUrl() {
-    return $this->getPlugin() ? $this->getPlugin()->getLoginUrl() : '';
+  public function getCredentials() {
+    return $this->getPlugin() ? $this->getPlugin()->getCredentials() : FALSE;
   }
 
   /**
    * Auth manager wrapper.
    *
-   * @return \Drupal\salesforce\SalesforceAuthProviderPluginManager|mixed
+   * @return \Drupal\salesforce\SalesforceAuthProviderPluginManagerInterface|mixed
    *   The auth provider plugin manager.
    */
   public function authManager() {
@@ -133,11 +168,26 @@ class SalesforceAuthConfig extends ConfigEntityBase implements EntityInterface {
    *   The list of plugins, indexed by ID.
    */
   public function getPluginsAsOptions() {
-    $options = ['' => t('- Select -')];
     foreach ($this->authManager()->getDefinitions() as $id => $definition) {
+      if ($id == 'broken') {
+        // Do not add the fallback provider.
+        continue;
+      }
       $options[$id] = ($definition['label']);
     }
-    return $options;
+    if (!empty($options)) {
+      return ['' => $this->t('- Select -')] + $options;
+    }
+    return [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPluginCollections() {
+    return [
+      'auth_provider' => new DefaultSingleLazyPluginCollection($this->authManager(), $this->provider, $this->getProviderSettings()),
+    ];
   }
 
 }

@@ -5,6 +5,8 @@ namespace Drupal\salesforce_mapping\Entity;
 use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Plugin\DefaultLazyPluginCollection;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\salesforce\Exception;
 use Drupal\salesforce\SelectQuery;
 use Drupal\salesforce_mapping\MappingConstants;
@@ -20,25 +22,12 @@ use Drupal\salesforce_mapping\MappingConstants;
  *     "storage" = "Drupal\salesforce_mapping\SalesforceMappingStorage",
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
  *     "access" = "Drupal\salesforce_mapping\SalesforceMappingAccessController",
- *     "list_builder" = "Drupal\salesforce_mapping\SalesforceMappingList",
- *     "form" = {
- *       "add" = "Drupal\salesforce_mapping\Form\SalesforceMappingAddForm",
- *       "edit" = "Drupal\salesforce_mapping\Form\SalesforceMappingEditForm",
- *       "disable" = "Drupal\salesforce_mapping\Form\SalesforceMappingDisableForm",
- *       "delete" = "Drupal\salesforce_mapping\Form\SalesforceMappingDeleteForm",
- *       "enable" = "Drupal\salesforce_mapping\Form\SalesforceMappingEnableForm",
- *       "fields" = "Drupal\salesforce_mapping\Form\SalesforceMappingFieldsForm",
- *      }
  *   },
  *   admin_permission = "administer salesforce mapping",
  *   entity_keys = {
  *     "id" = "id",
  *     "label" = "label",
  *     "weight" = "weight",
- *   },
- *   links = {
- *     "edit-form" = "/admin/structure/salesforce/mappings/manage/{salesforce_mapping}",
- *     "delete-form" = "/admin/structure/salesforce/mappings/manage/{salesforce_mapping}/delete"
  *   },
  *   config_export = {
  *    "id",
@@ -70,6 +59,8 @@ use Drupal\salesforce_mapping\MappingConstants;
  * )
  */
 class SalesforceMapping extends ConfigEntityBase implements SalesforceMappingInterface {
+
+  use StringTranslationTrait;
 
   /**
    * Only one bundle type for now.
@@ -263,6 +254,10 @@ class SalesforceMapping extends ConfigEntityBase implements SalesforceMappingInt
       ];
     }
     $this->pull_info = $pull_info[$this->id()];
+    foreach ($this->field_mappings as $i => &$field_mapping) {
+      $field_mapping['id'] = $i;
+      $field_mapping['mapping'] = $this;
+    }
   }
 
   /**
@@ -273,10 +268,34 @@ class SalesforceMapping extends ConfigEntityBase implements SalesforceMappingInt
   }
 
   /**
-   * Save the entity.
-   *
-   * @return object
-   *   The newly saved version of the entity.
+   * {@inheritdoc}
+   */
+  public function getPluginCollections() {
+    if (empty($this->field_mappings)) {
+      return [];
+    }
+    return [
+      'field_mappings' => new DefaultLazyPluginCollection($this->fieldManager(), $this->field_mappings),
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function toArray() {
+    // Schema API complains during save() if field_mappings' mapping property
+    // exists as a reference to the parent mapping. It's redundant anyway, so
+    // we can delete it safely.
+    // @TODO there's probably a way to do this with schema.yml, but I can't find it.
+    $entity_array = parent::toArray();
+    foreach ($entity_array['field_mappings'] as $i => &$value) {
+      unset($value['mapping']);
+    }
+    return $entity_array;
+  }
+
+  /**
+   * {@inheritdoc}
    */
   public function save() {
     $this->updated = $this->getRequestTime();
@@ -318,12 +337,19 @@ class SalesforceMapping extends ConfigEntityBase implements SalesforceMappingInt
    */
   public function calculateDependencies() {
     // Include config dependencies on all mapped Drupal fields.
+    $this->dependencies = array_intersect_key($this->dependencies, ['enforced' => '']);
     foreach ($this->getFieldMappings() as $field) {
-      foreach ($field->getDependencies($this) as $type => $deps) {
-        foreach ($deps as $dep) {
-          $this->addDependency($type, $dep);
-        }
-      }
+      // Configuration entities need to depend on the providers of any plugins
+      // that they store the configuration for. Default calculateDependencies()
+      // method does not work, because our field_mapping plugins are anonymous,
+      // indexed by numeric id only.
+      $this->calculatePluginDependencies($field);
+    }
+
+    // Add a hard dependency on the mapping entity and bundle.
+    if ($entity_type = $this->entityTypeManager()->getDefinition($this->getDrupalEntityType())) {
+      $dependency = $entity_type->getBundleConfigDependency($this->getDrupalBundle());
+      $this->addDependency($dependency['type'], $dependency['name']);
     }
     if ($this->doesPull()) {
       $this->addDependency('module', 'salesforce_pull');
@@ -337,15 +363,51 @@ class SalesforceMapping extends ConfigEntityBase implements SalesforceMappingInt
   /**
    * {@inheritdoc}
    */
+  public function onDependencyRemoval(array $dependencies) {
+    parent::onDependencyRemoval($dependencies);
+
+    // If the mapped entity type is being removed, we'll delete this mapping.
+    $entity_type = $this->entityTypeManager()->getDefinition($this->getDrupalEntityType());
+    $dependency = $entity_type->getBundleConfigDependency($this->getDrupalBundle());
+    if (!empty($dependencies[$dependency['type']][$dependency['name']])) {
+      return FALSE;
+    }
+
+    // Otherwise, ask each field mapping plugin if wants to remove itself.
+    return $this->removePluginDependencies($dependencies);
+  }
+
+  /**
+   * Delegate dependency removal events to field mappings plugins.
+   *
+   * @param array $dependencies
+   *   Dependencies.
+   */
+  public function removePluginDependencies(array $dependencies) {
+    $changed = FALSE;
+    foreach ($this->getFieldMappings() as $i => $field) {
+      if ($field->checkFieldMappingDependency($dependencies)) {
+        $changed = TRUE;
+        // If a plugin is dependent on the configuration being deleted, remove
+        // the field mapping.
+        unset($this->field_mappings[$i]);
+      }
+    }
+    return $changed;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getPullFields() {
     // @TODO This should probably be delegated to a field plugin bag?
     $fields = [];
-    foreach ($this->getFieldMappings() as $field_plugin) {
+    foreach ($this->getFieldMappings() as $i => $field_plugin) {
       // Skip fields that aren't being pulled from Salesforce.
       if (!$field_plugin->pull()) {
         continue;
       }
-      $fields[] = $field_plugin;
+      $fields[$i] = $field_plugin;
     }
     return $fields;
   }
@@ -380,12 +442,12 @@ class SalesforceMapping extends ConfigEntityBase implements SalesforceMappingInt
     }
 
     // @TODO #fieldMappingField
-    foreach ($this->getFieldMappings() as $field_plugin) {
+    foreach ($this->getFieldMappings() as $i => $field_plugin) {
       if ($field_plugin->get('salesforce_field') == $this->getKeyField()) {
         return $field_plugin->value($entity, $this);
       }
     }
-    throw new \Exception(t('Key %key not found for this mapping.', ['%key' => $this->getKeyField()]));
+    throw new \Exception($this->t('Key %key not found for this mapping.', ['%key' => $this->getKeyField()]));
   }
 
   /**
@@ -415,10 +477,10 @@ class SalesforceMapping extends ConfigEntityBase implements SalesforceMappingInt
   public function getFieldMappings() {
     // @TODO #fieldMappingField
     $fields = [];
-    foreach ($this->field_mappings as $field) {
-      $fields[] = $this->fieldManager()->createInstance(
+    foreach ($this->field_mappings as $i => $field) {
+      $fields[$i] = $this->fieldManager()->createInstance(
          $field['drupal_field_type'],
-         $field
+         $field + ['mapping' => $this]
        );
     }
     return $fields;
@@ -430,7 +492,7 @@ class SalesforceMapping extends ConfigEntityBase implements SalesforceMappingInt
   public function getFieldMapping(array $field) {
     return $this->fieldManager()->createInstance(
       $field['drupal_field_type'],
-      $field['config']
+      $field['config'] + ['mapping' => $this]
     );
   }
 

@@ -50,30 +50,6 @@ interface SalesforceAuthProviderInterface extends ServiceInterface, PluginFormIn
   public function refreshAccessToken(TokenInterface $token);
 
   /**
-   * Login URL, e.g. https://login.salesforce.com, for this plugin.
-   *
-   * @return string
-   *   Login URL.
-   */
-  public function getLoginUrl();
-
-  /**
-   * Consumer key for the connected OAuth app.
-   *
-   * @return string
-   *   Consumer key.
-   */
-  public function getConsumerKey();
-
-  /**
-   * Consumer secret for the connected OAuth app.
-   *
-   * @return string
-   *   Consumer secret.
-   */
-  public function getConsumerSecret();
-
-  /**
    * Return the credentials configured for this auth provider instance.
    *
    * Credentials contain consumer key, login url, secret, etc.
