@@ -436,3 +436,9 @@ a#add_layer{
 #gavias_slider_single{
    background-position: center center;
 }
+.gavias-image-demo{
+  height: 46px;
+  top: 4px;
+  position: absolute;
+  right: 35px;
+}

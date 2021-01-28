@@ -20,10 +20,10 @@ class SliderBlock extends DeriverBase {
    * {@inheritdoc}
    */
   public function getDerivativeDefinitions($base_plugin_definition) {
-    if(!db_table_exists('gavias_slider')){
+    if(!\Drupal::database()->schema()->tableExists('gavias_slider')){
       return "";
     }
-    $results = db_select('{gavias_slider}', 'd')
+    $results = \Drupal::database()->select('{gavias_slider}', 'd')
           ->fields('d', array('id', 'name'))
           ->execute();
     foreach ($results as $row) {

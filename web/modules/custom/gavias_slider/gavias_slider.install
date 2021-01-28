@@ -1,7 +1,7 @@
 <?php
 
 function gavias_slider_schema() {
-  if(!db_table_exists('gavias_slider')){
+  if(!\Drupal::database()->schema()->tableExists('gavias_slider')){
     $schema['gavias_slider'] = array(
       'fields' => array(
         'id' => array(

@@ -1714,10 +1714,12 @@ ul.swith-language > li > a.active {
 }
 
 .gva-upload-input .gavias-image-demo {
-  width: 120px;
+  width: 140px;
   height: auto;
   margin-top: 5px;
   float: left;
+  background: #f1f1f1;
+  padding: 10px;
 }
 .gva-upload-input .gavias-field-upload-remove {
   float: left;

@@ -18,7 +18,7 @@
         // Register as an anonymous AMD module:
         define([
             'jquery',
-            'web/modules/custom/gavias_slider/assets/js/upload/jquery.ui.widget'
+            'jquery.ui.widget'
         ], factory);
     } else {
         // Browser globals:
