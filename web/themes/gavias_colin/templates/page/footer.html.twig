@@ -1,0 +1,99 @@
+<footer id="footer" class="footer">
+    <div class="footer-inner">
+
+        {% if page.before_footer %}
+            <div class="footer-top">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="before-footer pull-right clearfix area">
+                                {{ page.before_footer }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="footer-center">
+            <div class="container">
+                <div class="row">
+                    {% if page.footer_first %}
+                        <div
+                                class="footer-first col-lg-{{ footer_first_size }} col-md-{{ footer_first_size }} col-sm-12 col-xs-12 column">
+                            {{ page.footer_first }}
+                        </div>
+                    {% endif %}
+
+                    {% if page.footer_second %}
+                        <div
+                                class="footer-second col-lg-{{ footer_second_size }} col-md-{{ footer_second_size }} col-sm-12 col-xs-12 column">
+                            {{ page.footer_second }}
+                        </div>
+                    {% endif %}
+
+                    {% if page.footer_third %}
+                        <div
+                                class="footer-third col-lg-{{ footer_third_size }} col-md-{{ footer_third_size }} col-sm-12 col-xs-12 column">
+                            {{ page.footer_third }}
+                        </div>
+                    {% endif %}
+
+                    {% if page.footer_four %}
+                        <div
+                                class="footer-four col-lg-{{ footer_four_size }} col-md-{{ footer_four_size }} col-sm-12 col-xs-12 column">
+                            {{ page.footer_four }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+
+        {% if page.after_footer %}
+            <div id="footer-after">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="after-footer clearfix area">
+                                {{ page.after_footer }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+    </div>
+
+    {% if page.copyright %}
+        <div class="copyright">
+            <div class="container">
+
+                <div class="row">
+                    <div class="col-md-3 col-sm-12">© Copyright {{ "now"|date('Y') }} Mental Health America, Inc.</div>
+                    <div class="col-md-9 col-sm-12">{{ page.copyright }}
+                        <span class="pull-right"><span>Web Sponsor:<br><br></span>
+                <a href="https://www.betterhelp.com/" title="{{ 'Better Help'|t }}">
+                    <img src="/sites/default/files/inline-images/better-help.png"
+                         style="max-height:2rem" alt="{{ 'Better Help'|t }}"/>
+                </a>
+            </span>
+                    </div>
+
+
+                </div>
+            </div>
+
+
+        </div>
+
+      <div class="wdg">
+        <a href="http://www.wayedesigngroup.com/" title="Web Development by Waye Design Group ">Web Development by Waye Design Group</a>
+      </div>
+
+        </div>
+    {% endif %}
+
+
+</footer>

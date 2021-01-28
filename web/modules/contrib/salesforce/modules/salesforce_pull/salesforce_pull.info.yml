@@ -1,0 +1,13 @@
+name: Salesforce Pull
+type: module
+description: Imports objects from Salesforce based on mappings defined in Salesforce Mapping.
+package: Salesforce
+core: 8.x
+
+dependencies:
+  - salesforce:salesforce_mapping
+
+# Information added by Drupal.org packaging script on 2020-01-03
+version: '8.x-3.6'
+project: 'salesforce'
+datestamp: 1578083292

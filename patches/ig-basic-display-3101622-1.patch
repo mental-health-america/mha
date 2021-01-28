@@ -1,0 +1,79 @@
+diff --git a/modules/contrib/instagram_api/src/Controller/Callback.php b/modules/contrib/instagram_api/src/Controller/Callback.php
+index a6a30f7..7bcf4fe 100644
+--- a/modules/contrib/instagram_api/src/Controller/Callback.php
++++ b/modules/contrib/instagram_api/src/Controller/Callback.php
+@@ -87,10 +87,11 @@ public function getToken($code) {
+
+     // Params.
+     $parameters = [
+-      'client_id' => $this->config->get('client_id'),
+-      'client_secret' => $this->config->get('client_secret'),
+-      'redirect_uri' => Url::fromUri('internal:/instagram_api/callback', ['absolute' => TRUE])->toString(),
++      'app_id' => $this->config->get('client_id'),
++      'app_secret' => $this->config->get('client_secret'),
++      'scope' => 'user_profile,user_media',
+       'grant_type' => 'authorization_code',
++      'redirect_uri' => Url::fromUri('internal:/instagram_api/callback', ['absolute' => TRUE])->toString(),
+       'code' => $code,
+     ];
+
+diff --git a/modules/contrib/instagram_api/src/Form/Settings.php b/modules/contrib/instagram_api/src/Form/Settings.php
+index 1f969dc..4e1d5dd 100644
+--- a/modules/contrib/instagram_api/src/Form/Settings.php
++++ b/modules/contrib/instagram_api/src/Form/Settings.php
+@@ -74,27 +74,27 @@ public function buildForm(array $form, FormStateInterface $form_state) {
+
+     $form['client'] = [
+       '#type' => 'fieldset',
+-      '#title' => $this->t('Client Settings'),
++      '#title' => $this->t('Application Settings'),
+     ];
+
+     $form['client']['help'] = [
+       '#type' => '#markup',
+-      '#markup' => $this->t('To get your Client ID, you need to register your application on @link.',
++      '#markup' => $this->t('To get your Application ID and Secret, you need to register your Instagram application on @link.  This module has been redeveloped to allow you to work with Instagram\'s new \'Basic Display API\'.  Specifically, it can now be used to accomplish Steps 4 and 5 of the new API\'s <a href=\'https://developers.facebook.com/docs/instagram-basic-display-api/getting-started\' target=\'_blank\'>Getting Started</a> guide.',
+         [
+-          '@link' => Link::fromTextAndUrl('https://www.instagram.com/developer/clients/manage/',
+-          Url::fromUri('https://www.instagram.com/developer/clients/manage/'))->toString(),
++          '@link' => Link::fromTextAndUrl('https://developers.facebook.com/apps',
++          Url::fromUri('https://developers.facebook.com/apps'))->toString(),
+         ]),
+     ];
+
+     $form['client']['client_id'] = [
+       '#type' => 'textfield',
+-      '#title' => $this->t('Client ID'),
++      '#title' => $this->t('Application ID'),
+       '#default_value' => $config->get('client_id'),
+     ];
+
+     $form['client']['client_secret'] = [
+       '#type' => 'textfield',
+-      '#title' => $this->t('Client Secret'),
++      '#title' => $this->t('Application Secret'),
+       '#default_value' => $config->get('client_secret'),
+     ];
+
+@@ -102,7 +102,7 @@ public function buildForm(array $form, FormStateInterface $form_state) {
+       $options = ['attributes' => ['target' => '_blank']];
+
+       $form['client']['access_token'] = [
+-        '#type' => 'textfield',
++        '#type' => 'textarea',
+         '#title' => $this->t('Access Token'),
+         '#default_value' => $config->get('access_token'),
+         '#description' => $this->t('To get your Access Token, @link.',
+@@ -177,9 +177,10 @@ private function accessUrl() {
+     $urlBase = $config->get('api_uri') . 'authorize';
+
+     $query = [
+-      'client_id' => $config->get('client_id'),
+-      'response_type' => 'code',
++      'app_id' => $config->get('client_id'),
+       'redirect_uri' => $redirectUrl,
++      'scope' => 'user_profile,user_media',
++      'response_type' => 'code',
+     ];
+
+     $url = Url::fromUri($urlBase, [

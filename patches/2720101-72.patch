@@ -1,0 +1,206 @@
+diff --git a/core/modules/views/src/Plugin/Block/ViewsExposedFilterBlock.php b/core/modules/views/src/Plugin/Block/ViewsExposedFilterBlock.php
+index 4b40a0d..73c5d79 100644
+--- a/core/modules/views/src/Plugin/Block/ViewsExposedFilterBlock.php
++++ b/core/modules/views/src/Plugin/Block/ViewsExposedFilterBlock.php
+@@ -3,6 +3,7 @@
+ namespace Drupal\views\Plugin\Block;
+ 
+ use Drupal\Core\Cache\Cache;
++use Drupal\Component\Utility\Xss;
+ 
+ /**
+  * Provides a 'Views Exposed Filter' block.
+@@ -47,6 +48,14 @@ public function build() {
+     // contextual links.
+     $this->addContextualLinks($output, 'exposed_filter');
+ 
++    // Set the blocks title.
++    if (!empty($this->configuration['label_display']) && ($this->view->getTitle() || !empty($this->configuration['views_label']))) {
++      $output['#title'] = [
++        '#markup' => empty($this->configuration['views_label']) ? $this->view->getTitle() : $this->configuration['views_label'],
++        '#allowed_tags' => Xss::getHtmlTagList()
++      ];
++    }
++
+     return $output;
+   }
+ 
+diff --git a/core/modules/views/tests/fixtures/update/block.block.exposedformtest_exposed_blockpage_1.yml b/core/modules/views/tests/fixtures/update/block.block.exposedformtest_exposed_blockpage_1.yml
+new file mode 100644
+index 0000000..2693179
+--- /dev/null
++++ b/core/modules/views/tests/fixtures/update/block.block.exposedformtest_exposed_blockpage_1.yml
+@@ -0,0 +1,22 @@
++langcode: en
++status: true
++dependencies:
++  config:
++    - views.view.test_exposed_block
++  module:
++    - views
++  theme:
++    - bartik
++id: exposedformtest_exposed_blockpage_1
++theme: bartik
++region: content
++weight: 0
++provider: null
++plugin: 'views_exposed_filter_block:test_exposed_block-page_1'
++settings:
++  id: 'views_exposed_filter_block:test_exposed_block-page_1'
++  label: ''
++  provider: views
++  label_display: visible
++  views_label: ''
++visibility: {  }
+diff --git a/core/modules/views/tests/fixtures/update/exposed-filter-blocks.php b/core/modules/views/tests/fixtures/update/exposed-filter-blocks.php
+new file mode 100644
+index 0000000..5b2b9df
+--- /dev/null
++++ b/core/modules/views/tests/fixtures/update/exposed-filter-blocks.php
+@@ -0,0 +1,29 @@
++<?php
++
++/**
++ * @file
++ * Test fixture.
++ */
++
++use Drupal\Core\Database\Database;
++use Drupal\Core\Serialization\Yaml;
++
++$connection = Database::getConnection();
++
++// Install the view configuration.
++$connection->insert('config')
++  ->fields([
++    'collection' => '',
++    'name' => 'views.view.test_exposed_block',
++    'data' => serialize(Yaml::decode(file_get_contents('core/modules/views/tests/modules/views_test_config/test_views/views.view.test_exposed_block.yml'))),
++  ])
++  ->execute();
++
++// Install the block configuration.
++$connection->insert('config')
++  ->fields([
++    'collection' => '',
++    'name' => 'block.block.exposedformtest_exposed_blockpage_1',
++    'data' => serialize(Yaml::decode(file_get_contents('core/modules/views/tests/fixtures/update/block.block.exposedformtest_exposed_blockpage_1.yml'))),
++  ])
++  ->execute();
+diff --git a/core/modules/views/tests/modules/views_test_config/test_views/views.view.test_exposed_block.yml b/core/modules/views/tests/modules/views_test_config/test_views/views.view.test_exposed_block.yml
+index be96ab4..df70195 100644
+--- a/core/modules/views/tests/modules/views_test_config/test_views/views.view.test_exposed_block.yml
++++ b/core/modules/views/tests/modules/views_test_config/test_views/views.view.test_exposed_block.yml
+@@ -14,6 +14,7 @@ core: '8'
+ display:
+   default:
+     display_options:
++      title: 'Test Exposed Block'
+       access:
+         type: none
+       cache:
+diff --git a/core/modules/views/tests/src/Functional/Plugin/ExposedFormTest.php b/core/modules/views/tests/src/Functional/Plugin/ExposedFormTest.php
+index 4cd81d2..2a6f5fa 100644
+--- a/core/modules/views/tests/src/Functional/Plugin/ExposedFormTest.php
++++ b/core/modules/views/tests/src/Functional/Plugin/ExposedFormTest.php
+@@ -199,7 +199,31 @@ public function testExposedBlock() {
+     $view = Views::getView('test_exposed_block');
+     $view->setDisplay('page_1');
+     $block = $this->drupalPlaceBlock('views_exposed_filter_block:test_exposed_block-page_1');
++
++    // Set to display the label on the exposed filter form block.
++    $block->getPlugin()->setConfigurationValue('label_display', TRUE);
++    $block->save();
++
++    // Test that the block label is found.
++    $this->drupalGet('test_exposed_block');
++    $this->assertText($view->getTitle(), 'Block title found.');
++
++    // Set a custom label on the exposed filter form block.
++    $block->getPlugin()->setConfigurationValue('views_label', '<strong>Custom</strong> title<script>alert("hacked!");</script>');
++    $block->save();
++
++    // Test that the custom block label is found.
++    $this->drupalGet('test_exposed_block');
++    $this->assertRaw('<strong>Custom</strong> titlealert("hacked!");', 'Custom block title found.');
++
++    // Set to hide the label on the exposed filter form block.
++    $block->getPlugin()->setConfigurationValue('label_display', FALSE);
++    $block->save();
++
++    // Test that the label is removed.
+     $this->drupalGet('test_exposed_block');
++    $this->assertNoRaw('<strong>Custom</strong> titlealert("hacked!");', 'Custom title was not displayed.');
++    $this->assertNoText($view->getTitle(), 'Block title was not displayed.');
+ 
+     // Test there is an exposed form in a block.
+     $xpath = $this->buildXPathQuery('//div[@id=:id]/form/@id', [':id' => Html::getUniqueId('block-' . $block->id())]);
+diff --git a/core/modules/views/tests/src/Functional/Update/ExposedFilterBlocksUpdateTest.php b/core/modules/views/tests/src/Functional/Update/ExposedFilterBlocksUpdateTest.php
+new file mode 100644
+index 0000000..cd5e954
+--- /dev/null
++++ b/core/modules/views/tests/src/Functional/Update/ExposedFilterBlocksUpdateTest.php
+@@ -0,0 +1,39 @@
++<?php
++
++namespace Drupal\Tests\views\Functional\Update;
++
++use Drupal\block\Entity\Block;
++use Drupal\FunctionalTests\Update\UpdatePathTestBase;
++
++/**
++ * Tests that the additional settings are added to the entity link field.
++ *
++ * @see views_post_update_entity_link_url()
++ *
++ * @group legacy
++ */
++class ExposedFilterBlocksUpdateTest extends UpdatePathTestBase {
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setDatabaseDumpFiles() {
++    $this->databaseDumpFiles = [
++      __DIR__ . '/../../../../../system/tests/fixtures/update/drupal-8.bare.standard.php.gz',
++      __DIR__ . '/../../../fixtures/update/exposed-filter-blocks.php',
++    ];
++  }
++
++  /**
++   * Tests that exposed filter blocks label display are disabled.
++   */
++  public function testViewsPostUpdateExposedFilterBlocks() {
++    $this->runUpdates();
++
++    // Assert the label display has been disabled after the update.
++    $block = Block::load('exposedformtest_exposed_blockpage_1');
++    $config = $block->getPlugin()->getConfiguration();
++    $this->assertEquals('0', $config['label_display']);
++  }
++
++}
+diff --git a/core/modules/views/views.post_update.php b/core/modules/views/views.post_update.php
+index f194045..472af13 100644
+--- a/core/modules/views/views.post_update.php
++++ b/core/modules/views/views.post_update.php
+@@ -366,3 +366,18 @@ function views_post_update_table_display_cache_max_age(&$sandbox = NULL) {
+     return FALSE;
+   });
+ }
++
++/**
++ * Update exposed filter blocks label display to be disabled.
++ */
++function views_post_update_exposed_filter_blocks_label_display(&$sandbox = NULL) {
++  \Drupal::classResolver(ConfigEntityUpdater::class)->update($sandbox, 'block', function ($block) {
++    /** @var \Drupal\block\BlockInterface $block */
++    if (strpos($block->getPluginId(), 'views_exposed_filter_block:') === 0) {
++      $block->getPlugin()->setConfigurationValue('label_display', '0');
++      return TRUE;
++    }
++
++    return FALSE;
++  });
++}

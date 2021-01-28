@@ -1,0 +1,12 @@
+diff --git a/dynamic_entity_reference.info.yml b/dynamic_entity_reference.info.yml
+index a0e31e1..0a7b53e 100644
+--- a/dynamic_entity_reference.info.yml
++++ b/dynamic_entity_reference.info.yml
+@@ -2,6 +2,7 @@ name: Dynamic Entity Reference
+ type: module
+ description: 'Provides an entity reference field that can reference multiple entity types.'
+ package: Field types
++core: '8.x'
+ core_version_requirement: ^8 || ^9
+ dependencies:
+   - drupal:field

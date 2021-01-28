@@ -1,0 +1,9 @@
+services:
+  instagram_feeds.cron_handler:
+    class: Drupal\instagram_feeds\CronHandler
+    arguments: ['@config.factory', '@http_client', '@entity_type.manager', '@entity_field.manager', '@event_dispatcher', '@token', '@logger.factory']
+  instagram_feeds.instagram_posts_obtained:
+    class: '\Drupal\instagram_feeds\EventSubscriber\InstagramPostsObtainedSubscriber'
+    arguments: ['@http_client', '@token', '@logger.factory']
+    tags:
+      - { name: 'event_subscriber' }

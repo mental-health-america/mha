@@ -1,0 +1,17 @@
+name: "Salesforce mapping test module"
+type: module
+description: "Salesforce mapping test module"
+package: Testing
+core: 8.x
+dependencies:
+  - text
+  - datetime
+  - link
+  - node
+  - salesforce_mapping
+  - salesforce_test_rest_client
+
+# Information added by Drupal.org packaging script on 2020-01-03
+version: '8.x-3.6'
+project: 'salesforce'
+datestamp: 1578083292

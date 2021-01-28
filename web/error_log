@@ -1,0 +1,16 @@
+[25-Apr-2019 15:35:23 UTC] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 524288 bytes) in /home/stagingmha/drupal/web/core/includes/bootstrap.inc on line 335
+[25-Apr-2019 15:35:23 UTC] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 73728 bytes) in /home/stagingmha/drupal/vendor/composer/ClassLoader.php on line 444
+[27-Jul-2019 00:08:57 UTC] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 7242375 bytes) in /home/stagingmha/drupal/web/core/lib/Drupal/Core/Database/Statement.php on line 59
+[14-Aug-2019 19:27:07 UTC] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 20480 bytes) in /home/stagingmha/drupal/web/core/lib/Drupal/Core/Cache/DatabaseBackend.php on line 167
+[14-Aug-2019 19:27:42 UTC] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 20480 bytes) in /home/stagingmha/drupal/web/core/lib/Drupal/Core/Database/Statement.php on line 59
+[31-Aug-2019 14:33:50 UTC] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 20480 bytes) in /home/stagingmha/drupal/web/core/modules/views/src/Plugin/views/display/DisplayPluginBase.php on line 152
+[02-Sep-2019 12:40:03 UTC] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 20480 bytes) in /home/stagingmha/drupal/web/core/lib/Drupal/Core/Cache/DatabaseBackend.php on line 167
+[12-Oct-2019 12:14:35 UTC] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 20480 bytes) in /home/stagingmha/drupal/web/core/lib/Drupal/Core/Database/Statement.php on line 59
+[12-Oct-2019 12:15:25 UTC] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 20480 bytes) in /home/stagingmha/drupal/web/core/lib/Drupal/Core/Database/Statement.php on line 59
+[12-Oct-2019 12:24:40 UTC] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 20480 bytes) in /home/stagingmha/drupal/web/core/lib/Drupal/Core/Database/Statement.php on line 59
+[12-Oct-2019 12:31:31 UTC] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 20480 bytes) in /home/stagingmha/drupal/web/core/lib/Drupal/Core/Database/Statement.php on line 59
+[12-Oct-2019 12:32:12 UTC] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 36864 bytes) in /home/stagingmha/drupal/web/core/lib/Drupal/Core/Database/Statement.php on line 59
+[19-Oct-2019 17:00:50 UTC] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 20480 bytes) in /home/stagingmha/drupal/web/core/lib/Drupal/Core/Database/Statement.php on line 59
+[19-Oct-2019 17:12:48 UTC] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 49152 bytes) in /home/stagingmha/drupal/web/core/lib/Drupal/Core/Database/Statement.php on line 59
+[19-Oct-2019 17:15:43 UTC] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 20480 bytes) in /home/stagingmha/drupal/web/core/lib/Drupal/Core/Database/Statement.php on line 59
+[05-Dec-2020 21:48:11 UTC] PHP Warning:  exec() has been disabled for security reasons in /home/mhanational/drupal/vendor/drush/drush/src/Config/Environment.php on line 458

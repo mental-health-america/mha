@@ -1,0 +1,90 @@
+<header id="header" class="header-v2">
+
+  {% if page.topbar %}
+    <div class="topbar">
+      <div class="topbar-inner">
+        <div class="container">
+          <div class="content">{{ page.topbar }}</div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="header-main">
+    <div class="container">
+      <div class="header-inner clearfix">
+        <div class="row">
+          <div class="col-md-3 col-sm-4 col-xs-4 branding">
+            {% if page.branding %}
+              {{ page.branding }}
+            {% endif %}
+          </div>
+          <div class="col-md-8 col-sm-7 col-xs-7 right-header hidden-sm hidden-xs">
+            {% if page.header_right %}
+              {{ page.header_right }}
+            {% endif %}
+          </div>
+
+          <div class="col-md-1 col-sm-8 col-xs-8 right-header">
+
+            <div id="menu-bar" class="menu-bar hidden-lg hidden-md">
+              <span class="one"></span>
+              <span class="two"></span>
+              <span class="three"></span>
+            </div>
+
+            {% if page.search %}
+              <div class="gva-search-region search-region">
+                <span class="icon"><i class="fa fa-search"></i></span>
+                <div class="search-content">
+                  {{ page.search }}
+                </div>
+              </div>
+            {% endif %}
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-menu">
+    <div class="container-fluid header-content-layout">
+      <div class="header-main-inner p-relative">
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12 p-static ml-5">
+            <div class="area-main-menu">
+              <div class="area-inner">
+                <div class="gva-offcanvas-mobile">
+                  <div class="close-offcanvas hidden"><i class="fa fa-times"></i></div>
+                  {% if page.main_menu %}
+                    {{ page.main_menu }}
+                  {% endif %}
+                  <div class="hidden-md hidden-lg">
+                    {% if page.header_right %}
+                      {{ page.header_right }}
+                    {% endif %}
+                  </div>
+                  {% if page.offcanvas %}
+                    <div class="after-offcanvas hidden">
+                      {{ page.offcanvas }}
+                    </div>
+                  {% endif %}
+                </div>
+
+                {% if page.quick_side %}
+                  <div class="quick-side-icon hidden-xs hidden-sm">
+                    <div class="icon"><a href="#"><span class="qicon fa fa-bars"></span></a></div>
+                  </div>
+                {% endif %}
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>

@@ -1,0 +1,22 @@
+diff --git a/src/Service/TokenReplacer.php b/src/Service/TokenReplacer.php
+index 257397c..7d65d83 100644
+--- a/src/Service/TokenReplacer.php
++++ b/src/Service/TokenReplacer.php
+@@ -81,7 +81,6 @@ class TokenReplacer {
+    *   Returns replaced token.
+    */
+   public function replaceContext($token, $key, BubbleableMetadata $b) {
+-
+     $token_type = $this->getTokenType($token);
+     $entity_type = $this->tokenEntityMapper->getEntityTypeForTokenType($token_type);
+ 
+@@ -97,6 +96,9 @@ class TokenReplacer {
+     $real_context = $this->contextRepository->getRuntimeContexts(array_keys($contexts_def));
+ 
+     foreach ($real_context as $key_i => $real_ci) {
++      if (!$real_ci->hasContextValue()) {
++        continue;
++      }
+       $context_data_definition_type = $real_ci->getContextData()->getPluginDefinition();
+       $value = $real_ci->getContextData()->getValue();
+ 

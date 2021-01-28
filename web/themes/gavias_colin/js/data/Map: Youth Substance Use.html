@@ -1,0 +1,201 @@
+<script src="/themes/gavias_colin/js/ammapred2019javascript.js" type="text/javascript"></script>
+<script src="/themes/gavias_colin/js/usaLowChildSUDetail2019.js" type="text/javascript"></script>
+
+<script>
+  AmCharts.makeChart("mapdiv10", {
+    type: "map",
+
+
+    colorSteps: 4,
+
+    dataProvider: {				map: "usaLowChildSUDetail2019",
+
+
+
+      areas: [{
+
+
+        id: "US-AL",
+        value: 25					}, {
+
+        id: "US-AK",
+        value: 100					}, {
+
+        id: "US-AZ",
+        value: 100					}, {
+
+        id: "US-AR",
+        value: 25					}, {
+
+        id: "US-CA",
+        value: 75					}, {
+
+        id: "US-CO",
+        value: 100					}, {
+
+        id: "US-CT",
+        value: 75					}, {
+
+        id: "US-DC",
+        value: 100					}, {
+        id: "US-DE",
+        value: 50					}, {
+
+        id: "US-FL",
+        value: 50					}, {
+
+        id: "US-GA",
+        value: 25					}, {
+
+        id: "US-HI",
+        value: 50					}, {
+
+        id: "US-ID",
+        value: 75					}, {
+
+        id: "US-IL",
+        value: 75					}, {
+
+        id: "US-IN",
+        value: 25
+      }, {
+
+        id: "US-IA",
+        value: 75					}, {
+
+        id: "US-KS",
+        value: 75
+      }, {
+
+        id: "US-KY",
+        value: 25
+      }, {
+
+        id: "US-LA",
+        value: 50					}, {
+
+        id: "US-ME",
+        value: 75					}, {
+
+        id: "US-MD",
+        value: 25					}, {
+
+        id: "US-MA",
+        value: 50					}, {
+
+        id: "US-MI",
+        value: 75					}, {
+
+        id: "US-MN",
+        value: 75					}, {
+
+        id: "US-MS",
+        value: 25
+      }, {
+
+        id: "US-MO",
+        value: 50
+      }, {
+
+        id: "US-MT",
+        value: 100					}, {
+
+        id: "US-NE",
+        value: 50					}, {
+
+        id: "US-NV",
+        value: 100
+      }, {
+
+
+
+
+        id: "US-NH",
+        value: 50
+      }, {
+
+        id: "US-NJ",
+        value: 25					}, {
+
+        id: "US-NM",
+        value: 100					}, {
+
+        id: "US-NY",
+        value: 50					}, {
+
+        id: "US-NC",
+        value: 25
+      }, {
+
+        id: "US-ND",
+        value: 100					}, {
+
+        id: "US-OH",
+        value: 50					}, {
+
+        id: "US-OK",
+        value: 50					}, {
+
+        id: "US-OR",
+        value: 100					}, {
+
+        id: "US-PA",
+        value: 25
+      }, {
+
+        id: "US-RI",
+        value: 100					}, {
+
+        id: "US-SC",
+        value: 50					}, {
+
+        id: "US-SD",
+        value: 100
+      }, {
+
+        id: "US-TN",
+        value: 25					}, {
+
+        id: "US-TX",
+        value: 50
+      }, {
+
+        id: "US-UT",
+        value: 25					}, {
+
+        id: "US-VT",
+        value: 75					}, {
+
+        id: "US-VA",
+        value: 25					}, {
+
+        id: "US-WA",
+        value: 100
+      }, {
+
+        id: "US-WV",
+        value: 75
+      }, {
+
+        id: "US-WI",
+        value: 75
+      }, {
+
+        id: "US-WY",
+        value: 100					}]
+    },
+
+    areasSettings: {
+      autoZoom: true
+    },
+
+    valueLegend: {
+      right: 10,
+      minValue: "Highest Ranked",
+      maxValue: "Lowest Ranked"
+    }
+
+  });
+</script>
+
+<div id="mapdiv10" style="width: 100%; background-color:#FFFFFF; height: 500px;">&nbsp;</div>

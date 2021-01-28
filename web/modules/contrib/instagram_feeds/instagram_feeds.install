@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the node module.
+ */
+
+use Drupal\Core\Database\Database;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\user\RoleInterface;
+
+/**
+ * Implements hook_requirements().
+ */
+function instagram_feeds_requirements($phase) {
+  $requirements = [];
+  if ($phase === 'runtime') {
+    $config = Drupal::config('instagram_feeds.settings');
+    $client_id = $config->get('client_id');
+    $client_secret = $config->get('client_secret');
+    $status = $client_id && $client_secret ? t('set') : t('not set');
+
+    $requirements['instagram_feeds_app_credentials'] = [
+      'title' => t('Instagram Feeds'),
+      'value' => t('Instagram App Credentials are @status', [
+        '@status' => $status,
+      ]),
+    ];
+  }
+  return $requirements;
+}

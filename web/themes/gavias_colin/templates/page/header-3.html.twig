@@ -1,0 +1,52 @@
+<header id="header" class="header-v3">
+
+  {% if page.topbar %}
+    <div class="topbar">
+      <div class="topbar-inner">
+        <div class="container">
+          <div class="content">{{ page.topbar }}</div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  <div class="header-main">
+    <div class="container">
+      <div class="header-inner clearfix">
+        <div class="row">
+          <div class="col-md-3 col-sm-4 col-xs-4 branding">
+            {% if page.branding %}
+              {{ page.branding }}
+            {% endif %}
+          </div>
+          <div class="col-md-8 col-sm-7 col-xs-7 hamit right-header">
+            {% if page.quick_side %}
+              <div class="quick-side-icon">
+                <div class="icon">
+                  <a href="#">
+                    <span class="qicon fa fa-bars"></span>
+                  </a>
+                </div>
+              </div>
+            {% endif %}
+            {% if page.header_right %}
+              {{ page.header_right }}
+            {% endif %}
+          </div>
+
+          <div class="col-md-1 col-sm-8 col-xs-8 mt-4 right-header">
+            {% if page.search %}
+              <div class="gva-search-region search-region">
+                <span class="icon"><i class="fa fa-search"></i></span>
+                <div class="search-content">
+                  {{ page.search }}
+                </div>
+              </div>
+            {% endif %}
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>

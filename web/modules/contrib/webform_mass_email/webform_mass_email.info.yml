@@ -1,0 +1,14 @@
+name: Webform Mass Email
+type: module
+description: Send bulk email for all recipients of the webform.
+core: 8.x
+core_version_requirement: ^8 || ^9
+package: Webform
+configure: webform.config.mass_email
+dependencies:
+  - webform:webform_ui (>= 8.x-5.0)
+
+# Information added by Drupal.org packaging script on 2020-03-31
+version: '8.x-1.0-beta5'
+project: 'webform_mass_email'
+datestamp: 1585665864

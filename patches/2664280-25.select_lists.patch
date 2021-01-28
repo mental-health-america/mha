@@ -1,0 +1,1279 @@
+diff --git a/src/Context/ContextDefinition.php b/src/Context/ContextDefinition.php
+index 7122d6e..e93c26c 100644
+--- a/src/Context/ContextDefinition.php
++++ b/src/Context/ContextDefinition.php
+@@ -25,6 +25,7 @@ class ContextDefinition extends ContextDefinitionCore implements ContextDefiniti
+     'constraints' => 'constraints',
+     'allow_null' => 'allowNull',
+     'assignment_restriction' => 'assignmentRestriction',
++    'list_options_callback' => 'listOptionsCallback',
+   ];
+ 
+   /**
+@@ -44,6 +45,13 @@ class ContextDefinition extends ContextDefinitionCore implements ContextDefiniti
+   protected $assignmentRestriction = NULL;
+ 
+   /**
++   * Name of callback function to generate options for select list.
++   *
++   * @var string|null
++   */
++  protected $listOptionsCallback = NULL;
++
++  /**
+    * {@inheritdoc}
+    */
+   public function toArray() {
+@@ -117,4 +125,19 @@ class ContextDefinition extends ContextDefinitionCore implements ContextDefiniti
+     return $this;
+   }
+ 
++  /**
++   * {@inheritdoc}
++   */
++  public function getListOptionsCallback() {
++    return $this->listOptionsCallback;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function setListOptionsCallback($callback) {
++    $this->listOptionsCallback = $callback;
++    return $this;
++  }
++
+ }
+diff --git a/src/Context/ContextDefinitionInterface.php b/src/Context/ContextDefinitionInterface.php
+index 118627c..70ec856 100644
+--- a/src/Context/ContextDefinitionInterface.php
++++ b/src/Context/ContextDefinitionInterface.php
+@@ -57,6 +57,8 @@ interface ContextDefinitionInterface extends ContextDefinitionInterfaceCore {
+    *   be provided as input values, ASSIGNMENT_RESTRICTION_SELECTOR for contexts
+    *   that must be provided as data selectors or NULL if there is no
+    *   restriction for this context.
++   *
++   * @return $this
+    */
+   public function setAssignmentRestriction($restriction);
+ 
+@@ -68,4 +70,24 @@ interface ContextDefinitionInterface extends ContextDefinitionInterfaceCore {
+    */
+   public function toArray();
+ 
++  /**
++   * Retrieves the select options callback.
++   *
++   * @return string|null
++   *   The name of the callback function to be used to generate options for a
++   *   select list in the UI.
++   */
++  public function getListOptionsCallback();
++
++  /**
++   * Sets the select options callback.
++   *
++   * @param string $name
++   *   The name of the callback function to be used to generate options for a
++   *   select list in the UI.
++   *
++   * @return $this
++   */
++  public function setListOptionsCallback($name);
++
+ }
+diff --git a/src/Form/Expression/ActionForm.php b/src/Form/Expression/ActionForm.php
+index e93e6a0..8176e33 100644
+--- a/src/Form/Expression/ActionForm.php
++++ b/src/Form/Expression/ActionForm.php
+@@ -89,6 +89,8 @@ class ActionForm implements ExpressionFormInterface {
+ 
+     $form['context']['#tree'] = TRUE;
+     foreach ($context_definitions as $context_name => $context_definition) {
++      $list_callback = $context_definition->getListOptionsCallback();
++      $configuration['list_options'] = empty($list_callback) ? NULL : $action->$list_callback();
+       $form = $this->buildContextForm($form, $form_state, $context_name, $context_definition, $configuration);
+     }
+ 
+diff --git a/src/Form/Expression/ConditionForm.php b/src/Form/Expression/ConditionForm.php
+index c6ed139..4d94938 100644
+--- a/src/Form/Expression/ConditionForm.php
++++ b/src/Form/Expression/ConditionForm.php
+@@ -91,6 +91,8 @@ class ConditionForm implements ExpressionFormInterface {
+ 
+     $form['context']['#tree'] = TRUE;
+     foreach ($context_definitions as $context_name => $context_definition) {
++      $list_callback = $context_definition->getListOptionsCallback();
++      $configuration['list_options'] = empty($list_callback) ? NULL : $condition->$list_callback();
+       $form = $this->buildContextForm($form, $form_state, $context_name, $context_definition, $configuration);
+     }
+ 
+diff --git a/src/Form/Expression/ContextFormTrait.php b/src/Form/Expression/ContextFormTrait.php
+index 65aeacc..e4aab12 100644
+--- a/src/Form/Expression/ContextFormTrait.php
++++ b/src/Form/Expression/ContextFormTrait.php
+@@ -51,15 +51,18 @@ trait ContextFormTrait {
+     else {
+       $default_value = $context_definition->getDefaultValue();
+     }
++    // Set initial values for the input field.
+     $form['context'][$context_name]['setting'] = [
+       '#type' => 'textfield',
+       '#title' => $title,
+       '#required' => $context_definition->isRequired(),
+       '#default_value' => $default_value,
++      '#multiple' => $context_definition->isMultiple(),
+     ];
+ 
+     $element = &$form['context'][$context_name]['setting'];
+ 
++    // Modify the element if doing data selection.
+     if ($mode == 'selector') {
+       $element['#description'] = $this->t("The data selector helps you drill down into the data available to Rules. <em>To make entity fields appear in the data selector, you may have to use the condition 'entity has field' (or 'content is of type').</em> More useful tips about data selection is available in <a href=':url'>the online documentation</a>.", [
+         ':url' => 'https://www.drupal.org/node/1300042',
+@@ -70,16 +73,25 @@ trait ContextFormTrait {
+       $element['#attributes']['data-autocomplete-path'] = $url->toString();
+       $element['#attached']['library'][] = 'rules/rules.autocomplete';
+     }
++    // Modify the element if it is a selection list.
++    elseif (!empty($configuration['list_options'])) {
++      $element['#type'] = 'select';
++      $element['#options'] = $configuration['list_options'];
++      $element['#description'] = $element['#multiple'] ? $this->t('Select any number of values.') : $this->t('Select a value from the list.');
++    }
++    // Modify the element to allow multiple text entries using textarea.
+     elseif ($context_definition->isMultiple()) {
+       $element['#type'] = 'textarea';
+-      // @todo get a description for possible values that can be filled in.
+       $element['#description'] = $this->t('Enter one value per line for this multi-valued context.');
+-
+       // Glue the list of values together as one item per line in the text area.
+       if (is_array($default_value)) {
+         $element['#default_value'] = implode("\n", $default_value);
+       }
+     }
++    // The element is a simple single entry text field.
++    else {
++      $element['#description'] = $this->t('Enter the value directly.');
++    }
+ 
+     $value = $mode == 'selector' ? $this->t('Switch to the direct input mode') : $this->t('Switch to data selection');
+     $form['context'][$context_name]['switch_button'] = [
+@@ -113,10 +125,16 @@ trait ContextFormTrait {
+         $context_config->map($context_name, $value['setting']);
+       }
+       else {
+-        // Each line of the textarea is one value for multiple contexts.
+         if ($context_definitions[$context_name]->isMultiple()) {
+-          $values = explode("\n", $value['setting']);
+-          $context_config->setValue($context_name, $values);
++          if (!empty($context_definitions[$context_name]->getListOptionsCallback())) {
++            // This is a select list with multiple values allowed.
++            $context_config->setValue($context_name, array_keys($value['setting']));
++          }
++          else {
++            // Each line of the textarea is one value for multiple contexts.
++            $values = explode("\n", $value['setting']);
++            $context_config->setValue($context_name, $values);
++          }
+         }
+         else {
+           $context_config->setValue($context_name, $value['setting']);
+diff --git a/src/Plugin/Condition/EntityHasField.php b/src/Plugin/Condition/EntityHasField.php
+index dfb5dbe..411f90e 100644
+--- a/src/Plugin/Condition/EntityHasField.php
++++ b/src/Plugin/Condition/EntityHasField.php
+@@ -2,8 +2,11 @@
+ 
+ namespace Drupal\rules\Plugin\Condition;
+ 
++use Drupal\Core\Entity\EntityFieldManagerInterface;
+ use Drupal\Core\Entity\FieldableEntityInterface;
++use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+ use Drupal\rules\Core\RulesConditionBase;
++use Symfony\Component\DependencyInjection\ContainerInterface;
+ 
+ /**
+  * Provides a 'Entity has field' condition.
+@@ -19,14 +22,51 @@ use Drupal\rules\Core\RulesConditionBase;
+  *     ),
+  *     "field" = @ContextDefinition("string",
+  *       label = @Translation("Field"),
+- *       description = @Translation("The name of the field to check for.")
++ *       description = @Translation("The name of the field to check for."),
++ *       list_options_callback = "fieldListOptions"
+  *     )
+  *   }
+  * )
+  *
+  * @todo: Add access callback information from Drupal 7.
+  */
+-class EntityHasField extends RulesConditionBase {
++class EntityHasField extends RulesConditionBase implements ContainerFactoryPluginInterface {
++
++  /**
++   * The entity_field.manager service.
++   *
++   * @var \Drupal\Core\Entity\EntityFieldManagerInterface
++   */
++  protected $entityFieldManager;
++
++  /**
++   * Constructs an EntityHasField object.
++   *
++   * @param array $configuration
++   *   A configuration array containing information about the plugin instance.
++   * @param string $plugin_id
++   *   The plugin ID for the plugin instance.
++   * @param mixed $plugin_definition
++   *   The plugin implementation definition.
++   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entity_field_manager
++   *   The entity_field.manager service.
++   */
++  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityFieldManagerInterface $entity_field_manager) {
++    parent::__construct($configuration, $plugin_id, $plugin_definition);
++    $this->entityFieldManager = $entity_field_manager;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
++    return new static(
++      $configuration,
++      $plugin_id,
++      $plugin_definition,
++      $container->get('entity_field.manager')
++    );
++  }
+ 
+   /**
+    * Checks if a given entity has a given field.
+@@ -43,4 +83,28 @@ class EntityHasField extends RulesConditionBase {
+     return $entity->hasField($field);
+   }
+ 
++  /**
++   * Returns all the available fields in the system.
++   *
++   * @return array
++   *   An array of field names keyed on the field name.
++   */
++  public function fieldListOptions() {
++    $options = [];
++
++    // Load all the fields in the system.
++    $fields = $this->entityFieldManager->getFieldMap();
++
++    // Add each field to our options array.
++    foreach ($fields as $entity_fields) {
++      foreach ($entity_fields as $field_name => $field) {
++        $options[$field_name] = $field_name;
++      }
++    }
++    // Sort the field names for ease of locating and selecting.
++    asort($options);
++
++    return $options;
++  }
++
+ }
+diff --git a/src/Plugin/Condition/EntityIsOfBundle.php b/src/Plugin/Condition/EntityIsOfBundle.php
+index 449b4e8..76e8d9e 100644
+--- a/src/Plugin/Condition/EntityIsOfBundle.php
++++ b/src/Plugin/Condition/EntityIsOfBundle.php
+@@ -2,8 +2,12 @@
+ 
+ namespace Drupal\rules\Plugin\Condition;
+ 
++use Drupal\Core\Entity\ContentEntityTypeInterface;
+ use Drupal\Core\Entity\EntityInterface;
++use Drupal\Core\Entity\EntityTypeManagerInterface;
++use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+ use Drupal\rules\Core\RulesConditionBase;
++use Symfony\Component\DependencyInjection\ContainerInterface;
+ 
+ /**
+  * Provides an 'Entity is of bundle' condition.
+@@ -20,18 +24,56 @@ use Drupal\rules\Core\RulesConditionBase;
+  *     ),
+  *     "type" = @ContextDefinition("string",
+  *       label = @Translation("Type"),
+- *       description = @Translation("The type of the evaluated entity.")
++ *       description = @Translation("The type of the evaluated entity."),
++ *       list_options_callback = "entityTypesListOptions"
+  *     ),
+  *     "bundle" = @ContextDefinition("string",
+  *       label = @Translation("Bundle"),
+- *       description = @Translation("The bundle of the evaluated entity.")
++ *       description = @Translation("The bundle of the evaluated entity."),
++ *       list_options_callback = "bundleListOptions"
+  *     )
+  *   }
+  * )
+  *
+  * @todo: Add access callback information from Drupal 7?
+  */
+-class EntityIsOfBundle extends RulesConditionBase {
++class EntityIsOfBundle extends RulesConditionBase implements ContainerFactoryPluginInterface {
++
++  /**
++   * The entity_type.manager service.
++   *
++   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
++   */
++  protected $entityTypeManager;
++
++  /**
++   * Constructs an EntityIsOfBundle object.
++   *
++   * @param array $configuration
++   *   A configuration array containing information about the plugin instance.
++   * @param string $plugin_id
++   *   The plugin ID for the plugin instance.
++   * @param mixed $plugin_definition
++   *   The plugin implementation definition.
++   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
++   *   The entity_type.manager service.
++   */
++  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager) {
++    parent::__construct($configuration, $plugin_id, $plugin_definition);
++    $this->entityTypeManager = $entity_type_manager;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
++    return new static(
++      $configuration,
++      $plugin_id,
++      $plugin_definition,
++      $container->get('entity_type.manager')
++    );
++  }
+ 
+   /**
+    * Check if a provided entity is of a specific type and bundle.
+@@ -69,4 +111,56 @@ class EntityIsOfBundle extends RulesConditionBase {
+     return $changed_definitions;
+   }
+ 
++  /**
++   * Returns an array of entity types that exist in the system.
++   *
++   * @return array
++   *   An array of entity types keyed on the entity type machine name.
++   */
++  public function entityTypesListOptions() {
++    $options = [];
++
++    $entity_types = $this->entityTypeManager->getDefinitions();
++
++    foreach ($entity_types as $entity_type) {
++      if (!$entity_type instanceof ContentEntityTypeInterface) {
++        continue;
++      }
++
++      $options[$entity_type->id()] = $entity_type->getLabel();
++      // If the id differs from the label add the id in brackets for clarity.
++      if (strtolower(str_replace('_', ' ', $entity_type->id())) != strtolower($entity_type->getLabel())) {
++        $options[$entity_type->id()] .= ' (' . $entity_type->id() . ')';
++      }
++    }
++
++    return $options;
++  }
++
++  /**
++   * Returns an array of entity bundles options.
++   *
++   * @return array
++   *   An array of bundles keyed on the bundle machine name.
++   */
++  public function bundleListOptions() {
++    $options = [];
++
++    $entity_types = $this->entityTypeManager->getDefinitions();
++
++    foreach ($entity_types as $entity_type) {
++      if ($bundle_entity_type = $entity_type->getBundleEntityType()) {
++        foreach ($this->entityTypeManager->getStorage($bundle_entity_type)->loadMultiple() as $entity) {
++          $options[$entity->id()] = $entity->label();
++          // If the id differs from the label add the id in brackets.
++          if (strtolower(str_replace('_', ' ', $entity->id())) != strtolower($entity->label())) {
++            $options[$entity->id()] .= ' (' . $entity->id() . ')';
++          }
++        }
++      }
++    }
++
++    return $options;
++  }
++
+ }
+diff --git a/src/Plugin/Condition/EntityIsOfType.php b/src/Plugin/Condition/EntityIsOfType.php
+index f915172..ec999c3 100644
+--- a/src/Plugin/Condition/EntityIsOfType.php
++++ b/src/Plugin/Condition/EntityIsOfType.php
+@@ -2,8 +2,12 @@
+ 
+ namespace Drupal\rules\Plugin\Condition;
+ 
++use Drupal\Core\Entity\ContentEntityTypeInterface;
+ use Drupal\Core\Entity\EntityInterface;
++use Drupal\Core\Entity\EntityTypeManagerInterface;
++use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+ use Drupal\rules\Core\RulesConditionBase;
++use Symfony\Component\DependencyInjection\ContainerInterface;
+ 
+ /**
+  * Provides an 'Entity is of type' condition.
+@@ -19,14 +23,51 @@ use Drupal\rules\Core\RulesConditionBase;
+  *     ),
+  *     "type" = @ContextDefinition("string",
+  *       label = @Translation("Type"),
+- *       description = @Translation("The entity type specified by the condition.")
++ *       description = @Translation("The entity type specified by the condition."),
++ *       list_options_callback = "entityTypesListOptions"
+  *     )
+  *   }
+  * )
+  *
+  * @todo: Add access callback information from Drupal 7?
+  */
+-class EntityIsOfType extends RulesConditionBase {
++class EntityIsOfType extends RulesConditionBase implements ContainerFactoryPluginInterface {
++
++  /**
++   * The entity_type.manager service.
++   *
++   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
++   */
++  protected $entityTypeManager;
++
++  /**
++   * Constructs an EntityIsOfType object.
++   *
++   * @param array $configuration
++   *   A configuration array containing information about the plugin instance.
++   * @param string $plugin_id
++   *   The plugin ID for the plugin instance.
++   * @param mixed $plugin_definition
++   *   The plugin implementation definition.
++   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
++   *   The entity_type.manager service.
++   */
++  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager) {
++    parent::__construct($configuration, $plugin_id, $plugin_definition);
++    $this->entityTypeManager = $entity_type_manager;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
++    return new static(
++      $configuration,
++      $plugin_id,
++      $plugin_definition,
++      $container->get('entity_type.manager')
++    );
++  }
+ 
+   /**
+    * Check if the provided entity is of a specific type.
+@@ -46,4 +87,30 @@ class EntityIsOfType extends RulesConditionBase {
+     return $entity_type == $type;
+   }
+ 
++  /**
++   * Returns an array of entity types that exist in the system.
++   *
++   * @return array
++   *   An array of entity types keyed on the entity type machine name.
++   */
++  public function entityTypesListOptions() {
++    $options = [];
++
++    $entity_types = $this->entityTypeManager->getDefinitions();
++
++    foreach ($entity_types as $entity_type) {
++      if (!$entity_type instanceof ContentEntityTypeInterface) {
++        continue;
++      }
++
++      $options[$entity_type->id()] = $entity_type->getLabel();
++      // If the id differs from the label add the id in brackets for clarity.
++      if (strtolower(str_replace('_', ' ', $entity_type->id())) != strtolower($entity_type->getLabel())) {
++        $options[$entity_type->id()] .= ' (' . $entity_type->id() . ')';
++      }
++    }
++
++    return $options;
++  }
++
+ }
+diff --git a/src/Plugin/Condition/NodeIsOfType.php b/src/Plugin/Condition/NodeIsOfType.php
+index 9ee4ab8..8f6c91e 100644
+--- a/src/Plugin/Condition/NodeIsOfType.php
++++ b/src/Plugin/Condition/NodeIsOfType.php
+@@ -2,8 +2,11 @@
+ 
+ namespace Drupal\rules\Plugin\Condition;
+ 
++use Drupal\Core\Entity\EntityManagerInterface;
++use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+ use Drupal\node\NodeInterface;
+ use Drupal\rules\Core\RulesConditionBase;
++use Symfony\Component\DependencyInjection\ContainerInterface;
+ 
+ /**
+  * Provides a 'Node is of type' condition.
+@@ -18,13 +21,50 @@ use Drupal\rules\Core\RulesConditionBase;
+  *     ),
+  *     "types" = @ContextDefinition("string",
+  *       label = @Translation("Content types"),
+- *       description = @Translation("Check for the the allowed node types."),
+- *       multiple = TRUE
++ *       description = @Translation("Select all the allowed node types."),
++ *       multiple = TRUE,
++ *       list_options_callback = "nodeTypesListOptions"
+  *     )
+  *   }
+  * )
+  */
+-class NodeIsOfType extends RulesConditionBase {
++class NodeIsOfType extends RulesConditionBase implements ContainerFactoryPluginInterface {
++
++  /**
++   * The entity.manager service.
++   *
++   * @var \Drupal\Core\Entity\EntityManagerInterface
++   */
++  protected $entityManager;
++
++  /**
++   * Constructs a NodeIsOfType object.
++   *
++   * @param array $configuration
++   *   A configuration array containing information about the plugin instance.
++   * @param string $plugin_id
++   *   The plugin ID for the plugin instance.
++   * @param mixed $plugin_definition
++   *   The plugin implementation definition.
++   * @param \Drupal\Core\Entity\EntityManagerInterface $entity_manager
++   *   The entity.manager service.
++   */
++  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityManagerInterface $entity_manager) {
++    parent::__construct($configuration, $plugin_id, $plugin_definition);
++    $this->entityManager = $entity_manager;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
++    return new static(
++      $configuration,
++      $plugin_id,
++      $plugin_definition,
++      $container->get('entity.manager')
++    );
++  }
+ 
+   /**
+    * Check if a node is of a specific set of types.
+@@ -41,4 +81,26 @@ class NodeIsOfType extends RulesConditionBase {
+     return in_array($node->getType(), $types);
+   }
+ 
++  /**
++   * Returns an array of node types that exist in the system.
++   *
++   * @return array
++   *   An array of node types keyed on the node type machine name.
++   */
++  public function nodeTypesListOptions() {
++    $options = [];
++
++    $node_types = $this->entityManager->getStorage('node_type')->loadMultiple();
++
++    foreach ($node_types as $node_type) {
++      $options[$node_type->id()] = $node_type->label();
++      // If the id differs from the label add the id in brackets for clarity.
++      if (strtolower(str_replace('_', ' ', $node_type->id())) != strtolower($node_type->label())) {
++        $options[$node_type->id()] .= ' (' . $node_type->id() . ')';
++      }
++    }
++
++    return $options;
++  }
++
+ }
+diff --git a/src/Plugin/Condition/UserHasEntityFieldAccess.php b/src/Plugin/Condition/UserHasEntityFieldAccess.php
+index a0bdf2e..f687d4d 100644
+--- a/src/Plugin/Condition/UserHasEntityFieldAccess.php
++++ b/src/Plugin/Condition/UserHasEntityFieldAccess.php
+@@ -2,11 +2,12 @@
+ 
+ namespace Drupal\rules\Plugin\Condition;
+ 
+-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+-use Drupal\rules\Core\RulesConditionBase;
++use Drupal\Core\Entity\EntityFieldManagerInterface;
+ use Drupal\Core\Entity\EntityTypeManagerInterface;
+-use Drupal\Core\Session\AccountInterface;
+ use Drupal\Core\Entity\ContentEntityInterface;
++use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
++use Drupal\Core\Session\AccountInterface;
++use Drupal\rules\Core\RulesConditionBase;
+ use Symfony\Component\DependencyInjection\ContainerInterface;
+ 
+ /**
+@@ -17,18 +18,23 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
+  *   label = @Translation("User has entity field access"),
+  *   category = @Translation("User"),
+  *   context = {
++ *     "user" = @ContextDefinition("entity:user",
++ *       label = @Translation("User")
++ *     ),
+  *     "entity" = @ContextDefinition("entity",
+  *       label = @Translation("Entity")
+  *     ),
+  *     "field" = @ContextDefinition("string",
+- *       label = @Translation("Field")
++ *       label = @Translation("Field"),
++ *       description = @Translation("The name of the field to check."),
++ *       list_options_callback = "fieldListOptions"
+  *     ),
+  *     "operation" = @ContextDefinition("string",
+- *       label = @Translation("Operation")
++ *       label = @Translation("Operation"),
++ *       description = @Translation("The access to check for."),
++ *       list_options_callback = "accessListOptions",
++ *       default_value = "view",
+  *     ),
+- *     "user" = @ContextDefinition("entity:user",
+- *       label = @Translation("User")
+- *     )
+  *   }
+  * )
+  *
+@@ -44,6 +50,13 @@ class UserHasEntityFieldAccess extends RulesConditionBase implements ContainerFa
+   protected $entityTypeManager;
+ 
+   /**
++   * The entity_field.manager service.
++   *
++   * @var \Drupal\Core\Entity\EntityFieldManagerInterface
++   */
++  protected $entityFieldManager;
++
++  /**
+    * Constructs a UserHasEntityFieldAccess object.
+    *
+    * @param array $configuration
+@@ -53,11 +66,14 @@ class UserHasEntityFieldAccess extends RulesConditionBase implements ContainerFa
+    * @param mixed $plugin_definition
+    *   The plugin implementation definition.
+    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+-   *   The entity type manager.
++   *   The entity_type.manager service.
++   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entity_field_manager
++   *   The entity_field.manager service.
+    */
+-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager) {
++  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, EntityFieldManagerInterface $entity_field_manager) {
+     parent::__construct($configuration, $plugin_id, $plugin_definition);
+     $this->entityTypeManager = $entity_type_manager;
++    $this->entityFieldManager = $entity_field_manager;
+   }
+ 
+   /**
+@@ -68,13 +84,16 @@ class UserHasEntityFieldAccess extends RulesConditionBase implements ContainerFa
+       $configuration,
+       $plugin_id,
+       $plugin_definition,
+-      $container->get('entity_type.manager')
++      $container->get('entity_type.manager'),
++      $container->get('entity_field.manager')
+     );
+   }
+ 
+   /**
+    * Evaluate if the user has access to the field of an entity.
+    *
++   * @param \Drupal\Core\Session\AccountInterface $user
++   *   The user account to test access against.
+    * @param \Drupal\Core\Entity\ContentEntityInterface $entity
+    *   The entity to check access on.
+    * @param string $field
+@@ -82,13 +101,11 @@ class UserHasEntityFieldAccess extends RulesConditionBase implements ContainerFa
+    * @param string $operation
+    *   The operation access should be checked for. Usually one of "view" or
+    *   "edit".
+-   * @param \Drupal\Core\Session\AccountInterface $user
+-   *   The user account to test access against.
+    *
+    * @return bool
+    *   TRUE if the user has access to the field on the entity, FALSE otherwise.
+    */
+-  protected function doEvaluate(ContentEntityInterface $entity, $field, $operation, AccountInterface $user) {
++  protected function doEvaluate(AccountInterface $user, ContentEntityInterface $entity, $field, $operation) {
+     if (!$entity->hasField($field)) {
+       return FALSE;
+     }
+@@ -103,4 +120,38 @@ class UserHasEntityFieldAccess extends RulesConditionBase implements ContainerFa
+     return $access->fieldAccess($operation, $definition, $user, $items);
+   }
+ 
++  /**
++   * Returns all the available fields in the system.
++   *
++   * @return array
++   *   An array of field names keyed on the field name.
++   */
++  public function fieldListOptions() {
++    $options = [];
++
++    // Load all the fields in the system.
++    $fields = $this->entityFieldManager->getFieldMap();
++
++    // Add each field to our options array.
++    foreach ($fields as $entity_fields) {
++      foreach ($entity_fields as $field_name => $field) {
++        $options[$field_name] = $field_name;
++      }
++    }
++    // Sort the field names for ease of locating and selecting.
++    asort($options);
++
++    return $options;
++  }
++
++  /**
++   * Returns the types of field access to check for.
++   *
++   * @return array
++   *   An array of access types.
++   */
++  public function accessListOptions() {
++    return ['view' => $this->t('View'), 'edit' => $this->t('Edit')];
++  }
++
+ }
+diff --git a/src/Plugin/Condition/UserHasRole.php b/src/Plugin/Condition/UserHasRole.php
+index 46c1166..d3d7a6f 100644
+--- a/src/Plugin/Condition/UserHasRole.php
++++ b/src/Plugin/Condition/UserHasRole.php
+@@ -19,12 +19,14 @@ use Drupal\user\UserInterface;
+  *     ),
+  *     "roles" = @ContextDefinition("entity:user_role",
+  *       label = @Translation("Roles"),
+- *       multiple = TRUE
++ *       multiple = TRUE,
++ *       list_options_callback = "userRolesListOptions"
+  *     ),
+  *     "operation" = @ContextDefinition("string",
+- *       label = @Translation("Match roles"),
+- *       description = @Translation("If matching against all selected roles, the user must have <em>all</em> the roles selected."),
++ *       label = @Translation("Matching multiple roles"),
++ *       description = @Translation("Specify if the user must have <em>all</em> the roles selected or <em>any</em> of the roles selected."),
+  *       default_value = "AND",
++ *       list_options_callback = "operationListOptions",
+  *       required = FALSE
+  *     )
+  *   }
+@@ -67,4 +69,27 @@ class UserHasRole extends RulesConditionBase {
+     }
+   }
+ 
++  /**
++   * Returns an array of user role options.
++   *
++   * @return array
++   *   An array of user roles keyed on role name.
++   */
++  public function userRolesListOptions() {
++    return user_role_names(TRUE);
++  }
++
++  /**
++   * Returns an array of role matching options.
++   *
++   * @return array
++   *   An array of logic operations for multiple role matching.
++   */
++  public function operationListOptions() {
++    return [
++      'AND' => $this->t('All selected roles (and)'),
++      'OR' => $this->t('Any selected role (or)'),
++    ];
++  }
++
+ }
+diff --git a/src/Plugin/RulesAction/SystemMessage.php b/src/Plugin/RulesAction/SystemMessage.php
+index 0c13e6a..3a9f218 100644
+--- a/src/Plugin/RulesAction/SystemMessage.php
++++ b/src/Plugin/RulesAction/SystemMessage.php
+@@ -17,13 +17,15 @@ use Drupal\rules\Core\RulesActionBase;
+  *       label = @Translation("Message")
+  *     ),
+  *     "type" = @ContextDefinition("string",
+- *       label = @Translation("Message type")
++ *       label = @Translation("Message type"),
++ *       list_options_callback = "messageTypeListOptions"
+  *     ),
+  *     "repeat" = @ContextDefinition("boolean",
+  *       label = @Translation("Repeat message"),
+  *       description = @Translation("If disabled and the message has been already shown, then the message won't be repeated."),
+  *       default_value = NULL,
+- *       required = FALSE
++ *       required = FALSE,
++ *       list_options_callback = "repeatListOptions"
+  *     )
+  *   }
+  * )
+@@ -50,4 +52,32 @@ class SystemMessage extends RulesActionBase {
+     drupal_set_message($message, $type, $repeat);
+   }
+ 
++  /**
++   * Returns an array of statuses that we can set for the drupal_set_message().
++   *
++   * @return array
++   *   An array of status options keyed on the status name.
++   */
++  public function messageTypeListOptions() {
++    return [
++      'info' => $this->t('Info'),
++      'status' => $this->t('Status'),
++      'warning' => $this->t('Warning'),
++      'error' => $this->t('Error'),
++    ];
++  }
++
++  /**
++   * Returns a YES/NO option set for selecting whether to repeat the message.
++   *
++   * @return array
++   *   A YES/NO options array.
++   */
++  public function repeatListOptions() {
++    return [
++      0 => $this->t('No'),
++      1 => $this->t('Yes'),
++    ];
++  }
++
+ }
+diff --git a/src/Plugin/RulesAction/UserRoleAdd.php b/src/Plugin/RulesAction/UserRoleAdd.php
+index 7cfc0a1..e51d7c0 100644
+--- a/src/Plugin/RulesAction/UserRoleAdd.php
++++ b/src/Plugin/RulesAction/UserRoleAdd.php
+@@ -19,7 +19,8 @@ use Drupal\user\UserInterface;
+  *     ),
+  *     "roles" = @ContextDefinition("entity:user_role",
+  *       label = @Translation("Roles"),
+- *       multiple = TRUE
++ *       multiple = TRUE,
++ *       list_options_callback = "userRolesListOptions"
+  *     )
+  *   }
+  * )
+@@ -75,4 +76,14 @@ class UserRoleAdd extends RulesActionBase {
+     return [];
+   }
+ 
++  /**
++   * Returns an array of user role options.
++   *
++   * @return array
++   *   An array of user roles keyed on role name.
++   */
++  public function userRolesListOptions() {
++    return user_role_names(TRUE);
++  }
++
+ }
+diff --git a/src/Plugin/RulesAction/UserRoleRemove.php b/src/Plugin/RulesAction/UserRoleRemove.php
+index aa03ffe..17f532c 100644
+--- a/src/Plugin/RulesAction/UserRoleRemove.php
++++ b/src/Plugin/RulesAction/UserRoleRemove.php
+@@ -19,7 +19,8 @@ use Drupal\rules\Exception\InvalidArgumentException;
+  *     ),
+  *     "roles" = @ContextDefinition("entity:user_role",
+  *       label = @Translation("Roles"),
+- *       multiple = TRUE
++ *       multiple = TRUE,
++ *       list_options_callback = "userRolesListOptions"
+  *     )
+  *   }
+  * )
+@@ -72,4 +73,14 @@ class UserRoleRemove extends RulesActionBase {
+     return [];
+   }
+ 
++  /**
++   * Returns an array of user role options.
++   *
++   * @return array
++   *   An array of user roles keyed on role name.
++   */
++  public function userRolesListOptions() {
++    return user_role_names(TRUE);
++  }
++
+ }
+diff --git a/tests/src/Functional/ConfigureAndExecuteTest.php b/tests/src/Functional/ConfigureAndExecuteTest.php
+index 9c1edb9..4e858ce 100644
+--- a/tests/src/Functional/ConfigureAndExecuteTest.php
++++ b/tests/src/Functional/ConfigureAndExecuteTest.php
+@@ -14,7 +14,7 @@ class ConfigureAndExecuteTest extends RulesBrowserTestBase {
+    *
+    * @var array
+    */
+-  public static $modules = ['node', 'rules'];
++  public static $modules = ['node', 'rules', 'comment', 'ban'];
+ 
+   /**
+    * We use the minimal profile because we want to test local action links.
+@@ -38,32 +38,46 @@ class ConfigureAndExecuteTest extends RulesBrowserTestBase {
+     $type->save();
+     $this->container->get('router.builder')->rebuild();
+ 
+-  }
+-
+-  /**
+-   * Tests creation of a rule and then triggering its execution.
+-   */
+-  public function testConfigureAndExecute() {
+-    $account = $this->drupalCreateUser([
++    $this->account = $this->drupalCreateUser([
+       'create article content',
+       'administer rules',
+       'administer site configuration',
+     ]);
+-    $this->drupalLogin($account);
++    $this->drupalLogin($this->account);
++  }
+ 
++  /**
++   * Helper function to create a reaction rule.
++   *
++   * @param string $label
++   *   The label for the new rule.
++   * @param string $machine_name
++   *   The internal machine-readable name.
++   * @param string $event
++   *   The name of the event to react on.
++   * @param string $description
++   *   Optional description for the reaction rule.
++   */
++  private function createRule($label, $machine_name, $event, $description = '') {
+     $this->drupalGet('admin/config/workflow/rules');
++    $this->clickLink('Add reaction rule');
++    $this->fillField('Label', $label);
++    $this->fillField('Machine-readable name', $machine_name);
++    $this->fillField('React on event', $event);
++    $this->fillField('Description', $description);
++    $this->pressButton('Save');
++  }
++
++  /**
++   * Tests creation of a rule and then triggering its execution.
++   */
++  public function testConfigureAndExecute() {
+ 
+     // Set up a rule that will show a system message if the title of a node
+     // matches "Test title".
+-    $this->clickLink('Add reaction rule');
+-
+-    $this->fillField('Label', 'Test rule');
+-    $this->fillField('Machine-readable name', 'test_rule');
+-    $this->fillField('React on event', 'rules_entity_presave:node');
+-    $this->pressButton('Save');
++    $this->createRule('Test rule', 'test_rule', 'rules_entity_presave:node');
+ 
+     $this->clickLink('Add condition');
+-
+     $this->fillField('Condition', 'rules_data_comparison');
+     $this->pressButton('Continue');
+ 
+@@ -110,4 +124,275 @@ class ConfigureAndExecuteTest extends RulesBrowserTestBase {
+     $this->assertSession()->pageTextNotContains('Title matched "Test title"!');
+   }
+ 
++  /**
++   * Test to add each condition provided by Rules.
++   *
++   * @param string $id
++   *   The id of the condition.
++   * @param string $label
++   *   The label of the condition.
++   * @param array $required
++   *   Array of fields to fill. The key is form field name and the value is the
++   *   text to fill into the field. This should hold just the fields which are
++   *   required and do not have any default value. Use an empty array if there
++   *   are no fields or all fields have a default.
++   * @param array $defaults
++   *   Array of defaults which should be stored without having to select the
++   *   value in the form.
++   *
++   * @dataProvider dataAddConditions()
++   */
++  public function testAddConditions($id, $label, array $required = [], array $defaults = []) {
++    $this->createRule('Add condition ' . $id, 'test_rule', 'rules_entity_presave:node', "Add condition $label\nid=$id");
++    $this->clickLink('Add condition');
++    $this->fillField('Condition', $id);
++    $this->pressButton('Continue');
++
++    // Save the form. If $required is not empty then we should get error(s) so
++    // verify this, then fill in the specified fields and try to save again.
++    $this->pressButton('Save');
++    if (!empty($required)) {
++      // Check that an error message is shown.
++      $this->assertSession()->pageTextContains('Error message');
++      // Fill in the required fields.
++      foreach ($required as $field => $value) {
++        $this->fillField($field, $value);
++      }
++      $this->pressButton('Save');
++    }
++    // Assert that the rule has saved correctly with no error message.
++    $this->assertSession()->pageTextNotContains('Error message');
++    $this->assertSession()->pageTextContains('Edit reaction rule "Add condition ' . $id . '"');
++    $this->assertSession()->pageTextContains('Condition: ' . $label);
++    // @todo - check that all values ($required and $defaults) have been stored.
++  }
++
++  /**
++   * Provides data for testAddConditions().
++   *
++   * @return array
++   *   The test data.
++   */
++  public function dataAddConditions() {
++    return [
++      // Data.
++      'Data Comparison' => [
++        'rules_data_comparison',
++        'Data Comparison',
++        ['context[data][setting]' => 'node.status.value', 'context[value][setting]' => TRUE],
++        ['operation' => '=='],
++      ],
++      'Data Is Empty' => [
++        'rules_data_is_empty',
++        'Data value is empty',
++        ['context[data][setting]' => 'node.uid.entity.name.value'],
++      ],
++      /*
++       // The two 'list' conditions do not work yet.
++      'List contains' => [
++        'rules_list_contains',
++        'List contains item',
++        ['context[list][setting]' => 'list_a', 'context[item][setting]' => '1'],
++      ],
++      'List count' => [
++        'rules_list_count_is',
++        'List Count Comparison',
++        ['context[list][setting]' => 'list_b', 'context[value][setting]' => 3],
++        ['operator' => '=='],
++      ],
++       */
++      // Entity.
++      'Entity has field' => [
++        'rules_entity_has_field',
++        'Entity has field',
++        ['context[entity][setting]' => 'node', 'context[field][setting]' => 'mail'],
++      ],
++      'Entity is new' => [
++        'rules_entity_is_new',
++        'Entity is new',
++        ['context[entity][setting]' => 'node'],
++      ],
++      'Entity is Bundle' => [
++        'rules_entity_is_of_bundle',
++        'Entity is of bundle', [
++          'context[entity][setting]' => 'node',
++          'context[type][setting]' => 'node',
++          'context[bundle][setting]' => 'article',
++        ],
++      ],
++      'Entity is Type' => [
++        'rules_entity_is_of_type',
++        'Entity is of TYPE',
++        ['context[entity][setting]' => 'something' , 'context[type][setting]' => 'user'],
++      ],
++      // Node.
++      'Node is promoted' => [
++        'rules_node_is_promoted',
++        'Node is promoted',
++        ['context[node][setting]' => 'node'],
++      ],
++      'Node is published' => [
++        'rules_node_is_published',
++        'Node is published',
++        ['context[node][setting]' => 'node'],
++      ],
++      'Node is sticky' => [
++        'rules_node_is_sticky',
++        'Node is sticky',
++        ['context[node][setting]' => 'anything'],
++      ],
++      'Node is Type' => [
++        'rules_node_is_of_type',
++        'Node is of type',
++        ['context[node][setting]' => 'something', 'edit-context-types-setting' => 'article'],
++      ],
++      // Path.
++      'Path alias exists' => [
++        'rules_path_alias_exists',
++        'Path alias exists',
++        ['context[alias][setting]' => 'something'],
++        ['context[language][setting]' => 'something'],
++      ],
++      'Path has alias' => [
++        'rules_path_has_alias',
++        'Path has alias',
++        ['context[path][setting]' => 'something'],
++        ['context[language][setting]' => 'something'],
++      ],
++      // User.
++      'User has entity field access' => [
++        'rules_entity_field_access',
++        'User has entity field access', [
++          'context[entity][setting]' => 'something',
++          'context[field][setting]' => 'mail',
++          'context[user][setting]' => 'someone',
++        ],
++        ['context[operation][setting]' => 'view'],
++      ],
++      'User has role' => [
++        'rules_user_has_role',
++        'User has role',
++        ['context[user][setting]' => 'someone', 'context[roles][setting][]' => 'authenticated'],
++        ['operation' => 'AND'],
++      ],
++      'User is blocked' => [
++        'rules_user_is_blocked',
++        'User is blocked',
++        ['context[user][setting]' => 'someone'],
++      ],
++    ];
++  }
++
++  /**
++   * Test to add each action provided by Rules.
++   *
++   * @param string $id
++   *   The id of the action.
++   * @param string $label
++   *   The label of the acition.
++   * @param array $required
++   *   Array of fields to fill. The key is form field name and the value is the
++   *   text to fill into the field. This should hold just the fields which are
++   *   required and do not have any default value. Use an empty array if there
++   *   are no fields or all fields have a default.
++   * @param array $defaults
++   *   Array of defaults which should be stored without having to select the
++   *   value in the form.
++   *
++   * @dataProvider dataAddActions()
++   */
++  public function testAddActions($id, $label, array $required = [], array $defaults = []) {
++    $agr = print_r($this->account->getRoles(), TRUE);
++    $urn = print_r(user_role_names(TRUE), TRUE);
++    $this->createRule('Add action ' . $id, 'test_rule', 'rules_entity_presave:node', "Add condition $label id=$id\naccount->getRoles() = " . $agr . "\nuser_role_names = " . $urn);
++    $this->clickLink('Add action');
++    $this->fillField('Action', $id);
++    $this->pressButton('Continue');
++
++    // Save the form. If $required is not empty then we should get error(s) so
++    // verify this, then fill in the specified fileds and try to save again.
++    $this->pressButton('Save');
++    if (!empty($required)) {
++      // Check that an error message is shown.
++      $this->assertSession()->pageTextContains('Error message');
++      // Fill in the required fields.
++      foreach ($required as $field => $value) {
++        $this->fillField($field, $value);
++      }
++      $this->pressButton('Save');
++    }
++
++    // Assert that the rule has saved correctly with no error message.
++    $this->assertSession()->pageTextNotContains('Error message');
++    $this->assertSession()->pageTextContains('Edit reaction rule "Add action ' . $id . '"');
++    $this->assertSession()->pageTextContains('Action: ' . $label);
++    // @todo - check that all values ($required and $defaults) have been stored.
++  }
++
++  /**
++   * Provides data for testAddActions().
++   *
++   * @return array
++   *   The test data.
++   */
++  public function dataAddActions() {
++    return [
++
++    /* rules_ban_ip fails interactively and in tests with same error:
++       You have requested a non-existent service "request".
++       @see https://www.drupal.org/project/rules/issues/2922804
++       The test data can be uncommented when this issue has been fixed.
++     */
++    /*
++      'Ban ip address' => [
++        'rules_ban_ip',
++        'Ban an IP address',
++        [],
++        ['context[ip][setting]' => ''],
++      ],
++     */
++
++    /* rules_entity_create:comment fails interactively and in tests with error:
++       PluginNotFoundException: The "entity:comment:x" plugin does not exist.
++       All values fails.
++      'Add Comment' => [
++        'rules_entity_create:comment',
++        'Create Comment',
++        ['context[comment_type][setting]' => 'x',
++         'context[entity_id][setting]' => '5']
++      ],
++     */
++      // Content.
++      'Add node' => [
++        'rules_entity_create:node',
++        'Create a new content',
++        ['context[type][setting]' => 'article', 'context[title][setting]' => 'Cakes'],
++      ],
++      // System.
++      'Display system message' => [
++        'rules_system_message',
++        'Show a message on the site',
++        ['context[message][setting]' => 'Here is the news', 'context[type][setting]' => 'status'],
++        ['context[repeat][setting]' => 'no'],
++      ],
++      // User.
++      'User - Add Role' => [
++        'rules_user_role_add',
++        'Add user role',
++        ['context[user][setting]' => 'someone', 'context[roles][setting][]' => 'authenticated'],
++      ],
++      'User - Block' => [
++        'rules_user_block',
++        'Block a user',
++        ['context[user][setting]' => 'someone'],
++      ],
++      'User - Remove Role' => [
++        'rules_user_role_remove',
++        'Remove user role',
++        ['context[user][setting]' => 'someone', 'context[roles][setting][]' => 'authenticated'],
++      ],
++
++    ];
++  }
++
+ }

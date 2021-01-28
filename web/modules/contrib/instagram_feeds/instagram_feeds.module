@@ -1,0 +1,65 @@
+<?php
+
+/**
+ * @file
+ * Hooks and custom functions for instagram_feeds module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_help().
+ */
+function instagram_feeds_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.instagram_feeds':
+      $element = _instagram_feeds_api_help();
+      $element['#open'] = TRUE;
+      return $element;
+
+    case 'instagram_feeds.settings':
+      return _instagram_feeds_api_help();
+  }
+}
+
+/**
+ * Implements hook_cron().
+ */
+function instagram_feeds_cron() {
+  /** @var Drupal\instagram_feeds\CronHandler $cron_handler */
+  $cron_handler = Drupal::service('instagram_feeds.cron_handler');
+  $cron_handler->refreshTokens()->importInstagramPosts();
+}
+
+/**
+ * Helper function to return the module help render array.
+ *
+ * @return array
+ *   Render array with module help information.
+ */
+function _instagram_feeds_api_help() : array {
+  $element = [
+    '#type' => 'details',
+    '#title' => t('Instagram App Details'),
+  ];
+  $element['redirect_uri'] = [
+    '#type' => 'item',
+    '#title' => t('Valid OAuth Redirect URI'),
+    '#markup' => Url::fromRoute('entity.instagram_account.add_form', [], ['https' => TRUE])->setAbsolute()->toString(),
+  ];
+  $link = [
+    '#type' => 'link',
+    '#title' => t('Facebook Apps page'),
+    '#url' => Url::fromUri('https://developers.facebook.com/apps/'),
+    '#attributes' => [
+      'target' => '_blank',
+    ],
+  ];
+  $element['fb_app_page'] = [
+    '#type' => 'item',
+    '#title' => t('Facebook Apps page'),
+    '#markup' => \Drupal::service('renderer')->render($link),
+  ];
+  return $element;
+}

@@ -1,0 +1,33 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.post_other
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - views
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: views_block__post_other_block_7
+theme: gavias_colin
+region: footer_four
+weight: 0
+provider: null
+plugin: 'views_block:post_other-block_7'
+settings:
+  id: 'views_block:post_other-block_7'
+  label: ''
+  provider: views
+  label_display: visible
+  views_label: ''
+  items_per_page: none
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    block_visibility_group: ''
+    context_mapping: {  }

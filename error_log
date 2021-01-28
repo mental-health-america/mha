@@ -1,0 +1,10 @@
+[06-Jan-2020 20:21:38 UTC] PHP Fatal error:  Allowed memory size of 2097152 bytes exhausted (tried to allocate 65536 bytes) in /home/mhanational/drupal/vendor/drush/drush/src/Preflight/LegacyPreflight.php on line 138
+[06-Jan-2020 20:21:58 UTC] PHP Fatal error:  Allowed memory size of 2097152 bytes exhausted (tried to allocate 65536 bytes) in /home/mhanational/drupal/vendor/drush/drush/src/Preflight/LegacyPreflight.php on line 138
+[06-Jan-2020 22:49:43 UTC] PHP Fatal error:  Allowed memory size of 2097152 bytes exhausted (tried to allocate 65536 bytes) in /home/mhanational/drupal/vendor/drush/drush/src/Preflight/LegacyPreflight.php on line 138
+[18-Nov-2020 15:26:29 UTC] PHP Warning:  exec() has been disabled for security reasons in /home/mhanational/drupal/vendor/drush/drush/src/Config/Environment.php on line 458
+[18-Nov-2020 20:12:32 UTC] PHP Warning:  exec() has been disabled for security reasons in /home/mhanational/drupal/vendor/drush/drush/src/Config/Environment.php on line 458
+[18-Nov-2020 20:15:33 UTC] PHP Warning:  exec() has been disabled for security reasons in /home/mhanational/drupal/vendor/drush/drush/src/Config/Environment.php on line 458
+[18-Nov-2020 20:15:52 UTC] PHP Warning:  exec() has been disabled for security reasons in /home/mhanational/drupal/vendor/drush/drush/src/Config/Environment.php on line 458
+[19-Nov-2020 13:47:39 UTC] PHP Warning:  exec() has been disabled for security reasons in /home/mhanational/drupal/vendor/drush/drush/src/Config/Environment.php on line 458
+[19-Nov-2020 14:29:59 UTC] PHP Warning:  exec() has been disabled for security reasons in /home/mhanational/drupal/vendor/drush/drush/src/Config/Environment.php on line 458
+[19-Nov-2020 19:04:13 UTC] PHP Warning:  exec() has been disabled for security reasons in /home/mhanational/drupal/vendor/drush/drush/src/Config/Environment.php on line 458

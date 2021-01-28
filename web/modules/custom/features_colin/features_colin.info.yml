@@ -1,0 +1,35 @@
+name: 'Features Colin'
+description: 'Features Colin - Import content type, field, view ... for Colin theme'
+type: module
+core: 8.x
+dependencies:
+  - block
+  - block_content
+  - block_visibility_groups
+  - comment
+  - ctools
+  - datetime
+  - field
+  - file
+  - gavias_content_builder
+  - gavias_view
+  - gaviasthemer
+  - image
+  - imce
+  - menu_ui
+  - node
+  - options
+  - path
+  - pathauto
+  - rdf
+  - simplenews
+  - system
+  - taxonomy
+  - text
+  - user
+  - views
+  - views_infinite_scroll
+  - webform
+  - config_update
+  - features
+version: 8.x-1.0

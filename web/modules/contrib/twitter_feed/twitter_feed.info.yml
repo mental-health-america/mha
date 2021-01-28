@@ -1,0 +1,13 @@
+name: Twitter Feed
+type: module
+description: Displays a list of tweets on a block
+# core: 8.x
+package: Social
+dependencies:
+  - block
+
+# Information added by Drupal.org packaging script on 2018-03-31
+version: '8.x-1.3'
+core: '8.x'
+project: 'twitter_feed'
+datestamp: 1522494188
