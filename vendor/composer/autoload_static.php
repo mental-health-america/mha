@@ -63,6 +63,7 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
         array (
             'Zumba\\Mink\\Driver\\' => 18,
             'Zumba\\GastonJS\\' => 15,
+            'ZipStream\\' => 10,
         ),
         'X' => 
         array (
@@ -91,6 +92,7 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
             'Symfony\\Polyfill\\Intl\\Idn\\' => 26,
             'Symfony\\Polyfill\\Iconv\\' => 23,
             'Symfony\\Polyfill\\Ctype\\' => 23,
+            'Symfony\\Contracts\\EventDispatcher\\' => 34,
             'Symfony\\Component\\Yaml\\' => 23,
             'Symfony\\Component\\VarDumper\\' => 28,
             'Symfony\\Component\\Validator\\' => 28,
@@ -116,6 +118,7 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
             'Symfony\\Bridge\\PsrHttpMessage\\' => 30,
             'Symfony\\Bridge\\PhpUnit\\' => 23,
             'Stecman\\Component\\Symfony\\Console\\BashCompletion\\' => 49,
+            'Solarium\\' => 9,
             'Shapefile\\' => 10,
             'SelfUpdate\\' => 11,
             'Seld\\PharUtils\\' => 15,
@@ -130,6 +133,8 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
             'Psy\\' => 4,
             'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
+            'Psr\\Http\\Client\\' => 16,
+            'Psr\\EventDispatcher\\' => 20,
             'Psr\\Container\\' => 14,
             'Prophecy\\' => 9,
             'PhpParser\\' => 10,
@@ -137,6 +142,7 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
         ),
         'M' => 
         array (
+            'MyCLabs\\Enum\\' => 13,
             'MathieuViossat\\Util\\' => 20,
             'Masterminds\\' => 12,
         ),
@@ -254,6 +260,10 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
         array (
             0 => __DIR__ . '/..' . '/jcalderonzumba/gastonjs/src',
         ),
+        'ZipStream\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/maennchen/zipstream-php/src',
+        ),
         'XdgBaseDir\\' => 
         array (
             0 => __DIR__ . '/..' . '/dnoegel/php-xdg-base-dir/src',
@@ -305,6 +315,10 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
         'Symfony\\Polyfill\\Ctype\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
+        ),
+        'Symfony\\Contracts\\EventDispatcher\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/event-dispatcher-contracts',
         ),
         'Symfony\\Component\\Yaml\\' => 
         array (
@@ -406,6 +420,10 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
         array (
             0 => __DIR__ . '/..' . '/stecman/symfony-console-completion/src',
         ),
+        'Solarium\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/solarium/solarium/src',
+        ),
         'Shapefile\\' => 
         array (
             0 => __DIR__ . '/..' . '/gasparesganga/php-shapefile/src/Shapefile',
@@ -436,7 +454,16 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
+        ),
+        'Psr\\Http\\Client\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/http-client/src',
+        ),
+        'Psr\\EventDispatcher\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/event-dispatcher/src',
         ),
         'Psr\\Container\\' => 
         array (
@@ -454,6 +481,10 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
         array (
             0 => __DIR__ . '/..' . '/mglaman/phpstan-drupal/src',
             1 => __DIR__ . '/..' . '/phpstan/phpstan-deprecation-rules/src',
+        ),
+        'MyCLabs\\Enum\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/myclabs/php-enum/src',
         ),
         'MathieuViossat\\Util\\' => 
         array (

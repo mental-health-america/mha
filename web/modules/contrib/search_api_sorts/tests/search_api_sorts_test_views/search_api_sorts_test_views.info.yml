@@ -4,14 +4,12 @@ description: 'Support module for Search API sorts Views tests'
 package: Search
 dependencies:
   - search_api:search_api
-  - search_api:search_api_test_db
   - drupal:node
   - drupal:views
-# core: 8.x
+core_version_requirement: ^8.8 || ^9
 hidden: true
 
-# Information added by Drupal.org packaging script on 2017-04-18
-version: '8.x-1.0-beta1'
-core: '8.x'
+# Information added by Drupal.org packaging script on 2020-09-11
+version: '8.x-1.0'
 project: 'search_api_sorts'
-datestamp: 1492501754
+datestamp: 1599830575

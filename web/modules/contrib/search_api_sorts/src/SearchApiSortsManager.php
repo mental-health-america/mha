@@ -2,10 +2,12 @@
 
 namespace Drupal\search_api_sorts;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\search_api\Display\DisplayInterface;
+use Drupal\search_api\Display\DisplayPluginManagerInterface;
+use Drupal\search_api\IndexInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
  * Manages search api sorts.
@@ -21,18 +23,25 @@ class SearchApiSortsManager implements SearchApiSortsManagerInterface {
   protected $currentRequest;
 
   /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
    * The module handler.
    *
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
   protected $moduleHandler;
+
+  /**
+   * The search api sorts field storage.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected $searchApiSortsFieldStorage;
+
+  /**
+   * The search api display manager.
+   *
+   * @var \Drupal\search_api\Display\DisplayPluginManagerInterface
+   */
+  protected $searchApiDisplayManager;
 
   /**
    * SearchApiSortsManager constructor.
@@ -43,11 +52,14 @@ class SearchApiSortsManager implements SearchApiSortsManagerInterface {
    *   The entity type manager.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
+   * @param \Drupal\search_api\Display\DisplayPluginManagerInterface $searchApiDisplayManager
+   *   The search api display manager.
    */
-  public function __construct(RequestStack $request_stack, EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler) {
+  public function __construct(RequestStack $request_stack, EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler, DisplayPluginManagerInterface $searchApiDisplayManager) {
     $this->currentRequest = $request_stack->getCurrentRequest();
-    $this->entityTypeManager = $entity_type_manager;
+    $this->searchApiSortsFieldStorage = $entity_type_manager->getStorage('search_api_sorts_field');
     $this->moduleHandler = $module_handler;
+    $this->searchApiDisplayManager = $searchApiDisplayManager;
   }
 
   /**
@@ -68,9 +80,25 @@ class SearchApiSortsManager implements SearchApiSortsManagerInterface {
    * {@inheritdoc}
    */
   public function getEnabledSorts(DisplayInterface $display) {
-    return $this->entityTypeManager
-      ->getStorage('search_api_sorts_field')
-      ->loadByProperties(['status' => TRUE, 'display_id' => $this->getEscapedConfigId($display->getPluginId())]);
+    return $this->searchApiSortsFieldStorage->loadByProperties([
+      'status' => TRUE,
+      'display_id' => $this->getEscapedConfigId($display->getPluginId()),
+    ]);
+  }
+
+  /**
+   * Returns all sort fields for a given search api display.
+   *
+   * @param \Drupal\search_api\Display\DisplayInterface $display
+   *   The display where the sorts should be returned for.
+   *
+   * @return \Drupal\Core\Entity\EntityInterface[]
+   *   An array containing sort fields for the given search display/
+   */
+  protected function getSorts(DisplayInterface $display) {
+    return $this->searchApiSortsFieldStorage->loadByProperties([
+      'display_id' => $this->getEscapedConfigId($display->getPluginId()),
+    ]);
   }
 
   /**
@@ -88,9 +116,25 @@ class SearchApiSortsManager implements SearchApiSortsManagerInterface {
     }
 
     // Allow altering the default sort.
-    \Drupal::moduleHandler()->alter('search_api_sorts_default_sort', $default_sort, $display);
+    $this->moduleHandler->alter('search_api_sorts_default_sort', $default_sort, $display);
 
     return $default_sort;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function cleanupSortFields(IndexInterface $index) {
+    foreach ($this->searchApiDisplayManager->getInstances() as $display) {
+      if ($display->getIndex() instanceof IndexInterface && $index->id() === $display->getIndex()->id()) {
+        foreach ($this->getSorts($display) as $search_api_sorts_field) {
+          $field = $index->getField($search_api_sorts_field->getFieldIdentifier());
+          if ($field === NULL) {
+            $search_api_sorts_field->delete();
+          }
+        }
+      }
+    }
   }
 
 }

@@ -3,9 +3,14 @@
 namespace Drupal\search_api_sorts\Form;
 
 use Drupal\Component\Utility\Html;
-use Drupal\Core\Form\FormBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\Url;
+use Drupal\search_api\Display\DisplayPluginManagerInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api_sorts\ConfigIdEscapeTrait;
 use Drupal\search_api_sorts\Entity\SearchApiSortsField;
@@ -16,6 +21,27 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class ManageSortFieldsForm extends FormBase {
   use ConfigIdEscapeTrait;
+
+  /**
+   * The search_api display plugin manager.
+   *
+   * @var \Drupal\search_api\Display\DisplayPluginManagerInterface
+   */
+  protected $displayPluginManager;
+
+  /**
+   * The language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
 
   /**
    * The search api sorts field storage.
@@ -41,10 +67,19 @@ class ManageSortFieldsForm extends FormBase {
   /**
    * Constructs the DisplaySortsForm object.
    *
+   * @param \Drupal\search_api\Display\DisplayPluginManagerInterface $display_plugin_manager
+   *   The search_api display plugin manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity manager.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
+   *   The language manager.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
+   *   The module handler.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(DisplayPluginManagerInterface $display_plugin_manager, EntityTypeManagerInterface $entity_type_manager, LanguageManagerInterface $languageManager, ModuleHandlerInterface $moduleHandler) {
+    $this->displayPluginManager = $display_plugin_manager;
+    $this->languageManager = $languageManager;
+    $this->moduleHandler = $moduleHandler;
     $this->searchApiSortsFieldStorage = $entity_type_manager->getStorage('search_api_sorts_field');
   }
 
@@ -53,7 +88,10 @@ class ManageSortFieldsForm extends FormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('entity_type.manager')
+      $container->get('plugin.manager.search_api.display'),
+      $container->get('entity_type.manager'),
+      $container->get('language_manager'),
+      $container->get('module_handler')
     );
   }
 
@@ -68,14 +106,12 @@ class ManageSortFieldsForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state, IndexInterface $search_api_index = NULL, $search_api_display = NULL) {
-
     $original_search_api_display = $this->getOriginalConfigId($search_api_display);
-    $display_plugin_manager = \Drupal::service('plugin.manager.search_api.display');
-    $this->display = $display_plugin_manager->createInstance($original_search_api_display);
+    $this->display = $this->displayPluginManager->createInstance($original_search_api_display);
     $this->index = $search_api_index;
 
     if ($disabled = empty($this->index->status())) {
-      drupal_set_message($this->t('Since the index for this display is at the moment disabled, no sorts can be activated.'), 'warning');
+      $this->messenger()->addWarning($this->t('Since the index for this display is at the moment disabled, no sorts can be activated.'));
     }
 
     $form['#title'] = $this->t('Manage sort fields for %label', ['%label' => $this->display->label()]);
@@ -86,17 +122,31 @@ class ManageSortFieldsForm extends FormBase {
       '#description' => $this->t('<p>Only index single-value strings or numbers can be used as sorts. See the Fields tab to change indexed fields.</p>'),
     ];
 
+    if ($this->languageManager->getDefaultLanguage()->getId() !== $this->languageManager->getCurrentLanguage()->getId()) {
+      $form['translation_message'] = [
+        '#theme' => 'status_messages',
+        '#message_list' => [MessengerInterface::TYPE_WARNING => [$this->t('You are currently editing the %language version of the search api sorts fields.', ['%language' => $this->languageManager->getDefaultLanguage()->getName()])]],
+      ];
+    }
+
+    $header = [
+      $this->t('Weight'),
+      $this->t('Enabled'),
+      $this->t('Default sort'),
+      $this->t('Default order'),
+      $this->t('Field'),
+      $this->t('Type'),
+      $this->t('Label'),
+    ];
+
+    $sort_fields_are_translatable = $this->moduleHandler->moduleExists('config_translation') && $this->languageManager->isMultilingual();
+    if ($sort_fields_are_translatable) {
+      $header[] = $this->t('Translate');
+    }
+
     $form['sorts'] = [
       '#type' => 'table',
-      '#header' => [
-        $this->t('Weight'),
-        $this->t('Enabled'),
-        $this->t('Default sort'),
-        $this->t('Default order'),
-        $this->t('Field'),
-        $this->t('Type'),
-        $this->t('Label'),
-      ],
+      '#header' => $header,
       '#tabledrag' => [
         [
           'action' => 'order',
@@ -128,7 +178,7 @@ class ManageSortFieldsForm extends FormBase {
         '#type' => 'radio',
         '#return_value' => $key,
         '#tree' => FALSE,
-        '#default_value' => $field['default_sort'],
+        '#default_value' => $field['default_sort'] === TRUE ? $key : NULL,
         '#states' => [
           'enabled' => [
             ':input[name="sorts[' . $key . '][status]"]' => ['checked' => TRUE],
@@ -160,6 +210,13 @@ class ManageSortFieldsForm extends FormBase {
         '#size' => 30,
         '#default_value' => $field['label'],
       ];
+      if ($sort_fields_are_translatable && $field['status'] === TRUE) {
+        $form['sorts'][$key]['translate'] = [
+          '#type' => 'link',
+          '#title' => $this->t('Translate'),
+          '#url' => Url::fromRoute('entity.search_api_sorts_field.config_translation_overview', ['search_api_sorts_field' => $this->getEscapedConfigId($this->display->getPluginId()) . '_' . $key]),
+        ];
+      }
     }
 
     $form['submit'] = [
@@ -229,7 +286,7 @@ class ManageSortFieldsForm extends FormBase {
    * @param array $fields
    *   An array of fields, filled with data from the index.
    */
-  private function fillSearchApiSortsFieldsValues(&$fields) {
+  private function fillSearchApiSortsFieldsValues(array &$fields) {
     $search_api_sorts_fields = $this->searchApiSortsFieldStorage->loadByProperties(['display_id' => $this->getEscapedConfigId($this->display->getPluginId())]);
     foreach ($search_api_sorts_fields as $search_api_sorts_field) {
       if (isset($fields[$search_api_sorts_field->getFieldIdentifier()])) {
@@ -271,24 +328,38 @@ class ManageSortFieldsForm extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $search_api_sorts_fields = $this->searchApiSortsFieldStorage->loadByProperties(['display_id' => $this->getEscapedConfigId($this->display->getPluginId())]);
     foreach ($form_state->getValue('sorts') as $key => $v) {
-      if (isset($search_api_sorts_fields[$this->getEscapedConfigId($this->display->getPluginId()) . '_' . $key])) {
-        $search_api_sorts_field = $search_api_sorts_fields[$this->getEscapedConfigId($this->display->getPluginId()) . '_' . $key];
+      $config_id = $this->getEscapedConfigId($this->display->getPluginId()) . '_' . $key;
+      $search_api_sorts_field = NULL;
+      if (isset($search_api_sorts_fields[$this->getEscapedConfigId($config_id)])) {
+        // If the field sort is not enabled, delete the config if it exists.
+        if ($v['status'] == 0) {
+          $search_api_sorts_fields[$config_id]->delete();
+        }
+        else {
+          $search_api_sorts_field = $search_api_sorts_fields[$config_id];
+        }
       }
       else {
-        $search_api_sorts_field = SearchApiSortsField::create();
-        $search_api_sorts_field->set('id', $this->getEscapedConfigId($this->display->getPluginId()) . '_' . $key);
-        $search_api_sorts_field->set('field_identifier', $key);
-        $search_api_sorts_field->set('display_id', $this->getEscapedConfigId($this->display->getPluginId()));
+        // Create configs only for enabled sort fields.
+        if ($v['status'] == 1) {
+          $search_api_sorts_field = SearchApiSortsField::create(['langcode' => $this->languageManager->getDefaultLanguage()->getId()]);
+          $search_api_sorts_field->set('id', $config_id);
+          $search_api_sorts_field->set('field_identifier', $key);
+          $search_api_sorts_field->set('display_id', $this->getEscapedConfigId($this->display->getPluginId()));
+        }
       }
-
-      $search_api_sorts_field->set('status', $v['status']);
-      $search_api_sorts_field->set('default_sort', $form_state->getValue('default_sort') == $key);
-      $search_api_sorts_field->set('default_order', $v['default_order']);
-      $search_api_sorts_field->set('label', $v['label']);
-      $search_api_sorts_field->set('weight', $v['weight']);
-      $search_api_sorts_field->save();
+      // Set all fields from the form to enabled configs only and save the
+      // config.
+      if ($v['status'] == 1) {
+        $search_api_sorts_field->set('status', $v['status']);
+        $search_api_sorts_field->set('default_sort', $form_state->getValue('default_sort') == $key);
+        $search_api_sorts_field->set('default_order', $v['default_order']);
+        $search_api_sorts_field->set('label', $v['label']);
+        $search_api_sorts_field->set('weight', $v['weight']);
+        $search_api_sorts_field->save();
+      }
     }
-    drupal_set_message($this->t('The changes were successfully saved.'));
+    $this->messenger()->addStatus($this->t('The changes were successfully saved.'));
   }
 
 }
