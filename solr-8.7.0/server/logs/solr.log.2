@@ -1,128 +1,89 @@
-2021-01-28 21:54:02.662 INFO  (main) [   ] o.e.j.u.log Logging initialized @787ms to org.eclipse.jetty.util.log.Slf4jLog
-2021-01-28 21:54:02.709 WARN  (main) [   ] o.e.j.x.XmlConfiguration Ignored arg: <Arg name="threadpool">
+2021-01-31 19:48:29.126 INFO  (main) [   ] o.e.j.u.log Logging initialized @1027ms to org.eclipse.jetty.util.log.Slf4jLog
+2021-01-31 19:48:29.182 WARN  (main) [   ] o.e.j.x.XmlConfiguration Ignored arg: <Arg name="threadpool">
     <New id="threadpool" class="com.codahale.metrics.jetty9.InstrumentedQueuedThreadPool"><Arg name="registry">
         <Call id="solrJettyMetricRegistry" name="getOrCreate" class="com.codahale.metrics.SharedMetricRegistries"><Arg>solr.jetty</Arg></Call>
       </Arg></New>
   </Arg>
-2021-01-28 21:54:02.791 INFO  (main) [   ] o.e.j.s.Server jetty-9.4.27.v20200227; built: 2020-02-27T18:37:21.340Z; git: a304fd9f351f337e7c0e2a7c28878dd536149c6c; jvm 15.0.1+9
-2021-01-28 21:54:02.803 INFO  (main) [   ] o.e.j.d.p.ScanningAppProvider Deployment monitor [file:///Users/bradleywaye/Sites/local.staging.mhanational.org/solr-8.7.0/server/contexts/] at interval 0
-2021-01-28 21:54:03.125 INFO  (main) [   ] o.e.j.w.StandardDescriptorProcessor NO JSP Support for /solr, did not find org.apache.jasper.servlet.JspServlet
-2021-01-28 21:54:03.135 INFO  (main) [   ] o.e.j.s.session DefaultSessionIdManager workerName=node0
-2021-01-28 21:54:03.135 INFO  (main) [   ] o.e.j.s.session No SessionScavenger set, using defaults
-2021-01-28 21:54:03.137 INFO  (main) [   ] o.e.j.s.session node0 Scavenging every 660000ms
-2021-01-28 21:54:03.197 INFO  (main) [   ] o.a.s.s.SolrDispatchFilter Using logger factory org.apache.logging.slf4j.Log4jLoggerFactory
-2021-01-28 21:54:03.203 INFO  (main) [   ] o.a.s.s.SolrDispatchFilter  ___      _       Welcome to Apache Solr™ version 8.7.0
-2021-01-28 21:54:03.203 INFO  (main) [   ] o.a.s.s.SolrDispatchFilter / __| ___| |_ _   Starting in standalone mode on port 8983
-2021-01-28 21:54:03.203 INFO  (main) [   ] o.a.s.s.SolrDispatchFilter \__ \/ _ \ | '_|  Install dir: /Users/bradleywaye/Sites/local.staging.mhanational.org/solr
-2021-01-28 21:54:03.203 INFO  (main) [   ] o.a.s.s.SolrDispatchFilter |___/\___/_|_|    Start time: 2021-01-28T21:54:03.203592Z
-2021-01-28 21:54:03.220 INFO  (main) [   ] o.a.s.c.SolrPaths Using system property solr.solr.home: /Users/bradleywaye/Sites/local.staging.mhanational.org/solr/server/solr
-2021-01-28 21:54:03.225 INFO  (main) [   ] o.a.s.c.SolrXmlConfig Loading container configuration from /Users/bradleywaye/Sites/local.staging.mhanational.org/solr/server/solr/solr.xml
-2021-01-28 21:54:03.318 INFO  (main) [   ] o.a.s.c.SolrXmlConfig MBean server found: com.sun.jmx.mbeanserver.JmxMBeanServer@53fb3dab, but no JMX reporters were configured - adding default JMX reporter.
-2021-01-28 21:54:03.676 INFO  (main) [   ] o.a.s.h.c.HttpShardHandlerFactory Host whitelist initialized: WhitelistHostChecker [whitelistHosts=null, whitelistHostCheckingEnabled=true]
-2021-01-28 21:54:03.831 WARN  (main) [   ] o.e.j.u.s.S.config Trusting all certificates configured for Client@38c2c309[provider=null,keyStore=null,trustStore=null]
-2021-01-28 21:54:03.831 WARN  (main) [   ] o.e.j.u.s.S.config No Client EndPointIdentificationAlgorithm configured for Client@38c2c309[provider=null,keyStore=null,trustStore=null]
-2021-01-28 21:54:03.965 WARN  (main) [   ] o.e.j.u.s.S.config Trusting all certificates configured for Client@34f392be[provider=null,keyStore=null,trustStore=null]
-2021-01-28 21:54:03.965 WARN  (main) [   ] o.e.j.u.s.S.config No Client EndPointIdentificationAlgorithm configured for Client@34f392be[provider=null,keyStore=null,trustStore=null]
-2021-01-28 21:54:04.013 INFO  (main) [   ] o.a.s.c.CoreContainer Initializing authorization plugin: solr.RuleBasedAuthorizationPlugin
-2021-01-28 21:54:04.019 INFO  (main) [   ] o.a.s.c.CoreContainer Initializing authentication plugin: solr.BasicAuthPlugin
-2021-01-28 21:54:04.108 INFO  (main) [   ] o.a.s.c.TransientSolrCoreCacheDefault Allocating transient cache for 2147483647 transient cores
-2021-01-28 21:54:04.110 INFO  (main) [   ] o.a.s.h.a.MetricsHistoryHandler No .system collection, keeping metrics history in memory.
-2021-01-28 21:54:04.161 INFO  (main) [   ] o.a.s.m.r.SolrJmxReporter JMX monitoring for 'solr.node' (registry 'solr.node') enabled at server: com.sun.jmx.mbeanserver.JmxMBeanServer@53fb3dab
-2021-01-28 21:54:04.161 INFO  (main) [   ] o.a.s.m.r.SolrJmxReporter JMX monitoring for 'solr.jvm' (registry 'solr.jvm') enabled at server: com.sun.jmx.mbeanserver.JmxMBeanServer@53fb3dab
-2021-01-28 21:54:04.164 INFO  (main) [   ] o.a.s.m.r.SolrJmxReporter JMX monitoring for 'solr.jetty' (registry 'solr.jetty') enabled at server: com.sun.jmx.mbeanserver.JmxMBeanServer@53fb3dab
-2021-01-28 21:54:04.191 INFO  (main) [   ] o.a.s.c.CorePropertiesLocator Found 2 core definitions underneath /Users/bradleywaye/Sites/local.staging.mhanational.org/solr/server/solr
-2021-01-28 21:54:04.192 INFO  (main) [   ] o.a.s.c.CorePropertiesLocator Cores are: [mha, staging]
-2021-01-28 21:54:04.225 INFO  (coreLoadExecutor-13-thread-2) [   x:staging] o.a.s.c.SolrConfig Using Lucene MatchVersion: 8.7.0
-2021-01-28 21:54:04.230 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.c.SolrResourceLoader Added 64 libs to classloader, from paths: [/Users/bradleywaye/Sites/local.staging.mhanational.org/solr/contrib/analysis-extras/lib, /Users/bradleywaye/Sites/local.staging.mhanational.org/solr/contrib/analysis-extras/lucene-libs, /Users/bradleywaye/Sites/local.staging.mhanational.org/solr/contrib/extraction/lib, /Users/bradleywaye/Sites/local.staging.mhanational.org/solr/contrib/langid/lib, /Users/bradleywaye/Sites/local.staging.mhanational.org/solr/dist]
-2021-01-28 21:54:04.239 INFO  (main) [   ] o.e.j.s.h.ContextHandler Started o.e.j.w.WebAppContext@75ed9710{/solr,file:///Users/bradleywaye/Sites/local.staging.mhanational.org/solr-8.7.0/server/solr-webapp/webapp/,AVAILABLE}{/Users/bradleywaye/Sites/local.staging.mhanational.org/solr-8.7.0/server/solr-webapp/webapp}
-2021-01-28 21:54:04.245 INFO  (main) [   ] o.e.j.s.AbstractConnector Started ServerConnector@46268f08{HTTP/1.1, (http/1.1, h2c)}{0.0.0.0:8983}
-2021-01-28 21:54:04.246 INFO  (main) [   ] o.e.j.s.Server Started @2372ms
-2021-01-28 21:54:04.321 INFO  (coreLoadExecutor-13-thread-2) [   x:staging] o.a.s.s.IndexSchema Schema name=default-config
-2021-01-28 21:54:04.522 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.c.SolrConfig Using Lucene MatchVersion: 8.7.0
-2021-01-28 21:54:04.536 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.u.SolrIndexConfig IndexWriter infoStream solr logging is enabled
-2021-01-28 21:54:04.574 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.s.IndexSchema Schema name=drupal-4.1.1-solr-8.x-0
-2021-01-28 21:54:04.842 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.s.IndexSchema Loaded schema drupal-4.1.1-solr-8.x-0/1.6 with uniqueid field id
-2021-01-28 21:54:04.865 INFO  (coreLoadExecutor-13-thread-2) [   x:staging] o.a.s.s.IndexSchema Loaded schema default-config/1.6 with uniqueid field id
-2021-01-28 21:54:04.872 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.c.CoreContainer Creating SolrCore 'mha' using configuration from instancedir /Users/bradleywaye/Sites/local.staging.mhanational.org/solr/server/solr/mha, trusted=true
-2021-01-28 21:54:04.896 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.m.r.SolrJmxReporter JMX monitoring for 'solr.core.mha' (registry 'solr.core.mha') enabled at server: com.sun.jmx.mbeanserver.JmxMBeanServer@53fb3dab
-2021-01-28 21:54:04.900 INFO  (coreLoadExecutor-13-thread-2) [   x:staging] o.a.s.c.CoreContainer Creating SolrCore 'staging' using configuration from instancedir /Users/bradleywaye/Sites/local.staging.mhanational.org/solr/server/solr/staging, trusted=true
-2021-01-28 21:54:04.901 INFO  (coreLoadExecutor-13-thread-2) [   x:staging] o.a.s.m.r.SolrJmxReporter JMX monitoring for 'solr.core.staging' (registry 'solr.core.staging') enabled at server: com.sun.jmx.mbeanserver.JmxMBeanServer@53fb3dab
-2021-01-28 21:54:04.912 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.c.SolrCore [[mha] ] Opening new SolrCore at [/Users/bradleywaye/Sites/local.staging.mhanational.org/solr/server/solr/mha], dataDir=[/Users/bradleywaye/Sites/local.staging.mhanational.org/solr/server/solr/mha/data/]
-2021-01-28 21:54:04.912 INFO  (coreLoadExecutor-13-thread-2) [   x:staging] o.a.s.c.SolrCore [[staging] ] Opening new SolrCore at [/Users/bradleywaye/Sites/local.staging.mhanational.org/solr/server/solr/staging], dataDir=[/Users/bradleywaye/Sites/local.staging.mhanational.org/solr/server/solr/staging/data/]
-2021-01-28 21:54:04.954 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.r.XSLTResponseWriter xsltCacheLifetimeSeconds=5
-2021-01-28 21:54:05.289 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.u.UpdateHandler Using UpdateLog implementation: org.apache.solr.update.UpdateLog
-2021-01-28 21:54:05.289 INFO  (coreLoadExecutor-13-thread-2) [   x:staging] o.a.s.u.UpdateHandler Using UpdateLog implementation: org.apache.solr.update.UpdateLog
-2021-01-28 21:54:05.289 INFO  (coreLoadExecutor-13-thread-2) [   x:staging] o.a.s.u.UpdateLog Initializing UpdateLog: dataDir= defaultSyncLevel=FLUSH numRecordsToKeep=100 maxNumLogsToKeep=10 numVersionBuckets=65536
-2021-01-28 21:54:05.289 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.u.UpdateLog Initializing UpdateLog: dataDir= defaultSyncLevel=FLUSH numRecordsToKeep=100 maxNumLogsToKeep=10 numVersionBuckets=65536
-2021-01-28 21:54:05.296 INFO  (coreLoadExecutor-13-thread-2) [   x:staging] o.a.s.u.CommitTracker Hard AutoCommit: if uncommitted for 15000ms; 
-2021-01-28 21:54:05.296 INFO  (coreLoadExecutor-13-thread-2) [   x:staging] o.a.s.u.CommitTracker Soft AutoCommit: disabled
-2021-01-28 21:54:05.300 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.u.CommitTracker Hard AutoCommit: if uncommitted for 15000ms; 
-2021-01-28 21:54:05.300 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.u.CommitTracker Soft AutoCommit: disabled
-2021-01-28 21:54:05.349 INFO  (coreLoadExecutor-13-thread-2) [   x:staging] o.a.s.r.ManagedResourceStorage File-based storage initialized to use dir: /Users/bradleywaye/Sites/local.staging.mhanational.org/solr/server/solr/staging/conf
-2021-01-28 21:54:05.361 INFO  (coreLoadExecutor-13-thread-2) [   x:staging] o.a.s.h.c.SpellCheckComponent Initializing spell checkers
-2021-01-28 21:54:05.364 INFO  (coreLoadExecutor-13-thread-2) [   x:staging] o.a.s.s.DirectSolrSpellChecker init: {name=default,field=_text_,classname=solr.DirectSolrSpellChecker,distanceMeasure=internal,accuracy=0.5,maxEdits=2,minPrefix=1,maxInspections=5,minQueryLength=4,maxQueryFrequency=0.01}
-2021-01-28 21:54:05.372 INFO  (coreLoadExecutor-13-thread-2) [   x:staging] o.a.s.h.ReplicationHandler Commits will be reserved for 10000 ms
-2021-01-28 21:54:05.375 INFO  (coreLoadExecutor-13-thread-2) [   x:staging] o.a.s.u.UpdateLog Could not find max version in index or recent updates, using new clock 1690169083559936000
-2021-01-28 21:54:05.378 INFO  (searcherExecutor-17-thread-1-processing-x:staging) [   x:staging] o.a.s.c.QuerySenderListener QuerySenderListener done.
-2021-01-28 21:54:05.378 INFO  (searcherExecutor-17-thread-1-processing-x:staging) [   x:staging] o.a.s.h.c.SpellCheckComponent Loading spell index for spellchecker: default
-2021-01-28 21:54:05.383 INFO  (searcherExecutor-17-thread-1-processing-x:staging) [   x:staging] o.a.s.c.SolrCore [staging]  Registered new searcher autowarm time: 0 ms
-2021-01-28 21:54:05.403 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.r.ManagedResourceStorage File-based storage initialized to use dir: /Users/bradleywaye/Sites/local.staging.mhanational.org/solr/server/solr/mha/conf
-2021-01-28 21:54:05.403 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.h.c.SpellCheckComponent Initializing spell checkers
-2021-01-28 21:54:05.404 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.s.DirectSolrSpellChecker init: {name=en,field=spellcheck_en,classname=solr.DirectSolrSpellChecker,distanceMeasure=internal,accuracy=0.5,maxEdits=2,minPrefix=1,maxInspections=5,minQueryLength=4,maxQueryFrequency=0.01,thresholdTokenFrequency=.01,onlyMorePopular=true}
-2021-01-28 21:54:05.404 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.s.DirectSolrSpellChecker init: {name=und,field=spellcheck_und,classname=solr.DirectSolrSpellChecker,distanceMeasure=internal,accuracy=0.5,maxEdits=2,minPrefix=1,maxInspections=5,minQueryLength=4,maxQueryFrequency=0.01,thresholdTokenFrequency=.01,onlyMorePopular=true}
-2021-01-28 21:54:05.404 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.h.c.SuggestComponent Initializing SuggestComponent
-2021-01-28 21:54:05.406 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.s.s.SolrSuggester init: {name=en,lookupImpl=AnalyzingInfixLookupFactory,dictionaryImpl=DocumentDictionaryFactory,field=twm_suggest,suggestAnalyzerFieldType=text_en,contextField=sm_context_tags,buildOnCommit=true,buildOnStartup=false}
-2021-01-28 21:54:05.418 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.s.s.SolrSuggester Dictionary loaded with params: {name=en,lookupImpl=AnalyzingInfixLookupFactory,dictionaryImpl=DocumentDictionaryFactory,field=twm_suggest,suggestAnalyzerFieldType=text_en,contextField=sm_context_tags,buildOnCommit=true,buildOnStartup=false}
-2021-01-28 21:54:05.418 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.h.c.SuggestComponent Registering searcher listener for suggester: en = SuggesterListener [core=org.apache.solr.core.SolrCore@a2e7cdf, suggester=SolrSuggester [ name=en, sourceLocation=null, storeDir=, lookupImpl=AnalyzingInfixLookupFactory, dictionaryImpl=DocumentDictionaryFactory, sizeInBytes=48 ], buildOnCommit=true, buildOnOptimize=false, buildOnStartup=false, isCoreReload=false]
-2021-01-28 21:54:05.418 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.s.s.SolrSuggester init: {name=und,lookupImpl=AnalyzingInfixLookupFactory,dictionaryImpl=DocumentDictionaryFactory,field=twm_suggest,suggestAnalyzerFieldType=text_und,contextField=sm_context_tags,buildOnCommit=true,buildOnStartup=false}
-2021-01-28 21:54:05.419 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.s.s.SolrSuggester Dictionary loaded with params: {name=und,lookupImpl=AnalyzingInfixLookupFactory,dictionaryImpl=DocumentDictionaryFactory,field=twm_suggest,suggestAnalyzerFieldType=text_und,contextField=sm_context_tags,buildOnCommit=true,buildOnStartup=false}
-2021-01-28 21:54:05.419 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.h.c.SuggestComponent Registering searcher listener for suggester: und = SuggesterListener [core=org.apache.solr.core.SolrCore@a2e7cdf, suggester=SolrSuggester [ name=und, sourceLocation=null, storeDir=, lookupImpl=AnalyzingInfixLookupFactory, dictionaryImpl=DocumentDictionaryFactory, sizeInBytes=48 ], buildOnCommit=true, buildOnOptimize=false, buildOnStartup=false, isCoreReload=false]
-2021-01-28 21:54:05.420 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.h.c.QueryElevationComponent Loading QueryElevation from: /Users/bradleywaye/Sites/local.staging.mhanational.org/solr/server/solr/mha/conf/elevate.xml
-2021-01-28 21:54:05.429 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.h.ReplicationHandler Commits will be reserved for 10000 ms
-2021-01-28 21:54:05.471 INFO  (searcherExecutor-15-thread-1-processing-x:mha) [   x:mha] o.a.s.c.S.Request [mha]  webapp=null path=null params={q=static+firstSearcher+warming+in+solrconfig.xml&distrib=false&event=firstSearcher} hits=0 status=0 QTime=32
-2021-01-28 21:54:05.472 INFO  (searcherExecutor-15-thread-1-processing-x:mha) [   x:mha] o.a.s.c.QuerySenderListener QuerySenderListener done.
-2021-01-28 21:54:05.472 INFO  (searcherExecutor-15-thread-1-processing-x:mha) [   x:mha] o.a.s.h.c.SpellCheckComponent Loading spell index for spellchecker: en
-2021-01-28 21:54:05.472 INFO  (searcherExecutor-15-thread-1-processing-x:mha) [   x:mha] o.a.s.h.c.SpellCheckComponent Loading spell index for spellchecker: und
-2021-01-28 21:54:05.474 INFO  (searcherExecutor-15-thread-1-processing-x:mha) [   x:mha] o.a.s.c.SolrCore [mha]  Registered new searcher autowarm time: 0 ms
-2021-01-28 21:54:19.642 INFO  (qtp1845623216-53) [   ] o.a.s.s.HttpSolrCall [admin] webapp=null path=/admin/cores params={indexInfo=false&wt=json&_=1611870846257} status=0 QTime=1
-2021-01-28 21:54:19.646 INFO  (qtp1845623216-26) [   ] o.a.s.s.HttpSolrCall [admin] webapp=null path=/admin/info/system params={wt=json&_=1611870846257} status=0 QTime=5
-2021-01-28 21:54:19.654 INFO  (qtp1845623216-54) [   ] o.a.s.s.HttpSolrCall [admin] webapp=null path=/admin/info/system params={wt=json&_=1611870846257} status=0 QTime=2
-2021-01-28 21:54:27.165 INFO  (qtp1845623216-26) [   ] o.a.s.s.HttpSolrCall [admin] webapp=null path=/admin/cores params={indexInfo=false&wt=json&_=1611870846257} status=0 QTime=0
-2021-01-28 21:54:27.168 INFO  (qtp1845623216-51) [   ] o.a.s.s.HttpSolrCall [admin] webapp=null path=/admin/info/system params={wt=json&_=1611870846257} status=0 QTime=2
-2021-01-28 21:55:04.600 INFO  (qtp1845623216-28) [   ] o.a.s.c.CoreContainer Security node changed, reloading security.json
-2021-01-28 21:55:04.601 INFO  (qtp1845623216-28) [   ] o.a.s.c.CoreContainer Initializing authorization plugin: solr.RuleBasedAuthorizationPlugin
-2021-01-28 21:55:04.601 INFO  (qtp1845623216-28) [   ] o.a.s.c.CoreContainer Initializing authentication plugin: solr.BasicAuthPlugin
-2021-01-28 21:55:04.601 INFO  (qtp1845623216-28) [   ] o.a.s.s.HttpSolrCall [admin] webapp=null path=/admin/authentication params={} status=0 QTime=3
-2021-01-28 21:55:50.487 INFO  (qtp1845623216-27) [   ] o.a.s.s.RuleBasedAuthorizationPluginBase This resource is configured to have a permission {
-  "name":"all",
-  "role":"admin"}, The principal org.apache.solr.security.BasicAuthPlugin$BasicAuthUserPrincipal@2cef2065[username=mha,pwd=*****] does not have the right role 
-2021-01-28 21:55:50.487 INFO  (qtp1845623216-26) [   ] o.a.s.s.RuleBasedAuthorizationPluginBase This resource is configured to have a permission {
-  "name":"all",
-  "role":"admin"}, The principal org.apache.solr.security.BasicAuthPlugin$BasicAuthUserPrincipal@515c6707[username=mha,pwd=*****] does not have the right role 
-2021-01-28 21:55:50.494 INFO  (qtp1845623216-53) [   ] o.a.s.s.RuleBasedAuthorizationPluginBase This resource is configured to have a permission {
-  "name":"all",
-  "role":"admin"}, The principal org.apache.solr.security.BasicAuthPlugin$BasicAuthUserPrincipal@5a4c328b[username=mha,pwd=*****] does not have the right role 
-2021-01-28 21:55:53.328 INFO  (qtp1845623216-27) [   ] o.a.s.s.RuleBasedAuthorizationPluginBase This resource is configured to have a permission {
-  "name":"all",
-  "role":"admin"}, The principal org.apache.solr.security.BasicAuthPlugin$BasicAuthUserPrincipal@570fee64[username=mha,pwd=*****] does not have the right role 
-2021-01-28 21:55:53.329 INFO  (qtp1845623216-51) [   ] o.a.s.s.RuleBasedAuthorizationPluginBase This resource is configured to have a permission {
-  "name":"all",
-  "role":"admin"}, The principal org.apache.solr.security.BasicAuthPlugin$BasicAuthUserPrincipal@44968292[username=mha,pwd=*****] does not have the right role 
-2021-01-28 21:56:00.511 INFO  (ShutdownMonitor) [   ] o.e.j.s.AbstractConnector Stopped ServerConnector@46268f08{HTTP/1.1, (http/1.1, h2c)}{0.0.0.0:8983}
-2021-01-28 21:56:00.511 INFO  (ShutdownMonitor) [   ] o.e.j.s.session node0 Stopped scavenging
-2021-01-28 21:56:00.513 INFO  (ShutdownMonitor) [   ] o.a.s.c.CoreContainer Shutting down CoreContainer instance=1991386317
-2021-01-28 21:56:00.514 INFO  (coreCloseExecutor-27-thread-1) [   ] o.a.s.c.SolrCore [staging]  CLOSING SolrCore org.apache.solr.core.SolrCore@2b8e5471
-2021-01-28 21:56:00.514 INFO  (coreCloseExecutor-27-thread-2) [   ] o.a.s.c.SolrCore [mha]  CLOSING SolrCore org.apache.solr.core.SolrCore@a2e7cdf
-2021-01-28 21:56:00.514 INFO  (coreCloseExecutor-27-thread-1) [   ] o.a.s.m.SolrMetricManager Closing metric reporters for registry=solr.core.staging tag=SolrCore@2b8e5471
-2021-01-28 21:56:00.514 INFO  (coreCloseExecutor-27-thread-1) [   ] o.a.s.m.r.SolrJmxReporter Closing reporter [org.apache.solr.metrics.reporters.SolrJmxReporter@10007885: rootName = null, domain = solr.core.staging, service url = null, agent id = null] for registry solr.core.staging/com.codahale.metrics.MetricRegistry@41cd51e0
-2021-01-28 21:56:00.524 INFO  (coreCloseExecutor-27-thread-2) [   ] o.a.s.m.SolrMetricManager Closing metric reporters for registry=solr.core.mha tag=SolrCore@a2e7cdf
-2021-01-28 21:56:00.524 INFO  (coreCloseExecutor-27-thread-2) [   ] o.a.s.m.r.SolrJmxReporter Closing reporter [org.apache.solr.metrics.reporters.SolrJmxReporter@3e674321: rootName = null, domain = solr.core.mha, service url = null, agent id = null] for registry solr.core.mha/com.codahale.metrics.MetricRegistry@54ca919d
-2021-01-28 21:56:00.528 INFO  (coreCloseExecutor-27-thread-1) [   ] o.a.s.u.DirectUpdateHandler2 Committing on IndexWriter.close()  ... SKIPPED (unnecessary).
-2021-01-28 21:56:00.532 INFO  (coreCloseExecutor-27-thread-2) [   ] o.a.s.u.DirectUpdateHandler2 Committing on IndexWriter.close()  ... SKIPPED (unnecessary).
-2021-01-28 21:56:00.539 INFO  (ShutdownMonitor) [   ] o.a.s.m.SolrMetricManager Closing metric reporters for registry=solr.node tag=null
-2021-01-28 21:56:00.539 INFO  (ShutdownMonitor) [   ] o.a.s.m.r.SolrJmxReporter Closing reporter [org.apache.solr.metrics.reporters.SolrJmxReporter@4adc663e: rootName = null, domain = solr.node, service url = null, agent id = null] for registry solr.node/com.codahale.metrics.MetricRegistry@4953312f
-2021-01-28 21:56:00.541 INFO  (ShutdownMonitor) [   ] o.a.s.m.SolrMetricManager Closing metric reporters for registry=solr.jvm tag=null
-2021-01-28 21:56:00.541 INFO  (ShutdownMonitor) [   ] o.a.s.m.r.SolrJmxReporter Closing reporter [org.apache.solr.metrics.reporters.SolrJmxReporter@340a8894: rootName = null, domain = solr.jvm, service url = null, agent id = null] for registry solr.jvm/com.codahale.metrics.MetricRegistry@13f9798
-2021-01-28 21:56:00.541 INFO  (ShutdownMonitor) [   ] o.a.s.m.SolrMetricManager Closing metric reporters for registry=solr.jetty tag=null
-2021-01-28 21:56:00.541 INFO  (ShutdownMonitor) [   ] o.a.s.m.r.SolrJmxReporter Closing reporter [org.apache.solr.metrics.reporters.SolrJmxReporter@7a8b9166: rootName = null, domain = solr.jetty, service url = null, agent id = null] for registry solr.jetty/com.codahale.metrics.MetricRegistry@411fee1a
-2021-01-28 21:56:00.547 INFO  (ShutdownMonitor) [   ] o.e.j.s.h.ContextHandler Stopped o.e.j.w.WebAppContext@75ed9710{/solr,null,UNAVAILABLE}{/Users/bradleywaye/Sites/local.staging.mhanational.org/solr-8.7.0/server/solr-webapp/webapp}
+2021-01-31 19:48:29.276 INFO  (main) [   ] o.e.j.s.Server jetty-9.4.27.v20200227; built: 2020-02-27T18:37:21.340Z; git: a304fd9f351f337e7c0e2a7c28878dd536149c6c; jvm 15.0.1+9
+2021-01-31 19:48:29.291 INFO  (main) [   ] o.e.j.d.p.ScanningAppProvider Deployment monitor [file:///Users/bradleywaye/Sites/local.mastermha.org/solr-8.7.0/server/contexts/] at interval 0
+2021-01-31 19:48:30.000 INFO  (main) [   ] o.e.j.w.StandardDescriptorProcessor NO JSP Support for /solr, did not find org.apache.jasper.servlet.JspServlet
+2021-01-31 19:48:30.008 INFO  (main) [   ] o.e.j.s.session DefaultSessionIdManager workerName=node0
+2021-01-31 19:48:30.008 INFO  (main) [   ] o.e.j.s.session No SessionScavenger set, using defaults
+2021-01-31 19:48:30.009 INFO  (main) [   ] o.e.j.s.session node0 Scavenging every 600000ms
+2021-01-31 19:48:30.054 INFO  (main) [   ] o.a.s.s.SolrDispatchFilter Using logger factory org.apache.logging.slf4j.Log4jLoggerFactory
+2021-01-31 19:48:30.057 INFO  (main) [   ] o.a.s.s.SolrDispatchFilter  ___      _       Welcome to Apache Solr™ version 8.7.0
+2021-01-31 19:48:30.058 INFO  (main) [   ] o.a.s.s.SolrDispatchFilter / __| ___| |_ _   Starting in standalone mode on port 8983
+2021-01-31 19:48:30.058 INFO  (main) [   ] o.a.s.s.SolrDispatchFilter \__ \/ _ \ | '_|  Install dir: /Users/bradleywaye/Sites/local.mastermha.org/solr
+2021-01-31 19:48:30.058 INFO  (main) [   ] o.a.s.s.SolrDispatchFilter |___/\___/_|_|    Start time: 2021-01-31T19:48:30.058271Z
+2021-01-31 19:48:30.069 INFO  (main) [   ] o.a.s.c.SolrPaths Using system property solr.solr.home: /Users/bradleywaye/Sites/local.mastermha.org/solr/server/solr
+2021-01-31 19:48:30.072 INFO  (main) [   ] o.a.s.c.SolrXmlConfig Loading container configuration from /Users/bradleywaye/Sites/local.mastermha.org/solr/server/solr/solr.xml
+2021-01-31 19:48:30.136 INFO  (main) [   ] o.a.s.c.SolrXmlConfig MBean server found: com.sun.jmx.mbeanserver.JmxMBeanServer@53fb3dab, but no JMX reporters were configured - adding default JMX reporter.
+2021-01-31 19:48:30.561 INFO  (main) [   ] o.a.s.h.c.HttpShardHandlerFactory Host whitelist initialized: WhitelistHostChecker [whitelistHosts=null, whitelistHostCheckingEnabled=true]
+2021-01-31 19:48:30.682 WARN  (main) [   ] o.e.j.u.s.S.config Trusting all certificates configured for Client@38c2c309[provider=null,keyStore=null,trustStore=null]
+2021-01-31 19:48:30.682 WARN  (main) [   ] o.e.j.u.s.S.config No Client EndPointIdentificationAlgorithm configured for Client@38c2c309[provider=null,keyStore=null,trustStore=null]
+2021-01-31 19:48:30.792 WARN  (main) [   ] o.e.j.u.s.S.config Trusting all certificates configured for Client@34f392be[provider=null,keyStore=null,trustStore=null]
+2021-01-31 19:48:30.792 WARN  (main) [   ] o.e.j.u.s.S.config No Client EndPointIdentificationAlgorithm configured for Client@34f392be[provider=null,keyStore=null,trustStore=null]
+2021-01-31 19:48:30.861 INFO  (main) [   ] o.a.s.c.CoreContainer Initializing authorization plugin: solr.RuleBasedAuthorizationPlugin
+2021-01-31 19:48:30.868 INFO  (main) [   ] o.a.s.c.CoreContainer Initializing authentication plugin: solr.BasicAuthPlugin
+2021-01-31 19:48:30.960 INFO  (main) [   ] o.a.s.c.TransientSolrCoreCacheDefault Allocating transient cache for 2147483647 transient cores
+2021-01-31 19:48:30.961 INFO  (main) [   ] o.a.s.h.a.MetricsHistoryHandler No .system collection, keeping metrics history in memory.
+2021-01-31 19:48:31.012 INFO  (main) [   ] o.a.s.m.r.SolrJmxReporter JMX monitoring for 'solr.node' (registry 'solr.node') enabled at server: com.sun.jmx.mbeanserver.JmxMBeanServer@53fb3dab
+2021-01-31 19:48:31.012 INFO  (main) [   ] o.a.s.m.r.SolrJmxReporter JMX monitoring for 'solr.jvm' (registry 'solr.jvm') enabled at server: com.sun.jmx.mbeanserver.JmxMBeanServer@53fb3dab
+2021-01-31 19:48:31.016 INFO  (main) [   ] o.a.s.m.r.SolrJmxReporter JMX monitoring for 'solr.jetty' (registry 'solr.jetty') enabled at server: com.sun.jmx.mbeanserver.JmxMBeanServer@53fb3dab
+2021-01-31 19:48:31.069 INFO  (main) [   ] o.a.s.c.CorePropertiesLocator Found 2 core definitions underneath /Users/bradleywaye/Sites/local.mastermha.org/solr/server/solr
+2021-01-31 19:48:31.070 INFO  (main) [   ] o.a.s.c.CorePropertiesLocator Cores are: [mha, staging]
+2021-01-31 19:48:31.111 INFO  (coreLoadExecutor-13-thread-2) [   x:staging] o.a.s.c.SolrConfig Using Lucene MatchVersion: 8.7.0
+2021-01-31 19:48:31.122 INFO  (main) [   ] o.e.j.s.h.ContextHandler Started o.e.j.w.WebAppContext@75ed9710{/solr,file:///Users/bradleywaye/Sites/local.mastermha.org/solr-8.7.0/server/solr-webapp/webapp/,AVAILABLE}{/Users/bradleywaye/Sites/local.mastermha.org/solr-8.7.0/server/solr-webapp/webapp}
+2021-01-31 19:48:31.130 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.c.SolrResourceLoader Added 64 libs to classloader, from paths: [/Users/bradleywaye/Sites/local.mastermha.org/solr/contrib/analysis-extras/lib, /Users/bradleywaye/Sites/local.mastermha.org/solr/contrib/analysis-extras/lucene-libs, /Users/bradleywaye/Sites/local.mastermha.org/solr/contrib/extraction/lib, /Users/bradleywaye/Sites/local.mastermha.org/solr/contrib/langid/lib, /Users/bradleywaye/Sites/local.mastermha.org/solr/dist]
+2021-01-31 19:48:31.134 INFO  (main) [   ] o.e.j.s.AbstractConnector Started ServerConnector@46268f08{HTTP/1.1, (http/1.1, h2c)}{0.0.0.0:8983}
+2021-01-31 19:48:31.134 INFO  (main) [   ] o.e.j.s.Server Started @3036ms
+2021-01-31 19:48:31.212 INFO  (coreLoadExecutor-13-thread-2) [   x:staging] o.a.s.s.IndexSchema Schema name=default-config
+2021-01-31 19:48:31.847 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.c.SolrConfig Using Lucene MatchVersion: 8.7.0
+2021-01-31 19:48:31.851 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.u.SolrIndexConfig IndexWriter infoStream solr logging is enabled
+2021-01-31 19:48:31.912 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.s.IndexSchema Schema name=drupal-4.1.1-solr-8.x-0
+2021-01-31 19:48:32.063 INFO  (coreLoadExecutor-13-thread-2) [   x:staging] o.a.s.s.IndexSchema Loaded schema default-config/1.6 with uniqueid field id
+2021-01-31 19:48:32.082 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.s.IndexSchema Loaded schema drupal-4.1.1-solr-8.x-0/1.6 with uniqueid field id
+2021-01-31 19:48:32.131 INFO  (coreLoadExecutor-13-thread-2) [   x:staging] o.a.s.c.CoreContainer Creating SolrCore 'staging' using configuration from instancedir /Users/bradleywaye/Sites/local.mastermha.org/solr/server/solr/staging, trusted=true
+2021-01-31 19:48:32.149 INFO  (coreLoadExecutor-13-thread-2) [   x:staging] o.a.s.m.r.SolrJmxReporter JMX monitoring for 'solr.core.staging' (registry 'solr.core.staging') enabled at server: com.sun.jmx.mbeanserver.JmxMBeanServer@53fb3dab
+2021-01-31 19:48:32.159 INFO  (coreLoadExecutor-13-thread-2) [   x:staging] o.a.s.c.SolrCore [[staging] ] Opening new SolrCore at [/Users/bradleywaye/Sites/local.mastermha.org/solr/server/solr/staging], dataDir=[/Users/bradleywaye/Sites/local.mastermha.org/solr/server/solr/staging/data/]
+2021-01-31 19:48:32.164 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.c.CoreContainer Creating SolrCore 'mha' using configuration from instancedir /Users/bradleywaye/Sites/local.mastermha.org/solr/server/solr/mha, trusted=true
+2021-01-31 19:48:32.165 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.m.r.SolrJmxReporter JMX monitoring for 'solr.core.mha' (registry 'solr.core.mha') enabled at server: com.sun.jmx.mbeanserver.JmxMBeanServer@53fb3dab
+2021-01-31 19:48:32.165 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.c.SolrCore [[mha] ] Opening new SolrCore at [/Users/bradleywaye/Sites/local.mastermha.org/solr/server/solr/mha], dataDir=[/Users/bradleywaye/Sites/local.mastermha.org/solr/server/solr/mha/data/]
+2021-01-31 19:48:32.181 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.r.XSLTResponseWriter xsltCacheLifetimeSeconds=5
+2021-01-31 19:48:32.456 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.u.UpdateHandler Using UpdateLog implementation: org.apache.solr.update.UpdateLog
+2021-01-31 19:48:32.456 INFO  (coreLoadExecutor-13-thread-2) [   x:staging] o.a.s.u.UpdateHandler Using UpdateLog implementation: org.apache.solr.update.UpdateLog
+2021-01-31 19:48:32.456 INFO  (coreLoadExecutor-13-thread-2) [   x:staging] o.a.s.u.UpdateLog Initializing UpdateLog: dataDir= defaultSyncLevel=FLUSH numRecordsToKeep=100 maxNumLogsToKeep=10 numVersionBuckets=65536
+2021-01-31 19:48:32.456 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.u.UpdateLog Initializing UpdateLog: dataDir= defaultSyncLevel=FLUSH numRecordsToKeep=100 maxNumLogsToKeep=10 numVersionBuckets=65536
+2021-01-31 19:48:32.463 INFO  (coreLoadExecutor-13-thread-2) [   x:staging] o.a.s.u.CommitTracker Hard AutoCommit: if uncommitted for 15000ms; 
+2021-01-31 19:48:32.464 INFO  (coreLoadExecutor-13-thread-2) [   x:staging] o.a.s.u.CommitTracker Soft AutoCommit: disabled
+2021-01-31 19:48:32.497 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.u.CommitTracker Hard AutoCommit: if uncommitted for 15000ms; 
+2021-01-31 19:48:32.497 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.u.CommitTracker Soft AutoCommit: disabled
+2021-01-31 19:48:32.540 INFO  (coreLoadExecutor-13-thread-2) [   x:staging] o.a.s.r.ManagedResourceStorage File-based storage initialized to use dir: /Users/bradleywaye/Sites/local.mastermha.org/solr/server/solr/staging/conf
+2021-01-31 19:48:32.549 INFO  (coreLoadExecutor-13-thread-2) [   x:staging] o.a.s.h.c.SpellCheckComponent Initializing spell checkers
+2021-01-31 19:48:32.553 INFO  (coreLoadExecutor-13-thread-2) [   x:staging] o.a.s.s.DirectSolrSpellChecker init: {name=default,field=_text_,classname=solr.DirectSolrSpellChecker,distanceMeasure=internal,accuracy=0.5,maxEdits=2,minPrefix=1,maxInspections=5,minQueryLength=4,maxQueryFrequency=0.01}
+2021-01-31 19:48:32.560 INFO  (coreLoadExecutor-13-thread-2) [   x:staging] o.a.s.h.ReplicationHandler Commits will be reserved for 10000 ms
+2021-01-31 19:48:32.563 INFO  (coreLoadExecutor-13-thread-2) [   x:staging] o.a.s.u.UpdateLog Could not find max version in index or recent updates, using new clock 1690432975733260288
+2021-01-31 19:48:32.566 INFO  (searcherExecutor-15-thread-1-processing-x:staging) [   x:staging] o.a.s.c.QuerySenderListener QuerySenderListener done.
+2021-01-31 19:48:32.566 INFO  (searcherExecutor-15-thread-1-processing-x:staging) [   x:staging] o.a.s.h.c.SpellCheckComponent Loading spell index for spellchecker: default
+2021-01-31 19:48:32.570 INFO  (searcherExecutor-15-thread-1-processing-x:staging) [   x:staging] o.a.s.c.SolrCore [staging]  Registered new searcher autowarm time: 0 ms
+2021-01-31 19:48:33.484 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.r.ManagedResourceStorage File-based storage initialized to use dir: /Users/bradleywaye/Sites/local.mastermha.org/solr/server/solr/mha/conf
+2021-01-31 19:48:33.485 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.h.c.SpellCheckComponent Initializing spell checkers
+2021-01-31 19:48:33.485 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.s.DirectSolrSpellChecker init: {name=en,field=spellcheck_en,classname=solr.DirectSolrSpellChecker,distanceMeasure=internal,accuracy=0.5,maxEdits=2,minPrefix=1,maxInspections=5,minQueryLength=4,maxQueryFrequency=0.01,thresholdTokenFrequency=.01,onlyMorePopular=true}
+2021-01-31 19:48:33.485 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.s.DirectSolrSpellChecker init: {name=und,field=spellcheck_und,classname=solr.DirectSolrSpellChecker,distanceMeasure=internal,accuracy=0.5,maxEdits=2,minPrefix=1,maxInspections=5,minQueryLength=4,maxQueryFrequency=0.01,thresholdTokenFrequency=.01,onlyMorePopular=true}
+2021-01-31 19:48:33.485 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.h.c.SuggestComponent Initializing SuggestComponent
+2021-01-31 19:48:33.488 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.s.s.SolrSuggester init: {name=en,lookupImpl=AnalyzingInfixLookupFactory,dictionaryImpl=DocumentDictionaryFactory,field=twm_suggest,suggestAnalyzerFieldType=text_en,contextField=sm_context_tags,buildOnCommit=true,buildOnStartup=false}
+2021-01-31 19:48:33.503 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.s.s.SolrSuggester Dictionary loaded with params: {name=en,lookupImpl=AnalyzingInfixLookupFactory,dictionaryImpl=DocumentDictionaryFactory,field=twm_suggest,suggestAnalyzerFieldType=text_en,contextField=sm_context_tags,buildOnCommit=true,buildOnStartup=false}
+2021-01-31 19:48:33.503 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.h.c.SuggestComponent Registering searcher listener for suggester: en = SuggesterListener [core=org.apache.solr.core.SolrCore@48103f02, suggester=SolrSuggester [ name=en, sourceLocation=null, storeDir=, lookupImpl=AnalyzingInfixLookupFactory, dictionaryImpl=DocumentDictionaryFactory, sizeInBytes=48 ], buildOnCommit=true, buildOnOptimize=false, buildOnStartup=false, isCoreReload=false]
+2021-01-31 19:48:33.503 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.s.s.SolrSuggester init: {name=und,lookupImpl=AnalyzingInfixLookupFactory,dictionaryImpl=DocumentDictionaryFactory,field=twm_suggest,suggestAnalyzerFieldType=text_und,contextField=sm_context_tags,buildOnCommit=true,buildOnStartup=false}
+2021-01-31 19:48:33.504 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.s.s.SolrSuggester Dictionary loaded with params: {name=und,lookupImpl=AnalyzingInfixLookupFactory,dictionaryImpl=DocumentDictionaryFactory,field=twm_suggest,suggestAnalyzerFieldType=text_und,contextField=sm_context_tags,buildOnCommit=true,buildOnStartup=false}
+2021-01-31 19:48:33.504 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.h.c.SuggestComponent Registering searcher listener for suggester: und = SuggesterListener [core=org.apache.solr.core.SolrCore@48103f02, suggester=SolrSuggester [ name=und, sourceLocation=null, storeDir=, lookupImpl=AnalyzingInfixLookupFactory, dictionaryImpl=DocumentDictionaryFactory, sizeInBytes=48 ], buildOnCommit=true, buildOnOptimize=false, buildOnStartup=false, isCoreReload=false]
+2021-01-31 19:48:33.505 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.h.c.QueryElevationComponent Loading QueryElevation from: /Users/bradleywaye/Sites/local.mastermha.org/solr/server/solr/mha/conf/elevate.xml
+2021-01-31 19:48:33.512 INFO  (coreLoadExecutor-13-thread-1) [   x:mha] o.a.s.h.ReplicationHandler Commits will be reserved for 10000 ms
+2021-01-31 19:48:33.551 INFO  (searcherExecutor-17-thread-1-processing-x:mha) [   x:mha] o.a.s.c.S.Request [mha]  webapp=null path=null params={q=static+firstSearcher+warming+in+solrconfig.xml&distrib=false&event=firstSearcher} hits=0 status=0 QTime=28
+2021-01-31 19:48:33.551 INFO  (searcherExecutor-17-thread-1-processing-x:mha) [   x:mha] o.a.s.c.QuerySenderListener QuerySenderListener done.
+2021-01-31 19:48:33.551 INFO  (searcherExecutor-17-thread-1-processing-x:mha) [   x:mha] o.a.s.h.c.SpellCheckComponent Loading spell index for spellchecker: en
+2021-01-31 19:48:33.551 INFO  (searcherExecutor-17-thread-1-processing-x:mha) [   x:mha] o.a.s.h.c.SpellCheckComponent Loading spell index for spellchecker: und
+2021-01-31 19:48:33.554 INFO  (searcherExecutor-17-thread-1-processing-x:mha) [   x:mha] o.a.s.c.SolrCore [mha]  Registered new searcher autowarm time: 0 ms
+2021-02-01 18:37:06.525 INFO  (qtp1845623216-58) [   ] o.a.s.s.HttpSolrCall [admin] webapp=null path=/admin/cores params={indexInfo=false&wt=json&_=1612204626459} status=0 QTime=3
+2021-02-01 18:37:06.529 INFO  (qtp1845623216-51) [   ] o.a.s.s.HttpSolrCall [admin] webapp=null path=/admin/info/system params={wt=json&_=1612204626459} status=0 QTime=8
+2021-02-01 18:37:06.532 INFO  (qtp1845623216-31) [   ] o.a.s.s.HttpSolrCall [admin] webapp=null path=/admin/cores params={wt=json&_=1612204626459} status=0 QTime=11
