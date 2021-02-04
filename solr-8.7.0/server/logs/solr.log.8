@@ -1,0 +1,406 @@
+2021-02-03 15:03:12.820 INFO  (main) [   ] o.e.j.u.log Logging initialized @734ms to org.eclipse.jetty.util.log.Slf4jLog
+2021-02-03 15:03:12.864 WARN  (main) [   ] o.e.j.x.XmlConfiguration Ignored arg: <Arg name="threadpool">
+    <New id="threadpool" class="com.codahale.metrics.jetty9.InstrumentedQueuedThreadPool"><Arg name="registry">
+        <Call id="solrJettyMetricRegistry" name="getOrCreate" class="com.codahale.metrics.SharedMetricRegistries"><Arg>solr.jetty</Arg></Call>
+      </Arg></New>
+  </Arg>
+2021-02-03 15:03:12.948 INFO  (main) [   ] o.e.j.s.Server jetty-9.4.27.v20200227; built: 2020-02-27T18:37:21.340Z; git: a304fd9f351f337e7c0e2a7c28878dd536149c6c; jvm 15.0.1+9
+2021-02-03 15:03:12.961 INFO  (main) [   ] o.e.j.d.p.ScanningAppProvider Deployment monitor [file:///Users/bradleywaye/Sites/local.mastermha.org/solr-8.7.0/server/contexts/] at interval 0
+2021-02-03 15:03:13.150 INFO  (main) [   ] o.e.j.w.StandardDescriptorProcessor NO JSP Support for /solr, did not find org.apache.jasper.servlet.JspServlet
+2021-02-03 15:03:13.156 INFO  (main) [   ] o.e.j.s.session DefaultSessionIdManager workerName=node0
+2021-02-03 15:03:13.156 INFO  (main) [   ] o.e.j.s.session No SessionScavenger set, using defaults
+2021-02-03 15:03:13.157 INFO  (main) [   ] o.e.j.s.session node0 Scavenging every 600000ms
+2021-02-03 15:03:13.191 INFO  (main) [   ] o.a.s.s.SolrDispatchFilter Using logger factory org.apache.logging.slf4j.Log4jLoggerFactory
+2021-02-03 15:03:13.195 INFO  (main) [   ] o.a.s.s.SolrDispatchFilter  ___      _       Welcome to Apache Solr™ version 8.7.0
+2021-02-03 15:03:13.195 INFO  (main) [   ] o.a.s.s.SolrDispatchFilter / __| ___| |_ _   Starting in standalone mode on port 8983
+2021-02-03 15:03:13.195 INFO  (main) [   ] o.a.s.s.SolrDispatchFilter \__ \/ _ \ | '_|  Install dir: /Users/bradleywaye/Sites/local.mastermha.org/solr
+2021-02-03 15:03:13.195 INFO  (main) [   ] o.a.s.s.SolrDispatchFilter |___/\___/_|_|    Start time: 2021-02-03T15:03:13.195767Z
+2021-02-03 15:03:13.205 INFO  (main) [   ] o.a.s.c.SolrPaths Using system property solr.solr.home: /Users/bradleywaye/Sites/local.mastermha.org/solr/server/solr
+2021-02-03 15:03:13.208 INFO  (main) [   ] o.a.s.c.SolrXmlConfig Loading container configuration from /Users/bradleywaye/Sites/local.mastermha.org/solr/server/solr/solr.xml
+2021-02-03 15:03:13.268 INFO  (main) [   ] o.a.s.c.SolrXmlConfig MBean server found: com.sun.jmx.mbeanserver.JmxMBeanServer@53fb3dab, but no JMX reporters were configured - adding default JMX reporter.
+2021-02-03 15:03:13.658 INFO  (main) [   ] o.a.s.h.c.HttpShardHandlerFactory Host whitelist initialized: WhitelistHostChecker [whitelistHosts=null, whitelistHostCheckingEnabled=true]
+2021-02-03 15:03:13.771 WARN  (main) [   ] o.e.j.u.s.S.config Trusting all certificates configured for Client@38c2c309[provider=null,keyStore=null,trustStore=null]
+2021-02-03 15:03:13.771 WARN  (main) [   ] o.e.j.u.s.S.config No Client EndPointIdentificationAlgorithm configured for Client@38c2c309[provider=null,keyStore=null,trustStore=null]
+2021-02-03 15:03:13.864 WARN  (main) [   ] o.e.j.u.s.S.config Trusting all certificates configured for Client@34f392be[provider=null,keyStore=null,trustStore=null]
+2021-02-03 15:03:13.864 WARN  (main) [   ] o.e.j.u.s.S.config No Client EndPointIdentificationAlgorithm configured for Client@34f392be[provider=null,keyStore=null,trustStore=null]
+2021-02-03 15:03:13.917 INFO  (main) [   ] o.a.s.c.CoreContainer Initializing authorization plugin: solr.RuleBasedAuthorizationPlugin
+2021-02-03 15:03:13.922 INFO  (main) [   ] o.a.s.c.CoreContainer Initializing authentication plugin: solr.BasicAuthPlugin
+2021-02-03 15:03:14.017 INFO  (main) [   ] o.a.s.c.TransientSolrCoreCacheDefault Allocating transient cache for 2147483647 transient cores
+2021-02-03 15:03:14.018 INFO  (main) [   ] o.a.s.h.a.MetricsHistoryHandler No .system collection, keeping metrics history in memory.
+2021-02-03 15:03:14.061 INFO  (main) [   ] o.a.s.m.r.SolrJmxReporter JMX monitoring for 'solr.node' (registry 'solr.node') enabled at server: com.sun.jmx.mbeanserver.JmxMBeanServer@53fb3dab
+2021-02-03 15:03:14.062 INFO  (main) [   ] o.a.s.m.r.SolrJmxReporter JMX monitoring for 'solr.jvm' (registry 'solr.jvm') enabled at server: com.sun.jmx.mbeanserver.JmxMBeanServer@53fb3dab
+2021-02-03 15:03:14.064 INFO  (main) [   ] o.a.s.m.r.SolrJmxReporter JMX monitoring for 'solr.jetty' (registry 'solr.jetty') enabled at server: com.sun.jmx.mbeanserver.JmxMBeanServer@53fb3dab
+2021-02-03 15:03:14.096 INFO  (main) [   ] o.a.s.c.CorePropertiesLocator Found 3 core definitions underneath /Users/bradleywaye/Sites/local.mastermha.org/solr/server/solr
+2021-02-03 15:03:14.096 INFO  (main) [   ] o.a.s.c.CorePropertiesLocator Cores are: [mha, staging, mha]
+2021-02-03 15:03:14.098 ERROR (main) [   ] o.a.s.s.SolrDispatchFilter Could not start Solr. Check solr/home property and the logs
+2021-02-03 15:03:14.108 ERROR (main) [   ] o.a.s.c.SolrCore null:org.apache.solr.common.SolrException: Found multiple cores with the name [mha], with instancedirs [/Users/bradleywaye/Sites/local.mastermha.org/solr/server/solr/mha] and [/Users/bradleywaye/Sites/local.mastermha.org/solr/server/solr/mhanational]
+	at org.apache.solr.core.CoreContainer.checkForDuplicateCoreNames(CoreContainer.java:995)
+	at org.apache.solr.core.CoreContainer.load(CoreContainer.java:835)
+	at org.apache.solr.servlet.SolrDispatchFilter.createCoreContainer(SolrDispatchFilter.java:275)
+	at org.apache.solr.servlet.SolrDispatchFilter.init(SolrDispatchFilter.java:184)
+	at org.eclipse.jetty.servlet.FilterHolder.initialize(FilterHolder.java:134)
+	at org.eclipse.jetty.servlet.ServletHandler.lambda$initialize$0(ServletHandler.java:751)
+	at java.base/java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:948)
+	at java.base/java.util.stream.Streams$ConcatSpliterator.forEachRemaining(Streams.java:734)
+	at java.base/java.util.stream.Streams$ConcatSpliterator.forEachRemaining(Streams.java:734)
+	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:658)
+	at org.eclipse.jetty.servlet.ServletHandler.initialize(ServletHandler.java:744)
+	at org.eclipse.jetty.servlet.ServletContextHandler.startContext(ServletContextHandler.java:360)
+	at org.eclipse.jetty.webapp.WebAppContext.startWebapp(WebAppContext.java:1445)
+	at org.eclipse.jetty.webapp.WebAppContext.startContext(WebAppContext.java:1409)
+	at org.eclipse.jetty.server.handler.ContextHandler.doStart(ContextHandler.java:825)
+	at org.eclipse.jetty.servlet.ServletContextHandler.doStart(ServletContextHandler.java:275)
+	at org.eclipse.jetty.webapp.WebAppContext.doStart(WebAppContext.java:524)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:72)
+	at org.eclipse.jetty.deploy.bindings.StandardStarter.processBinding(StandardStarter.java:46)
+	at org.eclipse.jetty.deploy.AppLifeCycle.runBindings(AppLifeCycle.java:188)
+	at org.eclipse.jetty.deploy.DeploymentManager.requestAppGoal(DeploymentManager.java:513)
+	at org.eclipse.jetty.deploy.DeploymentManager.addApp(DeploymentManager.java:154)
+	at org.eclipse.jetty.deploy.providers.ScanningAppProvider.fileAdded(ScanningAppProvider.java:173)
+	at org.eclipse.jetty.deploy.providers.WebAppProvider.fileAdded(WebAppProvider.java:447)
+	at org.eclipse.jetty.deploy.providers.ScanningAppProvider$1.fileAdded(ScanningAppProvider.java:66)
+	at org.eclipse.jetty.util.Scanner.reportAddition(Scanner.java:784)
+	at org.eclipse.jetty.util.Scanner.reportDifferences(Scanner.java:753)
+	at org.eclipse.jetty.util.Scanner.scan(Scanner.java:641)
+	at org.eclipse.jetty.util.Scanner.doStart(Scanner.java:540)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:72)
+	at org.eclipse.jetty.deploy.providers.ScanningAppProvider.doStart(ScanningAppProvider.java:146)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:72)
+	at org.eclipse.jetty.deploy.DeploymentManager.startAppProvider(DeploymentManager.java:599)
+	at org.eclipse.jetty.deploy.DeploymentManager.doStart(DeploymentManager.java:249)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:72)
+	at org.eclipse.jetty.util.component.ContainerLifeCycle.start(ContainerLifeCycle.java:169)
+	at org.eclipse.jetty.server.Server.start(Server.java:407)
+	at org.eclipse.jetty.util.component.ContainerLifeCycle.doStart(ContainerLifeCycle.java:117)
+	at org.eclipse.jetty.server.handler.AbstractHandler.doStart(AbstractHandler.java:97)
+	at org.eclipse.jetty.server.Server.doStart(Server.java:371)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:72)
+	at org.eclipse.jetty.xml.XmlConfiguration.lambda$main$1(XmlConfiguration.java:1924)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:554)
+	at org.eclipse.jetty.xml.XmlConfiguration.main(XmlConfiguration.java:1873)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:64)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.eclipse.jetty.start.Main.invokeMain(Main.java:218)
+	at org.eclipse.jetty.start.Main.start(Main.java:491)
+	at org.eclipse.jetty.start.Main.main(Main.java:77)
+
+2021-02-03 15:03:14.118 INFO  (main) [   ] o.e.j.s.h.ContextHandler Started o.e.j.w.WebAppContext@75ed9710{/solr,file:///Users/bradleywaye/Sites/local.mastermha.org/solr-8.7.0/server/solr-webapp/webapp/,AVAILABLE}{/Users/bradleywaye/Sites/local.mastermha.org/solr-8.7.0/server/solr-webapp/webapp}
+2021-02-03 15:03:14.124 INFO  (main) [   ] o.e.j.s.AbstractConnector Started ServerConnector@46268f08{HTTP/1.1, (http/1.1, h2c)}{0.0.0.0:8983}
+2021-02-03 15:03:14.124 INFO  (main) [   ] o.e.j.s.Server Started @2040ms
+2021-02-03 15:03:28.130 ERROR (qtp1845623216-46) [   ] o.a.s.s.SolrDispatchFilter Error processing the request. CoreContainer is either not initialized or shutting down.
+2021-02-03 15:03:28.146 WARN  (qtp1845623216-46) [   ] o.e.j.s.HttpChannel /solr/admin/cores => javax.servlet.ServletException: javax.servlet.UnavailableException: Error processing the request. CoreContainer is either not initialized or shutting down.
+	at org.eclipse.jetty.server.handler.HandlerCollection.handle(HandlerCollection.java:162)
+javax.servlet.ServletException: javax.servlet.UnavailableException: Error processing the request. CoreContainer is either not initialized or shutting down.
+	at org.eclipse.jetty.server.handler.HandlerCollection.handle(HandlerCollection.java:162) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:127) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.rewrite.handler.RewriteHandler.handle(RewriteHandler.java:322) ~[jetty-rewrite-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:127) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.Server.handle(Server.java:500) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.HttpChannel.lambda$handle$1(HttpChannel.java:383) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.HttpChannel.dispatch(HttpChannel.java:547) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:375) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:273) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:311) ~[jetty-io-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:103) ~[jetty-io-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.io.ChannelEndPoint$2.run(ChannelEndPoint.java:117) ~[jetty-io-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:806) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.run(QueuedThreadPool.java:938) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at java.lang.Thread.run(Thread.java:832) [?:?]
+Caused by: javax.servlet.UnavailableException: Error processing the request. CoreContainer is either not initialized or shutting down.
+	at org.apache.solr.servlet.SolrDispatchFilter.doFilter(SolrDispatchFilter.java:364) ~[?:?]
+	at org.apache.solr.servlet.SolrDispatchFilter.doFilter(SolrDispatchFilter.java:345) ~[?:?]
+	at org.eclipse.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1596) ~[jetty-servlet-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.servlet.ServletHandler.doHandle(ServletHandler.java:545) ~[jetty-servlet-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:143) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.security.SecurityHandler.handle(SecurityHandler.java:590) ~[jetty-security-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:127) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:235) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.session.SessionHandler.doHandle(SessionHandler.java:1610) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:233) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ContextHandler.doHandle(ContextHandler.java:1300) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:188) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.servlet.ServletHandler.doScope(ServletHandler.java:485) ~[jetty-servlet-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:1580) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:186) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ContextHandler.doScope(ContextHandler.java:1215) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:141) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ContextHandlerCollection.handle(ContextHandlerCollection.java:221) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.InetAccessHandler.handle(InetAccessHandler.java:177) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.HandlerCollection.handle(HandlerCollection.java:146) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	... 14 more
+2021-02-03 15:03:31.390 ERROR (qtp1845623216-27) [   ] o.a.s.s.SolrDispatchFilter Error processing the request. CoreContainer is either not initialized or shutting down.
+2021-02-03 15:03:31.390 WARN  (qtp1845623216-27) [   ] o.e.j.s.HttpChannel /solr/admin/cores => javax.servlet.ServletException: javax.servlet.UnavailableException: Error processing the request. CoreContainer is either not initialized or shutting down.
+	at org.eclipse.jetty.server.handler.HandlerCollection.handle(HandlerCollection.java:162)
+javax.servlet.ServletException: javax.servlet.UnavailableException: Error processing the request. CoreContainer is either not initialized or shutting down.
+	at org.eclipse.jetty.server.handler.HandlerCollection.handle(HandlerCollection.java:162) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:127) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.rewrite.handler.RewriteHandler.handle(RewriteHandler.java:322) ~[jetty-rewrite-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:127) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.Server.handle(Server.java:500) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.HttpChannel.lambda$handle$1(HttpChannel.java:383) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.HttpChannel.dispatch(HttpChannel.java:547) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:375) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:273) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:311) ~[jetty-io-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:103) ~[jetty-io-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.io.ChannelEndPoint$2.run(ChannelEndPoint.java:117) ~[jetty-io-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.runTask(EatWhatYouKill.java:336) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.doProduce(EatWhatYouKill.java:313) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.tryProduce(EatWhatYouKill.java:171) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.produce(EatWhatYouKill.java:135) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:806) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.run(QueuedThreadPool.java:938) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at java.lang.Thread.run(Thread.java:832) [?:?]
+Caused by: javax.servlet.UnavailableException: Error processing the request. CoreContainer is either not initialized or shutting down.
+	at org.apache.solr.servlet.SolrDispatchFilter.doFilter(SolrDispatchFilter.java:364) ~[?:?]
+	at org.apache.solr.servlet.SolrDispatchFilter.doFilter(SolrDispatchFilter.java:345) ~[?:?]
+	at org.eclipse.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1596) ~[jetty-servlet-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.servlet.ServletHandler.doHandle(ServletHandler.java:545) ~[jetty-servlet-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:143) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.security.SecurityHandler.handle(SecurityHandler.java:590) ~[jetty-security-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:127) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:235) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.session.SessionHandler.doHandle(SessionHandler.java:1610) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:233) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ContextHandler.doHandle(ContextHandler.java:1300) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:188) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.servlet.ServletHandler.doScope(ServletHandler.java:485) ~[jetty-servlet-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:1580) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:186) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ContextHandler.doScope(ContextHandler.java:1215) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:141) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ContextHandlerCollection.handle(ContextHandlerCollection.java:221) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.InetAccessHandler.handle(InetAccessHandler.java:177) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.HandlerCollection.handle(HandlerCollection.java:146) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	... 18 more
+2021-02-03 15:03:36.310 ERROR (qtp1845623216-28) [   ] o.a.s.s.SolrDispatchFilter Error processing the request. CoreContainer is either not initialized or shutting down.
+2021-02-03 15:03:36.310 WARN  (qtp1845623216-28) [   ] o.e.j.s.HttpChannel /solr/admin/cores => javax.servlet.ServletException: javax.servlet.UnavailableException: Error processing the request. CoreContainer is either not initialized or shutting down.
+	at org.eclipse.jetty.server.handler.HandlerCollection.handle(HandlerCollection.java:162)
+javax.servlet.ServletException: javax.servlet.UnavailableException: Error processing the request. CoreContainer is either not initialized or shutting down.
+	at org.eclipse.jetty.server.handler.HandlerCollection.handle(HandlerCollection.java:162) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:127) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.rewrite.handler.RewriteHandler.handle(RewriteHandler.java:322) ~[jetty-rewrite-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:127) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.Server.handle(Server.java:500) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.HttpChannel.lambda$handle$1(HttpChannel.java:383) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.HttpChannel.dispatch(HttpChannel.java:547) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:375) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:273) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:311) ~[jetty-io-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:103) ~[jetty-io-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.io.ChannelEndPoint$2.run(ChannelEndPoint.java:117) ~[jetty-io-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.runTask(EatWhatYouKill.java:336) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.doProduce(EatWhatYouKill.java:313) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.tryProduce(EatWhatYouKill.java:171) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.produce(EatWhatYouKill.java:135) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:806) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.run(QueuedThreadPool.java:938) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at java.lang.Thread.run(Thread.java:832) [?:?]
+Caused by: javax.servlet.UnavailableException: Error processing the request. CoreContainer is either not initialized or shutting down.
+	at org.apache.solr.servlet.SolrDispatchFilter.doFilter(SolrDispatchFilter.java:364) ~[?:?]
+	at org.apache.solr.servlet.SolrDispatchFilter.doFilter(SolrDispatchFilter.java:345) ~[?:?]
+	at org.eclipse.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1596) ~[jetty-servlet-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.servlet.ServletHandler.doHandle(ServletHandler.java:545) ~[jetty-servlet-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:143) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.security.SecurityHandler.handle(SecurityHandler.java:590) ~[jetty-security-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:127) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:235) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.session.SessionHandler.doHandle(SessionHandler.java:1610) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:233) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ContextHandler.doHandle(ContextHandler.java:1300) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:188) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.servlet.ServletHandler.doScope(ServletHandler.java:485) ~[jetty-servlet-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:1580) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:186) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ContextHandler.doScope(ContextHandler.java:1215) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:141) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ContextHandlerCollection.handle(ContextHandlerCollection.java:221) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.InetAccessHandler.handle(InetAccessHandler.java:177) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.HandlerCollection.handle(HandlerCollection.java:146) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	... 18 more
+2021-02-03 15:03:36.310 ERROR (qtp1845623216-29) [   ] o.a.s.s.SolrDispatchFilter Error processing the request. CoreContainer is either not initialized or shutting down.
+2021-02-03 15:03:36.310 WARN  (qtp1845623216-29) [   ] o.e.j.s.HttpChannel /solr/admin/info/system => javax.servlet.ServletException: javax.servlet.UnavailableException: Error processing the request. CoreContainer is either not initialized or shutting down.
+	at org.eclipse.jetty.server.handler.HandlerCollection.handle(HandlerCollection.java:162)
+javax.servlet.ServletException: javax.servlet.UnavailableException: Error processing the request. CoreContainer is either not initialized or shutting down.
+	at org.eclipse.jetty.server.handler.HandlerCollection.handle(HandlerCollection.java:162) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:127) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.rewrite.handler.RewriteHandler.handle(RewriteHandler.java:322) ~[jetty-rewrite-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:127) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.Server.handle(Server.java:500) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.HttpChannel.lambda$handle$1(HttpChannel.java:383) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.HttpChannel.dispatch(HttpChannel.java:547) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:375) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:273) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:311) ~[jetty-io-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:103) ~[jetty-io-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.io.ChannelEndPoint$2.run(ChannelEndPoint.java:117) ~[jetty-io-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.runTask(EatWhatYouKill.java:336) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.doProduce(EatWhatYouKill.java:313) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.tryProduce(EatWhatYouKill.java:171) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.produce(EatWhatYouKill.java:135) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:806) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.run(QueuedThreadPool.java:938) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at java.lang.Thread.run(Thread.java:832) [?:?]
+Caused by: javax.servlet.UnavailableException: Error processing the request. CoreContainer is either not initialized or shutting down.
+	at org.apache.solr.servlet.SolrDispatchFilter.doFilter(SolrDispatchFilter.java:364) ~[?:?]
+	at org.apache.solr.servlet.SolrDispatchFilter.doFilter(SolrDispatchFilter.java:345) ~[?:?]
+	at org.eclipse.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1596) ~[jetty-servlet-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.servlet.ServletHandler.doHandle(ServletHandler.java:545) ~[jetty-servlet-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:143) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.security.SecurityHandler.handle(SecurityHandler.java:590) ~[jetty-security-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:127) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:235) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.session.SessionHandler.doHandle(SessionHandler.java:1610) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:233) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ContextHandler.doHandle(ContextHandler.java:1300) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:188) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.servlet.ServletHandler.doScope(ServletHandler.java:485) ~[jetty-servlet-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:1580) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:186) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ContextHandler.doScope(ContextHandler.java:1215) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:141) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ContextHandlerCollection.handle(ContextHandlerCollection.java:221) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.InetAccessHandler.handle(InetAccessHandler.java:177) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.HandlerCollection.handle(HandlerCollection.java:146) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	... 18 more
+2021-02-03 15:03:36.313 ERROR (qtp1845623216-30) [   ] o.a.s.s.SolrDispatchFilter Error processing the request. CoreContainer is either not initialized or shutting down.
+2021-02-03 15:03:36.313 WARN  (qtp1845623216-30) [   ] o.e.j.s.HttpChannel /solr/admin/info/system => javax.servlet.ServletException: javax.servlet.UnavailableException: Error processing the request. CoreContainer is either not initialized or shutting down.
+	at org.eclipse.jetty.server.handler.HandlerCollection.handle(HandlerCollection.java:162)
+javax.servlet.ServletException: javax.servlet.UnavailableException: Error processing the request. CoreContainer is either not initialized or shutting down.
+	at org.eclipse.jetty.server.handler.HandlerCollection.handle(HandlerCollection.java:162) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:127) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.rewrite.handler.RewriteHandler.handle(RewriteHandler.java:322) ~[jetty-rewrite-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:127) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.Server.handle(Server.java:500) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.HttpChannel.lambda$handle$1(HttpChannel.java:383) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.HttpChannel.dispatch(HttpChannel.java:547) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:375) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:273) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:311) ~[jetty-io-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:103) ~[jetty-io-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.io.ChannelEndPoint$2.run(ChannelEndPoint.java:117) ~[jetty-io-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.runTask(EatWhatYouKill.java:336) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.doProduce(EatWhatYouKill.java:313) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.tryProduce(EatWhatYouKill.java:171) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.produce(EatWhatYouKill.java:135) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:806) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.run(QueuedThreadPool.java:938) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at java.lang.Thread.run(Thread.java:832) [?:?]
+Caused by: javax.servlet.UnavailableException: Error processing the request. CoreContainer is either not initialized or shutting down.
+	at org.apache.solr.servlet.SolrDispatchFilter.doFilter(SolrDispatchFilter.java:364) ~[?:?]
+	at org.apache.solr.servlet.SolrDispatchFilter.doFilter(SolrDispatchFilter.java:345) ~[?:?]
+	at org.eclipse.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1596) ~[jetty-servlet-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.servlet.ServletHandler.doHandle(ServletHandler.java:545) ~[jetty-servlet-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:143) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.security.SecurityHandler.handle(SecurityHandler.java:590) ~[jetty-security-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:127) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:235) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.session.SessionHandler.doHandle(SessionHandler.java:1610) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:233) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ContextHandler.doHandle(ContextHandler.java:1300) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:188) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.servlet.ServletHandler.doScope(ServletHandler.java:485) ~[jetty-servlet-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:1580) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:186) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ContextHandler.doScope(ContextHandler.java:1215) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:141) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ContextHandlerCollection.handle(ContextHandlerCollection.java:221) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.InetAccessHandler.handle(InetAccessHandler.java:177) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.HandlerCollection.handle(HandlerCollection.java:146) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	... 18 more
+2021-02-03 15:03:38.207 ERROR (qtp1845623216-31) [   ] o.a.s.s.SolrDispatchFilter Error processing the request. CoreContainer is either not initialized or shutting down.
+2021-02-03 15:03:38.207 WARN  (qtp1845623216-31) [   ] o.e.j.s.HttpChannel /solr/ => javax.servlet.ServletException: javax.servlet.UnavailableException: Error processing the request. CoreContainer is either not initialized or shutting down.
+	at org.eclipse.jetty.server.handler.HandlerCollection.handle(HandlerCollection.java:162)
+javax.servlet.ServletException: javax.servlet.UnavailableException: Error processing the request. CoreContainer is either not initialized or shutting down.
+	at org.eclipse.jetty.server.handler.HandlerCollection.handle(HandlerCollection.java:162) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:127) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.rewrite.handler.RewriteHandler.handle(RewriteHandler.java:322) ~[jetty-rewrite-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:127) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.Server.handle(Server.java:500) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.HttpChannel.lambda$handle$1(HttpChannel.java:383) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.HttpChannel.dispatch(HttpChannel.java:547) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:375) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:273) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:311) ~[jetty-io-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:103) ~[jetty-io-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.io.ChannelEndPoint$2.run(ChannelEndPoint.java:117) ~[jetty-io-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.runTask(EatWhatYouKill.java:336) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.doProduce(EatWhatYouKill.java:313) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.tryProduce(EatWhatYouKill.java:171) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.produce(EatWhatYouKill.java:135) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:806) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.run(QueuedThreadPool.java:938) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at java.lang.Thread.run(Thread.java:832) [?:?]
+Caused by: javax.servlet.UnavailableException: Error processing the request. CoreContainer is either not initialized or shutting down.
+	at org.apache.solr.servlet.SolrDispatchFilter.doFilter(SolrDispatchFilter.java:364) ~[?:?]
+	at org.apache.solr.servlet.SolrDispatchFilter.doFilter(SolrDispatchFilter.java:345) ~[?:?]
+	at org.eclipse.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1596) ~[jetty-servlet-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.servlet.ServletHandler.doHandle(ServletHandler.java:545) ~[jetty-servlet-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:143) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.security.SecurityHandler.handle(SecurityHandler.java:590) ~[jetty-security-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:127) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:235) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.session.SessionHandler.doHandle(SessionHandler.java:1610) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:233) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ContextHandler.doHandle(ContextHandler.java:1300) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:188) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.servlet.ServletHandler.doScope(ServletHandler.java:485) ~[jetty-servlet-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:1580) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:186) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ContextHandler.doScope(ContextHandler.java:1215) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:141) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ContextHandlerCollection.handle(ContextHandlerCollection.java:221) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.InetAccessHandler.handle(InetAccessHandler.java:177) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.HandlerCollection.handle(HandlerCollection.java:146) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	... 18 more
+2021-02-03 15:03:39.513 ERROR (qtp1845623216-27) [   ] o.a.s.s.SolrDispatchFilter Error processing the request. CoreContainer is either not initialized or shutting down.
+2021-02-03 15:03:39.514 WARN  (qtp1845623216-27) [   ] o.e.j.s.HttpChannel /solr/ => javax.servlet.ServletException: javax.servlet.UnavailableException: Error processing the request. CoreContainer is either not initialized or shutting down.
+	at org.eclipse.jetty.server.handler.HandlerCollection.handle(HandlerCollection.java:162)
+javax.servlet.ServletException: javax.servlet.UnavailableException: Error processing the request. CoreContainer is either not initialized or shutting down.
+	at org.eclipse.jetty.server.handler.HandlerCollection.handle(HandlerCollection.java:162) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:127) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.rewrite.handler.RewriteHandler.handle(RewriteHandler.java:322) ~[jetty-rewrite-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:127) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.Server.handle(Server.java:500) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.HttpChannel.lambda$handle$1(HttpChannel.java:383) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.HttpChannel.dispatch(HttpChannel.java:547) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:375) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:273) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:311) ~[jetty-io-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:103) ~[jetty-io-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.io.ChannelEndPoint$2.run(ChannelEndPoint.java:117) ~[jetty-io-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.runTask(EatWhatYouKill.java:336) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.doProduce(EatWhatYouKill.java:313) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.tryProduce(EatWhatYouKill.java:171) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.run(EatWhatYouKill.java:129) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.ReservedThreadExecutor$ReservedThread.run(ReservedThreadExecutor.java:375) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:806) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.run(QueuedThreadPool.java:938) ~[jetty-util-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at java.lang.Thread.run(Thread.java:832) [?:?]
+Caused by: javax.servlet.UnavailableException: Error processing the request. CoreContainer is either not initialized or shutting down.
+	at org.apache.solr.servlet.SolrDispatchFilter.doFilter(SolrDispatchFilter.java:364) ~[?:?]
+	at org.apache.solr.servlet.SolrDispatchFilter.doFilter(SolrDispatchFilter.java:345) ~[?:?]
+	at org.eclipse.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1596) ~[jetty-servlet-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.servlet.ServletHandler.doHandle(ServletHandler.java:545) ~[jetty-servlet-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:143) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.security.SecurityHandler.handle(SecurityHandler.java:590) ~[jetty-security-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:127) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:235) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.session.SessionHandler.doHandle(SessionHandler.java:1610) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:233) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ContextHandler.doHandle(ContextHandler.java:1300) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:188) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.servlet.ServletHandler.doScope(ServletHandler.java:485) ~[jetty-servlet-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:1580) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:186) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ContextHandler.doScope(ContextHandler.java:1215) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:141) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.ContextHandlerCollection.handle(ContextHandlerCollection.java:221) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.InetAccessHandler.handle(InetAccessHandler.java:177) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	at org.eclipse.jetty.server.handler.HandlerCollection.handle(HandlerCollection.java:146) ~[jetty-server-9.4.27.v20200227.jar:9.4.27.v20200227]
+	... 19 more
+2021-02-03 15:03:51.070 INFO  (ShutdownMonitor) [   ] o.e.j.s.AbstractConnector Stopped ServerConnector@46268f08{HTTP/1.1, (http/1.1, h2c)}{0.0.0.0:8983}
+2021-02-03 15:03:51.070 INFO  (ShutdownMonitor) [   ] o.e.j.s.session node0 Stopped scavenging
+2021-02-03 15:03:51.073 INFO  (ShutdownMonitor) [   ] o.e.j.s.h.ContextHandler Stopped o.e.j.w.WebAppContext@75ed9710{/solr,null,UNAVAILABLE}{/Users/bradleywaye/Sites/local.mastermha.org/solr-8.7.0/server/solr-webapp/webapp}

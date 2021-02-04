@@ -1,0 +1,17 @@
+{
+  "authentication":{
+    "blockUnknown":true,
+    "class":"solr.BasicAuthPlugin",
+    "credentials":{
+      "mhasolr":"IV0EHq1OnNrj6gvRCwvFwTrZ1+z1oBbnQdiVC3otuq0= Ndd7LKvVBAaZIF0QAVi1ekCfAJXr1GGfLtRUXhgrF8c=",
+      "mha":"kzVzbqwwWUVV16eku/xV2ietT3OMfoidfzxGtLPfMPY= 92HxpNx/G8ml6fXogJmnQjN0D+JfcCgzab/2hjwo//s=",
+      "bradway":"x78Ng3+R8gZ9Upe8y0+G6WjjZAhHJfPDAFjZup3oN0M= hU7IVcDq0e1ch1jl5hNDkh+jUKV3QSM6UvmZ/lismXY="},
+    "realm":"MHA Solr admins",
+    "forwardCredentials":false,
+    "":{"v":0}},
+  "authorization":{
+    "class":"solr.RuleBasedAuthorizationPlugin",
+    "permissions":[{
+        "name":"all",
+        "role":"admin"}],
+    "user-role":{"mhasolr":"admin"}}}
