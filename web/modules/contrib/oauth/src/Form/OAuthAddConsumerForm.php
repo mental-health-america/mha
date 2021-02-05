@@ -98,7 +98,7 @@ class OAuthAddConsumerForm extends FormBase {
       'key_hash' => $key_hash,
     );
     $this->user_data->set('oauth', $uid, $consumer_key, $consumer);
-    drupal_set_message($this->t('Added a new consumer.'));
+    $this->messenger()->addStatus($this->t('Added a new consumer.'));
     Cache::invalidateTags(['oauth:' . $uid]);
     $form_state->setRedirect('oauth.user_consumer', array('user' => $uid));
   }

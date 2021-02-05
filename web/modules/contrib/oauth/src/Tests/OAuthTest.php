@@ -6,7 +6,7 @@
 
 namespace Drupal\oauth\Tests;
 
-use Drupal\simpletest\WebTestBase;
+use Drupal\Tests\BrowserTestBase;
 use Drupal\user\USerData;
 
 /**
@@ -14,7 +14,7 @@ use Drupal\user\USerData;
  *
  * @group OAuth
  */
-class OAuthTest extends WebTestBase {
+class OAuthTest extends BrowserTestBase {
 
   /**
    * Modules to enable.
@@ -97,7 +97,7 @@ class OAuthTest extends WebTestBase {
           'format' => 'plain_text',
       )),
     );
-    $entity = entity_create($entity_type, $entity_values);
+    $entity = \Drupal::service('entity_type.manager')->getStorage($entity_type)->create($entity_values);
     $entity->save();
 
     // Create a user account that has the required permissions to read
@@ -115,7 +115,7 @@ class OAuthTest extends WebTestBase {
     // Get the consumer we just generated for the new user.
     $user_data = \Drupal::service('user.data')->get('oauth', $account->id());
     // Now send an authenticated request to read the entity through REST.
-    $url = $entity->urlInfo()->setRouteParameter('_format', $format);
+    $url = $entity->toUrl()->setRouteParameter('_format', $format);
     $endpoint = $url->setAbsolute()->toString();
     $oauth = new \OAuth(key($user_data), $user_data[key($user_data)]['consumer_secret']);
     $oauth_header = $oauth->getRequestHeader('GET', $endpoint);
