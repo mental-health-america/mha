@@ -12,7 +12,7 @@ use Drupal\Core\Block\BlockBase;
  * Provides a Custom Block
  * @Block(
  * id = "block_form_workplace_mental_health_email",
- * admin_label = @Translation("Form Young Leaders Email Sign up"),
+ * admin_label = @Translation("Form Workplace Mental Health Email Sign up"),
  * )
  */
 class form_workplace_mental_health_email extends BlockBase {
