@@ -1,0 +1,10 @@
+name: Young Leaders Email Form
+type: module
+description: 'Young Leaders email sign up form'
+package: Custom
+version: 8.x
+core: 8.x
+dependencies:
+  - node
+  - block
+
