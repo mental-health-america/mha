@@ -23,14 +23,8 @@ class form_annual_conference_email extends BlockBase {
   public function build() {
     return [
       '#markup' => $this->t('
-<div class="row">
-  <div class="col">
-    <div class="p-5 red-background rounded-corners clearfix">
-      <div id="UVXlmRczSN">
-     <script type="text/javascript" src="https://default.salsalabs.org/api/widget/template/9aa6a5eb-1ab6-4cc2-bf8c-bb9ccbaa5af6/?tId=UVXlmRczSN" ></script>
-      </div>
-     </div>
-  </div>
+<div id="UVXlmRczSN">
+    <script type="text/javascript" src="https://default.salsalabs.org/api/widget/template/9aa6a5eb-1ab6-4cc2-bf8c-bb9ccbaa5af6/?tId=UVXlmRczSN" ></script>
 </div>
       '),
     ];
