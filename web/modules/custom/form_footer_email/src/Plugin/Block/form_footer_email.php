@@ -25,7 +25,6 @@ class form_footer_email extends BlockBase {
       <div id="gNHKcuBICg">
     <script type="text/javascript" src="https://default.salsalabs.org/api/widget/template/475d7d0f-2f04-4142-b9e4-50c6abce55ea/?tId=gNHKcuBICg" ></script>
 </div>
-
       '),
     );
 
