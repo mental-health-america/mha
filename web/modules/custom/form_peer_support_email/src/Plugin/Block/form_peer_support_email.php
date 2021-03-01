@@ -23,15 +23,11 @@ class form_peer_support_email extends BlockBase {
   public function build() {
     return [
       '#markup' => $this->t('
-<div class="row">
-  <div class="col">
-    <div class="p-5 red-background rounded-corners clearfix">
-      <div id="hFwZMqrqDw">
-        <script type="text/javascript" src="https://default.salsalabs.org/api/widget/template/08ac95d1-0980-430e-a5f3-3350eaec4285/?tId=hFwZMqrqDw" ></script>
-      </div>
-     </div>
+<div class="p-5">
+  <div id="hFwZMqrqDw">
+    <script type="text/javascript" src="https://default.salsalabs.org/api/widget/template/08ac95d1-0980-430e-a5f3-3350eaec4285/?tId=hFwZMqrqDw" ></script>
   </div>
-</div>
+ </div>
       '),
     ];
 
