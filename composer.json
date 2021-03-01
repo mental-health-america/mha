@@ -68,7 +68,6 @@
         "drupal/charts": "^3.0@beta",
         "drupal/colorbox": "^1.4",
         "drupal/colorbox_inline": "^1.1",
-        "drupal/commerce_url": "^2.0",
         "drupal/config_update": "^1.6",
         "drupal/console": "^1.0.2",
         "drupal/contact_block": "^1.4",

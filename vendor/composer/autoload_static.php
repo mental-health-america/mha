@@ -219,7 +219,6 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
             'Composer\\Installers\\' => 20,
             'Composer\\CaBundle\\' => 18,
             'Composer\\' => 9,
-            'CommerceGuys\\Intl\\' => 18,
             'CommerceGuys\\Addressing\\' => 24,
         ),
         'B' => 
@@ -709,10 +708,6 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
         'Composer\\' => 
         array (
             0 => __DIR__ . '/..' . '/composer/composer/src/Composer',
-        ),
-        'CommerceGuys\\Intl\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/commerceguys/intl/src',
         ),
         'CommerceGuys\\Addressing\\' => 
         array (
