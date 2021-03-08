@@ -159,7 +159,7 @@
         "drupal/webform_migrate": "^1.1",
         "drupal/webform_score": "^2.0@alpha",
         "drupal/webform_views": "^5.0",
-        "drush/drush": "^10.3",
+        "drush/drush": "^10.4",
         "google/charts": "^45.0",
         "psr/container": "^1.0",
         "vlucas/phpdotenv": "^2.4",

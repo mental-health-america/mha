@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "163738e986da5a388475dcff1dc2d595",
+    "content-hash": "03fdfffefb038678daf68b6782e51e1e",
     "packages": [
         {
             "name": "alchemy/zippy",
@@ -3801,10 +3801,6 @@
                 {
                     "name": "Sam152",
                     "homepage": "https://www.drupal.org/user/1485048"
-                },
-                {
-                    "name": "frjo",
-                    "homepage": "https://www.drupal.org/user/5546"
                 },
                 {
                     "name": "jdwfly",
@@ -7747,7 +7743,7 @@
             "extra": {
                 "drupal": {
                     "version": "8.x-1.15",
-                    "datestamp": "1607188979",
+                    "datestamp": "1611210662",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -10017,7 +10013,7 @@
             "extra": {
                 "drupal": {
                     "version": "8.x-5.24",
-                    "datestamp": "1612453175",
+                    "datestamp": "1614791857",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -10214,7 +10210,7 @@
             "extra": {
                 "drupal": {
                     "version": "6.0.1",
-                    "datestamp": "1612453373",
+                    "datestamp": "1614791851",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -10353,7 +10349,7 @@
             "extra": {
                 "drupal": {
                     "version": "8.x-5.24",
-                    "datestamp": "1612453175",
+                    "datestamp": "1614791857",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -10475,16 +10471,16 @@
         },
         {
             "name": "drush/drush",
-            "version": "10.3.6",
+            "version": "10.4.0-rc1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drush-ops/drush.git",
-                "reference": "fc985a95c6010e04891a2dbcf3f39984b8c9ef0a"
+                "reference": "f4a2f73066714ef0c464c8c71ca3945e7bd94d38"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drush-ops/drush/zipball/fc985a95c6010e04891a2dbcf3f39984b8c9ef0a",
-                "reference": "fc985a95c6010e04891a2dbcf3f39984b8c9ef0a",
+                "url": "https://api.github.com/repos/drush-ops/drush/zipball/f4a2f73066714ef0c464c8c71ca3945e7bd94d38",
+                "reference": "f4a2f73066714ef0c464c8c71ca3945e7bd94d38",
                 "shasum": ""
             },
             "require": {
@@ -10509,6 +10505,10 @@
                 "webflo/drupal-finder": "^1.2",
                 "webmozart/path-util": "^2.1.0"
             },
+            "conflict": {
+                "drupal/migrate_run": "*",
+                "drupal/migrate_tools": "<= 5"
+            },
             "require-dev": {
                 "composer/installers": "^1.7",
                 "cweagans/composer-patches": "~1.0",
@@ -10516,9 +10516,10 @@
                 "drupal/alinks": "1.0.0",
                 "drupal/core-recommended": "^8.8",
                 "lox/xhprof": "dev-master",
-                "phpunit/phpunit": "^4.8.36 || ^6.1",
+                "phpunit/phpunit": ">=7.5.20",
                 "squizlabs/php_codesniffer": "^2.7 || ^3",
-                "vlucas/phpdotenv": "^2.4"
+                "vlucas/phpdotenv": "^2.4",
+                "yoast/phpunit-polyfills": "^0.2.0"
             },
             "bin": [
                 "drush"
@@ -10604,7 +10605,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-11-11T04:36:51+00:00"
+            "time": "2021-01-04T17:31:48+00:00"
         },
         {
             "name": "easyrdf/easyrdf",
