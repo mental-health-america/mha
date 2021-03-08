@@ -17,6 +17,7 @@
         var items = simple_instagram_feed_array[i].items;
         var styling = (simple_instagram_feed_array[i].styling === 'true' ? true : false);
         var unique_id = simple_instagram_feed_array[i].unique_id;
+        var lazy_load = simple_instagram_feed_array[i].lazy_load;
 
         // Verify items per row.
         var items_per_row;
@@ -42,7 +43,8 @@
           callback: null,
           styling: styling,
           items: items,
-          margin: 0.25
+          margin: 0.25,
+          lazy_load: lazy_load,
         };
 
         if (styling) {

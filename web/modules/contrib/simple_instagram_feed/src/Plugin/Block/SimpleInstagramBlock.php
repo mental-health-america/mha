@@ -41,6 +41,7 @@ class SimpleInstagramBlock extends BlockBase implements ContainerFactoryPluginIn
         'items_per_row_l_720' => 5,
         'items_per_row_l_960' => 5,
         'items_per_row_h_960' => 5,
+        'lazy_load' => true,
       ] + parent::defaultConfiguration();
   }
 
@@ -158,6 +159,13 @@ class SimpleInstagramBlock extends BlockBase implements ContainerFactoryPluginIn
       '#default_value' => isset($config['simple_instagram_styling']) ? $config['simple_instagram_styling'] : 'true',
     ];
 
+    $form['simple_instagram_lazy_load'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Lazyload assets'),
+      '#description' => $this->t('Do you wish to Lazy-load on this Instagram Feed?'),
+      '#default_value' => isset($config['simple_instagram_lazy_load']) ? $config['simple_instagram_lazy_load'] : 'true',
+    ];
+
     // Add a warning if the js library is not available.
     $this->simpleInstagramFeedLibrary->isAvailable(TRUE);
 
@@ -180,6 +188,7 @@ class SimpleInstagramBlock extends BlockBase implements ContainerFactoryPluginIn
     $this->configuration['simple_instagram_items_per_row_l_960'] = $values['simple_instagram_items_per_row']['simple_instagram_items_per_row_l_960'];
     $this->configuration['simple_instagram_items_per_row_h_960'] = $values['simple_instagram_items_per_row']['simple_instagram_items_per_row_h_960'];
     $this->configuration['simple_instagram_styling'] = $values['simple_instagram_styling'];
+    $this->configuration['simple_instagram_lazy_load'] = $values['simple_instagram_lazy_load'];
   }
 
   /**
@@ -229,6 +238,7 @@ class SimpleInstagramBlock extends BlockBase implements ContainerFactoryPluginIn
       'items_per_row_l_720' => $config['simple_instagram_items_per_row_l_720'] + 1,
       'items_per_row_l_960' => $config['simple_instagram_items_per_row_l_960'] + 1,
       'items_per_row_h_960' => $config['simple_instagram_items_per_row_h_960'] + 1,
+      'lazy_load' => $config['simple_instagram_lazy_load'],
     ];
   }
 
