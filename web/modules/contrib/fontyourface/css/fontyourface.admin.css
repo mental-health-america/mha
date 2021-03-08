@@ -16,7 +16,7 @@
 }
 
 .fontyourface-header {
-  height: 70px;
+  min-height: 70px;
 }
 
 .fontyourface-header h4,
@@ -25,7 +25,7 @@
 }
 
 .fontyourface-header h4 {
-  height: 40px;
+  min-height: 40px;
 }
 
 .view-fontyourface-font-manager .fontyourface-preview {

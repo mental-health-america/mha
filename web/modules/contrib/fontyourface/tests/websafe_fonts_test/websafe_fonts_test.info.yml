@@ -7,7 +7,7 @@ package: Testing
 dependencies:
   - fontyourface:fontyourface
 
-# Information added by Drupal.org packaging script on 2020-09-28
-version: '8.x-3.5'
+# Information added by Drupal.org packaging script on 2021-03-05
+version: '8.x-3.6'
 project: 'fontyourface'
-datestamp: 1601309659
+datestamp: 1614963173

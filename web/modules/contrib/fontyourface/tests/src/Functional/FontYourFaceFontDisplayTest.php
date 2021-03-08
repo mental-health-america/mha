@@ -50,8 +50,10 @@ class FontYourFaceFontDisplayTest extends BrowserTestBase {
       ->save();
 
     // Enable Arial font.
-    $this->drupalPostForm(Url::fromRoute('font.settings'), ['load_all_enabled_fonts' => FALSE], t('Save configuration'));
-    $this->drupalPostForm(Url::fromRoute('font.settings'), [], t('Import from websafe_fonts_test'));
+    $this->drupalGet(Url::fromRoute('font.settings'));
+    $this->submitForm(['load_all_enabled_fonts' => FALSE], 'Save configuration');
+    $this->drupalGet(Url::fromRoute('font.settings'));
+    $this->submitForm([], 'Import from websafe_fonts_test');
   }
 
   /**
@@ -80,7 +82,8 @@ class FontYourFaceFontDisplayTest extends BrowserTestBase {
       'selectors' => '.fontyourface h1, .fontyourface h2, .fontyourface h3, .fontyourface h4, .fontyourface h5, .fontyourface h6',
       'theme' => 'bartik',
     ];
-    $this->drupalPostForm(Url::fromRoute('entity.font_display.add_form'), $edit, 'Save');
+    $this->drupalGet(Url::fromRoute('entity.font_display.add_form'));
+    $this->submitForm($edit, 'Save');
     $this->drupalGet(Url::fromRoute('entity.font_display.collection'));
     $this->resetAll();
 

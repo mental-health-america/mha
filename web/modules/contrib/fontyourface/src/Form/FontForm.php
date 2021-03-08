@@ -2,7 +2,6 @@
 
 namespace Drupal\fontyourface\Form;
 
-use Drupal;
 use Drupal\Core\Entity\ContentEntityForm;
 use Drupal\Core\Form\FormStateInterface;
 
@@ -17,7 +16,7 @@ class FontForm extends ContentEntityForm {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    /* @var $entity \Drupal\fontyourface\Entity\Font */
+    /** @var \Drupal\fontyourface\Entity\Font $entity */
     $form = parent::buildForm($form, $form_state);
     $entity = $this->entity;
 
@@ -33,13 +32,13 @@ class FontForm extends ContentEntityForm {
 
     switch ($status) {
       case SAVED_NEW:
-        Drupal::messenger()->addMessage($this->t('Created the %label Font.', [
+        \Drupal::messenger()->addMessage($this->t('Created the %label Font.', [
           '%label' => $entity->label(),
         ]));
         break;
 
       default:
-        Drupal::messenger()->addMessage($this->t('Saved the %label Font.', [
+        \Drupal::messenger()->addMessage($this->t('Saved the %label Font.', [
           '%label' => $entity->label(),
         ]));
     }

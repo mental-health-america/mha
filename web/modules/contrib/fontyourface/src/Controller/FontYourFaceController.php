@@ -2,7 +2,6 @@
 
 namespace Drupal\fontyourface\Controller;
 
-use Drupal;
 use Drupal\Core\Url;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\ReplaceCommand;
@@ -38,7 +37,7 @@ class FontYourFaceController extends ControllerBase {
         return $response->addCommand(new ReplaceCommand('#font-status-' . $font->id(), $link));
       }
       else {
-        Drupal::messenger()->addMessage($this->t('Font @font successfully enabled', ['@font' => $font->name->value]));
+        \Drupal::messenger()->addMessage($this->t('Font @font successfully enabled', ['@font' => $font->name->value]));
         return $this->redirect('entity.font.collection');
       }
     }
@@ -51,7 +50,7 @@ class FontYourFaceController extends ControllerBase {
         ], 503);
       }
       else {
-        Drupal::messenger()->addMessage($error, 'error');
+        \Drupal::messenger()->addMessage($error, 'error');
         return $this->redirect('entity.font.collection');
       }
     }
@@ -80,7 +79,7 @@ class FontYourFaceController extends ControllerBase {
         return $response->addCommand(new ReplaceCommand('#font-status-' . $font->id(), $link));
       }
       else {
-        Drupal::messenger()->addMessage($this->t('Font @font successfully disabled', ['@font' => $font->name->value]));
+        \Drupal::messenger()->addMessage($this->t('Font @font successfully disabled', ['@font' => $font->name->value]));
         return $this->redirect('entity.font.collection');
       }
     }
@@ -93,7 +92,7 @@ class FontYourFaceController extends ControllerBase {
         ], 503);
       }
       else {
-        Drupal::messenger()->addMessage($error, 'error');
+        \Drupal::messenger()->addMessage($error, 'error');
         return $this->redirect('entity.font.collection');
       }
     }

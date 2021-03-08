@@ -27,7 +27,7 @@ class FontListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity) {
-    /* @var $entity \Drupal\fontyourface\Entity\Font */
+    /** @var \Drupal\fontyourface\Entity\Font $entity */
     $row['id'] = $entity->id();
     $row['name'] = Link::fromTextAndUrl(
       $entity->label(),

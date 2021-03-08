@@ -61,7 +61,8 @@ class FontYourFaceSubmoduleInstallTest extends BrowserTestBase {
     $this->drupalGet(Url::fromRoute('entity.font.collection'));
     $this->assertNoText('Arial');
 
-    $this->drupalPostForm(Url::fromRoute('font.settings'), [], t('Import from websafe_fonts_test'));
+    $this->drupalGet(Url::fromRoute('font.settings'));
+    $this->submitForm([], 'Import from websafe_fonts_test');
     $this->assertResponse(200);
     $this->assertText(t('Finished importing fonts.'));
 
@@ -91,7 +92,8 @@ class FontYourFaceSubmoduleInstallTest extends BrowserTestBase {
     $this->drupalGet('/node');
     $this->assertNoRaw('<meta name="Websafe Font" content="Arial" />');
 
-    $this->drupalPostForm(Url::fromRoute('font.settings'), ['load_all_enabled_fonts' => 1], t('Import from websafe_fonts_test'));
+    $this->drupalGet(Url::fromRoute('font.settings'));
+    $this->submitForm(['load_all_enabled_fonts' => 1], 'Import from websafe_fonts_test');
     $this->drupalGet(url::fromRoute('entity.font.activate', ['font' => 1, 'js' => 'nojs']));
     $this->assertText('Font Arial successfully enabled');
 

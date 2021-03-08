@@ -596,7 +596,7 @@ function _fontscom_api_generate_font_css(FontInterface $font) {
     $lines[] = "url('{$metadata['woff']}') format('woff')";
   }
   if ($metadata['svg']) {
-    $lines[] = "url('{$metadata['svg']}#{$css_family}') format('svg')";
+    $lines[] = "url('{$metadata['svg']}#{$font->css_family->value}') format('svg')";
   }
 
   $data .= 'src: ' . implode(', ', $lines) . ";\n";
