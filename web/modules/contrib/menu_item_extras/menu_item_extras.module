@@ -119,7 +119,9 @@ function menu_item_extras_theme() {
     'template' => 'menu-link-content',
   ];
   $theme['menu_levels'] = [
-    'render element' => 'items',
+    'render element' => 'element',
+    'file' => 'menu_item_extras.theme.inc',
+    'template' => 'menu-levels',
   ];
   return $theme;
 }
@@ -132,20 +134,25 @@ function menu_item_extras_preprocess_block(&$variables) {
   // class. We need to build menus supported by menu_item_extras with the
   // default #theme menu, to be able to add suggestions in the good order.
   if (
-      isset($variables['content']['#menu_name'])
+      isset($variables['content']['#theme'], $variables['content']['#menu_name'])
+      && strpos($variables['content']['#theme'], 'menu__') === 0
       && Utility::checkBundleHasExtraFieldsThanEntity('menu_link_content', $variables['content']['#menu_name'])
     ) {
-    $variables['content']['#theme'] = 'menu';
-    // Pass region name to the suggestions_menu_alter for
-    // the region suggestion.
-    if (!empty($variables['elements']['#id'])) {
-      /** @var \Drupal\Core\Config\Entity\ConfigEntityStorageInterface $block_storage */
-      $block_storage = \Drupal::entityTypeManager()
-        ->getStorage('block');
-      /** @var \Drupal\block\BlockInterface $block */
-      $block = $block_storage->load($variables['elements']['#id']);
-      if (!empty($block)) {
-        $variables['content']['#attributes']['data-region'] = $block->getRegion();
+
+      $menu_theme = 'menu__' . strtr($variables['content']['#menu_name'], '-', '_');
+      if ($variables['content']['#theme'] == $menu_theme) {
+        $variables['content']['#theme'] = 'menu';
+        // Pass region name to the suggestions_menu_alter for
+        // the region suggestion.
+        if (!empty($variables['elements']['#id'])) {
+        /** @var \Drupal\Core\Config\Entity\ConfigEntityStorageInterface $block_storage */
+        $block_storage = \Drupal::entityTypeManager()
+          ->getStorage('block');
+        /** @var \Drupal\block\BlockInterface $block */
+        $block = $block_storage->load($variables['elements']['#id']);
+        if (!empty($block)) {
+          $variables['content']['#attributes']['data-region'] = $block->getRegion();
+        }
       }
     }
   }
@@ -188,11 +195,9 @@ function menu_item_extras_theme_suggestions_menu_levels(array $variables) {
   /** @var \Drupal\menu_item_extras\Utility\Utility $utility */
   $utility = \Drupal::service('menu_item_extras.utility');
 
-  $menu_name = $utility::sanitizeMachineName($variables['items']['#menu_name']);
-  $children = Element::children($variables['items']);
-  if (isset($children[0]) && isset($variables['items'][$children[0]]['menu_level'])) {
-    $level = 'level_' . $variables['items'][$children[0]]['menu_level'];
-  }
+  $menu_name = $utility::sanitizeMachineName($variables['element']['#menu_name']);
+  $level = 'level_' . $variables['element']['#menu_level'];
+
 
   if (isset($level)) {
     $suggestions[] = $utility::suggestion($suggestion_prefix, $level);

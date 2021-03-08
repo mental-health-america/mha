@@ -150,7 +150,10 @@ class MenuLinkTreeHandler implements MenuLinkTreeHandlerInterface {
       }
       // Process subitems.
       if (!empty($item['below'])) {
-        $content['content']['children'] = $this->processMenuLinkTree($item['below'], $menu_name, $menu_level, $show_item_link);
+        $content['content']['children']['#items'] = $this->processMenuLinkTree($item['below'], $menu_name, $menu_level, $show_item_link);
+        $content['content']['children']['#theme'] = 'menu_levels';
+        $content['content']['children']['#menu_name'] = $menu_name;
+        $content['content']['children']['#menu_level'] = $menu_level + 1;
       }
       $item = array_merge($item, $content);
     }
