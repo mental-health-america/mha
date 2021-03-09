@@ -1,0 +1,10 @@
+name: Footer Email Form
+type: module
+description: 'Add a email sign up form to footer.'
+package: Custom
+version: 8.x
+core: 8.x
+dependencies:
+  - node
+  - block
+
