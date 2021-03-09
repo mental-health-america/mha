@@ -5329,6 +5329,18 @@ ul.sf-menu.sf-navbar ul ul {
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.30);
 }
 
+.form-required:after {
+  content: '';
+  vertical-align: super;
+  display: inline-block;
+  background-image: url(/core/misc/icons/ee0000/required.svg);
+  background-repeat: no-repeat;
+  background-size: 6px 6px;
+  width: 6px;
+  height: 6px;
+  margin: 0 0.3em;
+}
+
 .body-page input[type="email"], .body-page textarea, .body-page select {
   border: 1px solid #fff !important;
 }
