@@ -155,6 +155,9 @@ class ContentEntityCloneBase implements EntityHandlerInterface, EntityCloneInter
         if (!empty($already_cloned[$referenced_entity->getEntityTypeId()][$referenced_entity->id()])) {
           $referenced_entities[] = $already_cloned[$referenced_entity->getEntityTypeId()][$referenced_entity->id()];
         }
+        else {
+          $referenced_entities[] = $referenced_entity;
+        }
       }
       else {
         $referenced_entities[] = $referenced_entity;
