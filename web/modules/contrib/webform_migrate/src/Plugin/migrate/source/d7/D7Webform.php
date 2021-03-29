@@ -13,6 +13,7 @@ use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\webform\Entity\Webform;
 use Drupal\node\Entity\Node;
 use Symfony\Component\Yaml\Yaml;
+use Drupal\Component\Utility\Bytes;
 
 /**
  * Drupal 7 webform source from database.
@@ -270,8 +271,8 @@ class D7Webform extends DrupalSqlBase implements ImportAwareInterface, RollbackA
     if ($multiPage) {
       $pageCnt = 1;
       $current_page = 'wizard_page_1';
-      $output .= "first_page:\n  '#type': wizard_page\n  '#title': {" . $current_page . "_title}\n  '#open': true\n";
-      $current_page_title = t('Page') . ' ' . $pageCnt++;
+      $output .= "first_page:\n  '#type': webform_wizard_page\n  '#title': {" . $current_page . "_title}\n";
+      $current_page_title = 'Start';
     }
 
     foreach ($elements_tree as $element) {
@@ -322,7 +323,7 @@ class D7Webform extends DrupalSqlBase implements ImportAwareInterface, RollbackA
         $element['value'] = $this->replaceTokens($element['value']);
       }
 
-      $markup = $indent . $element['form_key'] . ":\n";
+      $markup = $indent . strtolower($element['form_key']) . ":\n";
       switch ($element['type']) {
         case 'fieldset':
           if ($multiPage && empty($current_page_title)) {
@@ -346,10 +347,10 @@ class D7Webform extends DrupalSqlBase implements ImportAwareInterface, RollbackA
           if (!empty($extra['aslist'])) {
             $select_type = 'select';
           }
-          elseif (!empty($extra['multiple']) && count($extra['items']) > 1) {
+          elseif (!empty($extra['multiple']) && count($valid_options) > 1) {
             $select_type = 'checkboxes';
           }
-          elseif (!empty($extra['multiple']) && count($extra['items']) == 1) {
+          elseif (!empty($extra['multiple']) && count($valid_options) == 1) {
             $select_type = 'checkbox';
             list($key, $desc) = explode('|', $extra['items']);
             $markup .= "$indent  '#description': \"" . $this->cleanString($desc) . "\"\n";
@@ -403,6 +404,7 @@ class D7Webform extends DrupalSqlBase implements ImportAwareInterface, RollbackA
           break;
 
         case 'file':
+        case 'multiple_file':
           $exts = '';
           if (!empty($extra['filtering']['types'])) {
             $types = $extra['filtering']['types'];
@@ -410,17 +412,34 @@ class D7Webform extends DrupalSqlBase implements ImportAwareInterface, RollbackA
               $add_types = explode(',', $extra['filtering']['addextensions']);
               $types = array_unique(array_merge($types, array_map('trim', $add_types)));
             }
-            $exts = implode(',', $types);
+            $exts = implode(' ', $types);
           }
-          $filesize = '';
+
+          $file_size = '';
           if (!empty($extra['filtering']['size'])) {
-            $filesize = $extra['filtering']['size'] / 1000;
+            // Get the string for the size. Will be something like "2 MB".
+            $size = $extra['filtering']['size'];
+
+            // Convert the string into an integer in bytes.
+            $file_size_bytes = Bytes::toInt($size);
+
+            // Convert that to MB.
+            $file_size = floor($file_size_bytes / 1024 / 1024);
+
+            // Failsafe as Webform doesn't let you go less than 1MB.
+            $file_size = ($file_size < 1) ? 1 : $file_size;
           }
+
           $markup .= "$indent  '#type': managed_file\n";
-          $markup .= "$indent  '#max_filesize': '$filesize'\n";
+          $markup .= "$indent  '#max_filesize': '$file_size'\n";
           $markup .= "$indent  '#file_extensions': '$exts'\n";
+
           if (!empty($extra['width'])) {
             $markup .= "$indent  '#size': " . $extra['width'] . "\n";
+          }
+
+          if ($element['type'] == 'multiple_file') {
+            $markup .= "$indent  '#multiple': true\n";
           }
           break;
 
@@ -453,9 +472,34 @@ class D7Webform extends DrupalSqlBase implements ImportAwareInterface, RollbackA
         case 'pagebreak':
           $output = str_replace('{' . $current_page . '_title}', $current_page_title, $output);
           $current_page = $element['form_key'];
-          $markup .= "$indent  '#type': wizard_page\n  '#open': true\n  '#title': {" . $current_page . "_title}\n";
-          $current_page_title = t('Page') . ' ' . $pageCnt++;
+          $markup .= "$indent  '#type': webform_wizard_page\n  '#title': {" . $current_page . "_title}\n";
+          $current_page_title = $element['name'];
+          $pageCnt++;
           break;
+
+        case 'addressfield':
+          $markup .= "$indent  '#type': webform_address\n";
+          $markup .= "$indent  '#state_province__type': textfield\n";
+          break;
+
+        case 'grid':
+          $questionsArray = $this->getItemsArray($extra['questions']);
+          $questions = $this->buildItemsString($questionsArray, $indent . '  ');
+
+          $answersArray = $this->getItemsArray($extra['options']);
+          $answers = $this->buildItemsString($answersArray, $indent . '  ');
+
+          $markup .= "$indent  '#type': webform_likert\n";
+          $markup .= "$indent  '#questions':\n" . $questions . "\n";
+          $markup .= "$indent  '#answers':\n" . $answers . "\n";
+          break;
+
+        default:
+          echo '';
+      }
+
+      if (!empty($element['type']) && is_string($element['type'])) {
+        $this->getModuleHandler()->alter('webform_migrate_d7_webform_element_' . $element['type'], $markup, $indent, $element);
       }
 
       // Add common fields.
@@ -485,13 +529,15 @@ class D7Webform extends DrupalSqlBase implements ImportAwareInterface, RollbackA
 
       // Build contionals.
       if ($states = $this->buildConditionals($element, $elements)) {
+        $markup .= "$indent  '#states':\n";
         foreach ($states as $key => $values) {
-          $markup .= "$indent  '#states':\n";
           $markup .= "$indent    $key:\n";
           foreach ($values as $value) {
             foreach ($value as $name => $item) {
               $markup .= "$indent      " . Yaml::dump($name, 2, 2) . ":\n";
-              $markup .= "$indent        " . Yaml::dump($item, 2, 2);
+              foreach (explode("\n", Yaml::dump($item, 2, 2)) as $line) {
+                $markup .= "$indent        " . $line . "\n";
+              }
             }
           }
         }
@@ -541,8 +587,10 @@ class D7Webform extends DrupalSqlBase implements ImportAwareInterface, RollbackA
       ]);
     $conditions = $query->condition('wc.nid', $nid)->condition('wca.target', $cid)->execute();
     $states = [];
+
     if (!empty($conditions)) {
       foreach ($conditions as $condition) {
+        $unsupported_condition = FALSE;
         // Element states.
         switch ($condition['action']) {
           case 'show':
@@ -555,16 +603,19 @@ class D7Webform extends DrupalSqlBase implements ImportAwareInterface, RollbackA
 
           case 'set':
             // Nothing found in D8 :(.
+            $unsupported_condition = TRUE;
             break;
         }
         // Condition states.
         $operator_value = $condition['value'];
         $depedent = $elements[$condition['source']];
         $depedent_extra = unserialize($depedent['extra']);
+        $depedent_extra['items'] = explode("\n", $depedent_extra['items']);
+
         switch ($condition['operator']) {
           case 'equal':
             $element_condition = ['value' => $operator_value];
-            if ($depedent['type'] == 'select' && !$depedent_extra['aslist']) {
+            if ($depedent['type'] == 'select' && !$depedent_extra['aslist'] && $depedent_extra['multiple']) {
               $element_condition = ['checked' => TRUE];
             }
             break;
@@ -573,17 +624,27 @@ class D7Webform extends DrupalSqlBase implements ImportAwareInterface, RollbackA
             // There is no handler for this in D8 so we do the reverse.
             $element_state = $condition['invert'] ? 'visible' : 'invisible';
             $element_condition = ['value' => $operator_value];
-            // Specially handle the checkboxes, radios.
-            if ($depedent['type'] == 'select' && !$depedent_extra['aslist']) {
+            // Specially handle the checkboxes.
+            if ($depedent['type'] == 'select' && !$depedent_extra['aslist'] && $depedent_extra['multiple']) {
               $element_condition = ['checked' => TRUE];
             }
+
             break;
 
           case 'less_than':
+            $element_condition = ['value' => ['less' => $operator_value]];
+            break;
+
           case 'less_than_equal':
+            $element_condition = ['value' => ['less_equal' => $operator_value]];
+            break;
+
           case 'greater_than':
+            $element_condition = ['value' => ['greater' => $operator_value]];
+            break;
+
           case 'greater_than_equal':
-            // Nothing in D8 to handle these.
+            $element_condition = ['value' => ['greater_equal' => $operator_value]];
             break;
 
           case 'empty':
@@ -605,13 +666,17 @@ class D7Webform extends DrupalSqlBase implements ImportAwareInterface, RollbackA
             break;
         }
 
-        if (!$depedent_extra['aslist'] && $depedent_extra['multiple'] && count($depedent_extra['items']) > 1) {
+        if (!$depedent_extra['aslist'] && $depedent_extra['multiple'] && is_array($depedent_extra['items']) && count($depedent_extra['items']) > 1) {
           $depedent['form_key'] = $depedent['form_key'] . "[$operator_value]";
         }
-        elseif (!$depedent_extra['aslist'] && !$depedent_extra['multiple']) {
+        elseif (!$depedent_extra['aslist'] && !$depedent_extra['multiple'] && is_array($depedent_extra['items']) && count($depedent_extra['items']) == 1) {
           $depedent['form_key'] = $depedent['form_key'] . "[$operator_value]";
         }
-        $states[$element_state][] = [':input[name="' . $depedent['form_key'] . '"]' => $element_condition];
+
+        if (!$unsupported_condition) {
+          $states[$element_state][] = [':input[name="' . strtolower($depedent['form_key']) . '"]' => $element_condition];
+        }
+
       }
       if (empty($states)) {
         return FALSE;
@@ -648,7 +713,7 @@ class D7Webform extends DrupalSqlBase implements ImportAwareInterface, RollbackA
       $id = 'email_' . $email['eid'];
       foreach (['email', 'subject', 'from_name', 'from_address'] as $field) {
         if (!empty($email[$field]) && is_numeric($email[$field]) && !empty($xref[$email[$field]])) {
-          $email[$field] = "[webform-submission:values:{$xref[$email[$field]]}:raw]";
+          $email[$field] = "[webform_submission:values:{$xref[$email[$field]]}:raw]";
         }
       }
       $excluded = [];
@@ -671,7 +736,7 @@ class D7Webform extends DrupalSqlBase implements ImportAwareInterface, RollbackA
           'from_mail' => $email['from_address'],
           'from_name' => $email['from_name'],
           'subject' => $email['subject'],
-          'body' => $email['template'],
+          'body' => str_replace('[submission:', '[webform_submission:', $email['template']),
           'html' => $email['html'],
           'attachments' => $email['attachments'],
           'excluded_elements' => $excluded,
@@ -783,7 +848,7 @@ class D7Webform extends DrupalSqlBase implements ImportAwareInterface, RollbackA
     $field_storage = FieldStorageConfig::loadByName('node', 'webform');
     $field = FieldConfig::loadByName('node', 'webform', 'webform');
     if (empty($field)) {
-      $field = entity_create('field_config', [
+      $field = \Drupal::service('entity_type.manager')->getStorage('field_config')->create([
         'field_storage' => $field_storage,
         'bundle' => 'webform',
         'label' => 'Webform',
@@ -791,15 +856,15 @@ class D7Webform extends DrupalSqlBase implements ImportAwareInterface, RollbackA
       ]);
       $field->save();
       // Assign widget settings for the 'default' form mode.
-      $display = entity_get_form_display('node', 'webform', 'default')->getComponent('webform');
-      entity_get_form_display('node', 'webform', 'default')
+      $display = \Drupal::service('entity_display.repository')->getFormDisplay('node', 'webform', 'default')->getComponent('webform');
+      \Drupal::service('entity_display.repository')->getFormDisplay('node', 'webform', 'default')
         ->setComponent('webform', [
           'type' => $display['type'],
         ])
         ->save();
       // Assign display settings for the 'default' and 'teaser' view modes.
-      $display = entity_get_display('node', 'webform', 'default')->getComponent('webform');
-      entity_get_display('node', 'webform', 'default')
+      $display = \Drupal::service('entity_display.repository')->getViewDisplay('node', 'webform', 'default')->getComponent('webform');
+      \Drupal::service('entity_display.repository')->getViewDisplay('node', 'webform', 'default')
         ->setComponent('webform', [
           'label' => $display['label'],
           'type' => $display['type'],
@@ -807,10 +872,10 @@ class D7Webform extends DrupalSqlBase implements ImportAwareInterface, RollbackA
         ->save();
       // The teaser view mode is created by the Standard profile and therefore
       // might not exist.
-      $view_modes = \Drupal::entityManager()->getViewModes('node');
+      $view_modes = \Drupal::service('entity_display.repository')->getViewModes('node');
       if (isset($view_modes['teaser'])) {
-        $display = entity_get_display('node', 'webform', 'teaser')->getComponent('webform');
-        entity_get_display('node', 'webform', 'teaser')
+        $display = \Drupal::service('entity_display.repository')->getViewDisplay('node', 'webform', 'teaser')->getComponent('webform');
+        \Drupal::service('entity_display.repository')->getViewDisplay('node', 'webform', 'teaser')
           ->setComponent('webform', [
             'label' => $display['label'],
             'type' => $display['type'],
@@ -822,16 +887,17 @@ class D7Webform extends DrupalSqlBase implements ImportAwareInterface, RollbackA
     // Attach any Webform created to the relevant webforms if
     // Webform exists and Webform exists and Webform field is empty.
     $webforms = $this->query()->execute();
-    foreach ($webforms as $webform) {
-      $webform_nid = $webform['nid'];
+    foreach ($webforms as $webformInfo) {
+      $webform_nid = $webformInfo['nid'];
       $webform_id = 'webform_' . $webform_nid;
       $webform = Webform::load($webform_id);
       if (!empty($webform)) {
+        /** @var \Drupal\node\NodeInterface $node */
         $node = Node::load($webform_nid);
         if (!empty($node) && $node->getType() == 'webform') {
           if (empty($node->webform->target_id)) {
             $node->webform->target_id = $webform_id;
-            $node->webform->status = 1;
+            $node->webform->status = $webformInfo['status'] ? 'open' : 'closed';
             $node->save();
           }
         }
@@ -855,6 +921,7 @@ class D7Webform extends DrupalSqlBase implements ImportAwareInterface, RollbackA
       $webform_id = 'webform_' . $webform_nid;
       $webform = Webform::load($webform_id);
       if (empty($webform)) {
+        /** @var \Drupal\node\NodeInterface $node */
         $node = Node::load($webform_nid);
         if (!empty($node) && $node->getType() == 'webform') {
           if (!empty($node->webform->target_id) && $node->webform->target_id == $webform_id) {
@@ -864,6 +931,26 @@ class D7Webform extends DrupalSqlBase implements ImportAwareInterface, RollbackA
         }
       }
     }
+  }
+
+  protected function getItemsArray($rawString) {
+    $items = explode("\n", $rawString);
+    $items = array_map('trim', $items);
+    return array_map(function($item) {
+      return explode('|', $item);
+    }, $items);
+  }
+
+  protected function buildItemsString($itemsArray, $baseIndent = '') {
+    $preparedItems = array_map(function($item) use ($baseIndent) {
+      return $baseIndent . '  ' . $this->encapsulateString($item[0]) . ': ' . $this->encapsulateString($item[1]);
+    }, $itemsArray);
+
+    return implode("\n", $preparedItems);
+  }
+
+  protected function encapsulateString($string) {
+    return sprintf("'%s'", addslashes($string));
   }
 
 }

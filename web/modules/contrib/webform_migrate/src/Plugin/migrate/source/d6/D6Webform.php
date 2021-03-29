@@ -412,6 +412,10 @@ class D6Webform extends DrupalSqlBase implements ImportAwareInterface, RollbackA
           break;
       }
 
+      if (!empty($element['type']) && is_string($element['type'])) {
+        $this->getModuleHandler()->alter('webform_migrate_d6_weform_element_' . $element['type'], $markup, $indent, $element);
+      }
+
       // Add common fields.
       if (!empty($element['value']) && (empty($valid_options) || in_array($element['value'], $valid_options))) {
         $markup .= "$indent  '#default_value': " . $element['value'] . "\n";
@@ -608,7 +612,7 @@ class D6Webform extends DrupalSqlBase implements ImportAwareInterface, RollbackA
     $field_storage = FieldStorageConfig::loadByName('node', 'webform');
     $field = FieldConfig::loadByName('node', 'webform', 'webform');
     if (empty($field)) {
-      $field = entity_create('field_config', [
+      $field = \Drupal::service('entity_type.manager')->getStorage('field_config')->create([
         'field_storage' => $field_storage,
         'bundle' => 'webform',
         'label' => 'Webform',
@@ -616,15 +620,15 @@ class D6Webform extends DrupalSqlBase implements ImportAwareInterface, RollbackA
       ]);
       $field->save();
       // Assign widget settings for the 'default' form mode.
-      $display = entity_get_form_display('node', 'webform', 'default')->getComponent('webform');
-      entity_get_form_display('node', 'webform', 'default')
+      $display = \Drupal::service('entity_display.repository')->getFormDisplay('node', 'webform', 'default')->getComponent('webform');
+      \Drupal::service('entity_display.repository')->getFormDisplay('node', 'webform', 'default')
         ->setComponent('webform', [
           'type' => $display['type'],
         ])
         ->save();
       // Assign display settings for the 'default' and 'teaser' view modes.
-      $display = entity_get_display('node', 'webform', 'default')->getComponent('webform');
-      entity_get_display('node', 'webform', 'default')
+      $display = \Drupal::service('entity_display.repository')->getViewDisplay('node', 'webform', 'default')->getComponent('webform');
+      \Drupal::service('entity_display.repository')->getViewDisplay('node', 'webform', 'default')
         ->setComponent('webform', [
           'label' => $display['label'],
           'type' => $display['type'],
@@ -632,10 +636,10 @@ class D6Webform extends DrupalSqlBase implements ImportAwareInterface, RollbackA
         ->save();
       // The teaser view mode is created by the Standard profile and therefore
       // might not exist.
-      $view_modes = \Drupal::entityManager()->getViewModes('node');
+      $view_modes = \Drupal::service('entity_display.repository')->getViewModes('node');
       if (isset($view_modes['teaser'])) {
-        $display = entity_get_display('node', 'webform', 'teaser')->getComponent('webform');
-        entity_get_display('node', 'webform', 'teaser')
+        $display = \Drupal::service('entity_display.repository')->getViewDisplay('node', 'webform', 'teaser')->getComponent('webform');
+        \Drupal::service('entity_display.repository')->getViewDisplay('node', 'webform', 'teaser')
           ->setComponent('webform', [
             'label' => $display['label'],
             'type' => $display['type'],
@@ -652,6 +656,7 @@ class D6Webform extends DrupalSqlBase implements ImportAwareInterface, RollbackA
       $webform_id = 'webform_' . $webform_nid;
       $webform = Webform::load($webform_id);
       if (!empty($webform)) {
+        /** @var \Drupal\node\NodeInterface $node */
         $node = Node::load($webform_nid);
         if (!empty($node) && $node->getType() == 'webform') {
           if (empty($node->webform->target_id)) {
@@ -681,6 +686,7 @@ class D6Webform extends DrupalSqlBase implements ImportAwareInterface, RollbackA
       $webform_id = 'webform_' . $webform_nid;
       $webform = Webform::load($webform_id);
       if (empty($webform)) {
+        /** @var \Drupal\node\NodeInterface $node */
         $node = Node::load($webform['nid']);
         if (!empty($node) && $node->getType() == 'webform') {
           if (!empty($node->webform->target_id) && $node->webform->target_id == $webform_id) {
