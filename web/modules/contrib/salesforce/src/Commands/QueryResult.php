@@ -41,7 +41,6 @@ class QueryResult extends RowsOfFieldsWithMetadata {
    *   SOQL result.
    */
   public function __construct(SelectQueryInterface $query, SelectQueryResult $queryResult) {
-    print_r($queryResult->records());
     $data = [];
     foreach ($queryResult->records() as $id => $record) {
       $data[$id] = $record->fields();

@@ -43,6 +43,7 @@ REQUIREMENTS
   5) Required modules
      Entity API - http://drupal.org/project/entity
      Libraries, only for SOAP API - http://drupal.org/project/libraries
+     See Installation below for installing other required dependencies.
 
 
 AUTHORIZATION / CONNECTED APP CONFIGURATION
@@ -81,6 +82,13 @@ AUTHORIZATION / CONNECTED APP CONFIGURATION
   you've specified via settings.php will be used to establish the connection to
   Salesforce, even though you cannot see them in the configuration form.
 
+INSTALLATION:
+-------------
+  When installing through Composer, require each submodules used seperately in
+  addition to the base salesforce module to insure installation of all necessary
+  depedencies. For example, use 'composer require drupal/salesforce_mapping' to
+  include drupal/dynamic_entity_reference and drupal/typed_data, both required
+  by salesforce_mapping.
 
 MODULES:
 --------
@@ -88,8 +96,23 @@ MODULES:
   Salesforce (salesforce):
     OAUTH2 authorization and wrapper around the Salesforce REST API.
 
+  Salesforce Example (salesforce_example)
+    Salesforce examples.
+
+  Salesforce Logger (salesforce_logger)
+    Consolidated logging for Salesforce Log events.
+
+  Salesforce JWT Auth Provider (salesforce_jwt)
+    Provides key-based Salesforce authentication.
+
   Salesforce Mapping (salesforce_mapping)
     Map Drupal entities to Salesforce fields, including field level mapping.
+
+  Salesforce Mapping UI (salesforce_mapping_ui)
+    User interface for managing Salesforce mappings.
+
+  Salesforce OAuth user-agent Provider (salesforce_oauth)
+    Provides user-agent-based Salesforce OAuth authentication.
 
   Salesforce Push (salesforce_push):
     Push Drupal entity updates into Salesforce.
@@ -101,3 +124,6 @@ MODULES:
     Lightweight wrapper around the SOAP API, using the OAUTH access token, to
     fill in functional gaps missing in the REST API. Requires the Salesforce PHP
     Toolkit.
+
+  Salesforce Webform (salesforce_webform)
+    Adds support for webforms fields in Salesforce Mapping.

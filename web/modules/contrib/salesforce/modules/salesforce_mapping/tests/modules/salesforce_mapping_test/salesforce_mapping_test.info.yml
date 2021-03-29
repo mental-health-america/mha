@@ -9,8 +9,9 @@ dependencies:
   - node
   - salesforce_mapping
   - salesforce_test_rest_client
+  - taxonomy
 
-# Information added by Drupal.org packaging script on 2020-06-10
-version: '8.x-4.1'
+# Information added by Drupal.org packaging script on 2021-03-18
+version: '8.x-4.2'
 project: 'salesforce'
-datestamp: 1591805948
+datestamp: 1616088750

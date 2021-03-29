@@ -141,7 +141,7 @@ class SalesforceAuthForm extends EntityForm {
     $this->entity->getPlugin()->submitConfigurationform($form, $form_state);
     // If redirect is not already set, and we have no errors, send user back to
     // the AuthConfig listing page.
-    if (!$form_state->getErrors() && !$form_state->getRedirect()) {
+    if (!$form_state->getErrors() && !$form_state->getResponse() && !$form_state->getRedirect()) {
       $form_state->setRedirectUrl($this->entity->toUrl('collection'));
     }
   }

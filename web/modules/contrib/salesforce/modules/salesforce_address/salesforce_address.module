@@ -1,0 +1,29 @@
+<?php
+
+/**
+ * @file
+ * Contains salesforce_address.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function salesforce_address_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.salesforce_address':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Salesforce Address provides a tweaked version
+        of the Address Field widget from the Address module, which is compatible
+        with Salesforce address formatting, which uses a single, multi-line
+        field for the street address rather than multiple lines. If you are
+        syncing Address fields with Saleforce addresses, you can save a lot of
+        sync trouble by enabling this widget on your Form configurations for
+        your Address fields.') . '</p>';
+      return $output;
+
+    default:
+  }
+}
