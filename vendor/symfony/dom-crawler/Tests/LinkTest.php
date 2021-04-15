@@ -18,30 +18,20 @@ class LinkTest extends TestCase
 {
     public function testConstructorWithANonATag()
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException('LogicException');
         $dom = new \DOMDocument();
         $dom->loadHTML('<html><div><div></html>');
 
         new Link($dom->getElementsByTagName('div')->item(0), 'http://www.example.com/');
     }
 
-    public function testBaseUriIsOptionalWhenLinkUrlIsAbsolute()
+    public function testConstructorWithAnInvalidCurrentUri()
     {
-        $dom = new \DOMDocument();
-        $dom->loadHTML('<html><a href="https://example.com/foo">foo</a></html>');
-
-        $link = new Link($dom->getElementsByTagName('a')->item(0));
-        $this->assertSame('https://example.com/foo', $link->getUri());
-    }
-
-    public function testAbsoluteBaseUriIsMandatoryWhenLinkUrlIsRelative()
-    {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException('InvalidArgumentException');
         $dom = new \DOMDocument();
         $dom->loadHTML('<html><a href="/foo">foo</a></html>');
 
-        $link = new Link($dom->getElementsByTagName('a')->item(0), 'example.com');
-        $link->getUri();
+        new Link($dom->getElementsByTagName('a')->item(0), 'example.com');
     }
 
     public function testGetNode()
