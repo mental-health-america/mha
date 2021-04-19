@@ -173,6 +173,7 @@ class ComposerStaticInit28ed0b610adae093ae18ea83a8c0020c
         ),
         'E' => 
         array (
+            'Enlightn\\SecurityChecker\\' => 25,
             'Egulias\\EmailValidator\\' => 23,
         ),
         'D' => 
@@ -550,6 +551,10 @@ class ComposerStaticInit28ed0b610adae093ae18ea83a8c0020c
         'Goutte\\' => 
         array (
             0 => __DIR__ . '/..' . '/fabpot/goutte/Goutte',
+        ),
+        'Enlightn\\SecurityChecker\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/enlightn/security-checker/src',
         ),
         'Egulias\\EmailValidator\\' => 
         array (
