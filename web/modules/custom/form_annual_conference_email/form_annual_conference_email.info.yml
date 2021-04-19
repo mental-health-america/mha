@@ -1,0 +1,10 @@
+name: Annual Conference Email Form
+type: module
+description: 'Annual Conference email sign up form'
+package: Custom
+version: 8.x
+core: 8.x
+dependencies:
+  - node
+  - block
+

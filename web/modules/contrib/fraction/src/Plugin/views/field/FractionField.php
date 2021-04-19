@@ -47,5 +47,4 @@ class FractionField extends EntityField {
     // Remove the 'click_sort_column' form element.
     unset($form['click_sort_column']);
   }
-
 }

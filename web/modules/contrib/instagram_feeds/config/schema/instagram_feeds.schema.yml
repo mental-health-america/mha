@@ -1,0 +1,30 @@
+instagram_feeds.settings:
+  type: config_object
+  mapping:
+    client_id:
+      type: string
+      label: 'Client ID'
+    client_secret:
+      type: string
+      label: 'Client Secret'
+    refresh_frequency:
+      type: string
+      label: 'Refresh Frequency'
+    avatar_uri_scheme:
+      type: string
+      label: 'Avatar destination'
+    avatar_directory:
+      type: string
+      label: 'Avatar directory'
+    mapping:
+      type: sequence
+      label: 'Fields mapping'
+      sequence:
+        - type: instagram_feeds.mapping.[%key]
+
+instagram_feeds.mapping:*:
+  type: sequence
+  label: 'Media bundle mapping for Instagram post fields'
+  sequence:
+    - type: string
+      label: 'Instagram API field name.'

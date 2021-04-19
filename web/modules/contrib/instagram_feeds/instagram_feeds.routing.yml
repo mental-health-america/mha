@@ -1,0 +1,46 @@
+entity.instagram_account.collection:
+  path: '/admin/config/media/instagram_feeds'
+  defaults:
+    _entity_list: 'instagram_account'
+    _title: 'Instagram Accounts'
+  requirements:
+    _permission: 'access instagram_account overview'
+
+entity.instagram_account.add_form:
+  path: '/admin/config/media/instagram_feeds/add'
+  defaults:
+    _entity_form: 'instagram_account.default'
+    _title: 'Add an Instagram Account'
+  requirements:
+    _permission: 'create instagram_account'
+
+entity.instagram_account.canonical:
+  path: '/admin/config/media/instagram_feeds/manage/{instagram_account}'
+  defaults:
+    _entity_view: 'instagram_account.full'
+  requirements:
+    _permission: 'view instagram_account'
+
+entity.instagram_account.edit_form:
+  path: '/admin/config/media/instagram_feeds/manage/{instagram_account}/edit'
+  defaults:
+    _entity_form: 'instagram_account.edit'
+    _title: 'Edit an Instagram Account'
+  requirements:
+    _permission: 'edit instagram_account'
+
+entity.instagram_account.delete_form:
+  path: '/admin/config/media/instagram_feeds/manage/{instagram_account}/delete'
+  defaults:
+    _entity_form: 'instagram_account.delete'
+    _title: 'Delete an Instagram Account'
+  requirements:
+    _permission: 'delete instagram_account'
+
+instagram_feeds.settings:
+  path: '/admin/config/media/instagram_feeds/settings'
+  defaults:
+    _form: '\Drupal\instagram_feeds\Form\SettingsForm'
+    _title: 'Instagram Feeds Settings'
+  requirements:
+    _permission: 'administer instagram_feeds'

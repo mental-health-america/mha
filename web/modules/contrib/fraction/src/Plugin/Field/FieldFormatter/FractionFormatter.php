@@ -3,6 +3,7 @@
 namespace Drupal\fraction\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -16,15 +17,15 @@ use Drupal\Core\Form\FormStateInterface;
  *   }
  * )
  */
-class FractionFormatter extends FractionFormatterBase {
+class FractionFormatter extends FormatterBase {
 
   /**
    * {@inheritdoc}
    */
   public static function defaultSettings() {
-    return [
+    return array(
       'separator' => '/',
-    ] + parent::defaultSettings();
+    ) + parent::defaultSettings();
   }
 
   /**
@@ -33,14 +34,14 @@ class FractionFormatter extends FractionFormatterBase {
   public function settingsForm(array $form, FormStateInterface $form_state) {
 
     // Numerator and denominator separator.
-    $elements['separator'] = [
+    $elements['separator'] = array(
       '#type' => 'textfield',
-      '#title' => $this->t('Separator'),
-      '#description' => $this->t('Specify the separator to display between the numerator and denominator.'),
+      '#title' => t('Separator'),
+      '#description' => t('Specify the separator to display between the numerator and denominator.'),
       '#default_value' => $this->getSetting('separator'),
       '#required' => TRUE,
       '#weight' => 0,
-    ];
+    );
 
     return $elements;
   }
@@ -49,13 +50,13 @@ class FractionFormatter extends FractionFormatterBase {
    * {@inheritdoc}
    */
   public function settingsSummary() {
-    $summary = parent::settingsSummary();
+    $summary = array();
 
     // Summarize the separator setting.
     $separator = $this->getSetting('separator');
-    $summary[] = $this->t('Separator: @separator', [
+    $summary[] = t('Separator: @separator', array(
       '@separator' => $separator,
-    ]);
+    ));
 
     return $summary;
   }
@@ -64,20 +65,20 @@ class FractionFormatter extends FractionFormatterBase {
    * {@inheritdoc}
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
-    $elements = [];
+    $elements = array();
 
     // Load the separator setting.
     $separator = $this->getSetting('separator');
 
     // Iterate through the items.
     foreach ($items as $delta => $item) {
-      $output = $item->fraction->toString($separator);
-      $elements[$delta] = [
-        '#markup' => $this->viewOutput($item, $output),
-      ];
+
+      // Output fraction as a string.
+      $elements[$delta] = array(
+        '#markup' => $item->fraction->toString($separator),
+      );
     }
 
     return $elements;
   }
-
 }

@@ -1,0 +1,12 @@
+name: Salesforce Address
+type: module
+description: A custom Address Field Widget for Salesforce compatibility.
+core_version_requirement: ^8.7.7 || ^9
+package: Salesforce
+dependencies:
+  - address:address
+
+# Information added by Drupal.org packaging script on 2021-03-18
+version: '8.x-4.2'
+project: 'salesforce'
+datestamp: 1616088750

@@ -1,7 +1,15 @@
+<<<<<<< HEAD
 {#
 /**
  * @file
  * Theme override for status messages.
+=======
+{% extends "@classy/misc/status-messages.html.twig" %}
+{#
+/**
+ * @file
+ * Default theme implementation for status messages.
+>>>>>>> 4df90ea29f7677ec159d91841a67936f76afec3e
  *
  * Displays status, error, and warning messages, grouped by type.
  *
@@ -15,6 +23,7 @@
  * Available variables:
  * - message_list: List of messages to be displayed, grouped by type.
  * - status_headings: List of all status types.
+<<<<<<< HEAD
  * - attributes: HTML attributes for the element, including:
  *   - class: HTML classes.
  */
@@ -53,3 +62,19 @@
 {% endfor %}
 {% endblock messages %}
 </div>
+=======
+ * - display: (optional) May have a value of 'status' or 'error' when only
+ *   displaying messages of that specific type.
+ *
+ * @see template_preprocess_status_messages()
+ */
+#}
+{% block messages %}
+  {% if message_list is not empty %}
+    {{ attach_library('bartik/messages') }}
+    <div class="messages__wrapper layout-container">
+      {{ parent() }}
+    </div>
+  {% endif %}
+{% endblock messages %}
+>>>>>>> 4df90ea29f7677ec159d91841a67936f76afec3e

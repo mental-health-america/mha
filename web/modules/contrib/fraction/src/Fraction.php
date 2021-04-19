@@ -5,72 +5,37 @@ namespace Drupal\fraction;
 /**
  * A simple class for representing and acting upon a fraction.
  */
-class Fraction implements FractionInterface {
+class Fraction {
 
   /**
-   * Numerator of the fraction.
-   *
-   * @var string|int
+   * Numerator and denominator properties.
    */
   protected $numerator;
-
-  /**
-   * Denominator of the fraction.
-   *
-   * @var string|int
-   */
   protected $denominator;
 
   /**
-   * Constructs a Fraction object.
+   * Constructor.
    *
-   * @param string|int $numerator
-   *   The fraction's numerator. Defaults to 0.
-   * @param string|int $denominator
-   *   The fraction's denominator. Defaults to 1.
+   * @param $numerator
+   *   The fraction's numerator.
+   * @param $denominator
+   *   The fraction's denominator.
    */
-  public function __construct($numerator = 0, $denominator = 1) {
+  public function __construct($numerator, $denominator) {
+
+    // Set the numerator and denominator.
     $this->setNumerator($numerator);
     $this->setDenominator($denominator);
   }
 
   /**
-   * {@inheritdoc}
-   */
-  public function fromDecimal($value) {
-    @trigger_error(__METHOD__ . ' is deprecated in drupal:8.0.0 and is removed in drupal:9.0.0. Use the static \Drupal\fraction\Fraction::createFromDecimal() instead.', E_USER_DEPRECATED);
-    return self::createFromDecimal($value);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function createFromDecimal($value) {
-
-    // Calculate the precision by counting the number of decimal places.
-    $precision = strlen(substr(strrchr($value, '.'), 1));
-
-    // Create the denominator by raising 10 to the power of the precision.
-    if (function_exists('bcpow')) {
-      $denominator = bcpow(10, $precision);
-    }
-    else {
-      $denominator = pow(10, $precision);
-    }
-
-    // Calculate the numerator by multiplying the value by the denominator.
-    if (function_exists('bcmul')) {
-      $numerator = bcmul($value, $denominator, 0);
-    }
-    else {
-      $numerator = $value * $denominator;
-    }
-
-    return new Fraction($numerator, $denominator);
-  }
-
-  /**
-   * {@inheritdoc}
+   * Set the numerator.
+   *
+   * @param $value
+   *   The numerator value.
+   *
+   * @return Fraction
+   *   Returns this Fraction object.
    */
   public function setNumerator($value) {
 
@@ -81,7 +46,13 @@ class Fraction implements FractionInterface {
   }
 
   /**
-   * {@inheritdoc}
+   * Set the denominator.
+   *
+   * @param $value
+   *   The denominator value.
+   *
+   * @return Fraction
+   *   Returns this Fraction object.
    */
   public function setDenominator($value) {
 
@@ -117,16 +88,25 @@ class Fraction implements FractionInterface {
   }
 
   /**
-   * {@inheritdoc}
+   * Get the denominator.
+   *
+   * @return string
+   *   Returns the denominator value.
    */
   public function getDenominator() {
     return $this->denominator;
   }
 
   /**
-   * {@inheritdoc}
+   * Return a string representation of the fraction.
+   *
+   * @param $separator
+   *   The separator to place between the numerator and denominator.
+   *
+   * @return string
+   *   Returns a string with the numerator, separator, and denominator.
    */
-  public function toString(string $separator = '/') {
+  public function toString($separator = '/') {
 
     // Get the numerator and denominator.
     $numerator = $this->getNumerator();
@@ -137,32 +117,32 @@ class Fraction implements FractionInterface {
   }
 
   /**
-   * {@inheritdoc}
+   * Calculate the decimal equivalent of the fraction.
+   *
+   * @param $precision
+   *   The desired decimal precision, defaults to 0.
+   * @param $auto_precision
+   *   Boolean, whether or not the precision should be automatically calculated.
+   *   This option provides more precision when you need it, and less when you
+   *   don't. If set to TRUE, it will try to determine the maximum precision
+   *   (this only works if the denominator is base 10). If the resulting
+   *   precision is greater than $precision, it will be used instead.
+   *
+   * @return string
+   *   Returns the decimal equivalent of the fraction as a PHP string.
    */
-  public function toDecimal(int $precision = 0, bool $auto_precision = FALSE) {
+  public function toDecimal($precision = 0, $auto_precision = FALSE) {
 
     // Get the numerator and denominator.
     $numerator = $this->getNumerator();
     $denominator = $this->getDenominator();
 
-    // If auto precision is on figure out the maximum precision.
-    if ($auto_precision) {
+    // If auto precision is on and the denominator is base-10, figure out the
+    // maximum precision.
+    if ($auto_precision && $denominator % 10 == 0) {
 
-      // If the denominator is base-10, max precision is the number of zeroes
-      // in the denominator.
-      if ($denominator % 10 == 0) {
-        $max_precision = strlen($denominator) - 1;
-      }
-
-      // Or, if the denominator is 1, max precision is zero.
-      elseif ($denominator == 1) {
-        $max_precision = 0;
-      }
-
-      // Otherwise, max precision is the denominator length.
-      else {
-        $max_precision = strlen($denominator);
-      }
+      // Max precision is the number of zeroes in the base-10 denominator.
+      $max_precision = strlen($denominator) - 1;
 
       // Use the greater of the two precisions.
       $precision = ($max_precision > $precision) ? $max_precision : $precision;
@@ -185,7 +165,47 @@ class Fraction implements FractionInterface {
   }
 
   /**
-   * {@inheritdoc}
+   * Calculates the numerator and denominator from a decimal value.
+   *
+   * @param $value
+   *   The decimal value to start with.
+   *
+   * @return Fraction
+   *   Returns this object.
+   */
+  public function fromDecimal($value) {
+
+    // Calculate the precision by counting the number of decimal places.
+    $precision = strlen(substr(strrchr($value, '.'), 1));
+
+    // Create the denominator by raising 10 to the power of the precision.
+    if (function_exists('bcpow')) {
+      $denominator = bcpow(10, $precision);
+    }
+    else {
+      $denominator = pow(10, $precision);
+    }
+
+    // Calculate the numerator by multiplying the value by the denominator.
+    if (function_exists('bcmul')) {
+      $numerator = bcmul($value, $denominator);
+    }
+    else {
+      $numerator = $value * $denominator;
+    }
+
+    // Set the numerator and denominator.
+    $this->setNumerator($numerator);
+    $this->setDenominator($denominator);
+
+    return $this;
+  }
+
+  /**
+   * Calculate the fraction's greatest common divisor using Euclid's algorithm.
+   *
+   * @return string
+   *   Returns the greatest common divisor.
    */
   public function gcd() {
 
@@ -218,7 +238,10 @@ class Fraction implements FractionInterface {
   }
 
   /**
-   * {@inheritdoc}
+   * Reduce the fraction to its simplest form.
+   *
+   * @return Fraction
+   *   Returns this Fraction object.
    */
   public function reduce() {
 
@@ -232,8 +255,8 @@ class Fraction implements FractionInterface {
     // Divide the numerator and denominator by the gcd.
     // Use BCMath division if available.
     if (function_exists('bcdiv')) {
-      $numerator = bcdiv($numerator, $gcd, 0);
-      $denominator = bcdiv($denominator, $gcd, 0);
+      $numerator = bcdiv($numerator, $gcd);
+      $denominator = bcdiv($denominator, $gcd);
     }
     else {
       $numerator = $numerator / $gcd;
@@ -248,7 +271,10 @@ class Fraction implements FractionInterface {
   }
 
   /**
-   * {@inheritdoc}
+   * Reciprocate the fraction.
+   *
+   * @return Fraction
+   *   Returns this Fraction object.
    */
   public function reciprocate() {
 
@@ -264,7 +290,13 @@ class Fraction implements FractionInterface {
   }
 
   /**
-   * {@inheritdoc}
+   * Add another fraction to this one.
+   *
+   * @param Fraction $fraction
+   *   Another fraction object to add to this one.
+   *
+   * @return Fraction
+   *   Returns this Fraction object.
    */
   public function add(Fraction $fraction) {
 
@@ -277,8 +309,8 @@ class Fraction implements FractionInterface {
     // Calculate the sum of the two fractions.
     // Use BCMath if available.
     if (function_exists('bcmul') && function_exists('bcadd')) {
-      $denominator = bcmul($denominator1, $denominator2, 0);
-      $numerator = bcadd(bcmul($numerator1, $denominator2, 0), bcmul($numerator2, $denominator1, 0), 0);
+      $denominator = bcmul($denominator1, $denominator2);
+      $numerator = bcadd(bcmul($numerator1, $denominator2), bcmul($numerator2, $denominator1));
     }
     else {
       $denominator = $denominator1 * $denominator2;
@@ -293,9 +325,15 @@ class Fraction implements FractionInterface {
   }
 
   /**
-   * {@inheritdoc}
+   * Subtract another fraction from this one.
+   *
+   * @param Fraction $fraction
+   *   Another fraction object to subtract this one.
+   *
+   * @return Fraction
+   *   Returns this Fraction object.
    */
-  public function subtract(Fraction $fraction) {
+  function subtract(Fraction $fraction) {
 
     // Get the numerator and denominator of each fraction.
     $numerator1 = $this->getNumerator();
@@ -306,8 +344,8 @@ class Fraction implements FractionInterface {
     // Calculate the difference of the two fractions.
     // Use BCMath if available.
     if (function_exists('bcmul') && function_exists('bcsub')) {
-      $denominator = bcmul($denominator1, $denominator2, 0);
-      $numerator = bcsub(bcmul($numerator1, $denominator2, 0), bcmul($numerator2, $denominator1, 0), 0);
+      $denominator = bcmul($denominator1, $denominator2);
+      $numerator = bcsub(bcmul($numerator1, $denominator2), bcmul($numerator2, $denominator1));
     }
     else {
       $denominator = $denominator1 * $denominator2;
@@ -322,9 +360,15 @@ class Fraction implements FractionInterface {
   }
 
   /**
-   * {@inheritdoc}
+   * Multiply this fraction with another one.
+   *
+   * @param Fraction $fraction
+   *   Another fraction object to multiply with.
+   *
+   * @return Fraction
+   *   Returns this Fraction object.
    */
-  public function multiply(Fraction $fraction) {
+  function multiply(Fraction $fraction) {
 
     // Get the numerator and denominator of each fraction.
     $numerator1 = $this->getNumerator();
@@ -335,8 +379,8 @@ class Fraction implements FractionInterface {
     // Calculate the product of the two fractions.
     // Use BCMath if available.
     if (function_exists('bcmul')) {
-      $numerator = bcmul($numerator1, $numerator2, 0);
-      $denominator = bcmul($denominator1, $denominator2, 0);
+      $numerator = bcmul($numerator1, $numerator2);
+      $denominator = bcmul($denominator1, $denominator2);
     }
     else {
       $numerator = $numerator1 * $numerator2;
@@ -351,9 +395,15 @@ class Fraction implements FractionInterface {
   }
 
   /**
-   * {@inheritdoc}
+   * Divide this fraction by another one.
+   *
+   * @param Fraction $fraction
+   *   Another fraction object to divide by.
+   *
+   * @return Fraction
+   *   Returns this Fraction object.
    */
-  public function divide(Fraction $fraction) {
+  function divide(Fraction $fraction) {
 
     // Reciprocate the fraction.
     $fraction->reciprocate();
@@ -367,8 +417,8 @@ class Fraction implements FractionInterface {
     // Calculate the quotient of the two fractions.
     // Use BCMath if available.
     if (function_exists('bcmul')) {
-      $numerator = bcmul($numerator1, $numerator2, 0);
-      $denominator = bcmul($denominator1, $denominator2, 0);
+      $numerator = bcmul($numerator1, $numerator2);
+      $denominator = bcmul($denominator1, $denominator2);
     }
     else {
       $numerator = $numerator1 * $numerator2;
@@ -387,7 +437,7 @@ class Fraction implements FractionInterface {
    *
    * @param $value
    *   The value to round.
-   * @param int $precision
+   * @param $precision
    *   The desired decimal precision.
    *
    * @return string
@@ -399,5 +449,5 @@ class Fraction implements FractionInterface {
     }
     return bcsub($value, '0.' . str_repeat('0', $precision) . '5', $precision);
   }
-
 }
+

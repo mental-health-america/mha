@@ -5,8 +5,8 @@
 /_sql
 
 # Ignore Drupal's file directory
-/web/sites/*/files/
-/web/sites/default/files/js/
+#/web/sites/*/files/
+#/web/sites/default/files/js/
 
 # Ignore SimpleTest multi-site environment.
 /web/sites/simpletest
@@ -26,24 +26,24 @@
 #/web/.eslintignore
 #/web/.eslintrc.json
 #/web/.gitattributes
-#/web/.htaccess
+/web/.htaccess
 #/autoload.php
 #/composer.lock
 #/web/index.php
 #/web/robots.txt
 #/web/update.php
 #/web/web.config
-example.gitignore
-web/profiles/README.txt
-web/themes/README.txt
-web/LICENSE.txt
-web/README.txt
+/example.gitignore
+/web/profiles/README.txt
+/web/themes/README.txt
+/web/LICENSE.txt
+/web/README.txt
 
 # Ignore Drupal's file directory
-#/web/sites/*/files/
+/web/sites/*/files/
 
 # Ignore paths that contain user-generated content <set by MHA>.
-#sites/*/files
+sites/*/files
 #sites/*/private
 #files/*
 
@@ -63,8 +63,8 @@ sites/*/settings.local.php
 sites/*/services.local.yml
 
 # ** Only works in OSs that support newer versions of fnmatch (Bash 4+)
-#/sites/default/**/files
-#/sites/default/**/private
+/sites/default/**/files
+/sites/default/**/private
 
 # Ignore SimpleTest multi-site environment.
 sites/simpletest
@@ -178,3 +178,5 @@ fabric.properties
 .idea
 
 # End of https://www.gitignore.io/api/phpstorm
+
+solr-8.7.0

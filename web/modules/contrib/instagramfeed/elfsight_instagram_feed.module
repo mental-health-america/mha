@@ -1,0 +1,30 @@
+<?php
+
+/**
+ * @file
+ * Contains elfsight_instagram_feed.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function elfsight_instagram_feed_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+
+    case 'help.page.elfsight_instagram_feed':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>';
+      $output .= t('Visit the <a href=":project_link">Elfsight Instagram Feed project pages</a> on Drupal.org for more information.',[
+        ':project_link' => 'https://www.drupal.org/project/elfsight_instagram_feed'
+        ]);
+      $output .= '</p>';
+
+      return $output;
+
+    default:
+  }
+}
+

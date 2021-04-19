@@ -285,11 +285,11 @@ abstract class SalesforceMappingFieldPluginBase extends PluginBase implements Sa
         break;
 
       case 'double':
-        $value = (double) $value;
+        $value = $value === NULL ? $value : (double) $value;
         break;
 
       case 'integer':
-        $value = (int) $value;
+        $value = $value === NULL ? $value : (int) $value;
         break;
 
       case 'multipicklist':
@@ -368,6 +368,7 @@ abstract class SalesforceMappingFieldPluginBase extends PluginBase implements Sa
       'drupal_field_type' => $this->getPluginId(),
       'drupal_field_value' => '',
       'mapping_id' => '',
+      'description' => '',
     ];
   }
 
@@ -403,6 +404,13 @@ abstract class SalesforceMappingFieldPluginBase extends PluginBase implements Sa
       ],
       '#required' => TRUE,
       '#default_value' => $this->config('direction') ? $this->config('direction') : MappingConstants::SALESFORCE_MAPPING_DIRECTION_SYNC,
+      '#attributes' => ['class' => ['narrow']],
+    ];
+    $pluginForm['description'] = [
+      '#title' => t('Description'),
+      '#type' => 'textarea',
+      '#description' => t('Details about this field mapping.'),
+      '#default_value' => $this->config('description'),
     ];
 
     return $pluginForm;

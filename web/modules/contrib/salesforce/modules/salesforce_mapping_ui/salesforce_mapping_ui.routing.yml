@@ -27,6 +27,7 @@ entity.salesforce_mapping.edit_form:
   path: '/admin/structure/salesforce/mappings/manage/{salesforce_mapping}'
   defaults:
     _entity_form: 'salesforce_mapping.edit'
+    _title_callback: '\Drupal\salesforce_mapping_ui\Controller\SalesforceMappingController::editTitle'
   requirements:
     _entity_access: 'salesforce_mapping.update'
 
@@ -34,7 +35,7 @@ entity.salesforce_mapping.fields:
   path: '/admin/structure/salesforce/mappings/manage/{salesforce_mapping}/fields'
   defaults:
     _entity_form: 'salesforce_mapping.fields'
-    _title: 'Fields'
+    _title_callback: '\Drupal\salesforce_mapping_ui\Controller\SalesforceMappingController::fieldsTitle'
   requirements:
     _entity_access: 'salesforce_mapping.update'
 
@@ -66,7 +67,7 @@ entity.salesforce_mapped_object.list:
     _title: 'Salesforce Mapped Objects'
   requirements:
     _permission: 'administer salesforce mapped objects'
-  
+
 entity.salesforce_mapped_object.canonical:
   path: '/admin/content/salesforce/{salesforce_mapped_object}'
   defaults:

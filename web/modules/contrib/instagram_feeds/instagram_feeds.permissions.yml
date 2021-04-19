@@ -1,0 +1,24 @@
+administer instagram_feeds:
+  title: 'Administer Instagram Feeds'
+  description: 'Perform adminstrative tasks for Instagram Feeds.'
+  restrict access: true
+access instagram_account overview:
+  title: 'Access the Instagram Accounts overview page'
+view instagram_account:
+  title: 'View Instagram Account'
+  description: 'View Instagram Account Entity.'
+create instagram_account:
+  title: 'Add Instagram Account'
+  description: 'Create a new entity Instagram Account and obtain Instagram access token.'
+update instagram_account:
+  title: 'Update any Instagram Account'
+  description: 'Update any Instagram Account entity and refresh Instagram access token.'
+update own instagram_account:
+  title: 'Update own Instagram Account'
+  description: 'Update own Instagram Account entity and refresh Instagram access token.'
+delete instagram_account:
+  title: 'Delete Instagram Account'
+  description: 'Delete Instagram Account entity.'
+delete own instagram_account:
+  title: 'Delete own Instagram Account'
+  description: 'Delete own Instagram Account entity.'

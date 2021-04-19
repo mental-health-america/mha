@@ -1,0 +1,15 @@
+instagram_feeds.default:
+  title: 'Instagram Feeds'
+  description: 'Configure Import by Cron from various Instagram accounts.'
+  parent: system.admin_config_media
+  route_name: entity.instagram_account.collection
+entity.instagram_account.collection:
+  title: 'Instagram Accounts'
+  description: 'The list of Instagram accounts.'
+  parent: instagram_feeds.default
+  route_name: entity.instagram_account.collection
+instagram_feeds.settings:
+  title: 'Instagram Feeds Settings'
+  description: 'Configure Instagram App Credentials.'
+  parent: instagram_feeds.default
+  route_name: instagram_feeds.settings

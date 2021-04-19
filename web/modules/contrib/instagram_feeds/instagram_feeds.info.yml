@@ -1,0 +1,20 @@
+name: Instagram Feeds
+description: 'Allows to import Instagram posts to your site.'
+package: Media
+
+type: module
+core: 8.x
+configure: instagram_feeds.settings
+
+php: 7.2
+core_version_requirement: ^8 || ^9
+
+# Dependencies
+dependencies:
+  - drupal:system (>=8.5)
+  - media_entity_instagram:media_entity_instagram (>=2.0)
+
+# Information added by Drupal.org packaging script on 2020-10-09
+version: '8.x-1.0-alpha3'
+project: 'instagram_feeds'
+datestamp: 1602254436

@@ -1,0 +1,10 @@
+name: Donate Form
+type: module
+description: 'Donate Form.'
+package: Custom
+version: 8.x
+core: 8.x
+dependencies:
+  - node
+  - block
+

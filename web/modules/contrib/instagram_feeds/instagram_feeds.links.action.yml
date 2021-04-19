@@ -1,0 +1,5 @@
+instagram_feeds.instagram_account.add:
+  route_name: entity.instagram_account.add_form
+  title: 'Add Instagram Account'
+  appears_on:
+    - entity.instagram_account.collection

@@ -5329,6 +5329,21 @@ ul.sf-menu.sf-navbar ul ul {
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.30);
 }
 
+<<<<<<< HEAD
+=======
+.form-required:after {
+  content: '';
+  vertical-align: super;
+  display: inline-block;
+  background-image: url(/core/misc/icons/ee0000/required.svg);
+  background-repeat: no-repeat;
+  background-size: 6px 6px;
+  width: 6px;
+  height: 6px;
+  margin: 0 0.3em;
+}
+
+>>>>>>> 4df90ea29f7677ec159d91841a67936f76afec3e
 .body-page input[type="email"], .body-page textarea, .body-page select {
   border: 1px solid #fff !important;
 }
@@ -5383,9 +5398,15 @@ header.header-v2 {
   color: #fff !important;
   background: #0086b3 !important;
   border: 1px solid transparent;
+<<<<<<< HEAD
   font-size: 10px !important;
   font-weight: 600 !important;
   padding: 5px 10px !important;
+=======
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  padding: 5px 20px !important;
+>>>>>>> 4df90ea29f7677ec159d91841a67936f76afec3e
   margin: 0 8px 5px;
   text-transform: uppercase;
   text-decoration: none;
@@ -5400,9 +5421,15 @@ header.header-v2 {
   background: #385887 !important;
   color: #fff !important;
   border: 1px solid transparent;
+<<<<<<< HEAD
   font-size: 10px !important;
   font-weight: 600 !important;
   padding: 5px 10px !important;
+=======
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  padding: 5px 20px !important;
+>>>>>>> 4df90ea29f7677ec159d91841a67936f76afec3e
   margin: 0 8px 5px;
   text-transform: uppercase;
   text-decoration: none;
@@ -5416,9 +5443,15 @@ header.header-v2 {
   background: #ea7901!important;
   color: #fff !important;
   border: 1px solid transparent;
+<<<<<<< HEAD
   font-size: 10px !important;
   font-weight: 600 !important;
   padding: 5px 10px !important;
+=======
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  padding: 5px 20px !important;
+>>>>>>> 4df90ea29f7677ec159d91841a67936f76afec3e
   margin: 0 8px 5px;
   text-transform: uppercase;
   text-decoration: none;

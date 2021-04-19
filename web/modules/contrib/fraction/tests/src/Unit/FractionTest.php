@@ -13,8 +13,7 @@ use Drupal\fraction\Fraction;
 class FractionTest extends UnitTestCase {
 
   /**
-   * Returns a Fraction object from a a numerator and denominator.
-   *
+   * Takes a numerator and denominator and returns a Fraction object.
    * This method should be identical to the fraction() function in
    * fraction.module.
    *
@@ -23,7 +22,7 @@ class FractionTest extends UnitTestCase {
    * @param $denominator
    *   The fraction's denominator.
    *
-   * @return \Drupal\fraction\Fraction
+   * @return Fraction
    *   Returns a $this->fraction object.
    */
   protected function fraction($numerator = 0, $denominator = 1) {
@@ -94,27 +93,12 @@ class FractionTest extends UnitTestCase {
     $message = 'A fraction of 2/5 with no precision should round to 0.';
     $this->assertEquals($result, '0', $message);
 
-    // Test automatic precision for base-10 denominator.
+    // Test decimal automatic precision.
     $result = $this->fraction(1, 1000)->toDecimal(2, TRUE);
     $message = 'A fraction of 1/1000 with precision 2 and auto-precision enabled should round to 0.001.';
     $this->assertEquals($result, '0.001', $message);
 
-    // Test automatic precision for denominator of 1.
-    $result = $this->fraction(3, 1)->toDecimal(0, TRUE);
-    $message = 'A fraction of 3/1 should return a decimal of 3 (with precision 0, auto_precision)';
-    $this->assertEquals($result, '3', $message);
-
-    // Test automatic precision for non-base-10 denominator.
-    $result = $this->fraction(1, 2)->toDecimal(0, TRUE);
-    $message = 'A fraction of 1/2 should return a decimal of 0.5 (with precision 0, auto_precision)';
-    $this->assertEquals($result, '0.5', $message);
-
     // Test creation of a fraction from a decimal.
-    $result = Fraction::createFromDecimal(0.5)->toString();
-    $message = 'The createFromDecimal() method should create a fraction of 5/10 from a decimal of 0.5.';
-    $this->assertEquals($result, '5/10', $message);
-
-    // Test creation of a fraction from a decimal (old constructor).
     $result = $this->fraction()->fromDecimal(0.5)->toString();
     $message = 'The fromDecimal() method should create a fraction of 5/10 from a decimal of 0.5.';
     $this->assertEquals($result, '5/10', $message);
@@ -154,11 +138,9 @@ class FractionTest extends UnitTestCase {
     $message = 'The reciprocal of 1/2 is 2/1.';
     $this->assertEquals($result, '2/1', $message);
 
-    // Test that reciprocation of a zero numerator does not result in division
-    // by zero.
+    // Test that reciprocation of a zero numerator does not result in division by zero.
     $result = $this->fraction(0, 1)->reciprocate()->toString();
     $message = 'The reciprocal of 0/1 is 0/1 (avoid division by zero).';
     $this->assertEquals($result, '0/1', $message);
   }
-
 }

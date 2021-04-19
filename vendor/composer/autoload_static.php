@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
+class ComposerStaticInit235d7d43e334d881fe2b49c99c40b401
 {
     public static $files = array (
         '9b38cf48e83f5d8f60375221cd213eee' => __DIR__ . '/..' . '/phpstan/phpstan/bootstrap.php',
@@ -42,6 +42,7 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
         '801c31d8ed748cfa537fa45402288c95' => __DIR__ . '/..' . '/psy/psysh/src/functions.php',
         '952683d815ff0a7bf322b93c0be7e4e4' => __DIR__ . '/..' . '/chi-teck/drupal-code-generator/src/bootstrap.php',
         '5a12a5271c58108e0aa33355e6ac54ea' => __DIR__ . '/..' . '/drupal/console-core/src/functions.php',
+        '2d0bd6b7e257b7230c706e6559d6a87b' => __DIR__ . '/..' . '/mglaman/phpstan-drupal/drupal-phpunit-hack.php',
         'd511210698f02d87ca48e3972f64323e' => __DIR__ . '/../..' . '/load.environment.php',
     );
 
@@ -63,10 +64,7 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
         array (
             'Zumba\\Mink\\Driver\\' => 18,
             'Zumba\\GastonJS\\' => 15,
-        ),
-        'X' => 
-        array (
-            'XdgBaseDir\\' => 11,
+            'ZipStream\\' => 10,
         ),
         'W' => 
         array (
@@ -91,6 +89,7 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
             'Symfony\\Polyfill\\Intl\\Idn\\' => 26,
             'Symfony\\Polyfill\\Iconv\\' => 23,
             'Symfony\\Polyfill\\Ctype\\' => 23,
+            'Symfony\\Contracts\\EventDispatcher\\' => 34,
             'Symfony\\Component\\Yaml\\' => 23,
             'Symfony\\Component\\VarDumper\\' => 28,
             'Symfony\\Component\\Validator\\' => 28,
@@ -116,6 +115,7 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
             'Symfony\\Bridge\\PsrHttpMessage\\' => 30,
             'Symfony\\Bridge\\PhpUnit\\' => 23,
             'Stecman\\Component\\Symfony\\Console\\BashCompletion\\' => 49,
+            'Solarium\\' => 9,
             'Shapefile\\' => 10,
             'SelfUpdate\\' => 11,
             'Seld\\PharUtils\\' => 15,
@@ -130,6 +130,8 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
             'Psy\\' => 4,
             'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
+            'Psr\\Http\\Client\\' => 16,
+            'Psr\\EventDispatcher\\' => 20,
             'Psr\\Container\\' => 14,
             'Prophecy\\' => 9,
             'PhpParser\\' => 10,
@@ -137,6 +139,7 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
         ),
         'M' => 
         array (
+            'MyCLabs\\Enum\\' => 13,
             'MathieuViossat\\Util\\' => 20,
             'Masterminds\\' => 12,
         ),
@@ -154,7 +157,6 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
         'J' => 
         array (
             'JsonSchema\\' => 11,
-            'Jawira\\CaseConverter\\' => 21,
         ),
         'I' => 
         array (
@@ -171,6 +173,7 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
         ),
         'E' => 
         array (
+            'Enlightn\\SecurityChecker\\' => 25,
             'Egulias\\EmailValidator\\' => 23,
         ),
         'D' => 
@@ -184,7 +187,6 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
             'Drupal\\Console\\' => 15,
             'Drupal\\Component\\' => 17,
             'Drupal\\' => 7,
-            'DrupalRector\\' => 13,
             'DrupalPractice\\' => 15,
             'DrupalComposer\\DrupalScaffold\\' => 30,
             'DrupalCodeGenerator\\' => 20,
@@ -256,9 +258,9 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
         array (
             0 => __DIR__ . '/..' . '/jcalderonzumba/gastonjs/src',
         ),
-        'XdgBaseDir\\' => 
+        'ZipStream\\' => 
         array (
-            0 => __DIR__ . '/..' . '/dnoegel/php-xdg-base-dir/src',
+            0 => __DIR__ . '/..' . '/maennchen/zipstream-php/src',
         ),
         'Webmozart\\PathUtil\\' => 
         array (
@@ -307,6 +309,10 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
         'Symfony\\Polyfill\\Ctype\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
+        ),
+        'Symfony\\Contracts\\EventDispatcher\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/event-dispatcher-contracts',
         ),
         'Symfony\\Component\\Yaml\\' => 
         array (
@@ -408,6 +414,10 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
         array (
             0 => __DIR__ . '/..' . '/stecman/symfony-console-completion/src',
         ),
+        'Solarium\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/solarium/solarium/src',
+        ),
         'Shapefile\\' => 
         array (
             0 => __DIR__ . '/..' . '/gasparesganga/php-shapefile/src/Shapefile',
@@ -438,7 +448,16 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
+        ),
+        'Psr\\Http\\Client\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/http-client/src',
+        ),
+        'Psr\\EventDispatcher\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/event-dispatcher/src',
         ),
         'Psr\\Container\\' => 
         array (
@@ -456,6 +475,10 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
         array (
             0 => __DIR__ . '/..' . '/mglaman/phpstan-drupal/src',
             1 => __DIR__ . '/..' . '/phpstan/phpstan-deprecation-rules/src',
+        ),
+        'MyCLabs\\Enum\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/myclabs/php-enum/src',
         ),
         'MathieuViossat\\Util\\' => 
         array (
@@ -501,10 +524,6 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
         array (
             0 => __DIR__ . '/..' . '/justinrainbow/json-schema/src/JsonSchema',
         ),
-        'Jawira\\CaseConverter\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/jawira/case-converter/src',
-        ),
         'Interop\\Container\\' => 
         array (
             0 => __DIR__ . '/..' . '/container-interop/container-interop/src/Interop/Container',
@@ -532,6 +551,10 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
         'Goutte\\' => 
         array (
             0 => __DIR__ . '/..' . '/fabpot/goutte/Goutte',
+        ),
+        'Enlightn\\SecurityChecker\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/enlightn/security-checker/src',
         ),
         'Egulias\\EmailValidator\\' => 
         array (
@@ -572,10 +595,6 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
         'Drupal\\' => 
         array (
             0 => __DIR__ . '/..' . '/drupal/coder/coder_sniffer/Drupal',
-        ),
-        'DrupalRector\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/palantirnet/drupal-rector/src',
         ),
         'DrupalPractice\\' => 
         array (
@@ -1021,7 +1040,7 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
         'PHPUnit\\Util\\Configuration' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Configuration.php',
         'PHPUnit\\Util\\ConfigurationGenerator' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/ConfigurationGenerator.php',
         'PHPUnit\\Util\\ErrorHandler' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/ErrorHandler.php',
-        'PHPUnit\\Util\\FileLoader' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Fileloader.php',
+        'PHPUnit\\Util\\FileLoader' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/FileLoader.php',
         'PHPUnit\\Util\\Filesystem' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Filesystem.php',
         'PHPUnit\\Util\\Filter' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Filter.php',
         'PHPUnit\\Util\\Getopt' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Getopt.php',
@@ -1408,11 +1427,11 @@ class ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b::$prefixesPsr0;
-            $loader->fallbackDirsPsr0 = ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b::$fallbackDirsPsr0;
-            $loader->classMap = ComposerStaticInite79b1fafaf46fb4283af5ca52e28e08b::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit235d7d43e334d881fe2b49c99c40b401::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit235d7d43e334d881fe2b49c99c40b401::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit235d7d43e334d881fe2b49c99c40b401::$prefixesPsr0;
+            $loader->fallbackDirsPsr0 = ComposerStaticInit235d7d43e334d881fe2b49c99c40b401::$fallbackDirsPsr0;
+            $loader->classMap = ComposerStaticInit235d7d43e334d881fe2b49c99c40b401::$classMap;
 
         }, null, ClassLoader::class);
     }

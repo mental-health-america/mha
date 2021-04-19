@@ -5,6 +5,7 @@ namespace Drupal\salesforce;
 use Drupal\Core\DependencyInjection\DependencySerializationTrait;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerTrait;
+use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\salesforce\Storage\SalesforceAuthTokenStorageInterface;
 use OAuth\Common\Http\Client\ClientInterface;
@@ -171,6 +172,13 @@ abstract class SalesforceAuthProviderPluginBase extends Salesforce implements Sa
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
+    if ($form_state->getResponse() instanceof TrustedRedirectResponse) {
+      // If we're redirecting off-site, do not proceed with save operation.
+      // We'll finish saving form input when we complete the OAuth handshake
+      // from Salesforce.
+      return FALSE;
+    }
+
     // Initialize identity if token is available.
     if (!$this->hasAccessToken()) {
       return TRUE;
@@ -181,7 +189,14 @@ abstract class SalesforceAuthProviderPluginBase extends Salesforce implements Sa
       'Content-type' => 'application/json',
     ];
     $data = $token->getExtraParams();
-    $response = $this->httpClient->retrieveResponse(new Uri($data['id']), [], $headers);
+    try {
+      $response = $this->httpClient->retrieveResponse(new Uri($data['id']), [], $headers);
+    }
+    catch (\Exception $e) {
+      $this->messenger()->addError($e->getMessage());
+      $form_state->disableRedirect();
+      return FALSE;
+    }
     $identity = $this->parseIdentityResponse($response);
     $this->storage->storeIdentity($this->service(), $identity);
     return TRUE;
@@ -191,7 +206,7 @@ abstract class SalesforceAuthProviderPluginBase extends Salesforce implements Sa
    * {@inheritdoc}
    */
   public function getCredentials() {
-    if (!$this->credentials || !$this->credentials->isValid()) {
+    if (empty($this->credentials) || !$this->credentials->isValid()) {
       $pluginDefinition = $this->getPluginDefinition();
       $this->credentials = $pluginDefinition['credentials_class']::create($this->configuration);
     }

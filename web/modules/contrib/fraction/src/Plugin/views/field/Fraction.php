@@ -5,7 +5,6 @@ namespace Drupal\fraction\Plugin\views\field;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\views\ResultRow;
-use Drupal\fraction\Fraction as FractionClass;
 
 /**
  * Field handler for Fraction database columns.
@@ -23,8 +22,8 @@ class Fraction extends FieldPluginBase {
     $options = parent::defineOptions();
 
     // Default to automatic precision.
-    $options['precision'] = ['default' => 0];
-    $options['auto_precision'] = ['default' => TRUE];
+    $options['precision'] = array('default' => 0);
+    $options['auto_precision'] = array('default' => TRUE);
 
     return $options;
   }
@@ -35,18 +34,18 @@ class Fraction extends FieldPluginBase {
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
 
     // Add fields for configuring precision and auto_precision.
-    $form['precision'] = [
+    $form['precision'] = array(
       '#type' => 'textfield',
       '#title' => t('Precision'),
       '#description' => t('Specify the number of digits after the decimal place to display when converting the fraction to a decimal. When "Auto precision" is enabled, this value essentially becomes a minimum fallback precision.'),
       '#default_value' => $this->options['precision'],
-    ];
-    $form['auto_precision'] = [
+    );
+    $form['auto_precision'] = array(
       '#type' => 'checkbox',
       '#title' => t('Auto precision'),
       '#description' => t('Automatically determine the maximum precision if the fraction has a base-10 denominator. For example, 1/100 would have a precision of 2, 1/1000 would have a precision of 3, etc.'),
       '#default_value' => $this->options['auto_precision'],
-    ];
+    );
 
     // Merge into the parent form.
     parent::buildOptionsForm($form, $form_state);
@@ -61,11 +60,11 @@ class Fraction extends FieldPluginBase {
    * {@inheritdoc}
    */
   public function clickSort($order) {
+
     // Ensure the main table for this field is included.
     $this->ensureMyTable();
 
-    // Formula for calculating the final value, by dividing numerator by
-    // denominator.
+    // Formula for calculating the final value, by dividing numerator by denominator.
     // These are available as additional fields.
     $formula = $this->tableAlias . '.' . $this->definition['additional fields']['numerator'] . ' / ' . $this->tableAlias . '.' . $this->definition['additional fields']['denominator'];
 
@@ -74,9 +73,10 @@ class Fraction extends FieldPluginBase {
   }
 
   /**
-   * Loads the numerator and denominator values and converts to decimal.
+   * Load the numerator and denominator values and perform conversion to decimal.
    */
   public function getValue(ResultRow $values, $field = NULL) {
+
     // Find the numerator and denominator field aliases.
     $numerator_alias = $this->aliases[$this->definition['additional fields']['numerator']];
     $denominator_alias = $this->aliases[$this->definition['additional fields']['denominator']];
@@ -89,9 +89,7 @@ class Fraction extends FieldPluginBase {
       $denominator = $values->{$denominator_alias};
       $precision = $this->options['precision'];
       $auto_precision = $this->options['auto_precision'];
-      $fraction = new FractionClass($numerator, $denominator);
-      return $fraction->toDecimal($precision, $auto_precision);
+      return fraction($numerator, $denominator)->toDecimal($precision, $auto_precision);
     }
   }
-
 }

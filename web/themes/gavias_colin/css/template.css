@@ -927,8 +927,15 @@ header.header-v3 .main-menu-inner {
 #footer .before-footer {
   padding: 50px 0 0;
 }
+<<<<<<< HEAD
 #footer .footer-center {
   padding: 75px 0 50px;
+=======
+
+#footer .footer-center {
+  margin: 20px 0 0;
+  padding: 0;
+>>>>>>> 4df90ea29f7677ec159d91841a67936f76afec3e
 }
 #footer .block {
   padding-bottom: 0;

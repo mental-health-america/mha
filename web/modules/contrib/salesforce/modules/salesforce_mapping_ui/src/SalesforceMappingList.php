@@ -76,7 +76,7 @@ class SalesforceMappingList extends DraggableListBuilder {
 
     // Only makes sense to expose fields operation if edit exists.
     if (isset($operations['edit'])) {
-      $operations['edit']['title'] = $this->t('Properties');
+      $operations['edit']['title'] = $this->t('Settings');
       $operations['fields'] = [
         'title' => $this->t('Fields'),
         'url' => $url,

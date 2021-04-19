@@ -10,8 +10,5 @@
     "issues": "http://drupal.org/project/issues/fraction",
     "source": "http://cgit.drupalcode.org/fraction"
   },
-  "require": { },
-  "require-dev": {
-    "drupal/feeds": "^3.0"
-  }
+  "require": { }
 }
