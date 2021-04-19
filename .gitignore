@@ -4,7 +4,6 @@
 
 /_sql
 
-.cpanel.yml
 # Ignore Drupal's file directory
 #/web/sites/*/files/
 #/web/sites/default/files/js/
