@@ -16129,7 +16129,7 @@
         },
         "time": "2021-02-14T12:29:41+00:00",
         "type": "library",
-        "installation-source": "dist",
+        "installation-source": "source",
         "autoload": {
             "psr-4": {
                 "Symfony\\Component\\DomCrawler\\": ""
