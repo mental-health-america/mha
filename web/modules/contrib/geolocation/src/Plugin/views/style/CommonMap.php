@@ -249,7 +249,7 @@ class CommonMap extends GeolocationStyleBase {
       $form = [
         '#type' => 'html_tag',
         '#tag' => 'span',
-        '#value' => t("No map provider found."),
+        '#value' => $this->t("No map provider found."),
       ];
       return;
     }
@@ -372,7 +372,7 @@ class CommonMap extends GeolocationStyleBase {
     $form['map_provider_settings'] = [
       '#type' => 'html_tag',
       '#tag' => 'span',
-      '#value' => t("No settings available."),
+      '#value' => $this->t("No settings available."),
     ];
 
     $map_provider_id = NestedArray::getValue($form_state->getUserInput(), ['style_options', 'map_provider_id']);

@@ -38,43 +38,148 @@ class DerRevUpdateTest extends UpdatePathTestBase {
    */
   public function testUpdate8201() {
     $connection = \Drupal::database();
-    if (version_compare(\Drupal::VERSION, '9.0.2', '>')) {
-      $update_manager = \Drupal::entityDefinitionUpdateManager();
-      $entity_type = $update_manager->getEntityType('entity_test_mulrev_chnged_revlog');
-      $update_manager->uninstallEntityType($entity_type);
-      $entity_type = \Drupal::entityTypeManager()->getDefinition('entity_test_mulrev_changed_rev');
-      $update_manager->installEntityType($entity_type);
-    }
     $this->runUpdates();
     // The db dump contain two entity_test_rev entities referencing one
     // entity_test_rev entity and one entity_test_mulrev entity.
     // Check the basefields value on entity table columns.
-    $this->assertEquals([NULL, 1, 1], $connection->query('SELECT dynamic_references__target_id FROM {entity_test_rev} ORDER BY id, revision_id')->fetchCol());
-    $this->assertEquals([NULL, 1, 1], $connection->query('SELECT dynamic_references__target_id_int FROM {entity_test_rev} ORDER BY id, revision_id')->fetchCol());
+    $this->assertEquals([
+      NULL,
+      1,
+      1,
+    ], $connection->query('SELECT dynamic_references__target_id FROM {entity_test_rev} ORDER BY id, revision_id')->fetchCol());
+    $this->assertEquals([
+      NULL,
+      1,
+      1,
+    ], $connection->query('SELECT dynamic_references__target_id_int FROM {entity_test_rev} ORDER BY id, revision_id')->fetchCol());
     // Check the both columns of the other basefield.
-    $this->assertEquals([NULL, 1, 1], $connection->query('SELECT der__target_id FROM {entity_test_rev} ORDER BY id, revision_id')->fetchCol());
-    $this->assertEquals([NULL, 1, 1], $connection->query('SELECT der__target_id_int FROM {entity_test_rev} ORDER BY id, revision_id')->fetchCol());
+    $this->assertEquals([
+      NULL,
+      1,
+      1,
+    ], $connection->query('SELECT der__target_id FROM {entity_test_rev} ORDER BY id, revision_id')->fetchCol());
+    $this->assertEquals([
+      NULL,
+      1,
+      1,
+    ], $connection->query('SELECT der__target_id_int FROM {entity_test_rev} ORDER BY id, revision_id')->fetchCol());
     // The db dump contain two entity_test_mulrev entities referencing one
     // entity_test_rev entity and one entity_test_mulrev entity.
     // Check the basefields value on entity data table columns.
-    $this->assertEquals([NULL, 1, 1], $connection->query('SELECT dynamic_references__target_id FROM {entity_test_mulrev_property_data} ORDER BY id, revision_id')->fetchCol());
-    $this->assertEquals([NULL, 1, 1], $connection->query('SELECT dynamic_references__target_id_int FROM {entity_test_mulrev_property_data} ORDER BY id, revision_id')->fetchCol());
+    $this->assertEquals([
+      NULL,
+      1,
+      1,
+    ], $connection->query('SELECT dynamic_references__target_id FROM {entity_test_mulrev_property_data} ORDER BY id, revision_id')->fetchCol());
+    $this->assertEquals([
+      NULL,
+      1,
+      1,
+    ], $connection->query('SELECT dynamic_references__target_id_int FROM {entity_test_mulrev_property_data} ORDER BY id, revision_id')->fetchCol());
     // Check the both columns of the other basefield.
-    $this->assertEquals([NULL, 1, 1], $connection->query('SELECT der__target_id FROM {entity_test_mulrev_property_data} ORDER BY id, revision_id')->fetchCol());
-    $this->assertEquals([NULL, 1, 1], $connection->query('SELECT der__target_id_int FROM {entity_test_mulrev_property_data} ORDER BY id, revision_id')->fetchCol());
+    $this->assertEquals([
+      NULL,
+      1,
+      1,
+    ], $connection->query('SELECT der__target_id FROM {entity_test_mulrev_property_data} ORDER BY id, revision_id')->fetchCol());
+    $this->assertEquals([
+      NULL,
+      1,
+      1,
+    ], $connection->query('SELECT der__target_id_int FROM {entity_test_mulrev_property_data} ORDER BY id, revision_id')->fetchCol());
 
     // Check the basefields value on entity revision table columns.
-    $this->assertEquals([NULL, 1, 1, 1, 1, 1, 1, 1, 1], $connection->query('SELECT dynamic_references__target_id FROM {entity_test_rev_revision} ORDER BY id, revision_id')->fetchCol());
-    $this->assertEquals([NULL, 1, 1, 1, 1, 1, 1, 1, 1], $connection->query('SELECT dynamic_references__target_id_int FROM {entity_test_rev_revision} ORDER BY id, revision_id')->fetchCol());
+    $this->assertEquals([
+      NULL,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+    ], $connection->query('SELECT dynamic_references__target_id FROM {entity_test_rev_revision} ORDER BY id, revision_id')->fetchCol());
+    $this->assertEquals([
+      NULL,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+    ], $connection->query('SELECT dynamic_references__target_id_int FROM {entity_test_rev_revision} ORDER BY id, revision_id')->fetchCol());
     // Check the both columns of the other basefield.
-    $this->assertEquals([NULL, NULL, NULL, 1, 1, NULL, NULL, 1, 1], $connection->query('SELECT der__target_id FROM {entity_test_rev_revision} ORDER BY id, revision_id')->fetchCol());
-    $this->assertEquals([NULL, NULL, NULL, 1, 1, NULL, NULL, 1, 1], $connection->query('SELECT der__target_id_int FROM {entity_test_rev_revision} ORDER BY id, revision_id')->fetchCol());
+    $this->assertEquals([
+      NULL,
+      NULL,
+      NULL,
+      1,
+      1,
+      NULL,
+      NULL,
+      1,
+      1,
+    ], $connection->query('SELECT der__target_id FROM {entity_test_rev_revision} ORDER BY id, revision_id')->fetchCol());
+    $this->assertEquals([
+      NULL,
+      NULL,
+      NULL,
+      1,
+      1,
+      NULL,
+      NULL,
+      1,
+      1,
+    ], $connection->query('SELECT der__target_id_int FROM {entity_test_rev_revision} ORDER BY id, revision_id')->fetchCol());
     // Check the basefields value on entity revision data table columns.
-    $this->assertEquals([NULL, 1, 1, 1, 1, 1, 1, 1, 1], $connection->query('SELECT dynamic_references__target_id FROM {entity_test_mulrev_property_revision} ORDER BY id, revision_id')->fetchCol());
-    $this->assertEquals([NULL, 1, 1, 1, 1, 1, 1, 1, 1], $connection->query('SELECT dynamic_references__target_id_int FROM {entity_test_mulrev_property_revision} ORDER BY id, revision_id')->fetchCol());
+    $this->assertEquals([
+      NULL,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+    ], $connection->query('SELECT dynamic_references__target_id FROM {entity_test_mulrev_property_revision} ORDER BY id, revision_id')->fetchCol());
+    $this->assertEquals([
+      NULL,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+    ], $connection->query('SELECT dynamic_references__target_id_int FROM {entity_test_mulrev_property_revision} ORDER BY id, revision_id')->fetchCol());
     // Check the both columns of the other basefield.
-    $this->assertEquals([NULL, NULL, NULL, 1, 1, NULL, NULL, 1, 1], $connection->query('SELECT der__target_id FROM {entity_test_mulrev_property_revision} ORDER BY id, revision_id')->fetchCol());
-    $this->assertEquals([NULL, NULL, NULL, 1, 1, NULL, NULL, 1, 1], $connection->query('SELECT der__target_id_int FROM {entity_test_mulrev_property_revision} ORDER BY id, revision_id')->fetchCol());
+    $this->assertEquals([
+      NULL,
+      NULL,
+      NULL,
+      1,
+      1,
+      NULL,
+      NULL,
+      1,
+      1,
+    ], $connection->query('SELECT der__target_id FROM {entity_test_mulrev_property_revision} ORDER BY id, revision_id')->fetchCol());
+    $this->assertEquals([
+      NULL,
+      NULL,
+      NULL,
+      1,
+      1,
+      NULL,
+      NULL,
+      1,
+      1,
+    ], $connection->query('SELECT der__target_id_int FROM {entity_test_mulrev_property_revision} ORDER BY id, revision_id')->fetchCol());
 
     // String id entity can be referenced now.
     $referenced_entity = EntityTestStringId::create([
@@ -90,32 +195,152 @@ class DerRevUpdateTest extends UpdatePathTestBase {
     $entity->setNewRevision(TRUE);
     $entity->save();
     // Check the basefields value on entity table columns.
-    $this->assertEquals([NULL, 1, 'test'], $connection->query('SELECT dynamic_references__target_id FROM {entity_test_rev} ORDER BY id, revision_id')->fetchCol());
-    $this->assertEquals([NULL, 1, 0], $connection->query('SELECT dynamic_references__target_id_int FROM {entity_test_rev} ORDER BY id, revision_id')->fetchCol());
+    $this->assertEquals([
+      NULL,
+      1,
+      'test',
+    ], $connection->query('SELECT dynamic_references__target_id FROM {entity_test_rev} ORDER BY id, revision_id')->fetchCol());
+    $this->assertEquals([
+      NULL,
+      1,
+      0,
+    ], $connection->query('SELECT dynamic_references__target_id_int FROM {entity_test_rev} ORDER BY id, revision_id')->fetchCol());
     // Check the both columns of the other basefield.
-    $this->assertEquals([NULL, 1, 'test'], $connection->query('SELECT der__target_id FROM {entity_test_rev} ORDER BY id, revision_id')->fetchCol());
-    $this->assertEquals([NULL, 1, 0], $connection->query('SELECT der__target_id_int FROM {entity_test_rev} ORDER BY id, revision_id')->fetchCol());
+    $this->assertEquals([
+      NULL,
+      1,
+      'test',
+    ], $connection->query('SELECT der__target_id FROM {entity_test_rev} ORDER BY id, revision_id')->fetchCol());
+    $this->assertEquals([
+      NULL,
+      1,
+      0,
+    ], $connection->query('SELECT der__target_id_int FROM {entity_test_rev} ORDER BY id, revision_id')->fetchCol());
     // The db dump contain two entity_test_mulrev entities referencing one
     // entity_test_rev entity and one entity_test_mulrev entity.
     // Check the basefields value on entity data table columns.
-    $this->assertEquals([NULL, 1, 'test'], $connection->query('SELECT dynamic_references__target_id FROM {entity_test_mulrev_property_data} ORDER BY id, revision_id')->fetchCol());
-    $this->assertEquals([NULL, 1, 0], $connection->query('SELECT dynamic_references__target_id_int FROM {entity_test_mulrev_property_data} ORDER BY id, revision_id')->fetchCol());
+    $this->assertEquals([
+      NULL,
+      1,
+      'test',
+    ], $connection->query('SELECT dynamic_references__target_id FROM {entity_test_mulrev_property_data} ORDER BY id, revision_id')->fetchCol());
+    $this->assertEquals([
+      NULL,
+      1,
+      0,
+    ], $connection->query('SELECT dynamic_references__target_id_int FROM {entity_test_mulrev_property_data} ORDER BY id, revision_id')->fetchCol());
     // Check the both columns of the other basefield.
-    $this->assertEquals([NULL, 1, 'test'], $connection->query('SELECT der__target_id FROM {entity_test_mulrev_property_data} ORDER BY id, revision_id')->fetchCol());
-    $this->assertEquals([NULL, 1, 0], $connection->query('SELECT der__target_id_int FROM {entity_test_mulrev_property_data} ORDER BY id, revision_id')->fetchCol());
+    $this->assertEquals([
+      NULL,
+      1,
+      'test',
+    ], $connection->query('SELECT der__target_id FROM {entity_test_mulrev_property_data} ORDER BY id, revision_id')->fetchCol());
+    $this->assertEquals([
+      NULL,
+      1,
+      0,
+    ], $connection->query('SELECT der__target_id_int FROM {entity_test_mulrev_property_data} ORDER BY id, revision_id')->fetchCol());
 
     // Check the basefields value on entity revision table columns.
-    $this->assertEquals([NULL, 1, 1, 1, 1, 1, 1, 1, 1, 'test'], $connection->query('SELECT dynamic_references__target_id FROM {entity_test_rev_revision} ORDER BY id, revision_id')->fetchCol());
-    $this->assertEquals([NULL, 1, 1, 1, 1, 1, 1, 1, 1, 0], $connection->query('SELECT dynamic_references__target_id_int FROM {entity_test_rev_revision} ORDER BY id, revision_id')->fetchCol());
+    $this->assertEquals([
+      NULL,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      'test',
+    ], $connection->query('SELECT dynamic_references__target_id FROM {entity_test_rev_revision} ORDER BY id, revision_id')->fetchCol());
+    $this->assertEquals([
+      NULL,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+    ], $connection->query('SELECT dynamic_references__target_id_int FROM {entity_test_rev_revision} ORDER BY id, revision_id')->fetchCol());
     // Check the both columns of the other basefield.
-    $this->assertEquals([NULL, NULL, NULL, 1, 1, NULL, NULL, 1, 1, 'test'], $connection->query('SELECT der__target_id FROM {entity_test_rev_revision} ORDER BY id, revision_id')->fetchCol());
-    $this->assertEquals([NULL, NULL, NULL, 1, 1, NULL, NULL, 1, 1, 0], $connection->query('SELECT der__target_id_int FROM {entity_test_rev_revision} ORDER BY id, revision_id')->fetchCol());
+    $this->assertEquals([
+      NULL,
+      NULL,
+      NULL,
+      1,
+      1,
+      NULL,
+      NULL,
+      1,
+      1,
+      'test',
+    ], $connection->query('SELECT der__target_id FROM {entity_test_rev_revision} ORDER BY id, revision_id')->fetchCol());
+    $this->assertEquals([
+      NULL,
+      NULL,
+      NULL,
+      1,
+      1,
+      NULL,
+      NULL,
+      1,
+      1,
+      0,
+    ], $connection->query('SELECT der__target_id_int FROM {entity_test_rev_revision} ORDER BY id, revision_id')->fetchCol());
     // Check the basefields value on entity revision data table columns.
-    $this->assertEquals([NULL, 1, 1, 1, 1, 1, 1, 1, 1, 'test'], $connection->query('SELECT dynamic_references__target_id FROM {entity_test_mulrev_property_revision} ORDER BY id, revision_id')->fetchCol());
-    $this->assertEquals([NULL, 1, 1, 1, 1, 1, 1, 1, 1, 0], $connection->query('SELECT dynamic_references__target_id_int FROM {entity_test_mulrev_property_revision} ORDER BY id, revision_id')->fetchCol());
+    $this->assertEquals([
+      NULL,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      'test',
+    ], $connection->query('SELECT dynamic_references__target_id FROM {entity_test_mulrev_property_revision} ORDER BY id, revision_id')->fetchCol());
+    $this->assertEquals([
+      NULL,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+    ], $connection->query('SELECT dynamic_references__target_id_int FROM {entity_test_mulrev_property_revision} ORDER BY id, revision_id')->fetchCol());
     // Check the both columns of the other basefield.
-    $this->assertEquals([NULL, NULL, NULL, 1, 1, NULL, NULL, 1, 1, 'test'], $connection->query('SELECT der__target_id FROM {entity_test_mulrev_property_revision} ORDER BY id, revision_id')->fetchCol());
-    $this->assertEquals([NULL, NULL, NULL, 1, 1, NULL, NULL, 1, 1, 0], $connection->query('SELECT der__target_id_int FROM {entity_test_mulrev_property_revision} ORDER BY id, revision_id')->fetchCol());
+    $this->assertEquals([
+      NULL,
+      NULL,
+      NULL,
+      1,
+      1,
+      NULL,
+      NULL,
+      1,
+      1,
+      'test',
+    ], $connection->query('SELECT der__target_id FROM {entity_test_mulrev_property_revision} ORDER BY id, revision_id')->fetchCol());
+    $this->assertEquals([
+      NULL,
+      NULL,
+      NULL,
+      1,
+      1,
+      NULL,
+      NULL,
+      1,
+      1,
+      0,
+    ], $connection->query('SELECT der__target_id_int FROM {entity_test_mulrev_property_revision} ORDER BY id, revision_id')->fetchCol());
   }
 
 }

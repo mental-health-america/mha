@@ -5,8 +5,8 @@
 /_sql
 
 # Ignore Drupal's file directory
-#/web/sites/*/files/
-#/web/sites/default/files/js/
+/web/sites/*/files/
+/web/sites/default/files/js/
 
 # Ignore SimpleTest multi-site environment.
 /web/sites/simpletest
@@ -38,9 +38,6 @@
 /web/themes/README.txt
 /web/LICENSE.txt
 /web/README.txt
-
-# Ignore Drupal's file directory
-/web/sites/*/files/
 
 # Ignore paths that contain user-generated content <set by MHA>.
 sites/*/files

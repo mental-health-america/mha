@@ -134,25 +134,22 @@ function menu_item_extras_preprocess_block(&$variables) {
   // class. We need to build menus supported by menu_item_extras with the
   // default #theme menu, to be able to add suggestions in the good order.
   if (
-      isset($variables['content']['#theme'], $variables['content']['#menu_name'])
-      && strpos($variables['content']['#theme'], 'menu__') === 0
-      && Utility::checkBundleHasExtraFieldsThanEntity('menu_link_content', $variables['content']['#menu_name'])
-    ) {
+    isset($variables['content']['#theme'], $variables['content']['#menu_name'])
+    && (strpos($variables['content']['#theme'], 'menu__') === 0 || $variables['content']['#theme'] === 'menu')
+    && Utility::checkBundleHasExtraFieldsThanEntity('menu_link_content', $variables['content']['#menu_name'])
+  ) {
 
-      $menu_theme = 'menu__' . strtr($variables['content']['#menu_name'], '-', '_');
-      if ($variables['content']['#theme'] == $menu_theme) {
-        $variables['content']['#theme'] = 'menu';
-        // Pass region name to the suggestions_menu_alter for
-        // the region suggestion.
-        if (!empty($variables['elements']['#id'])) {
-        /** @var \Drupal\Core\Config\Entity\ConfigEntityStorageInterface $block_storage */
-        $block_storage = \Drupal::entityTypeManager()
-          ->getStorage('block');
-        /** @var \Drupal\block\BlockInterface $block */
-        $block = $block_storage->load($variables['elements']['#id']);
-        if (!empty($block)) {
-          $variables['content']['#attributes']['data-region'] = $block->getRegion();
-        }
+    $variables['content']['#theme'] = 'menu';
+    // Pass region name to the suggestions_menu_alter for
+    // the region suggestion.
+    if (!empty($variables['elements']['#id'])) {
+      /** @var \Drupal\Core\Config\Entity\ConfigEntityStorageInterface $block_storage */
+      $block_storage = \Drupal::entityTypeManager()
+        ->getStorage('block');
+      /** @var \Drupal\block\BlockInterface $block */
+      $block = $block_storage->load($variables['elements']['#id']);
+      if (!empty($block)) {
+        $variables['content']['#attributes']['data-region'] = $block->getRegion();
       }
     }
   }

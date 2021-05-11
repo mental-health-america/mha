@@ -154,7 +154,7 @@
         "drupal/video_embed_field": "^2.1",
         "drupal/views_infinite_scroll": "^1.5",
         "drupal/views_term_hierarchy_weight_field": "^1.1",
-        "drupal/webform": "^6.1",
+        "drupal/webform": "5.x-dev",
         "drupal/webform_mass_email": "^1.0",
         "drupal/webform_migrate": "^1.1",
         "drupal/webform_score": "^2.0@alpha",

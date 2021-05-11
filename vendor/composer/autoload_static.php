@@ -53,7 +53,6 @@ class ComposerStaticInit28ed0b610adae093ae18ea83a8c0020c
         ),
         'p' => 
         array (
-            'phpGPX\\' => 7,
             'phpDocumentor\\Reflection\\' => 25,
         ),
         'c' => 
@@ -116,7 +115,6 @@ class ComposerStaticInit28ed0b610adae093ae18ea83a8c0020c
             'Symfony\\Bridge\\PhpUnit\\' => 23,
             'Stecman\\Component\\Symfony\\Console\\BashCompletion\\' => 49,
             'Solarium\\' => 9,
-            'Shapefile\\' => 10,
             'SelfUpdate\\' => 11,
             'Seld\\PharUtils\\' => 15,
             'Seld\\JsonLint\\' => 14,
@@ -235,10 +233,6 @@ class ComposerStaticInit28ed0b610adae093ae18ea83a8c0020c
         'zaporylie\\ComposerDrupalOptimizations\\' => 
         array (
             0 => __DIR__ . '/..' . '/zaporylie/composer-drupal-optimizations/src',
-        ),
-        'phpGPX\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/sibyx/phpgpx/src/phpGPX',
         ),
         'phpDocumentor\\Reflection\\' => 
         array (
@@ -417,10 +411,6 @@ class ComposerStaticInit28ed0b610adae093ae18ea83a8c0020c
         'Solarium\\' => 
         array (
             0 => __DIR__ . '/..' . '/solarium/solarium/src',
-        ),
-        'Shapefile\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/gasparesganga/php-shapefile/src/Shapefile',
         ),
         'SelfUpdate\\' => 
         array (

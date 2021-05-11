@@ -114,7 +114,7 @@ display:
                 weight: 0
                 settings:
                   position: topright
-                  default_label: false
+                  default_label: ''
                   tile_layer_providers:
                     OpenStreetMap:
                       'OpenStreetMap Mapnik':
@@ -514,23 +514,6 @@ display:
                 enabled: false
               leaflet_control_geocoder:
                 weight: 0
-                settings:
-                  position: topright
-                  geocoder: google_geocoding_api
-                  settings:
-                    label: Adresse
-                    description: 'Enter an address to be localized.'
-                    component_restrictions:
-                      route: ''
-                      locality: ''
-                      administrative_area: ''
-                      postal_code: ''
-                      country: ''
-                    boundary_restriction:
-                      south: ''
-                      west: ''
-                      north: ''
-                      east: ''
                 enabled: false
               leaflet_control_fullscreen:
                 weight: 0
