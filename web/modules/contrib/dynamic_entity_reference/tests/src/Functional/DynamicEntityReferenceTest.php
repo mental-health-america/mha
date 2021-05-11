@@ -117,6 +117,7 @@ class DynamicEntityReferenceTest extends BrowserTestBase {
       'entity_test_no_bundle',
       'entity_test_computed_field',
       'entity_test_map_field',
+      'entity_test_no_bundle_with_label',
     ];
     foreach ($labels[(string) t('Content', [], ['context' => 'Entity type group'])] as $entity_type_id => $entity_type_label) {
       if (!in_array($entity_type_id, $excluded_entity_type_ids)) {
@@ -133,7 +134,10 @@ class DynamicEntityReferenceTest extends BrowserTestBase {
     $excluded_entity_type_ids = FieldStorageConfig::loadByName('entity_test', 'field_foobar')
       ->getSetting('entity_type_ids');
     $this->assertNotNull($excluded_entity_type_ids);
-    $this->assertSame(array_keys($excluded_entity_type_ids), ['user', 'entity_test_label']);
+    $this->assertSame(array_keys($excluded_entity_type_ids), [
+      'user',
+      'entity_test_label',
+    ]);
     // Check the include entity settings.
     $this->drupalGet('entity_test/structure/entity_test/fields/entity_test.entity_test.field_foobar/storage');
     $this->submitForm([
@@ -165,7 +169,10 @@ class DynamicEntityReferenceTest extends BrowserTestBase {
     $excluded_entity_type_ids = FieldStorageConfig::loadByName('entity_test', 'field_foobar')
       ->getSetting('entity_type_ids');
     $this->assertNotNull($excluded_entity_type_ids);
-    $this->assertSame(array_keys($excluded_entity_type_ids), ['user', 'entity_test_label']);
+    $this->assertSame(array_keys($excluded_entity_type_ids), [
+      'user',
+      'entity_test_label',
+    ]);
     // Check the default settings.
     $this->drupalGet('entity_test/structure/entity_test/fields/entity_test.entity_test.field_foobar');
     $this->submitForm([
@@ -174,7 +181,10 @@ class DynamicEntityReferenceTest extends BrowserTestBase {
     ], t('Save settings'));
 
     $field_config = FieldConfig::loadByName('entity_test', 'entity_test', 'field_foobar')->toArray();
-    $this->assertEquals($field_config['default_value']['0'], ['target_type' => 'user', 'target_uuid' => $this->adminUser->uuid()]);
+    $this->assertEquals($field_config['default_value']['0'], [
+      'target_type' => 'user',
+      'target_uuid' => $this->adminUser->uuid(),
+    ]);
   }
 
   /**
@@ -209,6 +219,7 @@ class DynamicEntityReferenceTest extends BrowserTestBase {
       'entity_test_no_bundle',
       'entity_test_computed_field',
       'entity_test_map_field',
+      'entity_test_no_bundle_with_label',
     ];
     foreach ($labels[(string) t('Content', [], ['context' => 'Entity type group'])] as $entity_type_id => $entity_type_label) {
       if (!in_array($entity_type_id, $excluded_entity_type_ids)) {
@@ -292,7 +303,12 @@ class DynamicEntityReferenceTest extends BrowserTestBase {
     $this->drupalGet('entity_test/manage/' . $entity->id() . '/edit');
 
     // Ensure that the autocomplete path is correct.
-    foreach (['0' => 'user', '1' => 'entity_test', '2' => 'entity_test'] as $index => $expected_entity_type) {
+    $expected_entity_types = [
+      '0' => 'user',
+      '1' => 'entity_test',
+      '2' => 'entity_test',
+    ];
+    foreach ($expected_entity_types as $index => $expected_entity_type) {
       $selection_settings = $settings[$expected_entity_type]['handler_settings'] ?: [];
       $selection_settings += [
         'match_operator' => 'CONTAINS',
@@ -344,7 +360,13 @@ class DynamicEntityReferenceTest extends BrowserTestBase {
 
     // We don't know the order in which the entities will be listed, so just
     // assert parts and make sure both are shown.
-    $error_message = t('Multiple entities match this reference;');
+    // @todo remove this once 9.1 and 9.0 are not supported anymore.
+    if (version_compare(\Drupal::VERSION, '9.2', '>=')) {
+      $error_message = t('Multiple test entity entities match this reference;');
+    }
+    else {
+      $error_message = t('Multiple entities match this reference;');
+    }
     $assert_session->responseContains($error_message);
     $assert_session->responseContains($labels[0]);
     $assert_session->responseContains($labels[1]);
@@ -367,7 +389,13 @@ class DynamicEntityReferenceTest extends BrowserTestBase {
     ];
     // We don't know which id it will display, so just assert a part of the
     // error.
-    $error_message = t('Many entities are called %value. Specify the one you want by appending the id in parentheses', $params);
+    // @todo remove this once 9.1 and 9.0 are not supported anymore.
+    if (version_compare(\Drupal::VERSION, '9.2', '>=')) {
+      $error_message = t('Many test entity entities are called %value. Specify the one you want by appending the id in parentheses', $params);
+    }
+    else {
+      $error_message = t('Many entities are called %value. Specify the one you want by appending the id in parentheses', $params);
+    }
     $assert_session->responseContains($error_message);
 
     // Submit with a label that does not match anything.
@@ -377,7 +405,13 @@ class DynamicEntityReferenceTest extends BrowserTestBase {
       'field_foobar[1][target_id]' => 'does not exist',
     ];
     $this->submitForm($edit, t('Save'));
-    $assert_session->responseContains(t('There are no entities matching "%value".', ['%value' => 'does not exist']));
+    // @todo remove this once 9.1 and 9.0 are not supported anymore.
+    if (version_compare(\Drupal::VERSION, '9.2', '>=')) {
+      $assert_session->responseContains(t('There are no test entity entities matching "%value".', ['%value' => 'does not exist']));
+    }
+    else {
+      $assert_session->responseContains(t('There are no entities matching "%value".', ['%value' => 'does not exist']));
+    }
 
     $this->drupalGet('entity_test/manage/' . $entity->id() . '/edit');
     $edit = [

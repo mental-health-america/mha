@@ -318,7 +318,10 @@
             }
           }
 
-          if (addressIntegrationSettings.sync_mode === 'auto') {
+          if (
+              addressIntegrationSettings.sync_mode === 'auto'
+              && addressIntegrationSettings.direction !== 'one_way'
+          ) {
             widget.addLocationAlteredCallback(function (location, delta, identifier) {
               if (identifier === 'address-changed') {
                 return;

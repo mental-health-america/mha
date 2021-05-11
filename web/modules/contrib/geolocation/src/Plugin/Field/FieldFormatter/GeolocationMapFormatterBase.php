@@ -119,7 +119,7 @@ abstract class GeolocationMapFormatterBase extends FormatterBase {
       return [
         '#type' => 'html_tag',
         '#tag' => 'span',
-        '#value' => t("No map provider found."),
+        '#value' => $this->t("No map provider found."),
       ];
     }
 
@@ -217,7 +217,7 @@ abstract class GeolocationMapFormatterBase extends FormatterBase {
     $element['map_provider_settings'] = [
       '#type' => 'html_tag',
       '#tag' => 'span',
-      '#value' => t("No settings available."),
+      '#value' => $this->t("No settings available."),
     ];
 
     $parents = [

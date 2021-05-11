@@ -50,7 +50,7 @@ class DynamicEntityReferenceFieldRevisionTest extends EntityKernelTestBase {
    *
    * @var array
    */
-  public static $modules = ['dynamic_entity_reference'];
+  protected static $modules = ['dynamic_entity_reference'];
 
   /**
    * {@inheritdoc}
@@ -130,8 +130,14 @@ class DynamicEntityReferenceFieldRevisionTest extends EntityKernelTestBase {
     $database = $this->container->get('database');
     $this->assertEquals([2], $database->query('SELECT field_test_target_id FROM {entity_test_rev__field_test} ORDER BY entity_id, revision_id, delta')->fetchCol());
     $this->assertEquals([2], $database->query('SELECT field_test_target_id_int FROM {entity_test_rev__field_test} ORDER BY entity_id, revision_id, delta')->fetchCol());
-    $this->assertEquals([1, 2], $database->query('SELECT field_test_target_id FROM {entity_test_rev_revision__field_test} ORDER BY entity_id, revision_id, delta')->fetchCol());
-    $this->assertEquals([1, 2], $database->query('SELECT field_test_target_id_int FROM {entity_test_rev_revision__field_test} ORDER BY entity_id, revision_id, delta')->fetchCol());
+    $this->assertEquals([
+      1,
+      2,
+    ], $database->query('SELECT field_test_target_id FROM {entity_test_rev_revision__field_test} ORDER BY entity_id, revision_id, delta')->fetchCol());
+    $this->assertEquals([
+      1,
+      2,
+    ], $database->query('SELECT field_test_target_id_int FROM {entity_test_rev_revision__field_test} ORDER BY entity_id, revision_id, delta')->fetchCol());
   }
 
 }
