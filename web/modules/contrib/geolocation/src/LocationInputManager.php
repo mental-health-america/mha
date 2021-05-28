@@ -2,11 +2,12 @@
 
 namespace Drupal\geolocation;
 
+use Drupal\Component\Utility\SortArray;
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Component\Utility\SortArray;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
@@ -237,8 +238,8 @@ class LocationInputManager extends DefaultPluginManager {
       /** @var \Drupal\geolocation\LocationInputInterface $location_input_plugin */
       $location_input_plugin = $this->createInstance($option['location_input_id']);
       $plugin_form = $location_input_plugin->getForm($option_id, empty($option['settings']) ? [] : $option['settings'], $context, $default_value);
-      if ($plugin_form !== FALSE) {
-        return $plugin_form;
+      if ($plugin_form) {
+        $form = NestedArray::mergeDeep($plugin_form, $form);
       }
     }
 

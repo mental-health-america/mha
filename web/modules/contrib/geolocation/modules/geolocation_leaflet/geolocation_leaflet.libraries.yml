@@ -222,6 +222,13 @@ mapfeature.leaflet_marker_zoom_and_animate:
 # Map Features - Controls
 #
 
+# Control Attribution
+mapfeature.leaflet_control_attribution:
+  js:
+    js/MapFeature/geolocation-control-attribution.js: {}
+  dependencies:
+    - geolocation_leaflet/geolocation.leaflet
+
 # Control Zoom
 mapfeature.leaflet_control_zoom:
   js:

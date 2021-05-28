@@ -131,6 +131,7 @@ class ComposerStaticInit28ed0b610adae093ae18ea83a8c0020c
             'Psr\\Http\\Client\\' => 16,
             'Psr\\EventDispatcher\\' => 20,
             'Psr\\Container\\' => 14,
+            'Psr\\Cache\\' => 10,
             'Prophecy\\' => 9,
             'PhpParser\\' => 10,
             'PHPStan\\' => 8,
@@ -452,6 +453,10 @@ class ComposerStaticInit28ed0b610adae093ae18ea83a8c0020c
         'Psr\\Container\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
+        ),
+        'Psr\\Cache\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/cache/src',
         ),
         'Prophecy\\' => 
         array (

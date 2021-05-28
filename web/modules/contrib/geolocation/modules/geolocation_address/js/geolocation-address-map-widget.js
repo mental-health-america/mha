@@ -296,7 +296,7 @@
               var addressInput = this.getAddressByDelta(delta);
               if (addressInput) {
                 widget.addressChangedEventPaused = true;
-                addressInput.find('select, input').val('');
+                addressInput.find('select, input:not([type="hidden"], [name$="[given_name]"], [name$="[family_name]"])').val('');
                 widget.addressChangedEventPaused = false;
               }
             }
