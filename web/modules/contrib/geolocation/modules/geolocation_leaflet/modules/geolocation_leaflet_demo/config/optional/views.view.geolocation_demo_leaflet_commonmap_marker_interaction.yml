@@ -81,6 +81,10 @@ display:
           marker_icon_path: ''
           marker_row_number: 0
           centre:
+            views_boundary_filter:
+              enable: true
+              weight: 0
+              map_center_id: views_boundary_filter
             fit_bounds:
               enable: true
               weight: 0
