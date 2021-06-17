@@ -99,10 +99,10 @@ class GoogleGeocodingAPI extends GoogleGeocoderBase {
     $request_url .= self::API_PATH;
 
     if (!empty($config->get('google_map_api_server_key'))) {
-      $query_params['key'] = $config->get('google_map_api_server_key');
+      $query_params['key'] = KeyProvider::getKeyValue($config->get('google_map_api_server_key'));
     }
     elseif (!empty($config->get('google_map_api_key'))) {
-      $query_params['key'] = $config->get('google_map_api_key');
+      $query_params['key'] = KeyProvider::getKeyValue($config->get('google_map_api_key'));
     }
 
     if (!empty($this->configuration['component_restrictions'])) {

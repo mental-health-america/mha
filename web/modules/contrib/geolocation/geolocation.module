@@ -54,7 +54,7 @@ function geolocation_theme() {
         'attributes' => NULL,
         'children' => NULL,
         'title' => NULL,
-        'position' => NULL,
+        'coordinates' => NULL,
         'id' => NULL,
         'hidden' => NULL,
         'icon' => NULL,

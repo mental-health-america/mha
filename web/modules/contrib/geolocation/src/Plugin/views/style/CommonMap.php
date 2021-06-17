@@ -428,4 +428,18 @@ class CommonMap extends GeolocationStyleBase {
     );
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function calculateDependencies() {
+    $dependencies = parent::calculateDependencies();
+    if (empty($this->options['map_provider_id'])) {
+      return $dependencies;
+    }
+
+    $definition = $this->mapProviderManager->getDefinition($this->options['map_provider_id']);
+
+    return array_merge_recursive($dependencies, ['module' => [$definition['provider']]]);
+  }
+
 }
