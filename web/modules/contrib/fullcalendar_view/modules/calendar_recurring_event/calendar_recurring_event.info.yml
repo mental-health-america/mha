@@ -2,7 +2,7 @@ name: Calendar Recurring Event
 type: module
 description: Provide custom fields for recurring event feature provided by Fullcalendar View module
 package: Views
-core: 8.x
+core_version_requirement: ^8 || ^9
 
 dependencies:
   - drupal:fullcalendar_view
