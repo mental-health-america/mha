@@ -12,12 +12,13 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\Core\Security\TrustedCallbackInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Implements UltimenuManagerInterface.
  */
-class UltimenuManager extends UltimenuBase implements UltimenuManagerInterface {
+class UltimenuManager extends UltimenuBase implements UltimenuManagerInterface, TrustedCallbackInterface {
 
   /**
    * Module handler service.
@@ -113,6 +114,13 @@ class UltimenuManager extends UltimenuBase implements UltimenuManagerInterface {
       $container->get('ultimenu.tree'),
       $container->get('ultimenu.tool')
     );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function trustedCallbacks() {
+    return ['preRenderBuild'];
   }
 
   /**
@@ -333,9 +341,12 @@ class UltimenuManager extends UltimenuBase implements UltimenuManagerInterface {
 
       // Add a "data-drupal-link-system-path" attribute to let the
       // drupal.active-link library know the path in a standardized manner.
-      // Special case for the front page.
       $system_path = $url->getInternalPath();
-      $system_path = $system_path == '' ? '<front>' : $system_path;
+
+      // Special case for the front page.
+      if ($url->getRouteName() === '<front>') {
+        $system_path = '<front>';
+      }
 
       // @todo System path is deprecated - use the route name and parameters.
       $link_options['attributes']['data-drupal-link-system-path'] = $system_path;
@@ -382,6 +393,9 @@ class UltimenuManager extends UltimenuBase implements UltimenuManagerInterface {
     }
 
     $extra_classes = isset($link_options['attributes']['class']) ? $link_options['attributes']['class'] : [];
+    if (!is_array($extra_classes)) {
+      $extra_classes = [$extra_classes];
+    }
     $link_options['attributes']['class'] = $extra_classes ? array_merge(['ultimenu__link'], $extra_classes) : ['ultimenu__link'];
 
     $link_element = [

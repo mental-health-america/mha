@@ -11,3 +11,10 @@
 function ultimenu_update_8201() {
   // Do nothing to clear cache.
 }
+
+/**
+ * Clearing cache to update for Drupal 9.
+ */
+function ultimenu_update_8202() {
+  // Do nothing to clear cache.
+}

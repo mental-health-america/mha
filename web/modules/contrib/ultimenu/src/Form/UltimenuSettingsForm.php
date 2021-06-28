@@ -211,6 +211,13 @@ class UltimenuSettingsForm extends ConfigFormBase {
       '#description' => $this->t('The fallback text as link for when the AJAX fails. Default value: <b>@fallback_text</b>', ['@fallback_text' => 'Loading... Click here if it takes longer.']),
     ];
 
+    $form['ultimenu_goodies']['ajaxmw'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('AJAX mobile max-width'),
+      '#default_value' => $config->get('ajaxmw'),
+      '#description' => $this->t('Provides valid CSS max-width to disable AJAX, and auto trigger the AJAX instead, including units, e.g.: 481px. Meaning for device 480px below, AJAX will be auto-loaded rather than triggered by click.'),
+    ];
+
     // Provide region definitions for copy/paste.
     if (!empty($regions)) {
       $copies = [];
@@ -264,7 +271,7 @@ class UltimenuSettingsForm extends ConfigFormBase {
     if ($form_state->hasValue('goodies')) {
       $config->set('goodies', $data['goodies']);
     }
-    foreach (['skins', 'fallback_text'] as $key) {
+    foreach (['skins', 'fallback_text', 'ajaxmw'] as $key) {
       if ($form_state->hasValue($key)) {
         $config->set($key, $form_state->getValue($key));
       }

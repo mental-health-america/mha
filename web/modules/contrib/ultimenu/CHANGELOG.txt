@@ -1,4 +1,26 @@
 
+Ultimenu 8.x-2.0-dev, 2020-06-18
+--------------------------------
+- Issue #3201575 by Mark Shi: The expand Icon status is incorrect When I
+  double-click it.
+- Issue #3212881 by maskedjellybean: Warning: array_merge(): Expected parameter
+  2 to be an array, string given.
+
+Ultimenu 8.x-2.0-dev, 2020-06-22
+--------------------------------
+- Issue #3109089 by W01F, gausarts: Disable ajaxify for mobile.
+- Issue #3118207 by psf_: Call to undefined method
+  Drupal\\Core\\File\\FileSystem::scanDirectory().
+
+Ultimenu 8.x-2.0-dev, 2020-02-09
+--------------------------------
+- Issue #3109749 by lgcorredera: The links are generated with class="is-active"
+  when on the homepage.
+
+Ultimenu 8.x-2.0-dev, 2020-02-05
+--------------------------------
+- Updated deprecated @path.alias_storage for @path_alias.repository.
+
 Ultimenu 8.x-2.0-dev, 2020-01-15
 --------------------------------
 Issue #3106530 by gausarts, kappaluppa2@gmail.com: Links on site don'\''t work

@@ -224,7 +224,7 @@ class GeofieldItem extends FieldItemBase {
     /* @var \Geometry $geom */
     $geom = \Drupal::service('geofield.geophp')->load($this->value);
 
-    if (!empty($geom)) {
+    if (!empty($geom) && !$geom->isEmpty()) {
       /* @var \Point $centroid */
       $centroid = $geom->getCentroid();
       $bounding = $geom->getBBox();

@@ -5,10 +5,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [6.1.3]
+### Fixed
+- possible exception in Debug\Detail::__toString() when sub details are missing
+
+
+## [6.1.2]
+### Added
+- MoreLikeThis::setMaximumDocumentFrequency()
+- MoreLikeThis::setMaximumDocumentFrequencyPercentage()
+- getInterestingTerms() of MoreLikeThis Component results
+
+### Fixed
+- Debug\Detail return value types
+- Debug\Document return value types
+
+### Deprecated
+- Support for `mlt.match.include` and `mlt.match.offset` in MoreLikeThis Component (they only work in MLT queries)
+
+
 ## [6.1.1]
 
 ### Fixed
-- Set Client::VERSION to '6.1.1'. Release 6.1.0 accidently declared itself as 6.0.4.
+- Set Client::VERSION to '6.1.1'. Release 6.1.0 accidentally declared itself as 6.0.4.
 
 
 ## [6.1.0]

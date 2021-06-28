@@ -3357,18 +3357,18 @@
     },
     {
         "name": "drupal/better_exposed_filters",
-        "version": "5.0.0-beta1",
-        "version_normalized": "5.0.0.0-beta1",
+        "version": "5.0.0-beta2",
+        "version_normalized": "5.0.0.0-beta2",
         "source": {
             "type": "git",
             "url": "https://git.drupalcode.org/project/better_exposed_filters.git",
-            "reference": "8.x-5.0-beta1"
+            "reference": "8.x-5.0-beta2"
         },
         "dist": {
             "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/better_exposed_filters-8.x-5.0-beta1.zip",
-            "reference": "8.x-5.0-beta1",
-            "shasum": "bc5ce873fa699ee584fdeb2fd28ad6c5cb456b03"
+            "url": "https://ftp.drupal.org/files/projects/better_exposed_filters-8.x-5.0-beta2.zip",
+            "reference": "8.x-5.0-beta2",
+            "shasum": "3899191ee3fa383abe0162cc6701ddba86bae252"
         },
         "require": {
             "drupal/core": "^8.8 || ^9",
@@ -3380,8 +3380,8 @@
         "type": "drupal-module",
         "extra": {
             "drupal": {
-                "version": "8.x-5.0-beta1",
-                "datestamp": "1594141892",
+                "version": "8.x-5.0-beta2",
+                "datestamp": "1624554647",
                 "security-coverage": {
                     "status": "not-covered",
                     "message": "Beta releases are not covered by Drupal security advisories."
@@ -3391,7 +3391,7 @@
         "installation-source": "dist",
         "notification-url": "https://packages.drupal.org/8/downloads",
         "license": [
-            "GPL-2.0+"
+            "GPL-2.0-or-later"
         ],
         "authors": [
             {
@@ -3403,8 +3403,8 @@
                 "homepage": "https://www.drupal.org/u/etroid"
             },
             {
-                "name": "chr.fritsch",
-                "homepage": "https://www.drupal.org/user/2103716"
+                "name": "Neslee Canil Pinto",
+                "homepage": "https://www.drupal.org/u/neslee-canil-pinto"
             },
             {
                 "name": "jkopel",
@@ -3428,18 +3428,18 @@
     },
     {
         "name": "drupal/blazy",
-        "version": "2.3.0",
-        "version_normalized": "2.3.0.0",
+        "version": "2.4.0",
+        "version_normalized": "2.4.0.0",
         "source": {
             "type": "git",
             "url": "https://git.drupalcode.org/project/blazy.git",
-            "reference": "8.x-2.3"
+            "reference": "8.x-2.4"
         },
         "dist": {
             "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/blazy-8.x-2.3.zip",
-            "reference": "8.x-2.3",
-            "shasum": "b356957b5f61c449663fd539500d4ea1d58ef309"
+            "url": "https://ftp.drupal.org/files/projects/blazy-8.x-2.4.zip",
+            "reference": "8.x-2.4",
+            "shasum": "6915ae64881510c253c72ae3d01f0a66472d4462"
         },
         "require": {
             "drupal/core": "^8.8 || ^9"
@@ -3447,8 +3447,8 @@
         "type": "drupal-module",
         "extra": {
             "drupal": {
-                "version": "8.x-2.3",
-                "datestamp": "1623739559",
+                "version": "8.x-2.4",
+                "datestamp": "1624001330",
                 "security-coverage": {
                     "status": "covered",
                     "message": "Covered by Drupal's security advisory policy"
@@ -5189,18 +5189,18 @@
     },
     {
         "name": "drupal/editor_advanced_link",
-        "version": "1.8.0",
-        "version_normalized": "1.8.0.0",
+        "version": "1.9.0",
+        "version_normalized": "1.9.0.0",
         "source": {
             "type": "git",
             "url": "https://git.drupalcode.org/project/editor_advanced_link.git",
-            "reference": "8.x-1.8"
+            "reference": "8.x-1.9"
         },
         "dist": {
             "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/editor_advanced_link-8.x-1.8.zip",
-            "reference": "8.x-1.8",
-            "shasum": "510c3abff415933a34f4b8284d1440aaec2b95d9"
+            "url": "https://ftp.drupal.org/files/projects/editor_advanced_link-8.x-1.9.zip",
+            "reference": "8.x-1.9",
+            "shasum": "ee40ec8c8c7b14c69de3de6a5275959dc32455c4"
         },
         "require": {
             "drupal/core": "^8 || ^9"
@@ -5208,8 +5208,8 @@
         "type": "drupal-module",
         "extra": {
             "drupal": {
-                "version": "8.x-1.8",
-                "datestamp": "1588757015",
+                "version": "8.x-1.9",
+                "datestamp": "1624032562",
                 "security-coverage": {
                     "status": "covered",
                     "message": "Covered by Drupal's security advisory policy"
@@ -5500,18 +5500,18 @@
     },
     {
         "name": "drupal/entity_browser",
-        "version": "2.5.0",
-        "version_normalized": "2.5.0.0",
+        "version": "2.6.0",
+        "version_normalized": "2.6.0.0",
         "source": {
             "type": "git",
             "url": "https://git.drupalcode.org/project/entity_browser.git",
-            "reference": "8.x-2.5"
+            "reference": "8.x-2.6"
         },
         "dist": {
             "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/entity_browser-8.x-2.5.zip",
-            "reference": "8.x-2.5",
-            "shasum": "29456b961f0f90ff064601ab8a382446a8143774"
+            "url": "https://ftp.drupal.org/files/projects/entity_browser-8.x-2.6.zip",
+            "reference": "8.x-2.6",
+            "shasum": "95cad4ce9620ccb4f02afa0e8b8bbf7c73fc5aac"
         },
         "require": {
             "drupal/core": "^8.8 || ^9"
@@ -5528,8 +5528,8 @@
         "type": "drupal-module",
         "extra": {
             "drupal": {
-                "version": "8.x-2.5",
-                "datestamp": "1588015429",
+                "version": "8.x-2.6",
+                "datestamp": "1624401306",
                 "security-coverage": {
                     "status": "covered",
                     "message": "Covered by Drupal's security advisory policy"
@@ -6579,18 +6579,18 @@
     },
     {
         "name": "drupal/geofield",
-        "version": "1.31.0",
-        "version_normalized": "1.31.0.0",
+        "version": "1.32.0",
+        "version_normalized": "1.32.0.0",
         "source": {
             "type": "git",
             "url": "https://git.drupalcode.org/project/geofield.git",
-            "reference": "8.x-1.31"
+            "reference": "8.x-1.32"
         },
         "dist": {
             "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/geofield-8.x-1.31.zip",
-            "reference": "8.x-1.31",
-            "shasum": "5eb185044e6686a498b686be6a2793f4a3d57fa4"
+            "url": "https://ftp.drupal.org/files/projects/geofield-8.x-1.32.zip",
+            "reference": "8.x-1.32",
+            "shasum": "f0d0215f5c7bc209b6ce7aad1c3795373b700cc5"
         },
         "require": {
             "drupal/core": "^8.8 || ^9",
@@ -6599,8 +6599,8 @@
         "type": "drupal-module",
         "extra": {
             "drupal": {
-                "version": "8.x-1.31",
-                "datestamp": "1622755130",
+                "version": "8.x-1.32",
+                "datestamp": "1624396208",
                 "security-coverage": {
                     "status": "covered",
                     "message": "Covered by Drupal's security advisory policy"
@@ -8936,20 +8936,21 @@
     },
     {
         "name": "drupal/search_api_solr",
-        "version": "4.1.12",
-        "version_normalized": "4.1.12.0",
+        "version": "4.2.0",
+        "version_normalized": "4.2.0.0",
         "source": {
             "type": "git",
             "url": "https://git.drupalcode.org/project/search_api_solr.git",
-            "reference": "4.1.12"
+            "reference": "4.2.0"
         },
         "dist": {
             "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/search_api_solr-4.1.12.zip",
-            "reference": "4.1.12",
-            "shasum": "1f533d784b0609ca4b21a87bc012d1b100b12860"
+            "url": "https://ftp.drupal.org/files/projects/search_api_solr-4.2.0.zip",
+            "reference": "4.2.0",
+            "shasum": "ebdd5e5fdb0169207f544e2e5600bb8bc566f420"
         },
         "require": {
+            "composer/semver": "^1.0|^3.0",
             "consolidation/annotated-command": "^2.12|^4.1",
             "drupal/core": "^8.8 || ^9",
             "drupal/search_api": "~1.17",
@@ -8958,8 +8959,8 @@
             "ext-simplexml": "*",
             "laminas/laminas-stdlib": "^3.2",
             "maennchen/zipstream-php": "^1.2|^2.0",
-            "php": "^7.2|^8.0",
-            "solarium/solarium": "^6.0.4|^6.1.0"
+            "php": "^7.3|^8.0",
+            "solarium/solarium": "^6.1.3"
         },
         "conflict": {
             "drupal/acquia_search_solr": "<1.0.0-beta8",
@@ -8985,8 +8986,8 @@
         "type": "drupal-module",
         "extra": {
             "drupal": {
-                "version": "4.1.12",
-                "datestamp": "1622737539",
+                "version": "4.2.0",
+                "datestamp": "1624552136",
                 "security-coverage": {
                     "status": "covered",
                     "message": "Covered by Drupal's security advisory policy"
@@ -9950,27 +9951,27 @@
     },
     {
         "name": "drupal/ultimenu",
-        "version": "2.2.0",
-        "version_normalized": "2.2.0.0",
+        "version": "2.3.0",
+        "version_normalized": "2.3.0.0",
         "source": {
             "type": "git",
             "url": "https://git.drupalcode.org/project/ultimenu.git",
-            "reference": "8.x-2.2"
+            "reference": "8.x-2.3"
         },
         "dist": {
             "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/ultimenu-8.x-2.2.zip",
-            "reference": "8.x-2.2",
-            "shasum": "ae9e782a2767ac5b512f94d0d0bcea7b6bdba8e6"
+            "url": "https://ftp.drupal.org/files/projects/ultimenu-8.x-2.3.zip",
+            "reference": "8.x-2.3",
+            "shasum": "1058b420886cb8cdb54f16cc5e8c7620b810065c"
         },
         "require": {
-            "drupal/core": "^8 || ^9"
+            "drupal/core": "^8.8 || ^9"
         },
         "type": "drupal-module",
         "extra": {
             "drupal": {
-                "version": "8.x-2.2",
-                "datestamp": "1579094583",
+                "version": "8.x-2.3",
+                "datestamp": "1623999649",
                 "security-coverage": {
                     "status": "covered",
                     "message": "Covered by Drupal's security advisory policy"
@@ -10007,18 +10008,18 @@
     },
     {
         "name": "drupal/upgrade_status",
-        "version": "3.6.0",
-        "version_normalized": "3.6.0.0",
+        "version": "3.7.0",
+        "version_normalized": "3.7.0.0",
         "source": {
             "type": "git",
             "url": "https://git.drupalcode.org/project/upgrade_status.git",
-            "reference": "8.x-3.6"
+            "reference": "8.x-3.7"
         },
         "dist": {
             "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/upgrade_status-8.x-3.6.zip",
-            "reference": "8.x-3.6",
-            "shasum": "269830c5095b7fd5dafad295c551cee4d6324b4b"
+            "url": "https://ftp.drupal.org/files/projects/upgrade_status-8.x-3.7.zip",
+            "reference": "8.x-3.7",
+            "shasum": "f060f72dcf539084c5beb997b2920f04c9a517fc"
         },
         "require": {
             "drupal/core": "^8 || ^9",
@@ -10031,8 +10032,8 @@
         "type": "drupal-module",
         "extra": {
             "drupal": {
-                "version": "8.x-3.6",
-                "datestamp": "1623856046",
+                "version": "8.x-3.7",
+                "datestamp": "1624540305",
                 "security-coverage": {
                     "status": "covered",
                     "message": "Covered by Drupal's security advisory policy"
@@ -10263,7 +10264,7 @@
         "source": {
             "type": "git",
             "url": "https://git.drupalcode.org/project/webform.git",
-            "reference": "b56bfb451c421bd9ff7b74764abff722b7764c87"
+            "reference": "933c8c20684f3dd8c97f28b92585ffc37da19f7c"
         },
         "require": {
             "drupal/core": "^8.8"
@@ -10308,7 +10309,7 @@
             },
             "drupal": {
                 "version": "8.x-5.x-dev",
-                "datestamp": "1623455130",
+                "datestamp": "1624458274",
                 "security-coverage": {
                     "status": "not-covered",
                     "message": "Dev releases are not covered by Drupal security advisories."
@@ -10316,7 +10317,7 @@
             },
             "drush": {
                 "services": {
-                    "drush.services.yml": "^9"
+                    "drush.services.yml": "^9 || ^10"
                 }
             }
         },
@@ -10481,8 +10482,8 @@
     },
     {
         "name": "drupal/webform_node",
-        "version": "6.0.3",
-        "version_normalized": "6.0.3.0",
+        "version": "6.0.4",
+        "version_normalized": "6.0.4.0",
         "require": {
             "drupal/core": "^8.8 || ^9",
             "drupal/webform": "*"
@@ -10490,8 +10491,8 @@
         "type": "metapackage",
         "extra": {
             "drupal": {
-                "version": "6.0.3",
-                "datestamp": "1620250254",
+                "version": "6.0.4",
+                "datestamp": "1624461046",
                 "security-coverage": {
                     "status": "covered",
                     "message": "Covered by Drupal's security advisory policy"
@@ -10603,8 +10604,8 @@
     },
     {
         "name": "drupal/webform_ui",
-        "version": "5.26.0",
-        "version_normalized": "5.26.0.0",
+        "version": "5.27.0",
+        "version_normalized": "5.27.0.0",
         "require": {
             "drupal/core": "^8.8",
             "drupal/webform": "*"
@@ -10612,8 +10613,8 @@
         "type": "metapackage",
         "extra": {
             "drupal": {
-                "version": "8.x-5.26",
-                "datestamp": "1620250064",
+                "version": "8.x-5.27",
+                "datestamp": "1624460854",
                 "security-coverage": {
                     "status": "covered",
                     "message": "Covered by Drupal's security advisory policy"
@@ -11744,17 +11745,17 @@
     },
     {
         "name": "laminas/laminas-escaper",
-        "version": "2.7.0",
-        "version_normalized": "2.7.0.0",
+        "version": "2.8.0",
+        "version_normalized": "2.8.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/laminas/laminas-escaper.git",
-            "reference": "5e04bc5ae5990b17159d79d331055e2c645e5cc5"
+            "reference": "2d6dce99668b413610e9544183fa10392437f542"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/laminas/laminas-escaper/zipball/5e04bc5ae5990b17159d79d331055e2c645e5cc5",
-            "reference": "5e04bc5ae5990b17159d79d331055e2c645e5cc5",
+            "url": "https://api.github.com/repos/laminas/laminas-escaper/zipball/2d6dce99668b413610e9544183fa10392437f542",
+            "reference": "2d6dce99668b413610e9544183fa10392437f542",
             "shasum": ""
         },
         "require": {
@@ -11765,7 +11766,7 @@
             "zendframework/zend-escaper": "^2.6.1"
         },
         "require-dev": {
-            "laminas/laminas-coding-standard": "~1.0.0",
+            "laminas/laminas-coding-standard": "~2.3.0",
             "phpunit/phpunit": "^9.3",
             "psalm/plugin-phpunit": "^0.12.2",
             "vimeo/psalm": "^3.16"
@@ -11774,7 +11775,7 @@
             "ext-iconv": "*",
             "ext-mbstring": "*"
         },
-        "time": "2020-11-17T21:26:43+00:00",
+        "time": "2021-06-26T14:26:08+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -12062,17 +12063,17 @@
     },
     {
         "name": "laminas/laminas-zendframework-bridge",
-        "version": "1.2.0",
-        "version_normalized": "1.2.0.0",
+        "version": "1.3.0",
+        "version_normalized": "1.3.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/laminas/laminas-zendframework-bridge.git",
-            "reference": "6cccbddfcfc742eb02158d6137ca5687d92cee32"
+            "reference": "13af2502d9bb6f7d33be2de4b51fb68c6cdb476e"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/laminas/laminas-zendframework-bridge/zipball/6cccbddfcfc742eb02158d6137ca5687d92cee32",
-            "reference": "6cccbddfcfc742eb02158d6137ca5687d92cee32",
+            "url": "https://api.github.com/repos/laminas/laminas-zendframework-bridge/zipball/13af2502d9bb6f7d33be2de4b51fb68c6cdb476e",
+            "reference": "13af2502d9bb6f7d33be2de4b51fb68c6cdb476e",
             "shasum": ""
         },
         "require": {
@@ -12084,7 +12085,7 @@
             "squizlabs/php_codesniffer": "^3.5",
             "vimeo/psalm": "^4.6"
         },
-        "time": "2021-02-25T21:54:58+00:00",
+        "time": "2021-06-24T12:49:22+00:00",
         "type": "library",
         "extra": {
             "laminas": {
@@ -13532,17 +13533,17 @@
     },
     {
         "name": "phpstan/phpstan",
-        "version": "0.12.89",
-        "version_normalized": "0.12.89.0",
+        "version": "0.12.90",
+        "version_normalized": "0.12.90.0",
         "source": {
             "type": "git",
             "url": "https://github.com/phpstan/phpstan.git",
-            "reference": "54c0f5a6c30511b77128d58b6369f718df250542"
+            "reference": "f0e4b56630fc3d4eb5be86606d07212ac212ede4"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/phpstan/phpstan/zipball/54c0f5a6c30511b77128d58b6369f718df250542",
-            "reference": "54c0f5a6c30511b77128d58b6369f718df250542",
+            "url": "https://api.github.com/repos/phpstan/phpstan/zipball/f0e4b56630fc3d4eb5be86606d07212ac212ede4",
+            "reference": "f0e4b56630fc3d4eb5be86606d07212ac212ede4",
             "shasum": ""
         },
         "require": {
@@ -13551,7 +13552,7 @@
         "conflict": {
             "phpstan/phpstan-shim": "*"
         },
-        "time": "2021-06-09T20:23:49+00:00",
+        "time": "2021-06-18T07:15:38+00:00",
         "bin": [
             "phpstan",
             "phpstan.phar"
@@ -15222,17 +15223,17 @@
     },
     {
         "name": "sirbrillig/phpcs-variable-analysis",
-        "version": "v2.11.0",
-        "version_normalized": "2.11.0.0",
+        "version": "v2.11.1",
+        "version_normalized": "2.11.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/sirbrillig/phpcs-variable-analysis.git",
-            "reference": "e76e816236f401458dd8e16beecab905861b5867"
+            "reference": "9df9ade5961a3505d0d24b0e6be2ab82e335f753"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/sirbrillig/phpcs-variable-analysis/zipball/e76e816236f401458dd8e16beecab905861b5867",
-            "reference": "e76e816236f401458dd8e16beecab905861b5867",
+            "url": "https://api.github.com/repos/sirbrillig/phpcs-variable-analysis/zipball/9df9ade5961a3505d0d24b0e6be2ab82e335f753",
+            "reference": "9df9ade5961a3505d0d24b0e6be2ab82e335f753",
             "shasum": ""
         },
         "require": {
@@ -15246,7 +15247,7 @@
             "phpunit/phpunit": "^5.0 || ^6.5 || ^7.0 || ^8.0",
             "sirbrillig/phpcs-import-detection": "^1.1"
         },
-        "time": "2021-03-09T22:32:14+00:00",
+        "time": "2021-06-18T20:54:59+00:00",
         "type": "phpcodesniffer-standard",
         "installation-source": "dist",
         "autoload": {
@@ -15272,17 +15273,17 @@
     },
     {
         "name": "solarium/solarium",
-        "version": "6.1.1",
-        "version_normalized": "6.1.1.0",
+        "version": "6.1.3",
+        "version_normalized": "6.1.3.0",
         "source": {
             "type": "git",
             "url": "https://github.com/solariumphp/solarium.git",
-            "reference": "a161014dea4799c46adeb542d0a25ec334dcccc2"
+            "reference": "f6e18891368400b6a15d8863175310997792848c"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/solariumphp/solarium/zipball/a161014dea4799c46adeb542d0a25ec334dcccc2",
-            "reference": "a161014dea4799c46adeb542d0a25ec334dcccc2",
+            "url": "https://api.github.com/repos/solariumphp/solarium/zipball/f6e18891368400b6a15d8863175310997792848c",
+            "reference": "f6e18891368400b6a15d8863175310997792848c",
             "shasum": ""
         },
         "require": {
@@ -15301,11 +15302,11 @@
             "phpstan/extension-installer": "^1.0",
             "phpstan/phpstan": "^0.12",
             "phpstan/phpstan-phpunit": "^0.12",
-            "phpunit/phpunit": "^8.5 || ^9.4",
+            "phpunit/phpunit": "^9.5",
             "roave/security-advisories": "dev-master",
             "symfony/event-dispatcher": "^4.3 || ^5.0"
         },
-        "time": "2021-02-05T13:03:56+00:00",
+        "time": "2021-06-24T15:04:42+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

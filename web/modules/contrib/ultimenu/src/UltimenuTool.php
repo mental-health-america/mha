@@ -11,7 +11,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Transliteration\PhpTransliteration;
 use Drupal\Core\Path\PathMatcherInterface;
-use Drupal\Core\Path\AliasStorageInterface;
+use Drupal\path_alias\AliasRepositoryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -36,11 +36,11 @@ class UltimenuTool implements UltimenuToolInterface {
   protected $pathMatcher;
 
   /**
-   * The alias storage service.
+   * The alias repository service.
    *
-   * @var \Drupal\Core\Path\AliasStorageInterface
+   * @var \Drupal\path_alias\AliasRepositoryInterface
    */
-  protected $aliasStorage;
+  protected $aliasRepository;
 
   /**
    * The info parser service.
@@ -73,11 +73,11 @@ class UltimenuTool implements UltimenuToolInterface {
   /**
    * Constructs a Ultimenu object.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, AccountInterface $current_user, PathMatcherInterface $path_matcher, AliasStorageInterface $alias_storage, InfoParserInterface $info_parser, LanguageManagerInterface $language_manager, PhpTransliteration $transliteration) {
+  public function __construct(ConfigFactoryInterface $config_factory, AccountInterface $current_user, PathMatcherInterface $path_matcher, AliasRepositoryInterface $alias_repository, InfoParserInterface $info_parser, LanguageManagerInterface $language_manager, PhpTransliteration $transliteration) {
     $this->configFactory = $config_factory;
     $this->currentUser = $current_user;
     $this->pathMatcher = $path_matcher;
-    $this->aliasStorage = $alias_storage;
+    $this->aliasRepository = $alias_repository;
     $this->infoParser = $info_parser;
     $this->languageManager = $language_manager;
     $this->transliteration = $transliteration;
@@ -91,7 +91,7 @@ class UltimenuTool implements UltimenuToolInterface {
       $container->get('config.factory'),
       $container->get('current_user'),
       $container->get('path.matcher'),
-      $container->get('path.alias_storage'),
+      $container->get('path_alias.repository'),
       $container->get('info_parser'),
       $container->get('language_manager'),
       $container->get('transliteration')
@@ -319,7 +319,8 @@ class UltimenuTool implements UltimenuToolInterface {
       $path = $config['current_path'];
 
       $langcode = $this->languageManager->getCurrentLanguage()->getId();
-      $path_alias = mb_strtolower($this->aliasStorage->lookupPathAlias($path, $langcode));
+      $path_check = $this->aliasRepository->lookupByAlias($path, $langcode);
+      $path_alias = mb_strtolower($path_check['alias']);
       $page_match = $this->pathMatcher->matchPath($path_alias, $pages);
       if ($path_alias != $path) {
         $page_match = $page_match || $this->pathMatcher->matchPath($path, $pages);

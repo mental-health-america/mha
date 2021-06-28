@@ -3,7 +3,7 @@
  * Provides AJAX functionality for Ultimenu blocks.
  */
 
-(function ($, Drupal) {
+(function ($, Drupal, drupalSettings) {
 
   'use strict';
 
@@ -18,7 +18,23 @@
    *   The ultimenu HTML element.
    */
   function doUltimenuAjax(i, elm) {
-    $(elm).off().on('mouseover click touchstart', '.ultimenu__link[data-ultiajax-trigger]', Drupal.ultimenu.triggerAjax);
+    var $elm = $(elm);
+
+    if (drupalSettings.ultimenu && drupalSettings.ultimenu.ajaxmw && window.matchMedia) {
+      var mw = window.matchMedia('(max-device-width: ' + drupalSettings.ultimenu.ajaxmw + ')');
+      if (mw.matches) {
+        // Load all AJAX contents if so configured.
+        // Alternatively trigger the AJAX only if the hamburger is clicked.
+        $elm.find('.ultimenu__link[data-ultiajax-trigger]').each(function (i, item) {
+          var $trigger = $(item);
+          Drupal.ultimenu.executeAjax($trigger);
+        });
+        return;
+      }
+    }
+
+    // Regular mobie/ desktop AJAX.
+    $elm.off().on('mouseover click touchstart', '.ultimenu__link[data-ultiajax-trigger]', Drupal.ultimenu.triggerAjax.bind(Drupal.ultimenu));
   }
 
   /**
@@ -34,4 +50,4 @@
     }
   };
 
-})(jQuery, Drupal);
+})(jQuery, Drupal, drupalSettings);
