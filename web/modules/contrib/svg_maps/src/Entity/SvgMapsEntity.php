@@ -2,6 +2,8 @@
 
 namespace Drupal\svg_maps\Entity;
 
+use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
+use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\Core\Entity\Annotation\ConfigEntityType;
 use Drupal\Core\Plugin\DefaultSingleLazyPluginCollection;
@@ -191,17 +193,24 @@ class SvgMapsEntity extends ConfigEntityBase implements SvgMapsEntityInterface {
   }
   /**
    * Loads
+   *
    * @param string $type
    *   The plugin type id.
    * @param string $label
    *   Label of the svg map entity.
    *
-   * @return static
+   * @return \Drupal\Core\Entity\EntityInterface
    *   The svg map config entity if one exists for the provided label,
    *   otherwise NULL.
    */
   public static function loadByName($type, $label) {
-    return \Drupal::entityManager()->getStorage('svg_maps_entity')->load($type . '.' . $label);
+    try {
+      return \Drupal::entityTypeManager()
+        ->getStorage('svg_maps_entity')
+        ->load($type . '.' . $label);
+    } catch (InvalidPluginDefinitionException $e) {
+    } catch (PluginNotFoundException $e) {
+    }
   }
 
 }

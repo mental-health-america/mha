@@ -214,6 +214,7 @@ class SvgMapsEntityForm extends EntityForm {
 
   /**
    * {@inheritdoc}
+   * @throws \Drupal\Core\Entity\EntityStorageException|\Drupal\Core\Entity\EntityMalformedException
    */
   public function save(array $form, FormStateInterface $form_state) {
     /**
@@ -230,13 +231,13 @@ class SvgMapsEntityForm extends EntityForm {
 
     switch ($status) {
       case SAVED_NEW:
-        drupal_set_message($this->t('Created the %label Svg maps entity.', [
+        $this->messenger()->addMessage($this->t('Created the %label Svg maps entity.', [
           '%label' => $svg_maps_entity->label(),
         ]));
         break;
 
       default:
-        drupal_set_message($this->t('Saved the %label Svg maps entity.', [
+        $this->messenger()->addMessage($this->t('Saved the %label Svg maps entity.', [
           '%label' => $svg_maps_entity->label(),
         ]));
     }

@@ -34,11 +34,13 @@ class SvgMapsEntityDeleteForm extends EntityConfirmFormBase {
 
   /**
    * {@inheritdoc}
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
+
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->entity->delete();
 
-    drupal_set_message(
+    $this->messenger()->addMessage(
       $this->t('content @type: deleted @label.',
         [
           '@type' => $this->entity->bundle(),
@@ -50,4 +52,6 @@ class SvgMapsEntityDeleteForm extends EntityConfirmFormBase {
     $form_state->setRedirectUrl($this->getCancelUrl());
   }
 
+
 }
+
