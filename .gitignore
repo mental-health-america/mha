@@ -29,6 +29,8 @@
 /web/example.gitignore
 /web/INSTALL.txt
 /web/README.md
+/LICENSE
+
 # Ignore drupal core (if not versioning drupal sources)
 #/web/core
 #/web/modules
