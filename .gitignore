@@ -9,6 +9,9 @@
 /web/sites/default/settings.local.php
 /web/sites/default/settings.php
 # Ignore paths that may contain user-generated content
+/web/sites
+/web/sites/
+/web/sites/*/
 /web/sites/*/files
 /web/sites/*/public
 /web/sites/*/private
@@ -50,7 +53,8 @@
 /web/themes/README.txt
 /web/LICENSE.txt
 /web/README.txt
-
+/README.md
+/.env.example
 # Ignore OS garbage
 .DS_Store
 
