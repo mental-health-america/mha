@@ -219,13 +219,15 @@ class MapCenterManager extends DefaultPluginManager {
 
       /** @var \Drupal\geolocation\MapCenterInterface $map_center_plugin */
       $map_center_plugin = $this->createInstance($option['map_center_id']);
+      $map_center_plugin_settings = $option['settings'] ?? [];
+      $map_center_plugin_settings = $map_center_plugin->getSettings($map_center_plugin_settings);
       $map['#attached']['drupalSettings']['geolocation']['maps'][$map['#id']]['map_center'][$option['map_center_id']] = [
         'map_center_id' => $option['map_center_id'],
         'option_id' => $option_id,
-        'settings' => isset($option['settings']) ? $option['settings'] : [],
+        'settings' => $map_center_plugin_settings,
         'weight' => $option['weight'],
       ];
-      $map = $map_center_plugin->alterMap($map, $option_id, empty($option['settings']) ? [] : $option['settings'], $context);
+      $map = $map_center_plugin->alterMap($map, $option_id, $map_center_plugin_settings, $context);
     }
 
     if (empty($map['#centre'])) {

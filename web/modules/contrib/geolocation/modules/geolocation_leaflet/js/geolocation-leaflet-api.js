@@ -60,19 +60,20 @@
     var that = this;
 
     leafletPromise.then(function () {
+
+      var leafletMapSettings = that.settings.leaflet_settings;
+      leafletMapSettings.center = [that.lat, that.lng];
+      leafletMapSettings.zoomControl = false;
+      leafletMapSettings.attributionControl = false;
+      leafletMapSettings.crs = L.CRS[that.settings.leaflet_settings.crs];
+
       /** @type {Map} */
-      var leafletMap = L.map(that.container.get(0), {
-        center: [that.lat, that.lng],
-        zoom: that.settings.leaflet_settings.zoom,
-        zoomControl: false
-      });
+      var leafletMap = L.map(that.container.get(0), leafletMapSettings);
 
       var markerLayer = L.layerGroup().addTo(leafletMap);
 
       // Set the tile layer.
-      var tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
-      }).addTo(leafletMap);
+      var tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(leafletMap);
 
       that.leafletMap = leafletMap;
       that.markerLayer = markerLayer;
@@ -93,6 +94,10 @@
 
         map.leafletMap.on('contextmenu', /** @param {LeafletMouseEvent} e */ function (e) {
           map.contextClickCallback({lat: e.latlng.lat, lng: e.latlng.lng});
+        });
+
+        map.leafletMap.on('moveend', /** @param {LeafletEvent} e */ function (e) {
+          map.boundsChangedCallback(map.leafletMap.getBounds());
         });
       });
 
@@ -215,7 +220,10 @@
           color: shapeSettings.strokeColor,
           opacity: shapeSettings.strokeOpacity,
           weight: shapeSettings.strokeWidth
-        }).bindTooltip(shapeSettings.title);
+        });
+        if (shapeSettings.title) {
+          shape.bindTooltip(shapeSettings.title);
+        }
         break;
 
       case 'polygon':
@@ -225,7 +233,10 @@
           weight: shapeSettings.strokeWidth,
           fillColor: shapeSettings.fillColor,
           fillOpacity: shapeSettings.fillOpacity
-        }).bindTooltip(shapeSettings.title);
+        });
+        if (shapeSettings.title) {
+          shape.bindTooltip(shapeSettings.title);
+        }
         break;
     }
 

@@ -282,3 +282,14 @@ mapfeature.control_geocoder:
     js/MapFeature/geolocation-control-geocoder.js: {}
   dependencies:
     - geolocation_google_maps/googlemapsapi
+
+# Directions support.
+mapfeature.geolocation_google_maps_control_directions:
+  css:
+    theme:
+      css/MapFeature/directions.css: { }
+  js:
+    js/MapFeature/geolocation-control-directions.js: {}
+  dependencies:
+    - geolocation_google_maps/googlemapsapi
+

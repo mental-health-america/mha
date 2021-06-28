@@ -7,7 +7,7 @@ dependencies:
   - geolocation:geolocation_demo
   - geolocation:geolocation_leaflet
 
-# Information added by Drupal.org packaging script on 2021-05-05
-version: '8.x-3.4'
+# Information added by Drupal.org packaging script on 2021-05-26
+version: '8.x-3.6'
 project: 'geolocation'
-datestamp: 1620201427
+datestamp: 1622022804
