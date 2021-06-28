@@ -70,13 +70,12 @@
   margin: auto;
   top: 50%;
   left: 50%;
-  margin-left: -200px; /* width of pop up / 2 = in negtaive* as margin left*/
   margin-top: -70px; /* height of pop up / 2 = in negtaive* as margin left*/
 }
 .spb_top_center {
   top: 0;
-  left: 20%;
-  right: 20%;
+  position: relative;
+  margin: auto;
 }
 .spb_top_bar {
   right: 0;

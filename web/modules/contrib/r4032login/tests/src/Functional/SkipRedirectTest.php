@@ -5,11 +5,16 @@ namespace Drupal\Tests\r4032login\Functional;
 use Drupal\Tests\BrowserTestBase;
 
 /**
- * Tests redirection.
+ * Test that is well avoided to redirect for configured urls.
  *
  * @group r4032login
  */
-class RedirectTest extends BrowserTestBase {
+class SkipRedirectTest extends BrowserTestBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $defaultTheme = 'stark';
 
   /**
    * {@inheritdoc}
@@ -28,21 +33,21 @@ class RedirectTest extends BrowserTestBase {
   }
 
   /**
-   * Tests match_noredirect_pages config setting.
+   * Test that is well avoided to redirect for configured urls.
    *
    * @param string $path
    *   Request path.
-   * @param array $options
-   *   Request options.
    * @param int $code
    *   Response status code.
    * @param string $destination
    *   Resulting URL.
    *
    * @dataProvider skipRedirectDataProvider
+   *
+   * @throws \Behat\Mink\Exception\ExpectationException
    */
-  public function testSkipRedirect($path, array $options, $code, $destination) {
-    $this->drupalGet($path, $options);
+  public function testSkipRedirect($path, $code, $destination) {
+    $this->drupalGet($path);
     $this->assertSession()->statusCodeEquals($code);
     $this->assertSession()->addressEquals($destination);
   }
@@ -53,32 +58,24 @@ class RedirectTest extends BrowserTestBase {
   public function skipRedirectDataProvider() {
     return [
       [
-        '/admin/config/development',
-        [],
+        'admin/config/development',
         403,
-        '/admin/config/development',
+        'admin/config/development',
       ],
       [
-        '/admin/config',
-        [],
+        'admin/config',
         200,
-        '/user/login',
+        'user/login',
       ],
       [
-        '/admin/modules',
-        [
-          'query' => [
-            'foo' => 'bar',
-          ],
-        ],
+        'admin/modules',
         403,
-        '/admin/modules?foo=bar',
+        'admin/modules',
       ],
       [
-        '/admin/modules/uninstall',
-        [],
+        'admin/modules/uninstall',
         200,
-        '/user/login',
+        'user/login',
       ],
     ];
   }

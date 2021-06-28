@@ -2,35 +2,102 @@
 
 namespace Drupal\simple_popup_blocks\Form;
 
+use Drupal\Core\Database\Connection;
+use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\Entity\EntityTypeManager;
+use Drupal\Core\Messenger\Messenger;
 use Drupal\Core\Url;
+use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\simple_popup_blocks\SimplePopupBlocksStorage;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Form to add a popup entry.
  */
-class SimplePopupBlocksAddForm implements FormInterface {
+class SimplePopupBlocksAddForm extends ConfigFormBase {
 
   use StringTranslationTrait;
+
+  /**
+   * Object of EntityTypeManager.
+   *
+   * @var EntityTypeManager
+   */
+  protected $typeManager;
+
+  /**
+   * Messanger object.
+   *
+   * @var Messenger
+   */
+  protected $messenger;
+
+  /**
+   * Database object.
+   *
+   * @var Connection
+   */
+  protected $database;
+
+  /**
+   * SimplePopupBlocksAddForm constructor.
+   *
+   * @param EntityTypeManager $typeManager
+   * @param Messenger $messenger
+   * @param Connection $database
+   */
+  public function __construct(EntityTypeManager $typeManager, Messenger $messenger, Connection $database ) {
+    $this->typeManager = $typeManager;
+    $this->messenger = $messenger;
+    $this->database = $database;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+        $container->get('entity_type.manager'),
+        $container->get('messenger'),
+        $container->get('database')
+    );
+  }
 
   /**
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'simple_popup_blocks_add_form';
+    return 'simple_popup_blocks';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getEditableConfigNames() {
+    return [
+      'simple_popup_blocks.',
+    ];
   }
 
   /**
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $block_ids = \Drupal::entityQuery('block')->execute();
+    $visit_counts = [];
+    $block_ids = $this->typeManager->getStorage('block')->getQuery()->execute();
+
     $form = [];
     for ($i = 0; $i < 101; $i++) {
       $visit_counts[] = $i;
     }
+
+    $form['uid'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Unique identifier'),
+      '#required' => TRUE,
+    ];
 
     $form['type'] = [
       '#type' => 'radios',
@@ -109,7 +176,18 @@ class SimplePopupBlocksAddForm implements FormInterface {
           ->t('Right bar'),
       ],
     ];
-    $form['visit_counts'] = [
+    $form['popup_frequency'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Popup Frequency'),
+    ];
+
+    $form['popup_frequency']['use_time_frequency'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Use time frequency instead of visit count'),
+      '#default_value' => 0,
+    ];
+
+    $form['popup_frequency']['visit_counts'] = [
       '#title' => $this->t('Visit counts'),
       '#type' => 'select',
       '#multiple' => TRUE,
@@ -118,9 +196,29 @@ class SimplePopupBlocksAddForm implements FormInterface {
       '#options' => $visit_counts,
       '#default_value' => 0,
       '#description' => $this->t("Examples:<br>
-        0 = Show popup on users each visit<br> 
+        0 = Show popup on users each visit<br>
         1,2 = Show popup on users first and second visit<br>
         1,4,7 = Show popup on users first, forth and seventh visit"),
+      '#states' => [
+        'invisible' => [
+          ':input[name="use_time_frequency"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
+
+    $form['popup_frequency']['time_frequency'] = [
+      '#title' => $this->t('Time frequency'),
+      '#type' => 'select',
+      '#required' => TRUE,
+      '#options' => [3600 => 'Hourly', 86400 => 'Daily', 604800 => 'Weekly'],
+      '#default_value' => 3600,
+      '#description' => $this->t("Choose frequency popup is displayed to the visitor"),
+      '#states' => [
+        'visible' => [
+          ':input[name="use_time_frequency"]' => ['checked' => TRUE],
+        ],
+      ],
+		
     ];
     $form['minimize'] = [
       '#type' => 'checkbox',
@@ -132,7 +230,12 @@ class SimplePopupBlocksAddForm implements FormInterface {
       '#title' => $this->t('Close button'),
       '#default_value' => 1,
     ];
-    $form['escape'] = [
+    $form['button_configuration']['show_minimized_button'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Show minimized button when popup is not automatically triggered'),
+      '#default_value' => 0,
+    ];
+    $form['enable_escape'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('ESC key to close'),
       '#default_value' => 1,
@@ -168,6 +271,13 @@ class SimplePopupBlocksAddForm implements FormInterface {
         ],
       ],
     ];
+  $form['trigger_width'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Trigger width'),
+      '#size' => 5,
+      '#default_value' => "",
+      '#description' => $this->t("Specify a pixel width at which the popup should trigger, or leave blank for all widths. Example: 800.")
+    ];
     $form['trigger_selector'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Add css id or class starting with # or .'),
@@ -185,6 +295,13 @@ class SimplePopupBlocksAddForm implements FormInterface {
       '#default_value' => 400,
       '#description' => $this->t("Add popup width in pixels"),
     ];
+    $form['cookie_expiry'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Cookie expiry'),
+      '#size' => 5,
+      '#default_value' => 100,
+      '#description' => $this->t("Delete the cookie after x days. Choose 0 to delete the cookie after the browser closes."),
+    ];
     $form['adjustments'] = [
       '#type' => 'details',
       '#title' => $this->t('Adjustment class'),
@@ -193,7 +310,7 @@ class SimplePopupBlocksAddForm implements FormInterface {
     ];
     $form['submit'] = [
       '#type' => 'submit',
-      '#value' => $this->t('Convert to popup'),
+      '#value' => $this->t('Save Popup'),
     ];
     return $form;
   }
@@ -220,10 +337,6 @@ class SimplePopupBlocksAddForm implements FormInterface {
         $form_state->setError($form[$selector], $this->t('Selector should not start with . or # in %field.', ['%field' => $identifier]));
       }
     }
-    $check = SimplePopupBlocksStorage::loadCountByIdentifier($identifier);
-    if ($check) {
-      $form_state->setError($form[$selector], $this->t('Already popup created with this identifier %field.', ['%field' => $identifier]));
-    }
     $trigger_method = $form_state->getValue('trigger_method');
     if ($trigger_method == 1) {
       $trigger_selector = $form_state->getValue('trigger_selector');
@@ -245,7 +358,6 @@ class SimplePopupBlocksAddForm implements FormInterface {
     else {
       $identifier = $form_state->getValue('custom_css');
     }
-    $visit_counts = serialize($form_state->getValue('visit_counts'));
     $delay = $form_state->getValue('delay');
     if (empty($delay) || $delay < 0) {
       $delay = 0;
@@ -254,33 +366,41 @@ class SimplePopupBlocksAddForm implements FormInterface {
     if (empty($width) || $width < 0) {
       $width = 400;
     }
-    // Save the submitted entry.
-    $entry = [
-      'identifier' => $identifier,
-      'type' => $form_state->getValue('type'),
-      'css_selector' => $form_state->getValue('css_selector'),
-      'layout' => $form_state->getValue('layout'),
-      'visit_counts' => $visit_counts,
-      'overlay' => $form_state->getValue('overlay'),
-      'trigger_method' => $form_state->getValue('trigger_method'),
-      'trigger_selector' => $form_state->getValue('trigger_selector'),
-      'escape' => $form_state->getValue('escape'),
-      'delay' => $delay,
-      'minimize' => $form_state->getValue('minimize'),
-      'close' => $form_state->getValue('close'),
-      'width' => $width,
-      'status' => 1,
-    ];
-    $return = SimplePopupBlocksStorage::insert($entry);
-    if ($return) {
-      drupal_set_message($this->t('Popup settings has been created Successfully. Please place the css code mentioned below under the ADJUSTMENT CLASS Section.'));
-      $url = Url::fromRoute('simple_popup_blocks.edit')
-        ->setRouteParameters(['first' => $return]);
-      $form_state->setRedirectUrl($url);
+    $cookie_expiry = $form_state->getValue('cookie_expiry');
+    if (strlen($cookie_expiry) == 0 || $cookie_expiry < 0) {
+      $cookie_expiry = 100;
+    }
+    if ($form_state->getValue('use_time_frequency')) {
+      $visit_counts = serialize([0 => '0']);
     }
     else {
-      drupal_set_message($this->t('Error while creating.'), 'error');
+      $visit_counts = serialize($form_state->getValue('visit_counts'));
     }
+
+    $uid = preg_replace('@[^a-z0-9_]+@','_',strtolower($form_state->getValue('uid')));
+
+    $config = \Drupal::service('config.factory')->getEditable('simple_popup_blocks.popup_'.$uid);
+    $config->set('identifier', $identifier)
+      ->set('uid', $uid)
+      ->set('type', $form_state->getValue('type'))
+      ->set('css_selector', $form_state->getValue('css_selector'))
+      ->set('layout', $form_state->getValue('layout'))
+      ->set('visit_counts', $visit_counts)
+      ->set('overlay', $form_state->getValue('overlay'))
+      ->set('trigger_method', $form_state->getValue('trigger_method'))
+      ->set('trigger_selector', $form_state->getValue('trigger_selector'))
+      ->set('enable_escape', $form_state->getValue('enable_escape'))
+      ->set('delay', $delay)
+      ->set('minimize', $form_state->getValue('minimize'))
+      ->set('close', $form_state->getValue('close'))
+      ->set('use_time_frequency', $form_state->getValue('use_time_frequency'))
+      ->set('time_frequency', $form_state->getValue('time_frequency'))
+      ->set('show_minimized_button', $form_state->getValue('show_minimized_button'))		  
+      ->set('width', $width)
+      ->set('cookie_expiry', $cookie_expiry)
+      ->set('status', $form_state->getValue('status'))
+      ->save();
+     parent::submitForm($form, $form_state);
   }
 
 }
