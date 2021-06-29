@@ -6,7 +6,6 @@
  */
 
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\simple_popup_blocks\SimplePopupBlocksStorage;
 
 /**
  * Implements hook_help().
@@ -39,20 +38,31 @@ function simple_popup_blocks_page_attachments(array &$attachments) {
   $is_admin = \Drupal::service('router.admin_context')->isAdminRoute($route);
   if (!$is_admin) {
     $popup_settings = [];
-    foreach (SimplePopupBlocksStorage::loadAll() as $entry) {
-      if ($entry->status == 1) {
-        if ($entry->type == 0) {
-          $identifier = preg_replace('/[_]+/', '-', $entry->identifier);
-          $entry->identifier = 'block-' . $identifier;
-        }
-        $visit_counts = unserialize($entry->visit_counts);
-        $entry->visit_counts = implode(",", $visit_counts);
-        // Sanitize each entry.
-        $popup_settings[] = array_map('Drupal\Component\Utility\SafeMarkup::checkPlain', (array) $entry);
+	$cacheTags = [];
+    $configFactory = \Drupal::service('config.factory');
+    $configs = $configFactory->listAll('simple_popup_blocks.popup_');
+    foreach ($configs as $config) {
+      $data = $configFactory->get($config)->get();
+	  $configCacheTags = $configFactory->get($config)->getCacheTags();
+	  if (is_array($configCacheTags) && count($configCacheTags)) {
+	  $cacheTags = array_merge($cacheTags, $configCacheTags);
       }
-      $attachments['#attached']['library'][] = 'simple_popup_blocks/simple_popup_blocks';
-      $attachments['#attached']['drupalSettings']['simple_popup_blocks']['settings'] = $popup_settings;
+      if ($data['status'] == 1) {
+        if ($data['type'] == 0) {
+          $identifier = preg_replace('/[_]+/', '-', $data['identifier']);
+          $data['identifier'] = 'block-' . $identifier;
+        }
+        $visit_counts = unserialize($data['visit_counts']);
+        $data['visit_counts'] = implode(",", $visit_counts);
+        // Sanitize each entry.
+        $popup_settings[] = array_map('Drupal\Component\Utility\Html::escape', $data);
+      }
     }
+
+	$attachments['#attached']['library'][] = 'simple_popup_blocks/simple_popup_blocks';
+	$attachments['#attached']['drupalSettings']['simple_popup_blocks']['settings'] = $popup_settings;
+	$attachments['#cache']['tags'] = $cacheTags;
+
   }
 
 }

@@ -2,9 +2,9 @@ name: Gavias Colin
 type: theme
 description: 'A flexible, recolorable theme with many regions and a responsive, mobile-first layout.'
 package: gaviasthemes
+base theme: false
 libraries:
   - gavias_colin/global-styling
-  - gavias_colin/global-js
   - core/jquery
 
 libraries-override:
@@ -31,7 +31,7 @@ regions:
   after_content: 'After Content'
   highlighted: 'Highlighted'
   before_footer: 'Before Footer'
-  footer_first: 'Footer First'
+  footer_first: 'Footer Fisrt'
   footer_second: 'Footer Second'
   footer_third: 'Footer Third'
   footer_four: 'Footer Four'
@@ -39,6 +39,6 @@ regions:
   copyright: 'Copyright'
   other: 'Other'
 
-version: '8.x'
-core: '8.x'
+version: '9.x'
+core_version_requirement: ^8.8 || ^9
 project: 'drupal'

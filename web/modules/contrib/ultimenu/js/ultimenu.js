@@ -48,12 +48,9 @@
       me.documentWidth = width;
     },
 
-    triggerAjax: function (e) {
-      // Use currentTarget, not target, to also works for mobile caret.
-      var $trigger = $(e.currentTarget);
+    executeAjax: function ($trigger, e) {
       var $li = $trigger.closest('.has-ultimenu');
       var $ajax = $li.find('.ultimenu__ajax');
-
       var cleanUp = function () {
         // Removes attribute to prevent this event from firing again.
         $trigger.removeAttr('data-ultiajax-trigger');
@@ -86,16 +83,24 @@
           }
           // Helper for Blazy within the newly loaded AJAX content.
           var $blazy = $li.find('.b-lazy:not(.b-loaded)');
-          if (Drupal.blazy && $blazy.length) {
+          if (Drupal.blazy && Drupal.blazy.init !== null && $blazy.length) {
             Drupal.blazy.init.revalidate(true);
           }
         }, 1500);
 
-        e.stopPropagation();
+        if (e) {
+          e.stopPropagation();
+        }
       }
       else {
         cleanUp();
       }
+    },
+
+    triggerAjax: function (e) {
+      // Use currentTarget, not target, to also works for mobile caret.
+      var $trigger = $(e.currentTarget);
+      this.executeAjax($trigger, e);
     },
 
     triggerClickHamburger: function (e) {
@@ -146,10 +151,11 @@
       }
 
       // Toggle the current flyout.
-      $caret.closest('li').toggleClass('is-ultimenu-item-expanded');
-      $caret.parent().toggleClass('is-ultimenu-active');
-      $caret.parent().next('.ultimenu__flyout')
-        .not(':animated').slideToggle();
+      if ($caret.parent().next('.ultimenu__flyout').not(":animated").length > 0) {
+        $caret.closest('li').toggleClass('is-ultimenu-item-expanded');
+        $caret.parent().toggleClass('is-ultimenu-active');
+        $caret.parent().next('.ultimenu__flyout').slideToggle();
+      }
     },
 
     onResize: function (c, t) {

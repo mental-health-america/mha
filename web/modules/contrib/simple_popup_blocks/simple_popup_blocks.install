@@ -61,7 +61,7 @@ function simple_popup_blocks_schema() {
         'default' => 1,
         'description' => "Popup overlay. 1 is true",
       ],
-      'escape' => [
+      'enable_escape' => [
         'type' => 'int',
         'not null' => TRUE,
         'default' => 1,
@@ -104,6 +104,12 @@ function simple_popup_blocks_schema() {
         'default' => 400,
         'description' => "Popup width in px",
       ],
+      'cookie_expiry' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 100,
+        'description' => "Cookie expiry in days",
+      ],
       'status' => [
         'type' => 'int',
         'not null' => TRUE,
@@ -134,4 +140,53 @@ function simple_popup_blocks_update_8101(&$sandbox) {
     ->schema();
   $schema
     ->addField('simple_popup_blocks', 'visit_counts', $visit_counts);
+}
+
+/**
+ * Add cookie_expiry field in simple_popup_blocks table.
+ */
+function simple_popup_blocks_update_8102() {
+  $cookie_expiry = [
+    'type' => 'int',
+    'not null' => TRUE,
+    'default' => 100,
+    'description' => "Cookie expiry in days",
+  ];
+  $schema = Database::getConnection()
+    ->schema();
+  $schema
+    ->addField('simple_popup_blocks', 'cookie_expiry', $cookie_expiry);
+}
+
+/**
+ * Rename escape field in simple_popup_blocks table.
+ */
+function simple_popup_blocks_update_8103(&$sandbox) {
+  $enable_escape = [
+    'type' => 'int',
+    'not null' => TRUE,
+    'default' => 1,
+    'description' => "ESC button to close popup",
+  ];
+  Database::getConnection()
+    ->schema()
+    ->changeField('simple_popup_blocks', 'escape', 'enable_escape', $enable_escape);
+}
+
+/**
+ * Add trigger width field in simple_popup_blocks table.
+ */
+function simple_popup_blocks_update_8104(&$sandbox) {
+
+    $trigger_width = [
+      'type' => 'int',
+      'not null' => FALSE,
+      'default' => NULL,
+      'description' => "Trigger width in px",
+    ];
+
+  $schema = Database::getConnection()
+    ->schema();
+  $schema
+    ->addField('simple_popup_blocks', 'trigger_width', $trigger_width);
 }

@@ -11,7 +11,7 @@ services:
 
   ultimenu.tool:
     class: Drupal\ultimenu\UltimenuTool
-    arguments: ['@config.factory', '@current_user', '@path.matcher', '@path.alias_storage', '@info_parser', '@language_manager', '@transliteration']
+    arguments: ['@config.factory', '@current_user', '@path.matcher', '@path_alias.repository', '@info_parser', '@language_manager', '@transliteration']
 
   ultimenu.tree:
     class: Drupal\ultimenu\UltimenuTree
