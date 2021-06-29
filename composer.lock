@@ -6896,7 +6896,7 @@
             "extra": {
                 "drupal": {
                     "version": "8.x-3.0-beta1",
-                    "datestamp": "1609758293",
+                    "datestamp": "1618261123",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
@@ -15021,7 +15021,6 @@
         },
         {
             "name": "symfony/dom-crawler",
-<<<<<<< HEAD
             "version": "v3.4.47",
             "source": {
                 "type": "git",
@@ -15032,18 +15031,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/ef97bcfbae5b384b4ca6c8d57b617722f15241a6",
                 "reference": "ef97bcfbae5b384b4ca6c8d57b617722f15241a6",
-=======
-            "version": "v4.4.25",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/dom-crawler.git",
-                "reference": "41d15bb6d6b95d2be763c514bb2494215d9c5eef"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/41d15bb6d6b95d2be763c514bb2494215d9c5eef",
-                "reference": "41d15bb6d6b95d2be763c514bb2494215d9c5eef",
->>>>>>> master
                 "shasum": ""
             },
             "require": {
@@ -15096,11 +15083,7 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2020-10-24T10:57:07+00:00"
-=======
-            "time": "2021-05-26T11:20:16+00:00"
->>>>>>> master
         },
         {
             "name": "symfony/event-dispatcher",

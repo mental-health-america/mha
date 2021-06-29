@@ -4,10 +4,6 @@
  * Temporary fixes till further extensive updates.
  */
 
-<<<<<<< HEAD
-.form--optionset .vertical-tabs__panes .form-item label {
-  width: 160px;
-=======
 .form--slick .form-item--label,
 .form--slick .form-item.form-type--vertical-tabs,
 .form--slick .form-item.js-form-type-vertical-tabs {
@@ -222,5 +218,4 @@
     width: 48.999%;
   }
 
->>>>>>> master
 }
