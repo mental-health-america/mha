@@ -119,20 +119,26 @@ function ultimenu_preprocess_region(&$variables) {
  * Implements hook_preprocess_block().
  */
 function ultimenu_preprocess_block(&$variables) {
-  if ($variables['base_plugin_id'] == 'ultimenu_block' && $variables['derivative_plugin_id'] == 'ultimenu-main') {
-    $config = $variables['configuration'];
-    $canvas_skin = empty($config['canvas_skin']) ? 'scalein' : $config['canvas_skin'];
+  if ($variables['base_plugin_id'] == 'ultimenu_block') {
+    if ($variables['derivative_plugin_id'] == 'ultimenu-main') {
+      $config = $variables['configuration'];
+      $canvas_skin = empty($config['canvas_skin']) ? 'scalein' : $config['canvas_skin'];
 
-    $variables['#attached']['library'][] = 'ultimenu/hamburger';
-    $variables['#attached']['library'][] = 'ultimenu/offcanvas.' . $canvas_skin;
+      $variables['#attached']['library'][] = 'ultimenu/hamburger';
+      $variables['#attached']['library'][] = 'ultimenu/offcanvas.' . $canvas_skin;
 
-    // Optional if using the provided configuration.
-    if (!empty($config['canvas_off']) && !empty($config['canvas_on'])) {
-      $js_config = [
-        'canvasOff' => trim(strip_tags($config['canvas_off'])),
-        'canvasOn' => trim(strip_tags($config['canvas_on'])),
-      ];
-      $variables['#attached']['drupalSettings']['ultimenu'] = $js_config;
+      // Optional if using the provided configuration.
+      if (!empty($config['canvas_off']) && !empty($config['canvas_on'])) {
+        $js_config = [
+          'canvasOff' => trim(strip_tags($config['canvas_off'])),
+          'canvasOn' => trim(strip_tags($config['canvas_on'])),
+        ];
+        $variables['#attached']['drupalSettings']['ultimenu'] = $js_config;
+      }
+    }
+
+    if ($mw = ultimenu()->getSetting('ajaxmw')) {
+      $variables['#attached']['drupalSettings']['ultimenu']['ajaxmw'] = $mw;
     }
   }
 }

@@ -20,6 +20,9 @@ ultimenu.settings:
     fallback_text:
       type: string
       label: 'Fallback text displayed as an AJAX link.'
+    ajaxmw:
+      type: string
+      label: 'AJAX mobile max-width'
     goodies:
       type: sequence
       label: 'Ultimenu goodies'

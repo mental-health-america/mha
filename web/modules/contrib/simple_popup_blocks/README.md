@@ -34,6 +34,8 @@ To add popup, Go to Administration » Configuration »
 
 To manage popup, Go to Administration » Configuration » 
  Media » Add simple popup blocks » Manage.
+ 
+To create an Onclick event, add a css class(such as .modal-popup) to the block you'd like to pop up during your Onclick event. The block will be gone from the page, but will pop up when the element with the class is clicked on.
 
 ## Supported configurations
 
@@ -56,7 +58,8 @@ Documentation: https://www.drupal.org/docs/8/modules/simple-popup-blocks
 
 Current maintainers:
  * [Ameer Khan (ameer-khan)](https://www.drupal.org/u/ameer-khan)
- * [Vengatesan B (vengatjove)](https://www.drupal.org/u/vengatjove) 
+ * [Vengatesan B (vengatjove)](https://www.drupal.org/u/vengatjove)
+ * [Matt (mattbloomfield)](https://www.drupal.org/u/mattbloomfield) 
 
 ## This project has been sponsored by:
  * [Drupal Partners](https://www.drupal.org/drupal-partners-0)

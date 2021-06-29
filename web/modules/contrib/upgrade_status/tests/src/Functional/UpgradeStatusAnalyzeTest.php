@@ -149,6 +149,12 @@ class UpgradeStatusAnalyzeTest extends UpgradeStatusTestBase {
     $file = next($report['data']['files']);
     $this->assertEquals('The theme is overriding the "upgrade_status_test_theme_function_theme_function_override" theme function. Theme functions are deprecated. For more info, see https://www.drupal.org/node/2575445.', $file['messages'][0]['message']);
     $this->assertEquals(6, $file['messages'][0]['line']);
+    // @see https://www.drupal.org/project/upgrade_status/issues/3219968 base theme cannot be tested practically.
+    /*$file = next($report['data']['files']);
+    $this->assertEquals('upgrade_status_test_theme.info.yml', basename(key($report['data']['files'])));
+    $message = $file['messages'][0];
+    $this->assertEquals("The now required 'base theme' key is missing. See https://www.drupal.org/node/3066038.", $message['message']);
+    $this->assertEquals(0, $message['line']);*/
 
     $report = $key_value->get('upgrade_status_test_theme_functions');
     $this->assertNotEmpty($report);

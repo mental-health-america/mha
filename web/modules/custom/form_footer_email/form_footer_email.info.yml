@@ -3,7 +3,7 @@ type: module
 description: 'Add a email sign up form to footer.'
 package: Custom
 version: 8.x
-core: 8.x
+core_version_requirement: ^8 || ^9
 dependencies:
   - node
   - block
