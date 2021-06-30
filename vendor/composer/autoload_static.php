@@ -7,9 +7,9 @@ namespace Composer\Autoload;
 class ComposerStaticInitcc04bba40dc0565cc5b3546fe9574c20
 {
     public static $files = array (
-        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
-        '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '9b38cf48e83f5d8f60375221cd213eee' => __DIR__ . '/..' . '/phpstan/phpstan/bootstrap.php',
+        '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '92c8763cd6170fce6fcfe7e26b4e8c10' => __DIR__ . '/..' . '/symfony/phpunit-bridge/bootstrap.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         '23c18046f52bef3eea034657bafda50f' => __DIR__ . '/..' . '/symfony/polyfill-php81/bootstrap.php',
@@ -64,7 +64,6 @@ class ComposerStaticInitcc04bba40dc0565cc5b3546fe9574c20
         array (
             'Zumba\\Mink\\Driver\\' => 18,
             'Zumba\\GastonJS\\' => 15,
-            'ZipStream\\' => 10,
         ),
         'W' => 
         array (
@@ -90,7 +89,6 @@ class ComposerStaticInitcc04bba40dc0565cc5b3546fe9574c20
             'Symfony\\Polyfill\\Intl\\Idn\\' => 26,
             'Symfony\\Polyfill\\Iconv\\' => 23,
             'Symfony\\Polyfill\\Ctype\\' => 23,
-            'Symfony\\Contracts\\EventDispatcher\\' => 34,
             'Symfony\\Component\\Yaml\\' => 23,
             'Symfony\\Component\\VarDumper\\' => 28,
             'Symfony\\Component\\Validator\\' => 28,
@@ -116,7 +114,6 @@ class ComposerStaticInitcc04bba40dc0565cc5b3546fe9574c20
             'Symfony\\Bridge\\PsrHttpMessage\\' => 30,
             'Symfony\\Bridge\\PhpUnit\\' => 23,
             'Stecman\\Component\\Symfony\\Console\\BashCompletion\\' => 49,
-            'Solarium\\' => 9,
             'SelfUpdate\\' => 11,
             'Seld\\PharUtils\\' => 15,
             'Seld\\JsonLint\\' => 14,
@@ -130,8 +127,6 @@ class ComposerStaticInitcc04bba40dc0565cc5b3546fe9574c20
             'Psy\\' => 4,
             'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
-            'Psr\\Http\\Client\\' => 16,
-            'Psr\\EventDispatcher\\' => 20,
             'Psr\\Container\\' => 14,
             'Psr\\Cache\\' => 10,
             'Prophecy\\' => 9,
@@ -140,7 +135,6 @@ class ComposerStaticInitcc04bba40dc0565cc5b3546fe9574c20
         ),
         'M' => 
         array (
-            'MyCLabs\\Enum\\' => 13,
             'MathieuViossat\\Util\\' => 20,
             'Masterminds\\' => 12,
         ),
@@ -255,10 +249,6 @@ class ComposerStaticInitcc04bba40dc0565cc5b3546fe9574c20
         array (
             0 => __DIR__ . '/..' . '/jcalderonzumba/gastonjs/src',
         ),
-        'ZipStream\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/maennchen/zipstream-php/src',
-        ),
         'Webmozart\\PathUtil\\' => 
         array (
             0 => __DIR__ . '/..' . '/webmozart/path-util/src',
@@ -310,10 +300,6 @@ class ComposerStaticInitcc04bba40dc0565cc5b3546fe9574c20
         'Symfony\\Polyfill\\Ctype\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
-        ),
-        'Symfony\\Contracts\\EventDispatcher\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/event-dispatcher-contracts',
         ),
         'Symfony\\Component\\Yaml\\' => 
         array (
@@ -415,10 +401,6 @@ class ComposerStaticInitcc04bba40dc0565cc5b3546fe9574c20
         array (
             0 => __DIR__ . '/..' . '/stecman/symfony-console-completion/src',
         ),
-        'Solarium\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/solarium/solarium/src',
-        ),
         'SelfUpdate\\' => 
         array (
             0 => __DIR__ . '/..' . '/consolidation/self-update/src',
@@ -445,16 +427,7 @@ class ComposerStaticInitcc04bba40dc0565cc5b3546fe9574c20
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-factory/src',
-            1 => __DIR__ . '/..' . '/psr/http-message/src',
-        ),
-        'Psr\\Http\\Client\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/psr/http-client/src',
-        ),
-        'Psr\\EventDispatcher\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/psr/event-dispatcher/src',
+            0 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Container\\' => 
         array (
@@ -476,10 +449,6 @@ class ComposerStaticInitcc04bba40dc0565cc5b3546fe9574c20
         array (
             0 => __DIR__ . '/..' . '/mglaman/phpstan-drupal/src',
             1 => __DIR__ . '/..' . '/phpstan/phpstan-deprecation-rules/src',
-        ),
-        'MyCLabs\\Enum\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/myclabs/php-enum/src',
         ),
         'MathieuViossat\\Util\\' => 
         array (
