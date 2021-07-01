@@ -32,6 +32,8 @@
 # Ignore drupal core (if not versioning drupal sources)
 #/web/core
 #/web/modules
+/web/modules/.gitkeep
+/web/modules/custom/.gitkeep
 #/vendor
 #/web/.csslintrc
 #/web/.editorconfig
@@ -46,14 +48,12 @@
 #/web/update.php
 #/web/web.config
 /example.gitignore
-/web/profiles
-/web/profiles/contrib/
-/web/profiles/README.txt
-/web/profiles/.gitkeep
+/web/profiles/*
 /web/sites/README.txt
 /web/sites/example.sites.php
 /web/sites/example.settings.local.php
 /web/themes/README.txt
+/web/themes/.gitkeep
 /web/LICENSE.txt
 /web/README.txt
 
@@ -176,4 +176,3 @@ fabric.properties
 
 # End of https://www.gitignore.io/api/phpstorm
 
-/web/profiles/
