@@ -1542,7 +1542,7 @@ footer .block .block-title {
 }
 
 .gsc-heading.style-1 .title {
-  font-size: 50px !important;
+  font-size: 5rem !important;
   text-transform: initial !important;
   line-height: 1.1 !important;
   font-weight: 300 !important;
@@ -5813,9 +5813,11 @@ header.header-v1 .header-main-inner .header-inner {
 }
 
 #block-formgeneralemailsignup .sli-label {
-  color: #000 !important;
+  color: #660303 !important;
   font-size: 1rem !important;
   font-weight: bold;
+  letter-spacing: .1rem;
+  margin: 0 0 1rem;
 }
 
 .red.saturate p, #orange-wrapper p {
@@ -5835,4 +5837,18 @@ header.header-v1 .header-main-inner .header-inner {
 
 .ext {
   text-decoration: none !important;
+}
+
+#block-formgeneralemailsignup .sli-button.sli-small {
+  padding: 1rem 2rem !important;
+  font-size: 1rem !important;
+  color:#fff !important;
+  background: #660303 !important;
+  font-weight: bold;
+  letter-spacing: .1rem;
+}
+
+.gsc-image-content.skin-v2:hover .box-content a:hover {
+  color: #ffffff !important;
+  background: #346677;
 }
