@@ -5554,10 +5554,24 @@ header.header-v2 .header-main {
 
 }
 
-@media (max-width: 778px) {
-
+.pull-right.better {
+  float: right !important;
+  margin: 0 0 20px;
+}
+.gva-search-region .container-inline div {
+  display: block !important;
 }
 
-@media (max-width: 480px) {
-
+#footer .copyright {
+  padding-bottom: 0 !important;
 }
+
+.container-fluid.wdg-web {
+  padding: 10px 0;
+  background: #316474;
+}
+.pull-left.small {
+  font-size: 70%;
+  color: #fff;
+}
+a.white {color: #fff; text-decoration: none}

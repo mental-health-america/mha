@@ -138,6 +138,7 @@
         "drupal/simplenews": "^2.0@beta",
         "drupal/social_media_links": "^2.6",
         "drupal/superfish": "^1.4",
+        "drupal/svg_maps": "^1.0@beta",
         "drupal/token_filter": "^1.1",
         "drupal/typed_data": "^1.0@alpha",
         "drupal/ultimenu": "^2.0",
