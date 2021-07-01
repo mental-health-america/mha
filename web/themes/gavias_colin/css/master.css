@@ -5424,8 +5424,8 @@ header.header-v2 {
   letter-spacing: 0.25px;
 }
 
-.header-v2 .header-main-inner .navigation .gva_menu > li.menu-item:last-child  a {
-  background: #ea7901!important;
+.header-v2 .header-main-inner .navigation .gva_menu > li.menu-item:last-child a {
+  background: #ea7901 !important;
   color: #fff !important;
   border: 1px solid transparent;
   font-size: 11px !important;
@@ -5497,7 +5497,7 @@ header.header-v2 .header-main {
 }
 
 .hamburger .hamit {
-  margin: 35px 0 0 ;
+  margin: 35px 0 0;
 }
 
 .hamburger .gva-quick-side.open {
@@ -5569,18 +5569,21 @@ header.header-v2 .header-main {
 .container-fluid.wdg-web {
   padding: 10px 0;
   background: #316474;
+  font-size: .8rem;
 }
+
 .pull-left.small {
   font-size: 70%;
   color: #fff;
 }
+
 a.white {
   color: #fff; text-decoration: none
 }
 
 #footer a.sli-button {
   padding: .5rem 2rem;
-  cursor:pointer !important;;
+  cursor: pointer !important;;
 }
 
 #footer .sli-input {
@@ -5697,7 +5700,7 @@ input[type="submit"] {
   box-shadow: none !important;
 }
 
-input:focus, textarea:focus, select:focus{
+input:focus, textarea:focus, select:focus {
   outline: none;
 }
 
@@ -5724,7 +5727,7 @@ input[type="submit"] {
   box-shadow: none !important;
 }
 
-input:focus, textarea:focus, select:focus{
+input:focus, textarea:focus, select:focus {
   outline: none;
 }
 
@@ -5788,7 +5791,7 @@ input:focus, textarea:focus, select:focus{
 .body-page select {
   background-color: #fff;
   box-shadow: none;
-  border: 1px solid rgba(0,0,0,0.1) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
   padding: 5px 10px;
   margin: 0 0 1rem;
 }
@@ -5804,4 +5807,12 @@ header.header-v1 .header-main-inner .header-inner {
 #footer {
   background-color: #385887;
   background: url('/sites/default/files/inline-images/footer-image.jpg') top center;
+}
+
+#footer-2 a:hover,
+#footer-2 a:focus,
+#footer-2 a:active,
+#footer-2 a:visited {
+  outline: none !important;
+  color: #9ca841;
 }
