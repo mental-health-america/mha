@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "eea7deee95572d38b3c9a11899288540",
+    "content-hash": "7a7d9c99f115195df983c4a03a65c94a",
     "packages": [
         {
             "name": "alchemy/zippy",
@@ -6629,49 +6629,6 @@
             }
         },
         {
-            "name": "drupal/instagramfeed",
-            "version": "1.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/instagramfeed.git",
-                "reference": "8.x-1.1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/instagramfeed-8.x-1.1.zip",
-                "reference": "8.x-1.1",
-                "shasum": "8838230597ddf56014875ad693bae21f9cfd3200"
-            },
-            "require": {
-                "drupal/core": "^8 || ^9"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "8.x-1.1",
-                    "datestamp": "1589813468",
-                    "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Project has not opted into security advisory coverage!"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Unsupported Projects",
-                    "homepage": "https://www.drupal.org/user/291168"
-                }
-            ],
-            "homepage": "https://www.drupal.org/project/instagramfeed",
-            "support": {
-                "source": "https://git.drupalcode.org/project/instagramfeed"
-            }
-        },
-        {
             "name": "drupal/jquery_ui",
             "version": "1.4.0",
             "source": {
@@ -7207,66 +7164,6 @@
             "homepage": "https://www.drupal.org/project/mailsystem",
             "support": {
                 "source": "https://git.drupalcode.org/project/mailsystem"
-            }
-        },
-        {
-            "name": "drupal/media_entity_instagram",
-            "version": "3.0.5",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/media_entity_instagram.git",
-                "reference": "3.0.5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/media_entity_instagram-3.0.5.zip",
-                "reference": "3.0.5",
-                "shasum": "8554306ee244e3b6ec43f3cac2f7494a212cdbe9"
-            },
-            "require": {
-                "drupal/core": "^8.8 || ^9"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "3.0.5",
-                    "datestamp": "1614675425",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Drupal Media Team",
-                    "homepage": "https://www.drupal.org/user/3260690"
-                },
-                {
-                    "name": "Primsi",
-                    "homepage": "https://www.drupal.org/user/282629"
-                },
-                {
-                    "name": "chr.fritsch",
-                    "homepage": "https://www.drupal.org/user/2103716"
-                },
-                {
-                    "name": "designesse",
-                    "homepage": "https://www.drupal.org/user/854012"
-                },
-                {
-                    "name": "slashrsm",
-                    "homepage": "https://www.drupal.org/user/744628"
-                }
-            ],
-            "description": "Media Entity Instagram provider.",
-            "homepage": "https://www.drupal.org/project/media_entity_instagram",
-            "support": {
-                "source": "https://git.drupalcode.org/project/media_entity_instagram"
             }
         },
         {
@@ -8485,54 +8382,6 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/seckit",
                 "issues": "http://drupal.org/project/issues/seckit"
-            }
-        },
-        {
-            "name": "drupal/simple_instagram_feed",
-            "version": "3.11.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/simple_instagram_feed.git",
-                "reference": "8.x-3.11"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/simple_instagram_feed-8.x-3.11.zip",
-                "reference": "8.x-3.11",
-                "shasum": "3a6eecf7607c9db4016ad24b44431f658b962170"
-            },
-            "require": {
-                "drupal/core": "^8 || ^9"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "8.x-3.11",
-                    "datestamp": "1615580267",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "awasson",
-                    "homepage": "https://www.drupal.org/user/127091"
-                },
-                {
-                    "name": "paulocs",
-                    "homepage": "https://www.drupal.org/user/3640109"
-                }
-            ],
-            "description": "Creates a block with a dynamic Instagram Feed using https://github.com/jsanahuja/jquery.instagramFeed.",
-            "homepage": "https://www.drupal.org/project/simple_instagram_feed",
-            "support": {
-                "source": "https://git.drupalcode.org/project/simple_instagram_feed"
             }
         },
         {
