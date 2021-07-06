@@ -6,9 +6,7 @@ use Drupal\commerce_order\Entity\OrderInterface;
 use Drupal\commerce_order\Entity\OrderItemInterface;
 
 /**
- * Interface FacebookCommerceInterface.
- *
- * @package Drupal\facebook_pixel_commerce
+ * Defines the interface for facebook_pixel_commerce service.
  */
 interface FacebookCommerceInterface {
 

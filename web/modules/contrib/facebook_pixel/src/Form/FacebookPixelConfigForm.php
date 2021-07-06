@@ -6,9 +6,7 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class FacebookPixelConfigForm.
- *
- * @package Drupal\facebook_pixel\Form
+ * Facebook Pixel config.
  */
 class FacebookPixelConfigForm extends ConfigFormBase {
 
@@ -42,13 +40,6 @@ class FacebookPixelConfigForm extends ConfigFormBase {
       '#default_value' => $config->get('facebook_id'),
     ];
     return parent::buildForm($form, $form_state);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function validateForm(array &$form, FormStateInterface $form_state) {
-    parent::validateForm($form, $form_state);
   }
 
   /**

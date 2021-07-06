@@ -1,5 +1,6 @@
 name: Facebook Pixel Commerce
 type: module
+core_version_requirement: ^8 || ^9
 description: Adds commerce events to Facebook Pixel
 # core: 8.x
 package: Statistics

@@ -3,9 +3,7 @@
 namespace Drupal\facebook_pixel;
 
 /**
- * Interface FacebookEventInterface.
- *
- * @package Drupal\facebook_pixel
+ * Defines the interface for facebook_pixel service.
  */
 interface FacebookEventInterface {
 

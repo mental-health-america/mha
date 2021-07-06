@@ -10,6 +10,9 @@ use Drupal\facebook_pixel_commerce\FacebookCommerceInterface;
 use Drupal\state_machine\Event\WorkflowTransitionEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
+/**
+ * Cart subscriber.
+ */
 class CartSubscriber implements EventSubscriberInterface {
 
   /**

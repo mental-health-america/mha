@@ -5892,3 +5892,7 @@ header.header-v1 .header-main-inner .header-inner {
 #id_08371049-8ad5-430a-9d2a-9e2b86805fcc_inner span {
   color: #d26f05 !important;
 }
+
+.gsc-image-content.skin-v2:hover .box-content a:hover {
+  color: #f79941 !important;
+}

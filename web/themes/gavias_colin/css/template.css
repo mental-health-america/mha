@@ -2706,7 +2706,7 @@ body.maintenance-page {
 }
 
 .text-theme-2 {
-  color: #febf01 !important;
+  color: #f79941 !important;
 }
 
 .gavias-parallax {
@@ -3188,7 +3188,7 @@ div.error {
 }
 .btn:hover, .btn:focus, .btn:active, .btn.active, .btn-white:hover, .btn-white:focus, .btn-white:active, .btn-white.active, .btn-theme:hover, .btn-theme:focus, .btn-theme:active, .btn-theme.active, .btn-theme-second:hover, .btn-theme-second:focus, .btn-theme-second:active, .btn-theme-second.active, .more-link a:hover, .more-link a:focus, .more-link a:active, .more-link a.active, .btn-theme-submit:hover, .btn-theme-submit:focus, .btn-theme-submit:active, .btn-theme-submit.active {
   color: #fff;
-  background: #febf01;
+  background: #f79941;
 }
 
 .btn-theme, .btn-theme-second {
@@ -3207,7 +3207,7 @@ div.error {
 }
 
 .btn-theme-second {
-  background: #febf01;
+  background: #f79941;
   color: #fff;
 }
 .btn-theme-second:hover, .btn-theme-second:focus, .btn-theme-second:active {
@@ -3256,10 +3256,10 @@ div.error {
   font-weight: 900;
 }
 .btn-inline:hover {
-  color: #febf01;
+  color: #f79941;
 }
 .btn-inline:hover:after {
-  color: #febf01;
+  color: #f79941;
 }
 
 .user-login-form input[type*='submit'], .user-register-form input[type*='submit'], .user-form input[type*='submit'], .user-pass input[type*='submit'] {
@@ -3652,10 +3652,10 @@ div.error {
   margin-top: -7px;
 }
 .info-contact > div.phone .icon {
-  background: #febf01;
+  background: #f79941;
 }
 .info-contact > div.address .icon {
-  background: #febf01;
+  background: #f79941;
 }
 
 /* This is required to win over specificity of #content h2 */
@@ -4416,7 +4416,7 @@ div.resizable-textarea textarea {
   font-weight: 600;
 }
 .block.block-simplenews input#edit-subscribe:hover, .block.block-simplenews input#edit-subscribe:focus, .block.block-simplenews input#edit-subscribe:active {
-  background: #febf01;
+  background: #f79941;
   color: #fff;
 }
 .block.block-blocktabs {
@@ -4735,7 +4735,7 @@ nav.breadcrumb ol > li span {
 }
 
 .company-presentation {
-  background: #febf01;
+  background: #f79941;
   color: #fff;
   padding: 30px;
 }
@@ -7951,7 +7951,7 @@ ul[data-drupal-views-infinite-scroll-pager].pager a:hover, ul[data-drupal-views-
   margin: 0;
 }
 .gsc-icon-box-new.style-1 .content-inner .title {
-  color: #febf01;
+  color: #f79941;
   font-family: 'Montserrat', sans-serif;
   font-weight: 600;
   font-size: 18px;
@@ -8046,7 +8046,7 @@ ul[data-drupal-views-infinite-scroll-pager].pager a:hover, ul[data-drupal-views-
 }
 .gsc-icon-box-new.style-2 .content-inner .desc .link {
   margin-top: 13px;
-  color: #febf01;
+  color: #f79941;
   display: inline-block;
 }
 .gsc-icon-box-new.style-2 .content-inner .desc .link:hover {
@@ -8118,7 +8118,7 @@ ul[data-drupal-views-infinite-scroll-pager].pager a:hover, ul[data-drupal-views-
   -o-border-radius: 50%;
   text-align: center;
   line-height: 60px;
-  color: #febf01;
+  color: #f79941;
   background: #5468ff;
   font-size: 22px;
   -webkit-box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -8775,7 +8775,7 @@ ul[data-drupal-views-infinite-scroll-pager].pager a:hover, ul[data-drupal-views-
 }
 .gsc-content-images-parallax.style-v1 .content .sub-title span {
   text-transform: uppercase;
-  background: #febf01;
+  background: #f79941;
   font-size: 10px;
   padding: 2px 5px;
   letter-spacing: 1.5px;
@@ -9994,7 +9994,7 @@ ul[data-drupal-views-infinite-scroll-pager].pager a:hover, ul[data-drupal-views-
   font-size: 14px;
 }
 .gva-job-box .content-inner .information ul li i {
-  color: #febf01;
+  color: #f79941;
   width: 20px;
   text-align: left;
   font-size: 14px;
@@ -10032,7 +10032,7 @@ ul[data-drupal-views-infinite-scroll-pager].pager a:hover, ul[data-drupal-views-
   content: '';
   width: 50px;
   height: 2px;
-  background: #febf01;
+  background: #f79941;
   position: absolute;
   bottom: 0;
   left: 0;
@@ -10277,7 +10277,7 @@ ul[data-drupal-views-infinite-scroll-pager].pager a:hover, ul[data-drupal-views-
   box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
 }
 .gsc-box-hover.style-1:hover .icon {
-  color: #febf01;
+  color: #f79941;
 }
 
 .gsc-text-rotate .rotate-text {
@@ -10910,10 +10910,11 @@ ul[data-drupal-views-infinite-scroll-pager].pager a:hover, ul[data-drupal-views-
   color: #fff;
 }
 .gsc-image-content.skin-v2:hover .box-content a:hover {
-  color: #febf01 !important;
+  color: #f79941 !important;
 }
+
 .gsc-image-content.skin-v2:hover .box-content a:hover:after {
-  color: #febf01;
+  color: #f79941;
 }
 .gsc-image-content.skin-v2:hover .box-content .title {
   color: #fff;
@@ -11648,7 +11649,7 @@ ul[data-drupal-views-infinite-scroll-pager].pager a:hover, ul[data-drupal-views-
 }
 .event-block .event-content .event-info .event-meta {
   font-size: 13px;
-  color: #febf01;
+  color: #f79941;
 }
 .event-block .event-content .event-info .body {
   margin-top: 10px;
@@ -12436,7 +12437,7 @@ ul[data-drupal-views-infinite-scroll-pager].pager a:hover, ul[data-drupal-views-
 }
 .testimonial-node-3 .job {
   font-size: 13px;
-  color: #febf01;
+  color: #f79941;
 }
 
 .testimonial-grid .item-grid {

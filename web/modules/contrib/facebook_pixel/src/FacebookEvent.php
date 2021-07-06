@@ -6,7 +6,7 @@ use Drupal\Core\Session\SessionManager;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 
 /**
- * Class FacebookEvent.
+ * Helper methods for facebook_pixel module.
  *
  * @package Drupal\facebook_pixel
  */
@@ -36,14 +36,14 @@ class FacebookEvent implements FacebookEventInterface {
   /**
    * FacebookEvent constructor.
    *
-   * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $privateTempStore
+   * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $temp_store_factory
    *   The temp store factory service.
-   * @param \Drupal\Core\Session\SessionManager $sessionManager
+   * @param \Drupal\Core\Session\SessionManager $session
    *   The session manager service.
    */
-  public function __construct(PrivateTempStoreFactory $privateTempStore, SessionManager $sessionManager) {
-    $this->privateTempStore = $privateTempStore->get('user');
-    $this->sessionManager = $sessionManager;
+  public function __construct(PrivateTempStoreFactory $temp_store_factory, SessionManager $session) {
+    $this->privateTempStore = $temp_store_factory->get('user');
+    $this->sessionManager = $session;
   }
 
   /**
