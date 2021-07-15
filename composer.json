@@ -122,6 +122,7 @@
         "drupal/salesforce_oauth": "^4.1",
         "drupal/scheduler": "^1.0",
         "drupal/seckit": "^2.0",
+        "drupal/simple_instagram_feed": "^3.11",
         "drupal/simple_popup_blocks": "^2.8",
         "drupal/simple_sitemap": "^3.2",
         "drupal/simple_timeline": "^1.1",
@@ -198,9 +199,6 @@
             },
             "drupal/entity_clone.module": {
                 "Entity clone":"https://www.drupal.org/files/issues/2020-05-14/2784373_13.patch"
-            },
-            "drupal/facebook_pixel": {
-                "Facebook Pixel":"https://www.drupal.org/files/issues/2021-06-24/3122781-16.patch"
             }
         },
         "installer-paths": {
