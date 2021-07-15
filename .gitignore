@@ -1,3 +1,19 @@
+# Ignore sensitive information
+/web/sites/*/settings.php
+/.sql
+
+# Place local settings in settings.local.php
+sites/*/settings.local.php
+sites/*/example.settings.local.php
+sites/*/example.sites.php
+/web/sites/*/settings.local.php
+/web/sites/*/default.services.php
+/web/sites/*/default.settings.php
+
+# Ignore Drupal's file directory
+/web/sites/*/files/
+/web/sites/default/files/js/
+
 # gitignore template for Drupal 8 projects
 #
 # earlier versions of Drupal are tracked in `community/PHP/`
@@ -16,6 +32,7 @@
 /web/sites/*/private
 /web/sites/*/files-public
 /web/sites/*/files-private
+
 
 # Ignore paths that may contain temporary files
 /web/sites/*/translations
@@ -57,8 +74,20 @@
 /web/LICENSE.txt
 /web/README.txt
 
+# Ignore paths that contain user-generated content <set by MHA>.
+sites/*/files
+#sites/*/private
+#files/*
+
+
+# Note that services.local.yml is not loaded by default. If you would like
+# to use this file add the following to your settings.local.php file:
+#   $settings['container_yamls'][] = __DIR__ . '/services.local.yml';
+sites/*/services.local.yml
+
 # Ignore OS garbage
 .DS_Store
+
 
 LICENSE
 README.md
