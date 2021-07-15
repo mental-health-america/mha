@@ -1,8 +1,14 @@
 # Ignore sensitive information
 /web/sites/*/settings.php
-/web/sites/*/settings.local.php
+/.sql
 
-/_sql
+# Place local settings in settings.local.php
+sites/*/settings.local.php
+sites/*/example.settings.local.php
+sites/*/example.sites.php
+/web/sites/*/settings.local.php
+/web/sites/*/default.services.php
+/web/sites/*/default.settings.php
 
 # Ignore Drupal's file directory
 /web/sites/*/files/
@@ -51,8 +57,6 @@ sites/*/files
 /web/sites/*/files-public
 /web/sites/*/files-private
 
-# Place local settings in settings.local.php
-sites/*/settings.local.php
 
 # Note that services.local.yml is not loaded by default. If you would like
 # to use this file add the following to your settings.local.php file:

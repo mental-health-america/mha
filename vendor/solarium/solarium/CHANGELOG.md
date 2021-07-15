@@ -5,6 +5,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [6.1.4]
+### Added
+- Solarium\QueryType\ManagedResources\Result\Command::getWasSuccessful()
+- Solarium\QueryType\ManagedResources\Result\Command::getStatusMessage()
+- Query a single term in a Managed Resource
+
+### Fixed
+- Syntax error in request with facet queries that contain local parameters
+- HEAD requests could lead to timeouts with cURL adapter
+- Fix for reserved characters in managed resources (SOLR-6853)
+- Parsing nested details in debug response
+
+### Changed
+- Solarium\Component/Result/Stats/Result::getValue() is now public
+
+
 ## [6.1.3]
 ### Fixed
 - possible exception in Debug\Detail::__toString() when sub details are missing
