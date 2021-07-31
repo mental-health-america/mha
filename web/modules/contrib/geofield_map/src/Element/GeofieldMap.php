@@ -3,7 +3,7 @@
 namespace Drupal\geofield_map\Element;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\geofield\Element\GeofieldElementBase;
+use Drupal\geofield\Element\GeofieldLatLon;
 use Drupal\Core\Url;
 use Drupal\Component\Utility\NestedArray;
 
@@ -12,38 +12,7 @@ use Drupal\Component\Utility\NestedArray;
  *
  * @FormElement("geofield_map")
  */
-class GeofieldMap extends GeofieldElementBase {
-
-  /**
-   * {@inheritdoc}
-   */
-  public static $components = [
-    'lat' => [
-      'title' => 'Latitude',
-      'range' => 90,
-    ],
-    'lon' => [
-      'title' => 'Longitude',
-      'range' => 180,
-    ],
-  ];
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getInfo() {
-    $class = get_class($this);
-    return [
-      '#input' => TRUE,
-      '#process' => [
-        [$class, 'latLonProcess'],
-      ],
-      '#element_validate' => [
-        [$class, 'elementValidate'],
-      ],
-      '#theme_wrappers' => ['fieldset'],
-    ];
-  }
+class GeofieldMap extends GeofieldLatLon {
 
   /**
    * Generates the Geofield Map form element.
