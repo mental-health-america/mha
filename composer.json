@@ -69,7 +69,6 @@
         "drupal/config_update": "^1.6",
         "drupal/console": "^1.0.2",
         "drupal/content_access": "^1.0@alpha",
-        "drupal/contribute": "^5.0@beta",
         "drupal/core": "^8.6.0",
         "drupal/core-dev": "^8.8",
         "drupal/ctools": "^3.6",
