@@ -2026,17 +2026,17 @@
     },
     {
         "name": "doctrine/annotations",
-        "version": "1.13.1",
-        "version_normalized": "1.13.1.0",
+        "version": "1.13.2",
+        "version_normalized": "1.13.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/doctrine/annotations.git",
-            "reference": "e6e7b7d5b45a2f2abc5460cc6396480b2b1d321f"
+            "reference": "5b668aef16090008790395c02c893b1ba13f7e08"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/doctrine/annotations/zipball/e6e7b7d5b45a2f2abc5460cc6396480b2b1d321f",
-            "reference": "e6e7b7d5b45a2f2abc5460cc6396480b2b1d321f",
+            "url": "https://api.github.com/repos/doctrine/annotations/zipball/5b668aef16090008790395c02c893b1ba13f7e08",
+            "reference": "5b668aef16090008790395c02c893b1ba13f7e08",
             "shasum": ""
         },
         "require": {
@@ -2052,7 +2052,7 @@
             "phpunit/phpunit": "^7.5 || ^8.0 || ^9.1.5",
             "symfony/cache": "^4.4 || ^5.2"
         },
-        "time": "2021-05-16T18:07:53+00:00",
+        "time": "2021-08-05T19:00:23+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -2193,29 +2193,29 @@
     },
     {
         "name": "doctrine/collections",
-        "version": "1.6.7",
-        "version_normalized": "1.6.7.0",
+        "version": "1.6.8",
+        "version_normalized": "1.6.8.0",
         "source": {
             "type": "git",
             "url": "https://github.com/doctrine/collections.git",
-            "reference": "55f8b799269a1a472457bd1a41b4f379d4cfba4a"
+            "reference": "1958a744696c6bb3bb0d28db2611dc11610e78af"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/doctrine/collections/zipball/55f8b799269a1a472457bd1a41b4f379d4cfba4a",
-            "reference": "55f8b799269a1a472457bd1a41b4f379d4cfba4a",
+            "url": "https://api.github.com/repos/doctrine/collections/zipball/1958a744696c6bb3bb0d28db2611dc11610e78af",
+            "reference": "1958a744696c6bb3bb0d28db2611dc11610e78af",
             "shasum": ""
         },
         "require": {
             "php": "^7.1.3 || ^8.0"
         },
         "require-dev": {
-            "doctrine/coding-standard": "^6.0",
-            "phpstan/phpstan-shim": "^0.9.2",
-            "phpunit/phpunit": "^7.0",
-            "vimeo/psalm": "^3.8.1"
+            "doctrine/coding-standard": "^9.0",
+            "phpstan/phpstan": "^0.12",
+            "phpunit/phpunit": "^7.5 || ^8.5 || ^9.1.5",
+            "vimeo/psalm": "^4.2.1"
         },
-        "time": "2020-07-27T17:53:49+00:00",
+        "time": "2021-08-10T18:51:53+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -4105,17 +4105,17 @@
     },
     {
         "name": "drupal/core",
-        "version": "8.9.17",
-        "version_normalized": "8.9.17.0",
+        "version": "8.9.18",
+        "version_normalized": "8.9.18.0",
         "source": {
             "type": "git",
             "url": "https://github.com/drupal/core.git",
-            "reference": "a1416f2cc6701acc0cc6725bfeac3715e633fd9c"
+            "reference": "e536176c45d9d75ec57f7a12c0e3c0aead856841"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/drupal/core/zipball/a1416f2cc6701acc0cc6725bfeac3715e633fd9c",
-            "reference": "a1416f2cc6701acc0cc6725bfeac3715e633fd9c",
+            "url": "https://api.github.com/repos/drupal/core/zipball/e536176c45d9d75ec57f7a12c0e3c0aead856841",
+            "reference": "e536176c45d9d75ec57f7a12c0e3c0aead856841",
             "shasum": ""
         },
         "require": {
@@ -4282,7 +4282,7 @@
             "drupal/workflows": "self.version",
             "drupal/workspaces": "self.version"
         },
-        "time": "2021-07-20T21:43:12+00:00",
+        "time": "2021-08-12T17:48:42+00:00",
         "type": "drupal-core",
         "extra": {
             "drupal-scaffold": {
@@ -5589,18 +5589,18 @@
     },
     {
         "name": "drupal/field_group",
-        "version": "3.1.0",
-        "version_normalized": "3.1.0.0",
+        "version": "3.2.0",
+        "version_normalized": "3.2.0.0",
         "source": {
             "type": "git",
             "url": "https://git.drupalcode.org/project/field_group.git",
-            "reference": "8.x-3.1"
+            "reference": "8.x-3.2"
         },
         "dist": {
             "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/field_group-8.x-3.1.zip",
-            "reference": "8.x-3.1",
-            "shasum": "8a719eaea594f0ba874172831cb28da93c66b77a"
+            "url": "https://ftp.drupal.org/files/projects/field_group-8.x-3.2.zip",
+            "reference": "8.x-3.2",
+            "shasum": "2020bbfe40f6ba43bc733ae7c8761632572433a0"
         },
         "require": {
             "drupal/core": "^8.8 || ^9"
@@ -5611,8 +5611,8 @@
         "type": "drupal-module",
         "extra": {
             "drupal": {
-                "version": "8.x-3.1",
-                "datestamp": "1591772567",
+                "version": "8.x-3.2",
+                "datestamp": "1628513585",
                 "security-coverage": {
                     "status": "covered",
                     "message": "Covered by Drupal's security advisory policy"
@@ -7622,18 +7622,18 @@
     },
     {
         "name": "drupal/profile",
-        "version": "1.2.0",
-        "version_normalized": "1.2.0.0",
+        "version": "1.3.0",
+        "version_normalized": "1.3.0.0",
         "source": {
             "type": "git",
             "url": "https://git.drupalcode.org/project/profile.git",
-            "reference": "8.x-1.2"
+            "reference": "8.x-1.3"
         },
         "dist": {
             "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/profile-8.x-1.2.zip",
-            "reference": "8.x-1.2",
-            "shasum": "5ea5167ed6cc5b47761ea497fe20bae0fbea1cf2"
+            "url": "https://ftp.drupal.org/files/projects/profile-8.x-1.3.zip",
+            "reference": "8.x-1.3",
+            "shasum": "e2f0b76ae0cfb312259a956f7140cec261e543b1"
         },
         "require": {
             "drupal/core": "^8.8 || ^9",
@@ -7645,8 +7645,8 @@
         "type": "drupal-module",
         "extra": {
             "drupal": {
-                "version": "8.x-1.2",
-                "datestamp": "1604422701",
+                "version": "8.x-1.3",
+                "datestamp": "1628099894",
                 "security-coverage": {
                     "status": "covered",
                     "message": "Covered by Drupal's security advisory policy"
@@ -8932,23 +8932,23 @@
     },
     {
         "name": "drupal/upgrade_status",
-        "version": "3.8.0",
-        "version_normalized": "3.8.0.0",
+        "version": "3.9.0",
+        "version_normalized": "3.9.0.0",
         "source": {
             "type": "git",
             "url": "https://git.drupalcode.org/project/upgrade_status.git",
-            "reference": "8.x-3.8"
+            "reference": "8.x-3.9"
         },
         "dist": {
             "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/upgrade_status-8.x-3.8.zip",
-            "reference": "8.x-3.8",
-            "shasum": "76e0893e6f8e1a4fd99f8a935f414c0f242d0620"
+            "url": "https://ftp.drupal.org/files/projects/upgrade_status-8.x-3.9.zip",
+            "reference": "8.x-3.9",
+            "shasum": "5a0c33e882d72ac8d1ac28d68013937fcdced6cd"
         },
         "require": {
             "drupal/core": "^8 || ^9",
             "mathieuviossat/arraytotexttable": "~1.0.0",
-            "mglaman/phpstan-drupal": "^0.12.11",
+            "mglaman/phpstan-drupal": "^0.12.12",
             "nikic/php-parser": "^4.0.0",
             "phpstan/phpstan-deprecation-rules": "^0.12.0",
             "webflo/drupal-finder": "^1.2"
@@ -8956,8 +8956,8 @@
         "type": "drupal-module",
         "extra": {
             "drupal": {
-                "version": "8.x-3.8",
-                "datestamp": "1626775913",
+                "version": "8.x-3.9",
+                "datestamp": "1628707640",
                 "security-coverage": {
                     "status": "covered",
                     "message": "Covered by Drupal's security advisory policy"
@@ -9696,17 +9696,17 @@
     },
     {
         "name": "drush/drush",
-        "version": "10.5.0",
-        "version_normalized": "10.5.0.0",
+        "version": "10.6.0",
+        "version_normalized": "10.6.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/drush-ops/drush.git",
-            "reference": "3fd9f7e62ffb7f221e4be8151a738529345d22d5"
+            "reference": "c86d327359baddb0a2f51bb458703826469a0445"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/drush-ops/drush/zipball/3fd9f7e62ffb7f221e4be8151a738529345d22d5",
-            "reference": "3fd9f7e62ffb7f221e4be8151a738529345d22d5",
+            "url": "https://api.github.com/repos/drush-ops/drush/zipball/c86d327359baddb0a2f51bb458703826469a0445",
+            "reference": "c86d327359baddb0a2f51bb458703826469a0445",
             "shasum": ""
         },
         "require": {
@@ -9747,7 +9747,7 @@
             "vlucas/phpdotenv": "^2.4",
             "yoast/phpunit-polyfills": "^0.2.0"
         },
-        "time": "2021-05-08T15:49:30+00:00",
+        "time": "2021-08-13T10:40:40+00:00",
         "bin": [
             "drush"
         ],
@@ -10937,25 +10937,24 @@
     },
     {
         "name": "laminas/laminas-stdlib",
-        "version": "3.4.0",
-        "version_normalized": "3.4.0.0",
+        "version": "3.5.0",
+        "version_normalized": "3.5.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/laminas/laminas-stdlib.git",
-            "reference": "e89c2268c9cad25099f562f7f015c28c5dd383c9"
+            "reference": "c8ac6a76a133e682acfabc821d4a2ec646934b12"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/laminas/laminas-stdlib/zipball/e89c2268c9cad25099f562f7f015c28c5dd383c9",
-            "reference": "e89c2268c9cad25099f562f7f015c28c5dd383c9",
+            "url": "https://api.github.com/repos/laminas/laminas-stdlib/zipball/c8ac6a76a133e682acfabc821d4a2ec646934b12",
+            "reference": "c8ac6a76a133e682acfabc821d4a2ec646934b12",
             "shasum": ""
         },
         "require": {
-            "laminas/laminas-zendframework-bridge": "^1.0",
             "php": "^7.3 || ^8.0"
         },
-        "replace": {
-            "zendframework/zend-stdlib": "^3.2.1"
+        "conflict": {
+            "zendframework/zend-stdlib": "*"
         },
         "require-dev": {
             "laminas/laminas-coding-standard": "~2.3.0",
@@ -10964,7 +10963,7 @@
             "psalm/plugin-phpunit": "^0.16.0",
             "vimeo/psalm": "^4.7"
         },
-        "time": "2021-06-28T21:37:31+00:00",
+        "time": "2021-08-03T13:40:40+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -11924,17 +11923,17 @@
     },
     {
         "name": "pear/pear-core-minimal",
-        "version": "v1.10.10",
-        "version_normalized": "1.10.10.0",
+        "version": "v1.10.11",
+        "version_normalized": "1.10.11.0",
         "source": {
             "type": "git",
             "url": "https://github.com/pear/pear-core-minimal.git",
-            "reference": "625a3c429d9b2c1546438679074cac1b089116a7"
+            "reference": "68d0d32ada737153b7e93b8d3c710ebe70ac867d"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/pear/pear-core-minimal/zipball/625a3c429d9b2c1546438679074cac1b089116a7",
-            "reference": "625a3c429d9b2c1546438679074cac1b089116a7",
+            "url": "https://api.github.com/repos/pear/pear-core-minimal/zipball/68d0d32ada737153b7e93b8d3c710ebe70ac867d",
+            "reference": "68d0d32ada737153b7e93b8d3c710ebe70ac867d",
             "shasum": ""
         },
         "require": {
@@ -11944,7 +11943,7 @@
         "replace": {
             "rsky/pear-core-min": "self.version"
         },
-        "time": "2019-11-19T19:00:24+00:00",
+        "time": "2021-08-10T22:31:03+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
