@@ -293,7 +293,7 @@ class TextFormat extends WebformElementBase {
    * {@inheritdoc}
    */
   public function preview() {
-    return ($this->moduleHandler->moduleExists('filter')) ? parent::preview() : [];
+    return (\Drupal::moduleHandler()->moduleExists('filter')) ? parent::preview() : [];
   }
 
   /**

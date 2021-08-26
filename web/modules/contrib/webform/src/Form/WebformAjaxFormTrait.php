@@ -22,7 +22,7 @@ use Drupal\webform\WebformSubmissionForm;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- * Trait for webform ajax support.
+ * Trait class for Webform Ajax support.
  */
 trait WebformAjaxFormTrait {
 

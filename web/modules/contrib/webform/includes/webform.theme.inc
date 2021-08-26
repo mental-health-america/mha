@@ -484,12 +484,13 @@ function webform_preprocess_fieldset(&$variables) {
     $variables['attributes']['class'][] = 'webform-type-' . Html::getClass($element['#type']);
   }
 
-  // Remove invalid 'required' and 'aria-required' attributes from fieldset.
+  // Remove invalid 'required' attributes from fieldset.
+  //
+  // Issue #3174459: W3C Validation: required attribute not allowed on
+  // fieldset tag.
+  // @see https://www.drupal.org/project/drupal/issues/3174459
   if (isset($element['#webform_key'])) {
-    unset(
-      $variables['attributes']['required'],
-      $variables['attributes']['aria-required']
-    );
+    unset($variables['attributes']['required']);
   }
 }
 
@@ -514,19 +515,6 @@ function webform_preprocess_form_element(&$variables) {
   if (isset($variables['description'])) {
     $element = &$variables['element'];
     $variables['description_display'] = $element['#description_display'];
-  }
-
-  // Issue #2700439: Description class not added to
-  // form-element.html.twig template.
-  // @see https://www.drupal.org/project/drupal/issues/2700439
-  if (isset($variables['description_display']) && $variables['description_display'] === 'before') {
-    // Add system .description class.
-    if (isset($variables['description'])) {
-      if (empty($variables['description']['attributes'])) {
-        $variables['description']['attributes'] = new Attribute();
-      }
-      $variables['description']['attributes']->addClass('description');
-    }
   }
 
   // Add missing classes to the Claro theme's form elements.
@@ -562,7 +550,7 @@ function webform_preprocess_form_element_label(&$variables) {
   $element = &$variables['element'];
 
   // Fix variable title #markup tha contains a render array which is most
-  // likely a help tooltip.
+  // likely a Help tooltip.
   // @see template_preprocess_form_element_label()
   // @see webform_preprocess_form_element()
   if (isset($variables['title'])
@@ -659,7 +647,7 @@ function webform_preprocess_file_upload_help(&$variables) {
       if ($description instanceof TranslatableMarkup
         && $description->getUntranslatedString() === 'Allowed types: @extensions.') {
         $arguments = $description->getArguments();
-        if (strpos($arguments['@extensions'], ',') === FALSE) {
+        if (is_string($arguments['@extensions']) && strpos($arguments['@extensions'], ',') === FALSE) {
           $arguments['@extensions'] = preg_replace('/ +/', ', ', $arguments['@extensions']);
           $variables['descriptions'][$index] = new TranslatableMarkup($description->getUntranslatedString(), $arguments);
         }

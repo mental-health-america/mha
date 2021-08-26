@@ -9,7 +9,7 @@ use Drupal\Core\Url;
 use Drupal\webform\Utility\WebformDialogHelper;
 
 /**
- * Trait for webform dialog support.
+ * Trait class for Webform Ajax dialog support.
  */
 trait WebformDialogFormTrait {
 

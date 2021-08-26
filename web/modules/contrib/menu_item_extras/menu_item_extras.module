@@ -216,12 +216,10 @@ function menu_item_extras_theme_suggestions_menu_alter(array &$suggestions, arra
     /** @var \Drupal\menu_item_extras\Utility\Utility $utility */
     $utility = \Drupal::service('menu_item_extras.utility');
     $menu_name = $utility::sanitizeMachineName($menu_name);
-
-    // We have to add back the original suggestion that normally is generated
-    // from the #theme, because in pre-process we are replacing it with 'menu'.
-    $suggestions[] = $utility::suggestion('menu', $menu_name);
-
     if (Utility::checkBundleHasExtraFieldsThanEntity('menu_link_content', $variables['menu_name'])) {
+      // We have to add back the original suggestion that normally is generated
+      // from the #theme, because in pre-process we are replacing it with 'menu'.
+      $suggestions[] = $utility::suggestion('menu', $menu_name);
       $suggestion_prefix = 'menu__extras';
       // Custom suggestions.
       $suggestions[] = $suggestion_prefix;
