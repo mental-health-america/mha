@@ -23,6 +23,6 @@
     "source": "http://cgit.drupalcode.org/webform_mass_email"
   },
   "require": {
-    "drupal/webform": "~5.0"
+    "drupal/webform": "~5.0 || ~6.0"
   }
 }
