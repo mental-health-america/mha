@@ -46,7 +46,7 @@ if(!class_exists('element_gva_accordion')):
                ),
             ),                                           
          );
-         for($i=1; $i<=10; $i++){
+         for($i=1; $i<=15; $i++){
             $fields['fields'][] = array(
                'id'     => "info_${i}",
                'type'   => 'info',
@@ -74,7 +74,7 @@ if(!class_exists('element_gva_accordion')):
             'animate_delay'   => '',
             'el_class'        => ''
          );
-         for($i=1; $i<=10; $i++){
+         for($i=1; $i<=15; $i++){
             $default["title_{$i}"] = '';
             $default["content_{$i}"] = '';
          }
@@ -91,7 +91,7 @@ if(!class_exists('element_gva_accordion')):
           <?php ob_start() ?>
          <div class="gsc-accordion<?php print $el_class ?>" <?php print gavias_content_builder_print_animate_wow('', $animate_delay) ?>>
             <div class="panel-group <?php print $classes ?>" id="<?php print $_id; ?>" role="tablist" aria-multiselectable="true">
-              <?php for($i=1; $i<=10; $i++){ ?>
+              <?php for($i=1; $i<=15; $i++){ ?>
                   <?php 
                      $title = "title_{$i}";
                      $content = "content_{$i}";
