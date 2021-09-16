@@ -135,6 +135,7 @@
         "drupal/upgrade_status": "^3.1",
         "drupal/video_embed_field": "^2.1",
         "drupal/views_infinite_scroll": "^1.5",
+        "drupal/views_slideshow": "^4.8",
         "drupal/views_term_hierarchy_weight_field": "^1.1",
         "drupal/webform": "^5.0",
         "drupal/webform_mass_email": "^1.0",
