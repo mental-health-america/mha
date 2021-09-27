@@ -2,8 +2,11 @@
 
 namespace Drupal\Tests\svg_maps\Functional;
 
+use Behat\Mink\Exception\ExpectationException;
+use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\Url;
 use Drupal\Tests\BrowserTestBase;
+use Drupal\user\UserInterface;
 
 /**
  * Simple test to ensure that main page loads with module enabled.
@@ -11,6 +14,8 @@ use Drupal\Tests\BrowserTestBase;
  * @group svg_maps
  */
 class LoadTest extends BrowserTestBase {
+
+  protected $defaultTheme = 'stable';
 
   /**
    * Modules to enable.
@@ -22,12 +27,13 @@ class LoadTest extends BrowserTestBase {
   /**
    * A user with permission to administer site configuration.
    *
-   * @var \Drupal\user\UserInterface
+   * @var UserInterface
    */
   protected $user;
 
   /**
    * {@inheritdoc}
+   * @throws EntityStorageException
    */
   protected function setUp() {
     parent::setUp();
@@ -37,6 +43,7 @@ class LoadTest extends BrowserTestBase {
 
   /**
    * Tests that the home page loads with a 200 response.
+   * @throws ExpectationException
    */
   public function testLoad() {
     $this->drupalGet(Url::fromRoute('<front>'));

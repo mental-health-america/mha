@@ -41,7 +41,7 @@ class SvgMapsWidget extends NumberWidget implements ContainerFactoryPluginInterf
    *   The plugin_id for the formatter.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\Core\Field\FieldDefinitionInterface $field_definition
+   * @param FieldDefinitionInterface $field_definition
    *   The definition of the field to which the formatter is associated.
    * @param array $settings
    *   The formatter settings.
@@ -59,7 +59,7 @@ class SvgMapsWidget extends NumberWidget implements ContainerFactoryPluginInterf
   /**
    * Creates an instance of the plugin.
    *
-   * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+   * @param ContainerInterface $container
    *   The container to pull out services used in the plugin.
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.

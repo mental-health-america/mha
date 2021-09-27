@@ -3,6 +3,7 @@
 namespace Drupal\svg_maps\Annotation;
 
 use Drupal\Component\Annotation\Plugin;
+use Drupal\Core\Annotation\Translation;
 
 /**
  * Defines a Svg maps plugin item annotation object.
@@ -25,7 +26,7 @@ class SvgMapsType extends Plugin {
   /**
    * The label of the plugin.
    *
-   * @var \Drupal\Core\Annotation\Translation
+   * @var Translation
    *
    * @ingroup plugin_translatable
    */
@@ -38,7 +39,7 @@ class SvgMapsType extends Plugin {
    *
    * @ingroup plugin_translatable
    *
-   * @var \Drupal\Core\Annotation\Translation (optional)
+   * @var Translation (optional)
    */
   public $description = '';
 

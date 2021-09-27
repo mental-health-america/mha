@@ -6,10 +6,16 @@ use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Plugin\DefaultSingleLazyPluginCollection;
+use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Element\MachineName;
+use Drupal\svg_maps\Entity\SvgMapsEntityInterface;
+use Drupal\svg_maps\SvgMapsTypeBase;
+use Drupal\svg_maps\SvgMapsTypeInterface;
 use Drupal\svg_maps\SvgMapsTypeManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Messenger\MessengerTrait;
 
 /**
  * Class SvgMapsEntityForm.
@@ -19,21 +25,21 @@ class SvgMapsEntityForm extends EntityForm {
   /**
    * The instantiated plugin instances that have configuration forms.
    *
-   * @var \Drupal\Core\Plugin\PluginFormInterface[]
+   * @var PluginFormInterface[]
    */
   protected $configurableInstances = [];
 
   /**
    * The svg maps plugin manager.
    *
-   * @var \Drupal\svg_maps\SvgMapsTypeManager
+   * @var SvgMapsTypeManager
    */
   protected $plugin_manager;
 
   /**
    * Entity field manager service.
    *
-   * @var \Drupal\Core\Entity\EntityFieldManagerInterface
+   * @var EntityFieldManagerInterface
    */
   protected $entityFieldManager;
 
@@ -68,7 +74,7 @@ class SvgMapsEntityForm extends EntityForm {
     $form = parent::form($form, $form_state);
 //    $form_state->setCached(FALSE);
     /**
-     * @var $svg_maps_entity \Drupal\svg_maps\Entity\SvgMapsEntityInterface
+     * @var $svg_maps_entity SvgMapsEntityInterface
      */
     $form['#entity'] = $svg_maps_entity = $this->entity;
     $form_state->set('api_entity', $svg_maps_entity);
@@ -104,10 +110,10 @@ class SvgMapsEntityForm extends EntityForm {
     ];
 
 
-    /** @var \Drupal\svg_maps\SvgMapsTypeInterface $pluginObj */
+    /** @var SvgMapsTypeInterface $pluginObj */
     if($form_state->getValue('type')) {
       /**
-       * @var $pluginsManager \Drupal\Core\Plugin\DefaultSingleLazyPluginCollection
+       * @var $pluginsManager DefaultSingleLazyPluginCollection
        */
       $pluginsManager = $svg_maps_entity->getPluginCollections()['type_configuration'];
       $pluginObj = $pluginsManager->get($form_state->getValue('type'));
@@ -125,7 +131,7 @@ class SvgMapsEntityForm extends EntityForm {
 
     if ($pluginObj) {
       $plugin_configuration = (empty($this->configurableInstances[$pluginObj->getPluginId()]['plugin_config'])) ? $svg_maps_entity->getTypeConfiguration(): $this->configurableInstances[$pluginObj->getPluginId()]['plugin_config'];
-      /** @var \Drupal\svg_maps\SvgMapsTypeBase $instance */
+      /** @var SvgMapsTypeBase $instance */
       $instance = $this->plugin_manager->createInstance($pluginObj->getPluginId(), $plugin_configuration);
       // Store the configuration for validate and submit handlers.
       $this->configurableInstances[$pluginObj->getPluginId()]['plugin_config'] = $plugin_configuration;
@@ -169,10 +175,10 @@ class SvgMapsEntityForm extends EntityForm {
   public function addPath(array &$form, FormStateInterface $form_state) {
     $svg_maps_entity = $this->entity;
 
-    /** @var \Drupal\svg_maps\SvgMapsTypeInterface $pluginObj */
+    /** @var SvgMapsTypeInterface $pluginObj */
     if($form_state->getValue('type')) {
       /**
-       * @var $pluginsManager \Drupal\Core\Plugin\DefaultSingleLazyPluginCollection
+       * @var $pluginsManager DefaultSingleLazyPluginCollection
        */
       $pluginsManager = $svg_maps_entity->getPluginCollections()['type_configuration'];
       $pluginObj = $pluginsManager->get($form_state->getValue('type'));
@@ -182,7 +188,7 @@ class SvgMapsEntityForm extends EntityForm {
     }
     if ($pluginObj) {
       $plugin_configuration = (empty($this->configurableInstances[$pluginObj->getPluginId()]['plugin_config'])) ? $svg_maps_entity->getTypeConfiguration() : $this->configurableInstances[$pluginObj->getPluginId()]['plugin_config'];
-      /** @var \Drupal\svg_maps\SvgMapsTypeBase $instance */
+      /** @var SvgMapsTypeBase $instance */
       $instance = $this->plugin_manager->createInstance($pluginObj->getPluginId(), $plugin_configuration);
       // Store the configuration for validate and submit handlers.
       $this->configurableInstances[$pluginObj->getPluginId()]['plugin_config'] = $plugin_configuration;
@@ -217,7 +223,7 @@ class SvgMapsEntityForm extends EntityForm {
    */
   public function save(array $form, FormStateInterface $form_state) {
     /**
-     * @var $svg_maps_entity \Drupal\svg_maps\Entity\SvgMapsEntityInterface
+     * @var $svg_maps_entity SvgMapsEntityInterface
      */
     $svg_maps_entity = $this->entity;
     $maps_path = $form_state->getValue('maps_path', []);
@@ -230,13 +236,13 @@ class SvgMapsEntityForm extends EntityForm {
 
     switch ($status) {
       case SAVED_NEW:
-        drupal_set_message($this->t('Created the %label Svg maps entity.', [
+        $this->messenger()->addStatus($this->t('Created the %label Svg maps entity.', [
           '%label' => $svg_maps_entity->label(),
         ]));
         break;
 
       default:
-        drupal_set_message($this->t('Saved the %label Svg maps entity.', [
+        $this->messenger()->addStatus($this->t('Saved the %label Svg maps entity.', [
           '%label' => $svg_maps_entity->label(),
         ]));
     }

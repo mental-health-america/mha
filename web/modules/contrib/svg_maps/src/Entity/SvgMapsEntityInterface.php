@@ -4,6 +4,7 @@ namespace Drupal\svg_maps\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Entity\EntityWithPluginCollectionInterface;
+use Drupal\svg_maps\SvgMapsTypeInterface;
 
 /**
  * Provides an interface for defining Svg maps entity entities.
@@ -13,7 +14,7 @@ interface SvgMapsEntityInterface extends EntityWithPluginCollectionInterface, Co
   /**
    * Returns the svg maps type plugin.
    *
-   * @return \Drupal\svg_maps\SvgMapsTypeInterface
+   * @return SvgMapsTypeInterface
    *   The type.
    */
   public function getType();
@@ -32,7 +33,7 @@ interface SvgMapsEntityInterface extends EntityWithPluginCollectionInterface, Co
    * @param array $path
    *   The Svg maps path.
    *
-   * @return \Drupal\svg_maps\Entity\SvgMapsEntityInterface
+   * @return SvgMapsEntityInterface
    *   The called Svg maps entity.
    */
   public function setMapsPath(array $path);

@@ -2,8 +2,12 @@
 
 namespace Drupal\svg_maps\Entity;
 
+use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
+use Drupal\Component\Plugin\Exception\PluginNotFoundException;
+use Drupal\Component\Plugin\LazyPluginCollection;
 use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\Core\Entity\Annotation\ConfigEntityType;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Plugin\DefaultSingleLazyPluginCollection;
 
 /**
@@ -81,9 +85,10 @@ class SvgMapsEntity extends ConfigEntityBase implements SvgMapsEntityInterface {
   /**
    * Type lazy plugin collection.
    *
-   * @var \Drupal\Core\Plugin\DefaultSingleLazyPluginCollection
+   * @var DefaultSingleLazyPluginCollection
    */
   protected $typePluginCollection;
+
 
   /**
    * {@inheritdoc}
@@ -109,7 +114,7 @@ class SvgMapsEntity extends ConfigEntityBase implements SvgMapsEntityInterface {
   /**
    * Gets the plugin collections used by this object.
    *
-   * @return \Drupal\Component\Plugin\LazyPluginCollection[]
+   * @return LazyPluginCollection[]
    *   An array of plugin collections, keyed by the property name they use to
    *   store their configuration.
    */
@@ -135,7 +140,7 @@ class SvgMapsEntity extends ConfigEntityBase implements SvgMapsEntityInterface {
   /**
    * Returns type lazy plugin collection.
    *
-   * @return \Drupal\Core\Plugin\DefaultSingleLazyPluginCollection
+   * @return DefaultSingleLazyPluginCollection
    *   The type configuration.
    */
   protected function typePluginCollection() {
@@ -196,12 +201,16 @@ class SvgMapsEntity extends ConfigEntityBase implements SvgMapsEntityInterface {
    * @param string $label
    *   Label of the svg map entity.
    *
-   * @return static
+   * @return bool
    *   The svg map config entity if one exists for the provided label,
    *   otherwise NULL.
    */
   public static function loadByName($type, $label) {
-    return \Drupal::entityManager()->getStorage('svg_maps_entity')->load($type . '.' . $label);
+    try {
+      return \Drupal::service('entity_type.manager')> self::getStorage('svg_maps_entity')->load($type . '.' . $label);
+    } catch (InvalidPluginDefinitionException $e) {
+    } catch (PluginNotFoundException $e) {
+    }
   }
 
 }

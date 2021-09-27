@@ -14,8 +14,7 @@ function svg_maps_usa_states_help($route_name, RouteMatchInterface $route_match)
   switch ($route_name) {
     // Main module help for the svg_maps_usa_states module.
     case 'help.page.svg_maps_usa_states':
-      $output = '';
-      $output .= '<h3>' . t('About') . '</h3>';
+      $output = '<h3>' . t('About') . '</h3>';
       $output .= '<p>' . t('Svg Maps USA states') . '</p>';
       return $output;
 

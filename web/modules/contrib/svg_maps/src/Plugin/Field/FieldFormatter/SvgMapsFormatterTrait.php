@@ -2,6 +2,7 @@
 
 namespace Drupal\svg_maps\Plugin\Field\FieldFormatter;
 
+use Drupal\Component\Plugin\Exception\PluginException;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
@@ -19,7 +20,7 @@ trait SvgMapsFormatterTrait {
   /**
    * The Svg map plugin service.
    *
-   * @var \Drupal\svg_maps\SvgMapsTypeManager
+   * @var SvgMapsTypeManager
    */
   protected $svgMapsPlugin;
 
@@ -30,7 +31,7 @@ trait SvgMapsFormatterTrait {
    *   The plugin_id for the formatter.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\Core\Field\FieldDefinitionInterface $field_definition
+   * @param FieldDefinitionInterface $field_definition
    *   The definition of the field to which the formatter is associated.
    * @param array $settings
    *   The formatter settings.
@@ -81,6 +82,7 @@ trait SvgMapsFormatterTrait {
 
   /**
    * {@inheritdoc}
+   * @throws PluginException
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
     $elements = [];
