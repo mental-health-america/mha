@@ -4,12 +4,12 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitf8c7154d8463f701fe5f597065806620
+class ComposerStaticInit9e07841863e94920eeaad16b7e0fe5a1
 {
     public static $files = array (
-        '9b38cf48e83f5d8f60375221cd213eee' => __DIR__ . '/..' . '/phpstan/phpstan/bootstrap.php',
-        '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+        '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
+        '9b38cf48e83f5d8f60375221cd213eee' => __DIR__ . '/..' . '/phpstan/phpstan/bootstrap.php',
         '92c8763cd6170fce6fcfe7e26b4e8c10' => __DIR__ . '/..' . '/symfony/phpunit-bridge/bootstrap.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -44,6 +44,7 @@ class ComposerStaticInitf8c7154d8463f701fe5f597065806620
         '952683d815ff0a7bf322b93c0be7e4e4' => __DIR__ . '/..' . '/chi-teck/drupal-code-generator/src/bootstrap.php',
         '5a12a5271c58108e0aa33355e6ac54ea' => __DIR__ . '/..' . '/drupal/console-core/src/functions.php',
         '2d0bd6b7e257b7230c706e6559d6a87b' => __DIR__ . '/..' . '/mglaman/phpstan-drupal/drupal-phpunit-hack.php',
+        '38143a9afc50997d55e4815db8489d1c' => __DIR__ . '/..' . '/rector/rector/bootstrap.php',
         'd511210698f02d87ca48e3972f64323e' => __DIR__ . '/../..' . '/load.environment.php',
     );
 
@@ -182,8 +183,8 @@ class ComposerStaticInitf8c7154d8463f701fe5f597065806620
             'Drupal\\Console\\' => 15,
             'Drupal\\Component\\' => 17,
             'Drupal\\' => 7,
+            'DrupalRector\\' => 13,
             'DrupalPractice\\' => 15,
-            'DrupalComposer\\DrupalScaffold\\' => 30,
             'DrupalCodeGenerator\\' => 20,
             'Dotenv\\' => 7,
             'Doctrine\\Persistence\\' => 21,
@@ -566,13 +567,13 @@ class ComposerStaticInitf8c7154d8463f701fe5f597065806620
         array (
             0 => __DIR__ . '/..' . '/drupal/coder/coder_sniffer/Drupal',
         ),
+        'DrupalRector\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/palantirnet/drupal-rector/src',
+        ),
         'DrupalPractice\\' => 
         array (
             0 => __DIR__ . '/..' . '/drupal/coder/coder_sniffer/DrupalPractice',
-        ),
-        'DrupalComposer\\DrupalScaffold\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/drupal-composer/drupal-scaffold/src',
         ),
         'DrupalCodeGenerator\\' => 
         array (
@@ -785,6 +786,7 @@ class ComposerStaticInitf8c7154d8463f701fe5f597065806620
 
     public static $classMap = array (
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Drupal' => __DIR__ . '/../..' . '/web/core/lib/Drupal.php',
         'DrupalFinder\\DrupalFinder' => __DIR__ . '/..' . '/webflo/drupal-finder/src/DrupalFinder.php',
         'DrupalProject\\composer\\ScriptHandler' => __DIR__ . '/../..' . '/scripts/composer/ScriptHandler.php',
@@ -836,6 +838,7 @@ class ComposerStaticInitf8c7154d8463f701fe5f597065806620
         'Nette\\Utils\\Reflection' => __DIR__ . '/..' . '/nette/utils/src/Utils/Reflection.php',
         'Nette\\Utils\\RegexpException' => __DIR__ . '/..' . '/nette/utils/src/Utils/exceptions.php',
         'Nette\\Utils\\Strings' => __DIR__ . '/..' . '/nette/utils/src/Utils/Strings.php',
+        'Nette\\Utils\\Type' => __DIR__ . '/..' . '/nette/utils/src/Utils/Type.php',
         'Nette\\Utils\\UnknownImageFileException' => __DIR__ . '/..' . '/nette/utils/src/Utils/exceptions.php',
         'Nette\\Utils\\Validators' => __DIR__ . '/..' . '/nette/utils/src/Utils/Validators.php',
         'Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
@@ -1398,11 +1401,11 @@ class ComposerStaticInitf8c7154d8463f701fe5f597065806620
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitf8c7154d8463f701fe5f597065806620::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitf8c7154d8463f701fe5f597065806620::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitf8c7154d8463f701fe5f597065806620::$prefixesPsr0;
-            $loader->fallbackDirsPsr0 = ComposerStaticInitf8c7154d8463f701fe5f597065806620::$fallbackDirsPsr0;
-            $loader->classMap = ComposerStaticInitf8c7154d8463f701fe5f597065806620::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit9e07841863e94920eeaad16b7e0fe5a1::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit9e07841863e94920eeaad16b7e0fe5a1::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit9e07841863e94920eeaad16b7e0fe5a1::$prefixesPsr0;
+            $loader->fallbackDirsPsr0 = ComposerStaticInit9e07841863e94920eeaad16b7e0fe5a1::$fallbackDirsPsr0;
+            $loader->classMap = ComposerStaticInit9e07841863e94920eeaad16b7e0fe5a1::$classMap;
 
         }, null, ClassLoader::class);
     }
