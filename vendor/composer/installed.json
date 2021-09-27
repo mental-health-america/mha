@@ -8294,22 +8294,22 @@
         },
         {
             "name": "drupal/salesforce",
-            "version": "4.2.0",
-            "version_normalized": "4.2.0.0",
+            "version": "4.3.0",
+            "version_normalized": "4.3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/salesforce.git",
-                "reference": "8.x-4.2"
+                "reference": "8.x-4.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/salesforce-8.x-4.2.zip",
-                "reference": "8.x-4.2",
-                "shasum": "93e8094e9d4c57a0ea9afd9e6bfb2ef18c47d09b"
+                "url": "https://ftp.drupal.org/files/projects/salesforce-8.x-4.3.zip",
+                "reference": "8.x-4.3",
+                "shasum": "0321e169ef222a2bc61b40789d327b928417ae20"
             },
             "require": {
                 "consolidation/output-formatters": "^3.2.0 || ^4.1",
-                "drupal/core": "^8.7.7 || ^9",
+                "drupal/core": "^8.7.7 || 9.0.*",
                 "ext-json": "*",
                 "lusitanian/oauth": "^0.8.11"
             },
@@ -8339,8 +8339,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-4.2",
-                    "datestamp": "1616088748",
+                    "version": "8.x-4.3",
+                    "datestamp": "1632765348",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -8388,17 +8388,17 @@
         },
         {
             "name": "drupal/salesforce_oauth",
-            "version": "4.2.0",
-            "version_normalized": "4.2.0.0",
+            "version": "4.3.0",
+            "version_normalized": "4.3.0.0",
             "require": {
-                "drupal/core": "^8.7.7 || ^9",
+                "drupal/core": "^8.7.7 || 9.0.*",
                 "drupal/salesforce": "*"
             },
             "type": "metapackage",
             "extra": {
                 "drupal": {
-                    "version": "8.x-4.2",
-                    "datestamp": "1616088748",
+                    "version": "8.x-4.3",
+                    "datestamp": "1632765348",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -9488,27 +9488,27 @@
         },
         {
             "name": "drupal/webform",
-            "version": "5.28.0",
-            "version_normalized": "5.28.0.0",
+            "version": "6.0.5",
+            "version_normalized": "6.0.5.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/webform.git",
-                "reference": "8.x-5.28"
+                "reference": "6.0.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/webform-8.x-5.28.zip",
-                "reference": "8.x-5.28",
-                "shasum": "31376657f81e50302cc6b89d5094e0b8a0810f57"
+                "url": "https://ftp.drupal.org/files/projects/webform-6.0.5.zip",
+                "reference": "6.0.5",
+                "shasum": "a925d604e3b4a29f5a688a8e84fdb3a93490f641"
             },
             "require": {
-                "drupal/core": "^8.8"
+                "drupal/core": "^8.8 || ^9"
             },
             "require-dev": {
                 "drupal/address": "~1.0",
                 "drupal/bootstrap": "~3.0",
                 "drupal/captcha": "~1.0",
-                "drupal/chosen": "~2.0",
+                "drupal/chosen": "~3.0",
                 "drupal/clientside_validation": "~3.0",
                 "drupal/clientside_validation_jquery": "*",
                 "drupal/devel": "~3.0",
@@ -9516,6 +9516,9 @@
                 "drupal/entity_print": "~2.0",
                 "drupal/gnode": "*",
                 "drupal/group": "1.0",
+                "drupal/jquery_ui": "~1.0",
+                "drupal/jquery_ui_checkboxradio": "~1.0",
+                "drupal/jquery_ui_datepicker": "~1.0",
                 "drupal/lingotek": "~3.0",
                 "drupal/mailsystem": "~4.0",
                 "drupal/paragraphs": "~1.0",
@@ -9537,11 +9540,15 @@
                 "drupal/webform_share": "*",
                 "drupal/webform_ui": "*"
             },
+            "suggest": {
+                "drupal/jquery_ui_checkboxradio": "Provides jQuery UI Checkboxradio library. Required by the Webform jQueryUI Buttons module. The Webform jQueryUI Buttons module is deprecated because jQueryUI is no longer maintained.",
+                "drupal/jquery_ui_datepicker": "Provides jQuery UI Datepicker library. Required to support datepickers. The Webform jQueryUI Datepicker module is deprecated because jQueryUI is no longer maintained."
+            },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-5.28",
-                    "datestamp": "1629909852",
+                    "version": "6.0.5",
+                    "datestamp": "1629909787",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -9768,77 +9775,6 @@
             "install-path": null
         },
         {
-            "name": "drupal/webform_score",
-            "version": "2.0.0-alpha1",
-            "version_normalized": "2.0.0.0-alpha1",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/webform_score.git",
-                "reference": "8.x-2.0-alpha1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/webform_score-8.x-2.0-alpha1.zip",
-                "reference": "8.x-2.0-alpha1",
-                "shasum": "39b4a6fca40aa10b3ac7175ecdf399d16d1aec00"
-            },
-            "require": {
-                "drupal/fraction": "^1.3",
-                "drupal/webform": "^5.0"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "8.x-2.0-alpha1",
-                    "datestamp": "1541513880",
-                    "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Alpha releases are not covered by Drupal security advisories."
-                    }
-                }
-            },
-            "installation-source": "dist",
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0+"
-            ],
-            "authors": [
-                {
-                    "name": "Mike Miles (mikemiles86)",
-                    "homepage": "https://www.drupal.org/u/mikemiles86",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "Rob Powell (robpowell)",
-                    "homepage": "https://www.drupal.org/u/robpowell",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "Kay VanValkenburgh (key_v)",
-                    "homepage": "https://www.drupal.org/u/kay_v",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "mikemiles86",
-                    "homepage": "https://www.drupal.org/user/471470"
-                },
-                {
-                    "name": "robpowell",
-                    "homepage": "https://www.drupal.org/user/3417529"
-                }
-            ],
-            "description": "This module provides scoring functionality to webform elements.",
-            "homepage": "https://www.drupal.org/project/webform_score",
-            "keywords": [
-                "Drupal"
-            ],
-            "support": {
-                "source": "http://cgit.drupalcode.org/webform_score",
-                "issues": "https://www.drupal.org/project/issues/webform_score"
-            },
-            "install-path": "../../web/modules/contrib/webform_score"
-        },
-        {
             "name": "drupal/webform_submission_export_import",
             "version": "6.0.5",
             "version_normalized": "6.0.5.0",
@@ -9941,70 +9877,6 @@
                 "source": "https://git.drupalcode.org/project/webform"
             },
             "install-path": null
-        },
-        {
-            "name": "drupal/webform_views",
-            "version": "5.0.0-alpha7",
-            "version_normalized": "5.0.0.0-alpha7",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/webform_views.git",
-                "reference": "8.x-5.0-alpha7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/webform_views-8.x-5.0-alpha7.zip",
-                "reference": "8.x-5.0-alpha7",
-                "shasum": "6c9bb51735a106729dcfa08372e987ebf95d38f2"
-            },
-            "require": {
-                "drupal/core": "^8",
-                "drupal/webform": "*"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "8.x-5.0-alpha7",
-                    "datestamp": "1557288185",
-                    "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Alpha releases are not covered by Drupal security advisories."
-                    }
-                }
-            },
-            "installation-source": "dist",
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "acbramley",
-                    "homepage": "https://www.drupal.org/user/1036766"
-                },
-                {
-                    "name": "bucefal91",
-                    "homepage": "https://www.drupal.org/user/504128"
-                },
-                {
-                    "name": "jrockowitz",
-                    "homepage": "https://www.drupal.org/user/371407"
-                },
-                {
-                    "name": "matio89",
-                    "homepage": "https://www.drupal.org/user/2320090"
-                },
-                {
-                    "name": "ws.agency",
-                    "homepage": "https://www.drupal.org/user/2851415"
-                }
-            ],
-            "description": "Webform integration with views.",
-            "homepage": "https://www.drupal.org/project/webform_views",
-            "support": {
-                "source": "https://git.drupalcode.org/project/webform_views"
-            },
-            "install-path": "../../web/modules/contrib/webform_views"
         },
         {
             "name": "drush/drush",

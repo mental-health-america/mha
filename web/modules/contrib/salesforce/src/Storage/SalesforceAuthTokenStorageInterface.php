@@ -2,6 +2,7 @@
 
 namespace Drupal\salesforce\Storage;
 
+use Drupal\salesforce\Rest\SalesforceIdentityInterface;
 use OAuth\Common\Storage\TokenStorageInterface;
 
 /**
@@ -16,7 +17,7 @@ interface SalesforceAuthTokenStorageInterface extends TokenStorageInterface {
    *
    * @return $this
    */
-  public function storeIdentity($service, $identity);
+  public function storeIdentity($service, SalesforceIdentityInterface $identity);
 
   /**
    * Return boolean indicating whether this service has an identity.
@@ -29,7 +30,7 @@ interface SalesforceAuthTokenStorageInterface extends TokenStorageInterface {
   /**
    * Identity for the given service.
    *
-   * @return array
+   * @return \Drupal\salesforce\Rest\SalesforceIdentityInterface
    *   Identity.
    */
   public function retrieveIdentity($service);
