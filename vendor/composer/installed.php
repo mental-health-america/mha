@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '3677739d0d001c8839069696755a8c31868da782',
+        'reference' => '3cfb9628c1e6c12d0d33413cb749d4c2d439a4fd',
         'name' => 'drupal-composer/drupal-project',
         'dev' => true,
     ),
@@ -370,7 +370,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '3677739d0d001c8839069696755a8c31868da782',
+            'reference' => '3cfb9628c1e6c12d0d33413cb749d4c2d439a4fd',
             'dev_requirement' => false,
         ),
         'drupal/action' => array(
@@ -2378,12 +2378,12 @@
             'dev_requirement' => false,
         ),
         'phpdocumentor/type-resolver' => array(
-            'pretty_version' => '1.5.0',
-            'version' => '1.5.0.0',
+            'pretty_version' => '1.5.1',
+            'version' => '1.5.1.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../phpdocumentor/type-resolver',
             'aliases' => array(),
-            'reference' => '30f38bffc6f24293dadd1823936372dfa9e86e2f',
+            'reference' => 'a12f7e301eb7258bb68acd89d4aefa05c2906cae',
             'dev_requirement' => false,
         ),
         'phpspec/prophecy' => array(
@@ -2488,8 +2488,8 @@
         'psr/container-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '1.0',
-                1 => '^1.0',
+                0 => '^1.0',
+                1 => '1.0',
             ),
         ),
         'psr/http-message' => array(
@@ -3045,12 +3045,12 @@
             'dev_requirement' => false,
         ),
         'vlucas/phpdotenv' => array(
-            'pretty_version' => 'v2.6.7',
-            'version' => '2.6.7.0',
+            'pretty_version' => 'v2.6.8',
+            'version' => '2.6.8.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../vlucas/phpdotenv',
             'aliases' => array(),
-            'reference' => 'b786088918a884258c9e3e27405c6a4cf2ee246e',
+            'reference' => 'f1e2a35e53abe9322f0ab9ada689967e30055d40',
             'dev_requirement' => false,
         ),
         'webflo/drupal-finder' => array(

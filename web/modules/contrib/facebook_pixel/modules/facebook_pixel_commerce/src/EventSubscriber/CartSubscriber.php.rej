@@ -1,0 +1,18 @@
+***************
+*** 10,15 ****
+  use Drupal\state_machine\Event\WorkflowTransitionEvent;
+  use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+  
+  class CartSubscriber implements EventSubscriberInterface {
+  
+    /**
+--- 10,18 ----
+  use Drupal\state_machine\Event\WorkflowTransitionEvent;
+  use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+  
++ /**
++  * Cart subscriber.
++  */
+  class CartSubscriber implements EventSubscriberInterface {
+  
+    /**
