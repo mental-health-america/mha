@@ -41,7 +41,7 @@ class UniqueFieldsConstraintValidator extends ConstraintValidator {
         ->load($id);
       $url = $entity->toUrl();
       $message_replacements = [
-        '@entity_type' => $entity_type->getLowercaseLabel(),
+        '@entity_type' => $entity_type->getSingularLabel(),
         ':url' => $url->toString(),
         '@label' => $entity->label(),
       ];

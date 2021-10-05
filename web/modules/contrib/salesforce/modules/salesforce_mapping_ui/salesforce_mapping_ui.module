@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\salesforce_mapping_ui\Form\MappedObjectDeleteForm;
 use Drupal\salesforce_mapping_ui\SalesforceMappingList;
 use Drupal\salesforce_mapping_ui\Form\SalesforceMappingAddForm;
 use Drupal\salesforce_mapping_ui\Form\SalesforceMappingEditForm;
@@ -51,7 +52,7 @@ function salesforce_mapping_ui_entity_type_alter(array &$entity_types) {
   $entity_types['salesforce_mapped_object']->setHandlerClass('list_builder', MappedObjectList::class);
   $entity_types['salesforce_mapped_object']->setFormClass('add', MappedObjectForm::class);
   $entity_types['salesforce_mapped_object']->setFormClass('edit', MappedObjectForm::class);
-  $entity_types['salesforce_mapped_object']->setFormClass('delete', MappedObjectForm::class);
+  $entity_types['salesforce_mapped_object']->setFormClass('delete', MappedObjectDeleteForm::class);
   $entity_types['salesforce_mapped_object']->setFormClass('default', MappedObjectForm::class);
   $entity_types['salesforce_mapped_object']->setLinkTemplate('add-form', '/admin/content/salesforce/add');
   $entity_types['salesforce_mapped_object']->setLinkTemplate('edit-form', '/admin/content/salesforce/{salesforce_mapped_object}/edit');

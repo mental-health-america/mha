@@ -3,6 +3,8 @@
 namespace Drupal\salesforce\Storage;
 
 use Drupal\Core\State\StateInterface;
+use Drupal\salesforce\Rest\SalesforceIdentity;
+use Drupal\salesforce\Rest\SalesforceIdentityInterface;
 use OAuth\Common\Storage\Exception\TokenNotFoundException;
 use OAuth\Common\Token\TokenInterface;
 
@@ -157,7 +159,7 @@ class SalesforceAuthTokenStorage implements SalesforceAuthTokenStorageInterface 
   /**
    * {@inheritdoc}
    */
-  public function storeIdentity($service, $identity) {
+  public function storeIdentity($service, SalesforceIdentityInterface $identity) {
     $this->state->set(static::getIdentityStorageId($service), $identity);
     return $this;
   }
@@ -173,7 +175,12 @@ class SalesforceAuthTokenStorage implements SalesforceAuthTokenStorageInterface 
    * {@inheritdoc}
    */
   public function retrieveIdentity($service) {
-    return $this->state->get(static::getIdentityStorageId($service));
+    // Backwards compatibility in case someone missed the hook_update.
+    $identity = $this->state->get(static::getIdentityStorageId($service));
+    if (is_array($identity)) {
+      $identity = SalesforceIdentity::create($identity);
+    }
+    return $identity;
   }
 
   /**

@@ -1,3 +1,7 @@
+salesforce_mapping.entities:
+  class: \Drupal\Core\Menu\LocalTaskDefault
+  deriver: \Drupal\salesforce_mapping_ui\Plugin\Derivative\SalesforceMappingLocalTask
+
 salesforce_mapped_object.admin:
   title: Salesforce
   base_route: system.admin_content

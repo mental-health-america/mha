@@ -38,6 +38,8 @@ interface SalesforceAuthProviderInterface extends ServiceInterface, PluginFormIn
   /**
    * Perform a refresh of the given token.
    *
+   * NB: This method should also refresh any associated identity.
+   *
    * @param \OAuth\Common\Token\TokenInterface $token
    *   The token.
    *
@@ -48,6 +50,20 @@ interface SalesforceAuthProviderInterface extends ServiceInterface, PluginFormIn
    *   Comment.
    */
   public function refreshAccessToken(TokenInterface $token);
+
+  /**
+   * Given a token, fetch the SF identity.
+   *
+   * @param \OAuth\Common\Token\TokenInterface $token
+   *   The token.
+   *
+   * @return \Drupal\salesforce\Rest\SalesforceIdentityInterface
+   *   The refreshed identity.
+   *
+   * @throws \OAuth\OAuth2\Service\Exception\MissingRefreshTokenException
+   *   Comment.
+   */
+  public function refreshIdentity(TokenInterface $token);
 
   /**
    * Return the credentials configured for this auth provider instance.
@@ -72,8 +88,11 @@ interface SalesforceAuthProviderInterface extends ServiceInterface, PluginFormIn
   /**
    * Identify for this connection.
    *
-   * @return array
+   * @return \Drupal\salesforce\Rest\SalesforceIdentityInterface
    *   Identity for this connection.
+   *
+   * @throws \Drupal\salesforce\IdentityNotFoundException
+   *   If there is no identity.
    */
   public function getIdentity();
 
