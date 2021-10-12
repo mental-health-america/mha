@@ -3758,7 +3758,7 @@ table > tfoot > tr > td {
 .views-element-container table > tbody > tr.rankings > td {
   padding: 5px 10px !important;
   border-bottom: none !important;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: bold;
 }
 
@@ -5761,9 +5761,9 @@ input:focus, textarea:focus, select:focus {
   margin: 200px 0 0;
 }
 
-.rankings:last-of-type {
+/*.rankings:last-of-type {
   background: #ccc !important;
-}
+}*/
 
 .logged-in .help {
   position: relative;
