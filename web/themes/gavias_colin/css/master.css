@@ -5761,9 +5761,29 @@ input:focus, textarea:focus, select:focus {
   margin: 200px 0 0;
 }
 
+
+/*************Mental Health Report Rankings************/
+
+.rankings {
+  background: #fff;
+}
+
+
+.rankings table > thead:first-child > tr:first-child > th {
+background: #062552;
+}
+
+.rankings table > thead:first-child > tr:first-child > th a,
+.rankings table > thead:first-child > tr:first-child > th a:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
 /*.rankings:last-of-type {
   background: #ccc !important;
 }*/
+
+/*************Mental Health Report Rankings************/
 
 .logged-in .help {
   position: relative;
