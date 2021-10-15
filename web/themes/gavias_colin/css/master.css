@@ -3755,12 +3755,12 @@ table > tfoot > tr > td {
   min-width: 100px;
 }
 
-.views-element-container table > tbody > tr.rankings > td {
+/*.views-element-container table > tbody > tr.rankings > td {
   padding: 5px 10px !important;
   border-bottom: none !important;
   font-size: 14px;
   font-weight: bold;
-}
+}*/
 
 .views-element-container ul li::before {
   content: '\f138';
@@ -5764,20 +5764,33 @@ input:focus, textarea:focus, select:focus {
 
 /*************Mental Health Report Rankings************/
 
-.rankings {
+.views-element-container.rankings,
+.views-element-container.rankings table {
   background: #fff;
 }
-
-
-.rankings table > thead:first-child > tr:first-child > th {
-background: #062552;
+.views-element-container.rankings table > thead:first-child > tr:first-child > th {
+  background: #062552;
 }
 
-.rankings table > thead:first-child > tr:first-child > th a,
-.rankings table > thead:first-child > tr:first-child > th a:hover {
+.views-element-container.rankings table > thead:first-child > tr:first-child > th a,
+.views-element-container.rankings table > thead:first-child > tr:first-child > th a:hover {
   color: #fff;
   text-decoration: none;
 }
+
+.views-element-container table > tbody > tr.rankings > td {
+  padding: 5px 10px !important;
+  border-bottom: none !important;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.views-element-container.rankings table > thead > tr > th, table > thead > tr > td,
+.views-element-container.rankings table > tbody > tr > th, table > tbody > tr > td {
+  border-color: inherit;
+  border: none;
+}
+
 
 /*.rankings:last-of-type {
   background: #ccc !important;
