@@ -1702,7 +1702,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       'content' => $this->t('The <strong>Options configuration</strong> page lists reusable predefined options/values available for select menus, radio buttons, checkboxes and Likert elements.'),
       'video_id' => 'configuration',
       'routes' => [
-        // @see /admin/structure/webform/config/options
+        // @see /admin/structure/webform/options
         'entity.webform_options.collection',
       ],
     ];

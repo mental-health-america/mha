@@ -1,7 +1,7 @@
 name: FullCalendar Legend
 type: module
 description: Show the bundle names of content types on a FullCalendar. Intended for use with FullCalendar Colors.
-core: 8.x
+core_version_requirement: ^8.8 || ^9
 package: FullCalendar
 dependencies:
   - fullcalendar

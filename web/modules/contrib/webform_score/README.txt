@@ -1,31 +1,34 @@
-Webform Score
+# Webform Score
 
 This project lets you score an individual user's answers, then store and display the scores.
 
-Sample use cases
-- graded assessments (e.g. quizzes to test students' ability to provide intended responses)
-- point-based progress tracking
+## Sample use cases
 
-Features
-Use existing webform authoring tools
-Pre-assign the following per form element
-- whether to score or not
-- possible point value
-- criteria for awarding points (currently either 'not blank' or a regex pattern match)
-Display scores using any method Webform provides (HTML, TEXT, TABLE or YAML) with
-- overall score as "X/Y" ("X" points out of a total of "Y")
-- score per form element as "X/Y"
-Create custom validation methods with Webform Score Validation Plugins
+* graded assessments (e.g. quizzes to test students' ability to provide intended responses)
+* point-based progress tracking
 
-To try a demo
-- visit http://simplytest.me/project/2847683
+## Features
 
-Basic usage
-- enable <modules>
-- navigate to <webform page>
-- edit an existing webform or add a new one
-- edit an existing element on the form or add a new one
-- select whether or not to score the form
-- assign a point value
-- indicate validation method
-- set display at ...
+* Use existing webform authoring tools
+* Pre-assign the following per form element
+  * whether to score or not
+  * possible point value
+  * criteria for awarding points (currently either 'contains' or 'equals' match)
+* Display scores on the webform submission page or on a View:
+  * overall score as "X/Y" ("X" points out of a total of "Y")
+  * score as percentage, i.e. "77%"
+* Create custom scoring methods with Webform Score Plugins
+
+## Try a demo
+
+* visit https://simplytest.me/project/webform_score
+
+## Basic usage
+
+1. Enable Webform Score Module and dependencies such as Fraction.
+2. Navigate to Webform page.
+3. Edit an existing Webform or add a new one.
+4. Create a new element on the form using the new category, called "Quiz".
+5. Set your Option Values equal to how many points to score for the correct or most correct answers depending on what type of quiz you are creating.
+6. At the bottom of the Quiz element, select the methodology to score the form.
+7. Repeat steps 4-6 above until you have no more questions to put on your Quiz.

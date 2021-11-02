@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Fraction
+ * Fraction module code.
  */
 
 use Drupal\fraction\Fraction;
@@ -24,19 +24,19 @@ function fraction_help($route_name, RouteMatchInterface $route_match) {
   }
 }
 
-/***************************************************************
- * Utility functions
- * *************************************************************/
-
 /**
  * Fraction factory function.
+ *
+ * @deprecated in drupal:8.8.0 and is removed from drupal:9.0.0. Use the
+ * static \Drupal\fraction\Fraction instead.
  *
  * @param $numerator
  *   The fraction's numerator.
  * @param $denominator
  *   The fraction's denominator.
  *
- * Returns a new fraction object.
+ * @return \Drupal\fraction\Fraction
+ *   Returns a new fraction object.
  */
 function fraction($numerator = 0, $denominator = 1) {
   return new Fraction($numerator, $denominator);
@@ -45,12 +45,15 @@ function fraction($numerator = 0, $denominator = 1) {
 /**
  * Convert a decimal value into a fraction object.
  *
+ * @deprecated in drupal:8.8.0 and is removed from drupal:9.0.0. Use the
+ * static \Drupal\fraction\Fraction::createFromDecimal() instead.
+ *
  * @param $value
  *   The decimal value to be converted.
  *
- * @return
+ * @return \Drupal\fraction\Fraction
  *   Returns a new fraction object.
  */
 function fraction_from_decimal($value) {
-  return fraction()->fromDecimal($value);
+  return Fraction::createFromDecimal($value);
 }

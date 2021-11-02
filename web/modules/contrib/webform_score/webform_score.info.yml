@@ -7,8 +7,8 @@ dependencies:
   - webform
   - fraction
 
-# Information added by Drupal.org packaging script on 2018-11-06
-version: '8.x-2.0-alpha1'
-core: '8.x'
+# Information added by Drupal.org packaging script on 2019-01-19
+version: '8.x-2.0-alpha1+1-dev'
+core_version_requirement: ^8.8 || ^9
 project: 'webform_score'
-datestamp: 1541513885
+datestamp: 1547941384

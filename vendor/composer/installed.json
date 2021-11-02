@@ -6018,34 +6018,34 @@
         },
         {
             "name": "drupal/fraction",
-            "version": "1.3.0",
-            "version_normalized": "1.3.0.0",
+            "version": "dev-1.x",
+            "version_normalized": "dev-1.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/fraction.git",
-                "reference": "8.x-1.3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/fraction-8.x-1.3.zip",
-                "reference": "8.x-1.3",
-                "shasum": "a0704da202c6ee0ff1297d063c3056fb0d3ab89d"
+                "reference": "a8dd2399ee29ac9eccf9dd2d3cfa70582a0b3d7e"
             },
             "require": {
-                "drupal/core": "^8"
+                "drupal/core": "^8 || ^9"
+            },
+            "require-dev": {
+                "drupal/feeds": "^3.0"
             },
             "type": "drupal-module",
             "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
                 "drupal": {
-                    "version": "8.x-1.3",
-                    "datestamp": "1539009780",
+                    "version": "8.x-1.3+46-dev",
+                    "datestamp": "1590586409",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
                 "GPL-2.0+"
@@ -6070,127 +6070,6 @@
                 "issues": "http://drupal.org/project/issues/fraction"
             },
             "install-path": "../../web/modules/contrib/fraction"
-        },
-        {
-            "name": "drupal/fullcalendar",
-            "version": "1.0.0-alpha3",
-            "version_normalized": "1.0.0.0-alpha3",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/fullcalendar.git",
-                "reference": "8.x-1.0-alpha3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/fullcalendar-8.x-1.0-alpha3.zip",
-                "reference": "8.x-1.0-alpha3",
-                "shasum": "fd399948e748e4fe0cdb37e3a3be0bba82405ec5"
-            },
-            "require": {
-                "drupal/core": "^8 || ^9"
-            },
-            "require-dev": {
-                "drupal/colors": "*"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "8.x-1.0-alpha3",
-                    "datestamp": "1587382056",
-                    "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Alpha releases are not covered by Drupal security advisories."
-                    }
-                }
-            },
-            "installation-source": "dist",
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0+"
-            ],
-            "authors": [
-                {
-                    "name": "aspilicious",
-                    "homepage": "https://www.drupal.org/user/172527"
-                },
-                {
-                    "name": "dakala",
-                    "homepage": "https://www.drupal.org/user/53175"
-                },
-                {
-                    "name": "hefox",
-                    "homepage": "https://www.drupal.org/user/426416"
-                },
-                {
-                    "name": "tim.plunkett",
-                    "homepage": "https://www.drupal.org/user/241634"
-                },
-                {
-                    "name": "tstoeckler",
-                    "homepage": "https://www.drupal.org/user/107158"
-                }
-            ],
-            "description": "Integrates the Fullcalender Library from https://fullcalendar.io",
-            "homepage": "https://www.drupal.org/project/fullcalendar",
-            "keywords": [
-                "Drupal"
-            ],
-            "support": {
-                "source": "http://cgit.drupalcode.org/fullcalendar",
-                "issues": "http://drupal.org/project/issues/fullcalendar"
-            },
-            "install-path": "../../web/modules/contrib/fullcalendar"
-        },
-        {
-            "name": "drupal/fullcalendar_view",
-            "version": "2.8.0",
-            "version_normalized": "2.8.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/fullcalendar_view.git",
-                "reference": "8.x-2.8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/fullcalendar_view-8.x-2.8.zip",
-                "reference": "8.x-2.8",
-                "shasum": "3a8043abac636f4f559b1bbde2e2a5964209a89f"
-            },
-            "require": {
-                "drupal/core": "^8 || ^9"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "8.x-2.8",
-                    "datestamp": "1626141050",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "installation-source": "dist",
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "KarinG",
-                    "homepage": "https://www.drupal.org/user/787114"
-                },
-                {
-                    "name": "Mingsong",
-                    "homepage": "https://www.drupal.org/user/2986445"
-                }
-            ],
-            "description": "A view plugin to present contents in FullCalendar view",
-            "homepage": "https://www.drupal.org/project/fullcalendar_view",
-            "support": {
-                "source": "https://git.drupalcode.org/project/fullcalendar_view"
-            },
-            "install-path": "../../web/modules/contrib/fullcalendar_view"
         },
         {
             "name": "drupal/geofield",
@@ -9542,27 +9421,27 @@
         },
         {
             "name": "drupal/webform",
-            "version": "5.29.0",
-            "version_normalized": "5.29.0.0",
+            "version": "6.1.0",
+            "version_normalized": "6.1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/webform.git",
-                "reference": "8.x-5.29"
+                "reference": "6.1.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/webform-8.x-5.29.zip",
-                "reference": "8.x-5.29",
-                "shasum": "59e71c4924036bd7de7d93fec1f8d5dd32bbc81d"
+                "url": "https://ftp.drupal.org/files/projects/webform-6.1.0.zip",
+                "reference": "6.1.0",
+                "shasum": "0dae48cc100133a4144ca8219d5506b917888588"
             },
             "require": {
-                "drupal/core": "^8.8"
+                "drupal/core": "^8.8 || ^9"
             },
             "require-dev": {
                 "drupal/address": "~1.0",
                 "drupal/bootstrap": "~3.0",
                 "drupal/captcha": "~1.0",
-                "drupal/chosen": "~2.0",
+                "drupal/chosen": "~3.0",
                 "drupal/clientside_validation": "~3.0",
                 "drupal/clientside_validation_jquery": "*",
                 "drupal/devel": "~3.0",
@@ -9570,6 +9449,9 @@
                 "drupal/entity_print": "~2.0",
                 "drupal/gnode": "*",
                 "drupal/group": "1.0",
+                "drupal/jquery_ui": "~1.0",
+                "drupal/jquery_ui_checkboxradio": "~1.0",
+                "drupal/jquery_ui_datepicker": "~1.0",
                 "drupal/lingotek": "~3.0",
                 "drupal/mailsystem": "~4.0",
                 "drupal/paragraphs": "~1.0",
@@ -9591,11 +9473,15 @@
                 "drupal/webform_share": "*",
                 "drupal/webform_ui": "*"
             },
+            "suggest": {
+                "drupal/jquery_ui_checkboxradio": "Provides jQuery UI Checkboxradio library. Required by the Webform jQueryUI Buttons module. The Webform jQueryUI Buttons module is deprecated because jQueryUI is no longer maintained.",
+                "drupal/jquery_ui_datepicker": "Provides jQuery UI Datepicker library. Required to support datepickers. The Webform jQueryUI Datepicker module is deprecated because jQueryUI is no longer maintained."
+            },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-5.29",
-                    "datestamp": "1635676451",
+                    "version": "6.1.0",
+                    "datestamp": "1635676666",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -9820,78 +9706,6 @@
                 "source": "https://git.drupalcode.org/project/webform"
             },
             "install-path": null
-        },
-        {
-            "name": "drupal/webform_score",
-            "version": "2.0.0-alpha1",
-            "version_normalized": "2.0.0.0-alpha1",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/webform_score.git",
-                "reference": "8.x-2.0-alpha1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/webform_score-8.x-2.0-alpha1.zip",
-                "reference": "8.x-2.0-alpha1",
-                "shasum": "39b4a6fca40aa10b3ac7175ecdf399d16d1aec00"
-            },
-            "require": {
-                "drupal/core": "~8.0",
-                "drupal/fraction": "^1.3",
-                "drupal/webform": "^5.0"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "8.x-2.0-alpha1",
-                    "datestamp": "1541513880",
-                    "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Alpha releases are not covered by Drupal security advisories."
-                    }
-                }
-            },
-            "installation-source": "dist",
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0+"
-            ],
-            "authors": [
-                {
-                    "name": "Mike Miles (mikemiles86)",
-                    "homepage": "https://www.drupal.org/u/mikemiles86",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "Rob Powell (robpowell)",
-                    "homepage": "https://www.drupal.org/u/robpowell",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "Kay VanValkenburgh (key_v)",
-                    "homepage": "https://www.drupal.org/u/kay_v",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "mikemiles86",
-                    "homepage": "https://www.drupal.org/user/471470"
-                },
-                {
-                    "name": "robpowell",
-                    "homepage": "https://www.drupal.org/user/3417529"
-                }
-            ],
-            "description": "This module provides scoring functionality to webform elements.",
-            "homepage": "https://www.drupal.org/project/webform_score",
-            "keywords": [
-                "Drupal"
-            ],
-            "support": {
-                "source": "http://cgit.drupalcode.org/webform_score",
-                "issues": "https://www.drupal.org/project/issues/webform_score"
-            },
-            "install-path": "../../web/modules/contrib/webform_score"
         },
         {
             "name": "drupal/webform_submission_export_import",
