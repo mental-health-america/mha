@@ -16,28 +16,11 @@ use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Utility\WebformDateHelper;
 use Drupal\webform\WebformSubmissionInterface;
 use Drupal\webform\WebformInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a base 'date' class.
  */
 abstract class DateBase extends WebformElementBase {
-
-  /**
-   * The date formatter service.
-   *
-   * @var \Drupal\Core\Datetime\DateFormatterInterface
-   */
-  protected $dateFormatter;
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
-    $instance->dateFormatter = $container->get('date.formatter');
-    return $instance;
-  }
 
   /**
    * {@inheritdoc}
@@ -78,16 +61,6 @@ abstract class DateBase extends WebformElementBase {
     // Parse #default_value date input format.
     $this->parseInputFormat($element, '#default_value');
 
-    // If date picker does not exist, remove date picker related properties.
-    if (!$this->datePickerExists()) {
-      unset(
-        $element['#datepicker'],
-        $element['#datepicker_button'],
-        $element['#date_date_format'],
-        $element['#date_date_datepicker_button']
-      );
-    }
-
     // Set date min/max attributes.
     // This overrides extra attributes set via Datetime::processDatetime.
     // @see \Drupal\Core\Datetime\Element\Datetime::processDatetime
@@ -121,9 +94,7 @@ abstract class DateBase extends WebformElementBase {
     $cacheability = CacheableMetadata::createFromObject($config);
     $cacheability->applyTo($element);
 
-    if ($this->datePickerExists()) {
-      $element['#attached']['library'][] = 'webform/webform.element.date';
-    }
+    $element['#attached']['library'][] = 'webform/webform.element.date';
 
     $element['#after_build'][] = [get_class($this), 'afterBuild'];
   }
@@ -199,7 +170,7 @@ abstract class DateBase extends WebformElementBase {
       return $value;
     }
     elseif (DateFormat::load($format)) {
-      return $this->dateFormatter->format($timestamp, $format);
+      return \Drupal::service('date.formatter')->format($timestamp, $format);
     }
     else {
       return static::formatDate($format, $timestamp);
@@ -260,9 +231,17 @@ abstract class DateBase extends WebformElementBase {
     $form['default']['default_value']['#description'] .= '<br /><br />' . $this->t("You may use tokens. Tokens should use the 'html_date' or 'html_datetime' date format. (i.e. @date_format)", ['@date_format' => '[current-user:field_date_of_birth:date:html_date]']);
 
     // Allow custom date formats to be entered.
-    $form['display']['format']['#type'] = 'webform_select_other';
-    $form['display']['format']['#other__option_label'] = $this->t('Custom date format…');
-    $form['display']['format']['#other__description'] = $this->t('A user-defined date format. See the <a href="http://php.net/manual/function.date.php">PHP manual</a> for available options.');
+    $form['display']['item']['format']['#options']['custom'] = $this->t('Custom HTML/text…');
+    $form['display']['item']['format']['#type'] = 'webform_select_other';
+    $form['display']['item']['format']['#other__option_label'] = $this->t('Custom date format…');
+    $form['display']['item']['format']['#other__description'] = $this->t('A user-defined date format. See the <a href="http://php.net/manual/function.date.php">PHP manual</a> for available options.');
+    $format_custom_states = [
+      'visible' => [':input[name="properties[format][select]"]' => ['value' => 'custom']],
+      'required' => [':input[name="properties[format][select]"]' => ['value' => 'custom']],
+    ];
+    $form['display']['item']['format_html']['#states'] = $format_custom_states;
+    $form['display']['item']['format_text']['#states'] = $format_custom_states;
+    $form['display']['item']['twig']['#states'] = $format_custom_states;
 
     $form['date'] = [
       '#type' => 'fieldset',
@@ -296,14 +275,11 @@ abstract class DateBase extends WebformElementBase {
       '#title' => $this->t('Date days of the week'),
       '#options' => DateHelper::weekDaysAbbr(TRUE),
       '#element_validate' => [['\Drupal\webform\Utility\WebformElementHelper', 'filterValues']],
-      '#description' => $this->t('Specifies the day(s) of the week.'),
+      '#description' => $this->t('Specifies the day(s) of the week. Please note, the date picker will disable unchecked days of the week.'),
       '#options_display' => 'side_by_side',
       '#required' => TRUE,
       '#weight' => 20,
     ];
-    if ($this->datePickerExists()) {
-      $form['date']['date_days']['#description'] .= ' ' . $this->t('Please note, the date picker will disable unchecked days of the week.');
-    }
 
     // Date/time min/max validation.
     if ($this->hasProperty('date_date_min')
@@ -413,12 +389,12 @@ abstract class DateBase extends WebformElementBase {
     elseif (is_array($element[$property])) {
       foreach ($element[$property] as $key => $value) {
         $timestamp = strtotime($value);
-        $element[$property][$key] = ($timestamp) ? $this->dateFormatter->format($timestamp, 'html_' . $this->getDateType($element)) : NULL;
+        $element[$property][$key] = ($timestamp) ? \Drupal::service('date.formatter')->format($timestamp, 'html_' . $this->getDateType($element)) : NULL;
       }
     }
     else {
       $timestamp = strtotime($element[$property]);
-      $element[$property] = ($timestamp) ? $this->dateFormatter->format($timestamp, 'html_' . $this->getDateType($element)) : NULL;
+      $element[$property] = ($timestamp) ? \Drupal::service('date.formatter')->format($timestamp, 'html_' . $this->getDateType($element)) : NULL;
     }
   }
 
@@ -699,20 +675,6 @@ abstract class DateBase extends WebformElementBase {
     /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
     $date_formatter = \Drupal::service('date.formatter');
     return $date_formatter->format($timestamp ?: \Drupal::time()->getRequestTime(), 'custom', $custom_format);
-  }
-
-  /**
-   * Determine if the the jQuery UI date picker is supported.
-   *
-   * @return bool
-   *   TRUE if Drupal 8 or for Drupal 9 support the jQuery UI date picker
-   *   module is installed.
-   *
-   * @see \webform_library_info_alter
-   */
-  protected function datePickerExists() {
-    return (floatval(\Drupal::VERSION) < 9)
-      || $this->moduleHandler->moduleExists('jquery_ui_datepicker');
   }
 
 }

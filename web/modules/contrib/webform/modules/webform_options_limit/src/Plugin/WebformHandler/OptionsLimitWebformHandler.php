@@ -4,9 +4,13 @@ namespace Drupal\webform_options_limit\Plugin\WebformHandler;
 
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Database\Connection;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\OptGroup;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Render\Element;
 use Drupal\webform\Element\WebformAjaxElementTrait;
 use Drupal\webform\Element\WebformEntityTrait;
@@ -15,9 +19,12 @@ use Drupal\webform\Plugin\WebformElement\BooleanBase;
 use Drupal\webform\Plugin\WebformElement\OptionsBase;
 use Drupal\webform\Plugin\WebformElement\TableSelect;
 use Drupal\webform\Plugin\WebformElementEntityOptionsInterface;
+use Drupal\webform\Plugin\WebformElementManagerInterface;
 use Drupal\webform\Plugin\WebformHandlerBase;
 use Drupal\webform\Utility\WebformOptionsHelper;
+use Drupal\webform\WebformSubmissionConditionsValidatorInterface;
 use Drupal\webform\WebformSubmissionInterface;
+use Drupal\webform\WebformTokenManagerInterface;
 use Drupal\webform_options_limit\Plugin\WebformOptionsLimitHandlerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -46,13 +53,6 @@ class OptionsLimitWebformHandler extends WebformHandlerBase implements WebformOp
   protected $database;
 
   /**
-   * The current user.
-   *
-   * @var \Drupal\Core\Session\AccountInterface
-   */
-  protected $currentUser;
-
-  /**
    * The webform token manager.
    *
    * @var \Drupal\webform\WebformTokenManagerInterface
@@ -76,13 +76,29 @@ class OptionsLimitWebformHandler extends WebformHandlerBase implements WebformOp
   /**
    * {@inheritdoc}
    */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerChannelFactoryInterface $logger_factory, ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, WebformSubmissionConditionsValidatorInterface $conditions_validator, Connection $database, WebformTokenManagerInterface $token_manager, WebformElementManagerInterface $element_manager) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $logger_factory, $config_factory, $entity_type_manager, $conditions_validator);
+    $this->database = $database;
+    $this->tokenManager = $token_manager;
+    $this->elementManager = $element_manager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
-    $instance->database = $container->get('database');
-    $instance->currentUser = $container->get('current_user');
-    $instance->tokenManager = $container->get('webform.token_manager');
-    $instance->elementManager = $container->get('plugin.manager.webform.element');
-    return $instance;
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('logger.factory'),
+      $container->get('config.factory'),
+      $container->get('entity_type.manager'),
+      $container->get('webform_submission.conditions_validator'),
+      $container->get('database'),
+      $container->get('webform.token_manager'),
+      $container->get('plugin.manager.webform.element')
+    );
   }
 
   /**
@@ -620,7 +636,7 @@ class OptionsLimitWebformHandler extends WebformHandlerBase implements WebformOp
    */
   protected function alterOptionsElement(array &$element, array $limits, array $reached) {
     // Set options element's options labels.
-    $options =& $element['#options'];
+    $options = &$element['#options'];
     $this->alterOptionsElementLabels($options, $limits);
 
     // Disable or remove reached options.
@@ -660,7 +676,7 @@ class OptionsLimitWebformHandler extends WebformHandlerBase implements WebformOp
             $limits[$option_value]
           );
           $message_display = $this->configuration['option_message_display'];
-          $option =& $options[$option_value][0];
+          $option = &$options[$option_value][0];
           switch ($message_display) {
             case WebformOptionsLimitHandlerInterface::MESSAGE_DISPLAY_DESCRIPTION:
               list(
@@ -727,7 +743,7 @@ class OptionsLimitWebformHandler extends WebformHandlerBase implements WebformOp
    *   An options element's reached options.
    */
   protected function removeOptionsElement(array &$element, array $reached) {
-    $options =& $element['#options'];
+    $options = &$element['#options'];
     $this->removeOptionsElementRecursive($options, $reached);
   }
 
@@ -1341,11 +1357,12 @@ class OptionsLimitWebformHandler extends WebformHandlerBase implements WebformOp
 
     // Limit by authenticated or anonymous user.
     if ($this->configuration['limit_user']) {
-      if ($this->currentUser->isAuthenticated()) {
-        $query->condition('s.uid', $this->currentUser->id());
+      $account = \Drupal::currentUser();
+      if ($account->isAuthenticated()) {
+        $query->condition('s.uid', $account->id());
       }
       else {
-        $sids = $this->submissionStorage->getAnonymousSubmissionIds($this->currentUser);
+        $sids = $this->submissionStorage->getAnonymousSubmissionIds($account);
         if ($sids) {
           $query->condition('s.sid', $sids, 'IN');
           $query->condition('s.uid', 0);

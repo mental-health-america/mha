@@ -3,8 +3,10 @@
 namespace Drupal\webform\Form;
 
 use Drupal\Core\Entity\ContentEntityDeleteForm;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\webform\WebformRequestInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -43,12 +45,26 @@ class WebformSubmissionDeleteForm extends ContentEntityDeleteForm implements Web
   protected $requestHandler;
 
   /**
+   * Constructs a WebformSubmissionDeleteForm object.
+   *
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
+   *   The entity repository.
+   * @param \Drupal\webform\WebformRequestInterface $request_handler
+   *   The webform request handler.
+   */
+  public function __construct(EntityRepositoryInterface $entity_repository, WebformRequestInterface $request_handler) {
+    parent::__construct($entity_repository);
+    $this->requestHandler = $request_handler;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    $instance = parent::create($container);
-    $instance->requestHandler = $container->get('webform.request');
-    return $instance;
+    return new static(
+      $container->get('entity.repository'),
+      $container->get('webform.request')
+    );
   }
 
   /**
@@ -119,6 +135,7 @@ class WebformSubmissionDeleteForm extends ContentEntityDeleteForm implements Web
    * {@inheritdoc}
    */
   public function getDescription() {
+    // @see \Drupal\webform\Form\WebformSubmissionDeleteMultipleForm::getDescription
     return [
       'title' => [
         '#markup' => $this->t('This action will…'),

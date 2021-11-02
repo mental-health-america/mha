@@ -32,12 +32,11 @@ class WebformMultiple extends FormElement {
       '#access' => TRUE,
       '#key' => NULL,
       '#header' => NULL,
-      '#header_label' => '',
       '#element' => [
         '#type' => 'textfield',
-        '#title' => t('Item value'),
+        '#title' => $this->t('Item value'),
         '#title_display' => 'invisible',
-        '#placeholder' => t('Enter value…'),
+        '#placeholder' => $this->t('Enter value…'),
       ],
       '#cardinality' => FALSE,
       '#min_items' => NULL,
@@ -362,7 +361,7 @@ class WebformMultiple extends FormElement {
     /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
     $element_manager = \Drupal::service('plugin.manager.webform.element');
     foreach ($child_keys as $child_key) {
-      $sub_element =& $sub_elements[$child_key];
+      $sub_element = &$sub_elements[$child_key];
 
       $element_plugin = $element_manager->getElementInstance($sub_element);
 
@@ -423,18 +422,9 @@ class WebformMultiple extends FormElement {
     }
 
     if (empty($element['#header'])) {
-      if (!empty($element['#header_label'])) {
-        $header_label = $element['#header_label'];
-      }
-      elseif (!empty($element['#title'])) {
-        $header_label = WebformAccessibilityHelper::buildVisuallyHidden($element['#title']);
-      }
-      else {
-        $header_label = [];
-      }
       return [
         [
-          'data' => $header_label,
+          'data' => (!empty($element['#title'])) ? WebformAccessibilityHelper::buildVisuallyHidden($element['#title']) : [],
           'colspan' => ($colspan + 1),
         ],
       ];
@@ -470,11 +460,6 @@ class WebformMultiple extends FormElement {
     elseif (is_string($element['#header'])) {
       return [
         ['data' => $element['#header'], 'colspan' => ($element['#child_keys']) ? count($element['#child_keys']) + $colspan : $colspan + 1],
-      ];
-    }
-    elseif (!empty($element['#header_label'])) {
-      return [
-        ['data' => $element['#header_label'], 'colspan' => ($element['#child_keys']) ? count($element['#child_keys']) + $colspan : $colspan + 1],
       ];
     }
     else {

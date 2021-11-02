@@ -32,7 +32,7 @@ class WebformVariantManager extends DefaultPluginManager implements WebformVaria
   protected $configFactory;
 
   /**
-   * Constructs a WebformVariantManager object.
+   * Constructs a WebformVariantManager.
    *
    * @param \Traversable $namespaces
    *   An object that implements \Traversable which contains the root paths

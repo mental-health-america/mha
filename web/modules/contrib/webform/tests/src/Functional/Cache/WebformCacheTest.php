@@ -35,6 +35,7 @@ class WebformCacheTest extends WebformBrowserTestBase {
     // '[current-user:mail]' token.
     $this->assertEqual($form['#cache'], [
       'contexts' => [
+        'session',
         'user.roles:authenticated',
       ],
       'tags' => [

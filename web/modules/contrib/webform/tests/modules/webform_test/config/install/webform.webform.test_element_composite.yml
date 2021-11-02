@@ -37,12 +37,12 @@ elements: |
       last_name:
         '#type': textfield
         '#title': 'Last name'
-      sex:
+      gender:
         '#type': select
         '#options':
           Male: Male
           Female: Female
-        '#title': Sex
+        '#title': Gender
       martial_status:
         '#type': webform_select_other
         '#options': marital_status
@@ -77,7 +77,7 @@ settings:
   form_previous_submissions: true
   form_confidential: false
   form_confidential_message: ''
-  form_disable_remote_addr: false
+  form_remote_addr: true
   form_convert_anonymous: false
   form_prepopulate: false
   form_prepopulate_source_entity: false
