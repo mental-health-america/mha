@@ -169,7 +169,7 @@ class PullController extends ControllerBase {
       $mappings[] = $mapping;
     }
     else {
-      $mappings = $this->mappingStorage->loadByProperties(["pull_standalone" => TRUE]);
+      $mappings = $this->mappingStorage->loadByProperties([["pull_standalone" => TRUE]]);
     }
 
     foreach ($mappings as $mapping) {

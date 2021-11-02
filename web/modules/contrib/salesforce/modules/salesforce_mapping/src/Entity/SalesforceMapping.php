@@ -565,7 +565,7 @@ class SalesforceMapping extends ConfigEntityBase implements SalesforceMappingInt
    * {@inheritdoc}
    */
   public function getLastDeleteTime() {
-    return $this->pull_info['last_delete_timestamp'] ?? NULL;
+    return $this->pull_info['last_delete_timestamp'] ? $this->pull_info['last_delete_timestamp'] : NULL;
   }
 
   /**
@@ -579,7 +579,7 @@ class SalesforceMapping extends ConfigEntityBase implements SalesforceMappingInt
    * {@inheritdoc}
    */
   public function getLastPullTime() {
-    return $this->pull_info['last_pull_timestamp'] ?? NULL;
+    return $this->pull_info['last_pull_timestamp'] ? $this->pull_info['last_pull_timestamp'] : NULL;
   }
 
   /**

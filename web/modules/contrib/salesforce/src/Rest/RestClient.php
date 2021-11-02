@@ -8,7 +8,6 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\salesforce\IdentityNotFoundException;
 use Drupal\salesforce\SalesforceAuthProviderPluginManagerInterface;
 use Drupal\salesforce\SelectQueryInterface;
 use Drupal\salesforce\SFID;
@@ -365,20 +364,19 @@ class RestClient implements RestClientInterface {
     if (!$this->authProvider) {
       return [];
     }
-    try {
-      $id = $this->authProvider->getIdentity();
+    $id = $this->authProvider->getIdentity();
+    if (!empty($id)) {
+      $url = str_replace('v{version}/', '', $id['urls']['rest']);
+      $response = new RestResponse($this->httpRequest($url));
+      foreach ($response->data as $version) {
+        $versions[$version['version']] = $version;
+      }
+      $this->cache->set('salesforce:versions', $versions, $this->getRequestTime() + self::LONGTERM_CACHE_LIFETIME, ['salesforce']);
+      return $versions;
     }
-    catch (IdentityNotFoundException $e) {
+    else {
       return [];
     }
-
-    $url = str_replace('v{version}/', '', $id->getUrl('rest'));
-    $response = new RestResponse($this->httpRequest($url));
-    foreach ($response->data as $version) {
-      $versions[$version['version']] = $version;
-    }
-    $this->cache->set('salesforce:versions', $versions, $this->getRequestTime() + self::LONGTERM_CACHE_LIFETIME, ['salesforce']);
-    return $versions;
   }
 
   /**

@@ -7,11 +7,10 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\salesforce\Rest\SalesforceIdentity;
 use Drupal\salesforce\Storage\SalesforceAuthTokenStorageInterface;
 use OAuth\Common\Http\Client\ClientInterface;
+use OAuth\Common\Http\Exception\TokenResponseException;
 use OAuth\Common\Http\Uri\Uri;
-use OAuth\Common\Token\TokenInterface;
 use OAuth\OAuth2\Service\Salesforce;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -185,49 +184,22 @@ abstract class SalesforceAuthProviderPluginBase extends Salesforce implements Sa
       return TRUE;
     }
     $token = $this->getAccessToken();
-    try {
-      $this->refreshIdentity($token);
-    }
-    catch (\Exception $e) {
-      watchdog_exception('salesforce', $e);
-      $this->messenger()->addError($e->getMessage());
-      $form_state->disableRedirect();
-      return FALSE;
-    }
-    return TRUE;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function requestAccessToken($code, $state = NULL) {
-    $token = parent::requestAccessToken($code, $state);
-    $this->refreshIdentity($token);
-    return $token;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function refreshAccessToken(TokenInterface $token) {
-    $token = parent::refreshAccessToken($token);
-    $this->refreshIdentity($token);
-    return $token;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function refreshIdentity(TokenInterface $token) {
     $headers = [
       'Authorization' => 'OAuth ' . $token->getAccessToken(),
       'Content-type' => 'application/json',
     ];
     $data = $token->getExtraParams();
-    $response = $this->httpClient->retrieveResponse(new Uri($data['id']), [], $headers);
-    $identity = new SalesforceIdentity($response);
+    try {
+      $response = $this->httpClient->retrieveResponse(new Uri($data['id']), [], $headers);
+    }
+    catch (\Exception $e) {
+      $this->messenger()->addError($e->getMessage());
+      $form_state->disableRedirect();
+      return FALSE;
+    }
+    $identity = $this->parseIdentityResponse($response);
     $this->storage->storeIdentity($this->service(), $identity);
-    return $identity;
+    return TRUE;
   }
 
   /**
@@ -280,18 +252,28 @@ abstract class SalesforceAuthProviderPluginBase extends Salesforce implements Sa
    * {@inheritdoc}
    */
   public function getInstanceUrl() {
-    return $this->getAccessToken()->getExtraParams()['instance_url'] ?? '';
+    return $this->getAccessToken()->getExtraParams()['instance_url'];
   }
 
   /**
    * {@inheritdoc}
    */
   public function getApiEndpoint($api_type = 'rest') {
-    $identity = $this->getIdentity();
-    if (empty($identity)) {
-      throw new IdentityNotFoundException();
+    $url = &drupal_static(self::CLASS . __FUNCTION__ . $api_type);
+    if (!isset($url)) {
+      $identity = $this->getIdentity();
+      if (empty($identity)) {
+        return FALSE;
+      }
+      if (is_string($identity)) {
+        $url = $identity;
+      }
+      elseif (isset($identity['urls'][$api_type])) {
+        $url = $identity['urls'][$api_type];
+      }
+      $url = str_replace('{version}', $this->getApiVersion(), $url);
     }
-    return $identity->getUrl($api_type, $this->getApiVersion());
+    return $url;
   }
 
   /**
@@ -309,11 +291,7 @@ abstract class SalesforceAuthProviderPluginBase extends Salesforce implements Sa
    * {@inheritdoc}
    */
   public function getIdentity() {
-    $identity = $this->storage->retrieveIdentity($this->id());
-    if (empty($identity)) {
-      throw new IdentityNotFoundException();
-    }
-    return $identity;
+    return $this->storage->retrieveIdentity($this->id());
   }
 
   /**
@@ -321,6 +299,29 @@ abstract class SalesforceAuthProviderPluginBase extends Salesforce implements Sa
    */
   public function service() {
     return $this->id();
+  }
+
+  /**
+   * Handle the identity response from Salesforce.
+   *
+   * @param string $responseBody
+   *   JSON identity response from Salesforce.
+   *
+   * @return array
+   *   The identity.
+   *
+   * @throws \OAuth\Common\Http\Exception\TokenResponseException
+   */
+  protected function parseIdentityResponse($responseBody) {
+    $data = json_decode($responseBody, TRUE);
+
+    if (NULL === $data || !is_array($data)) {
+      throw new TokenResponseException('Unable to parse response.');
+    }
+    elseif (isset($data['error'])) {
+      throw new TokenResponseException('Error in retrieving token: "' . $data['error'] . '"');
+    }
+    return $data;
   }
 
   /**

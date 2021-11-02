@@ -177,7 +177,6 @@ class SalesforceJWTPlugin extends SalesforceAuthProviderPluginBase {
     $response = $this->httpClient->retrieveResponse(new Uri($this->getLoginUrl() . static::AUTH_TOKEN_PATH), $data, ['Content-Type' => 'application/x-www-form-urlencoded']);
     $token = $this->parseAccessTokenResponse($response);
     $this->storage->storeAccessToken($this->service(), $token);
-    $this->refreshIdentity($token);
     return $token;
   }
 
@@ -185,9 +184,7 @@ class SalesforceJWTPlugin extends SalesforceAuthProviderPluginBase {
    * {@inheritDoc}
    */
   public function refreshAccessToken(TokenInterface $token) {
-    $token = $this->requestAccessToken($this->generateAssertion());
-    $this->refreshIdentity($token);
-    return $token;
+    return $this->requestAccessToken($this->generateAssertion());
   }
 
   /**

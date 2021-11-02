@@ -51,7 +51,7 @@ class RelatedProperties extends SalesforceMappingFieldPluginBase {
    * {@inheritdoc}
    */
   public function value(EntityInterface $entity, SalesforceMappingInterface $mapping) {
-    [$field_name, $referenced_field_name] = explode(':', $this->config('drupal_field_value'), 2);
+    list($field_name, $referenced_field_name) = explode(':', $this->config('drupal_field_value'), 2);
     // Since we're not setting hard restrictions around bundles/fields, we may
     // have a field that doesn't exist for the given bundle/entity. In that
     // case, calling get() on an entity with a non-existent field argument
@@ -80,9 +80,7 @@ class RelatedProperties extends SalesforceMappingFieldPluginBase {
       if ($field_definition['type'] == 'multipicklist') {
         $values = [];
         foreach ($field as $ref_entity) {
-          if (!$ref_entity->entity->get($referenced_field_name)->isEmpty()) {
-            $values[] = $ref_entity->entity->get($referenced_field_name)->value;
-          }
+          $values[] = $ref_entity->entity->get($referenced_field_name)->value;
         }
         return implode(';', $values);
       }
@@ -103,7 +101,7 @@ class RelatedProperties extends SalesforceMappingFieldPluginBase {
     $definition['config_dependencies']['config'] = [];
     $field_name = $this->config('drupal_field_value');
     if (strpos($field_name, ':')) {
-      [$field_name, $dummy] = explode(':', $field_name, 2);
+      list($field_name, $dummy) = explode(':', $field_name, 2);
     }
     // Add reference field.
     if ($field = FieldConfig::loadByName($this->mapping->getDrupalEntityType(), $this->mapping->getDrupalBundle(), $field_name)) {

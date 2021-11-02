@@ -4,7 +4,6 @@ namespace Drupal\Tests\salesforce_mapping\Functional;
 
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
-use Drupal\KernelTests\KernelTestBase;
 use Drupal\node\Entity\Node;
 use Drupal\salesforce_mapping\Entity\MappedObject;
 use Drupal\salesforce_mapping\Entity\SalesforceMapping;
@@ -33,12 +32,8 @@ class PushParamsTest extends BrowserTestBase {
    */
   public static $modules = [
     'typed_data',
-    'options',
     'dynamic_entity_reference',
-    'salesforce',
     'salesforce_mapping',
-    'salesforce_push',
-    'salesforce_pull',
     'salesforce_mapping_test',
   ];
 
@@ -59,11 +54,12 @@ class PushParamsTest extends BrowserTestBase {
     $entity1->save();
 
     // Mapped Object to be used for RelatedIDs push params property.
-    $mappedObject = \Drupal::entityTypeManager()
-      ->getStorage('salesforce_mapped_object')
-      ->loadByEntityAndMapping($entity1, $mapping);
-
-    $mappedObject->set('salesforce_id', '0123456789ABCDEFGH');
+    $mappedObject = MappedObject::create([
+      'drupal_entity' => $entity1,
+      'salesforce_mapping' => $mapping,
+      'salesforce_id' => '0123456789ABCDEFGH',
+      'salesforce_link' => NULL,
+    ]);
     $mappedObject->save();
 
     // Entity 2 to be mapped to Salesforce.
@@ -75,7 +71,6 @@ class PushParamsTest extends BrowserTestBase {
       'field_salesforce_test_email' => 'test2@example.com',
       'field_salesforce_test_link' => 'https://example.com',
       'field_salesforce_test_reference' => $entity1,
-      'field_salesforce_test_multi' => [['value' => 'Value 1'], ['value' => 'Value 2'], ['value' => 'Value 3']],
     ]);
     $entity2->save();
 
@@ -86,12 +81,11 @@ class PushParamsTest extends BrowserTestBase {
     $expected = [
       'FirstName' => 'SALESFORCE TEST',
       'Email' => 'test2@example.com',
-      'Birthdate' => $expectedDate->format('Y-m-d\TH:i:sO'),
+      'Birthdate' => $expectedDate->format(DateTime::ISO8601),
       'd5__Do_Not_Mail__c' => TRUE,
       'ReportsToId' => '0123456789ABCDEFGH',
       'RecordTypeId' => '012i0000001B15mAAC',
       'Description' => 'https://example.com',
-      'd5__Multipicklist_Test__c' => 'Value 1;Value 2;Value 3'
     ];
     $actual = $pushParams->getParams();
     ksort($actual);
@@ -114,11 +108,12 @@ class PushParamsTest extends BrowserTestBase {
     $entity1->save();
 
     // Mapped Object to be used for RelatedIDs push params property.
-    $mappedObject = \Drupal::entityTypeManager()
-      ->getStorage('salesforce_mapped_object')
-      ->loadByEntityAndMapping($entity1, $mapping);
-
-    $mappedObject->set('salesforce_id', '0123456789ABCDEFGH');
+    $mappedObject = MappedObject::create([
+      'drupal_entity' => $entity1,
+      'salesforce_mapping' => $mapping,
+      'salesforce_id' => '0123456789ABCDEFGH',
+      'salesforce_link' => NULL,
+    ]);
     $mappedObject->save();
 
     // Entity 2 to be mapped to Salesforce.
@@ -130,7 +125,6 @@ class PushParamsTest extends BrowserTestBase {
       'field_salesforce_test_email' => 'test2@example.com',
       'field_salesforce_test_link' => 'https://example.com',
       'field_salesforce_test_reference' => $entity1,
-      'field_salesforce_test_multi' => ['Value 1', 'Value 2', 'Value 3'],
     ]);
     $entity2->save();
 
@@ -139,12 +133,11 @@ class PushParamsTest extends BrowserTestBase {
     $expected = [
       'FirstName' => 'SALESFORCE TEST',
       'Email' => 'test2@example.com',
-      'Birthdate' => null,
+      'Birthdate' => '',
       'd5__Do_Not_Mail__c' => TRUE,
       'ReportsToId' => '0123456789ABCDEFGH',
       'RecordTypeId' => '012i0000001B15mAAC',
       'Description' => 'https://example.com',
-      'd5__Multipicklist_Test__c' => 'Value 1;Value 2;Value 3'
     ];
     $actual = $pushParams->getParams();
     ksort($actual);

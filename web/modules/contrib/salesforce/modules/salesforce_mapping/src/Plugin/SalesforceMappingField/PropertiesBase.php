@@ -2,7 +2,6 @@
 
 namespace Drupal\salesforce_mapping\Plugin\SalesforceMappingField;
 
-use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\TypedData\ComplexDataDefinitionInterface;
@@ -91,14 +90,11 @@ abstract class PropertiesBase extends SalesforceMappingFieldPluginBase {
       ->objectDescribe($mapping->getSalesforceObjectType());
     $field_definition = $describe->getField($this->config('salesforce_field'));
     if ($field_definition['type'] == 'multipicklist') {
-      $data = $this->getDataValue($entity, $this->config('drupal_field_value'));
-      if (!empty($data)) {
-        $strings = [];
-        foreach ($data as $item) {
-          $strings[] = $item->getString();
-        }
-        return implode(';', $strings);
+      $values = [];
+      foreach ($entity->get($this->config('drupal_field_value')) as $value) {
+        $values[] = $this->getStringValue($entity, $value);
       }
+      return implode(';', $values);
     }
     else {
       return $this->getStringValue($entity, $this->config('drupal_field_value'));
@@ -215,30 +211,8 @@ abstract class PropertiesBase extends SalesforceMappingFieldPluginBase {
    */
   protected function getStringValue(EntityInterface $entity, $drupal_field_value) {
     try {
-      $data = $this->getDataValue($entity, $drupal_field_value);
-      return empty($data) ? NULL : $data->getString();
-    }
-    catch (\Exception $e) {
-      return NULL;
-    }
-  }
-
-  /**
-   * Another helper Method to check for and retrieve field data.
-   *
-   * Same as getStringValue(), but returns the typed data prior to stringifying.
-   *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
-   *   The entity to search the Typed Data for.
-   * @param string $drupal_field_value
-   *   The Typed Data property to get.
-   *
-   * @return \Drupal\Core\TypedData\TypedDataInterface|NULL
-   *   The array representation of the Typed Data property value.
-   */
-  protected function getDataValue(EntityInterface $entity, $drupal_field_value) {
-    try {
-      return $this->dataFetcher()->fetchDataByPropertyPath($entity->getTypedData(), $drupal_field_value);
+      return $this->dataFetcher()->fetchDataByPropertyPath($entity->getTypedData(), $drupal_field_value)
+        ->getString();
     }
     catch (\Exception $e) {
       return NULL;

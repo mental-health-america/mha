@@ -1,6 +1,5 @@
 langcode: en
 status: true
-dependencies: {  }
 name: 'Salesforce Mapping Test Content Type'
 type: salesforce_mapping_test_content
 description: ''

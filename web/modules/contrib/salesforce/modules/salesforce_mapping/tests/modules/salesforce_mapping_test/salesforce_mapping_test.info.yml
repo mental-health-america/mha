@@ -7,15 +7,11 @@ dependencies:
   - datetime
   - link
   - node
-  - options
-  - user
   - salesforce_mapping
-  - salesforce_push
-  - salesforce_pull
   - salesforce_test_rest_client
   - taxonomy
 
-# Information added by Drupal.org packaging script on 2021-09-27
-version: '8.x-4.3'
+# Information added by Drupal.org packaging script on 2021-03-18
+version: '8.x-4.2'
 project: 'salesforce'
-datestamp: 1632765352
+datestamp: 1616088750

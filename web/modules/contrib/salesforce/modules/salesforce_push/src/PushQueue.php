@@ -15,6 +15,7 @@ use Drupal\Core\State\StateInterface;
 use Drupal\salesforce\EntityNotFoundException;
 use Drupal\salesforce\Event\SalesforceErrorEvent;
 use Drupal\salesforce\Event\SalesforceEvents;
+use Drupal\salesforce\Event\SalesforceNoticeEvent;
 use Drupal\salesforce_mapping\Entity\SalesforceMappingInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -516,7 +517,7 @@ class PushQueue extends DatabaseQueue implements PushQueueInterface {
         '%id' => $item->entity_id,
         '%mapping' => $mapping->id(),
       ];
-      $this->eventDispatcher->dispatch(SalesforceEvents::ERROR, new SalesforceErrorEvent(NULL, $message, $args));
+      $this->eventDispatcher->dispatch(SalesforceEvents::NOTICE, new SalesforceNoticeEvent(NULL, $message, $args));
       $this->deleteItem($item);
       return;
     }
@@ -537,7 +538,7 @@ class PushQueue extends DatabaseQueue implements PushQueueInterface {
       '%item' => $item->item_id,
       '%fail' => $item->failures,
     ];
-    $this->eventDispatcher->dispatch(SalesforceEvents::ERROR, new SalesforceErrorEvent(NULL, $message, $args));
+    $this->eventDispatcher->dispatch(SalesforceEvents::NOTICE, new SalesforceNoticeEvent(NULL, $message, $args));
 
     // Failed items will remain in queue, but not be released. They'll be
     // retried only when the current lease expires.
