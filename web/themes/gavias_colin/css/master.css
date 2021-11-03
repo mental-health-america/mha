@@ -6021,11 +6021,12 @@ header.header-v1 .header-main-inner .header-inner {
   padding: 5px 10px;
 }
 
-
 .webform-submission-form .form-actions .webform-button--submit {
   background: #385878 !important;
   line-height: inherit;
   padding: 0 !important;
+  min-width: 200px;
+  margin-top: 20px;
 }
 
 #id_08371049-8ad5-430a-9d2a-9e2b86805fcc_inner span {
@@ -6040,7 +6041,9 @@ label {
   font-weight: 500;
 }
 
-fieldset.webform-composite-hidden-title .fieldset-wrapper > .form-item:last-child, fieldset.webform-composite-hidden-title .fieldset-wrapper > .form-wrapper > .form-item:last-child, fieldset.webform-composite-hidden-title .fieldset-wrapper > .webform-flexbox:last-child {
+fieldset.webform-composite-hidden-title .fieldset-wrapper > .form-item:last-child,
+fieldset.webform-composite-hidden-title .fieldset-wrapper > .form-wrapper > .form-item:last-child,
+fieldset.webform-composite-hidden-title .fieldset-wrapper > .webform-flexbox:last-child {
   margin-bottom: 0;
   display: block ruby;
   max-width: 580px;
@@ -6048,7 +6051,7 @@ fieldset.webform-composite-hidden-title .fieldset-wrapper > .form-item:last-chil
 }
 
 @media (min-width: 768px) {
-  .col-sm-4 {
+  .node--type-webform .col-sm-4 {
     float: inherit !important;
   }
 }
@@ -6096,7 +6099,7 @@ fieldset.webform-composite-hidden-title .fieldset-wrapper > .form-item:last-chil
   background-color: #98a927;
 }
 
-material-tabs ul.quicktabs-tabs li {
+.material-tabs ul.quicktabs-tabs li {
   margin-left: 1rem;
 }
 
