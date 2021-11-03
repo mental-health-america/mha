@@ -2872,6 +2872,114 @@ ol.special li::before {
 .path-position-statements .item-columns {
   margin: 3px 0 3px 0 !important;
 }
+.path-issues .view-all-date h1:first-of-type {
+  margin: 0 0 10px 20px !important;
+}
+
+.path-issues .view-all-date .views-exposed-form.bef-exposed-form {
+  margin: 1rem 2rem;
+}
+
+.path-issues .views-element-container caption {
+  margin: 0 1rem 2rem;
+}
+
+.path-issues .views-element-container {
+  background: #fff;
+}
+
+.path-issues .view-all-date .gva-view .views-element-container caption {
+  margin: 1 1rem 2rem;
+}
+
+.path-issues .view-all-date h2 {
+  font-size: 26px;
+  padding: 1rem 0 0 2rem;
+}
+
+.path-issues .views-exposed-form.bef-exposed-form label {
+  font-weight: 600 !important;
+  background: #062552;
+  color: #fff;
+}
+
+.path-issues input[type="submit"] {
+  background: #98a927;
+  font-weight: 600 !important;
+  color: #000;
+  width: 100px;
+}
+
+.path-issues .views-element-container table > caption + thead > tr > th a {
+  background: transparent;
+  color: #fff !important;
+}
+.path-issues .views-element-container table > thead:first-child > tr:first-child > th a,
+.path-issues .views-element-container table > caption + thead > tr:first-child > th {
+  background: #062552;
+  color: #fff;
+}
+
+.path-issues .contextual-region.gva-view.view-page {
+  background: #fff;
+}
+
+.path-issues .views-exposed-form.bef-exposed-form {
+  background: #fff !important;
+  padding: 10px !important;
+  margin: 1rem 0;
+}
+
+.path-issues header .gva-view .view-content-wrap {
+  background: #fff;
+  padding: 2rem;
+  border-top: 5px solid #385886;
+}
+
+.path-issues tbody tr:nth-child(odd) {
+  background: #fff;
+}
+
+.path-issues .views-element-container table > tbody > tr > td, table > tfoot > tr > th, table > tfoot > tr > td {
+  padding: 1rem;
+  border: none;
+}
+
+.path-issues table > thead > tr > th, table > thead > tr > td, table > tbody > tr > th, table > tbody > tr > td, table > tfoot > tr > th, table > tfoot > tr > td {
+  border: none;
+}
+
+.path-issues .views-element-container:nth-child(n+2) header {
+  margin: 0;
+  padding: 0;
+  border-top: 50px solid #fff;
+}
+
+.path-issues table > thead:first-child > tr:first-child > th {
+  background: #062552;
+  color: #fff;
+}
+
+.path-issues .gva-view table {
+  background: #fff;
+  margin-bottom: 0;
+  border: 0;
+  margin: 0 auto;
+  width: 100%;
+  border-bottom: 4rem solid #f7f7f7;
+  border-left: 3rem solid #f7f7f7;
+  border-right: 3rem solid #f7f7f7;
+}
+
+.path-issues .gva-view table {
+  border-bottom: 4rem solid transparent !important;
+  border-left: 3rem solid transparent !important;
+  border-right: 3rem solid transparent !important;
+}
+
+.path-issues .contextual-region.gva-view.view-page {
+  background: #f7f7f7;
+}
 
 /* ------------------- Q ------------------ */
 /* ------------------- Q ------------------ */
@@ -5283,10 +5391,8 @@ ul.sf-menu.sf-navbar ul ul {
 
 #presenting-sponsor .gsc-heading.style-2 .title {
   color: #385887 !important;
-  font-size: 60px;
   font-weight: 300;
   line-height: 38px;
-  text-transform: initial;
   margin: 0 0 80px !important;
   font-size: 2.2rem !important;
   text-transform: uppercase !important;
@@ -5841,7 +5947,7 @@ header.header-v1 .header-main-inner .header-inner {
   padding: 1rem 2rem !important;
   font-size: 1rem !important;
   color: black !important;
-  background: #FFA500 !important;
+  background: #ffa500 !important;
   font-weight: bold;
   letter-spacing: .1rem;
 }
@@ -5883,7 +5989,7 @@ header.header-v1 .header-main-inner .header-inner {
 }
 
 .gsc-image-content.skin-v2:hover .box-content a:hover {
-  color: #ffffff !important;
+  color: #fff !important;
   background: #346677;
 }
 
@@ -5928,4 +6034,92 @@ header.header-v1 .header-main-inner .header-inner {
 
 .gsc-image-content.skin-v2:hover .box-content a:hover {
   color: #f79941 !important;
+}
+
+label {
+  font-weight: 500;
+}
+
+fieldset.webform-composite-hidden-title .fieldset-wrapper > .form-item:last-child, fieldset.webform-composite-hidden-title .fieldset-wrapper > .form-wrapper > .form-item:last-child, fieldset.webform-composite-hidden-title .fieldset-wrapper > .webform-flexbox:last-child {
+  margin-bottom: 0;
+  display: block ruby;
+  max-width: 580px;
+  padding: 1rem;
+}
+
+@media (min-width: 768px) {
+  .col-sm-4 {
+    float: inherit !important;
+  }
+}
+
+.h1, h1 {
+  font-size: 2.5rem !important;
+  text-transform: initial !important;
+}
+
+.owl-carousel .owl-nav > div {
+  color: #fff !important;
+  background: #385887 !important;
+  border: none;
+}
+
+.gbb-row.row-gradient-1 span,
+.gbb-row.row-gradient-1 p,
+.gbb-row.row-gradient-1 a h3,
+.gbb-row.row-gradient-1 h3 a,
+.gbb-row.row-gradient-1 h3 {
+  color: #fff !important;
+}
+
+.gva-view-grid .item-image {
+  margin: 0;
+  border: 1px solid #ccc;
+  border-radius: 5px !important;
+  padding: 1rem;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+}
+
+.gva-search-region .search-content {
+  width: 310px !important;
+}
+
+#block-views-block-partners-block-2 .item-image,
+#block-views-block-partners-block-1 .item-image {
+  margin: 0 0 25px 0;
+  border: 1px solid #e3dfdf;
+  border-radius: 15px;
+  padding: 15px;
+}
+
+.material-tabs ul.quicktabs-tabs {
+  background-color: #98a927;
+}
+
+material-tabs ul.quicktabs-tabs li {
+  margin-left: 1rem;
+}
+
+ul.quicktabs-tabs li {
+  margin-left: 1rem;
+}
+
+@media (max-width: 480px) {
+  header .gva-view .view-content-wrap {
+    padding: .5rem;
+  }
+  .path-issues .gva-view table {
+    border-bottom: 2rem solid #f7f7f7;
+    border-left: 1rem solid #f7f7f7;
+    border-right: 1rem solid #f7f7f7;
+  }
+}
+
+.body-page #email-us input[type="text"],
+.body-page #email-us input[type="tel"],
+.body-page #email-us input[type="password"],
+.body-page #email-us input[type="email"],
+.body-page #email-us textarea,
+.body-page #email-us select {
+  font-size: inherit !important;
 }
