@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'ebcb6d249d79d59bd61749b57e1e5dc6d7884e2a',
+        'reference' => '91b6a121f5aab0e6b1f727a17ff4690997b259a1',
         'name' => 'drupal-composer/drupal-project',
         'dev' => true,
     ),
@@ -325,7 +325,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'ebcb6d249d79d59bd61749b57e1e5dc6d7884e2a',
+            'reference' => '91b6a121f5aab0e6b1f727a17ff4690997b259a1',
             'dev_requirement' => false,
         ),
         'drupal/action' => array(
@@ -1523,6 +1523,15 @@
             'replaced' => array(
                 0 => '9.2.8',
             ),
+        ),
+        'drupal/recaptcha' => array(
+            'pretty_version' => '3.0.0',
+            'version' => '3.0.0.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../web/modules/contrib/recaptcha',
+            'aliases' => array(),
+            'reference' => '8.x-3.0',
+            'dev_requirement' => false,
         ),
         'drupal/recaptcha_v3' => array(
             'pretty_version' => '1.4.0',
