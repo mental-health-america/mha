@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '06d7c3360562317ceb4e9a5b5f3f334de4648496',
+        'reference' => '58b2ddb1a728eb469c10c788ab95111f5d22b554',
         'name' => 'drupal-composer/drupal-project',
         'dev' => true,
     ),
@@ -238,7 +238,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '06d7c3360562317ceb4e9a5b5f3f334de4648496',
+            'reference' => '58b2ddb1a728eb469c10c788ab95111f5d22b554',
             'dev_requirement' => false,
         ),
         'drupal/action' => array(
@@ -1470,12 +1470,12 @@
             ),
         ),
         'drupal/salesforce' => array(
-            'pretty_version' => '4.2.0',
-            'version' => '4.2.0.0',
+            'pretty_version' => '5.0.0',
+            'version' => '5.0.0.0',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../web/modules/contrib/salesforce',
             'aliases' => array(),
-            'reference' => '8.x-4.2',
+            'reference' => '5.0.0',
             'dev_requirement' => false,
         ),
         'drupal/salesforce_oauth' => array(

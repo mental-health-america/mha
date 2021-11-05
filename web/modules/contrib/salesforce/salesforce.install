@@ -197,7 +197,7 @@ function salesforce_get_usage_requirements() {
   else {
     $usage = str_replace('api-usage=', '', $usage);
 
-    list($usage, $limit) = explode('/', $usage, 2);
+    [$usage, $limit] = explode('/', $usage, 2);
     $pct = 'N/A';
     if ($limit > 0) {
       $pct = ($usage / $limit) * 100.0;
@@ -455,4 +455,21 @@ function salesforce_update_8402() {
     // probably fail.
     return;
   }
+}
+
+/**
+ * New cache lifetime config options.
+ */
+function salesforce_update_8800() {
+  $settings = \Drupal::configFactory()->getEditable('salesforce.settings');
+  $save = FALSE;
+  if (!$settings->get('short_term_cache_lifetime')) {
+    $settings->set('short_term_cache_lifetime', \Drupal\salesforce\Rest\RestClient::CACHE_LIFETIME);
+    $save = TRUE;
+  }
+  if (!$settings->get('long_term_cache_lifetime')) {
+    $settings->set('long_term_cache_lifetime', \Drupal\salesforce\Rest\RestClient::LONGTERM_CACHE_LIFETIME);
+    $save = TRUE;
+  }
+  $settings->save();
 }

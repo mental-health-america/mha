@@ -395,8 +395,8 @@ class MappedObject extends RevisionableContentEntityBase implements MappedObject
     // Previously hook_salesforce_push_params_alter.
     $params = new PushParams($mapping, $drupal_entity);
     $this->eventDispatcher()->dispatch(
-      SalesforceEvents::PUSH_PARAMS,
-      new SalesforcePushParamsEvent($this, $params)
+      new SalesforcePushParamsEvent($this, $params),
+      SalesforceEvents::PUSH_PARAMS
     );
 
     // @TODO is this the right place for this logic to live?
@@ -449,8 +449,8 @@ class MappedObject extends RevisionableContentEntityBase implements MappedObject
 
     // Previously hook_salesforce_push_success.
     $this->eventDispatcher()->dispatch(
-      SalesforceEvents::PUSH_SUCCESS,
-      new SalesforcePushParamsEvent($this, $params)
+      new SalesforcePushParamsEvent($this, $params),
+      SalesforceEvents::PUSH_SUCCESS
     );
 
     return $result;
@@ -547,13 +547,14 @@ class MappedObject extends RevisionableContentEntityBase implements MappedObject
           '@sffield' => $field->config('salesforce_field'),
           '@sfid' => $this->sfid(),
         ];
-        $this->eventDispatcher()->dispatch(SalesforceEvents::NOTICE, new SalesforceNoticeEvent($e, $message, $args));
+        $this->eventDispatcher()
+          ->dispatch(new SalesforceNoticeEvent($e, $message, $args), SalesforceEvents::NOTICE);
         continue;
       }
 
       $this->eventDispatcher()->dispatch(
-        SalesforceEvents::PULL_ENTITY_VALUE,
-        new SalesforcePullEntityValueEvent($value, $field, $this)
+        new SalesforcePullEntityValueEvent($value, $field, $this),
+        SalesforceEvents::PULL_ENTITY_VALUE
       );
       try {
         // If $value is TypedData, it should have been set during pullValue().
@@ -573,17 +574,17 @@ class MappedObject extends RevisionableContentEntityBase implements MappedObject
           '@did' => $drupal_entity->id(),
           '@v' => $value,
         ];
-        $this->eventDispatcher()->dispatch(SalesforceEvents::WARNING, new SalesforceWarningEvent($e, $message, $args));
+        $this->eventDispatcher()->dispatch(new SalesforceWarningEvent($e, $message, $args), SalesforceEvents::WARNING);
         continue;
       }
     }
 
     // @TODO: Event dispatching and entity saving should not be happening in this context, but inside a controller. This class needs to be more model-like.
     $this->eventDispatcher()->dispatch(
-      SalesforceEvents::PULL_PRESAVE,
       new SalesforcePullEvent($this, $drupal_entity->isNew()
         ? MappingConstants::SALESFORCE_MAPPING_SYNC_SF_CREATE
-        : MappingConstants::SALESFORCE_MAPPING_SYNC_SF_UPDATE)
+        : MappingConstants::SALESFORCE_MAPPING_SYNC_SF_UPDATE),
+      SalesforceEvents::PULL_PRESAVE
     );
 
     // Set a flag here to indicate that a pull is happening, to avoid

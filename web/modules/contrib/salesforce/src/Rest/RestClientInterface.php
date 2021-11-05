@@ -407,4 +407,20 @@ interface RestClientInterface {
    */
   public function getObjectTypeName(SFID $id);
 
+  /**
+   * Getter for short term cache lifetime.
+   *
+   * @return int
+   *   Short term cache lifetime, in seconds.
+   */
+  public function getShortTermCacheLifetime();
+
+  /**
+   * Getter for long term cache lifetime.
+   *
+   * @return int
+   *   Long term cache lifetime, in seconds.
+   */
+  public function getLongTermCacheLifetime();
+
 }

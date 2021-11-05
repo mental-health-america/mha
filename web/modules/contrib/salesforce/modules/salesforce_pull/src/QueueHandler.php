@@ -127,7 +127,7 @@ class QueueHandler {
         '%noi' => $this->queue->numberOfItems(),
         '%max' => $max_size,
       ];
-      $this->eventDispatcher->dispatch(SalesforceEvents::NOTICE, new SalesforceNoticeEvent(NULL, $message, $args));
+      $this->eventDispatcher->dispatch(new SalesforceNoticeEvent(NULL, $message, $args), SalesforceEvents::NOTICE);
       return FALSE;
     }
 
@@ -229,15 +229,15 @@ class QueueHandler {
     try {
       $soql = $mapping->getPullQuery($mapped_fields, $start, $stop);
       $this->eventDispatcher->dispatch(
-        SalesforceEvents::PULL_QUERY,
-        new SalesforceQueryEvent($mapping, $soql)
+        new SalesforceQueryEvent($mapping, $soql),
+        SalesforceEvents::PULL_QUERY
       );
       return $this->sfapi->query($soql);
     }
     catch (\Exception $e) {
       $message = '%type: @message in %function (line %line of %file).';
       $args = Error::decodeException($e);
-      $this->eventDispatcher->dispatch(SalesforceEvents::ERROR, new SalesforceErrorEvent($e, $message, $args));
+      $this->eventDispatcher->dispatch(new SalesforceErrorEvent($e, $message, $args), SalesforceEvents::ERROR);
     }
   }
 
@@ -259,7 +259,7 @@ class QueueHandler {
       catch (\Exception $e) {
         $message = '%type: @message in %function (line %line of %file).';
         $args = Error::decodeException($e);
-        $this->eventDispatcher->dispatch(SalesforceEvents::ERROR, new SalesforceErrorEvent($e, $message, $args));
+        $this->eventDispatcher->dispatch(new SalesforceErrorEvent($e, $message, $args), SalesforceEvents::ERROR);
         // @TODO do we really want to eat this exception here?
         return;
       }
@@ -298,7 +298,7 @@ class QueueHandler {
     catch (\Exception $e) {
       $message = '%type: @message in %function (line %line of %file).';
       $args = Error::decodeException($e);
-      $this->eventDispatcher->dispatch(SalesforceEvents::ERROR, new SalesforceErrorEvent($e, $message, $args));
+      $this->eventDispatcher->dispatch(new SalesforceErrorEvent($e, $message, $args), SalesforceEvents::ERROR);
     }
   }
 

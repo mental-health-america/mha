@@ -384,7 +384,7 @@ abstract class SalesforceMappingFormCrudBase extends SalesforceMappingFormBase {
       }
       catch (\Exception $e) {
         $form_state->setError($form['pull']['pull_where_clause'], $this->t('Test pull query returned an error. Please check logs for error details.'));
-        \Drupal::service('event_dispatcher')->dispatch(SalesforceEvents::ERROR, new SalesforceErrorEvent($e));
+        \Drupal::service('event_dispatcher')->dispatch(new SalesforceErrorEvent($e), SalesforceEvents::ERROR);
       }
     }
   }

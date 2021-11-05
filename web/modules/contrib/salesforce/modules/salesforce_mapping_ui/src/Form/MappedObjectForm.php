@@ -197,7 +197,7 @@ class MappedObjectForm extends ContentEntityForm {
     }
     catch (\Exception $e) {
       $mapped_object->delete();
-      $this->eventDispatcher->dispatch(SalesforceEvents::ERROR, new SalesforceErrorEvent($e));
+      $this->eventDispatcher->dispatch(new SalesforceErrorEvent($e), SalesforceEvents::ERROR);
       $this->messenger()->addError($this->t('Push failed with an exception: %exception', ['%exception' => $e->getMessage()]));
       $form_state->setRebuild();
       return;
@@ -239,7 +239,7 @@ class MappedObjectForm extends ContentEntityForm {
       $mapped_object->pull();
     }
     catch (\Exception $e) {
-      $this->eventDispatcher->dispatch(SalesforceEvents::ERROR, new SalesforceErrorEvent($e));
+      $this->eventDispatcher->dispatch(new SalesforceErrorEvent($e), SalesforceEvents::ERROR);
       $this->messenger()->addError($this->t('Pull failed with an exception: %exception', ['%exception' => $e->getMessage()]));
       $form_state->setRebuild();
       return;

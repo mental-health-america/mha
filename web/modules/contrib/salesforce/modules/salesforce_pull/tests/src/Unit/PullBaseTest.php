@@ -35,12 +35,12 @@ class PullBaseTest extends UnitTestCase {
    *
    * @var array
    */
-  public static $modules = ['salesforce_pull'];
+  protected static $modules = ['salesforce_pull'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->salesforce_id = '1234567890abcde';

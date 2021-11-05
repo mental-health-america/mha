@@ -31,12 +31,12 @@ class QueueHandlerTest extends UnitTestCase {
    *
    * @var array
    */
-  static public $modules = ['salesforce_pull'];
+  static protected $modules = ['salesforce_pull'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $result = [
       'totalSize' => 1,

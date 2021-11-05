@@ -19,7 +19,7 @@ class PullQueueItemTest extends UnitTestCase {
    *
    * @var array
    */
-  public static $modules = ['salesforce_pull'];
+  protected static $modules = ['salesforce_pull'];
 
   /**
    * Test object instantiation.

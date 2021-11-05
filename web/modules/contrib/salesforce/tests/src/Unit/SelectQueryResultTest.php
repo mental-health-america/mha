@@ -18,12 +18,12 @@ class SelectQueryResultTest extends UnitTestCase {
    *
    * @var array
    */
-  static public $modules = ['salesforce'];
+  protected static $modules = ['salesforce'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $result = [
       'totalSize' => 2,

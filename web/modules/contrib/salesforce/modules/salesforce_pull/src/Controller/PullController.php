@@ -169,7 +169,7 @@ class PullController extends ControllerBase {
       $mappings[] = $mapping;
     }
     else {
-      $mappings = $this->mappingStorage->loadByProperties([["pull_standalone" => TRUE]]);
+      $mappings = $this->mappingStorage->loadByProperties(["pull_standalone" => TRUE]);
     }
 
     foreach ($mappings as $mapping) {
@@ -195,7 +195,7 @@ class PullController extends ControllerBase {
     $count = 0;
     while ((!$this->getTimeLimit() || time() < $end) && ($item = $queue->claimItem())) {
       try {
-        $this->eventDispatcher->dispatch(SalesforceEvents::NOTICE, new SalesforceNoticeEvent(NULL, 'Processing item @id from @name queue.', ['@name' => QueueHandler::PULL_QUEUE_NAME, '@id' => $item->item_id]));
+        $this->eventDispatcher->dispatch(new SalesforceNoticeEvent(NULL, 'Processing item @id from @name queue.', ['@name' => QueueHandler::PULL_QUEUE_NAME, '@id' => $item->item_id]), SalesforceEvents::NOTICE);
         $worker->processItem($item->data);
         $queue->deleteItem($item);
         $count++;
@@ -212,11 +212,11 @@ class PullController extends ControllerBase {
       }
     }
     $elapsed = microtime(TRUE) - $start;
-    $this->eventDispatcher->dispatch(SalesforceEvents::NOTICE, new SalesforceNoticeEvent(NULL, 'Processed @count items from the @name queue in @elapsed sec.', [
+    $this->eventDispatcher->dispatch(new SalesforceNoticeEvent(NULL, 'Processed @count items from the @name queue in @elapsed sec.', [
       '@count' => $count,
       '@name' => QueueHandler::PULL_QUEUE_NAME,
       '@elapsed' => round($elapsed, 2),
-    ]));
+    ]), SalesforceEvents::NOTICE);
   }
 
 }

@@ -153,8 +153,8 @@ class Rest extends PluginBase implements PushQueueProcessorInterface {
     // @TODO: the following is nearly identical to the end of salesforce_push_entity_crud(). Can we DRY it? Do we care?
     try {
       $this->eventDispatcher->dispatch(
-        SalesforceEvents::PUSH_MAPPING_OBJECT,
-        new SalesforcePushOpEvent($mapped_object, $item->op)
+        new SalesforcePushOpEvent($mapped_object, $item->op),
+        SalesforceEvents::PUSH_MAPPING_OBJECT
       );
 
       // If this is a delete, destroy the SF object and we're done.
@@ -181,8 +181,8 @@ class Rest extends PluginBase implements PushQueueProcessorInterface {
     }
     catch (\Exception $e) {
       $this->eventDispatcher->dispatch(
-        SalesforceEvents::PUSH_FAIL,
-        new SalesforcePushOpEvent($mapped_object, $item->op)
+        new SalesforcePushOpEvent($mapped_object, $item->op),
+        SalesforceEvents::PUSH_FAIL
       );
 
       // Log errors and throw exception to cause this item to be re-queued.
