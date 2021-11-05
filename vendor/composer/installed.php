@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '8941af2e059fd0337382820648e11a0d0378d5cc',
+        'reference' => '06d7c3360562317ceb4e9a5b5f3f334de4648496',
         'name' => 'drupal-composer/drupal-project',
         'dev' => true,
     ),
@@ -238,7 +238,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '8941af2e059fd0337382820648e11a0d0378d5cc',
+            'reference' => '06d7c3360562317ceb4e9a5b5f3f334de4648496',
             'dev_requirement' => false,
         ),
         'drupal/action' => array(
@@ -378,6 +378,15 @@
             'replaced' => array(
                 0 => '9.2.8',
             ),
+        ),
+        'drupal/captcha' => array(
+            'pretty_version' => '1.2.0',
+            'version' => '1.2.0.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../web/modules/contrib/captcha',
+            'aliases' => array(),
+            'reference' => '8.x-1.2',
+            'dev_requirement' => false,
         ),
         'drupal/charts' => array(
             'pretty_version' => '3.2.0',
@@ -1430,6 +1439,15 @@
                 0 => '9.2.8',
             ),
         ),
+        'drupal/recaptcha' => array(
+            'pretty_version' => '3.0.0',
+            'version' => '3.0.0.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../web/modules/contrib/recaptcha',
+            'aliases' => array(),
+            'reference' => '8.x-3.0',
+            'dev_requirement' => false,
+        ),
         'drupal/redirect' => array(
             'pretty_version' => '1.6.0',
             'version' => '1.6.0.0',
@@ -1851,6 +1869,15 @@
             'install_path' => __DIR__ . '/../../web/libraries/google_charts',
             'aliases' => array(),
             'reference' => NULL,
+            'dev_requirement' => false,
+        ),
+        'google/recaptcha' => array(
+            'pretty_version' => '1.2.4',
+            'version' => '1.2.4.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../google/recaptcha',
+            'aliases' => array(),
+            'reference' => '614f25a9038be4f3f2da7cbfd778dc5b357d2419',
             'dev_requirement' => false,
         ),
         'grasmash/expander' => array(
