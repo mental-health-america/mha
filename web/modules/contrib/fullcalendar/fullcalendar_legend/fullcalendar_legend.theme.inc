@@ -11,14 +11,6 @@ use Drupal\Component\Utility\Html;
  * Build the legend as a render array.
  */
 function template_preprocess_fullcalendar_legend(&$variables) {
-  $element = [
-    '#attached' => [
-      'css' => [
-        drupal_get_path('module', 'fullcalendar_legend') . '/css/fullcalendar_legend.theme.css',
-      ],
-    ],
-  ];
-
   foreach ($variables['types'] as $type_name => $type) {
     $element[$type_name] = [
       '#type'       => 'container',
@@ -47,6 +39,7 @@ function template_preprocess_fullcalendar_legend(&$variables) {
       ];
     }
   }
+  $element['#attached']['library'][] = 'fullcalendar_legend/fullcalendar_legend';
 
   $variables['element'] = $element;
 }
@@ -71,9 +64,7 @@ function theme_fullcalendar_legend($variables) {
  */
 function _fullcalendar_legend_get_classes($type) {
   $values['type'] = $type['bundle'];
-  $entity = \Drupal::entityTypeManager()
-    ->getStorage($type['entity_type'])
-    ->create($values);
+  $entity = \Drupal::entityTypeManager()->getStorage($type['entity_type'])->create($values);
 
   $module_handler = \Drupal::moduleHandler();
   $classes = $module_handler->invokeAll('fullcalendar_classes', [$entity]);

@@ -8,6 +8,7 @@
 namespace Drupal\fullcalendar_legend\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\views\ViewExecutable;
 use Drupal\views\Views;
 
 /**
@@ -22,14 +23,13 @@ abstract class FullcalendarLegendBase extends BlockBase {
     $view_id = \Drupal::routeMatch()->getParameter('view_id');
     $view = Views::getView($view_id);
 
-    if (empty($view)) {
+    if (empty($view) || !$view instanceof ViewExecutable) {
       return NULL;
     }
 
-    $style = $view->display_handler->getOption('style');
-    if ($style['type'] != 'fullcalendar') {
-      return NULL;
-    }
+    $view->setDisplay('page_1');
+    $view->preExecute();
+    $view->execute();
 
     $fields = [];
 

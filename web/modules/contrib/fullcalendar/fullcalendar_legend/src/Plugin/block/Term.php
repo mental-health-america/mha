@@ -32,11 +32,6 @@ class Term extends FullcalendarLegendBase implements ContainerFactoryPluginInter
   protected $termStorage;
 
   /**
-   * @var \Drupal\Core\Entity\Query\QueryFactory
-   */
-  protected $entityQuery;
-
-  /**
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected $entityTypeManager;
