@@ -178,7 +178,7 @@ abstract class RulesIntegrationTestBase extends UnitTestCase {
       ->willReturn(NULL);
 
     $this->cacheBackend = new NullBackend('rules');
-    $rules_directory = __DIR__ . '/../../../..';
+    $rules_directory = __DIR__ . '/../../../rules';
     $this->namespaces = new \ArrayObject([
       'Drupal\\rules' => $rules_directory . '/src',
       'Drupal\\rules_test' => $rules_directory . '/tests/modules/rules_test/src',

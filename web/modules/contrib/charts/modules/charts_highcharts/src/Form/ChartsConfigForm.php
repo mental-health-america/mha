@@ -2,7 +2,6 @@
 
 namespace Drupal\charts_highcharts\Form;
 
-
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
@@ -38,9 +37,8 @@ class ChartsConfigForm extends ConfigFormBase {
       '#type' => 'fieldset',
       '#description' => $this->t(
         'This is a placeholder for Highcharts-specific library options. If you would like to help build this out, please work from <a href="@issue_link">this issue</a>.', [
-        '@issue_link' => Url::fromUri('https://www.drupal.org/project/charts/issues/3046981')
-          ->toString(),
-      ]),
+          '@issue_link' => Url::fromUri('https://www.drupal.org/project/charts/issues/3046981')->toString(),
+        ]),
     ];
 
     $form['legend'] = [
@@ -127,7 +125,7 @@ class ChartsConfigForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
 
     $this->config('charts_highcharts.settings')
-      // Set the submitted configuration setting
+      // Set the submitted configuration setting.
       ->set('placeholder', $form_state->getValue('placeholder'))
       ->set('legend_layout', $form_state->getValue('legend_layout'))
       ->set('legend_background_color', $form_state->getValue('legend_background_color'))

@@ -110,7 +110,6 @@ class ChartsPluginStyleChart extends StylePluginBase implements ContainerFactory
     }
 
     // @todo: ensure that chart extensions inherit defaults from parent
-
     // Remove the default setting for chart type so it can be inherited if this
     // is a chart extension type.
     if ($this->view->style_plugin === 'chart_extension') {
@@ -156,7 +155,7 @@ class ChartsPluginStyleChart extends StylePluginBase implements ContainerFactory
     // Merge in the global chart settings form.
     $field_options = $this->displayHandler->getFieldLabels();
     $form_state->set('default_options', $this->options);
-    $form = $this->chartsBaseSettingsForm->getChartsBaseSettingsForm($form, $this->options, $field_options, ['style_options'], 'view');
+    $form = $this->chartsBaseSettingsForm->getChartsBaseSettingsForm($form, 'view', $this->options, $field_options, ['style_options']);
 
   }
 
@@ -220,7 +219,7 @@ class ChartsPluginStyleChart extends StylePluginBase implements ContainerFactory
     if (isset($data_fields[$label_field_key])) {
       unset($data_fields[$label_field_key]);
     }
-    // Allow argument tokens in the title
+    // Allow argument tokens in the title.
     if (!empty($this->view->build_info['substitutions'])) {
       $tokens = $this->view->build_info['substitutions'];
       $title = $this->options['title_position'] ? $this->options['title'] : FALSE;
@@ -238,12 +237,12 @@ class ChartsPluginStyleChart extends StylePluginBase implements ContainerFactory
       '#chart_library' => $this->options['library'],
       '#chart_id' => $chart_id,
       '#id' => ('chart_' . $chart_id),
-    //  '#title' => $this->options['title_position'] ? $this->options['title'] : FALSE,
+    // '#title' => $this->options['title_position'] ? $this->options['title'] : FALSE,
       '#title' => $title,
       '#title_position' => $this->options['title_position'],
       '#tooltips' => $this->options['tooltips'],
       '#data_labels' => $this->options['data_labels'],
-      '#colors' => $this->options['colors'],
+      '#colors' => isset($this->options['colors']) ? $this->options['colors'] : NULL,
       '#background' => $this->options['background'] ? $this->options['background'] : 'transparent',
       '#legend' => $this->options['legend_position'] ? TRUE : FALSE,
       '#legend_position' => $this->options['legend_position'] ? $this->options['legend_position'] : NULL,

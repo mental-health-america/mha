@@ -2,7 +2,6 @@
 
 namespace Drupal\charts\Form;
 
-
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\charts\Settings\ChartsBaseSettingsForm;
 use Drupal\Core\Url;
@@ -71,13 +70,13 @@ class ChartsConfigForm extends ConfigFormBase {
         <strong>default</strong> settings. They do not affect existing charts.
         To make a new chart, <a href="@create">create a new view</a> and select
         the display format of "Chart".', [
-        '@create' => Url::fromRoute('views_ui.add')
-          ->toString(),
-      ]),
+          '@create' => Url::fromRoute('views_ui.add')
+            ->toString(),
+        ]),
       '#weight' => -100,
     ];
     // Reuse the global settings form for defaults, but remove JS classes.
-    $form = $this->chartsBaseSettingsForm->getChartsBaseSettingsForm($form, $defaults, $field_options, $parents, 'config_form');
+    $form = $this->chartsBaseSettingsForm->getChartsBaseSettingsForm($form, 'config_form', $defaults, $field_options, $parents);
     $form['xaxis']['#attributes']['class'] = [];
     $form['yaxis']['#attributes']['class'] = [];
     $form['display']['colors']['#prefix'] = NULL;

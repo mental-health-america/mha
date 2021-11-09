@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "71256cd1d95bee4a24a5b0e4a97ad7ef",
+    "content-hash": "86250605b862989473e260a410898eae",
     "packages": [
         {
             "name": "alchemy/zippy",
@@ -2220,17 +2220,17 @@
         },
         {
             "name": "drupal/charts",
-            "version": "3.2.0",
+            "version": "3.3.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/charts.git",
-                "reference": "8.x-3.2"
+                "reference": "8.x-3.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/charts-8.x-3.2.zip",
-                "reference": "8.x-3.2",
-                "shasum": "7caf427ce981962036f8335e94f41fc88f36db72"
+                "url": "https://ftp.drupal.org/files/projects/charts-8.x-3.3.zip",
+                "reference": "8.x-3.3",
+                "shasum": "dd67bd5764a766525777d83b8963655f0e0bf8c3"
             },
             "require": {
                 "drupal/core": "^8 || ^9"
@@ -2238,8 +2238,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-3.2",
-                    "datestamp": "1588134278",
+                    "version": "8.x-3.3",
+                    "datestamp": "1636438364",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -7651,7 +7651,7 @@
             "extra": {
                 "drupal": {
                     "version": "8.x-1.9",
-                    "datestamp": "1632421785",
+                    "datestamp": "1632421809",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -10880,21 +10880,21 @@
         },
         {
             "name": "symfony-cmf/routing",
-            "version": "2.3.3",
+            "version": "2.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony-cmf/Routing.git",
-                "reference": "3c97e7b7709b313cecfb76d691ad4cc22acbf3f5"
+                "reference": "bbcdf2f6301d740454ba9ebb8adaefd436c36a6b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony-cmf/Routing/zipball/3c97e7b7709b313cecfb76d691ad4cc22acbf3f5",
-                "reference": "3c97e7b7709b313cecfb76d691ad4cc22acbf3f5",
+                "url": "https://api.github.com/repos/symfony-cmf/Routing/zipball/bbcdf2f6301d740454ba9ebb8adaefd436c36a6b",
+                "reference": "bbcdf2f6301d740454ba9ebb8adaefd436c36a6b",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2 || ^8.0",
-                "psr/log": "^1.0",
+                "psr/log": "^1.0 || ^2.0 || ^3.0",
                 "symfony/http-kernel": "^4.4 || ^5.0",
                 "symfony/routing": "^4.4 || ^5.0"
             },
@@ -10937,9 +10937,9 @@
             ],
             "support": {
                 "issues": "https://github.com/symfony-cmf/Routing/issues",
-                "source": "https://github.com/symfony-cmf/Routing/tree/2.3.3"
+                "source": "https://github.com/symfony-cmf/Routing/tree/2.3.4"
             },
-            "time": "2020-10-06T10:15:37+00:00"
+            "time": "2021-11-08T16:33:10+00:00"
         },
         {
             "name": "symfony/config",
@@ -14088,6 +14088,7 @@
                 "issues": "https://github.com/webmozart/path-util/issues",
                 "source": "https://github.com/webmozart/path-util/tree/2.3.0"
             },
+            "abandoned": "symfony/filesystem",
             "time": "2015-12-17T08:42:14+00:00"
         },
         {

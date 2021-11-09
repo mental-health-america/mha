@@ -41,24 +41,22 @@ class Google extends AbstractChart {
   /**
    * Creates a JSON Object formatted for Google Charts JavaScript to use.
    *
-   * @param mixed $options
+   * @param array $options
    *   Options.
-   * @param mixed $categories
-   *   Categories.
-   * @param mixed $seriesData
-   *   Series data.
-   * @param mixed $attachmentDisplayOptions
-   *   Attachment display options.
-   * @param mixed $variables
+   * @param string $chartId
+   *   Chart ID.
+   * @param array $variables
    *   Variables.
-   * @param mixed $chartId
-   *   Chart Id.
+   * @param array $categories
+   *   Categories.
+   * @param array $seriesData
+   *   Series data.
+   * @param array $attachmentDisplayOptions
+   *   Attachment display options.
    * @param array $customOptions
    *   Overrides.
-   *
-   * @return array|void
    */
-  public function buildVariables($options, $categories = [], $seriesData = [], $attachmentDisplayOptions = [], &$variables, $chartId, $customOptions = []) {
+  public function buildVariables(array $options, $chartId, array &$variables, array $categories = [], array $seriesData = [], array $attachmentDisplayOptions = [], array $customOptions = []) {
 
     $categoriesCount = count($categories);
     $seriesCount = count($seriesData);
@@ -532,6 +530,11 @@ class Google extends AbstractChart {
     // Where to place the axis titles, compared to the chart area.
     if (isset($options['axis_titles_position'])) {
       $googleOptions->setAxisTitlesPosition($options['axis_titles_position']);
+    }
+
+    // Determine what content to show in pie slices.
+    if (isset($options['pie_slice_text'])) {
+      $googleOptions->setPieSliceText($options['pie_slice_text']);
     }
 
     // Set gauge specific options.

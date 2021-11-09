@@ -14,18 +14,27 @@ use Drupal\charts\Plugin\override\AbstractChartOverride;
  */
 class BillboardOverrides extends AbstractChartOverride {
 
+  /**
+   * @param array $originalOptions
+   *   The original options.
+   *
+   * @return array $options
+   *   The overridden options.
+   */
   public function chartOverrides(array $originalOptions = []) {
 
     $options = [];
 
-//    // An example of how to override the color property.
-//    $options['color'] = [
-//      'pattern' => [
-//        '#000000',
-//        '#999999',
-//        '#666666'
-//      ]
-//    ];
+    /**
+     *    // An example of how to override the color property.
+     *    $options['color'] = [
+     *      'pattern' => [
+     *        '#000000',
+     *        '#999999',
+     *        '#666666'
+     *      ]
+     *    ];
+     */
 
     return $options;
   }

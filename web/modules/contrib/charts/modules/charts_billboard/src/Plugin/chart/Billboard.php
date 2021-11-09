@@ -24,9 +24,13 @@ use Drupal\charts_billboard\Settings\Billboard\ChartLegend;
 class Billboard extends AbstractChart {
 
   /**
-   * @param $type
+   * Process the chart type.
    *
-   * @return string
+   * @param array $options
+   *   The chart options, which includes the type.
+   *
+   * @return string $type
+   *   The chart type.
    */
   public function processChartType($options) {
 
@@ -36,7 +40,7 @@ class Billboard extends AbstractChart {
     else {
       $type = $options['type'];
     }
-    // If Polar is checked, then convert to Radar chart type
+    // If Polar is checked, then convert to Radar chart type.
     if (isset($options['polar']) && $options['polar'] == 1) {
       $type = 'radar';
     }
@@ -47,24 +51,22 @@ class Billboard extends AbstractChart {
   /**
    * Creates a JSON Object formatted for Billboard.js Charts JavaScript to use.
    *
-   * @param mixed $options
+   * @param array $options
    *   Options.
-   * @param mixed $categories
-   *   Categories.
-   * @param mixed $seriesData
-   *   Series data.
-   * @param mixed $attachmentDisplayOptions
-   *   Attachment display options.
-   * @param mixed $variables
+   * @param string $chartId
+   *   Chart ID.
+   * @param array $variables
    *   Variables.
-   * @param mixed $chartId
-   *   Chart Id.
+   * @param array $categories
+   *   Categories.
+   * @param array $seriesData
+   *   Series data.
+   * @param array $attachmentDisplayOptions
+   *   Attachment display options.
    * @param array $customOptions
    *   Overrides.
-   *
-   * @return array|void
    */
-  public function buildVariables($options, $categories = [], $seriesData = [], $attachmentDisplayOptions = [], &$variables, $chartId, $customOptions = []) {
+  public function buildVariables(array $options, $chartId, array &$variables, array $categories = [], array $seriesData = [], array $attachmentDisplayOptions = [], array $customOptions = []) {
 
     // Create new instance of CThree.
     $bb = new BillboardChart();
@@ -96,7 +98,7 @@ class Billboard extends AbstractChart {
      * categories. If only one data field is selected, then the label field
      * will serve as the categories. If multiple data fields are selected,
      * they will become the categories.
-     * */
+     */
     if ($type == 'pie' || $type == 'donut') {
       // Set the charts colors.
       $chartColor = new ChartColor();
@@ -150,16 +152,17 @@ class Billboard extends AbstractChart {
         $chartAxis->setRotated(FALSE);
       }
       if ($options['type'] == 'scatter') {
-        // Old code: $chartAxis->setX(['tick' => ['fit' => FALSE]]);
-
-        // New code: uses the Scatter Field in charts_fields. Still needs
-        // plenty of work.
+        /**
+         * Old code: $chartAxis->setX(['tick' => ['fit' => FALSE]]);
+         * New code: uses the Scatter Field in charts_fields. Still needs
+         * plenty of work.
+         */
         $fieldLabel = $seriesData[0]['name'];
         array_shift($bbData[0]);
         $scatterFieldData = $bbData[0];
         $scatterFieldX = [];
         $scatterFieldY = [];
-        for($i = 0; $i < count($scatterFieldData); $i++) {
+        for ($i = 0; $i < count($scatterFieldData); $i++) {
           array_push($scatterFieldX, $scatterFieldData[$i][0]);
           array_push($scatterFieldY, $scatterFieldData[$i][1]);
         }
@@ -239,11 +242,12 @@ class Billboard extends AbstractChart {
       $bb->setPoint($points);
     }
 
-    // Set legend
+    // Set legend.
     $legend = new ChartLegend();
     if (empty($options['legend_position'])) {
       $legend->setShow(FALSE);
-    } else {
+    }
+    else {
       $legend->setShow(TRUE);
     }
     $bb->setLegend($legend);
@@ -251,12 +255,14 @@ class Billboard extends AbstractChart {
     $bindTo = '#' . $chartId;
     $bb->setBindTo($bindTo);
 
-    // Override Billboard classes. These will only override what is in
-    // charts_billboard/src/Settings/CThree/CThree.php
-    // but you can use more of the Billboard API, as you are not constrained
-    // to what is in this class. See:
-    // charts_billboard/src/Plugin/override/BillboardOverrides.php
-    foreach($customOptions as $option => $key) {
+    /**
+     * Override Billboard classes. These will only override what is in
+     * charts_billboard/src/Settings/CThree/CThree.php
+     * but you can use more of the Billboard API, as you are not constrained
+     * to what is in this class. See:
+     * charts_billboard/src/Plugin/override/BillboardOverrides.php
+     */
+    foreach ($customOptions as $option => $key) {
       $setter = 'set' . ucfirst($option);
       if (method_exists($bb, $setter)) {
         $bb->$setter($customOptions[$option]);
