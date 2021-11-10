@@ -390,7 +390,7 @@ span.mailto {
 }
 
 .blog-title a {
-  font-size: 20px !important;
+  font-size: 1.4rem !important;
   font-weight: bold !important;
   color: #262626 !important;
   text-decoration: none !important;
@@ -439,7 +439,7 @@ span.mailto {
 .breadcrumb-content-inner .gva-breadcrumb-content .page-title {
   color: #005696 !important;
   text-align: left !important;
-  font-size: 2.75em !important;
+  font-size: 2.25em !important;
   font-weight: 300 !important;
   text-transform: capitalize !important;
   letter-spacing: 0 !important;
@@ -2440,7 +2440,7 @@ li:hover {
 }
 
 .main-blog-container {
-  width: inherit;
+  width: inherit !important;
   background: transparent;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.30);
 }
@@ -6126,3 +6126,41 @@ ul.quicktabs-tabs li {
 .body-page #email-us select {
   font-size: inherit !important;
 }
+
+#search-form input[type="submit"],
+#search-block-form input[type="submit"] {
+  border-radius: 0;
+}
+
+#edit-submit-webinar {
+  border-radius: 0;
+}
+
+.bio h3,
+.blog-wrapper h3 {
+  font-size: 1.2rem !important;
+}
+
+.views-exposed-form input[type="submit"] {
+  background: #98a927;
+  color: #000;
+  border-radius: 0;
+}
+
+.views-exposed-form div#edit-actions {
+  margin: 1.3rem 0 0;
+}
+
+.bio.title a {
+  font-size: 1.2rem !important;
+  font-weight:   600 !important;
+}
+
+.main-blog-container {
+  width: inherit !important;
+}
+
+.main-blog-container a.btn.btn-primary {
+  color: #fff !important;
+}
+
