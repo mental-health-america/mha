@@ -22,11 +22,13 @@ use Drupal\charts_chartjs\Settings\Chartjs\ChartjsTicks;
 class Chartjs extends AbstractChart {
 
   /**
-   * @param $options
-   *
-   * @return $type
-   *
    * Outputs a type that can be used by Chart.js.
+   *
+   * @param array $options
+   *   Options.
+   *
+   * @return string $type
+   *   Type.
    *
    */
   protected function buildChartType($options) {
@@ -34,24 +36,31 @@ class Chartjs extends AbstractChart {
       case 'bar':
         $type = 'horizontalBar';
         break;
+
       case 'column':
         $type = 'bar';
         break;
+
       case 'spline':
         $type = 'line';
         break;
+
       case 'donut':
         $type = 'doughnut';
         break;
+
       case 'area':
         $type = 'line';
         break;
+
       case 'gauge':
         $type = 'linearGauge';
         break;
+
       default:
         $type = $options['type'];
         break;
+
     }
     if (isset($options['polar']) && $options['polar'] == 1) {
       $type = 'radar';
@@ -64,24 +73,28 @@ class Chartjs extends AbstractChart {
   }
 
   /**
-   * @param $options
+   * Build the scale color ranges.
    *
-   * @return array
+   * @param array $options
+   *   Options.
+   *
+   * @return array $scaleColorRanges
+   *   Scale color ranges.
    */
-  protected function buildGaugeOptions($options) {
+  protected function buildGaugeOptions(array $options) {
     $scaleColorRanges = [];
     $scaleColorRanges[0] = new \stdClass();
     $scaleColorRanges[1] = new \stdClass();
     $scaleColorRanges[2] = new \stdClass();
-    // Red
+    // Red.
     $scaleColorRanges[0]->start = isset($options['red_from']) ? $options['red_from'] : '';
     $scaleColorRanges[0]->end = isset($options['red_to']) ? $options['red_to'] : '';
     $scaleColorRanges[0]->color = '#ff000c';
-    // Yellow
+    // Yellow.
     $scaleColorRanges[1]->start = isset($options['yellow_from']) ? $options['yellow_from'] : '';
     $scaleColorRanges[1]->end = isset($options['yellow_to']) ? $options['yellow_to'] : '';
     $scaleColorRanges[1]->color = '#ffff00';
-    // Green
+    // Green.
     $scaleColorRanges[2]->start = isset($options['green_from']) ? $options['green_from'] : '';
     $scaleColorRanges[2]->end = isset($options['green_to']) ? $options['green_to'] : '';
     $scaleColorRanges[2]->color = '#008000';
@@ -90,11 +103,14 @@ class Chartjs extends AbstractChart {
   }
 
   /**
-   * @param $options
+   * Build the options.
+   *
+   * @param array $options
+   *   Options.
    *
    * @return \Drupal\charts_chartjs\Settings\Chartjs\ChartjsOptions
    */
-  protected function buildOptions($options) {
+  protected function buildOptions(array $options) {
     $chartjsOptions = new ChartjsOptions();
     $chartjsScales = new ChartjsScales();
     $chartjsStacking = new ChartjsStacking();
@@ -102,7 +118,7 @@ class Chartjs extends AbstractChart {
     $tickOptions = new ChartjsTickConfigurationOptions();
 
     // Determines if chart is stacked.
-    if (!empty($options['grouping'] && $options['grouping'] == TRUE)) {
+    if (!empty($options['grouping']) && $options['grouping'] == TRUE) {
       $grouping = TRUE;
     }
     else {
@@ -129,7 +145,6 @@ class Chartjs extends AbstractChart {
     return $chartjsOptions;
   }
 
-
   /**
    * @param $options
    *
@@ -138,7 +153,7 @@ class Chartjs extends AbstractChart {
   protected function buildLegend($options) {
     $legend = new \stdClass();
 
-    if(!empty($options['legend_position']) && $options['legend'] == TRUE) {
+    if(isset($options['legend']) && !empty($options['legend_position']) && ($options['legend'] == TRUE)) {
       $legend->display = TRUE;
       $legend->position = $options['legend_position'];
     }
@@ -172,24 +187,22 @@ class Chartjs extends AbstractChart {
   /**
    * Creates a JSON Object formatted for C3 Charts JavaScript to use.
    *
-   * @param mixed $options
+   * @param array $options
    *   Options.
-   * @param mixed $categories
-   *   Categories.
-   * @param mixed $seriesData
-   *   Series data.
-   * @param mixed $attachmentDisplayOptions
-   *   Attachment display options.
-   * @param mixed $variables
+   * @param string $chartId
+   *   Chart ID.
+   * @param array $variables
    *   Variables.
-   * @param mixed $chartId
-   *   Chart Id.
+   * @param array $categories
+   *   Categories.
+   * @param array $seriesData
+   *   Series data.
+   * @param array $attachmentDisplayOptions
+   *   Attachment display options.
    * @param array $customOptions
    *   Overrides.
-   *
-   * @return array|void
    */
-  public function buildVariables($options, $categories = [], $seriesData = [], $attachmentDisplayOptions = [], &$variables, $chartId, $customOptions = []) {
+  public function buildVariables(array $options, $chartId, array &$variables, array $categories = [], array $seriesData = [], array $attachmentDisplayOptions = [], array $customOptions = []) {
 
     // Create new instance of Chart.js.
     $chartjs = new ChartjsChart();
@@ -247,8 +260,8 @@ class Chartjs extends AbstractChart {
     if ($options['type'] == 'gauge') {
       $chartjs->setScaleColorRanges($this->buildGaugeOptions($options));
       $range = [];
-      //    $range->startValue = $options['min'];
-      //    $range->endValue = $options['max'];
+      // $range->startValue = $options['min'].
+      // $range->endValue = $options['max'].
       $range['startValue'] = 1;
       $range['endValue'] = 1000;
       $chartjs->setRange($range);
@@ -256,11 +269,13 @@ class Chartjs extends AbstractChart {
 
     $chartjs->setOptions($this->buildOptions($options));
 
-    // Override Chart.js classes. These will only override what is in
-    // charts_chartjs/src/Settings/Chartjs/ChartjsChart.php
-    // but you can use more of the Chart.js API, as you are not constrained
-    // to what is in this class. See:
-    // charts_chartjs/src/Plugin/override/ChartjsOverrides.php
+    /*
+     * Override Chart.js classes. These will only override what is in
+     * charts_chartjs/src/Settings/Chartjs/ChartjsChart.php
+     * but you can use more of the Chart.js API, as you are not constrained
+     * to what is in this class. See:
+     * charts_chartjs/src/Plugin/override/ChartjsOverrides.php
+     */
     foreach($customOptions as $option => $key) {
       $setter = 'set' . ucfirst($option);
       if (method_exists($chartjs, $setter)) {

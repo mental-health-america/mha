@@ -7,20 +7,60 @@ namespace Drupal\charts_billboard\Settings\Billboard;
  */
 class BillboardChart implements \JsonSerializable {
 
+  /**
+   * Color.
+   *
+   * @var mixed
+   */
   private $color;
 
+  /**
+   * BindTo.
+   *
+   * @var string
+   */
   private $bindto;
 
+  /**
+   * Data.
+   *
+   * @var mixed
+   */
   private $data;
 
+  /**
+   * Axis.
+   *
+   * @var mixed
+   */
   private $axis;
 
+  /**
+   * Chart title.
+   *
+   * @var mixed
+   */
   private $title;
 
+  /**
+   * Gauge.
+   *
+   * @var mixed
+   */
   private $gauge;
 
+  /**
+   * Point.
+   *
+   * @var mixed
+   */
   private $point;
 
+  /**
+   * Legend.
+   *
+   * @var mixed
+   */
   private $legend;
 
   /**
@@ -124,42 +164,60 @@ class BillboardChart implements \JsonSerializable {
   }
 
   /**
+   * Get the gauge.
+   *
    * @return mixed
+   *   Gauge.
    */
   public function getGauge() {
     return $this->gauge;
   }
 
   /**
+   * Set the gauge.
+   *
    * @param mixed $gauge
+   *   Gauge.
    */
   public function setGauge($gauge) {
     $this->gauge = $gauge;
   }
 
   /**
+   * Get the point.
+   *
    * @return mixed
+   *   Point.
    */
   public function getPoint() {
     return $this->point;
   }
 
   /**
+   * Set the point.
+   *
    * @param mixed $point
+   *   Point.
    */
   public function setPoint($point) {
     $this->point = $point;
   }
 
   /**
+   * Get the legend.
+   *
    * @return mixed
+   *   Legend.
    */
   public function getLegend() {
     return $this->legend;
   }
 
   /**
+   * Set the legend.
+   *
    * @param mixed $legend
+   *   Legend.
    */
   public function setLegend($legend) {
     $this->legend = $legend;

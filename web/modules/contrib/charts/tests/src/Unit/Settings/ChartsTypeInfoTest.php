@@ -83,7 +83,7 @@ class ChartsTypeInfoTest extends UnitTestCase {
   public function testGetChartTypes(string $chartType) {
     $chartTypes = $this->chartsTypeInfo->getChartTypes();
     $this->assertArrayHasKey($chartType, $chartTypes);
-    $this->assertInternalType('string', $chartTypes[$chartType]->render());
+    $this->assertIsString($chartTypes[$chartType]->render());
   }
 
   /**
@@ -96,7 +96,7 @@ class ChartsTypeInfoTest extends UnitTestCase {
    */
   public function testGetChartType(string $chartType) {
     $chartTypeInfo = $this->chartsTypeInfo->getChartType($chartType);
-    $this->assertInternalType('array', $chartTypeInfo);
+    $this->assertIsArray($chartTypeInfo);
     $this->assertArrayHasKey('label', $chartTypeInfo);
     $this->assertArrayHasKey('axis', $chartTypeInfo);
   }

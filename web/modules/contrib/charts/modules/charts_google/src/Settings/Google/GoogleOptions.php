@@ -77,6 +77,16 @@ class GoogleOptions implements \JsonSerializable {
   private $colors;
 
   /**
+   * Font Size.
+   *
+   * The default font size, in pixels, of all text in the chart. You can
+   * override this using properties for specific chart elements.
+   *
+   * @var int
+   */
+  private $fontSize;
+
+  /**
    * Font Name.
    *
    * The default font face for all text in the chart.
@@ -210,6 +220,13 @@ class GoogleOptions implements \JsonSerializable {
    * @var float
    */
   private $sliceVisibilityThreshold;
+
+  /**
+   * pieSliceText value
+   *
+   * @var string
+   */
+  private $pieSliceText;
 
   /**
    * Gets the title of the Material Chart. Only Material Charts support titles.
@@ -381,6 +398,26 @@ class GoogleOptions implements \JsonSerializable {
   }
 
   /**
+   * Gets the default font size for all text in the chart.
+   *
+   * @return int
+   *   The font size, in pixels.
+   */
+  public function getFontSize() {
+    return $this->fontSize;
+  }
+
+  /**
+   * Sets the default font size for all text in the chart.
+   *
+   * @param int $fontSize
+   *   The font size, in pixels.
+   */
+  public function setFontSize($fontSize = NULL) {
+    $this->fontSize = $fontSize;
+  }
+
+  /**
    * Set Colors.
    *
    * Sets the colors to use for the chart elements. An array of strings, where
@@ -406,12 +443,12 @@ class GoogleOptions implements \JsonSerializable {
   }
 
   /**
-   * Set Colors.
+   * Set Font Name.
    *
    * Sets the default font face for all text in the chart.
    *
    * @param string $fontName
-   *   Colors.
+   *   Font Name.
    */
   public function setFontName($fontName = NULL) {
     $this->fontName = $fontName;
@@ -689,6 +726,20 @@ class GoogleOptions implements \JsonSerializable {
    */
   public function setSliceVisibilityThreshold(float $sliceVisibilityThreshold) {
     $this->sliceVisibilityThreshold = $sliceVisibilityThreshold;
+  }
+
+  /**
+   * @return string
+   */
+  public function getPieSliceText() {
+    return $this->pieSliceText;
+  }
+
+  /**
+   * @param string $pieSliceText
+   */
+  public function setPieSliceText(string $pieSliceText) {
+    $this->pieSliceText = $pieSliceText;
   }
 
   /**

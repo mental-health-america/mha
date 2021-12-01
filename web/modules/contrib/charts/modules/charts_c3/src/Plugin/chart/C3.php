@@ -40,24 +40,22 @@ class C3 extends AbstractChart {
   /**
    * Creates a JSON Object formatted for C3 Charts JavaScript to use.
    *
-   * @param mixed $options
+   * @param array $options
    *   Options.
-   * @param mixed $categories
-   *   Categories.
-   * @param mixed $seriesData
-   *   Series data.
-   * @param mixed $attachmentDisplayOptions
-   *   Attachment display options.
-   * @param mixed $variables
+   * @param string $chartId
+   *   Chart ID.
+   * @param array $variables
    *   Variables.
-   * @param mixed $chartId
-   *   Chart Id.
+   * @param array $categories
+   *   Categories.
+   * @param array $seriesData
+   *   Series data.
+   * @param array $attachmentDisplayOptions
+   *   Attachment display options.
    * @param array $customOptions
    *   Overrides.
-   *
-   * @return array|void
    */
-  public function buildVariables($options, $categories = [], $seriesData = [], $attachmentDisplayOptions = [], &$variables, $chartId, $customOptions = []) {
+  public function buildVariables(array $options, $chartId, array &$variables, array $categories = [], array $seriesData = [], array $attachmentDisplayOptions = [], array $customOptions = []) {
 
     // Create new instance of CThree.
     $c3 = new CThree();
@@ -191,14 +189,16 @@ class C3 extends AbstractChart {
     $chartAxis->y = $showAxis;
 
     // Sets secondary axis from the first attachment only.
-    if (!$noAttachmentDisplays && $attachmentDisplayOptions[0]['inherit_yaxis'] == 0) {
+    if (!$noAttachmentDisplays &&
+      isset($attachmentDisplayOptions[0]['inherit_yaxis']) &&
+      $attachmentDisplayOptions[0]['inherit_yaxis'] == 0) {
       $showSecAxis['show'] = TRUE;
       $showSecAxis['label'] = $attachmentDisplayOptions[0]['style']['options']['yaxis_title'];
       $chartAxis->y2 = $showSecAxis;
     }
 
     // Determines if chart is stacked.
-    if (!empty($options['grouping'] && $options['grouping'] == TRUE)) {
+    if (isset($options['grouping']) && $options['grouping'] === TRUE) {
       $seriesNames = [];
       for ($i = 0; $i < $seriesCount; $i++) {
         array_push($seriesNames, $seriesData[$i]['name']);

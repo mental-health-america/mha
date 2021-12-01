@@ -10,20 +10,24 @@ use Drupal\Component\Plugin\PluginInspectionInterface;
 interface ChartInterface extends PluginInspectionInterface {
 
   /**
-   * Build Variables.
+   * Creates a JSON Object formatted for the charting library JavaScript.
    *
-   * @param $options
-   * @param $categories
-   * @param $seriesData
-   * @param $attachmentDisplayOptions
-   * @param $variables
-   * @param $chartId
-   * @param array $customOptions
-   *
-   * @return array
+   * @param array $options
+   *   Options.
+   * @param string $chartId
+   *   Chart ID.
+   * @param array $variables
    *   Variables.
+   * @param array $categories
+   *   Categories.
+   * @param array $seriesData
+   *   Series data.
+   * @param array $attachmentDisplayOptions
+   *   Attachment display options.
+   * @param array $customOptions
+   *   Overrides.
    */
-  public function buildVariables($options, $categories, $seriesData, $attachmentDisplayOptions, &$variables, $chartId, $customOptions = []);
+  public function buildVariables(array $options, $chartId, array &$variables, array $categories, array $seriesData, array $attachmentDisplayOptions, array $customOptions = []);
 
   /**
    * Return the name of the chart.

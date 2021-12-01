@@ -4,7 +4,6 @@ namespace Drupal\charts_api_example\Controller;
 
 use Drupal\charts\Services\ChartsSettingsServiceInterface;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Component\Uuid\UuidInterface;
@@ -73,7 +72,7 @@ class ChartsApiExample extends ControllerBase {
       'three_dimensional' => FALSE,
       'title_position' => 'out',
       'legend_position' => 'right',
-      'data_labels'=> $this->chartSettings['data_labels'],
+      'data_labels' => $this->chartSettings['data_labels'],
       'tooltips' => $this->chartSettings['tooltips'],
       // 'grouping'   => TRUE,
       'colors'   => $this->chartSettings['colors'],

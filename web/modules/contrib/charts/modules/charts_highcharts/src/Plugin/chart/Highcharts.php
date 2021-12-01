@@ -40,15 +40,19 @@ use Drupal\Core\Plugin\Context\ContextDefinition;
 class Highcharts extends AbstractChart {
 
   /**
-   * @param $options
+   * Build the legend.
+   *
+   * @param array $options
+   *   Options
    *
    * @return \Drupal\charts_highcharts\Settings\Highcharts\ChartLegend
+   *   Chart legend.
    */
-  protected function buildChartLegend($options) {
-    // Retrieve Highcharts-specific default settings
+  protected function buildChartLegend(array $options) {
+    // Retrieve Highcharts-specific default settings.
     $highchartsConfig = \Drupal::config('charts_highcharts.settings')
       ->get();
-    // Incorporate Highcharts-specific default settings into $options
+    // Incorporate Highcharts-specific default settings into $options.
     $options = array_merge($options, $highchartsConfig);
 
     $chartLegend = new ChartLegend();
@@ -96,17 +100,21 @@ class Highcharts extends AbstractChart {
     $chartLegend->setItemStyle($styles);
     // Get language direction and set legend direction upon
     $direction = \Drupal::languageManager()->getCurrentLanguage()->getDirection();
-    $chartLegend->setDirection($direction == 'ltr' ? false : true);
+    $chartLegend->setDirection($direction == 'ltr' ? FALSE : TRUE);
 
     return $chartLegend;
   }
 
   /**
-   * @param $options
+   * Build the plotOptions.
+   *
+   * @param array $options
+   *   Options.
    *
    * @return \Drupal\charts_highcharts\Settings\Highcharts\PlotOptions
+   *   PlotOptions.
    */
-  protected function buildPlotOptions($options) {
+  protected function buildPlotOptions(array $options) {
     $plotOptions = new PlotOptions();
     $plotOptionsStacking = new PlotOptionsStacking();
     $plotOptionsSeries = new PlotOptionsSeries();
@@ -116,8 +124,8 @@ class Highcharts extends AbstractChart {
     if (!empty($options['grouping'])) {
       $plotOptions->setPlotOptions($options['type'], $plotOptionsStacking);
       $plotOptionsStacking->setDataLabels($plotOptionsSeriesDataLabels);
-      // Set markers if grouped
-      if (in_array($options['type'], ['area','line','scatter','spline'])) {
+      // Set markers if grouped.
+      if (in_array($options['type'], ['area', 'line', 'scatter', 'spline'])) {
         $marker = new Marker();
         if ($options['data_markers'] == 'FALSE') {
           $marker->setEnabled(FALSE);
@@ -134,8 +142,8 @@ class Highcharts extends AbstractChart {
     else {
       $plotOptions->setPlotOptions($options['type'], $plotOptionsSeries);
       $plotOptionsSeries->setDataLabels($plotOptionsSeriesDataLabels);
-      // Set markers if not grouped
-      if (in_array($options['type'], ['area','line','scatter','spline'])) {
+      // Set markers if not grouped.
+      if (in_array($options['type'], ['area', 'line', 'scatter', 'spline'])) {
         $marker = new Marker();
         if ($options['data_markers'] == 'FALSE') {
           $marker->setEnabled(FALSE);
@@ -158,13 +166,19 @@ class Highcharts extends AbstractChart {
   }
 
   /**
-   * @param $options
-   * @param $seriesData
-   * @param $categories
+   * Build the x-axis.
+   *
+   * @param array $options
+   *   Options.
+   * @param array $seriesData
+   *   SeriesData.
+   * @param array $categories
+   *   Categories.
    *
    * @return \Drupal\charts_highcharts\Settings\Highcharts\Xaxis
+   *   X-axis.
    */
-  protected function buildXaxis($options, $seriesData, $categories) {
+  protected function buildXaxis(array $options, array $seriesData, array $categories) {
     $chartXaxis = new Xaxis();
     $chartLabels = new ChartLabel();
     // Set x-axis label rotation.
@@ -224,11 +238,14 @@ class Highcharts extends AbstractChart {
   }
 
   /**
-   * @param $options
+   * Build the y-axis labels.
+   *
+   * @param array $options
+   *   Options.
    *
    * @return \Drupal\charts_highcharts\Settings\Highcharts\YaxisLabel
    */
-  protected function buildYaxisLabels($options) {
+  protected function buildYaxisLabels(array $options) {
     $yaxisLabels = new YaxisLabel();
     if (!empty($options['yaxis_suffix'])) {
       $yaxisLabels->setYaxisLabelSuffix($options['yaxis_suffix']);
@@ -241,11 +258,14 @@ class Highcharts extends AbstractChart {
   }
 
   /**
-   * @param $attachmentDisplayOptions
+   * Build the secondary y-axis.
+   *
+   * @param array $attachmentDisplayOptions
+   *   Attachment display options.
    *
    * @return \Drupal\charts_highcharts\Settings\Highcharts\Yaxis
    */
-  protected function buildSecondaryYaxis($attachmentDisplayOptions) {
+  protected function buildSecondaryYaxis(array $attachmentDisplayOptions) {
     $chartYaxisSecondary = new Yaxis();
     $yAxisTitleSecondary = new YaxisTitle();
     $yAxisTitleSecondary->setText($attachmentDisplayOptions[0]['style']['options']['yaxis_title']);
@@ -270,15 +290,22 @@ class Highcharts extends AbstractChart {
   }
 
   /**
-   * @param $title
-   * @param $yaxisLabels
-   * @param $options
-   * @param $seriesData
-   * @param $categories
+   * Build the y-axis.
+   *
+   * @param string $title
+   *   Title.
+   * @param mixed $yaxisLabels
+   *   Labels.
+   * @param array $options
+   *   Options.
+   * @param array $seriesData
+   *   SeriesData.
+   * @param array $categories
+   *   Categories.
    *
    * @return \Drupal\charts_highcharts\Settings\Highcharts\Yaxis
    */
-  protected function buildYaxis($title, $yaxisLabels, $options, $seriesData, $categories) {
+  protected function buildYaxis($title, $yaxisLabels, array $options, array $seriesData, array $categories) {
 
     $chartYaxis = new Yaxis();
     $yAxisTitle = new YaxisTitle();
@@ -358,7 +385,7 @@ class Highcharts extends AbstractChart {
       $chartYaxis->setMin((int) $options['min']);
       $chartYaxis->setMax((int) $options['max']);
       if (count($seriesData) > 1 || count($categories) > 1) {
-        \Drupal::service('messenger')->addMessage(t('The gauge 
+        \Drupal::service('messenger')->addMessage(t('The gauge
           chart type does not work well with more than one value.'), 'warning');
       }
     }
@@ -369,11 +396,14 @@ class Highcharts extends AbstractChart {
   }
 
   /**
-   * @param $options
+   * Build Tooltip
+   *
+   * @param array $options
+   *   Options.
    *
    * @return \Drupal\charts_highcharts\Settings\Highcharts\Tooltip
    */
-  protected function buildToolTip($options) {
+  protected function buildToolTip(array $options) {
     $chartTooltip = new Tooltip();
     if (isset($options['tooltips'])) {
       $chartTooltip->setEnabled($options['tooltips']);
@@ -389,11 +419,14 @@ class Highcharts extends AbstractChart {
   }
 
   /**
-   * @param $options
+   * Build credits.
+   *
+   * @param array $options
+   *   Options.
    *
    * @return \Drupal\charts_highcharts\Settings\Highcharts\ChartCredits
    */
-  protected function buildCredits($options) {
+  protected function buildCredits(array $options) {
     $chartCredits = new ChartCredits();
     if (isset($options['credits'])) {
       $chartCredits->setEnabled(TRUE);
@@ -408,11 +441,13 @@ class Highcharts extends AbstractChart {
   }
 
   /**
-   * @param $options
+   * Build the chart title.
+   * @param array $options
+   *   Options.
    *
    * @return \Drupal\charts_highcharts\Settings\Highcharts\ChartTitle
    */
-  protected function buildChartTitle($options) {
+  protected function buildChartTitle(array $options) {
     $chartTitle = new ChartTitle();
     if (isset($options['title'])) {
       $chartTitle->setText($options['title']);
@@ -431,11 +466,13 @@ class Highcharts extends AbstractChart {
   }
 
   /**
-   * @param $options
+   * Build the chart type.
+   * @param array $options
+   *   Options.
    *
    * @return \Drupal\charts_highcharts\Settings\Highcharts\Chart
    */
-  protected function buildChartType($options) {
+  protected function buildChartType(array $options) {
     $chart = new Chart();
     $chart->setType($options['type']);
 
@@ -477,24 +514,22 @@ class Highcharts extends AbstractChart {
   /**
    * Creates a JSON Object formatted for Highcharts JavaScript to use.
    *
-   * @param mixed $options
+   * @param array $options
    *   Options.
-   * @param mixed $categories
-   *   Categories.
-   * @param mixed $seriesData
-   *   Series data.
-   * @param mixed $attachmentDisplayOptions
-   *   Attachment display options.
-   * @param mixed $variables
+   * @param string $chartId
+   *   Chart ID.
+   * @param array $variables
    *   Variables.
-   * @param mixed $chartId
-   *   Chart Id.
+   * @param array $categories
+   *   Categories.
+   * @param array $seriesData
+   *   Series data.
+   * @param array $attachmentDisplayOptions
+   *   Attachment display options.
    * @param array $customOptions
    *   Overrides.
-   *
-   * @return array|void
    */
-  public function buildVariables($options, $categories = [], $seriesData = [], $attachmentDisplayOptions = [], &$variables, $chartId, $customOptions = []) {
+  public function buildVariables(array $options, $chartId, array &$variables, array $categories = [], array $seriesData = [], array $attachmentDisplayOptions = [], array $customOptions = []) {
     $noAttachmentDisplays = count($attachmentDisplayOptions) === 0;
 
     // @todo: make this so that it happens if any display uses donut.

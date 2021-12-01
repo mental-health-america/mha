@@ -2,7 +2,6 @@
 
 namespace Drupal\charts_billboard\Form;
 
-
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
@@ -38,9 +37,8 @@ class ChartsConfigForm extends ConfigFormBase {
       '#type' => 'fieldset',
       '#description' => $this->t(
         'This is a placeholder for Billboard.js-specific library options. If you would like to help build this out, please work from <a href="@issue_link">this issue</a>.', [
-        '@issue_link' => Url::fromUri('https://www.drupal.org/project/charts/issues/3046983')
-          ->toString(),
-      ]),
+          '@issue_link' => Url::fromUri('https://www.drupal.org/project/charts/issues/3046983')->toString(),
+        ]),
     ];
 
     return parent::buildForm($form, $form_state);
@@ -53,7 +51,7 @@ class ChartsConfigForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
 
     $this->config('charts_billboard.settings')
-      // Set the submitted configuration setting
+      // Set the submitted configuration setting.
       ->set('placeholder', $form_state->getValue('placeholder'))
       ->save();
 

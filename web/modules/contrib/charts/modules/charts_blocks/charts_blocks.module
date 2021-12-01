@@ -5,10 +5,8 @@
  * Contains chart_block_example.module.
  */
 
-use Drupal\block\Entity\Block;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
-
 
 /**
  * Implements hook_help().
@@ -47,9 +45,7 @@ function charts_blocks_theme() {
 }
 
 /**
- * Implements template_preprocess_page
- *
- * @param $variables
+ * Implements template_preprocess_hook().
  */
 function template_preprocess_charts_blocks(&$variables) {
 
@@ -63,12 +59,13 @@ function template_preprocess_charts_blocks(&$variables) {
       $chartOverridePlugin = $chartOverridePluginManager->createInstance($variables['library'] . '_overrides');
       $chartOverrideOptions = $chartOverridePlugin->chartOverrides($variables['options']);
     }
-  } catch (PluginNotFoundException $e) {
+  }
+  catch (PluginNotFoundException $e) {
     \Drupal::service('messenger')
-      ->addMessage(t('Exception...' . $e->getMessage()));
+      ->addMessage(t('Exception: @error', ['@error', $e->getMessage()]));
   }
 
   $plugin_manager = \Drupal::service('plugin.manager.charts');
   $plugin = $plugin_manager->createInstance($variables['library']);
-  $plugin->buildVariables($variables['options'], $variables['categories'], $variables['seriesData'], $variables['secondaryOptions'], $variables, $variables['id'], $chartOverrideOptions);
+  $plugin->buildVariables($variables['options'], $variables['id'], $variables, $variables['categories'], $variables['seriesData'], $variables['secondaryOptions'], $chartOverrideOptions);
 }

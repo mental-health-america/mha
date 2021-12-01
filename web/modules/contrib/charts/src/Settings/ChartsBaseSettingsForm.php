@@ -1,40 +1,41 @@
 <?php
 
-
 namespace Drupal\charts\Settings;
 
-use Drupal\charts\Settings\ChartsDefaultSettings;
-use Drupal\charts\Settings\ChartsTypeInfo;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
-
+/**
+ * Base settings form for charts.
+ */
 class ChartsBaseSettingsForm {
 
-    use StringTranslationTrait;
+  use StringTranslationTrait;
 
-    /**
-     * @var ChartsDefaultSettings
-     */
-    private $defaultSettings;
+  /**
+   * @var \Drupal\charts\Settings\ChartsDefaultSettings
+   */
+  private $defaultSettings;
 
-    /**
-     * @var ChartsTypeInfo
-     */
-    private $chartsTypes;
+  /**
+   * @var \Drupal\charts\Settings\ChartsTypeInfo
+   */
+  private $chartsTypes;
 
-    public function __construct() {
-        $this->defaultSettings = new ChartsDefaultSettings();
-        $this->chartsTypes = new ChartsTypeInfo();
+  public function __construct() {
+    $this->defaultSettings = new ChartsDefaultSettings();
+    $this->chartsTypes = new ChartsTypeInfo();
 
-        $translation = \Drupal::service('string_translation');
-        $this->setStringTranslation($translation);
-    }
+    $translation = \Drupal::service('string_translation');
+    $this->setStringTranslation($translation);
+  }
 
   /**
    * Charts Settings Form.
    *
    * @param mixed $form
    *   The form array to which this form will be added.
+   * @param string $pluginType
+   *   A string to determine which layout to use.
    * @param array $defaults
    *   An array of existing values which will be used to populate defaults.
    * @param array $field_options
@@ -43,13 +44,11 @@ class ChartsBaseSettingsForm {
    *   If all the contents of this form should be parented under a particular
    *   namespace, an array of parent names that will be prepended to each
    *   element's #parents property.
-   * @param string $pluginType
-   *   A string to determine which layout to use.
    *
    * @return mixed Form.
-   * Form.
+   *   Form.
    */
-  public function getChartsBaseSettingsForm($form, $defaults = [], $field_options = [], $parents = [], $pluginType) {
+  public function getChartsBaseSettingsForm($form, $pluginType, $defaults = [], $field_options = [], $parents = []) {
 
     // Set options from defaults.
     $options = array_merge($this->defaultSettings->getDefaults(), $defaults);
@@ -132,10 +131,14 @@ class ChartsBaseSettingsForm {
             '#column' => 'one',
           ];
 
+          $default_value = '';
+          if (isset($options['data_fields'][$field_name])) {
+            $default_value = $options['data_fields'][$field_name];
+          }
           $form['fields']['table'][$field_count]['data_fields'][$field_name] = [
             '#type' => 'checkbox',
             '#title' => $field_name,
-            '#default_value' => $options['data_fields'][$field_name],
+            '#default_value' => $default_value,
             '#return_value' => $field_name,
             '#weight' => -9,
             '#states' => [
@@ -320,7 +323,6 @@ class ChartsBaseSettingsForm {
         // This is only shown on inverted charts.
         '#attributes' => ['class' => ['axis-inverted-show']],
       ];
-
 
     }
 
@@ -567,7 +569,6 @@ class ChartsBaseSettingsForm {
       '#default_value' => $options['xaxis_labels_rotation'],
       '#parents' => array_merge($parents, ['xaxis_labels_rotation']),
     ];
-
 
     $form['yaxis']['title'] = [
       '#title' => $this->t('Custom title'),

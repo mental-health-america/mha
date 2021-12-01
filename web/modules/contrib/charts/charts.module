@@ -9,6 +9,9 @@ use Drupal\charts\Util\Util;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\views\ViewExecutable;
 
+/**
+ * Implements hook_views_data().
+ */
 function charts_views_data() {
   $data['charts_fields']['table']['group'] = t('Charts');
   $data['charts_fields']['table']['join'] = [
@@ -51,7 +54,6 @@ function charts_theme($existing, $type, $theme, $path) {
 
 /**
  * Implements hook_views_pre_view().
- *
  */
 function charts_views_pre_view(ViewExecutable $view, $display_id, array &$args) {
   $hasFields = array_key_exists('fields', $view->display_handler->options);
@@ -85,7 +87,7 @@ function charts_views_pre_view(ViewExecutable $view, $display_id, array &$args) 
 }
 
 /**
- * Implements template_preprocess_views_view_charts().
+ * Implements template_preprocess_hook().
  */
 function template_preprocess_views_view_charts(&$variables) {
 
@@ -148,7 +150,9 @@ function template_preprocess_views_view_charts(&$variables) {
 
     // Combine the $seriesData from each Chart Attachment into one array.
     for ($j = 0; $j < count($attachmentData[1]); $j++) {
-      if ($i == 0 && $attachmentDisplay['display_options']['inherit_yaxis'] == 0) {
+      if ($i == 0 &&
+        isset($attachmentDisplay['display_options']['inherit_yaxis']) &&
+        $attachmentDisplay['display_options']['inherit_yaxis'] == 0) {
         $attachmentData[1][$j]['yAxis'] = 1;
       }
       array_push($attachmentSeriesData, $attachmentData[1][$j]);
@@ -197,9 +201,10 @@ function template_preprocess_views_view_charts(&$variables) {
       $chartOverridePlugin = $chartOverridePluginManager->createInstance($plugin_definition['id']);
       $chartOverrideOptions = $chartOverridePlugin->chartOverrides($variables['options']);
     }
-  } catch (PluginNotFoundException $e) {
+  }
+  catch (PluginNotFoundException $e) {
     \Drupal::service('messenger')
-      ->addMessage(t('Exception...' . $e->getMessage()));
+      ->addMessage(t('Exception: @error', ['@error', $e->getMessage()]));
   }
 
   // Generate a unique chart ID by combining the View and display IDs.
@@ -209,5 +214,5 @@ function template_preprocess_views_view_charts(&$variables) {
 
   $plugin_manager = \Drupal::service('plugin.manager.charts');
   $plugin = $plugin_manager->createInstance($options['library']);
-  $plugin->buildVariables($variables['options'], $categories, $seriesData, $attachmentDisplayOptions, $variables, $chartId, $chartOverrideOptions);
+  $plugin->buildVariables($variables['options'], $chartId, $variables, $categories, $seriesData, $attachmentDisplayOptions, $chartOverrideOptions);
 }

@@ -168,6 +168,8 @@ class ChartsBaseSettingsFormTest extends UnitTestCase {
    *
    * @param mixed $form
    *   The form array to which this form will be added.
+   * @param string $pluginType
+   *   A string to determine which layout to use.
    * @param array $defaults
    *   An array of existing values which will be used to populate defaults.
    * @param array $field_options
@@ -176,15 +178,13 @@ class ChartsBaseSettingsFormTest extends UnitTestCase {
    *   If all the contents of this form should be parented under a particular
    *   namespace, an array of parent names that will be prepended to each
    *   element's #parents property.
-   * @param string $pluginType
-   *   A string to determine which layout to use.
    *
    * @dataProvider formProvider
    */
-  public function testGetChartsBaseSettingsForm(array $form, array $defaults, array $field_options, array $parents, $pluginType) {
-    $settingsForm = $this->chartsBaseSettingsForm->getChartsBaseSettingsForm($form, $defaults, $field_options, $parents, $pluginType);
+  public function testGetChartsBaseSettingsForm(array $form, $pluginType, array $defaults, array $field_options, array $parents) {
+    $settingsForm = $this->chartsBaseSettingsForm->getChartsBaseSettingsForm($form, $pluginType, $defaults, $field_options, $parents);
 
-    $this->assertInternalType('array', $settingsForm);
+    $this->assertIsArray($settingsForm);
     $this->assertArrayHasKey('library', $settingsForm);
     $this->assertArrayHasKey('type', $settingsForm);
     $this->assertArrayHasKey('display', $settingsForm);
@@ -296,6 +296,7 @@ class ChartsBaseSettingsFormTest extends UnitTestCase {
   public function formProvider() {
     yield [
         [],
+      'block',
         [
           'inherit_yaxis' => 1,
           'secondary_yaxis' => [
@@ -310,21 +311,20 @@ class ChartsBaseSettingsFormTest extends UnitTestCase {
         ],
         [],
         [],
-        'block',
     ];
     yield [
         [],
+      'view',
         ['colors' => ['00FF00']],
         ['title' => $this->prophesize(TranslatableMarkup::class)->reveal()],
         [],
-      'view',
     ];
     yield [
         [],
+      'config_form',
         ['colors' => ['00FF00', '00FF00', '00FF00', '00FF00', '00FF00', '00FF00', '00FF00', '00FF00', '00FF00', '00FF00']],
         [],
         [],
-      'config_form',
     ];
   }
 

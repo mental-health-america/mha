@@ -8,7 +8,6 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\charts\Settings\ChartsDefaultSettings;
 use Drupal\charts\Services\ChartsSettingsService;
-use Drupal\charts\Settings\ChartsTypeInfo;
 use Drupal\charts\Settings\ChartsBaseSettingsForm;
 use Drupal\charts\Settings\ChartsDefaultColors;
 
@@ -22,12 +21,32 @@ use Drupal\charts\Settings\ChartsDefaultColors;
  */
 class ChartsBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
+  /**
+   * Chart defaults.
+   *
+   * @var mixed
+   */
   protected $defaults;
 
+  /**
+   * Colors.
+   *
+   * @var mixed
+   */
   protected $colors;
 
+  /**
+   * Chart default settings.
+   *
+   * @var mixed
+   */
   protected $chartsDefaultSettings;
 
+  /**
+   * Chart base settings form.
+   *
+   * @var mixed
+   */
   protected $chartsBaseSettingsForm;
 
   /**
@@ -69,9 +88,9 @@ class ChartsBlock extends BlockBase implements ContainerFactoryPluginInterface {
     else {
       $defaults = $this->configuration;
     }
-    $form = $this->chartsBaseSettingsForm->getChartsBaseSettingsForm($form, $defaults, [], [], 'block');
+    $form = $this->chartsBaseSettingsForm->getChartsBaseSettingsForm($form, 'block', $defaults, [], []);
 
-    /**
+    /*
      * @todo figure out why the block label field does not respect weight.
      */
     // Reposition the block form fields to the top.
@@ -171,7 +190,7 @@ class ChartsBlock extends BlockBase implements ContainerFactoryPluginInterface {
       '#weight' => '-15',
     ];
 
-    /**
+    /*
      * Unset the #parents element from default form, then set the
      * default value.
      */
@@ -284,10 +303,8 @@ class ChartsBlock extends BlockBase implements ContainerFactoryPluginInterface {
     $form['yaxis']['secondary_yaxis']['decimal_count']['#default_value'] = !empty($this->configuration['secondary_yaxis_decimal_count']) ? $this->configuration['secondary_yaxis_decimal_count'] : $defaults['yaxis_decimal_count'];
     $form['yaxis']['secondary_yaxis']['labels_rotation']['#default_value'] = !empty($this->configuration['secondary_yaxis_labels_rotation']) ? $this->configuration['secondary_yaxis_labels_rotation'] : $defaults['yaxis_labels_rotation'];
 
-
     return $form;
   }
-
 
   /**
    * {@inheritdoc}
@@ -449,7 +466,7 @@ class ChartsBlock extends BlockBase implements ContainerFactoryPluginInterface {
       $this->configuration[$field] = $form_state->getValue([
         'display',
         'gauge',
-        $field
+        $field,
       ]);
     }
 
@@ -482,7 +499,8 @@ class ChartsBlock extends BlockBase implements ContainerFactoryPluginInterface {
       ];
     }
 
-    /** Helps for pie and donut charts, which need more colors than configurable
+    /*
+     * Helps for pie and donut charts, which need more colors than configurable
      * for a single series.
      */
     $colors = $this->colors->getDefaultColors();
