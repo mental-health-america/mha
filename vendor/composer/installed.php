@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '51812df2bc7429ebc6ebf9ed0aa2063a03ab0e2c',
+        'reference' => 'ee5e464545ee079bcf223ac668d3946c6c9e7a43',
         'name' => 'drupal-composer/drupal-project',
         'dev' => true,
     ),
@@ -370,7 +370,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '51812df2bc7429ebc6ebf9ed0aa2063a03ab0e2c',
+            'reference' => 'ee5e464545ee079bcf223ac668d3946c6c9e7a43',
             'dev_requirement' => false,
         ),
         'drupal/action' => array(
@@ -1592,12 +1592,14 @@
             ),
         ),
         'drupal/rules' => array(
-            'pretty_version' => '3.0.0-alpha5',
-            'version' => '3.0.0.0-alpha5',
+            'pretty_version' => 'dev-3.x',
+            'version' => 'dev-3.x',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../web/modules/contrib/rules',
-            'aliases' => array(),
-            'reference' => '8.x-3.0-alpha5',
+            'aliases' => array(
+                0 => '3.x-dev',
+            ),
+            'reference' => 'b92e91537fcb47e0dfd5eba4e3c5c9b79e543eca',
             'dev_requirement' => false,
         ),
         'drupal/salesforce' => array(
