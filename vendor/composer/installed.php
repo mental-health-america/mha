@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '26ad565657d7c3efc32c302de0874412a889849e',
+        'reference' => '51812df2bc7429ebc6ebf9ed0aa2063a03ab0e2c',
         'name' => 'drupal-composer/drupal-project',
         'dev' => true,
     ),
@@ -370,7 +370,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '26ad565657d7c3efc32c302de0874412a889849e',
+            'reference' => '51812df2bc7429ebc6ebf9ed0aa2063a03ab0e2c',
             'dev_requirement' => false,
         ),
         'drupal/action' => array(
@@ -1632,6 +1632,15 @@
             'replaced' => array(
                 0 => '8.9.19',
             ),
+        ),
+        'drupal/search_exclude' => array(
+            'pretty_version' => '1.2.0',
+            'version' => '1.2.0.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../web/modules/contrib/search_exclude',
+            'aliases' => array(),
+            'reference' => '8.x-1.2',
+            'dev_requirement' => false,
         ),
         'drupal/seckit' => array(
             'pretty_version' => '2.0.0',
