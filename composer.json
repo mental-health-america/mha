@@ -120,6 +120,7 @@
         "drupal/salesforce": "^5.0",
         "drupal/salesforce_oauth": "^4.1",
         "drupal/scheduler": "^1.0",
+        "drupal/search_exclude": "^2.0@beta",
         "drupal/seckit": "^2.0",
         "drupal/simple_instagram_feed": "^3.11",
         "drupal/simple_popup_blocks": "^2.8",
