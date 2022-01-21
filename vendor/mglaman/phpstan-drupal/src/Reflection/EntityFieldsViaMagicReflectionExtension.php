@@ -20,7 +20,10 @@ class EntityFieldsViaMagicReflectionExtension implements PropertiesClassReflecti
 
     public function hasProperty(ClassReflection $classReflection, string $propertyName): bool
     {
-        if ($classReflection->hasNativeProperty($propertyName)) {
+        // @todo Have this run after PHPStan\Reflection\Annotations\AnnotationsPropertiesClassReflectionExtension
+        // We should not have to check for the property tags if we could get this to run after PHPStan's
+        // existing annotation property reflection.
+        if ($classReflection->hasNativeProperty($propertyName) || array_key_exists($propertyName, $classReflection->getPropertyTags())) {
             // Let other parts of PHPStan handle this.
             return false;
         }
@@ -34,7 +37,7 @@ class EntityFieldsViaMagicReflectionExtension implements PropertiesClassReflecti
             // Content entities have magical __get... so it is kind of true.
             return true;
         }
-        if (self::classObjectIsSuperOfFieldItemList($reflection)->yes()) {
+        if (self::classObjectIsSuperOfInterface($reflection, self::getFieldItemListInterfaceObject())->yes()) {
             return FieldItemListPropertyReflection::canHandleProperty($classReflection, $propertyName);
         }
 
@@ -47,17 +50,16 @@ class EntityFieldsViaMagicReflectionExtension implements PropertiesClassReflecti
         if ($reflection->implementsInterface('Drupal\Core\Entity\EntityInterface')) {
             return new EntityFieldReflection($classReflection, $propertyName);
         }
-        if (self::classObjectIsSuperOfFieldItemList($reflection)->yes()) {
+        if (self::classObjectIsSuperOfInterface($reflection, self::getFieldItemListInterfaceObject())->yes()) {
             return new FieldItemListPropertyReflection($classReflection, $propertyName);
         }
 
         throw new \LogicException($classReflection->getName() . "::$propertyName should be handled earlier.");
     }
 
-    protected static function classObjectIsSuperOfFieldItemList(\ReflectionClass $reflection) : TrinaryLogic
+    public static function classObjectIsSuperOfInterface(\ReflectionClass $reflection, ObjectType $interfaceObject) : TrinaryLogic
     {
         $classObject = new ObjectType($reflection->getName());
-        $interfaceObject = self::getFieldItemListInterfaceObject();
         return $interfaceObject->isSuperTypeOf($classObject);
     }
 

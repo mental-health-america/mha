@@ -8,7 +8,7 @@ dependencies:
   - dynamic_entity_reference
   - views
 
-# Information added by Drupal.org packaging script on 2021-05-06
-version: '8.x-2.0-alpha15'
+# Information added by Drupal.org packaging script on 2022-01-17
+version: '8.x-2.0-alpha17'
 project: 'dynamic_entity_reference'
-datestamp: 1620309102
+datestamp: 1642425191
