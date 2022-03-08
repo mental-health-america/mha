@@ -20,7 +20,7 @@
   var _id = 'blazy';
   var _data = 'data-';
   var _dataAnimation = _data + 'animation';
-  var _dataDimensions = _data + 'dimensions';
+  var _dataRatios = _data + 'ratios';
   var _dataRatio = _data + 'ratio';
   var _media = 'media';
   var _picture = 'picture';
@@ -29,6 +29,7 @@
   var _isAnimated = 'is-b-animated';
   var _winData = {};
   var _opts = {};
+  var _ww = 0;
 
   /**
    * Blazy public compat methods.
@@ -55,17 +56,23 @@
       var bio = me.init;
       var check = function (e) {
         var details = e && e.detail ? e.detail : {};
-        me.resizeTick = bio && bio.resizeTick || 0;
 
         _winData = details.winData || me.windowData();
 
-        if ($.isFun(cb)) {
-          $.each(items, function (entry) {
-            var el = entry.target || entry;
+        var isResized = _ww > 0 && _ww !== _winData.ww;
+        if (isResized) {
+          me.resizeTick = bio && bio.resizeTick || 0;
 
-            return cb.call(me, el);
-          });
+          if ($.isFun(cb)) {
+            $.each(items, function (entry, i) {
+              var el = entry.target || entry;
+
+              return cb.call(me, el, i, isResized);
+            });
+          }
         }
+
+        _ww = _winData.ww;
       };
 
       // Already throttled for oldies, or RO/RAF for modern browsers.
@@ -115,28 +122,38 @@
    *
    * This only applies to Responsive images with aspect ratio fluid.
    * Static ratio (media--ratio--169, etc.) is ignored and uses CSS instead.
+   * The dimensions here are pre-determined server-side per image styles.
+   * Called during window.resize and window.onload to have a frame (setup
+   * dimensions) to minimize reflows. The real frame will be set after the
+   * image.onload/ decoded moment at blazy.drupal.js ::pad() method for more
+   * precise dimensions based on image natural dimensions, not server-side ones.
    *
    * @param {Element} cn
    *   The .media--ratio[--fluid] container HTML element.
+   * @param {int} i
+   *   The element index.
+   * @param {bool} isResized
+   *   If the resize event is triggered.
    *
    * @todo this should be at bio.js, but bLazy has no support which prevents it.
    * Unless made generic for a ping-pong.
    */
-  function updateRatio(cn) {
+  function updateRatio(cn, i, isResized) {
     cn = cn.target || cn;
+
+    // The actual third argument is object collections, unless being resized.
+    isResized = $.isBool(isResized) ? isResized : false;
 
     if (!$.isElm(cn)) {
       return;
     }
 
-    var me = this;
     // Blazy container (via formatter or Views style) is not always there.
     var root = $.closest(cn, '.' + _id);
-    var dimensions = $.parse($.attr(cn, _dataDimensions));
-    var isResized = me.resizeTick > 0;
+    var ratios = $.parse($.attr(cn, _dataRatios));
 
     // Bail out if a static/ non-fluid aspect ratio.
-    if (!dimensions) {
+    if ($.isEmpty(ratios)) {
       fallbackRatio(cn);
       return;
     }
@@ -146,7 +163,7 @@
     var data = $.extend(_winData, {
       up: isPicture
     });
-    var pad = $.activeWidth(dimensions, data);
+    var pad = $.activeWidth(ratios, data);
 
     // Provides marker for grouping between multiple instances.
     cn.dblazy = $.isElm(root) && root.dblazy;
@@ -154,12 +171,12 @@
       cn.style.paddingBottom = pad + '%';
     }
 
+    // @todo remove, already moved into bio.media.js for multi-breakpoint BG.
     // Update multi-breakpoint CSS background.
     // @todo move it out of ratio. ATM, requires ratio to update multi-BG.
-    if (isResized) {
-      me.update(cn, false, _winData);
-    }
-
+    // if (isResized) {
+    // me.update(cn, false, _winData);
+    // }
     // @todo refactor or remove into IO.
     // Fix for picture or bg element with resizing.
     // if (isResized && (isPicture || $.hasAttr(cn, _dataBg))) {
@@ -189,6 +206,7 @@
 
     // Update multi-breakpoint fluid aspect ratio, if any.
     if (els.length) {
+      $.each(els, updateRatio.bind(me));
       me.checkResize(els, updateRatio, doc);
     }
   }

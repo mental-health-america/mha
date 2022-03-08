@@ -9,6 +9,8 @@ interface BlazyInterface {
 
   /**
    * Defines constant placeholder Data URI image.
+   *
+   * @todo deprecated and removed for Placeholder::DATA anytime.
    */
   const PLACEHOLDER = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
@@ -70,25 +72,5 @@ interface BlazyInterface {
    *   The given settings.
    */
   public static function lazyAttributes(array &$attributes, array $settings = []): void;
-
-  /**
-   * Builds URLs, cache tags, and dimensions for an individual image.
-   *
-   * Respects a few scenarios:
-   * 1. Blazy Filter or unmanaged file with/ without valid URI.
-   * 2. Hand-coded image_url with/ without valid URI.
-   * 3. Respects first_uri without image_url such as colorbox/zoom-like.
-   * 4. File API via field formatters or Views fields/ styles with valid URI.
-   * If we have a valid URI, provides the correct image URL.
-   * Otherwise leave it as is, likely hotlinking to external/ sister sites.
-   * Hence URI validity is not crucial in regards to anything but #4.
-   * The image will fail silently at any rate given non-expected URI.
-   *
-   * @param array $settings
-   *   The given settings being modified.
-   * @param object $item
-   *   The image item.
-   */
-  public static function urlAndDimensions(array &$settings, $item = NULL): void;
 
 }

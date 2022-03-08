@@ -7,11 +7,12 @@
 
   'use strict';
 
+  var _context = _doc;
   var _md = 'media';
   var _id = 'blazy-' + _md;
+  var _idOnce = 'b-' + _md;
   var _player = _md + '--player';
-  var _mounted = _player + '--on';
-  var _element = '.' + _player + ':not(.' + _mounted + ')';
+  var _element = '.' + _player;
   var _icon = _md + '__icon';
   var _elIconPlay = '.' + _icon + '--play';
   var _elIconClose = '.' + _icon + '--close';
@@ -30,7 +31,6 @@
     var $el = $(el);
     var iframe = $el.find(_iFrame);
     var btn = $el.find(_elIconPlay);
-    var $doc = $(_doc);
 
     // Media player toggler is disabled, just display iframe.
     if (!$.isElm(btn)) {
@@ -60,9 +60,9 @@
 
       var target = this;
       var player = target.parentNode;
-      var playing = $doc.find('.' + _isPlaying);
+      var playing = $.find(_doc, '.' + _isPlaying);
       var iframe = $.find(player, _iFrame);
-      var video = $doc.find('video');
+      var video = $.find(_doc, 'video');
 
       url = $.attr(target, _dataUrl);
       title = $.attr(target, _dataIFrameTitle);
@@ -74,7 +74,7 @@
 
       // Remove other playing video.
       if ($.isElm(playing)) {
-        var played = $doc.find('.' + _isPlaying + ' ' + _iFrame);
+        var played = $.find(_doc, '.' + _isPlaying + ' ' + _iFrame);
         // Remove the previous iframe.
         $.remove(played);
         playing.className = playing.className.replace(/(\S+)playing/, '');
@@ -88,10 +88,9 @@
 
       // Cache iframe for the potential repeating clicks.
       if (!newIframe) {
-        newIframe = _doc.createElement(_iFrame);
-        newIframe.className = _md + '__iframe ' + _md + '__element';
+        newIframe = $.create(_iFrame, _md + '__iframe ' + _md + '__element');
 
-        $(newIframe).attr({
+        $.attr(newIframe, {
           src: url,
           allowfullscreen: true,
           title: title
@@ -129,8 +128,7 @@
     $el.on('click.' + _id, _elIconPlay, play);
 
     // Closes the video.
-    $el.on('click.' + _id, _elIconClose, stop)
-      .addClass(_mounted);
+    $el.on('click.' + _id, _elIconClose, stop);
   }
 
   /**
@@ -165,7 +163,7 @@
     var html = '';
 
     if (imgUrl) {
-      html += '<img src="$img" class="$imgClass" alt="$alt" loading="lazy" decoding="async" />';
+      html += '<img src="$imgUrl" class="$imgClass" alt="$alt" loading="lazy" decoding="async" />';
     }
 
     if (player) {
@@ -187,7 +185,7 @@
       idClass: idClass,
       player: player,
       pad: pad,
-      img: imgUrl,
+      imgUrl: imgUrl,
       imgClass: imgClass,
       alt: alt,
       oembed: oembedUrl,
@@ -203,9 +201,16 @@
    */
   Drupal.behaviors.blazyMedia = {
     attach: function (context) {
-      context = $.context(context);
 
-      $.once(process, _element, context);
+      _context = $.context(context);
+
+      $.once(process, _idOnce, _element, _context);
+
+    },
+    detach: function (context, setting, trigger) {
+      if (trigger === 'unload') {
+        $.once.removeSafely(_idOnce, _element, _context);
+      }
     }
   };
 

@@ -20,10 +20,12 @@
 
   'use strict';
 
+  var _context = _doc;
   var _id = 'blazy';
-  var _mounted = _id + '--on';
-  var _element = '.' + _id + ':not(.' + _mounted + ')';
-  var _elementGlobal = 'html';
+  var _idOnce = _id;
+  var _element = '.' + _id;
+  var _elementGlobal = 'body';
+  var _idOnceGlobal = 'b-root';
   var _data = 'data';
   var _checked = 'b-checked';
   var _errorClass = 'errorClass';
@@ -70,7 +72,7 @@
      */
     fixDataUri: function () {
       var me = this;
-      var els = $.findAll(me.context, me.selector('[src^="' + _image + '"]'));
+      var els = $.findAll(_doc, me.selector('[src^="' + _image + '"]'));
       var fix = function (img) {
         var src = $.attr(img, _src);
         if ($.contains(src, ['base64', 'svg+xml'])) {
@@ -96,7 +98,7 @@
       var picture = function (root) {
         if (root.dblazy && root.dbuniform) {
           if ((root.dblazy === cn.dblazy) && !root.dbpicture) {
-            $.trigger(root, _id + '.uniform.' + root.dblazy, {
+            $.trigger(root, _id + '.uniform' + root.dblazy, {
               pad: pad
             });
             root.dbpicture = true;
@@ -161,13 +163,11 @@
     var opts = $.parse($.attr(elm, 'data-' + _id));
     var isUniform = $.hasClass(elm, _id + '--field block-grid ' + _id + '--uniform');
     var instance = (Math.random() * 10000).toFixed(0);
-    var eventId = _id + '.uniform.' + instance;
+    var eventId = _id + '.uniform' + instance;
     var localItems = $.findAll(elm, '.media--ratio');
 
     _opts = me.merge(opts);
     me.revalidate = me.revalidate || $.hasClass(elm, _id + '--revalidate');
-
-    $.addClass(elm, _mounted);
 
     // Each cointainer may have different image styles and aspect ratio.
     // Provides marker to call event once, since adding classes make no sense.
@@ -214,17 +214,23 @@
     attach: function (context) {
 
       var me = Drupal.blazy;
-      var doc = $.context(context);
+      _context = $.context(context);
 
-      me.context = doc;
+      me.context = _context;
 
       // Processes .blazy, if available, without initialization.
       // Initialization is not per container to also support IO with root.
       // @todo replace with core/once when min D9.2, and or after sub-modules.
-      $.once(process.bind(me), _element, doc);
+      $.once(process.bind(me), _idOnce, _element, _context);
 
       // Initializes blazy once as a global observer, not per container.
-      $.once(init.bind(me), _elementGlobal, doc);
+      $.once(init.bind(me), _idOnceGlobal, _elementGlobal, _doc);
+    },
+    detach: function (context, setting, trigger) {
+      if (trigger === 'unload') {
+        $.once.removeSafely(_idOnce, _element, _context);
+        $.once.removeSafely(_idOnceGlobal, _elementGlobal, _doc);
+      }
     }
   };
 

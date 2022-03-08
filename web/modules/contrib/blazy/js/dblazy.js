@@ -2,7 +2,8 @@
  * @file
  * This file contains common jQuery replacement methods for vanilla ones to DRY.
  *
- * Cherries by @toddmotto, @cferdinandi, @adamfschwartz, @daniellmb, Cash.
+ * Cherries by @toddmotto, @cferdinandi, @adamfschwartz, @daniellmb, Cash,
+ * underscore.
  *
  * Some dup wrappers are meant to DRY with null checks aka poorman null safety.
  * The rest are convenient to avoid object instantiation ($()) and to preserve
@@ -11,6 +12,8 @@
  *
  * @todo use Cash for better DOM queries, or any core libraries when available.
  * @todo remove unneeded dup methods once all codebase migrated.
+ * @todo move more DOM methods into blazy.dom.js to make it ditchable for Cash.
+ * @todo https://caniuse.com/dom-manip-convenience
  */
 
 /* global define, module */
@@ -22,21 +25,19 @@
   var extend = Object.assign;
   var _aProto = Array.prototype;
   var _oProto = Object.prototype;
+  var _toString = _oProto.toString;
   var _splice = _aProto.splice;
   var _some = _aProto.some;
   var _symbol = typeof Symbol !== 'undefined' && Symbol;
+  var _isJq = 'jQuery' in _win;
+  var _isCash = 'cash' in _win;
   var _class = 'class';
   var _add = 'add';
   var _remove = 'remove';
+  var _has = 'has';
+  var _get = 'get';
+  var _set = 'set';
   var _width = 'width';
-  var _height = 'height';
-  var _after = 'after';
-  var _before = 'before';
-  var _begin = 'begin';
-  var _end = 'end';
-  var _uTop = 'Top';
-  var _uLeft = 'Left';
-  var _uHeight = 'Height';
   var _uWidth = 'Width';
   var _clientWidth = 'client' + _uWidth;
   var _scroll = 'scroll';
@@ -44,7 +45,12 @@
   var _observer = 'Observer';
   var _dashAlphaRe = /-([a-z])/g;
   var _cssVariableRe = /^--/;
+  var _wsRe = /[\11\12\14\15\40]+/;
+  var _dataOnce = 'data-once';
+  var _storage = _win.localStorage;
   var _events = {};
+  // The largest integer that can be represented exactly.
+  var MAX_ARRAY_INDEX = Math.pow(2, 53) - 1;
 
   /**
    * Object for public APIs where dBlazy stands for drupalBlazy.
@@ -55,8 +61,9 @@
    *   Returns this instance.
    */
   var dBlazy = function () {
-    function dBlazy(selector, context) {
+    function dBlazy(selector, ctx) {
       var me = this;
+
       me.name = ns;
 
       if (!selector) {
@@ -69,9 +76,8 @@
 
       var els = selector;
       if (isStr(selector)) {
-        var ctx = (isMe(context) ? context[0] : context) || _doc;
-        els = findAll(ctx, selector);
-        if (isEmpty(els)) {
+        els = findAll(context(ctx), selector);
+        if (!els.length) {
           return;
         }
       }
@@ -89,13 +95,13 @@
       }
     }
 
-    dBlazy.prototype.init = function (selector, context) {
-      var instance = new dBlazy(selector, context);
+    dBlazy.prototype.init = function (selector, ctx) {
+      var instance = new dBlazy(selector, ctx);
+
       if (isElm(selector)) {
         if (!selector.idblazy) {
           selector.idblazy = instance;
         }
-
         return selector.idblazy;
       }
 
@@ -142,14 +148,99 @@
     me = isMe(me) ? me : db(me);
     var ln = me.length;
 
-    if (!ln || ln === 1) {
-      cb(me[0]);
-    }
-    else {
-      me.each(cb);
+    if (isFun(cb)) {
+      if (!ln || ln === 1) {
+        cb(me[0], 0);
+      }
+      else {
+        me.each(cb);
+      }
     }
 
     return me;
+  }
+
+  /**
+   * Returns a `toString`-based type tester, based on underscore.js.
+   *
+   * @private
+   *
+   * @param {string} name
+   *   The name to test for its type.
+   *
+   * @return {bool}
+   *   True if name matches the _toString result.
+   */
+  function isTag(name) {
+    var tag = '[object ' + name + ']';
+    return function (obj) {
+      return _toString.call(obj) === tag;
+    };
+  }
+
+  /**
+   * Generate a function to obtain property `key` from `obj`.
+   *
+   * @private
+   *
+   * @param {string} key
+   *   The key to test in an object.
+   *
+   * @return {mixed}
+   *   String, object, undefined.
+   */
+  function shallowProperty(key) {
+    return function (obj) {
+      return isNull(obj) ? void 0 : obj[key];
+    };
+  }
+
+  /**
+   * Returns true if the checked property is number.
+   *
+   * @private
+   *
+   * @param {function} cb
+   *   The callback to test length property.
+   *
+   * @return {bool}
+   *   True if argument is property is number.
+   */
+  function checkLength(cb) {
+    return function (collection) {
+      var size = cb(collection);
+      return typeof size === 'number' && size >= 0 && size <= MAX_ARRAY_INDEX;
+    };
+  }
+
+  // Internal helper to obtain the `length` property of an object.
+  var getLength = shallowProperty('length');
+
+  /**
+   * Returns true if the argument is an array-like object, NodeList, etc.
+   *
+   * @private
+   *
+   * @return {bool}
+   *   True if argument is an array-like object.
+   */
+  var isArrayLike = checkLength(getLength);
+
+  /**
+   * Retrieve the names of an object's own properties.
+   *
+   * Delegates to ECMAScript 5's native `Object.keys`.
+   *
+   * @private
+   *
+   * @param {mixed} x
+   *   The x to test for its properties.
+   *
+   * @return {array}
+   *   The object keys, or empty array.
+   */
+  function keys(x) {
+    return !isObj(x) ? [] : Object.keys(x);
   }
 
   /**
@@ -158,7 +249,7 @@
    * @private
    *
    * @param {Mixed} x
-   *   The x to check for its type truthy.
+   *   The x to check for its type.
    *
    * @return {bool}
    *   True if x is an instanceof dBlazy.
@@ -168,20 +259,26 @@
   }
 
   /**
-   * Returns true if the x is an array.
+   * True if the supplied argument is an array.
    *
    * @private
    *
    * One of the weird behaviors in JavaScript is the typeof Array is Object.
    *
    * @param {Mixed} x
-   *   The x to check for its type truthy.
+   *   The x to check for its type.
    *
    * @return {bool}
-   *   True if x is an instanceof Array.
+   *   True if the argument is an instanceof Array.
+   *
+   * @todo refine, like everything else.
    */
   function isArr(x) {
-    return !isEmpty(x) && Array.isArray(x);
+    // String has length.
+    if (isStr(x)) {
+      return false;
+    }
+    return x && (Array.isArray(x) || isArrayLike(x));
   }
 
   /**
@@ -196,7 +293,7 @@
    *   True if x is an instanceof bool.
    */
   function isBool(x) {
-    return typeof x === 'boolean';
+    return x === true || x === false || _toString.call(x) === '[object Boolean]';
   }
 
   /**
@@ -215,19 +312,14 @@
   }
 
   /**
-   * Returns true if the x is a function.
+   * Returns true if the argument is a function.
    *
    * @private
    *
-   * @param {Mixed} x
-   *   The x to check for its type truthy.
-   *
    * @return {bool}
-   *   True if x is an instanceof Function.
+   *   True if argument is an instanceof Function.
    */
-  function isFun(x) {
-    return typeof x === 'function';
-  }
+  var isFun = isTag('Function');
 
   /**
    * Returns true if the x is anything falsy.
@@ -247,7 +339,17 @@
    * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Logical_NOT
    */
   function isEmpty(x) {
-    return isNull(x) || isUnd(x) || x === false || (x.length && x.length === 0);
+    if (isNull(x) || isUnd(x) || x === false) {
+      return true;
+    }
+
+    // Skip expensive `toString`-based checks if `obj` has no `.length`.
+    var length = getLength(x);
+    if (typeof length === 'number' && (isArr(x) || isStr(x))) {
+      return length === 0;
+    }
+
+    return getLength(keys(x)) === 0;
   }
 
   /**
@@ -297,26 +399,28 @@
    *   True if x is an instanceof Object.
    */
   function isObj(x) {
-    if (typeof x !== 'object' || isEmpty(x)) {
-      return false;
-    }
-    var proto = Object.getPrototypeOf(x);
-    return isNull(proto) || proto === _oProto;
+    // if (!x || typeof x !== 'object') {
+    // return false;
+    // }
+    // var proto = Object.getPrototypeOf(x);
+    // return isNull(proto) || proto === _oProto;
+    var type = typeof x;
+    return type === 'function' || type === 'object' && !!x;
   }
 
   /**
-   * Returns true if the x is a string.
+   * Returns true if the argument is a string.
    *
    * @private
    *
    * @param {Mixed} x
-   *   The x to check for its type truthy.
+   *   The x to check for its type string.
    *
    * @return {bool}
-   *   True if x is a string.
+   *   True if argument is a string.
    */
   function isStr(x) {
-    return typeof x === 'string';
+    return x && typeof x === 'string';
   }
 
   /**
@@ -405,14 +509,11 @@
   }
 
   /**
-   * A simple forEach() implementation for Arrays, Objects and NodeLists.
+   * A not simple forEach() implementation for Arrays, Objects and NodeLists.
    *
    * @private
    *
-   * @author Todd Motto
-   * @link https://github.com/toddmotto/foreach
-   *
-   * @param {Array|Object|NodeList} collection
+   * @param {Array|Object|NodeList} obj
    *   Collection of items to iterate.
    * @param {Function} cb
    *   Callback function for each iteration.
@@ -425,28 +526,45 @@
    * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach
    * @see https://developer.mozilla.org/en-US/docs/Web/API/NodeList/forEach
    * @todo drop for native [].forEach post D10+ when IE gone from planet earth.
+   * @todo refactor, unreliable given unexpected properties.
    */
-  function each(collection, cb, scope) {
-    if (_oProto.toString.call(collection) === '[object Object]') {
-      for (var prop in collection) {
-        if (has(collection, prop)) {
-          if (prop === 'length') {
-            continue;
-          }
-          cb.call(scope, collection[prop], prop, collection);
-        }
-      }
+  function each(obj, cb, scope) {
+    if (isFun(obj) || isStr(obj) || isBool(obj) || isNum(obj)) {
+      return [];
     }
-    else if (collection) {
-      if (collection.length === 1) {
-        cb.call(scope, collection[0], 0, collection);
-      }
-      else {
-        collection.forEach(cb, scope);
+
+    // Filter out useless empty array.
+    if (isArr(obj) && !isUnd(obj.length)) {
+      var length = obj.length;
+      if (!length || (length === 1 && obj[0] === ' ')) {
+        return [];
       }
     }
 
-    return collection;
+    if (_toString.call(obj) === '[object Object]') {
+      for (var prop in obj) {
+        if (hasProp(obj, prop)) {
+          if (prop === 'length' || prop === 'name') {
+            continue;
+          }
+          if (cb.call(scope, obj[prop], prop, obj) === false) {
+            break;
+          }
+        }
+      }
+    }
+    else if (obj) {
+      var len = obj.length;
+      if (len && len === 1 && !isUnd(obj[0])) {
+        cb.call(scope, obj[0], 0, obj);
+      }
+      else {
+        // Assumes array, at least non-expected objs were blacklisted above.
+        obj.forEach(cb, scope);
+      }
+    }
+
+    return obj;
   }
 
   /**
@@ -454,10 +572,7 @@
    *
    * @private
    *
-   * @author Todd Motto
-   * @link https://github.com/toddmotto/foreach
-   *
-   * @param {Array|Object|NodeList} collection
+   * @param {Array|Object|NodeList} obj
    *   Collection of items to iterate.
    * @param {string} prop
    *   The property nane.
@@ -465,8 +580,8 @@
    * @return {bool}
    *   Returns true if the property found.
    */
-  function has(collection, prop) {
-    return _oProto.hasOwnProperty.call(collection, prop);
+  function hasProp(obj, prop) {
+    return _oProto.hasOwnProperty.call(obj, prop);
   }
 
   /**
@@ -504,6 +619,10 @@
     return isArr(x) ? x : [x];
   }
 
+  function _op(el, op, name, value) {
+    return el[op + 'Attribute'](name, value);
+  }
+
   /**
    * A forgiving attribute wrapper with fallback mimicking jQuery.attr method.
    *
@@ -535,7 +654,7 @@
       if (_undefined) {
         defValue = '';
       }
-      return hasAttr(el, attr) ? el.getAttribute(attr) : defValue;
+      return hasAttr(el, attr) ? _op(el, _get, attr) : defValue;
     }
 
     var chainCallback = function (el) {
@@ -546,15 +665,15 @@
       // Passing a key-value pair object means setting multiple attributes once.
       if (isObj(attr)) {
         each(attr, function (value, key) {
-          el.setAttribute(prefix + key, value);
+          _op(el, _set, prefix + key, value);
         });
       }
       // Since an attribute value null makes no sense, assumes nullify.
       else if (isNull(defValue)) {
         each(toArray(attr), function (value) {
           var name = prefix + value;
-          if (el.hasAttribute(name)) {
-            el.removeAttribute(name);
+          if (hasAttr(el, name)) {
+            _op(el, _remove, name);
           }
         });
       }
@@ -565,7 +684,7 @@
           el.src = defValue;
         }
         else {
-          el.setAttribute(attr, defValue);
+          _op(el, _set, attr, defValue);
         }
       }
     };
@@ -587,7 +706,7 @@
    *   True if it has the attribute.
    */
   function hasAttr(el, name) {
-    return isQsa(el) && el.hasAttribute(name);
+    return isQsa(el) && _op(el, _has, name);
   }
 
   /**
@@ -626,21 +745,25 @@
     var found = 0;
 
     if (isQsa(el) && isStr(names)) {
+      names = names.trim();
       var _list = el.classList;
 
-      each(names.split(' '), function (name) {
+      var verify = function (name) {
         if (_list) {
           if (_list.contains(name)) {
             found++;
           }
         }
-        else {
+        if (found === 0) {
+          // SVG may fail classList here.
           var check = _attr(el, _class);
           if (check && check.match(name)) {
             found++;
           }
         }
-      });
+      };
+
+      each(names.trim().split(' '), verify);
     }
     return found > 0;
   }
@@ -661,11 +784,16 @@
    *   This dBlazy object.
    */
   function toggleClass(els, name, op) {
-    var chainCallback = function (el) {
-      if (isQsa(el) && isStr(name)) {
+    var chainCallback = function (el, i) {
+      if (isQsa(el)) {
         var _list = el.classList;
-        var names = name.split(' ');
-        if (_list) {
+
+        if (isFun(name)) {
+          name = name(_op(el, _get, 'class'), i);
+        }
+
+        if (_list && isStr(name)) {
+          var names = name.trim().split(' ');
           if (isUnd(op)) {
             names.map(function (value) {
               _list.toggle(value);
@@ -720,7 +848,7 @@
    * @private
    *
    * Similar to ES6 ::includes, only for oldies.
-   * Cannot use [].every() since it not about all or nothing.
+   * Cannot use [].every() since it is not about all or nothing.
    *
    * @param {Array|Element|string} str
    *   The source string to test for.
@@ -868,8 +996,12 @@
    *   Returns true if matches, else false.
    */
   function equal(el, tags) {
+    if (!el || !el.nodeName) {
+      return false;
+    }
+
     return _some.call(toArray(tags), function (tag) {
-      return isQsa(el) && (el.nodeName.toLowerCase() === tag.toLowerCase());
+      return el.nodeName.toLowerCase() === tag.toLowerCase();
     });
   }
 
@@ -884,6 +1016,9 @@
    * Alternatively flag the asArray to any value if an array is expected, or
    * use the shortcut ::findAll() to be clear.
    *
+   * To check if the expected element is found:
+   *   - use $.isElm(el) which returns a bool.
+   *
    * @param {Element} el
    *   The parent HTML element.
    * @param {string} selector
@@ -895,14 +1030,24 @@
    *   Empty array if not found, else the expected element(s).
    */
   function find(el, selector, asArray) {
-    if (isStr(selector) && isQsa(el)) {
-      return isUnd(asArray) ? (el.querySelector(selector) || []) : toElms(selector, el);
+    if (isQsa(el)) {
+      // Direct descendant.
+      var scope = ':scope';
+      if (isStr(selector) && startsWith(selector, '>')) {
+        if (!contains(selector, scope)) {
+          selector = scope + ' ' + selector;
+        }
+      }
+      return isUnd(asArray) && isStr(selector) ? (el.querySelector(selector) || []) : toElms(selector, el);
     }
     return [];
   }
 
   /**
    * A simple querySelectorAll wrapper.
+   *
+   * To check if the expected elements are found:
+   *   - use regular `els.length`. The length 0 means not found.
    *
    * @private
    *
@@ -971,7 +1116,7 @@
    *   Returns the window width.
    */
   function windowWidth() {
-    return _win.innerWidth || _doc.documentElement[_clientWidth] || _doc.body[_clientWidth] || _win.screen[_width];
+    return _win.innerWidth || _doc.documentElement[_clientWidth] || _win.screen[_width];
   }
 
   /**
@@ -1009,9 +1154,9 @@
    */
   function activeWidth(dataset, winData) {
     var mobileFirst = winData.up || false;
-    var keys = Object.keys(dataset);
-    var xs = keys[0];
-    var xl = keys[keys.length - 1];
+    var _k = keys(dataset);
+    var xs = _k[0];
+    var xl = _k[_k.length - 1];
     var ww = winData.ww || windowWidth();
     var pr = (ww * pixelRatio());
     var rw = mobileFirst ? ww : pr;
@@ -1020,7 +1165,7 @@
       return mobileFirst ? parseInt(w, 10) <= rw : parseInt(w, 10) >= rw;
     };
 
-    var data = keys.filter(mw).map(function (v) {
+    var data = _k.filter(mw).map(function (v) {
       return dataset[v];
     })[mobileFirst ? 'pop' : 'shift']();
 
@@ -1122,6 +1267,9 @@
    *
    * @private
    *
+   * @author Daniel Lamb <dlamb.open.source@gmail.com>
+   * @link https://github.com/daniellmb/once.js
+   *
    * @param {Function} cb
    *   The executed function.
    *
@@ -1150,18 +1298,19 @@
    *
    * @param {NodeList|Array.<Element>|Element|string} selector
    *   A NodeList, array of elements, or string.
-   * @param {Document|Element} [context=document]
+   * @param {Document|Element} ctx
    *   An element to use as context for querySelectorAll.
    *
    * @return {Array.<Element>}
    *   An array of elements to process.
    */
-  function toElms(selector, context) {
+  function toElms(selector, ctx) {
     // Assume selector is an array-like element unless a string.
     var elements = toArray(selector);
     if (isStr(selector)) {
-      var check = context.querySelector(selector);
-      elements = isNull(check) ? [] : context.querySelectorAll(selector);
+      ctx = context(ctx);
+      var check = ctx.querySelector(selector);
+      elements = isNull(check) ? [] : ctx.querySelectorAll(selector);
     }
 
     // Ensures an array is returned and not a NodeList or an Array-like object.
@@ -1223,7 +1372,7 @@
           while (t && t !== this) {
             if (is(t, selector)) {
               _cbt.call(t, e);
-              return;
+              break;
             }
             t = t.parentElement;
           }
@@ -1266,7 +1415,7 @@
         if (isFun(cb)) {
           // See https://caniuse.com/once-event-listener.
           if (_one && add && _ie) {
-            var cbone = function cbone(evt) {
+            var cbone = function cbone() {
               el.removeEventListener(type, cbone, options);
               _cb.apply(this, arguments);
             };
@@ -1277,6 +1426,7 @@
           el[op + 'EventListener'](type, cb, options);
         }
 
+        // @todo store as namespace to allow easy removal by namespaces.
         if (add) {
           _events[e] = cb;
         }
@@ -1285,7 +1435,7 @@
         }
       };
 
-      each(eventName.split(' '), process);
+      each(eventName.trim().split(' '), process);
     };
 
     return chain.call(els, chainCallback);
@@ -1343,18 +1493,15 @@
     return chain.call(els, chainCallback);
   }
 
-  db.trigger = trigger.bind(db);
-  fn.trigger = function (eventName, details, param) {
-    return trigger(this, eventName, details, param);
-  };
-
   // Type methods.
   // Wonder why ES6 has alt lambda `=>` for `function`? Compact, to save bytes.
   // Kotlin has useless `fun` due to being compiled back to `function`. But ES6
   // lambda is true savings unless being transpiled. So these stupid abbr are.
   // The contract here is no rigid minds, fun, less bytes. Hail to Linux.
+  db.isTag = isTag;
   db.isArr = isArr;
   db.isBool = isBool;
+  db.isDoc = isDoc;
   db.isElm = isElm;
   db.isFun = isFun;
   db.isEmpty = isEmpty;
@@ -1370,6 +1517,7 @@
   db.isRo = 'Resize' + _observer in _win;
   db.isNativeLazy = 'loading' in HTMLImageElement.prototype;
   db.isAmd = typeof define === 'function' && define.amd;
+  db.isWin = isWin;
   db._er = -1;
   db._ok = 1;
 
@@ -1378,72 +1526,29 @@
     return chain.call(els, cb);
   };
 
-  fn.chain = function (cb) {
-    return chain.call(this, cb);
-  };
-
   db.each = each;
-  fn.each = function (cb) {
-    return each(this, cb);
-  };
 
   db.extend = extend;
-  fn.extend = function (plugins) {
-    return extend(fn, plugins);
+  fn.extend = function (plugins, reverse) {
+    reverse = reverse || false;
+    return reverse ? extend(plugins, fn) : extend(fn, plugins);
   };
 
-  db.has = has;
+  db.hasProp = hasProp;
 
   db.parse = parse;
   db.toArray = toArray;
 
   // Attribute methods.
-  db.hasAttr = hasAttr.bind(db);
-  fn.hasAttr = function (name) {
-    var me = this;
-    return _some.call(me, function (el) {
-      return hasAttr.call(me, el, name);
-    });
-  };
-
+  db.hasAttr = hasAttr;
   db.attr = _attr.bind(db);
-  fn.attr = function (attr, defValue, withDefault) {
-    var me = this;
-    if (isNull(defValue)) {
-      return me.removeAttr(attr, withDefault);
-    }
-    return _attr(me, attr, defValue, withDefault);
-  };
-
   db.removeAttr = removeAttr.bind(db);
-  fn.removeAttr = function (attr, prefix) {
-    return removeAttr(this, attr, prefix);
-  };
 
   // Class name methods.
-  db.hasClass = hasClass.bind(db);
-  fn.hasClass = function (name) {
-    var me = this;
-    return _some.call(me, function (el) {
-      return hasClass.call(me, el, name);
-    });
-  };
-
-  db.toggleClass = toggleClass.bind(db);
-  fn.toggleClass = function (name, op) {
-    return toggleClass(this, name, op);
-  };
-
-  db.addClass = addClass.bind(db);
-  fn.addClass = function (name) {
-    return this.toggleClass(name, _add);
-  };
-
-  db.removeClass = removeClass.bind(db);
-  fn.removeClass = function (name) {
-    var me = this;
-    return arguments.length ? me.toggleClass(name, _remove) : me.attr(_class, '');
-  };
+  db.hasClass = hasClass;
+  db.toggleClass = toggleClass;
+  db.addClass = addClass;
+  db.removeClass = removeClass;
 
   // String methods.
   db.contains = contains;
@@ -1453,40 +1558,13 @@
 
   // DOM query methods.
   db.closest = closest;
-  fn.closest = function (selector) {
-    return closest(this[0], selector);
-  };
-
   db.is = is;
 
   // @todo merge with ::is().
   db.equal = equal;
-  fn.equal = function (selector) {
-    return equal(this[0], selector);
-  };
-
   db.find = find;
-  fn.find = function (selector, asArray) {
-    return find(this[0], selector, asArray);
-  };
-
   db.findAll = findAll;
-  fn.findAll = function (selector) {
-    return findAll(this[0], selector);
-    // @todo multiple sources for multiple targets.
-    // return this.each(function (el) {
-    // els.push(findAll(el, selector));
-    // });
-  };
-
-  fn.first = function (el) {
-    return isUnd(el) ? this[0] : el;
-  };
-
   db.remove = remove;
-  fn.remove = function () {
-    this.each(remove);
-  };
 
   // Window methods.
   db.ie = ie;
@@ -1496,30 +1574,17 @@
   db.activeWidth = activeWidth;
 
   // Event methods.
-  fn.toEvent = function (eventName, selector, cb, params, isCustom, op) {
-    return toEvent(this, eventName, selector, cb, params, isCustom, op);
-  };
-
-  db.on = on.bind(db);
-  fn.on = function (eventName, selector, cb, params, isCustom) {
-    return this.toEvent(eventName, selector, cb, params, isCustom, _add);
-  };
-
-  db.off = off.bind(db);
-  fn.off = function (eventName, selector, cb, params, isCustom) {
-    return this.toEvent(eventName, selector, cb, params, isCustom, _remove);
-  };
-
-  db.one = one.bind(db);
-  fn.one = function (eventName, cb, isCustom) {
-    return one(this, eventName, cb, isCustom);
-  };
+  db.toEvent = toEvent;
+  db.on = on;
+  db.off = off;
+  db.one = one;
+  db.trigger = trigger;
 
   // Image methods.
   db.isDecoded = isDecoded;
 
   // Similar to core domReady, only public and generic.
-  fn.ready = function (callback) {
+  function ready(callback) {
     var cb = function () {
       return setTimeout(callback, 0, db);
     };
@@ -1532,7 +1597,9 @@
     }
 
     return this;
-  };
+  }
+
+  db.ready = ready.bind(db);
 
   /**
    * Decodes the image.
@@ -1568,31 +1635,21 @@
   };
 
   /**
-   * Executes a function once.
-   *
-   * To make easy conversion till D9.2 is a minimum at sub-modules, one
-   * core/once method are adapted.
-   *
-   * @author Daniel Lamb <dlamb.open.source@gmail.com>
-   * @link https://github.com/daniellmb/once.js
+   * A wrapper for core/once until D9.2 is a minimum.
    *
    * @param {Function} cb
    *   The executed function.
+   * @param {string} id
+   *   The id of the once call.
    * @param {NodeList|Array.<Element>|Element|string} selector
    *   A NodeList, array of elements, single Element, or a string.
-   * @param {Document|Element} [context=document]
+   * @param {Document|Element} ctx
    *   An element to use as context for querySelectorAll.
    *
    * @return {Array.<Element>}
    *   An array of elements to process, or empty for old behavior.
-   *
-   * @tbd deprecated in Blazy 2.5 and will be removed in Blazy 3.+. Use the
-   * core/once library instead. See https://www.drupal.org/node/3254668.
-   *
-   * @todo until D9.2 is a minimum, adapt core/once for better once at the next
-   * optimization sessions.
    */
-  db.once = function (cb, selector, context) {
+  function onceCompat(cb, id, selector, ctx) {
     var els = [];
 
     // Original once.
@@ -1601,16 +1658,17 @@
     }
     else {
       // If extra arguments are provided, assumes regular loop over elements.
-      // Safe to use fallback _doc since it is normally executed once onready.
-      els = isStr(selector) ? findAll(context || _doc, selector) : toArray(selector);
-      var len = els.length;
-      if (len) {
-        _once(len === 1 ? cb(els[0]) : each(els, cb));
+      els = initOnce(id, selector, ctx);
+      if (els.length) {
+        // Already avoids loop for a single item.
+        each(els, cb);
       }
     }
 
     return els;
-  };
+  }
+
+  db.once = onceCompat;
 
   /**
    * A simple wrapper to delay callback function, taken out of blazy library.
@@ -1684,7 +1742,7 @@
    */
   db.template = function (string, map) {
     for (var key in map) {
-      if (has(map, key)) {
+      if (hasProp(map, key)) {
         string = string.replace(new RegExp(escape('$' + key), 'g'), map[key]);
       }
     }
@@ -1698,22 +1756,36 @@
    * This can be null after Colorbox close, or absurd <script> element, likely
    * arbitrary, etc.
    *
-   * @param {HTMLDocument|Element} context
+   * @param {Document|Element} ctx
    *   Any element, including weird script element.
    *
    * @return {Element|Document|DocumentFragment}
    *   The Element|Document|DocumentFragment to not fail querySelector, etc.
+   *
+   * @todo refine core/once expects Element only, or patch it for [1,9,11].
    */
-  db.context = function (context) {
+  function context(ctx) {
     // Weirdo: context may be null after Colorbox close.
-    context = context || _doc;
+    ctx = ctx || _doc;
 
     // jQuery may pass its array as non-expected context identified by length.
-    context = context.length ? context[0] : context;
+    ctx = toElm(ctx);
 
-    // IE9 knows not HTMLDocument, IE8 does.
-    return context && isDoc(context) ? context : _doc;
-  };
+    // Absurd <script> elements which have no children may be spit on AJAX.
+    if (isQsa(ctx) && ctx.children && ctx.children.length) {
+      return ctx;
+    }
+
+    // IE9 knows not deprecated HTMLDocument, IE8 does.
+    return isDoc(ctx) ? ctx : _doc;
+  }
+
+  // Valid elements for querySelector with length: form, select, etc.
+  function toElm(el) {
+    var isJq = _isJq && el instanceof _win.jQuery;
+    var isCash = _isCash && el instanceof _win.cash;
+    return el && (isMe(el) || isJq || isCash) ? el[0] : el;
+  }
 
   // Minimum common DOM methods taken and modified from cash.
   // @todo refactor or remove dups when everyone uses cash, or vanilla alike.
@@ -1723,13 +1795,9 @@
     });
   }
 
-  db.camelCase = camelCase;
-
   function isVar(prop) {
     return _cssVariableRe.test(prop);
   }
-
-  db.isVar = isVar;
 
   // @see https://developer.mozilla.org/en-US/docs/Web/API/Window/getComputedStyle
   function computeStyle(el, prop, isVariable) {
@@ -1749,56 +1817,50 @@
     return _style[prop] || el.style[prop];
   }
 
-  function css(els, props, vals) {
-    var me = this;
-    var _undefined = isUnd(vals);
-    var _obj = isObj(props);
-    var _getter = !_obj && _undefined;
+  // https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect
+  function rect(el) {
+    return isElm(el) ? el.getBoundingClientRect() : {};
+  }
 
-    // Getter.
-    if (_getter && isStr(props)) {
-      // @todo figure out multi-element getters. Ok for now, as hardly multiple.
-      var el = els && els.length ? els[0] : els;
-      // @todo re-check common integer.
-      var arr = [_width, _height, 'top', 'right', 'bottom', 'left'];
-      var result = computeStyle(el, props);
-      return arr.indexOf(props) === -1 ? result : parseInt(result, 10);
+  function traverse(el, selector, relative) {
+    if (isElm(el)) {
+      var target = el[relative];
+
+      if (isUnd(selector)) {
+        return target;
+      }
+
+      while (target) {
+        if (is(target, selector) || equal(target, selector)) {
+          return target;
+        }
+        target = target[relative];
+      }
     }
+    return null;
+  }
 
+  function parent(el, selector) {
+    return traverse(el, selector, 'parentElement');
+  }
+
+  function prevnext(el, selector, prefix) {
+    return traverse(el, selector, prefix + 'ElementSibling');
+  }
+
+  function prev(el, selector) {
+    return prevnext(el, selector, 'previous');
+  }
+
+  function next(el, selector) {
+    return prevnext(el, selector, 'next');
+  }
+
+  function empty(els) {
     var chainCallback = function (el) {
-      if (!isElm(el)) {
-        return _getter ? '' : me;
-      }
-
-      var setVal = function (prop, val) {
-        // Setter.
-        if (isFun(val)) {
-          val = val();
-        }
-
-        if (contains(prop, '-') || isVar(prop)) {
-          prop = camelCase(prop);
-        }
-
-        el.style[prop] = isStr(val) ? val : val + 'px';
-      };
-
-      // Passing a key-value pair object means setting multiple attributes once.
-      if (_obj) {
-        each(props, function (val, prop) {
-          setVal(prop, val);
-        });
-      }
-      // Since a css value null makes no sense, assumes nullify.
-      else if (isNull(vals)) {
-        each(toArray(props), function (prop) {
-          el.style.removeProperty(prop);
-        });
-      }
-      else {
-        // Else a setter.
-        if (isStr(props)) {
-          setVal(props, vals);
+      if (isElm(el)) {
+        while (el.firstChild) {
+          el.removeChild(el.firstChild);
         }
       }
     };
@@ -1806,148 +1868,92 @@
     return chain.call(els, chainCallback);
   }
 
-  db.computeStyle = computeStyle;
-
-  fn.computeStyle = function (prop) {
-    return computeStyle(this[0], prop);
-  };
-
-  db.css = css;
-
-  // @tdo multiple css values once.
-  fn.css = function (prop, val) {
-    return css(this, prop, val);
-  };
-
-  // https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect
-  function rect(el) {
-    return isElm(el) ? el.getBoundingClientRect() : {};
-  }
-
-  db.rect = rect;
-
-  function offset(el) {
-    var rect = rect(el);
-
-    return {
-      top: (rect.top || 0) + _doc.body[_scroll + _uTop],
-      left: (rect.left || 0) + _doc.body[_scroll + _uLeft]
-    };
-  }
-
-  db.offset = offset;
-
-  db.width = function (el, val) {
-    return css(el, _width, val);
-  };
-
-  db.height = function (el, val) {
-    return css(el, _height, val);
-  };
-
-  function outerDim(el, withMargin, prop) {
-    var result = 0;
-
-    if (isElm(el)) {
-      result = el['offset' + prop];
-      if (withMargin) {
-        var style = computeStyle(el);
-        var margin = function (pos) {
-          return parseInt(style['margin' + pos], 10);
-        };
-        if (prop === _uHeight) {
-          result += margin(_uTop) + margin('Bottom');
-        }
-        else {
-          result += margin(_uLeft) + margin('Right');
-        }
-      }
-    }
-    return result;
-  }
-
-  db.outerWidth = function (el, withMargin) {
-    return outerDim(el, withMargin, _uWidth);
-  };
-
-  db.outerHeight = function (el, withMargin) {
-    return outerDim(el, withMargin, _uHeight);
-  };
-
-  /**
-   * Insert Element or string into a position relative to a target element.
-   *
-   * To minimize confusions with native insertAdjacent[Element|HTML].
-   *
-   * <!-- beforebegin -->
-   * <p>
-   *   <!-- afterbegin -->
-   *   foo
-   *   <!-- beforeend -->
-   * </p>
-   * <!-- afterend -->
-   *
-   * @param {Element} target
-   *   The target Element.
-   * @param {Element|string} el
-   *   The element or string to insert.
-   * @param {string} position
-   *   The position or placement.
-   *
-   * @see https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentElement
-   * @see https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentHTML
-   */
-  function insert(target, el, position) {
-    // @todo recheck DocumentFragment if needed.
-    if (isElm(target)) {
-      var suffix = isElm(el) ? 'Element' : 'HTML';
-      target['insertAdjacent' + suffix](position, el);
-    }
-  }
-
-  db.after = function (target, el) {
-    insert(target, el, _after + _end);
-  };
-
-  // Node.insertBefore(), similar to beforebegin, with different arguments.
-  db.before = function (target, el) {
-    insert(target, el, _before + _begin);
-  };
-
-  // Node.appendChild(), same effect as beforeend.
-  db.append = function (target, el) {
-    insert(target, el, _before + _end);
-  };
-
-  db.prepend = function (target, el) {
-    insert(target, el, _after + _begin);
-  };
-
-  function parent(el) {
-    return isElm(el) && el.parentElement;
-  }
-
-  db.parent = parent;
-
-  function prev(el) {
-    return isElm(el) && el.previousElementSibling;
-  }
-
-  db.prev = prev;
-
-  db.next = function (el) {
-    return isElm(el) && el.nextElementSibling;
-  };
-
-  db.index = function (el) {
+  function index(el, parents) {
     var i = 0;
     if (isElm(el)) {
+      if (!isUnd(parents)) {
+        each(toArray(parents), function (sel) {
+          var check = closest(el, sel);
+          if (isElm(check)) {
+            el = check;
+            return false;
+          }
+        });
+      }
+
       while (!isNull(el = prev(el))) {
         i++;
       }
     }
     return i;
+  }
+
+  db.context = context;
+  db.toElm = toElm;
+  db.camelCase = camelCase;
+  db.isVar = isVar;
+  db.computeStyle = computeStyle;
+  db.rect = rect;
+  db.empty = empty;
+  db.parent = parent;
+  db.next = next;
+  db.prev = prev;
+  db.index = index;
+
+  db.create = function (tagName, attrs, html) {
+    var el = _doc.createElement(tagName);
+
+    if (isStr(attrs) || isObj(attrs)) {
+      if (isStr(attrs)) {
+        el.className = attrs;
+      }
+      else {
+        _attr(el, attrs);
+      }
+    }
+
+    if (html) {
+      html = html.trim();
+
+      el.innerHTML = html;
+      if (tagName === 'template') {
+        el = el.content.firstChild || el;
+      }
+    }
+
+    return el;
   };
+
+  // See https://caniuse.com/?search=localstorage
+  db.storage = function (key, value, defValue) {
+    if (_storage) {
+      if (isUnd(value)) {
+        return _storage.getItem(key);
+      }
+      _storage.setItem(key, value);
+    }
+    return defValue || false;
+  };
+
+  // @todo merge with cash if available.
+  // if (_isCash) {
+  // fn.extend(cash.fn, true);
+  // }
+  // Collects base prototypes for clarity.
+  var objs = {
+    chain: function (cb) {
+      return chain.call(this, cb);
+    },
+    each: function (cb) {
+      return each(this, cb);
+    },
+    ready: function (callback) {
+      return ready.call(this, callback);
+    }
+  };
+
+  // Merge base prototypes.
+  fn.extend(objs);
 
   // @deprecated for shorter ::is(). Hardly used, except lory.
   db.matches = is;
@@ -1959,6 +1965,92 @@
   db.bindEvent = on.bind(db);
 
   db.unbindEvent = off.bind(db);
+
+  function _filter(selector, elements, apply) {
+    return elements.filter(function (el) {
+      var selected = is(el, selector);
+      if (selected && apply) {
+        apply(el);
+      }
+      return selected;
+    });
+  }
+
+  db.filter = _filter;
+
+  // @todo remove all these when min D9.2, or take the least minimum for BC.
+  // Be sure to make context Element, or patch it to work with [1,9,11] types
+  // which distinguish this from core/once as per 2022/2.
+  // When removed and context issue is fixed, it will be just:
+  // `db.once = extend(db.once, once);` + `db.once.removeSafely()`.
+  function elsOnce(selector, ctx) {
+    return findAll(context(ctx), selector);
+  }
+
+  function selOnce(id) {
+    return '[' + _dataOnce + '~="' + id + '"]';
+  }
+
+  function updateOnce(el, opts) {
+    var add = opts.add;
+    var remove = opts.remove;
+    var result = [];
+
+    if (hasAttr(el, _dataOnce)) {
+      var ids = _attr(el, _dataOnce).trim().split(_wsRe);
+      each(ids, function (id) {
+        if (!contains(result, id) && id !== remove) {
+          result.push(id);
+        }
+      });
+    }
+    if (add && !contains(result, add)) {
+      result.push(add);
+    }
+    var value = result.join(' ');
+    _op(el, value === '' ? _remove : _set, _dataOnce, value);
+  }
+
+  function initOnce(id, selector, ctx) {
+    return _filter(':not(' + selOnce(id) + ')', elsOnce(selector, ctx), function (el) {
+      updateOnce(el, {
+        add: id
+      });
+    });
+  }
+
+  if (!db.once.find) {
+    db.once.find = function (id, ctx) {
+      return elsOnce(!id ? '[' + _dataOnce + ']' : selOnce(id), ctx);
+    };
+    db.once.filter = function (id, selector, ctx) {
+      return _filter(selOnce(id), elsOnce(selector, ctx));
+    };
+    db.once.remove = function (id, selector, ctx) {
+      return _filter(
+        selOnce(id),
+        elsOnce(selector, ctx),
+        function (el) {
+          updateOnce(el, {
+            remove: id
+          });
+        }
+      );
+    };
+    db.once.removeSafely = function (id, selector, ctx) {
+      var me = this;
+      var jq = _win.jQuery;
+
+      if (me.find(id, ctx).length) {
+        me.remove(id, selector, ctx);
+      }
+
+      // @todo remove BC for pre core/once when min D9.2:
+      if (_isJq && jq && jq.fn && isFun(jq.fn.removeOnce)) {
+        jq(selector, context(ctx)).removeOnce(id);
+      }
+    };
+  }
 
   if (typeof exports !== 'undefined') {
     // Node.js.

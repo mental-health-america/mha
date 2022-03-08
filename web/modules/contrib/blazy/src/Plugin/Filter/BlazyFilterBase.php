@@ -11,7 +11,7 @@ use Drupal\filter\Plugin\FilterBase;
 use Drupal\filter\Render\FilteredMarkup;
 use Drupal\blazy\Blazy;
 use Drupal\blazy\BlazyDefault;
-use Drupal\blazy\BlazyFile;
+use Drupal\blazy\Media\BlazyFile;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -50,7 +50,7 @@ abstract class BlazyFilterBase extends FilterBase implements BlazyFilterInterfac
   /**
    * The blazy oembed service.
    *
-   * @var \Drupal\blazy\BlazyOEmbedInterface
+   * @var \Drupal\blazy\Media\BlazyOEmbedInterface
    */
   protected $blazyOembed;
 
@@ -88,7 +88,7 @@ abstract class BlazyFilterBase extends FilterBase implements BlazyFilterInterfac
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     $instance = new static($configuration, $plugin_id, $plugin_definition);
 
-    $instance->root = $instance->root ?? $container->getParameter('app.root');
+    $instance->root = $instance->root ?? Blazy::root($container);
     $instance->entityFieldManager = $instance->entityFieldManager ?? $container->get('entity_field.manager');
     $instance->filterManager = $instance->filterManager ?? $container->get('plugin.manager.filter');
     $instance->blazyAdmin = $instance->blazyAdmin ?? $container->get('blazy.admin');
@@ -257,14 +257,14 @@ abstract class BlazyFilterBase extends FilterBase implements BlazyFilterInterfac
       // Attempts to get the correct URI with hard-coded URL if applicable.
       if ($uri = BlazyFile::buildUri($src)) {
         $settings['uri'] = $uri;
-        $data['item'] = Blazy::image($settings);
+        $data['item'] = BlazyFile::image($settings);
       }
       else {
         // At least provide root URI to figure out image dimensions.
         $settings['uri_root'] = mb_substr($src, 0, 4) === 'http' ? $src : $this->root . $src;
       }
     }
-    return $data['item'];
+    return $data['item'] ?? NULL;
   }
 
   /**
@@ -297,7 +297,7 @@ abstract class BlazyFilterBase extends FilterBase implements BlazyFilterInterfac
       // Runs after type, width and height set, if any, to not recheck them.
       $this->blazyOembed->build($settings);
     }
-    return $data['item'];
+    return $data['item'] ?? NULL;
   }
 
   /**
@@ -381,6 +381,9 @@ abstract class BlazyFilterBase extends FilterBase implements BlazyFilterInterfac
     $settings['width'] = $node->getAttribute('width');
     $settings['height'] = $node->getAttribute('height');
     $settings['media_switch'] = empty($settings['media_switch']) ? $this->settings['media_switch'] : $settings['media_switch'];
+
+    // Checks for [Responsive] image styles at individual items.
+    BlazyFile::imageStyles($settings, TRUE);
   }
 
   /**
