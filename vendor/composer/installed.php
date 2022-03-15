@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '60b939f586f3178a9ce085afc42df44510b676fc',
+        'reference' => 'dbd69f3be80c21d09a46c30d3b50e25e81fcc3c1',
         'name' => 'drupal-composer/drupal-project',
         'dev' => true,
     ),
@@ -283,7 +283,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '60b939f586f3178a9ce085afc42df44510b676fc',
+            'reference' => 'dbd69f3be80c21d09a46c30d3b50e25e81fcc3c1',
             'dev_requirement' => false,
         ),
         'drupal/action' => array(
@@ -1507,6 +1507,15 @@
             'replaced' => array(
                 0 => '9.3.7',
             ),
+        ),
+        'drupal/rebuild_cache_access' => array(
+            'pretty_version' => '1.7.0',
+            'version' => '1.7.0.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../web/modules/contrib/rebuild_cache_access',
+            'aliases' => array(),
+            'reference' => '8.x-1.7',
+            'dev_requirement' => false,
         ),
         'drupal/recaptcha' => array(
             'pretty_version' => '3.0.0',
