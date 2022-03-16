@@ -146,6 +146,7 @@
         "drupal/webform_submission_export_import": "^6.0",
         "drupal/webform_ui": "^5.0",
         "drupal/webform_views": "^5.0@alpha",
+        "drupal/yoast_seo": "^1.7",
         "drush/drush": "^10.4",
         "google/charts": "^45.0",
         "psr/container": "^1.0",

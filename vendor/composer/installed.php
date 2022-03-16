@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'dbd69f3be80c21d09a46c30d3b50e25e81fcc3c1',
+        'reference' => 'b30f6d80a5845bc5143c99b4be5c5ccafac219cb',
         'name' => 'drupal-composer/drupal-project',
         'dev' => true,
     ),
@@ -283,7 +283,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'dbd69f3be80c21d09a46c30d3b50e25e81fcc3c1',
+            'reference' => 'b30f6d80a5845bc5143c99b4be5c5ccafac219cb',
             'dev_requirement' => false,
         ),
         'drupal/action' => array(
@@ -1930,6 +1930,15 @@
             'replaced' => array(
                 0 => '9.3.7',
             ),
+        ),
+        'drupal/yoast_seo' => array(
+            'pretty_version' => '1.7.0',
+            'version' => '1.7.0.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../web/modules/contrib/yoast_seo',
+            'aliases' => array(),
+            'reference' => '8.x-1.7',
+            'dev_requirement' => false,
         ),
         'drush/drush' => array(
             'pretty_version' => '10.6.2',

@@ -9394,6 +9394,70 @@
             "install-path": "../../web/modules/contrib/webform_views"
         },
         {
+            "name": "drupal/yoast_seo",
+            "version": "1.7.0",
+            "version_normalized": "1.7.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/yoast_seo.git",
+                "reference": "8.x-1.7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/yoast_seo-8.x-1.7.zip",
+                "reference": "8.x-1.7",
+                "shasum": "7df2a7d70fd204f3503ffa17423bfd86a0ae5269"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9",
+                "drupal/metatag": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.7",
+                    "datestamp": "1604304795",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Kingdutch",
+                    "homepage": "https://www.drupal.org/user/1868952"
+                },
+                {
+                    "name": "Open Social",
+                    "homepage": "https://www.drupal.org/user/272162"
+                },
+                {
+                    "name": "bramtenhove",
+                    "homepage": "https://www.drupal.org/user/1549848"
+                },
+                {
+                    "name": "robertragas",
+                    "homepage": "https://www.drupal.org/user/2723261"
+                },
+                {
+                    "name": "ronaldtebrake",
+                    "homepage": "https://www.drupal.org/user/2314038"
+                }
+            ],
+            "description": "Adds Real-time SEO page analysis and configuration.",
+            "homepage": "https://www.drupal.org/project/yoast_seo",
+            "support": {
+                "source": "https://git.drupalcode.org/project/yoast_seo"
+            },
+            "install-path": "../../web/modules/contrib/yoast_seo"
+        },
+        {
             "name": "drush/drush",
             "version": "10.6.2",
             "version_normalized": "10.6.2.0",
