@@ -1,0 +1,87 @@
+<?php
+
+/**
+ * @file
+ * Single Content Sync module functionality.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_help().
+ */
+function single_content_sync_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'single_content_sync.node_export':
+      /** @var \Drupal\node\NodeInterface $node */
+      $node = $route_match->getParameter('node');
+      $output = '';
+      $output .= '<p>' . t('Here is exported content of %title in %language.', [
+        '%title' => $node->getTitle(),
+        '%language' => $node->language()->getName(),
+      ]) . '</p>';
+      $output .= '<p>' . t('Just copy it and go to import page of another environment to paste it, or use the action buttons below.') . '</p>';
+      $output .= '<br><p>' . t('You can download results as a zip file with all file references such as images, documents, videos and etc.') . '</p>';
+      $output .= '<p>' . t('You can also download results as a single YAML file, in this case files will be imported by the absolute URL (suitable if you use CDN for files)') . '</p>';
+      $output .= '<br><p>' . t('By using the file result you can import content on deploy. See README how to do it.') . '</p>';
+
+      return $output;
+
+    case 'single_content_sync.import':
+      $output = '';
+      $output .= '<p>' . t('Paste the content that you just imported and click on the Import button.') . '</p>';
+      $output .= '<p>' . t('We check content by uuid, so existing content is updated, and new content is created.') . '</p>';
+
+      return $output;
+  }
+}
+
+/**
+ * Implements hook_entity_operation().
+ */
+function single_content_sync_entity_operation(EntityInterface $entity) {
+  $operations = [];
+
+  if ($entity->getEntityTypeId() === 'node') {
+    $operations['export'] = [
+      'title' => t('Export'),
+      'weight' => 50,
+      'url' => Url::fromRoute('single_content_sync.node_export', [
+        'node' => $entity->id(),
+      ]),
+    ];
+  }
+
+  if ($entity->getEntityTypeId() === 'block_content') {
+    $operations['export'] = [
+      'title' => t('Export'),
+      'weight' => 50,
+      'url' => Url::fromRoute('single_content_sync.block_content_export', [
+        'block_content' => $entity->id(),
+      ]),
+    ];
+  }
+
+  return $operations;
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for links__dropbutton__operations.
+ */
+function single_content_sync_preprocess_links__dropbutton__operations(&$variables) {
+  foreach ($variables['links'] as &$link_data) {
+    if (!isset($link_data['link']['#url'])) {
+      continue;
+    }
+
+    // Remove destination parameter from the query of the export link.
+    switch ($link_data['link']['#url']->getRouteName()) {
+      case 'single_content_sync.node_export':
+      case 'single_content_sync.block_content_export':
+        unset($link_data['link']['#options']['query']['destination']);
+        break;
+    }
+  }
+}

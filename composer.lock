@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0be7b1c396c9ff13dc67ce1c99e92ed9",
+    "content-hash": "20da260abc47f9f4c244dd7d3b7fb704",
     "packages": [
         {
             "name": "alchemy/zippy",
@@ -7980,6 +7980,53 @@
             }
         },
         {
+            "name": "drupal/single_content_sync",
+            "version": "1.1.0-rc4",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/single_content_sync.git",
+                "reference": "1.1.0-rc4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/single_content_sync-1.1.0-rc4.zip",
+                "reference": "1.1.0-rc4",
+                "shasum": "f61cb53c923567185daf36e3ddeabdc6d2a07f63"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9",
+                "drupal/yaml_editor": "^1.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.1.0-rc4",
+                    "datestamp": "1619423543",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Alex Kuzava (nginex)",
+                    "homepage": "https://www.drupal.org/u/nginex",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "This is a simple way of exporting a single node to yml file with possibility to import it on another environment.",
+            "homepage": "https://drupal.org/project/single_content_sync",
+            "support": {
+                "source": "https://cgit.drupalcode.org/single_content_sync",
+                "issues": "https://drupal.org/project/issues/single_content_sync"
+            }
+        },
+        {
             "name": "drupal/social_media_links",
             "version": "2.8.0",
             "source": {
@@ -9061,6 +9108,50 @@
             "homepage": "https://www.drupal.org/project/webform_views",
             "support": {
                 "source": "https://git.drupalcode.org/project/webform_views"
+            }
+        },
+        {
+            "name": "drupal/yaml_editor",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/yaml_editor.git",
+                "reference": "8.x-1.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/yaml_editor-8.x-1.1.zip",
+                "reference": "8.x-1.1",
+                "shasum": "eb01f577316529808e73360e17b1798c6d5b297d"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.1",
+                    "datestamp": "1592902686",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "yannickoo",
+                    "homepage": "https://www.drupal.org/user/531118"
+                }
+            ],
+            "description": "Adds an editor for YAML configuration textareas.",
+            "homepage": "https://www.drupal.org/project/yaml_editor",
+            "support": {
+                "source": "https://git.drupalcode.org/project/yaml_editor"
             }
         },
         {
@@ -14902,6 +14993,7 @@
         "drupal/quicktabs": 15,
         "drupal/search_exclude": 10,
         "drupal/simplenews": 10,
+        "drupal/single_content_sync": 5,
         "drupal/typed_data": 15,
         "drupal/webform_views": 15
     },

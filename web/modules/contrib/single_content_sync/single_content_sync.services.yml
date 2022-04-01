@@ -1,0 +1,7 @@
+services:
+  single_content_sync.exporter:
+    class: Drupal\single_content_sync\ContentExporter
+    arguments: ['@entity_type.manager', '@module_handler']
+  single_content_sync.importer:
+    class: Drupal\single_content_sync\ContentImporter
+    arguments: [ '@entity_type.manager', '@entity.repository', '@module_handler', '@file_system']

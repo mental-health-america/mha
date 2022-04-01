@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '0bf49551637c1c92c879fb15a4ec3c5bc2cb00ed',
+        'reference' => '83e9827d4b19da15433bf461b2d497380e967ff0',
         'name' => 'drupal-composer/drupal-project',
         'dev' => true,
     ),
@@ -283,7 +283,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '0bf49551637c1c92c879fb15a4ec3c5bc2cb00ed',
+            'reference' => '83e9827d4b19da15433bf461b2d497380e967ff0',
             'dev_requirement' => false,
         ),
         'drupal/action' => array(
@@ -1676,6 +1676,15 @@
             'reference' => '8.x-2.0-beta2',
             'dev_requirement' => false,
         ),
+        'drupal/single_content_sync' => array(
+            'pretty_version' => '1.1.0-rc4',
+            'version' => '1.1.0.0-RC4',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../web/modules/contrib/single_content_sync',
+            'aliases' => array(),
+            'reference' => '1.1.0-rc4',
+            'dev_requirement' => false,
+        ),
         'drupal/social_media_links' => array(
             'pretty_version' => '2.8.0',
             'version' => '2.8.0.0',
@@ -1939,6 +1948,15 @@
             'replaced' => array(
                 0 => '9.3.9',
             ),
+        ),
+        'drupal/yaml_editor' => array(
+            'pretty_version' => '1.1.0',
+            'version' => '1.1.0.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../web/modules/contrib/yaml_editor',
+            'aliases' => array(),
+            'reference' => '8.x-1.1',
+            'dev_requirement' => false,
         ),
         'drupal/yoast_seo' => array(
             'pretty_version' => '1.7.0',
