@@ -68,6 +68,7 @@
         "drupal/config_update": "^1.6",
         "drupal/console": "^1.0.2",
         "drupal/content_access": "^1.0@alpha",
+        "drupal/content_sync": "^3.0@beta",
         "drupal/core": "^9.",
         "drupal/ctools": "^3.6",
         "drupal/date_popup": "^1.0",

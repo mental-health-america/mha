@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'ead342295736cd8df88249d59461c995a66d220d',
+        'reference' => '0bf49551637c1c92c879fb15a4ec3c5bc2cb00ed',
         'name' => 'drupal-composer/drupal-project',
         'dev' => true,
     ),
@@ -283,7 +283,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'ead342295736cd8df88249d59461c995a66d220d',
+            'reference' => '0bf49551637c1c92c879fb15a4ec3c5bc2cb00ed',
             'dev_requirement' => false,
         ),
         'drupal/action' => array(
@@ -582,6 +582,15 @@
             'replaced' => array(
                 0 => '9.3.9',
             ),
+        ),
+        'drupal/content_sync' => array(
+            'pretty_version' => '3.0.0-beta1',
+            'version' => '3.0.0.0-beta1',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../web/modules/contrib/content_sync',
+            'aliases' => array(),
+            'reference' => '3.0.0-beta1',
+            'dev_requirement' => false,
         ),
         'drupal/content_translation' => array(
             'dev_requirement' => false,
