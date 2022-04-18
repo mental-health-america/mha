@@ -132,7 +132,10 @@ function template_preprocess_colorbox_formatter(&$variables) {
     $variables['url'] = $style->buildUrl($image_uri);
   }
   else {
-    $variables['url'] = file_create_url($image_uri);
+    /** @var \Drupal\Core\File\FileUrlGeneratorInterface $file_url_generator */
+    $file_url_generator = \Drupal::service('file_url_generator');
+
+    $variables['url'] = $file_url_generator->generateAbsoluteString($image_uri);
   }
 
   // If File Entity module is enabled, load attribute values from file entity.

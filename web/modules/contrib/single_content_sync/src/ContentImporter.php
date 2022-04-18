@@ -2,12 +2,13 @@
 
 namespace Drupal\single_content_sync;
 
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\File\FileSystemInterface;
-use Drupal\Core\Serialization\Yaml;
+use Drupal\Core\TypedData\TranslatableInterface;
 
 class ContentImporter implements ContentImporterInterface {
 
@@ -40,6 +41,13 @@ class ContentImporter implements ContentImporterInterface {
   protected $fileSystem;
 
   /**
+   * The content sync helper.
+   *
+   * @var \Drupal\single_content_sync\ContentSyncHelperInterface
+   */
+  protected $contentSyncHelper;
+
+  /**
    * ContentExporter constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -50,178 +58,98 @@ class ContentImporter implements ContentImporterInterface {
    *   The module handler.
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   The file system.
+   * @param \Drupal\single_content_sync\ContentSyncHelperInterface $content_sync_helper
+   *   The content sync helper.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, EntityRepositoryInterface $entity_repository, ModuleHandlerInterface $module_handler, FileSystemInterface $file_system) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, EntityRepositoryInterface $entity_repository, ModuleHandlerInterface $module_handler, FileSystemInterface $file_system, ContentSyncHelperInterface $content_sync_helper) {
     $this->entityTypeManager = $entity_type_manager;
     $this->entityRepository = $entity_repository;
     $this->moduleHandler = $module_handler;
     $this->fileSystem = $file_system;
+    $this->contentSyncHelper = $content_sync_helper;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function doImport(array $content) {
-    $entity = NULL;
+  public function doImport(array $content): EntityInterface {
+    $storage = $this->entityTypeManager->getStorage($content['entity_type']);
+    $definition = $this->entityTypeManager->getDefinition($content['entity_type']);
+
+    // Check if there is an existing entity with the identical uuid.
+    $entity = $this->entityRepository->loadEntityByUuid($content['entity_type'], $content['uuid']);
+
+    // If not, create a new instance of the entity.
+    if (!$entity) {
+      $values = [
+        'uuid' => $content['uuid'],
+      ];
+      if ($bundle_key = $definition->getKey('bundle')) {
+        $values[$bundle_key] = $content['bundle'];
+      }
+
+      $entity = $storage->create($values);
+    }
 
     switch ($content['entity_type']) {
       case 'node':
-        $node_storage = $this->entityTypeManager->getStorage('node');
-        $entity = $this->entityRepository->loadEntityByUuid('node', $content['uuid']);
-
-        if (!$entity) {
-          $entity = $node_storage->create([
-            'uuid' => $content['uuid'],
-            'type' => $content['bundle'],
-            'title' => $content['base_fields']['title'],
-            'langcode' => $content['base_fields']['langcode'],
-            'created' => $content['base_fields']['created'],
-            'changed' => $content['base_fields']['changed'],
-            'status' => $content['base_fields']['status'],
-            'path' => [
-              'alias' => $content['base_fields']['url'],
-              'pathauto' => empty($content['base_fields']['url']),
-            ],
-          ]);
-        }
-        else {
-          $entity->set('title', $content['base_fields']['title']);
-          $entity->set('langcode', $content['base_fields']['langcode']);
-          $entity->set('status', $content['base_fields']['status']);
-          $entity->set('path', [
-            'alias' => $content['base_fields']['url'],
-            'pathauto' => 0,
-          ]);
-        }
-
         if (isset($content['base_fields']['author']) && ($account = user_load_by_mail($content['base_fields']['author']))) {
           $entity->setOwner($account);
         }
         break;
 
-      case 'user':
-        $user_storage = $this->entityTypeManager->getStorage('user');
-        $entity = $this->entityRepository->loadEntityByUuid('user', $content['uuid']);
-
-        if (!$entity) {
-          $entity = $user_storage->create([
-            'uuid' => $content['uuid'],
-            'mail' => $content['base_fields']['mail'],
-            'init' => $content['base_fields']['init'],
-            'name' => $content['base_fields']['name'],
-            'created' => $content['base_fields']['created'],
-            'changed' => $content['base_fields']['changed'],
-            'status' => $content['base_fields']['status'],
-            'timezone' => $content['base_fields']['timezone'],
-          ]);
-        }
-        else {
-          $entity->set('mail', $content['base_fields']['mail']);
-          $entity->set('name', $content['base_fields']['name']);
-          $entity->set('status', $content['base_fields']['status']);
-          $entity->set('timezone', $content['base_fields']['timezone']);
-        }
-        break;
-
-      case 'block_content':
-        $block_content_storage = $this->entityTypeManager->getStorage('block_content');
-        $entity = $this->entityRepository->loadEntityByUuid('block_content', $content['uuid']);
-
-        if (!$entity) {
-          $entity = $block_content_storage->create([
-            'uuid' => $content['uuid'],
-            'type' => $content['bundle'],
-            'langcode' => $content['base_fields']['langcode'],
-            'info' => $content['base_fields']['info'],
-            'reusable' => $content['base_fields']['reusable'],
-          ]);
-        }
-        else {
-          $entity->set('info', $content['base_fields']['info']);
-          $entity->set('reusable', $content['base_fields']['reusable']);
-        }
-        break;
-
-      case 'media':
-        $media_storage = $this->entityTypeManager->getStorage('media');
-        $entity = $this->entityRepository->loadEntityByUuid('media', $content['uuid']);
-
-        if (!$entity) {
-          $entity = $media_storage->create([
-            'uuid' => $content['uuid'],
-            'bundle' => $content['bundle'],
-            'langcode' => $content['base_fields']['langcode'],
-            'name' => $content['base_fields']['name'],
-            'status' => $content['base_fields']['status'],
-            'created' => $content['base_fields']['created'],
-            'changed' => $content['base_fields']['changed'],
-          ]);
-        }
-        else {
-          $entity->set('name', $content['base_fields']['name']);
-          $entity->set('created', $content['base_fields']['created']);
-          $entity->set('changed', $content['base_fields']['changed']);
-          $entity->set('status', $content['base_fields']['status']);
-        }
-        break;
-
       case 'taxonomy_term':
-        $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');
-        $entity = $this->entityRepository->loadEntityByUuid('taxonomy_term', $content['uuid']);
-
-        if (!$entity) {
-          $entity = $term_storage->create([
-            'uuid' => $content['uuid'],
-            'name' => $content['base_fields']['name'],
-            'weight' => $content['base_fields']['weight'],
-            'langcode' => $content['base_fields']['langcode'],
-            'description' => $content['base_fields']['description'],
-          ]);
-
-          if ($content['base_fields']['parent']) {
-            $entity->set('parent', $this->doImport($content['base_fields']['parent']));
-          }
-        }
-        else {
-          $entity->set('name', $content['base_fields']['name']);
-          $entity->set('langcode', $content['base_fields']['langcode']);
-          $entity->set('weight', $content['base_fields']['weight']);
-          $entity->set('description', $content['base_fields']['description']);
-        }
-        break;
-
-      case 'paragraph':
-        $entity = $this->entityRepository->loadEntityByUuid('paragraph', $content['uuid']);
-        $paragraph_storage = $this->entityTypeManager->getStorage('paragraph');
-
-        if (!$entity) {
-          $entity = $paragraph_storage->create([
-            'uuid' => $content['uuid'],
-            'type' => $content['bundle'],
-            'langcode' => $content['base_fields']['langcode'],
-            'created' => $content['base_fields']['created'],
-            'status' => $content['base_fields']['status'],
-          ]);
-        }
-        else {
-          $entity->set('status', $content['base_fields']['status']);
-          $entity->set('langcode', $content['base_fields']['langcode']);
+        if ($content['base_fields']['parent']) {
+          $entity->set('parent', $this->doImport($content['base_fields']['parent']));
         }
         break;
     }
+
+    // Import values from base fields.
+    $this->importBaseValues($entity, $content['base_fields']);
 
     // Alter importing entity by using hook_content_import_entity_alter().
     // Support of importing a new entity type can be provided in the hook.
     $this->moduleHandler->alter('content_import_entity', $content, $entity);
 
-    // Import content field values.
-    foreach ($content['custom_fields'] as $field_name => $field_value) {
-      $this->setFieldValue($entity, $field_name, $field_value);
-    }
+    // Import values from custom fields.
+    $this->importCustomValues($entity, $content['custom_fields']);
 
     $entity->save();
 
+    // Sync translations of the entity.
+    if (isset($content['translations']) && $entity instanceof TranslatableInterface) {
+      foreach ($content['translations'] as $langcode => $translation_content) {
+        $translated_entity = !$entity->hasTranslation($langcode) ? $entity->addTranslation($langcode) : $entity->getTranslation($langcode);
+
+        $this->importBaseValues($translated_entity, $translation_content['base_fields']);
+        $this->importCustomValues($translated_entity, $translation_content['custom_fields']);
+
+        $translated_entity->save();
+      }
+    }
+
     return $entity;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function importCustomValues(FieldableEntityInterface $entity, array $fields) {
+    foreach ($fields as $field_name => $field_value) {
+      $this->setFieldValue($entity, $field_name, $field_value);
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function importBaseValues(FieldableEntityInterface $entity, array $fields) {
+    $values = $this->mapBaseFieldsValues($entity->getEntityTypeId(), $fields);
+
+    foreach ($values as $field_name => $value) {
+      $entity->set($field_name, $value);
+    }
   }
 
   /**
@@ -312,7 +240,7 @@ class ContentImporter implements ContentImporterInterface {
 
             $content = file_get_contents($file_item['url']);
             $directory = $this->fileSystem->dirname($file_item['uri']);
-            $this->fileSystem->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
+            $this->contentSyncHelper->prepareFilesDirectory($directory);
 
             if ($file = file_save_data($content, $file_item['uri'], FileSystemInterface::EXISTS_REPLACE)) {
               $file->setOwnerId(1);
@@ -346,6 +274,20 @@ class ContentImporter implements ContentImporterInterface {
 
         $entity->set($field_name, $values);
         break;
+
+      case 'metatag':
+        $entity->set($field_name, [['value' => serialize($field_value)]]);
+        break;
+
+      case 'layout_section':
+        // Get unserialized version of each section.
+        $sections = base64_decode($field_value);
+        $values = array_map(function (string $section) {
+          return unserialize($section);
+        }, explode('|', $sections));
+
+        $entity->set($field_name, $values);
+        break;
     }
 
     // Alter setting a field value during the import by using
@@ -357,24 +299,126 @@ class ContentImporter implements ContentImporterInterface {
   /**
    * {@inheritdoc}
    */
-  public function importFromFile($file_path) {
-    if (!file_exists($file_path)) {
-      throw new \Exception('The requested file does not exists.');
+  public function importFromFile(string $file_real_path): EntityInterface {
+    if (!file_exists($file_real_path)) {
+      throw new \Exception('The requested file does not exist.');
     }
 
-    $file_content = file_get_contents($file_path);
+    $file_content = file_get_contents($file_real_path);
 
     if (!$file_content) {
-      throw new \Exception('The requested file cannot be downloaded.');
+      throw new \Exception('The requested file could not be downloaded.');
     }
 
-    $content = Yaml::decode($file_content);
-
-    if (!$content) {
-      throw new \Exception('The requested file has invalid YAML content.');
-    }
+    $content = $this->contentSyncHelper->validateYamlFileContent($file_content);
 
     return $this->doImport($content);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function importFromZip(string $file_real_path): EntityInterface {
+    // Extract zip files to the unique local directory.
+    $zip = $this->contentSyncHelper->createZipInstance($file_real_path);
+    $import_directory = $this->contentSyncHelper->createImportDirectory();
+    $zip->extract($import_directory);
+
+    $default_scheme = $this->contentSyncHelper->getDefaultFileScheme();
+    $content_file_path = NULL;
+
+    foreach ($zip->listContents() as $zip_file) {
+      $original_file_path = "{$import_directory}/{$zip_file}";
+
+      // Move the extracted assets to the proper destination.
+      if (strpos($zip_file, 'assets') === 0) {
+        // Use default schema instead of the assets destinations.
+        $destination = str_replace('assets/', "{$default_scheme}://", $zip_file);
+        $directory = $this->fileSystem->dirname($destination);
+        $this->contentSyncHelper->prepareFilesDirectory($directory);
+        $this->fileSystem->move($original_file_path, $destination, FileSystemInterface::EXISTS_REPLACE);
+      }
+      else {
+        $content_file_path = $original_file_path;
+      }
+    }
+
+    if (is_null($content_file_path)) {
+      throw new \Exception('The content file in YAML format could not be found.');
+    }
+
+    $entity = $this->importFromFile($content_file_path);
+
+    // Clean up extracted files/folder that are left after successful import.
+    $this->fileSystem->deleteRecursive($import_directory);
+
+    return $entity;
+}
+
+  /**
+   * {@inheritdoc}
+   */
+  public function mapBaseFieldsValues($entity_type_id, array $values) {
+    $map_values = [];
+
+    switch ($entity_type_id) {
+      case 'node':
+        return [
+          'title' => $values['title'],
+          'langcode' => $values['langcode'],
+          'created' => $values['created'],
+          'changed' => $values['changed'],
+          'status' => $values['status'],
+          'path' => [
+            'alias' => $values['url'],
+            'pathauto' => empty($values['url']),
+          ],
+        ];
+
+      case 'user':
+        return [
+          'mail' => $values['mail'],
+          'init' => $values['init'],
+          'name' => $values['name'],
+          'created' => $values['created'],
+          'changed' => $values['changed'],
+          'status' => $values['status'],
+          'timezone' => $values['timezone'],
+        ];
+
+      case 'block_content':
+        return [
+          'langcode' => $values['langcode'],
+          'info' => $values['info'],
+          'reusable' => $values['reusable'],
+        ];
+
+      case 'media':
+        return [
+          'langcode' => $values['langcode'],
+          'name' => $values['name'],
+          'status' => $values['status'],
+          'created' => $values['created'],
+          'changed' => $values['changed'],
+        ];
+
+      case 'taxonomy_term':
+        return [
+          'name' => $values['name'],
+          'weight' => $values['weight'],
+          'langcode' => $values['langcode'],
+          'description' => $values['description'],
+        ];
+
+      case 'paragraph':
+        return [
+          'langcode' => $values['langcode'],
+          'created' => $values['created'],
+          'status' => $values['status'],
+        ];
+    }
+
+    return $map_values;
   }
 
 }
