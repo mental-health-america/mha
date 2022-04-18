@@ -1,13 +1,12 @@
 name: Single Content Sync
 type: module
 description: 'Export/import a single content between different environments.'
-core: 8.x
-core_version_requirement: ^8 || ^9
+core_version_requirement: ^8.8 || ^9
 package: Content
 dependencies:
-  - drupal:yaml_editor
+  - yaml_editor:yaml_editor
 
-# Information added by Drupal.org packaging script on 2021-04-26
-version: '1.1.0-rc4'
+# Information added by Drupal.org packaging script on 2022-04-17
+version: '1.2.0'
 project: 'single_content_sync'
-datestamp: 1619423545
+datestamp: 1650217248

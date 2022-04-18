@@ -3,13 +3,13 @@
 namespace Drupal\single_content_sync\Form;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
-use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Url;
+use Drupal\file\FileInterface;
 use Drupal\single_content_sync\ContentExporterInterface;
+use Drupal\single_content_sync\ContentFileGeneratorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -27,13 +27,6 @@ class ContentExportForm extends FormBase {
   protected $contentExporter;
 
   /**
-   * The file system.
-   *
-   * @var \Drupal\Core\File\FileSystemInterface
-   */
-  protected $fileSystem;
-
-  /**
    * The entity type manager.
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
@@ -41,19 +34,26 @@ class ContentExportForm extends FormBase {
   protected $entityTypeManager;
 
   /**
+   * The content file generator.
+   *
+   * @var \Drupal\single_content_sync\ContentFileGeneratorInterface
+   */
+  protected $fileGenerator;
+
+  /**
    * ContentExportForm constructor.
    *
    * @param \Drupal\single_content_sync\ContentExporterInterface $content_exporter
    *   The content exporter service.
-   * @param \Drupal\Core\File\FileSystemInterface $file_system
-   *   The file system.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
+   * @param \Drupal\single_content_sync\ContentFileGeneratorInterface $file_generator
+   *   The content file generator.
    */
-  public function __construct(ContentExporterInterface $content_exporter, FileSystemInterface $file_system, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(ContentExporterInterface $content_exporter, EntityTypeManagerInterface $entity_type_manager, ContentFileGeneratorInterface $file_generator) {
     $this->contentExporter = $content_exporter;
-    $this->fileSystem = $file_system;
     $this->entityTypeManager = $entity_type_manager;
+    $this->fileGenerator = $file_generator;
   }
 
   /**
@@ -62,8 +62,8 @@ class ContentExportForm extends FormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('single_content_sync.exporter'),
-      $container->get('file_system'),
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('single_content_sync.file_generator')
     );
   }
 
@@ -87,7 +87,7 @@ class ContentExportForm extends FormBase {
         $files = $this->entityTypeManager->getStorage('file')
           ->loadByProperties(['filename' => $filename]);
         /** @var \Drupal\file\FileInterface $file */
-        $file = reset($files);
+        $file = array_pop($files);
         if (file_exists($file->getFileUri())) {
           $download_url = Url::fromRoute('single_content_sync.file_download', [], [
             'query' => ['file' => $filename],
@@ -104,11 +104,11 @@ class ContentExportForm extends FormBase {
             ],
             'single_content_sync_export_download',
           ];
+          return;
         }
+
         // If the file does not exist, something went wrong.
-        else {
-          $this->messenger()->addError($this->t('The export file could not be found, please try again.'));
-        }
+        $this->messenger()->addError($this->t('The export file could not be found, please try again.'));
       }
     }
   }
@@ -119,9 +119,10 @@ class ContentExportForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $this->handleAutoFileDownload($form);
 
+    $extract_translations = $form_state->getValue('translation', FALSE);
     $parameters = $this->getRouteMatch()->getParameters();
     $entity = $parameters->getIterator()->current();
-    $export_in_yaml = $this->contentExporter->doExportToYml($entity);
+    $export_in_yaml = $this->contentExporter->doExportToYml($entity, $extract_translations);
 
     $form['output'] = [
       '#type' => 'textarea',
@@ -129,7 +130,24 @@ class ContentExportForm extends FormBase {
       '#attributes' => [
         'data-yaml-editor' => 'true',
       ],
+      '#wrapper_attributes' => [
+        'id' => 'exported-content',
+      ],
       '#value' => $export_in_yaml,
+    ];
+
+    $form['translation'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Include all translations?'),
+      '#description' => $this->t('The exported content will be refreshed to preview it with translations.'),
+      '#ajax' => [
+        'callback' => '::refreshContent',
+        'wrapper' => 'exported-content',
+        'effect' => 'fade',
+        'progress' => [
+          'type' => 'fullscreen',
+        ],
+      ],
     ];
 
     $form['actions'] = [
@@ -153,44 +171,53 @@ class ContentExportForm extends FormBase {
   }
 
   /**
+   * Ajax callback to refresh output field.
+   */
+  public function refreshContent(array &$form, FormStateInterface $form_state) {
+    // Clean up warning messages when refreshing field.
+    $this->messenger()->deleteByType('warning');
+
+    return $form['output'];
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $button = $form_state->getTriggeringElement();
-    $file_name = '';
+    $extract_translations = $form_state->getValue('translation', FALSE);
+    $parameters = $this->getRouteMatch()->getParameters();
+    $entity = $parameters->getIterator()->current();
 
     switch ($button['#name']) {
       case 'download_file':
-        $output = $form_state->getValue('output');
-        $content = Yaml::decode($output);
-        $directory = 'public://export';
-        $this->fileSystem->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
-
-        $file = file_save_data($output, "{$directory}/{$content['uuid']}.yml", FileSystemInterface::EXISTS_REPLACE);
-        $file->setTemporary();
-        $file->save();
-
-        $file_name = $file->getFilename();
-        $url = Url::fromRoute('single_content_sync.file_download', [], [
-          'query' => ['file' => $file_name],
-          'absolute' => TRUE,
-        ]);
-        $message = $this->t('Your download should begin now. If it does not start, download the file @link.', [
-          '@link' => Link::fromTextAndUrl($this->t('here'), $url)->toString(),
-        ]);
-        $this->messenger()->addStatus($message);
+        $file = $this->fileGenerator->generateYamlFile($entity, $extract_translations);
         break;
 
       case 'download_zip':
-        $this->messenger()->addWarning($this->t('This is not ready yet, coming soon!'));
+        $file = $this->fileGenerator->generateZipFile($entity, $extract_translations);
         break;
     }
 
-    $form_state->setRedirect($this->getRouteMatch()->getRouteName(), $this->getRouteMatch()->getRawParameters()->all(), [
-      'query' => [
-        'file' => $file_name,
-      ],
-    ]);
+    // Display message to download a file immediately.
+    if (isset($file) && $file instanceof FileInterface) {
+      $file_name = $file->getFileName();
+
+      $url = Url::fromRoute('single_content_sync.file_download', [], [
+        'query' => ['file' => $file_name],
+        'absolute' => TRUE,
+      ]);
+      $message = $this->t('Your download should begin now. If it does not start, download the file @link.', [
+        '@link' => Link::fromTextAndUrl($this->t('here'), $url)->toString(),
+      ]);
+      $this->messenger()->addStatus($message);
+
+      $form_state->setRedirect($this->getRouteMatch()->getRouteName(), $this->getRouteMatch()->getRawParameters()->all(), [
+        'query' => [
+          'file' => $file_name,
+        ],
+      ]);
+    }
   }
 
 }

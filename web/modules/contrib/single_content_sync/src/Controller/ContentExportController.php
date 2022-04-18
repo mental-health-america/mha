@@ -26,8 +26,7 @@ class ContentExportController extends ControllerBase {
     }
 
     /** @var \Drupal\file\FileInterface $file */
-    $file = reset($files);
-
+    $file = array_pop($files);
     return new BinaryFileResponse($file->getFileUri(), 200, [], FALSE, 'attachment');
   }
 
