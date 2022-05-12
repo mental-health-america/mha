@@ -51,7 +51,8 @@
       // @todo re-check common integer.
       var arr = [_width, _height, 'top', 'right', 'bottom', 'left'];
       var result = $.computeStyle(el, props);
-      return arr.indexOf(props) === -1 ? result : parseInt(result, 2);
+      var num = $.isNum(result) ? parseInt(result, 2) : result;
+      return arr.indexOf(props) === -1 ? result : num;
     }
 
     var chainCallback = function (el) {
@@ -188,9 +189,13 @@
     insert(target, el, _after + _begin);
   }
 
-  function clone(els) {
+  function clone(els, deep) {
+    if ($.isUnd(deep)) {
+      deep = true;
+    }
+
     var chainCallback = function (el) {
-      return $.isElm(el) && el.cloneNode(true);
+      return $.isElm(el) && el.cloneNode(deep);
     };
     return $.chain(els, chainCallback);
   }
@@ -270,8 +275,8 @@
       // els.push(findAll(el, selector));
       // });
     },
-    clone: function () {
-      return clone(this);
+    clone: function (deep) {
+      return clone(this, deep);
     },
     computeStyle: function (prop) {
       return $.computeStyle(this[0], prop);

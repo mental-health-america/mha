@@ -115,6 +115,16 @@ class ContentImporter implements ContentImporterInterface {
     // Import values from custom fields.
     $this->importCustomValues($entity, $content['custom_fields']);
 
+    // The entity that we are importing can be already created during the import
+    // if that entity existed as a reference. We need to update this entity to
+    // use the same id and enforce update instead of insert.
+    $existing_entity = $this->entityRepository->loadEntityByUuid($content['entity_type'], $content['uuid']);
+
+    if ($existing_entity) {
+      $entity->{$definition->getKey('id')} = $existing_entity->id();
+      $entity->enforceIsNew(FALSE);
+    }
+
     $entity->save();
 
     // Sync translations of the entity.
@@ -192,18 +202,37 @@ class ContentImporter implements ContentImporterInterface {
       case 'entity_reference_revisions':
         $values = [];
         foreach ($field_value as $child_entity) {
-          // Import content entity relation.
-          if (isset($child_entity['uuid']) && isset($child_entity['entity_type'])) {
+          // Import config relation just by setting target id.
+          if (isset($child_entity['type']) && $child_entity['type'] === 'config') {
+            $values[] = [
+              'target_id' => $child_entity['value'],
+            ];
+            continue;
+          }
+
+          // If the entity was fully exported we do the full import.
+          if ($this->isFullEntity($child_entity)) {
             $values[] = $this->doImport($child_entity);
             continue;
           }
 
-          // Import config relation just by setting target id.
-          if ($child_entity['type'] === 'config') {
-            $values[] = [
-              'target_id' => $child_entity['value'],
+          $reference_entity = $this->entityRepository->loadEntityByUuid($child_entity['entity_type'], $child_entity['uuid']);
+
+          // Create a stub entity without custom field values.
+          if (!$reference_entity) {
+            $reference_entity_values = [
+              'uuid' => $child_entity['uuid'],
             ];
+            $definition = $this->entityTypeManager->getDefinition($child_entity['entity_type']);
+            if ($bundle_key = $definition->getKey('bundle')) {
+              $reference_entity_values[$bundle_key] = $child_entity['bundle'];
+            }
+            $reference_entity = $this->entityTypeManager->getStorage($child_entity['entity_type'])->create($reference_entity_values);
+            $this->importBaseValues($reference_entity, $child_entity['base_fields']);
+            $reference_entity->save();
           }
+
+          $values[] = $reference_entity;
         }
 
         $entity->set($field_name, $values);
@@ -318,7 +347,7 @@ class ContentImporter implements ContentImporterInterface {
   /**
    * {@inheritdoc}
    */
-  public function importFromZip(string $file_real_path): EntityInterface {
+  public function importFromZip(string $file_real_path): array {
     // Extract zip files to the unique local directory.
     $zip = $this->contentSyncHelper->createZipInstance($file_real_path);
     $import_directory = $this->contentSyncHelper->createImportDirectory();
@@ -326,6 +355,7 @@ class ContentImporter implements ContentImporterInterface {
 
     $default_scheme = $this->contentSyncHelper->getDefaultFileScheme();
     $content_file_path = NULL;
+    $entity_array = [];
 
     foreach ($zip->listContents() as $zip_file) {
       $original_file_path = "{$import_directory}/{$zip_file}";
@@ -339,7 +369,10 @@ class ContentImporter implements ContentImporterInterface {
         $this->fileSystem->move($original_file_path, $destination, FileSystemInterface::EXISTS_REPLACE);
       }
       else {
+        // An array is made of entities to accommodate the import of a zip
+        // from the Bulk export function.
         $content_file_path = $original_file_path;
+        $entity_array[] = $this->importFromFile($content_file_path);
       }
     }
 
@@ -347,13 +380,11 @@ class ContentImporter implements ContentImporterInterface {
       throw new \Exception('The content file in YAML format could not be found.');
     }
 
-    $entity = $this->importFromFile($content_file_path);
-
     // Clean up extracted files/folder that are left after successful import.
     $this->fileSystem->deleteRecursive($import_directory);
 
-    return $entity;
-}
+    return $entity_array;
+  }
 
   /**
    * {@inheritdoc}
@@ -363,17 +394,20 @@ class ContentImporter implements ContentImporterInterface {
 
     switch ($entity_type_id) {
       case 'node':
-        return [
+        $node = [
           'title' => $values['title'],
           'langcode' => $values['langcode'],
           'created' => $values['created'],
-          'changed' => $values['changed'],
           'status' => $values['status'],
-          'path' => [
+        ];
+        // We check if node url alias is filled in.
+        if (isset($values['url'])) {
+          $node['path'] = [
             'alias' => $values['url'],
             'pathauto' => empty($values['url']),
-          ],
-        ];
+          ];
+        }
+        return $node;
 
       case 'user':
         return [
@@ -381,7 +415,6 @@ class ContentImporter implements ContentImporterInterface {
           'init' => $values['init'],
           'name' => $values['name'],
           'created' => $values['created'],
-          'changed' => $values['changed'],
           'status' => $values['status'],
           'timezone' => $values['timezone'],
         ];
@@ -399,7 +432,6 @@ class ContentImporter implements ContentImporterInterface {
           'name' => $values['name'],
           'status' => $values['status'],
           'created' => $values['created'],
-          'changed' => $values['changed'],
         ];
 
       case 'taxonomy_term':
@@ -419,6 +451,20 @@ class ContentImporter implements ContentImporterInterface {
     }
 
     return $map_values;
+  }
+
+  /**
+   * Validates whether an entity array is a full entity array or not.
+   *
+   * @param array $entity
+   *   The entity array to be validated.
+   *
+   * @return bool
+   *   If the entity is a full entity array will return TRUE,
+   *   else will return FALSE.
+   */
+  protected function isFullEntity(array $entity): bool {
+    return isset($entity['uuid']) && isset($entity['entity_type']) && isset($entity['base_fields']) && isset($entity['custom_fields']);
   }
 
 }

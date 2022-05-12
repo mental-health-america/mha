@@ -83,6 +83,11 @@ class ContentImportForm extends FormBase {
       '#attributes' => [
         'data-yaml-editor' => 'true',
       ],
+      '#attached' => [
+        'library' => [
+          'single_content_sync/yaml_editor',
+        ],
+      ],
     ];
     $form['actions'] = ['#type' => 'actions'];
     $form['actions']['import'] = [
@@ -123,6 +128,7 @@ class ContentImportForm extends FormBase {
       }
       catch (\Exception $e) {
         $this->messenger()->addError($e->getMessage());
+        return;
       }
     }
     else {
@@ -132,10 +138,17 @@ class ContentImportForm extends FormBase {
       }
       catch (\Exception $e) {
         $this->messenger()->addError($e->getMessage());
+        return;
       }
     }
 
-    if (isset($entity) && $entity instanceof EntityInterface) {
+    $entities = !is_array($entity) ? [$entity] : $entity;
+
+    if (count($entities) > 1) {
+      $this->messenger()->addStatus($this->t('The bulk import of content has been successful performed.'));
+    }
+    else {
+      $entity = array_pop($entities);
       $this->messenger()->addStatus($this->t('The content has been synced @link', [
         '@link' => $entity->toLink()->toString(),
       ]));

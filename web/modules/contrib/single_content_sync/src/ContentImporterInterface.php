@@ -47,10 +47,10 @@ interface ContentImporterInterface {
    * @param string $file_real_path
    *   The real path to the local file.
    *
-   * @return \Drupal\Core\Entity\EntityInterface
-   *   Imported entity.
+   * @return \Drupal\Core\Entity\EntityInterface[]
+   *   An array of imported entities.
    */
-  public function importFromZip(string $file_real_path): EntityInterface;
+  public function importFromZip(string $file_real_path): array;
 
   /**
    * Do a mapping between entity base fields and exported content.

@@ -16,7 +16,7 @@ interface ContentFileGeneratorInterface {
    *   Whether to extract translations.
    *
    * @return \Drupal\file\FileInterface
-   *   The generate file represented as object.
+   *   The generated file represented as object.
    */
   public function generateYamlFile(FieldableEntityInterface $entity, bool $extract_translations = FALSE): FileInterface;
 
@@ -29,8 +29,23 @@ interface ContentFileGeneratorInterface {
    *   Whether to extract translations.
    *
    * @return \Drupal\file\FileInterface
-   *   The generate file represented as object.
+   *   The generated file represented as object.
    */
   public function generateZipFile(FieldableEntityInterface $entity, bool $extract_translations = FALSE): FileInterface;
+
+  /**
+   * Generate a Zip file with bulk exported content and assets.
+   *
+   * @param \Drupal\Core\Entity\FieldableEntityInterface[] $entities
+   *   An array of content entities.
+   * @param bool $extract_translations
+   *   Whether to extract translations.
+   * @param bool $extract_assets
+   *   Whether to extract assets.
+   *
+   * @return \Drupal\file\FileInterface
+   *   The generated file represented as object.
+   */
+  public function generateBulkZipFile(array $entities, bool $extract_translations = FALSE, bool $extract_assets = FALSE): FileInterface;
 
 }
