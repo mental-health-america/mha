@@ -134,6 +134,11 @@ class ContentExportForm extends FormBase {
         'id' => 'exported-content',
       ],
       '#value' => $export_in_yaml,
+      '#attached' => [
+        'library' => [
+          'single_content_sync/yaml_editor',
+        ],
+      ],
     ];
 
     $form['translation'] = [

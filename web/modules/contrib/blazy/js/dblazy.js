@@ -13,7 +13,7 @@
  * @todo use Cash for better DOM queries, or any core libraries when available.
  * @todo remove unneeded dup methods once all codebase migrated.
  * @todo move more DOM methods into blazy.dom.js to make it ditchable for Cash.
- * @todo https://caniuse.com/dom-manip-convenience
+ * @todo when IE gone, https://caniuse.com/dom-manip-convenience
  */
 
 /* global define, module */
@@ -392,6 +392,8 @@
    *
    * @private
    *
+   * One of the weird behaviors in JavaScript is the typeof Array is Object.
+   *
    * @param {Mixed} x
    *   The x to check for its type truthy.
    *
@@ -399,13 +401,13 @@
    *   True if x is an instanceof Object.
    */
   function isObj(x) {
-    // if (!x || typeof x !== 'object') {
-    // return false;
-    // }
-    // var proto = Object.getPrototypeOf(x);
-    // return isNull(proto) || proto === _oProto;
-    var type = typeof x;
-    return type === 'function' || type === 'object' && !!x;
+    if (!x || typeof x !== 'object') {
+      return false;
+    }
+    // var type = typeof x;
+    // return type === 'function' || type === 'object' && !!x;
+    var proto = Object.getPrototypeOf(x);
+    return isNull(proto) || proto === _oProto;
   }
 
   /**
@@ -541,6 +543,11 @@
       }
     }
 
+    // Filter out useless empty object.
+    if (isObj(obj) && isEmpty(obj)) {
+      return [];
+    }
+
     if (_toString.call(obj) === '[object Object]') {
       for (var prop in obj) {
         if (hasProp(obj, prop)) {
@@ -554,6 +561,10 @@
       }
     }
     else if (obj) {
+      if (obj instanceof HTMLCollection) {
+        obj = _aProto.slice.call(obj);
+      }
+
       var len = obj.length;
       if (len && len === 1 && !isUnd(obj[0])) {
         cb.call(scope, obj[0], 0, obj);
@@ -1374,7 +1385,7 @@
               _cbt.call(t, e);
               break;
             }
-            t = t.parentElement;
+            t = t.parentElement || t.parentNode;
           }
         }
       };
@@ -1652,12 +1663,17 @@
   function onceCompat(cb, id, selector, ctx) {
     var els = [];
 
+    // If a string, assumes find once like core/once.
+    if (isStr(cb)) {
+      return findOnce(cb, id);
+    }
+
     // Original once.
     if (isUnd(selector)) {
       _once(cb);
     }
+    // If extra arguments are provided, assumes regular loop over elements.
     else {
-      // If extra arguments are provided, assumes regular loop over elements.
       els = initOnce(id, selector, ctx);
       if (els.length) {
         // Already avoids loop for a single item.
@@ -1767,6 +1783,16 @@
   function context(ctx) {
     // Weirdo: context may be null after Colorbox close.
     ctx = ctx || _doc;
+
+    // Checks if a string is given as a context.
+    if (isStr(ctx)) {
+      ctx = is(ctx, 'html') ? _doc : _doc.querySelector(ctx);
+    }
+
+    // Prevents problematic _doc.documentElement as the context.
+    if (is(ctx, 'html')) {
+      ctx = _doc;
+    }
 
     // jQuery may pass its array as non-expected context identified by length.
     ctx = toElm(ctx);
@@ -1899,6 +1925,7 @@
   db.next = next;
   db.prev = prev;
   db.index = index;
+  db.keys = keys;
 
   db.create = function (tagName, attrs, html) {
     var el = _doc.createElement(tagName);
@@ -1925,12 +1952,29 @@
   };
 
   // See https://caniuse.com/?search=localstorage
-  db.storage = function (key, value, defValue) {
+  db.storage = function (key, value, defValue, restore) {
     if (_storage) {
       if (isUnd(value)) {
         return _storage.getItem(key);
       }
-      _storage.setItem(key, value);
+
+      if (isNull(value)) {
+        _storage.removeItem(key);
+      }
+      else {
+        try {
+          _storage.setItem(key, value);
+        }
+        catch (e) {
+          // Reset if (2 - 10MB) quota is exceeded, if value is growing.
+          _storage.removeItem(key);
+
+          // Only makes sense if the value is incremental, not the quota limit.
+          if (restore) {
+            _storage.setItem(key, value);
+          }
+        }
+      }
     }
     return defValue || false;
   };
@@ -2019,10 +2063,12 @@
     });
   }
 
+  function findOnce(id, ctx) {
+    return elsOnce(!id ? '[' + _dataOnce + ']' : selOnce(id), ctx);
+  }
+
   if (!db.once.find) {
-    db.once.find = function (id, ctx) {
-      return elsOnce(!id ? '[' + _dataOnce + ']' : selOnce(id), ctx);
-    };
+    db.once.find = findOnce;
     db.once.filter = function (id, selector, ctx) {
       return _filter(selOnce(id), elsOnce(selector, ctx));
     };

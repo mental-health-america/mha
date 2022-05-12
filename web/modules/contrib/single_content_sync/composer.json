@@ -15,8 +15,5 @@
         "source": "https://cgit.drupalcode.org/single_content_sync"
     },
     "license": "GPL-2.0-or-later",
-    "minimum-stability": "dev",
-    "require": {
-        "drupal/yaml_editor": "^1.0"
-    }
+    "minimum-stability": "dev"
 }

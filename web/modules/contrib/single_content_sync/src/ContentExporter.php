@@ -12,6 +12,7 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\TempStore\PrivateTempStore;
 use Drupal\field\FieldConfigInterface;
 use Drupal\media\MediaInterface;
 use Drupal\node\NodeInterface;
@@ -58,6 +59,27 @@ class ContentExporter implements ContentExporterInterface {
   protected $database;
 
   /**
+   * The private temp store of the module.
+   *
+   * @var \Drupal\Core\TempStore\PrivateTempStore
+   */
+  protected $privateTempStore;
+
+  /**
+   * Local cache variable to store the reference info of entities.
+   *
+   * @var array
+   */
+  private $entityReferenceCache = [];
+
+  /**
+   * Local cache variable to store the exported output of entities.
+   *
+   * @var array
+   */
+  private $entityOutputCache = [];
+
+  /**
    * ContentExporter constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -68,18 +90,95 @@ class ContentExporter implements ContentExporterInterface {
    *   The messenger.
    * @param \Drupal\Core\Database\Connection $database
    *   The database connection.
+   * @param \Drupal\Core\TempStore\PrivateTempStore $store
+   *   The private temp store of the module.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler, MessengerInterface $messenger, Connection $database) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler, MessengerInterface $messenger, Connection $database, PrivateTempStore $store) {
     $this->entityTypeManager = $entity_type_manager;
     $this->moduleHandler = $module_handler;
     $this->messenger = $messenger;
     $this->database = $database;
+    $this->privateTempStore = $store;
+  }
+
+  /**
+   * Generates a cache key based on the entity's entity type id and uuid.
+   *
+   * @param \Drupal\Core\Entity\FieldableEntityInterface $entity
+   *   The entity object for which to generate a cache key.
+   *
+   * @return string
+   *   A string representing the entity's cache key.
+   */
+  protected function generateCacheKey(FieldableEntityInterface $entity): string {
+    return implode('-', [$entity->getEntityTypeId(), $entity->uuid()]);
+  }
+
+  /**
+   * Verifies whether a given entity is present in the entityOutputCache.
+   *
+   * @param \Drupal\Core\Entity\FieldableEntityInterface $entity
+   *   The entity to be verified in the cache.
+   *
+   * @return bool
+   *   If the entity is present in the entityOutputCache will return TRUE,
+   *   else will return FALSE.
+   */
+  protected function isOutputCached(FieldableEntityInterface $entity): bool {
+    return array_key_exists($this->generateCacheKey($entity), $this->entityOutputCache);
+  }
+
+  /**
+   * Verifies whether a given entity is present in the entityReferenceCache.
+   *
+   * @param \Drupal\Core\Entity\FieldableEntityInterface $entity
+   *   The entity to be verified in the cache.
+   *
+   * @return bool
+   *   If the entity is present in the entityReferenceCache will return TRUE,
+   *   else will return FALSE.
+   */
+  protected function isReferenceCached(FieldableEntityInterface $entity): bool {
+    return array_key_exists($this->generateCacheKey($entity), $this->entityReferenceCache);
+  }
+
+  /**
+   * Adds a given entity to the entityOutputCache.
+   *
+   * @param \Drupal\Core\Entity\FieldableEntityInterface $entity
+   *   The entity to be added to the entityOuputCache.
+   * @param array $output
+   *   The exported content output.
+   */
+  protected function addEntityToOutputCache(FieldableEntityInterface $entity, array $output): void {
+    $id = $this->generateCacheKey($entity);
+    $this->entityOutputCache[$id] = $output;
+  }
+
+  /**
+   * Adds a given entity to the entityReferenceCache.
+   *
+   * @param \Drupal\Core\Entity\FieldableEntityInterface $entity
+   *   The entity to be added to the entityReferenceCache.
+   */
+  protected function addEntityToReferenceCache(FieldableEntityInterface $entity): void {
+    $id = $this->generateCacheKey($entity);
+    $this->entityReferenceCache[$id] = $id;
   }
 
   /**
    * {@inheritdoc}
    */
   public function doExportToArray(FieldableEntityInterface $entity): array {
+    // Add the entity to the entityReferenceCache array.
+    $this->addEntityToReferenceCache($entity);
+
+    // If the output was already cached, return the cached output.
+    // Continue the method if not.
+    if ($this->isOutputCached($entity)) {
+      return $this->entityOutputCache[$this->generateCacheKey($entity)];
+    }
+
     $output = [
       'uuid' => $entity->uuid(),
       'entity_type' => $entity->getEntityTypeId(),
@@ -116,6 +215,9 @@ class ContentExporter implements ContentExporterInterface {
       }
     }
 
+    // Add the output to the entityOutputCache array.
+    $this->addEntityToOutputCache($entity, $output);
+
     return $output;
   }
 
@@ -148,9 +250,8 @@ class ContentExporter implements ContentExporterInterface {
             'status' => $entity->isPublished(),
             'langcode' => $entity->language()->getId(),
             'created' => $entity->getCreatedTime(),
-            'changed' => $entity->getChangedTime(),
             'author' => $owner ? $owner->getEmail() : NULL,
-            'url' => $entity->get('path')->alias ?? NULL,
+            'url' => $entity->hasField('path') ? $entity->get('path')->alias : NULL,
           ];
         }
         break;
@@ -171,7 +272,6 @@ class ContentExporter implements ContentExporterInterface {
             'name' => $entity->getName(),
             'created' => $entity->getCreatedTime(),
             'status' => $entity->isPublished(),
-            'changed' => $entity->getChangedTime(),
             'langcode' => $entity->language()->getId(),
           ];
         }
@@ -184,7 +284,6 @@ class ContentExporter implements ContentExporterInterface {
             'init' => $entity->getInitialEmail(),
             'name' => $entity->getAccountName(),
             'created' => $entity->getCreatedTime(),
-            'changed' => $entity->getChangedTime(),
             'status' => $entity->isActive(),
             'timezone' => $entity->getTimeZone(),
           ];
@@ -269,11 +368,21 @@ class ContentExporter implements ContentExporterInterface {
         $entities = $storage->loadMultiple($ids);
 
         foreach ($entities as $child_entity) {
-          // Export content entity relation.
           if ($child_entity instanceof FieldableEntityInterface) {
-            $value[] = $this->doExportToArray($child_entity);
+            if (!$this->isReferenceCached($child_entity)) {
+              // Export content entity relation.
+              $value[] = $this->doExportToArray($child_entity);
+            }
+            else {
+              $value[] = [
+                'uuid' => $child_entity->uuid(),
+                'entity_type' => $child_entity->getEntityTypeId(),
+                'base_fields' => $this->exportBaseValues($child_entity),
+                'bundle' => $child_entity->bundle(),
+              ];
+            }
           }
-          // Support basic export og config entity relation.
+          // Support basic export of config entity relation.
           elseif ($child_entity instanceof ConfigEntityInterface) {
             $value[] = [
               'type' => 'config',
@@ -303,6 +412,8 @@ class ContentExporter implements ContentExporterInterface {
 
       case 'file':
       case 'image':
+        $assets = $this->privateTempStore->get('export.assets') ?? [];
+
         $value = [];
         $file_storage = $this->entityTypeManager->getStorage('file');
 
@@ -313,6 +424,8 @@ class ContentExporter implements ContentExporterInterface {
             'uri' => $file->getFileUri(),
             'url' => $file->createFileUrl(FALSE),
           ];
+
+          $assets[] = $file_item['uri'];
 
           if (isset($item['alt'])) {
             $file_item['alt'] = $item['alt'];
@@ -328,6 +441,13 @@ class ContentExporter implements ContentExporterInterface {
 
           $value[] = $file_item;
         }
+
+        $assets = array_unique($assets);
+        $assets = array_values($assets);
+
+        // Let's store all exported assets in the private storage.
+        // This will be used during exporting all assets to the zip later on.
+        $this->privateTempStore->set('export.assets', $assets);
         break;
 
       case 'metatag':

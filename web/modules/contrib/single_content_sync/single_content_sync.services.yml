@@ -6,6 +6,7 @@ services:
       - '@module_handler'
       - '@messenger'
       - '@database'
+      - '@single_content_sync.store'
 
   single_content_sync.importer:
     class: Drupal\single_content_sync\ContentImporter
@@ -20,10 +21,9 @@ services:
     class: Drupal\single_content_sync\ContentFileGenerator
     arguments:
       - '@file_system'
-      - '@entity_field.manager'
-      - '@entity_type.manager'
       - '@single_content_sync.helper'
       - '@single_content_sync.exporter'
+      - '@single_content_sync.store'
 
   single_content_sync.helper:
     class: Drupal\single_content_sync\ContentSyncHelper
@@ -33,3 +33,8 @@ services:
       - '@plugin.manager.archiver'
       - '@entity_type.manager'
       - '@config.factory'
+
+  single_content_sync.store:
+    class: \Drupal\Core\TempStore\PrivateTempStore
+    factory: ['@tempstore.private', 'get']
+    arguments: [single_content_sync]

@@ -14,6 +14,7 @@ use Drupal\Component\Utility\Unicode;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\blazy\BlazyDefault;
 use Drupal\blazy\BlazyManagerInterface;
+use Drupal\blazy\Utility\Path;
 
 /**
  * A base for blazy admin integration to have re-usable methods in one place.
@@ -136,7 +137,9 @@ abstract class BlazyAdminBase implements BlazyAdminInterface {
    * Returns shared form elements across field formatter and Views.
    */
   public function openingForm(array &$form, &$definition = []) {
-    $this->blazyManager->getModuleHandler()->alter('blazy_form_element_definition', $definition);
+    $this->blazyManager
+      ->getModuleHandler()
+      ->alter('blazy_form_element_definition', $definition);
 
     // Display style: column, plain static grid, slick grid, slick carousel.
     // https://drafts.csswg.org/css-multicol
@@ -294,14 +297,6 @@ abstract class BlazyAdminBase implements BlazyAdminInterface {
    * Returns shared ending form elements across field formatter and Views.
    */
   public function closingForm(array &$form, $definition = []) {
-    if (isset($definition['current_view_mode'])) {
-      $form['current_view_mode'] = [
-        '#type'          => 'hidden',
-        '#default_value' => $definition['current_view_mode'] ?? '_custom',
-        '#weight'        => 120,
-      ];
-    }
-
     $this->finalizeForm($form, $definition);
   }
 
@@ -381,7 +376,7 @@ abstract class BlazyAdminBase implements BlazyAdminInterface {
           'content' => $this->t('Image linked to content'),
         ],
         '#empty_option' => $this->t('- None -'),
-        '#description'  => $this->t('May depend on the enabled supported or supportive modules: colorbox, photobox etc. See docs for details. Clear cache if they do not appear here due to being permanently cached. Add Thumbnail style if using Photobox, Slick, or others which may need it. Try selecting "<strong>- None -</strong>" first before changing if trouble with this complex form states.'),
+        '#description'  => $this->t('Clear cache if lightboxes do not appear here due to being permanently cached. <ol><li>Link to content: for aggregated small slicks.</li><li>Image to iframe: video is hidden below image until toggled, otherwise iframe is always displayed, and draggable fails. Aspect ratio applies.</li><li>(Quasi-)lightboxes: Colorbox, ElevateZoomPlus, Intense, Photobox, PhotoSwipe, Magnific Popup, Slick Lightbox, Splidebox, Zooming, etc. Depends on the enabled supported modules, or has known integration with Blazy. See docs or <em>/admin/help/blazy_ui</em> for details.</li></ol> Add <em>Thumbnail style</em> if using Photobox, Slick, or others which may need it. Try selecting "<strong>- None -</strong>" first before changing if trouble with this complex form states.'),
         '#weight'       => -99,
       ];
 
@@ -442,7 +437,7 @@ abstract class BlazyAdminBase implements BlazyAdminInterface {
           '#title'        => $this->t('Aspect ratio'),
           '#options'      => array_combine($ratio, $ratio),
           '#empty_option' => $this->t('- None -'),
-          '#description'  => $this->t('Aspect ratio to get consistently responsive images and iframes. Coupled with Image style. And to fix layout reflow and excessive height issues. <a href="@dimensions" target="_blank">Image styles and video dimensions</a> must <a href="@follow" target="_blank">follow the aspect ratio</a>. If not, images will be distorted. Use fixed ratio (non-fluid) to avoid JS works, or if it fails Responsive image. Fixed ratio means, all images from mobile to desktop use the same aspect ratio. Fluid means dimensions are calculated and JS works are attempted to fix aspect ratio. <a href="@link" target="_blank">Learn more</a>, or leave empty to DIY (such as using CSS mediaquery), or when working with multi-image-style plugin like GridStack.', [
+          '#description'  => $this->t('Aspect ratio to get consistently responsive images and iframes. Coupled with Image style. And to fix layout reflow, excessive height issues, whitespace below images, collapsed container, no-js users, etc. <a href="@dimensions" target="_blank">Image styles and video dimensions</a> must <a href="@follow" target="_blank">follow the aspect ratio</a>. If not, images will be distorted. <a href="@link" target="_blank">Learn more</a>. <ul><li><b>Fixed ratio:</b> all images use the same aspect ratio mobile up. Use it to avoid JS works, or if it fails Responsive image. </li><li><b>Fluid:</b> aka dynamic, dimensions are calculated and JS works are attempted to fix it.</li><li><b>Leave empty:</b> to DIY (such as using CSS mediaquery), or when working with multi-image-style plugin like GridStack.</li></ul>', [
             '@dimensions'  => '//size43.com/jqueryVideoTool.html',
             '@follow'      => '//en.wikipedia.org/wiki/Aspect_ratio_%28image%29',
             '@link'        => '//www.smashingmagazine.com/2014/02/27/making-embedded-content-work-in-responsive-design/',
@@ -598,12 +593,16 @@ abstract class BlazyAdminBase implements BlazyAdminInterface {
     $admin_css = $admin_css ?: $this->blazyManager->configLoad('admin_css', 'blazy.settings');
     $excludes = ['details', 'fieldset', 'hidden', 'markup', 'item', 'table'];
     $selects = ['cache', 'optionset', 'view_mode'];
-    $current_route_name = $this->blazyManager->getRouteName();
 
-    // Disable the admin css in the layout builder, to
-    // avoid conflicts with the active frontend theme.
-    if ($admin_css && !empty($current_route_name)) {
-      $admin_css = !str_starts_with($current_route_name, "layout_builder.");
+    // Disable the admin css in the layout builder, to avoid conflicts with
+    // the active frontend theme.
+    // @todo recheck str_starts_with for PHP7. No errors at PHP7.4, last time.
+    if ($admin_css && $router = Path::routeMatch()) {
+      $route_name = $router->getRouteName();
+
+      if (!empty($route_name)) {
+        $admin_css = mb_strpos($route_name, 'layout_builder.') === FALSE;
+      }
     }
 
     $this->blazyManager->getModuleHandler()->alter('blazy_form_element', $form, $definition);
@@ -789,6 +788,7 @@ abstract class BlazyAdminBase implements BlazyAdminInterface {
   protected function getState($state, array $definition = []) {
     $lightboxes = [];
 
+    // @fixme this appears to be broken at some point of Drupal.
     foreach ($this->blazyManager->getLightboxes() as $key => $lightbox) {
       $lightboxes[$key]['value'] = $lightbox;
     }
@@ -807,7 +807,7 @@ abstract class BlazyAdminBase implements BlazyAdminInterface {
       static::STATE_LIGHTBOX_CUSTOM => [
         'visible' => [
           'select[name$="[box_caption]"]' => ['value' => 'custom'],
-          'select[name*="[media_switch]"]' => $lightboxes,
+          // @fixme 'select[name*="[media_switch]"]' => $lightboxes,
         ],
       ],
       static::STATE_IFRAME_ENABLED => [

@@ -41,3 +41,11 @@ single_content_sync.import:
     _title: 'Import content'
   requirements:
     _permission: 'import single content'
+
+single_content_sync.bulk_export:
+  path: '/admin/content/bulk-export'
+  defaults:
+    _form: '\Drupal\single_content_sync\Form\ContentBulkExportForm'
+    _title: 'Bulk export content'
+  requirements:
+    _permission: 'export single content'

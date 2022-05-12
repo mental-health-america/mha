@@ -100,13 +100,15 @@ To replace **Blur** effect with `animate.css` thingies, implements two things:
 function MYTHEME_preprocess_blazy(&$variables) {
   $settings = &$variables['settings'];
   $attributes = &$variables['attributes'];
+  $blazies = &$settings['blazies'];
 
   // Be sure to limit the scope, only animate for particular conditions.
-  if ($settings['entity_id'] == 123
-    && $settings['field_name'] == 'field_media_animated')  {
+  if ($blazies->get('entity.id') == 123
+    && $blazies->get('field.name') == 'field_media_animated')  {
+    $fx = $blazies->get('fx');
 
-    // This was taken care of by feeding $settings['fx'], or hard-coded here.
-    $attributes['data-animation'] = 'wobble';
+    // This was taken care of by feeding $fx, or hard-coded here.
+    $attributes['data-animation'] = $fx ?: 'wobble';
 
     // The following can be defined manually.
     $attributes['data-animation-duration'] = '3s';
