@@ -74,9 +74,6 @@ class ContentFileGenerator implements ContentFileGeneratorInterface {
    * {@inheritdoc}
    */
   public function generateZipFile(FieldableEntityInterface $entity, bool $extract_translations = FALSE): FileInterface {
-    // Clean up storage with assets before we start exporting a content.
-    $this->privateTempStore->delete('export.assets');
-
     $export_file = $this->generateYamlFile($entity, $extract_translations);
 
     // Generate an empty zip file to be used for storing the exported content.
