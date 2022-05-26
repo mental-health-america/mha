@@ -85,7 +85,7 @@ class ContentSyncHelper implements ContentSyncHelperInterface {
    * {@inheritdoc}
    */
   public function saveFileContentTemporary(string $content, string $destination): FileInterface {
-    $file = file_save_data($content, $destination, FileSystemInterface::EXISTS_REPLACE);
+    $file = file_save_data($content, $destination);
     $file->setTemporary();
     $file->save();
 

@@ -6,9 +6,11 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Core\Entity\RevisionableInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\TypedData\TranslatableInterface;
+use Drupal\layout_builder\Plugin\Block\InlineBlock;
 
 class ContentImporter implements ContentImporterInterface {
 
@@ -48,6 +50,13 @@ class ContentImporter implements ContentImporterInterface {
   protected $contentSyncHelper;
 
   /**
+   * The inline block usage service.
+   *
+   * @var \Drupal\layout_builder\InlineBlockUsageInterface
+   */
+  protected $blockUsage;
+
+  /**
    * ContentExporter constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -67,6 +76,19 @@ class ContentImporter implements ContentImporterInterface {
     $this->moduleHandler = $module_handler;
     $this->fileSystem = $file_system;
     $this->contentSyncHelper = $content_sync_helper;
+  }
+
+  /**
+   * Get inline block usage from the service.
+   *
+   * @return \Drupal\layout_builder\InlineBlockUsageInterface
+   *   The layout builder service.
+   */
+  private function blockUsage() {
+    if (!$this->blockUsage) {
+      $this->blockUsage = \Drupal::getContainer()->get('inline_block.usage');
+    }
+    return $this->blockUsage;
   }
 
   /**
@@ -103,6 +125,12 @@ class ContentImporter implements ContentImporterInterface {
           $entity->set('parent', $this->doImport($content['base_fields']['parent']));
         }
         break;
+
+      case 'block_content':
+        if (isset($content['base_fields']['enforce_new_revision']) && $entity instanceof RevisionableInterface) {
+          $entity->setNewRevision();
+        }
+        break;
     }
 
     // Import values from base fields.
@@ -114,18 +142,7 @@ class ContentImporter implements ContentImporterInterface {
 
     // Import values from custom fields.
     $this->importCustomValues($entity, $content['custom_fields']);
-
-    // The entity that we are importing can be already created during the import
-    // if that entity existed as a reference. We need to update this entity to
-    // use the same id and enforce update instead of insert.
-    $existing_entity = $this->entityRepository->loadEntityByUuid($content['entity_type'], $content['uuid']);
-
-    if ($existing_entity) {
-      $entity->{$definition->getKey('id')} = $existing_entity->id();
-      $entity->enforceIsNew(FALSE);
-    }
-
-    $entity->save();
+    $this->createOrUpdate($entity);
 
     // Sync translations of the entity.
     if (isset($content['translations']) && $entity instanceof TranslatableInterface) {
@@ -140,6 +157,31 @@ class ContentImporter implements ContentImporterInterface {
     }
 
     return $entity;
+  }
+
+  /**
+   * Create a new entity or update existing one in the proper way.
+   *
+   * The entity that we are importing can be already created during the import
+   * if that entity existed as a reference. We need to update this entity to
+   * use the same id and enforce update instead of insert.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity object.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  protected function createOrUpdate(EntityInterface &$entity) {
+    $definition = $this->entityTypeManager->getDefinition($entity->getEntityTypeId());
+    $existing_entity = $this->entityRepository->loadEntityByUuid($entity->getEntityTypeId(), $entity->uuid());
+
+    if ($existing_entity) {
+      $entity->{$definition->getKey('id')} = $existing_entity->id();
+      $entity->enforceIsNew(FALSE);
+    }
+
+    $entity->save();
   }
 
   /**
@@ -248,6 +290,7 @@ class ContentImporter implements ContentImporterInterface {
         }
         break;
 
+      case 'svg_image_field':
       case 'file':
       case 'image':
         $file_storage = $this->entityTypeManager->getStorage('file');
@@ -263,11 +306,22 @@ class ContentImporter implements ContentImporterInterface {
             $file = reset($files);
           }
           else {
-            if (!file_exists($file_item['url'])) {
-              break;
+            $filename = NULL;
+
+            // Check if we have a file on the server. This is a case when you do
+            // import content with assets from a zip file.
+            if (file_exists($file_item['uri'])) {
+              $filename = $file_item['uri'];
+            }
+            elseif (file($file_item['url']) !== FALSE) {
+              $filename = $file_item['url'];
             }
 
-            $content = file_get_contents($file_item['url']);
+            if (!$filename) {
+              continue;
+            }
+
+            $content = file_get_contents($filename);
             $directory = $this->fileSystem->dirname($file_item['uri']);
             $this->contentSyncHelper->prepareFilesDirectory($directory);
 
@@ -279,7 +333,7 @@ class ContentImporter implements ContentImporterInterface {
           }
 
           if (!$file) {
-            break;
+            continue;
           }
 
           $file_value = [
@@ -309,13 +363,53 @@ class ContentImporter implements ContentImporterInterface {
         break;
 
       case 'layout_section':
-        // Get unserialized version of each section.
-        $sections = base64_decode($field_value);
-        $values = array_map(function (string $section) {
-          return unserialize($section);
-        }, explode('|', $sections));
+        if (!$this->moduleHandler->moduleExists('layout_builder')) {
+          throw new \Exception('The layout could not be imported due to the layout_builder module was disabled.');
+        }
 
-        $entity->set($field_name, $values);
+        $imported_blocks = [];
+        $block_list = $field_value['blocks'] ?? [];
+
+        // Prepare entity to have id in the database to be used for inline block
+        // usages.
+        if ($block_list) {
+          $this->createOrUpdate($entity);
+        }
+
+        foreach ($block_list as $block) {
+          /** @var \Drupal\block_content\BlockContentInterface $new_block */
+          $new_block = $this->doImport($block);
+
+          if (!$this->blockUsage()->getUsage($new_block->id())) {
+            $this->blockUsage()->addUsage($new_block->id(), $entity);
+          }
+
+          $old_revision_id = $block['base_fields']['block_revision_id'];
+          $imported_blocks[$old_revision_id] = $new_block->getRevisionId();
+        }
+
+        // Get unserialized version of each section.
+        $base64_sections = base64_decode($field_value['sections'] ?? $field_value);
+        /** @var \Drupal\layout_builder\Section[] $sections */
+        $sections = array_map(function (string $section) {
+          return unserialize($section);
+        }, explode('|', $base64_sections));
+
+        foreach ($sections as $section) {
+          $section_components = $section->getComponents();
+          foreach ($section_components as $component) {
+            if ($component->getPlugin() instanceof InlineBlock) {
+              $configuration = $component->toArray()['configuration'];
+              if (isset($configuration['block_revision_id']) && isset($imported_blocks[$configuration['block_revision_id']])) {
+                // Replace the old revision id with a new revision id.
+                $configuration['block_revision_id'] = $imported_blocks[$configuration['block_revision_id']];
+                $component->setConfiguration($configuration);
+              }
+            }
+          }
+        }
+
+        $entity->set($field_name, $sections);
         break;
     }
 

@@ -4,7 +4,7 @@ description: 'Export/import a single content between different environments.'
 core_version_requirement: ^8.8 || ^9
 package: Content
 
-# Information added by Drupal.org packaging script on 2022-05-05
-version: '1.3.0'
+# Information added by Drupal.org packaging script on 2022-05-22
+version: '1.3.3'
 project: 'single_content_sync'
-datestamp: 1651778192
+datestamp: 1653213759

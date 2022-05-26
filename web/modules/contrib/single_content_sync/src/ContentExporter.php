@@ -14,6 +14,7 @@ use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\TempStore\PrivateTempStore;
 use Drupal\field\FieldConfigInterface;
+use Drupal\layout_builder\Plugin\Block\InlineBlock;
 use Drupal\media\MediaInterface;
 use Drupal\node\NodeInterface;
 use Drupal\taxonomy\TermInterface;
@@ -262,6 +263,8 @@ class ContentExporter implements ContentExporterInterface {
             'info' => $entity->label(),
             'reusable' => $entity->isReusable(),
             'langcode' => $entity->language()->getId(),
+            'block_revision_id' => $entity->getRevisionId(),
+            'enforce_new_revision' => TRUE,
           ];
         }
         break;
@@ -410,6 +413,7 @@ class ContentExporter implements ContentExporterInterface {
         }
         break;
 
+      case 'svg_image_field':
       case 'file':
       case 'image':
         $assets = $this->privateTempStore->get('export.assets') ?? [];
@@ -456,13 +460,34 @@ class ContentExporter implements ContentExporterInterface {
         break;
 
       case 'layout_section':
+        $block_storage = $this->entityTypeManager->getStorage('block_content');
+        $block_list = [];
+
         $sections = $this->database->select('node__layout_builder__layout', 'n')
           ->fields('n', ['layout_builder__layout_section'])
           ->condition('n.entity_id', $field->getEntity()->id())
           ->execute()
           ->fetchCol();
 
-        $value = base64_encode(implode('|', $sections));
+        foreach ($field->getValue() as $section_array) {
+          /** @var \Drupal\layout_builder\Section $section */
+          $section = $section_array['section'];
+          $components = $section->getComponents();
+          foreach ($components as $component) {
+            if ($component->getPlugin() instanceof InlineBlock) {
+              $configuration = $component->toArray()['configuration'];
+              if (isset($configuration['block_revision_id'])) {
+                $block = $block_storage->loadRevision($configuration['block_revision_id']);
+                $block_list[] = $this->doExportToArray($block);
+              }
+            }
+          }
+        }
+
+        $value = [
+          'sections' => base64_encode(implode('|', $sections)),
+          'blocks' => $block_list,
+        ];
         break;
 
       default:
