@@ -22,12 +22,19 @@ a:link {
   font-family: 'Montserrat', sans-serif !important;
 }
 
+#page-main-content p a,
+#page-main-content p a:link,
+p a.ext,
+p .ext {
+  text-decoration: underline !important;
+}
+
 a:hover,
 a:focus,
 a:active,
 a:visited {
   color: #375887;
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 a.slider-button-white {
@@ -6157,7 +6164,7 @@ ul.quicktabs-tabs li {
 
 .bio.title a {
   font-size: 1.2rem !important;
-  font-weight:   600 !important;
+  font-weight: 600 !important;
 }
 
 .main-blog-container {
@@ -6232,7 +6239,7 @@ input[type="submit"],
 }
 
 .path-issues .views-element-container {
-  background: #ffffff;
+  background: #fff;
 }
 
 .path-issues .view-all-date .gva-view .views-element-container caption {
@@ -6284,7 +6291,7 @@ input[type="submit"],
 }
 
 .path-issues tbody tr:nth-child(odd) {
-  background: #ffffff;
+  background: #fff;
 }
 
 .path-issues .views-element-container table > tbody > tr > td, table > tfoot > tr > th, table > tfoot > tr > td {
@@ -6308,7 +6315,7 @@ input[type="submit"],
 }
 
 .path-issues .gva-view table {
-  background: #ffffff;
+  background: #fff;
   margin-bottom: 0;
   border: 0;
   margin: 0 auto;
@@ -6327,8 +6334,6 @@ input[type="submit"],
 .path-issues .contextual-region.gva-view.view-page {
   background: #f7f7f7;
 }
-
-
 
 
 .h1, h1 {
@@ -6411,11 +6416,11 @@ ul.quicktabs-tabs li {
   border-top: 5px solid #ccc;
 }
 #comment-form label {
-  display: block!important;
-  font-size: 1rem!important;
-  font-weight: 600!important;
-  margin-bottom: 0!important;
-  padding: 0!important;
+  display: block !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  margin-bottom: 0 !important;
+  padding: 0 !important;
 }
 div#edit-comment-body-0-format-guidelines {
   font-size: 14px;
@@ -6476,7 +6481,7 @@ header {
 }
 
 h3.title-news a {
- padding: .75rem 0 0;
+  padding: .75rem 0 0;
   color: #262626;
 }
 
@@ -6509,4 +6514,487 @@ h3.title-news a:hover {
     max-width: 50px;
     overflow: hidden;
   }
+}
+
+
+/* LAST MINUTE UPDATES */
+/* LAST MINUTE UPDATES */
+/* LAST MINUTE UPDATES */
+/* LAST MINUTE UPDATES */
+/* LAST MINUTE UPDATES */
+/* LAST MINUTE UPDATES */
+
+
+.path-_022 .item-image {
+  max-width: 200px !important;
+}
+
+.covid22 table > thead > tr > th,
+.covid22 table > thead > tr > td,
+.covid22 table > tbody > tr > th,
+.covid22 table > tbody > tr > td,
+.covid22 table > tfoot > tr > th,
+.covid22 table > tfoot > tr > td {
+  border-color: #7d7d7d;
+  border-width: 1px 1px 1px 0;
+  border-style: solid;
+  color: black !important;
+}
+
+.covid22 table p {
+  color: #000 !important;
+}
+
+.covid22 h4, .covid22 .h4 {
+  font-size: 25px;
+  color: #395886 !important;
+}
+
+/*** Start Gavias Extra-Large buttons ***/
+.gsc-button.extra-large {
+  color: #fff !important;
+}
+/*** End Gavias Extra-Large buttons ***/
+
+/*** Start sign-up for title ***/
+#id_b1cdee07-a320-43c0-9711-9975b633f84d_inner > p > strong > span {
+  font-size: 1.625rem !important;
+}
+/*** End sign-up for title ***/
+
+.covid22 .gsc-heading.style-1 .title {
+  font-size: 1.6rem !important;
+}
+
+.gsc-column ul li {
+  list-style: inherit;
+}
+
+.path-mha-staff div#edit-actions {
+  margin: 1rem 0 0;
+  position: absolute;
+  top: 22px;
+}
+
+.path-mha-staff table#draggableviews-table-key-staff-page-2-0 {
+  margin: 25px 0 0;
+}
+
+a.mailto:hover {
+  color: #385887 !important;
+}
+
+svg.mailto {
+  display: none;
+}
+
+.path-mha-staff .card.shadow-sm {
+  min-height: 670px !important;
+}
+
+.revlon h2 {
+  font-size: 4rem !important;
+  line-height: 1 !important;
+  font-weight: 700 !important;
+  padding: 2rem 0 0 !important;
+}
+
+.revlon .gbb-row-wrapper .icon-row:after {
+  display: none !important;
+}
+
+.revlon span.icon-row.my-5 {
+  display: none !important;
+}
+
+.revlon #footer,
+.revlon #footer-2 {
+  display: none !important;
+}
+
+
+.orange-header h2.block-title.title-view {
+  color: #ae5d03 !important;
+}
+
+.orange-header .block .block-title {
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+  margin: 0;
+  padding-left: 1rem;
+}
+
+.views-element-container ul li {
+  list-style: square !important;
+  margin: 1rem 1rem !important;
+  color: #385887;
+  font-weight: normal;
+  line-height: 1.4;
+}
+
+.center-text h1:first-of-type {
+  text-align: center !important;
+}
+
+.path-_022 #block-gaviassliderlayerannualconferenceforwardtogether { display: none;}
+
+.agenda .orange-link {
+  color: #385887 !important;
+}
+
+.views-element-container table > tbody > tr > td, table > tfoot > tr > th, table > tfoot > tr > td {
+  font-weight: bold;
+}
+
+#white-link a,
+#white-link a:link {
+  color: #fff !important;
+  text-decoration: underline !important;
+}
+
+#white-link a:hover,
+#white-link a:link:hover {
+  font-weight: bold;
+}
+
+#block-forwardtogether-2 {
+  background: #355989;
+}
+
+#edit-submit-conference-agenda, #edit-submit-team {
+  background: #0067ff;
+  border: none;
+  color: #fff;
+  padding: 0 2rem;
+  text-transform: uppercase;
+  margin: 0 0 2rem;
+  border-radius: 5px;
+}
+
+.views-element-container caption {
+  font-size: 22px;
+  font-weight: 600;
+  background: #6785b1;
+  padding: 5px 10px;
+  text-align: left;
+  color: #fff;
+}
+
+.gsc-column ul li::before {
+  display: none !important;
+}
+
+.on-the-gray .quicktabs-tabpage {
+  border: none;
+  border-top: 5px solid #ebebeb !important;
+}
+
+.on-the-gray .quicktabs-tabs > li > a {
+  background: #345988 !important;
+  color: #fff;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 14px;
+}
+
+.on-the-gray .quicktabs-tabs > li > a:hover,
+.on-the-gray .quicktabs-tabs > li.active > a {
+  background: rgb(221, 221, 221) !important;
+  color: #345988 !important;
+}
+
+.mhra li.menu-item {
+  display: block;
+  width: 100%;
+}
+
+.mhra .gva_menu > li > a {
+  padding: .5rem !important;
+}
+
+header.header-v1 .header-main-inner .header-inner {
+  padding-right: 80px !important;
+}
+
+.node--type-webform .col-sm-4 {
+  float: inline-start !important;
+}
+
+.national-spot {
+  color: red !important
+}
+
+.path-newsroom .btn.btn-primary, .path-newsroom .btn-primary.ext {
+  color: #fff !important;
+}
+div#edit-actions {
+  margin: 1rem 0 0;
+}
+
+#edit-preview {
+  eight: 35px;
+  line-height: 35px;
+  padding: 0 5px;
+  background: #385887;
+  color: #fff;
+  font-size: 14px;
+  width: 120px;
+  border: none !important;
+  box-shadow: none !important;
+  text-transform: initial;
+  border-radius: 20px;
+  margin: 0 1rem;
+}
+
+input[type="submit"],
+#edit-wizard-prev {
+  height: 35px;
+  line-height: 35px;
+  padding: 0 2rem;
+  background: #385878;
+  color: #fff;
+  font-size: 14px;
+  width: auto;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+#captcha {
+  margin: 2rem;
+  border: 1px solid #ccc;
+  padding: 1rem;
+  width: 70%;
+}
+.blog-subscribe {
+  margin: 2rem 0 0 1rem;
+}
+#comment-form label {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.path-issues .view-all-date h1:first-of-type {
+  margin: 0 0 10px 20px !important;
+}
+
+.path-issues .view-all-date .views-exposed-form.bef-exposed-form {
+  margin: 1rem 2rem;
+}
+
+.path-issues .views-element-container caption {
+  margin: 0 1rem 2rem;
+}
+
+.path-issues .views-element-container {
+  background: #fff;
+}
+
+.path-issues .view-all-date .gva-view .views-element-container caption {
+  margin: 1rem 1rem 2rem;
+}
+
+.path-issues .view-all-date h2 {
+  font-size: 26px;
+  padding: 1rem 0 0 2rem;
+}
+
+.path-issues .views-exposed-form.bef-exposed-form label {
+  font-weight: 600 !important;
+  background: #062552;
+  color: #fff;
+}
+
+.path-issues input[type="submit"] {
+  background: #98a927;
+  font-weight: 600 !important;
+  color: #000;
+  width: 100px;
+}
+
+.path-issues .views-element-container table > caption + thead > tr > th a {
+  background: transparent;
+  color: #fff !important;
+}
+.path-issues .views-element-container table > thead:first-child > tr:first-child > th a,
+.path-issues .views-element-container table > caption + thead > tr:first-child > th {
+  background: #062552;
+  color: #fff;
+}
+
+.path-issues .contextual-region.gva-view.view-page {
+  background: #fff;
+}
+
+.path-issues .views-exposed-form.bef-exposed-form {
+  background: #fff !important;
+  padding: 10px !important;
+  margin: 1rem 0;
+}
+
+.path-issues header .gva-view .view-content-wrap {
+  background: #fff;
+  padding: 2rem;
+  border-top: 5px solid #385886;
+}
+
+.path-issues tbody tr:nth-child(odd) {
+  background: #fff;
+}
+
+.path-issues .views-element-container table > tbody > tr > td, table > tfoot > tr > th, table > tfoot > tr > td {
+  padding: 1rem;
+  border: none;
+}
+
+.path-issues table > thead > tr > th, table > thead > tr > td, table > tbody > tr > th, table > tbody > tr > td, table > tfoot > tr > th, table > tfoot > tr > td {
+  border: none;
+}
+
+.path-issues .views-element-container:nth-child(n+2) header {
+  margin: 0;
+  padding: 0;
+  border-top: 50px solid #fff;
+}
+
+.path-issues table > thead:first-child > tr:first-child > th {
+  background: #062552;
+  color: #fff;
+}
+
+.path-issues .gva-view table {
+  background: #fff;
+  margin-bottom: 0;
+  border: 0;
+  margin: 0 auto;
+  width: 100%;
+  border-bottom: 4rem solid #f7f7f7;
+  border-left: 3rem solid #f7f7f7;
+  border-right: 3rem solid #f7f7f7;
+}
+
+.path-issues .gva-view table {
+  border-bottom: 4rem solid transparent !important;
+  border-left: 3rem solid transparent !important;
+  border-right: 3rem solid transparent !important;
+}
+
+.path-issues .contextual-region.gva-view.view-page {
+  background: #f7f7f7;
+}
+
+.h1, h1 {
+  font-size: 2.5rem !important;
+  text-transform: initial !important;
+}
+
+.owl-carousel .owl-nav > div {
+  color: #fff !important;
+  background: #385887 !important;
+  border: none;
+}
+
+.gbb-row.row-gradient-1 span,
+.gbb-row.row-gradient-1 p,
+.gbb-row.row-gradient-1 a h3,
+.gbb-row.row-gradient-1 h3 a,
+.gbb-row.row-gradient-1 h3 {
+  color: #fff !important;
+}
+
+.gva-view-grid .item-image {
+  margin: 0;
+  border: 1px solid #ccc;
+  border-radius: 5px !important;
+  padding: 1rem;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+}
+
+.gva-search-region .search-content {
+  width: 310px !important;
+}
+
+#block-views-block-partners-block-2 .item-image,
+#block-views-block-partners-block-1 .item-image {
+  margin: 0 0 25px 0;
+  border: 1px solid #e3dfdf;
+  border-radius: 15px;
+  padding: 15px;
+}
+
+.material-tabs ul.quicktabs-tabs {
+  background-color: #98a927;
+}
+
+.material-tabs ul.quicktabs-tabs li {
+  margin-left: 1rem;
+}
+
+ul.quicktabs-tabs li {
+  margin-left: 1rem;
+}
+
+@media (max-width: 480px) {
+  header .gva-view .view-content-wrap {
+    padding: .5rem;
+  }
+  .path-issues .gva-view table {
+    border-bottom: 2rem solid #f7f7f7;
+    border-left: 1rem solid #f7f7f7;
+    border-right: 1rem solid #f7f7f7;
+  }
+}
+
+.body-page #email-us input[type="text"],
+.body-page #email-us input[type="tel"],
+.body-page #email-us input[type="password"],
+.body-page #email-us input[type="email"],
+.body-page #email-us textarea,
+.body-page #email-us select {
+  font-size: inherit !important;
+}
+
+header.header-default .main-menu {
+  margin: -15px !important;
+}
+
+.gva-view-grid .item-image {
+  margin: 0 !important;
+  border: none;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+.gva-search-region {
+  z-index: 99999999 !important;
+}
+
+#footer a.sli-button {
+  color: #fff !important;
+  border: 1px solid #ea7901 !important;
+  background: #ea7901 !important;
+}
+
+.light-accordion .panel-body {
+  background: #fff !important;
+  color: #000 !important;
+  padding: 15px 30px !important;
+  margin: 30px !important;
+  max-width: 75ch !important;
+}
+
+.light-accordion .panel-body ul li {
+  color: #000 !important;
+}
+
+/* ADD UNDERLINE */
+
+
+.btn.btn-primary, .btn-primary.ext, a.btn.btn-primary, a.btn-primary .ext  {
+  text-decoration: none !important;
 }
