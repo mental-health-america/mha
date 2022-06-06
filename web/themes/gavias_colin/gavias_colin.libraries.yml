@@ -23,6 +23,7 @@ global-styling:
       css/update.css: { }
       css/master.css: { }
       css/search.css: { }
+      css/override.css: { }
 
   js:
     vendor/jquery-migrate.min.js: {}
