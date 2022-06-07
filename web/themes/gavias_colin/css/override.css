@@ -497,6 +497,50 @@ header.header-default .main-menu {
 .divTableBody {
   display: table-row-group;
 }
+/* FIX UNDERLINES */
+
+#block-bwm-njord-system-main ul li a,
+#page-main-content p a,
+#page-main-content p a:link,
+p a.ext,
+p .ext,
+a.mailto,
+a.ext {
+  text-decoration: underline;
+}
+
+.path-position-statements .blue-link a,
+.path-position-statements .blue-link a:link,
+a.ext {
+  text-decoration: underline !important;
+}
+
+.path-position-statements .blue-link a:hover {
+  text-decoration: none !important;
+  color: #ea7901 !important;
+}
+
+#blue-accordian .panel .panel-heading .panel-title > a,
+.panel .panel-heading .panel-title > a,
+.btn.btn-primary,
+.btn-primary.ext,
+.btn-primary,
+.btn.btn-primary,
+.btn-primary.ext,
+a.btn.btn-primary,
+a.btn-primary .ext,
+a .btn.btn-primary
+ {
+  text-decoration: none !important;
+}
+
+.frontpage .gsc-button.extra-large {
+  color: #346677 !important;
+}
+
+.frontpage .gsc-button.extra-large:hover {
+  color: #fff !important;
+}
 
 @media (max-width: 480px) {
   header .gva-view .view-content-wrap {
