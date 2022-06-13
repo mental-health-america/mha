@@ -1,7 +1,7 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/mhanational/drupal9
+    - export DEPLOYPATH=/home/mhanational/master
     - /bin/cp -R * $DEPLOYPATH
 
 ######################
