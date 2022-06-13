@@ -14,9 +14,10 @@ class BlazyAdminExtended extends BlazyAdminFormatterBase implements BlazyAdminIn
    * Returns shared form elements across field formatter and Views.
    */
   public function openingForm(array &$form, &$definition = []) {
-    $namespace = isset($definition['namespace']) ? $definition['namespace'] : 'blazy';
+    $namespace = $definition['namespace'] ?? 'blazy';
+    $settings  = $definition['settings'] ?? [];
 
-    if (!empty($definition['vanilla'])) {
+    if (!empty($definition['vanilla']) && isset($settings['vanilla'])) {
       $form['vanilla'] = [
         '#type'        => 'checkbox',
         '#title'       => $this->t('Vanilla @namespace', ['@namespace' => $namespace]),
@@ -95,6 +96,7 @@ class BlazyAdminExtended extends BlazyAdminFormatterBase implements BlazyAdminIn
       ];
     }
 
+    // Allows empty options to raise awareness of this option.
     if (isset($definition['classes'])) {
       $form['class'] = [
         '#type'        => 'select',

@@ -1,6 +1,14 @@
 admin_css: true
+nojs:
+  lazy: '0'
+  classlist: '0'
+  polyfill: '0'
+  promise: '0'
+  raf: '0'
 fx: ''
-decode: false
+blur_client: false
+blur_storage: false
+blur_minwidth: 0
 noscript: false
 responsive_image: false
 one_pixel: true
@@ -14,7 +22,6 @@ blazy:
   validateDelay: 25
   container: ''
 io:
-  enabled: false
   unblazy: false
   rootMargin: 0px
   threshold: '0'

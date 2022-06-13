@@ -125,8 +125,8 @@ function drush_salesforce_pull_sf_pull_query($name) {
   }
 
   \Drupal::service('event_dispatcher')->dispatch(
-    SalesforceEvents::PULL_QUERY,
-    new SalesforceQueryEvent($mapping, $soql)
+    new SalesforceQueryEvent($mapping, $soql),
+    SalesforceEvents::PULL_QUERY
   );
 
   drush_log(dt('!mapping: Issuing pull query: !query', ['!query' => (string) $soql, '!mapping' => $mapping->id()]), 'notice');
@@ -231,8 +231,8 @@ function drush_salesforce_pull_sf_pull_file($file, $name = NULL) {
 
   foreach ($queries as $soql) {
     \Drupal::service('event_dispatcher')->dispatch(
-      SalesforceEvents::PULL_QUERY,
-      new SalesforceQueryEvent($mapping, $soql)
+      new SalesforceQueryEvent($mapping, $soql),
+      SalesforceEvents::PULL_QUERY
     );
 
     drush_log(dt('Issuing pull query: !query', ['!query' => (string) $soql]));

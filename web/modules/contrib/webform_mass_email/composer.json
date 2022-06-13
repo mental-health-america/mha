@@ -12,7 +12,7 @@
       "role": "Maintainer"
     },
     {
-      "name": "Vit Hovezak (kyberman)",
+      "name": "Vit Moravsky (kyberman)",
       "homepage": "https://www.drupal.org/u/kyberman",
       "role": "Co-maintainer"
     }
@@ -23,6 +23,6 @@
     "source": "http://cgit.drupalcode.org/webform_mass_email"
   },
   "require": {
-    "drupal/webform": "~5.0 || ~6.0"
+    "drupal/webform": "^5.0 || ^6.0"
   }
 }

@@ -41,7 +41,7 @@ class RestClientTest extends UnitTestCase {
   /**
    * Set up for each test.
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
     $this->salesforce_id = '1234567890abcde';
     $this->methods = [
@@ -97,6 +97,8 @@ class RestClientTest extends UnitTestCase {
     if (empty($methods)) {
       $methods = $this->methods;
     }
+    $methods[] = 'getShortTermCacheLifetime';
+    $methods[] = 'getLongTermCacheLifetime';
 
     $args = [
       $this->httpClient,
@@ -113,6 +115,14 @@ class RestClientTest extends UnitTestCase {
       ->setMethods($methods)
       ->setConstructorArgs($args)
       ->getMock();
+
+    $this->client->expects($this->any())
+      ->method('getShortTermCacheLifetime')
+      ->willReturn(0);
+
+    $this->client->expects($this->any())
+      ->method('getLongTermCacheLifetime')
+      ->willReturn(0);
   }
 
   /**

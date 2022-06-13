@@ -183,8 +183,8 @@ class SalesforcePullCommands extends SalesforceMappingCommandsBase {
       }
 
       $this->eventDispatcher->dispatch(
-        SalesforceEvents::PULL_QUERY,
-        new SalesforceQueryEvent($mapping, $soql)
+        new SalesforceQueryEvent($mapping, $soql),
+        SalesforceEvents::PULL_QUERY
       );
 
       $this->logger()->info(dt('!mapping: Issuing pull query: !query', [
@@ -290,8 +290,8 @@ class SalesforcePullCommands extends SalesforceMappingCommandsBase {
 
     foreach ($queries as $soql) {
       $this->eventDispatcher->dispatch(
-        SalesforceEvents::PULL_QUERY,
-        new SalesforceQueryEvent($mapping, $soql)
+        new SalesforceQueryEvent($mapping, $soql),
+        SalesforceEvents::PULL_QUERY
       );
 
       $this->logger()->info(dt('Issuing pull query: !query', ['!query' => (string) $soql]));

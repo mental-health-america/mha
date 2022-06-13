@@ -111,6 +111,20 @@ class SettingsForm extends ConfigFormBase {
       ],
     ];
 
+    $form['short_term_cache_lifetime'] = [
+      '#title' => $this->t($definition['short_term_cache_lifetime']['label']),
+      '#description' => $this->t($definition['short_term_cache_lifetime']['description']),
+      '#type' => 'number',
+      '#default_value' => $config->get('short_term_cache_lifetime'),
+    ];
+
+    $form['long_term_cache_lifetime'] = [
+      '#title' => $this->t($definition['long_term_cache_lifetime']['label']),
+      '#description' => $this->t($definition['long_term_cache_lifetime']['description']),
+      '#type' => 'number',
+      '#default_value' => $config->get('short_term_cache_lifetime'),
+    ];
+
     if (\Drupal::moduleHandler()->moduleExists('salesforce_push')) {
       $form['global_push_limit'] = [
         '#title' => $this->t($definition['global_push_limit']['label']),

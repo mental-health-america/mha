@@ -4,7 +4,7 @@ namespace Drupal\Tests\blazy\Kernel\Views;
 
 use Drupal\Core\Form\FormState;
 use Drupal\views\Views;
-use Drupal\blazy\BlazyViews;
+use Drupal\blazy\Theme\BlazyViews;
 
 /**
  * Test Blazy Views integration.
@@ -23,7 +23,7 @@ class BlazyViewsFileTest extends BlazyViewsTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE) {
+  protected function setUp($import_test_views = TRUE): void {
     parent::setUp($import_test_views);
 
     $this->entityFieldName = 'field_entity_test';

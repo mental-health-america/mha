@@ -189,7 +189,7 @@ abstract class SalesforceMappingFieldPluginBase extends PluginBase implements Sa
       $field_definition = $describe->getField($this->config('salesforce_field'));
     }
     catch (\Exception $e) {
-      $this->eventDispatcher->dispatch(SalesforceEvents::WARNING, new SalesforceWarningEvent($e, 'Field definition not found for %describe.%field', ['%describe' => $describe->getName(), '%field' => $this->config('salesforce_field')]));
+      $this->eventDispatcher->dispatch(new SalesforceWarningEvent($e, 'Field definition not found for %describe.%field', ['%describe' => $describe->getName(), '%field' => $this->config('salesforce_field')]), SalesforceEvents::WARNING);
       // If getField throws, however, just return the raw value.
       return $value;
     }

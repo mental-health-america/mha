@@ -5,12 +5,24 @@ blazy.settings:
     admin_css:
       type: boolean
       label: 'Admin CSS'
-    decode:
-      type: boolean
-      label: 'Use decoding'
+    nojs:
+      type: sequence
+      label: 'No JavaScript'
+      sequence:
+        - type: string
+          label: nojs
     fx:
       type: string
       label: 'Image effect'
+    blur_client:
+      type: boolean
+      label: 'Use client-side blur'
+    blur_storage:
+      type: boolean
+      label: 'Store blur in localStorage'
+    blur_minwidth:
+      type: integer
+      label: 'Blur min-width'
     noscript:
       type: boolean
       label: 'Add noscript'
@@ -49,9 +61,6 @@ blazy.settings:
       type: mapping
       label: IO
       mapping:
-        enabled:
-          type: boolean
-          label: 'Enable IO'
         unblazy:
           type: boolean
           label: 'Unload bLazy'

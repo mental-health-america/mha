@@ -27,7 +27,7 @@ class StatusPageTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['salesforce', 'salesforce_test_rest_client'];
+  protected static $modules = ['salesforce', 'salesforce_test_rest_client'];
 
   /**
    * Auth provider manager service.
@@ -60,7 +60,7 @@ class StatusPageTest extends BrowserTestBase {
   /**
    * {@inheritDoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
     $this->authMan = \Drupal::service('plugin.manager.salesforce.auth_providers');
     $file = __DIR__ . "/../../../salesforce.install";

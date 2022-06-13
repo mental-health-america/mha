@@ -1,3 +1,0 @@
-widgets:
-  js:
-    //platform.twitter.com/widgets.js: { type: external, minified: true, attributes: { async: true } }

@@ -180,7 +180,7 @@ class DeleteHandler {
           '%id' => $mapped_object->entity_id->value,
           '%sfid' => $record['id'],
         ];
-        $this->eventDispatcher->dispatch(SalesforceEvents::NOTICE, new SalesforceNoticeEvent(NULL, $message, $args));
+        $this->eventDispatcher->dispatch(new SalesforceNoticeEvent(NULL, $message, $args), SalesforceEvents::NOTICE);
         $mapped_object->delete();
         return;
       }
@@ -194,7 +194,7 @@ class DeleteHandler {
           '%id' => $mapped_object->id(),
           '%sfid' => $record['id'],
         ];
-        $this->eventDispatcher->dispatch(SalesforceEvents::WARNING, new SalesforceWarningEvent(NULL, $message, $args));
+        $this->eventDispatcher->dispatch(new SalesforceWarningEvent(NULL, $message, $args), SalesforceEvents::WARNING);
         // @TODO should we delete a mapped object whose parent mapping no longer exists? Feels like someone else's job.
         // $mapped_object->delete();
         return;
@@ -206,7 +206,7 @@ class DeleteHandler {
 
       // Before attempting the final delete, give other modules a chance to disallow it.
       $deleteAllowedEvent = new SalesforceDeleteAllowedEvent($mapped_object);
-      $this->eventDispatcher->dispatch(SalesforceEvents::DELETE_ALLOWED, $deleteAllowedEvent);
+      $this->eventDispatcher->dispatch($deleteAllowedEvent, SalesforceEvents::DELETE_ALLOWED);
       if ($deleteAllowedEvent->isDeleteAllowed() === FALSE) {
         return;
       }
@@ -222,10 +222,10 @@ class DeleteHandler {
           '%id' => $mapped_object->entity_id,
           '%sfid' => $record['id'],
         ];
-        $this->eventDispatcher->dispatch(SalesforceEvents::NOTICE, new SalesforceNoticeEvent(NULL, $message, $args));
+        $this->eventDispatcher->dispatch(new SalesforceNoticeEvent(NULL, $message, $args), SalesforceEvents::NOTICE);
       }
       catch (\Exception $e) {
-        $this->eventDispatcher->dispatch(SalesforceEvents::ERROR, new SalesforceErrorEvent($e));
+        $this->eventDispatcher->dispatch(new SalesforceErrorEvent($e), SalesforceEvents::ERROR);
         // If mapped entity couldn't be deleted, do not delete the mapped
         // object.
         return;

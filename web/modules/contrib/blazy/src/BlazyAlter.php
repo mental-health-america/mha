@@ -2,7 +2,6 @@
 
 namespace Drupal\blazy;
 
-use Drupal\Component\Utility\NestedArray;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Field\FormatterInterface;
 use Drupal\editor\Entity\Editor;
@@ -17,12 +16,25 @@ use Drupal\editor\Entity\Editor;
 class BlazyAlter {
 
   /**
+   * The blazy library info.
+   *
+   * @var array
+   */
+  private static $libraryInfoBuild;
+
+  /**
    * Implements hook_config_schema_info_alter().
    */
-  public static function configSchemaInfoAlter(array &$definitions, $formatter = 'blazy_base', array $settings = []) {
+  public static function configSchemaInfoAlter(
+    array &$definitions,
+    $formatter = 'blazy_base',
+    array $settings = []
+  ): void {
     if (isset($definitions[$formatter])) {
       $mappings = &$definitions[$formatter]['mapping'];
       $settings = $settings ?: BlazyDefault::extendedSettings() + BlazyDefault::gridSettings();
+      $settings += BlazyDefault::deprecatedSettings();
+
       foreach ($settings as $key => $value) {
         // Seems double is ignored, and causes a missing schema, unlike float.
         $type = gettype($value);
@@ -50,21 +62,13 @@ class BlazyAlter {
   /**
    * Implements hook_library_info_alter().
    */
-  public static function libraryInfoAlter(&$libraries, $extension) {
-    if ($extension === 'blazy') {
-      if ($path = blazy_libraries_get_path('blazy')) {
-        $libraries['blazy']['js'] = ['/' . $path . '/blazy.js' => ['weight' => -4]];
-      }
-
-      if (blazy()->configLoad('io.enabled')) {
-        if (blazy()->configLoad('io.unblazy')) {
-          $dependencies = ['core/drupal', 'blazy/bio.media', 'blazy/loading'];
-          $libraries['load']['dependencies'] = $dependencies;
-        }
-        else {
-          $libraries['load']['dependencies'][] = 'blazy/bio.media';
-        }
-      }
+  public static function libraryInfoAlter(&$libraries, $extension): void {
+    // @todo remove if core changed, right below core/drupal for being generic,
+    // and dependency-free and a dependency for many other generic ones.
+    // @todo watch out for core @todo to remove drupal namespace for debounce.
+    $debounce = 'drupal.debounce';
+    if ($extension === 'core' && isset($libraries[$debounce])) {
+      $libraries[$debounce]['js']['misc/debounce.js'] = ['weight' => -16];
     }
 
     if ($extension === 'media' && isset($libraries['oembed.frame'])) {
@@ -73,24 +77,60 @@ class BlazyAlter {
   }
 
   /**
-   * Implements hook_blazy_settings_alter().
+   * Implements hook_library_info_build().
    */
-  public static function blazySettingsAlter(array &$build, $items) {
-    $settings = &$build['settings'];
+  public static function libraryInfoBuild() {
+    if (!isset(static::$libraryInfoBuild)) {
+      // Optional polyfills for IEs, and oldies.
+      $polyfills = array_merge(BlazyDefault::polyfills(), BlazyDefault::ondemandPolyfills());
+      foreach ($polyfills as $id) {
+        // Matches common core polyfills' weight.
+        $weight = $id == 'polyfill' ? -21 : -20;
+        $weight = $id == 'webp' ? -5.5 : $weight;
+        $common = ['minified' => TRUE, 'weight' => $weight];
+        $libraries[$id] = [
+          'js' => [
+            'js/polyfill/blazy.' . $id . '.min.js' => $common,
+          ],
+        ];
 
-    // Sniffs for Views to allow block__no_wrapper, views_no_wrapper, etc.
-    if (function_exists('views_get_current_view') && $view = views_get_current_view()) {
-      $settings['view_name'] = $view->storage->id();
-      $settings['current_view_mode'] = $view->current_display;
-      $plugin_id = is_null($view->style_plugin) ? "" : $view->style_plugin->getPluginId();
-      $settings['view_plugin_id'] = empty($settings['view_plugin_id']) ? $plugin_id : $settings['view_plugin_id'];
+        if ($id == 'webp') {
+          $libraries[$id]['dependencies'][] = 'blazy/dblazy';
+        }
+      }
+
+      // Plugins extending dBlazy.
+      foreach (BlazyDefault::plugins() as $id) {
+        $base = ['eventify', 'viewport', 'dataset', 'css', 'dom'];
+        $base = in_array($id, $base);
+        $deps = $base ? ['blazy/dblazy', 'blazy/base'] : ['blazy/xlazy'];
+        if ($id == 'xlazy') {
+          $deps = ['blazy/viewport', 'blazy/dataset', 'blazy/dom'];
+        }
+
+        // @todo problematic weight, basically compat must be present.
+        if (in_array($id, ['animate', 'background'])) {
+          $deps[] = 'blazy/compat';
+        }
+        $weight = $base ? -5.6 : -5.5;
+        $common = ['minified' => TRUE, 'weight' => $weight];
+        $libraries[$id] = [
+          'js' => [
+            'js/plugin/blazy.' . $id . '.min.js' => $common,
+          ],
+          'dependencies' => $deps,
+        ];
+      }
+
+      static::$libraryInfoBuild = $libraries;
     }
+    return static::$libraryInfoBuild;
   }
 
   /**
    * Checks if Entity/Media Embed is enabled.
    */
-  public static function isCkeditorApplicable(Editor $editor) {
+  public static function isCkeditorApplicable(Editor $editor): bool {
     foreach (['entity_embed', 'media_embed'] as $filter) {
       if (!$editor->isNew()
         && $editor->getFilterFormat()->filters()->has($filter)
@@ -106,9 +146,9 @@ class BlazyAlter {
   /**
    * Implements hook_ckeditor_css_alter().
    */
-  public static function ckeditorCssAlter(array &$css, Editor $editor) {
+  public static function ckeditorCssAlter(array &$css, Editor $editor): void {
     if (self::isCkeditorApplicable($editor)) {
-      $path = base_path() . drupal_get_path('module', 'blazy');
+      $path = Blazy::getPath('module', 'blazy', TRUE);
       $css[] = $path . '/css/components/blazy.media.css';
       $css[] = $path . '/css/components/blazy.preview.css';
       $css[] = $path . '/css/components/blazy.ratio.css';
@@ -127,47 +167,21 @@ class BlazyAlter {
    * via Entity/Media Embed which normally means Blazy should be disabled
    * due to CKEditor not supporting JS assets.
    *
-   * @see \Drupal\blazy\Blazy::preprocessBlazy()
-   * @see \Drupal\blazy\Blazy::preprocessField()
-   * @see \Drupal\blazy\Blazy::preprocessFileVideo()
+   * @see \Drupal\blazy\Theme\BlazyTheme::blazy()
+   * @see \Drupal\blazy\Theme\BlazyTheme::field()
+   * @see \Drupal\blazy\Theme\BlazyTheme::fileVideo()
    * @see blazy_preprocess_file_video()
    */
-  public static function thirdPartyFormatters() {
+  public static function thirdPartyFormatters(): array {
     $formatters = ['file_video'];
-    blazy()->getModuleHandler()->alter('blazy_third_party_formatters', $formatters);
+    \blazy()->getModuleHandler()->alter('blazy_third_party_formatters', $formatters);
     return array_unique($formatters);
-  }
-
-  /**
-   * Overrides variables for field.html.twig templates.
-   */
-  public static function thirdPartyPreprocessField(array &$variables) {
-    $element = $variables['element'];
-    $settings = empty($element['#blazy']) ? [] : $element['#blazy'];
-    $settings['third_party'] = $element['#third_party_settings'];
-    $is_preview = Blazy::isPreview();
-
-    foreach ($variables['items'] as &$item) {
-      if (empty($item['content'])) {
-        continue;
-      }
-
-      $item_attributes = &$item['content'][isset($item['content']['#attributes']) ? '#attributes' : '#item_attributes'];
-      $item_attributes['data-b-lazy'] = TRUE;
-      if ($is_preview) {
-        $item_attributes['data-b-preview'] = TRUE;
-      }
-    }
-
-    // Attaches Blazy libraries here since Blazy is not the formatter.
-    $attachments = blazy()->attach($settings);
-    $variables['#attached'] = empty($variables['#attached']) ? $attachments : NestedArray::mergeDeep($variables['#attached'], $attachments);
   }
 
   /**
    * Implements hook_field_formatter_third_party_settings_form().
    */
-  public static function fieldFormatterThirdPartySettingsForm(FormatterInterface $plugin) {
+  public static function fieldFormatterThirdPartySettingsForm(FormatterInterface $plugin): array {
     if (in_array($plugin->getPluginId(), self::thirdPartyFormatters())) {
       return [
         'blazy' => [
@@ -183,7 +197,7 @@ class BlazyAlter {
   /**
    * Implements hook_field_formatter_settings_summary_alter().
    */
-  public static function fieldFormatterSettingsSummaryAlter(&$summary, $context) {
+  public static function fieldFormatterSettingsSummaryAlter(&$summary, $context): void {
     $on = $context['formatter']->getThirdPartySetting('blazy', 'blazy', FALSE);
     if ($on && in_array($context['formatter']->getPluginId(), self::thirdPartyFormatters())) {
       $summary[] = 'Blazy';
@@ -191,15 +205,40 @@ class BlazyAlter {
   }
 
   /**
-   * Attaches Colorbox if so configured.
+   * Implements hook_blazy_settings_alter().
+   *
+   * @todo remove, likely no-longer relevant since sub-modules re-use the same
+   * Blazy::containerAttributes() without being exclusive to `blazy` namespace
+   * which was at 1.x, but not 2.x. At 2.x `blazy` is merged into the embedding
+   * parent automatically making this irrelevant. Meaning CSS classes are
+   * preserved by Blazy containing Views style since 2.x.
    */
-  public static function attachColorbox(array &$load, $attach = []) {
-    if (\Drupal::hasService('colorbox.attachment')) {
-      $dummy = [];
-      \Drupal::service('colorbox.attachment')->attach($dummy);
-      $load = isset($dummy['#attached']) ? NestedArray::mergeDeep($load, $dummy['#attached']) : $load;
-      $load['library'][] = 'blazy/colorbox';
-      unset($dummy);
+  public static function blazySettingsAlter(array &$build, $items): void {
+    $settings = &$build['settings'];
+    $blazies = $settings['blazies'];
+
+    // Sniffs for Views to allow block__no_wrapper, views_no_wrapper, etc.
+    $function = 'views_get_current_view';
+    if (is_callable($function) && $view = $function()) {
+
+      $style = $view->style_plugin;
+      $display = is_null($style) ? '' : $style->displayHandler->getPluginId();
+
+      $name = $view->storage->id();
+      $view_mode = $view->current_display;
+      $plugin_id = is_null($style) ? '' : $style->getPluginId();
+
+      $current = [
+        'display'     => $display,
+        'instance_id' => str_replace('_', '-', "{$name}-{$display}-{$view_mode}"),
+        'name'        => $name,
+        'plugin_id'   => $plugin_id,
+        'view_mode'   => $view_mode,
+        'is_view'     => FALSE,
+      ];
+
+      // @todo add `formatter` key if the above is proven right.
+      $blazies->set('view', $current, TRUE);
     }
   }
 

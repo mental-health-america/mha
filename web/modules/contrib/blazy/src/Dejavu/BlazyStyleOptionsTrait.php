@@ -126,12 +126,11 @@ trait BlazyStyleOptionsTrait {
 
     $definition['plugin_id'] = $this->getPluginId();
     $definition['settings'] = $this->options;
-    $definition['current_view_mode'] = $this->view->current_display;
     $definition['_views'] = TRUE;
 
     // Provides the requested fields based on available $options.
     foreach ($defined_options as $key) {
-      $definition[$key] = isset($options[$key]) ? $options[$key] : [];
+      $definition[$key] = $options[$key] ?? [];
     }
 
     $contexts = [
@@ -180,7 +179,7 @@ trait BlazyStyleOptionsTrait {
 
       // Entity reference label where the above $value can be term ID.
       if ($markup = $this->getField($index, $field_name)) {
-        $value = is_object($markup) ? trim(strip_tags($markup->__toString())) : $value;
+        $value = is_object($markup) ? trim(strip_tags($markup->__toString()) ?: '') : $value;
       }
 
       if (is_string($value)) {
@@ -199,7 +198,7 @@ trait BlazyStyleOptionsTrait {
         }
       }
       else {
-        $value = isset($value[0]['value']) && !empty($value[0]['value']) ? $value[0]['value'] : '';
+        $value = $value[0]['value'] ?? '';
         if ($value) {
           $values[$index] = $clean ? Html::cleanCssIdentifier(mb_strtolower($value)) : $value;
         }

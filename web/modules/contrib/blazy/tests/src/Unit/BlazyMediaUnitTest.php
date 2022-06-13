@@ -3,7 +3,8 @@
 namespace Drupal\Tests\blazy\Unit;
 
 use Drupal\Tests\UnitTestCase;
-use Drupal\blazy\BlazyMedia;
+use Drupal\blazy\Media\BlazyMedia;
+use Drupal\blazy\BlazyDefault;
 use Drupal\Tests\blazy\Traits\BlazyUnitTestTrait;
 
 /**
@@ -18,7 +19,7 @@ class BlazyMediaUnitTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->setUpVariables();
@@ -33,15 +34,27 @@ class BlazyMediaUnitTest extends UnitTestCase {
    * @dataProvider providerTestBlazyMediaBuild
    */
   public function testBlazyMediaBuild($markup) {
+    $source_field = $this->randomMachineName();
+    $view_mode = 'default';
     $settings = [
-      'source_field' => $this->randomMachineName(),
+      // 'source_field' => $source_field,
       'image_style'  => 'blazy_crop',
       'ratio'        => 'fluid',
-      'view_mode'    => 'default',
-      'media_source' => 'remote_video',
+      // 'view_mode'    => 'default',
+      // 'media_source' => 'remote_video',
       'media_switch' => 'media',
       // @todo 'bundle' => 'entity_test',
+    ] + BlazyDefault::htmlSettings();
+
+    $blazies = &$settings['blazies'];
+    $info = [
+      // 'input_url'    => $input_url,
+      'source_field' => $source_field,
+      'source'       => 'remote_video',
+      'view_mode'    => $view_mode,
     ];
+
+    $blazies->set('media', $info);
 
     $markup['#settings'] = $settings;
     $markup['#attached'] = [];
@@ -57,7 +70,7 @@ class BlazyMediaUnitTest extends UnitTestCase {
       ->willReturn($field_definition);
     $items->expects($this->any())
       ->method('view')
-      ->with($settings['view_mode'])
+      ->with($view_mode)
       ->willReturn($markup);
     $items->expects($this->any())
       ->method('getEntity')
@@ -65,7 +78,7 @@ class BlazyMediaUnitTest extends UnitTestCase {
 
     $entity->expects($this->once())
       ->method('get')
-      ->with($settings['source_field'])
+      ->with($source_field)
       ->will($this->returnValue($items));
 
     $render = BlazyMedia::build($entity, $settings);

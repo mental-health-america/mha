@@ -214,7 +214,7 @@ class SalesforceMappingCommands extends SalesforceMappingCommandsBase {
       $entity_type = $this->etm->getDefinition($et_id);
       if ($entity_type) {
         $id_key = $entity_type->getKey('id');
-        $query->addJoin("LEFT", $entity_type->getBaseTable(), 'et', "et.$id_key = m.drupal_entity__target_id_int");
+        $query->addJoin("LEFT", $entity_type->getBaseTable(), 'et', "et.$id_key = m.drupal_entity__target_id");
         $query->isNull("et.$id_key");
       }
       $mapped_obj_ids = $query->execute()->fetchCol();

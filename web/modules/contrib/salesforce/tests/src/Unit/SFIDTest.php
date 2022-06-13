@@ -17,7 +17,7 @@ class SFIDTest extends UnitTestCase {
    *
    * @var array
    */
-  static public $modules = ['salesforce'];
+  static protected $modules = ['salesforce'];
 
   /**
    * Test object instantiation with good ID.

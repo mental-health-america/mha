@@ -15,7 +15,7 @@ dependencies:
   - salesforce_test_rest_client
   - taxonomy
 
-# Information added by Drupal.org packaging script on 2021-09-27
-version: '8.x-4.3'
+# Information added by Drupal.org packaging script on 2021-11-03
+version: '5.0.0'
 project: 'salesforce'
-datestamp: 1632765352
+datestamp: 1635946402

@@ -30,12 +30,12 @@ class MappedObjectTest extends UnitTestCase {
    *
    * @var array
    */
-  static public $modules = ['salesforce_mapping'];
+  static protected $modules = ['salesforce_mapping'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->entityTypeId = $this->randomMachineName();
