@@ -85,7 +85,7 @@ function salesforce_push_entity_crud(EntityInterface $entity, $op) {
     }
     catch (\Exception $e) {
       // Do not allow any exception to prevent entity CRUD.
-      \Drupal::service('event_dispatcher')->dispatch(SalesforceEvents::ERROR, new SalesforceErrorEvent($e));
+      \Drupal::service('event_dispatcher')->dispatch(new SalesforceErrorEvent($e), SalesforceEvents::ERROR);
     }
   }
 }
@@ -138,8 +138,8 @@ function salesforce_push_entity_crud_mapping(EntityInterface $entity, $op, Sales
 
   // Event subscribers should call $event->disallowPush() to prevent push.
   $event = \Drupal::service('event_dispatcher')->dispatch(
-    SalesforceEvents::PUSH_ALLOWED,
-    new SalesforcePushAllowedEvent($mapped_object, $op)
+    new SalesforcePushAllowedEvent($mapped_object, $op),
+    SalesforceEvents::PUSH_ALLOWED
   );
   if ($event->isPushAllowed() === FALSE) {
     return;
@@ -151,7 +151,7 @@ function salesforce_push_entity_crud_mapping(EntityInterface $entity, $op, Sales
       salesforce_push_enqueue_async($entity, $mapping, $mapped_object, $op);
     }
     catch (\Exception $e) {
-      \Drupal::service('event_dispatcher')->dispatch(SalesforceEvents::ERROR, new SalesforceErrorEvent($e));
+      \Drupal::service('event_dispatcher')->dispatch(new SalesforceErrorEvent($e), SalesforceEvents::ERROR);
     }
     return;
   }
@@ -159,8 +159,8 @@ function salesforce_push_entity_crud_mapping(EntityInterface $entity, $op, Sales
   // Attempt real-time push. Enqueue async push on failure.
   try {
     \Drupal::service('event_dispatcher')->dispatch(
-      SalesforceEvents::PUSH_MAPPING_OBJECT,
-      new SalesforcePushOpEvent($mapped_object, $op)
+      new SalesforcePushOpEvent($mapped_object, $op),
+      SalesforceEvents::PUSH_MAPPING_OBJECT
     );
 
     // If this is a delete, destroy the SF object.
@@ -180,16 +180,16 @@ function salesforce_push_entity_crud_mapping(EntityInterface $entity, $op, Sales
   catch (\Exception $e) {
 
     \Drupal::service('event_dispatcher')->dispatch(
-      SalesforceEvents::PUSH_FAIL,
-      new SalesforcePushOpEvent($mapped_object, $op)
+      new SalesforcePushOpEvent($mapped_object, $op),
+      SalesforceEvents::PUSH_FAIL
     );
 
-    \Drupal::service('event_dispatcher')->dispatch(SalesforceEvents::ERROR, new SalesforceErrorEvent($e));
+    \Drupal::service('event_dispatcher')->dispatch(new SalesforceErrorEvent($e), SalesforceEvents::ERROR);
     try {
       salesforce_push_enqueue_async($entity, $mapping, $mapped_object, $op);
     }
     catch (\Exception $e) {
-      \Drupal::service('event_dispatcher')->dispatch(SalesforceEvents::ERROR, new SalesforceErrorEvent($e));
+      \Drupal::service('event_dispatcher')->dispatch(new SalesforceErrorEvent($e), SalesforceEvents::ERROR);
     }
 
     if (!$mapped_object->isNew()) {
@@ -250,6 +250,6 @@ function salesforce_push_cron() {
     $queue->processQueues($mappings);
   }
   catch (\Exception $e) {
-    \Drupal::service('event_dispatcher')->dispatch(SalesforceEvents::ERROR, new SalesforceErrorEvent($e));
+    \Drupal::service('event_dispatcher')->dispatch(new SalesforceErrorEvent($e), SalesforceEvents::ERROR);
   }
 }

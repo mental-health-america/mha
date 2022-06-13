@@ -107,7 +107,7 @@ class SalesforceAuthSettings extends ConfigFormBase {
       ->save();
 
     $this->messenger()->addStatus($this->t('Authorization settings have been saved.'));
-    $this->eventDispatcher->dispatch(SalesforceEvents::NOTICE, new SalesforceNoticeEvent(NULL, "Authorization provider changed to %provider.", ['%provider' => $form_state->getValue('provider')]));
+    $this->eventDispatcher->dispatch(new SalesforceNoticeEvent(NULL, "Authorization provider changed to %provider.", ['%provider' => $form_state->getValue('provider')]), SalesforceEvents::NOTICE);
   }
 
 }

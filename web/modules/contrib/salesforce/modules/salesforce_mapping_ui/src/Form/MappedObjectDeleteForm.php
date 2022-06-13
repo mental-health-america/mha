@@ -48,7 +48,7 @@ class MappedObjectDeleteForm extends ContentEntityConfirmFormBase {
     $form_state->setRedirectUrl($mapped_object->getMappedEntity()->toUrl());
     $message = 'MappedObject @sfid deleted.';
     $args = ['@sfid' => $mapped_object->salesforce_id->value];
-    \Drupal::service('event_dispatcher')->dispatch(SalesforceEvents::NOTICE, new SalesforceNoticeEvent(NULL, $message, $args));
+    \Drupal::service('event_dispatcher')->dispatch(new SalesforceNoticeEvent(NULL, $message, $args), SalesforceEvents::NOTICE);
     $mapped_object->delete();
   }
 

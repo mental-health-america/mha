@@ -1,0 +1,17 @@
+single_content_sync.node_export:
+  route_name: single_content_sync.node_export
+  base_route: entity.node.canonical
+  title: 'Export'
+  weight: 10
+
+single_content_sync.block_content_export:
+  route_name: single_content_sync.block_content_export
+  base_route: entity.block_content.canonical
+  title: 'Export'
+  weight: 10
+
+single_content_sync.import:
+  route_name: single_content_sync.import
+  base_route: system.admin_content
+  title: 'Import'
+  weight: 10

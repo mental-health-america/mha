@@ -2,17 +2,23 @@
 
 namespace Drupal\blazy;
 
-use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\NestedArray;
-use Drupal\Core\Template\Attribute;
+use Drupal\blazy\Media\BlazyFile;
+use Drupal\blazy\Media\BlazyImage;
+use Drupal\blazy\Media\Placeholder;
+use Drupal\blazy\Theme\BlazyAttribute;
+use Drupal\blazy\Theme\Grid;
+use Drupal\blazy\Utility\Check;
+use Drupal\blazy\Utility\CheckItem;
+use Drupal\blazy\Utility\Path;
 
 /**
- * Provides common blazy utility static methods.
+ * Provides common blazy utility and a few alias for frequent methods.
  */
-class Blazy implements BlazyInterface {
+class Blazy {
 
-  // @todo remove at blazy:8.x-3.0 or sooner.
+  // @todo remove at blazy:3.0.
   use BlazyDeprecatedTrait;
 
   /**
@@ -23,434 +29,32 @@ class Blazy implements BlazyInterface {
   private static $blazyId;
 
   /**
-   * Prepares variables for blazy.html.twig templates.
+   * Provides attachments when not using the provided API.
    */
-  public static function preprocessBlazy(array &$variables) {
-    $element = $variables['element'];
-    foreach (BlazyDefault::themeProperties() as $key) {
-      $variables[$key] = isset($element["#$key"]) ? $element["#$key"] : [];
-    }
-
-    // Provides optional attributes, see BlazyFilter.
-    foreach (BlazyDefault::themeAttributes() as $key) {
-      $key = $key . '_attributes';
-      $variables[$key] = empty($element["#$key"]) ? [] : new Attribute($element["#$key"]);
-    }
-
-    // Provides sensible default html settings to shutup notices when lacking.
-    $settings  = &$variables['settings'];
-    $settings += BlazyDefault::itemSettings();
-
-    // Do not proceed if no URI is provided.
-    if (empty($settings['uri'])) {
-      return;
-    }
-
-    // URL and dimensions are built out at BlazyManager::preRenderBlazy().
-    // Still provides a failsafe for direct call to theme_blazy().
-    if (empty($settings['_api'])) {
-      self::urlAndDimensions($settings, $variables['item']);
-    }
-
-    // Allows rich Media entities stored within `content` to take over.
-    if (empty($variables['content'])) {
-      self::buildMedia($variables);
-    }
-
-    // Aspect ratio to fix layout reflow with lazyloaded images responsively.
-    // This is outside 'lazy' to allow non-lazyloaded iframe/content use it too.
-    $settings['ratio'] = empty($settings['width']) ? '' : $settings['ratio'];
-    if ($settings['ratio']) {
-      self::aspectRatioAttributes($variables['attributes'], $settings);
-    }
-
-    // Makes a little order here due to twig ignoring the preset priority.
-    $attributes = &$variables['attributes'];
-    $classes = empty($attributes['class']) ? [] : $attributes['class'];
-    $attributes['class'] = array_merge(['media', 'media--blazy'], $classes);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function buildMedia(array &$variables) {
-    $settings = $variables['settings'];
-
-    // (Responsive) image is optional for Video, or image as CSS background.
-    if (empty($settings['background'])) {
-      if (!empty($settings['responsive_image_style_id'])) {
-        self::buildResponsiveImage($variables);
-      }
-      else {
-        self::buildImage($variables);
-      }
-    }
-
-    // Prepare a media player, and allow a tiny video preview without iframe.
-    if ($settings['use_media'] && empty($settings['_noiframe'])) {
-      self::buildIframe($variables);
-    }
-
-    // (Responsive) image is optional for Video, or image as CSS background.
-    if ($variables['image']) {
-      self::imageAttributes($variables);
+  public static function attach(array &$variables, array $settings = []): void {
+    if ($blazy = self::service('blazy.manager')) {
+      $attachments = $blazy->attach($settings) ?: [];
+      $variables['#attached'] = self::merge($attachments, $variables, '#attached');
     }
   }
 
   /**
-   * {@inheritdoc}
+   * Provides autoplay URL, relevant for lightboxes to save another click.
    */
-  public static function urlAndDimensions(array &$settings, $item = NULL) {
-    // BlazyFilter, or image style with crop, may already set these.
-    BlazyUtil::imageDimensions($settings, $item);
-
-    // Provides image url based on the given settings.
-    BlazyUtil::imageUrl($settings);
-
-    // The SVG placeholder should accept either original, or styled image.
-    $is_media = in_array($settings['type'], ['audio', 'video']);
-    $settings['placeholder'] = empty($settings['placeholder']) ? BlazyUtil::generatePlaceholder($settings['width'], $settings['height']) : $settings['placeholder'];
-    $settings['use_media'] = $settings['embed_url'] && $is_media;
-    $settings['use_loading'] = empty($settings['is_preview']) ? $settings['use_loading'] : FALSE;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function buildResponsiveImage(array &$variables) {
-    $settings = $variables['settings'];
-    $attributes = empty($settings['is_preview']) ? [
-      'data-b-lazy' => $settings['one_pixel'],
-      'data-placeholder' => $settings['placeholder'],
-    ] : [];
-    $variables['image'] += [
-      '#type' => 'responsive_image',
-      '#responsive_image_style_id' => $settings['responsive_image_style_id'],
-      '#uri' => $settings['uri'],
-      '#attributes' => $attributes,
-    ];
-  }
-
-  /**
-   * Modifies variables for blazy (non-)lazyloaded image.
-   */
-  public static function buildImage(array &$variables) {
-    $settings = $variables['settings'];
-
-    // Supports either lazy loaded image, or not.
-    $variables['image'] += [
-      '#theme' => 'image',
-      '#uri' => !empty($settings['is_preview']) || empty($settings['lazy']) ? $settings['image_url'] : $settings['placeholder'],
-    ];
-  }
-
-  /**
-   * Modifies $variables to provide optional (Responsive) image attributes.
-   */
-  public static function imageAttributes(array &$variables) {
-    $item = $variables['item'];
-    $settings = &$variables['settings'];
-    $image = &$variables['image'];
-    $attributes = &$variables['item_attributes'];
-
-    // Respects hand-coded image attributes.
-    if ($item) {
-      if (!isset($attributes['alt'])) {
-        $attributes['alt'] = empty($item->alt) ? NULL : trim($item->alt);
-      }
-
-      // Do not output an empty 'title' attribute.
-      if (isset($item->title) && (mb_strlen($item->title) != 0)) {
-        $attributes['title'] = trim($item->title);
-      }
+  public static function autoplay($url): string {
+    if (strpos($url, 'autoplay') === FALSE
+      || strpos($url, 'autoplay=0') !== FALSE) {
+      return strpos($url, '?') === FALSE
+        ? $url . '?autoplay=1'
+        : $url . '&autoplay=1';
     }
-
-    // Only output dimensions for non-svg. Respects hand-coded image attributes.
-    // Do not pass it to $attributes to also respect both (Responsive) image.
-    if (!isset($attributes['width']) && empty($settings['unstyled'])) {
-      $image['#height'] = $settings['height'];
-      $image['#width'] = $settings['width'];
-    }
-
-    // Overrides title if to be used as a placeholder for lazyloaded video.
-    if (!empty($settings['embed_url']) && !empty($settings['accessible_title'])) {
-      $translation_replacements = ['@label' => $settings['accessible_title']];
-      $attributes['title'] = t('Preview image for the video "@label".', $translation_replacements);
-
-      if (!empty($attributes['alt'])) {
-        $translation_replacements['@alt'] = $attributes['alt'];
-        $attributes['alt'] = t('Preview image for the video "@label" - @alt.', $translation_replacements);
-      }
-      else {
-        $attributes['alt'] = $attributes['title'];
-      }
-    }
-
-    $attributes['class'][] = 'media__image';
-    // https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/decode.
-    if (!empty($settings['decode'])) {
-      $attributes['decoding'] = 'async';
-    }
-
-    // Reserves UUID for sub-module lookups, relevant for BlazyFilter.
-    if (!empty($settings['entity_uuid'])) {
-      $attributes['data-entity-uuid'] = $settings['entity_uuid'];
-    }
-
-    self::commonAttributes($attributes, $variables['settings']);
-    $image['#attributes'] = empty($image['#attributes']) ? $attributes : NestedArray::mergeDeep($image['#attributes'], $attributes);
-
-    // Provides a noscript if so configured, before any lazy defined.
-    if (!empty($settings['noscript']) && empty($settings['is_preview'])) {
-      self::buildNoscriptImage($variables);
-    }
-
-    // Provides [data-(src|lazy)] for (Responsive) image, after noscript.
-    if (!empty($settings['lazy'])) {
-      self::lazyAttributes($image['#attributes'], $settings);
-    }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function iframeAttributes(array &$settings) {
-    if (empty($settings['is_preview'])) {
-      $attributes['data-src'] = $settings['embed_url'];
-      $attributes['src'] = 'about:blank';
-      $attributes['class'][] = 'b-lazy';
-      $attributes['allowfullscreen'] = TRUE;
-      $attributes['loading'] = 'lazy';
-    }
-    else {
-      $attributes['src'] = $settings['embed_url'];
-      $attributes['sandbox'] = TRUE;
-    }
-
-    $attributes['class'][] = 'media__iframe';
-    self::commonAttributes($attributes, $settings);
-    return $attributes;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function buildIframe(array &$variables) {
-    $settings = &$variables['settings'];
-    $settings['player'] = empty($settings['lightbox']) && $settings['media_switch'] == 'media';
-
-    if (empty($variables['url'])) {
-      $variables['image'] = empty($settings['media_switch']) ? [] : $variables['image'];
-
-      // Pass iframe attributes to template.
-      $variables['iframe'] = [
-        '#type' => 'html_tag',
-        '#tag' => 'iframe',
-        '#attributes' => self::iframeAttributes($settings),
-      ];
-
-      // Iframe is removed on lazyloaded, puts data at non-removable storage.
-      $variables['attributes']['data-media'] = Json::encode(['type' => $settings['type']]);
-    }
-  }
-
-  /**
-   * Provides (Responsive) image noscript if so configured.
-   */
-  public static function buildNoscriptImage(array &$variables) {
-    $settings = $variables['settings'];
-    $noscript = $variables['image'];
-    $noscript['#uri'] = empty($settings['responsive_image_style_id']) ? $settings['image_url'] : $settings['uri'];
-    $noscript['#attributes']['data-b-noscript'] = TRUE;
-
-    $variables['noscript'] = [
-      '#type' => 'inline_template',
-      '#template' => '{{ prefix | raw }}{{ noscript }}{{ suffix | raw }}',
-      '#context' => [
-        'noscript' => $noscript,
-        'prefix' => '<noscript>',
-        'suffix' => '</noscript>',
-      ],
-    ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function lazyAttributes(array &$attributes, array $settings = []) {
-    // Slick has its own class and methods: ondemand, anticipative, progressive.
-    // @todo remove this condition once sub-modules have been aware of preview.
-    if (empty($settings['is_preview'])) {
-      $attributes['class'][] = $settings['lazy_class'];
-      $attributes['data-' . $settings['lazy_attribute']] = $settings['image_url'];
-    }
-  }
-
-  /**
-   * Provide common attributes for IMG, IFRAME, VIDEO, DIV, etc. elements.
-   */
-  public static function commonAttributes(array &$attributes, array $settings = []) {
-    $attributes['class'][] = 'media__element';
-  }
-
-  /**
-   * Modifies container attributes with aspect ratio for iframe, image, etc.
-   */
-  public static function aspectRatioAttributes(array &$attributes, array &$settings) {
-    $settings['ratio'] = empty($settings['ratio']) ? '' : str_replace(':', '', $settings['ratio']);
-
-    if ($settings['height'] && $settings['ratio'] == 'fluid') {
-      // If "lucky", Blazy/ Slick Views galleries may already set this once.
-      // Lucky when you don't flatten out the Views output earlier.
-      $padding = $settings['padding_bottom'] ?: round((($settings['height'] / $settings['width']) * 100), 2);
-      self::inlineStyle($attributes, 'padding-bottom: ' . $padding . '%;');
-
-      // Views rewrite results or Twig inline_template may strip out `style`
-      // attributes, provide hint to JS.
-      $attributes['data-ratio'] = $padding;
-    }
-  }
-
-  /**
-   * Provides container attributes for .blazy container: .field, .view, etc.
-   */
-  public static function containerAttributes(array &$attributes, array $settings = []) {
-    $settings += ['namespace' => 'blazy'];
-    $classes = empty($attributes['class']) ? [] : $attributes['class'];
-    $attributes['data-blazy'] = empty($settings['blazy_data']) ? '' : Json::encode($settings['blazy_data']);
-
-    // Provides data-LIGHTBOX-gallery to not conflict with original modules.
-    if (!empty($settings['media_switch']) && $settings['media_switch'] != 'content') {
-      $switch = str_replace('_', '-', $settings['media_switch']);
-      $attributes['data-' . $switch . '-gallery'] = TRUE;
-      $classes[] = 'blazy--' . $switch;
-    }
-
-    // Provides contextual classes relevant to the container: .field, or .view.
-    // Sniffs for Views to allow block__no_wrapper, views__no_wrapper, etc.
-    foreach (['field', 'view'] as $key) {
-      if (!empty($settings[$key . '_name'])) {
-        $name = str_replace('_', '-', $settings[$key . '_name']);
-        $name = $key == 'view' ? 'view--' . $name : $name;
-        $classes[] = $settings['namespace'] . '--' . $key;
-        $classes[] = $settings['namespace'] . '--' . $name;
-        if (!empty($settings['current_view_mode'])) {
-          $view_mode = str_replace('_', '-', $settings['current_view_mode']);
-          $classes[] = $settings['namespace'] . '--' . $name . '--' . $view_mode;
-        }
-      }
-    }
-
-    $attributes['class'] = array_merge(['blazy'], $classes);
-  }
-
-  /**
-   * Overrides variables for responsive-image.html.twig templates.
-   */
-  public static function preprocessResponsiveImage(array &$variables) {
-    $image = &$variables['img_element'];
-    $attributes = &$variables['attributes'];
-    $placeholder = empty($attributes['data-placeholder']) ? static::PLACEHOLDER : $attributes['data-placeholder'];
-
-    // Bail out if a noscript is requested.
-    // @todo figure out to not even enter this method, yet not break ratio, etc.
-    if (!isset($attributes['data-b-noscript'])) {
-      // Modifies <picture> [data-srcset] attributes on <source> elements.
-      if (!$variables['output_image_tag']) {
-        /** @var \Drupal\Core\Template\Attribute $source */
-        if (isset($variables['sources']) && is_array($variables['sources'])) {
-          foreach ($variables['sources'] as &$source) {
-            $source->setAttribute('data-srcset', $source['srcset']->value());
-            $source->setAttribute('srcset', '');
-          }
-        }
-
-        // Prevents invalid IMG tag when one pixel placeholder is disabled.
-        $image['#uri'] = $placeholder;
-        $image['#srcset'] = '';
-
-        // Cleans up the no-longer relevant attributes for controlling element.
-        unset($attributes['data-srcset'], $image['#attributes']['data-srcset']);
-      }
-      else {
-        // Modifies <img> element attributes.
-        $image['#attributes']['data-srcset'] = $attributes['srcset']->value();
-        $image['#attributes']['srcset'] = '';
-      }
-
-      // The [data-b-lazy] is a flag indicating 1px placeholder.
-      // This prevents double-downloading the fallback image, if enabled.
-      if (!empty($attributes['data-b-lazy'])) {
-        $image['#uri'] = $placeholder;
-      }
-
-      // More shared-with-image attributes are set at self::imageAttributes().
-      $image['#attributes']['class'][] = 'b-responsive';
-    }
-
-    // Cleans up the no-longer needed flags:
-    foreach (['placeholder', 'b-lazy', 'b-noscript'] as $key) {
-      unset($attributes['data-' . $key], $image['#attributes']['data-' . $key]);
-    }
-  }
-
-  /**
-   * Overrides variables for file-video.html.twig templates.
-   */
-  public static function preprocessFileVideo(array &$variables) {
-    if ($files = $variables['files']) {
-      if (empty($variables['attributes']['data-b-preview'])) {
-        $variables['attributes']->addClass(['b-lazy']);
-        foreach ($files as $file) {
-          $source_attributes = &$file['source_attributes'];
-          $source_attributes->setAttribute('data-src', $source_attributes['src']->value());
-          $source_attributes->setAttribute('src', '');
-        }
-      }
-
-      // Adds a poster image if so configured.
-      if (isset($files[0], $files[0]['blazy']) && $blazy = $files[0]['blazy']) {
-        if ($blazy->get('image') && $blazy->get('uri')) {
-          $settings = $blazy->storage();
-          $settings['_dimensions'] = TRUE;
-          BlazyUtil::imageUrl($settings);
-          if (!empty($settings['image_url'])) {
-            $variables['attributes']->setAttribute('poster', $settings['image_url']);
-          }
-          if (!empty($settings['lightbox'])) {
-            $variables['attributes']->setAttribute('autoplay', TRUE);
-          }
-        }
-      }
-
-      $attrs = ['data-b-lazy', 'data-b-preview'];
-      $variables['attributes']->addClass(['media__element']);
-      $variables['attributes']->removeAttribute($attrs);
-    }
-  }
-
-  /**
-   * Overrides variables for field.html.twig templates.
-   */
-  public static function preprocessField(array &$variables) {
-    $element = &$variables['element'];
-    $settings = empty($element['#blazy']) ? [] : $element['#blazy'];
-
-    // 1. Hence Blazy is not the formatter, lacks of settings.
-    if (!empty($element['#third_party_settings']['blazy']['blazy'])) {
-      BlazyAlter::thirdPartyPreprocessField($variables);
-    }
-
-    // 2. Hence Blazy is the formatter, has its settings.
-    if (empty($settings['_grid'])) {
-      self::containerAttributes($variables['attributes'], $settings);
-    }
+    return $url;
   }
 
   /**
    * Returns the trusted HTML ID of a single instance.
    */
-  public static function getHtmlId($string = 'blazy', $id = '') {
+  public static function getHtmlId($string = 'blazy', $id = ''): string {
     if (!isset(static::$blazyId)) {
       static::$blazyId = 0;
     }
@@ -461,62 +65,360 @@ class Blazy implements BlazyInterface {
   }
 
   /**
-   * Modifies inline style to not nullify others.
+   * Alias for Path::getPath().
    */
-  public static function inlineStyle(array &$attributes, $css) {
-    $attributes['style'] = (isset($attributes['style']) ? $attributes['style'] : '') . $css;
+  public static function getPath($type, $name, $absolute = FALSE): ?string {
+    return Path::getPath($type, $name, $absolute);
   }
 
   /**
-   * Returns URI from image item.
+   * Alias for Path::getLibrariesPath().
    */
-  public static function uri($item) {
-    $fallback = isset($item->uri) ? $item->uri : '';
-    return empty($item) ? '' : (($entity = $item->entity) && empty($item->uri) ? $entity->getFileUri() : $fallback);
+  public static function getLibrariesPath($name, $base_path = FALSE): ?string {
+    return Path::getLibrariesPath($name, $base_path);
   }
 
   /**
-   * Returns fake image item based on the given $attributes.
+   * Merge data with a new one with an optional key.
    */
-  public static function image(array $attributes = []) {
-    $item = new \stdClass();
-    foreach (['uri', 'width', 'height', 'target_id', 'alt', 'title'] as $key) {
-      if (isset($attributes[$key])) {
-        $item->{$key} = $attributes[$key];
-      }
+  public static function merge(array $data, array $element, $key = NULL): array {
+    if ($key) {
+      return empty($element[$key])
+        ? $data : NestedArray::mergeDeep($element[$key], $data);
     }
-    return $item;
+    return empty($element)
+      ? $data : NestedArray::mergeDeep($data, $element);
   }
 
   /**
-   * Returns a wrapper to pass tests, or DI where adding params is troublesome.
+   * Preliminary settings, normally at container/ global level.
    */
-  public static function streamWrapperManager() {
-    return \Drupal::hasService('stream_wrapper_manager') ? \Drupal::service('stream_wrapper_manager') : NULL;
+  public static function preSettings(array &$settings): void {
+    self::verify($settings);
+
+    $blazies = $settings['blazies'];
+    if ($blazies->was('initialized')) {
+      return;
+    }
+
+    // Checks for basic features.
+    Check::container($settings);
+
+    // Checks for lightboxes.
+    Check::lightboxes($settings);
+
+    // Checks for grids.
+    Check::grids($settings);
+
+    // Checks for Image styles, excluding Responsive image.
+    BlazyImage::styles($settings);
+
+    // Checks for lazy.
+    Check::lazyOrNot($settings);
+
+    // Marks it processed.
+    $blazies->set('was.initialized', TRUE);
   }
 
   /**
-   * Returns a wrapper to pass tests, or DI where adding params is troublesome.
+   * Modifies the common UI settings inherited down to each item.
+   */
+  public static function postSettings(array &$settings = []): void {
+    // Failsafe, might be called directly at ::attach() outside the workflow.
+    self::verify($settings);
+
+    $blazies = $settings['blazies'];
+    if (!$blazies->was('initialized')) {
+      self::preSettings($settings);
+    }
+  }
+
+  /**
+   * Prepares the essential settings, URI, delta, etc.
+   */
+  public static function prepare(array &$settings, $item = NULL, $delta = -1): void {
+    CheckItem::essentials($settings, $item, $delta);
+
+    if ($settings['blazies']->get('image.uri')) {
+      CheckItem::multimedia($settings);
+      CheckItem::unstyled($settings);
+      CheckItem::insanity($settings);
+    }
+  }
+
+  /**
+   * Blazy is prepared with an URI, provides few attributes as needed.
+   */
+  public static function prepared(array &$attributes, array &$settings, $item = NULL): void {
+    // Prepare image URL and its dimensions, including for rich-media content,
+    // such as for local video poster image if a poster URI is provided.
+    BlazyImage::prepare($settings, $item);
+
+    // Build thumbnail and optional placeholder based on thumbnail.
+    Placeholder::prepare($attributes, $settings);
+  }
+
+  /**
+   * Preserves crucial blazy specific settings to avoid accidental overrides.
+   *
+   * To pass the first found Blazy formatter cherry settings into the container,
+   * like Blazy Grid which lacks of options like `Media switch` or lightboxes,
+   * so that when this is called at the container level, it can populate
+   * lightbox gallery attributes if so configured.
+   * This way at Views style, the container can have lightbox galleries without
+   * extra settings, as long as `Use field template` is disabled under
+   * `Style settings`, otherwise flattened out as a string.
+   *
+   * @see \Drupa\blazy\BlazyManagerBase::isBlazy()
+   */
+  public static function preserve(array &$parentsets, array &$childsets): void {
+    $cherries = BlazyDefault::cherrySettings();
+
+    foreach ($cherries as $key => $value) {
+      $fallback = $parentsets[$key] ?? $value;
+      // Ensures to respect parent formatter or Views style if provided.
+      $parentsets[$key] = isset($childsets[$key]) && empty($fallback)
+        ? $childsets[$key]
+        : $fallback;
+    }
+
+    $parent = $parentsets['blazies'] ?? NULL;
+    $child = $childsets['blazies'] ?? NULL;
+    if ($parent && $child) {
+      // $parent->set('first.settings', array_filter($child));
+      // $parent->set('first.item_id', $child->get('item.id'));
+      // Hints containers to build relevant lightbox gallery attributes.
+      $childbox = $child->get('lightbox.name');
+      $parentbox = $parent->get('lightbox.name');
+
+      // Ensures to respect parent formatter or Views style if provided.
+      // The moral of this method is only if parent lacks of settings like Grid.
+      if ($childbox && !$parentbox) {
+        $optionset = $child->get('lightbox.optionset', $childbox);
+        $parent->set('lightbox.name', $childbox)
+          ->set($childbox, $optionset)
+          ->set('is.lightbox', TRUE)
+          ->set('switch', $child->get('switch'));
+      }
+
+      $parent->set('first', $child->get('first'), TRUE)
+        ->set('was.preserve', TRUE);
+    }
+  }
+
+  /**
+   * Reset the BlazySettings per item.
+   */
+  public static function reset(array &$settings): BlazySettings {
+    self::verify($settings);
+
+    // The settings instance must be unique per item.
+    $blazies = &$settings['blazies'];
+    if (!$blazies->was('reset')) {
+      $blazies->reset($settings);
+      $blazies->set('was.reset', TRUE);
+    }
+
+    return $blazies;
+  }
+
+  /**
+   * Returns the cross-compat D8 ~ D10 app root.
+   */
+  public static function root($container) {
+    return version_compare(\Drupal::VERSION, '9.0', '<') ? $container->get('app.root') : $container->getParameter('app.root');
+  }
+
+  /**
+   * Initialize BlazySettings object for convenient, and easy organization.
+   */
+  public static function settings(array $data = []): BlazySettings {
+    return new BlazySettings($data);
+  }
+
+  /**
+   * Extracts settings from the $build.
+   */
+  public static function toSettings(array &$build): array {
+    $settings = $build;
+    if (isset($settings['settings'])) {
+      $settings = &$settings['settings'];
+    }
+
+    self::verify($settings);
+    return $settings;
+  }
+
+  /**
+   * Returns the translated entity if available.
+   */
+  public static function translated($entity, $langcode): object {
+    if ($langcode && $entity->hasTranslation($langcode)) {
+      return $entity->getTranslation($langcode);
+    }
+    return $entity;
+  }
+
+  /**
+   * Verify `blazies` exists, in case accessed outside the workflow.
+   */
+  public static function verify(array &$settings): void {
+    if (!isset($settings['blazies']) && !isset($settings['inited'])) {
+      $settings += BlazyDefault::htmlSettings();
+    }
+  }
+
+  /**
+   * Retrieves the request stack.
+   *
+   * @return \Symfony\Component\HttpFoundation\RequestStack
+   *   The request stack.
+   *
+   * @todo remove for Path::requestStack() after sub-modules, if any.
+   */
+  public static function requestStack() {
+    return self::service('request_stack');
+  }
+
+  /**
+   * Retrieves the currently active route match object.
+   *
+   * @return \Drupal\Core\Routing\RouteMatchInterface
+   *   The currently active route match object.
+   *
+   * @todo remove for Path::routeMatch() after sub-modules, if any.
    */
   public static function routeMatch() {
-    return \Drupal::routeMatch();
+    return self::service('current_route_match');
   }
 
   /**
-   * Checks if Blazy is in CKEditor preview mode where no JS assets are loaded.
+   * Retrieves the stream wrapper manager service.
+   *
+   * @return \Drupal\Core\StreamWrapper\StreamWrapperManager
+   *   The stream wrapper manager.
+   *
+   * @todo remove for Path::streamWrapperManager() after sub-modules.
    */
-  public static function isPreview() {
-    return in_array(self::routeMatch()->getRouteName(), [
-      'entity_embed.preview',
-      'media.filter.preview',
-    ]);
+  public static function streamWrapperManager() {
+    return self::service('stream_wrapper_manager');
   }
 
   /**
-   * Implements hook_config_schema_info_alter().
+   * Returns a wrapper to pass tests, or DI where adding params is troublesome.
    */
-  public static function configSchemaInfoAlter(array &$definitions, $formatter = 'blazy_base', array $settings = []) {
+  public static function service($service) {
+    return \Drupal::hasService($service) ? \Drupal::service($service) : NULL;
+  }
+
+  /**
+   * Alias for hook_config_schema_info_alter() for sub-modules.
+   */
+  public static function configSchemaInfoAlter(
+    array &$definitions,
+    $formatter = 'blazy_base',
+    array $settings = []
+  ): void {
     BlazyAlter::configSchemaInfoAlter($definitions, $formatter, $settings);
+  }
+
+  /**
+   * Alias for BlazyAttribute::container() for sub-modules.
+   */
+  public static function containerAttributes(array &$attributes, array $settings): void {
+    BlazyAttribute::container($attributes, $settings);
+  }
+
+  /**
+   * Alias for Grid::build() for sub-modules and easy organization.
+   */
+  public static function grid(array $items, array $settings): array {
+    return Grid::build($items, $settings);
+  }
+
+  /**
+   * Alias for Grid::attributes() for sub-modules and easy organization.
+   */
+  public static function gridAttributes(array &$attributes, array $settings): void {
+    Grid::attributes($attributes, $settings);
+  }
+
+  /**
+   * Alias for BlazyFile::transformRelative() for sub-modules.
+   */
+  public static function transformRelative($uri, $style = NULL, array $options = []): string {
+    return BlazyFile::transformRelative($uri, $style, $options);
+  }
+
+  /**
+   * Alias for BlazyFile::normalizeUri() for sub-modules.
+   */
+  public static function normalizeUri($path): string {
+    return BlazyFile::normalizeUri($path);
+  }
+
+  /**
+   * Alias for BlazyFile::uri() for sub-modules.
+   */
+  public static function uri($item, array $settings = []): string {
+    return BlazyFile::uri($item, $settings);
+  }
+
+  /**
+   * Determines which lazyload to use for Slick and Splide.
+   *
+   * Moved it here to avoid similar issues like `is_preview` complication,
+   * and other improvements: `Loading` priority, `No JavaScript: lazy`, etc.
+   *
+   * @todo refine this based on the new options.
+   * @todo remove non configurable settings after sub-modules.
+   */
+  public static function which(array &$settings, $lazy, $class, $attribute): void {
+    // Don't bother if empty.
+    if (empty($lazy)) {
+      return;
+    }
+
+    self::verify($settings);
+    $blazies = $settings['blazies'];
+
+    // Bail out if lazy load is disabled, or in sandbox mode.
+    if ($blazies->is('nojs') || $blazies->is('sandboxed')) {
+      return;
+    }
+
+    // Slick only knows plain old image.
+    // Splide does know plain (Responsive) image, but not Picture.
+    // Blazy knows more: BG, local video, remote video or iframe, (Responsive
+    // |Picture) image.
+    // Must be re-defined at item level to respect mixed media.
+    // @todo local video, iframe, etc. are not covered at container level.
+    $use_blazy = $lazy == 'blazy'
+      || !empty($settings['blazy'])
+      || !empty($settings['background'])
+      || !empty($settings['responsive_image_style'])
+      || $blazies->is('blazy')
+      || $blazies->is('blur');
+
+    // Allows Blazy to take over for advanced features above.
+    $lazy = $use_blazy ? 'blazy' : $lazy;
+
+    // Still a check in case the above does not cover, like video, iframe, etc.
+    if ($use_blazy) {
+      $blazies->set('is.blazy', TRUE);
+    }
+    else {
+      $settings['lazy_class'] = $class;
+      $settings['lazy_attribute'] = $attribute;
+
+      $blazies->set('lazy.attribute', $attribute)
+        ->set('lazy.class', $class);
+    }
+
+    $settings['blazy'] = $use_blazy;
+    $settings['lazy'] = $lazy;
+
+    $blazies->set('lazy.id', $lazy);
   }
 
 }

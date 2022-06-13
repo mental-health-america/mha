@@ -26,12 +26,12 @@ class SalesforceMappingTest extends UnitTestCase {
    *
    * @var array
    */
-  static public $modules = ['salesforce_mapping'];
+  static protected $modules = ['salesforce_mapping'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->id = $this->randomMachineName();
@@ -168,9 +168,15 @@ class SalesforceMappingTest extends UnitTestCase {
     $expectedQuery->fields[] = 'Id';
     $expectedQuery->fields[] = $this->mapping->getPullTriggerDate();
     $expectedQuery->order[$this->mapping->getPullTriggerDate()] = 'ASC';
-    $this->assertArrayEquals($expectedQuery->fields, $query->fields);
-    $this->assertArrayEquals($expectedQuery->order, $query->order);
-    $this->assertArrayEquals($expectedQuery->conditions, $query->conditions);
+    ksort($expectedQuery->fields);
+    ksort($query->fields);
+    $this->assertEquals($expectedQuery->fields, $query->fields);
+    ksort($expectedQuery->order);
+    ksort($query->order);
+    $this->assertEquals($expectedQuery->order, $query->order);
+    ksort($expectedQuery->conditions);
+    ksort($query->conditions);
+    $this->assertEquals($expectedQuery->conditions, $query->conditions);
     $this->assertEquals($expectedQuery->objectType, $query->objectType);
     $this->assertEquals($expectedQuery->limit, $query->limit);
   }

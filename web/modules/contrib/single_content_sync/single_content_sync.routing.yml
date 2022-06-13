@@ -1,0 +1,51 @@
+single_content_sync.node_export:
+  path: '/node/{node}/export'
+  defaults:
+    _form: '\Drupal\single_content_sync\Form\ContentExportForm'
+    _title: 'Export content'
+  options:
+    _node_operation_route: TRUE
+    parameters:
+      node:
+        type: entity:node
+  requirements:
+    node: \d+
+    _permission: 'export single content'
+
+single_content_sync.block_content_export:
+  path: '/block/{block_content}/export'
+  defaults:
+    _form: '\Drupal\single_content_sync\Form\ContentExportForm'
+    _title: 'Export content'
+  options:
+    _admin_route: TRUE
+    parameters:
+      block_content:
+        type: entity:block_content
+  requirements:
+    block_content: \d+
+    _permission: 'export single content'
+
+single_content_sync.file_download:
+  path: '/content/export/download/file'
+  defaults:
+    _controller: '\Drupal\single_content_sync\Controller\ContentExportController::download'
+    _title: 'Download file'
+  requirements:
+    _permission: 'export single content'
+
+single_content_sync.import:
+  path: '/admin/content/import'
+  defaults:
+    _form: '\Drupal\single_content_sync\Form\ContentImportForm'
+    _title: 'Import content'
+  requirements:
+    _permission: 'import single content'
+
+single_content_sync.bulk_export:
+  path: '/admin/content/bulk-export'
+  defaults:
+    _form: '\Drupal\single_content_sync\Form\ContentBulkExportForm'
+    _title: 'Bulk export content'
+  requirements:
+    _permission: 'export single content'

@@ -30,7 +30,7 @@ class BlazyAdminFormatterUnitTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->setUpUnitServices();
@@ -71,11 +71,16 @@ class BlazyAdminFormatterUnitTest extends UnitTestCase {
    */
   public function testBuildSettingsForm() {
     $form = [];
-    $definition = $this->getDefaulEntityFormatterDefinition() + $this->getDefaultFormatterDefinition();
+    $definition = $this->getDefaulEntityFormatterDefinition()
+      + $this->getScopedFormElements();
 
     $definition['settings'] += $this->getDefaultFields(TRUE);
 
+    $this->assertArrayHasKey('scopes', $definition);
+
     $this->blazyAdminFormatter->buildSettingsForm($form, $definition);
+    $this->assertArrayHasKey('scopes', $definition);
+    $this->assertArrayHasKey('opening', $form);
     $this->assertArrayHasKey('closing', $form);
   }
 

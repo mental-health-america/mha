@@ -1,0 +1,114 @@
+diff --git a/src/HookService.php b/src/HookService.php
+index 2ff4259..316ee17 100644
+--- a/src/HookService.php
++++ b/src/HookService.php
+@@ -31,7 +31,7 @@ class HookService {
+     ];
+     foreach ($webform_submission->getWebform()->getElementsInitializedAndFlattened() as $element) {
+       $element_plugin = $this->elementManager->createInstance($this->elementManager->getElementPluginId($element));
+-      if ($element_plugin instanceof \Drupal\webform_score\QuizInterface) {
++      if ($element_plugin instanceof QuizInterface) {
+         $score['maximum'] += $element_plugin->getMaxScore($element);
+         $score['scored'] += $element_plugin->score($element, $webform_submission);
+       }
+diff --git a/src/Plugin/WebformScore/Contains.php b/src/Plugin/WebformScore/Contains.php
+index 61709ec..cd61260 100644
+--- a/src/Plugin/WebformScore/Contains.php
++++ b/src/Plugin/WebformScore/Contains.php
+@@ -33,8 +33,8 @@ class Contains extends WebformScoreBase implements WebformScoreInterface {
+     $answer = $answer->getValue();
+     $expected = $this->configuration['expected'];
+     if (!$this->configuration['case_sensitive']) {
+-      $answer = Unicode::strtolower($answer);
+-      $expected = Unicode::strtolower($expected);
++      $answer = mb_strtolower($answer);
++      $expected = mb_strtolower($expected);
+     }
+
+     return Unicode::strpos($answer, $expected) === FALSE ? 0 : $this->getMaxScore();
+diff --git a/webform_score.module b/webform_score.module
+index 2b23656..1654061 100644
+--- a/webform_score.module
++++ b/webform_score.module
+@@ -1,5 +1,12 @@
+ <?php
+
++use Drupal\webform\WebformSubmissionInterface;
++use Drupal\Core\Entity\EntityTypeInterface;
++use Drupal\Core\Field\BaseFieldDefinition;
++use Drupal\Core\Field\FieldDefinitionInterface;
++use Drupal\Core\Session\AccountInterface;
++use Drupal\Core\Field\FieldItemListInterface;
++use Drupal\Core\Access\AccessResult;
+ /**
+  * @file
+  * This module provides scoring functionality to webform elements.
+@@ -8,19 +15,19 @@
+ /**
+  * Implements hook_ENTITY_TYPE_presave().
+  */
+-function webform_score_webform_submission_presave(\Drupal\webform\WebformSubmissionInterface $webform_submission) {
++function webform_score_webform_submission_presave(WebformSubmissionInterface $webform_submission) {
+   \Drupal::service('webform_score.hooks')->webformSubmissionPreSave($webform_submission);
+ }
+
+ /**
+  * Implements hook_entity_base_field_info().
+  */
+-function webform_score_entity_base_field_info(\Drupal\Core\Entity\EntityTypeInterface $entity_type) {
++function webform_score_entity_base_field_info(EntityTypeInterface $entity_type) {
+   $fields = [];
+
+   switch ($entity_type->id()) {
+     case 'webform_submission':
+-      $fields['webform_score'] = \Drupal\Core\Field\BaseFieldDefinition::create('fraction')
++      $fields['webform_score'] = BaseFieldDefinition::create('fraction')
+         ->setLabel(t('Score'))
+         ->setDisplayOptions('view', [
+           'type' => 'fraction_percentage',
+@@ -40,21 +47,21 @@ function webform_score_entity_base_field_info(\Drupal\Core\Entity\EntityTypeInte
+ /**
+  * Implements hook_entity_field_access().
+  */
+-function webform_score_entity_field_access($operation, \Drupal\Core\Field\FieldDefinitionInterface $field_definition, \Drupal\Core\Session\AccountInterface $account, \Drupal\Core\Field\FieldItemListInterface $items = NULL) {
++function webform_score_entity_field_access($operation, FieldDefinitionInterface $field_definition, AccountInterface $account, FieldItemListInterface $items = NULL) {
+   switch ($field_definition->getName()) {
+     case 'webform_score':
+       switch ($operation) {
+         case 'view':
+           if ($account->hasPermission('view any submission score')) {
+-            return \Drupal\Core\Access\AccessResult::neutral()->cachePerPermissions();
++            return AccessResult::neutral()->cachePerPermissions();
+           }
+           if ($account->hasPermission('view own submission score') && $items && $items->getEntity()->isOwner($account)) {
+-            return \Drupal\Core\Access\AccessResult::neutral()
++            return AccessResult::neutral()
+               ->cachePerUser()
+               ->addCacheableDependency($items->getEntity());
+           }
+
+-          $access = \Drupal\Core\Access\AccessResult::forbidden()->cachePerPermissions();
++          $access = AccessResult::forbidden()->cachePerPermissions();
+
+           if (!$account->hasPermission('view any submission score')) {
+             $access->cachePerUser();
+@@ -67,16 +74,16 @@ function webform_score_entity_field_access($operation, \Drupal\Core\Field\FieldD
+           break;
+
+         case 'edit':
+-          return \Drupal\Core\Access\AccessResult::forbidden('The field value is calculated automatically upon saving.');
++          return AccessResult::forbidden('The field value is calculated automatically upon saving.');
+           break;
+
+         default:
+-          return \Drupal\Core\Access\AccessResult::neutral();
++          return AccessResult::neutral();
+           break;
+       }
+       break;
+   }
+
+-  return \Drupal\Core\Access\AccessResult::neutral();
++  return AccessResult::neutral();
+ }
+

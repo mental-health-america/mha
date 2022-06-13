@@ -317,8 +317,8 @@ trait GeofieldMapFieldTrait {
   /**
    * Transform Geofield data into Geojson features.
    *
-   * @param mixed $items
-   *   The Geofield Data Values.
+   * @param mixed $item
+   *   The Geofield Data Value.
    * @param int $entity_id
    *   The Entity Id.
    * @param string $description
@@ -330,41 +330,33 @@ trait GeofieldMapFieldTrait {
    *   GeofieldGoogleMapViewStyle will add row fields (already rendered).
    *
    * @return array
-   *   The data array for the current feature, including Geojson and additional
-   *   data.
+   *   The datum for the current feature, including Geojson and additional data.
    */
-  protected function getGeoJsonData($items, $entity_id, $description = NULL, $tooltip = NULL, array $additional_data = NULL) {
-    $data = [];
+  protected function getGeoJsonData($item, $entity_id, $description = NULL, $tooltip = NULL, array $additional_data = NULL) {
 
-    foreach ($items as $delta => $item) {
-      $value = ($item instanceof GeofieldItem) ? $item->value : $item;
+    $datum = [];
+    $value = ($item instanceof GeofieldItem) ? $item->value : $item;
 
-      try {
-        $geometry = $this->geoPhpWrapper->load($value);
-      }
-      catch (\Exception $exception) {
-        $geometry = FALSE;
-      }
-
+    try {
+      $geometry = $this->geoPhpWrapper->load($value);
       if ($geometry instanceof \Geometry) {
         $datum = [
           "type" => "Feature",
           "geometry" => json_decode($geometry->out('json')),
         ];
         $datum['properties'] = [
-          // If a multivalue field value with the same index exist, use this,
-          // else use the first item as fallback.
-          'description' => isset($description[$delta]) ? $description[$delta] : (isset($description[0]) ? $description[0] : NULL),
+          'description' => $description,
           'tooltip' => $tooltip,
           'data' => $additional_data,
           'entity_id' => $entity_id,
         ];
-
-        $data[] = $datum;
       }
     }
+    catch (\Exception $exception) {
+      watchdog_exception('Geofield Map getGeoJsonData', $exception);
+    }
 
-    return $data;
+    return $datum;
   }
 
   /**
@@ -1566,7 +1558,7 @@ trait GeofieldMapFieldTrait {
       $geocoder_control = $form_state_input['fields'][$element['#array_parents'][1]]['settings_edit_form']['settings']['map_geocoder']['control'];
     }
     if (isset($geocoder_control) && $geocoder_control) {
-      $providers = is_array($element['#value']) ? array_filter($element['#value'], function ($value) {
+      $providers = isset($element['#value']) && is_array($element['#value']) ? array_filter($element['#value'], function ($value) {
         return isset($value['checked']) && TRUE == $value['checked'];
       }) : [];
 

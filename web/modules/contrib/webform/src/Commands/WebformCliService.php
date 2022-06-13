@@ -1,4 +1,5 @@
 <?php
+// phpcs:ignoreFile
 
 namespace Drupal\webform\Commands;
 
@@ -76,9 +77,9 @@ class WebformCliService implements WebformCliServiceInterface {
     }
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
   // Commands.
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   /**
    * {@inheritdoc}
@@ -124,6 +125,7 @@ class WebformCliService implements WebformCliServiceInterface {
         'state' => 'Submission state to be included: "completed", "draft" or "all" (default).',
         'sticky' => 'Flagged/starred submission status.',
         'files' => 'Download files: "1" or "0" (default). If set to 1, the exported CSV file and any submission file uploads will be download in a gzipped tar file.',
+        'attachments' => 'Download attachments: "1" or "0" (default). If set to 1, the exported CSV file and any submission element attachments will be download in a gzipped tar file.',
         // Output options.
         'destination' => 'The full path and filename in which the CSV or archive should be stored. If omitted the CSV file or archive will be outputted to the command line.',
       ],
@@ -314,9 +316,9 @@ class WebformCliService implements WebformCliServiceInterface {
     return $items;
   }
 
-  /******************************************************************************/
+  /* ************************************************************************** */
   // Export
-  /******************************************************************************/
+  /* ************************************************************************** */
 
   /**
    * {@inheritdoc}
@@ -378,9 +380,9 @@ class WebformCliService implements WebformCliServiceInterface {
     return NULL;
   }
 
-  /******************************************************************************/
+  /* ************************************************************************** */
   // Import.
-  /******************************************************************************/
+  /* ************************************************************************** */
 
   /**
    * {@inheritdoc}
@@ -442,9 +444,9 @@ class WebformCliService implements WebformCliServiceInterface {
     return NULL;
   }
 
-  /******************************************************************************/
+  /* ************************************************************************** */
   // Purge
-  /******************************************************************************/
+  /* ************************************************************************** */
 
   /**
    * {@inheritdoc}
@@ -527,9 +529,9 @@ class WebformCliService implements WebformCliServiceInterface {
     }
   }
 
-  /******************************************************************************/
+  /* ************************************************************************** */
   // Tidy
-  /******************************************************************************/
+  /* ************************************************************************** */
 
   /**
    * {@inheritdoc}
@@ -541,7 +543,7 @@ class WebformCliService implements WebformCliServiceInterface {
 
     if (empty(Settings::get('config_' . $target . '_directory', FALSE))
       && !(isset($config_directories) && isset($config_directories[$target]))
-      && !(\Drupal::moduleHandler()->moduleExists($target) && file_exists(drupal_get_path('module', $target) . '/config'))
+      && !(\Drupal::moduleHandler()->moduleExists($target) && file_exists(\Drupal::service('extension.list.module')->getPath($target) . '/config'))
       && !file_exists(realpath($target))) {
       $t_args = ['@target' => $target];
       return $this->drush_set_error($this->dt("Unable to find '@target' module (config/install), config directory (sync), or path (/some/path/).", $t_args));
@@ -570,7 +572,7 @@ class WebformCliService implements WebformCliServiceInterface {
       $dependencies = $this->drush_get_option('dependencies');
     }
     elseif (\Drupal::moduleHandler()->moduleExists($target)) {
-      $file_directory_path = drupal_get_path('module', $target) . '/config';
+      $file_directory_path = \Drupal::service('extension.list.module')->getPath($target) . '/config';
       $dependencies = $this->drush_get_option('dependencies');
     }
     else {
@@ -635,9 +637,9 @@ class WebformCliService implements WebformCliServiceInterface {
     }
   }
 
-  /******************************************************************************/
+  /* ************************************************************************** */
   // Devel Generate.
-  /******************************************************************************/
+  /* ************************************************************************** */
 
   /**
    * {@inheritdoc}
@@ -663,9 +665,9 @@ class WebformCliService implements WebformCliServiceInterface {
     $instance->generate($values);
   }
 
-  /******************************************************************************/
+  /* ************************************************************************** */
   // Libraries
-  /******************************************************************************/
+  /* ************************************************************************** */
 
   /**
    * {@inheritdoc}
@@ -688,7 +690,7 @@ class WebformCliService implements WebformCliServiceInterface {
    */
   public function drush_webform_libraries_composer() {
     // Load existing composer.json file and unset certain properties.
-    $composer_path = drupal_get_path('module', 'webform') . '/composer.json';
+    $composer_path = __DIR__ . '/../../composer.json';
     $json = file_get_contents($composer_path);
     $data = json_decode($json , FALSE, $this->drush_webform_composer_get_json_encode_options());
     $data = (array) $data;
@@ -729,37 +731,58 @@ class WebformCliService implements WebformCliServiceInterface {
         continue;
       }
 
-      // Download archive to temp directory.
+      $download_location = DRUPAL_ROOT . "/libraries/$library_name";
+
       $download_url = $library['download_url']->toString();
+
+      if (preg_match('/\.zip$/', $download_url)) {
+        $download_type = 'zip';
+      }
+      elseif (preg_match('/\.tgz$/', $download_url)) {
+        $download_type = 'tar';
+      }
+      else {
+        $download_type = 'file';
+      }
+
+      // Download archive to temp directory.
       $this->drush_print("Downloading $download_url");
 
-      $temp_filepath = $temp_dir . '/' . basename(current(explode('?', $download_url, 2)));
-      $this->drush_download_file($download_url, $temp_filepath);
 
-      // Extract ZIP archive.
-      $download_location = DRUPAL_ROOT . "/libraries/$library_name";
-      $this->drush_print("Extracting to $download_location");
-
-      // Extract to temp location.
-      $temp_location = $this->drush_tempdir();
-      if (!$this->drush_tarball_extract($temp_filepath, $temp_location)) {
-        $this->drush_set_error("Unable to extract $library_name");
-        return;
+      if ($download_type === 'file') {
+        $this->drush_mkdir($download_location);
+        $download_filepath = $download_location . '/' . basename($download_url);
+        $this->drush_download_file($download_url, $download_filepath);
       }
+      else {
+        $temp_filepath = $temp_dir . '/' . basename(current(explode('?', $download_url, 2)));
+        $this->drush_download_file($download_url, $temp_filepath);
 
-      // Move files and directories from temp location to download location.
-      // using rename.
-      $files = scandir($temp_location);
-      // Remove directories (. ..)
-      unset($files[0], $files[1]);
-      if ((count($files) === 1) && is_dir($temp_location . '/' . current($files))) {
-        $temp_location .= '/' . current($files);
-      }
-      $this->drush_move_dir($temp_location, $download_location);
+        // Extract ZIP archive.
+        $this->drush_print("Extracting to $download_location");
 
-      // Remove the tarball.
-      if (file_exists($temp_filepath)) {
-        $this->drush_delete_dir($temp_filepath, TRUE);
+        // Extract to temp location.
+        $temp_location = $this->drush_tempdir();
+        if (!$this->drush_tarball_extract($temp_filepath, $temp_location)) {
+          $this->drush_set_error("Unable to extract $library_name");
+          return;
+        }
+
+        // Move files and directories from temp location to download location.
+        // using rename.
+        $files = scandir($temp_location);
+        // Remove directories (. ..)
+        unset($files[0], $files[1]);
+        if ((count($files) === 1) && is_dir($temp_location . '/' . current($files))) {
+          $temp_location .= '/' . current($files);
+        }
+        $this->drush_move_dir($temp_location, $download_location);
+
+        // Remove the tarball.
+        if (file_exists($temp_filepath)) {
+          $this->drush_delete_dir($temp_filepath, TRUE);
+        }
+
       }
     }
 
@@ -803,9 +826,9 @@ class WebformCliService implements WebformCliServiceInterface {
     return $removed;
   }
 
-  /******************************************************************************/
+  /* ************************************************************************** */
   // Repair.
-  /******************************************************************************/
+  /* ************************************************************************** */
 
   /**
    * {@inheritdoc}
@@ -919,9 +942,9 @@ class WebformCliService implements WebformCliServiceInterface {
     }
   }
 
-  /******************************************************************************/
+  /* ************************************************************************** */
   // Docs.
-  /******************************************************************************/
+  /* ************************************************************************** */
 
   /**
    * {@inheritdoc}
@@ -941,7 +964,7 @@ class WebformCliService implements WebformCliServiceInterface {
   public function drush_webform_docs() {
     /** @var \Drupal\Core\File\FileSystemInterface $file_system */
     $file_system = \Drupal::service('file_system');
-    $html_directory_path = drupal_get_path('module', 'webform') . '/html';
+    $html_directory_path = __DIR__ . '/../../html';
     $images_directory_path = "$html_directory_path/images";
 
     // Create the /html directory.
@@ -1045,9 +1068,9 @@ class WebformCliService implements WebformCliServiceInterface {
     return $html;
   }
 
-  /******************************************************************************/
+  /* ************************************************************************** */
   // Composer.
-  /******************************************************************************/
+  /* ************************************************************************** */
 
   /**
    * {@inheritdoc}
@@ -1179,6 +1202,7 @@ class WebformCliService implements WebformCliServiceInterface {
       }
 
       $dist_url = $library['download_url']->toString();
+
       if (preg_match('/\.zip$/', $dist_url)) {
         $dist_type = 'zip';
       }
@@ -1188,8 +1212,19 @@ class WebformCliService implements WebformCliServiceInterface {
       else {
         $dist_type = 'file';
       }
+
       $package_version = $library['version'];
-      $package_name = (strpos($library_name, '.') === FALSE) ? "$library_name/$library_name" : str_replace('.', '/', $library_name);
+
+      if (strpos($library_name, '/') !== FALSE) {
+        $package_name = $library_name;
+      }
+      elseif (strpos($library_name, '.') !== FALSE) {
+        $package_name = str_replace('.', '/', $library_name);
+      }
+      else {
+        $package_name = "$library_name/$library_name";
+      }
+
       $repositories->$library_name = [
         '_webform' => TRUE,
         'type' => 'package',
@@ -1213,9 +1248,9 @@ class WebformCliService implements WebformCliServiceInterface {
     $require = WebformObjectHelper::sortByProperty($require);
   }
 
-  /******************************************************************************/
+  /* ************************************************************************** */
   // Generate commands.
-  /******************************************************************************/
+  /* ************************************************************************** */
 
   /**
    * {@inheritdoc}
@@ -1223,13 +1258,13 @@ class WebformCliService implements WebformCliServiceInterface {
   public function drush_webform_generate_commands() {
     // Drush 8.x.
     $commands = $this->drush_webform_generate_commands_drush8();
-    $filepath = DRUPAL_ROOT . '/' . drupal_get_path('module', 'webform') . '/drush/webform.drush.inc';
+    $filepath = __DIR__ . '/../../drush/webform.drush.inc';
     file_put_contents($filepath, $commands);
     $this->drush_print("$filepath updated.");
 
     // Drush 9.x.
     $commands = $this->drush_webform_generate_commands_drush9();
-    $filepath = DRUPAL_ROOT . '/' . drupal_get_path('module', 'webform') . '/src/Commands/WebformCommands.php';
+    $filepath = __DIR__ . '/../Commands/WebformCommands.php';
     file_put_contents($filepath, $commands);
     $this->drush_print("$filepath updated.");
   }
@@ -1248,9 +1283,9 @@ class WebformCliService implements WebformCliServiceInterface {
     foreach ($items as $command_key => $command_item) {
       // Command name.
       $functions[] = "
-/******************************************************************************/
+/* ************************************************************************** */
 // drush $command_key. DO NOT EDIT.
-/******************************************************************************/";
+/* ************************************************************************** */";
 
       // Validate.
       $validate_method = 'drush_' . str_replace('-', '_', $command_key) . '_validate';
@@ -1341,9 +1376,9 @@ $functions
 
       // Command name.
       $methods[] = "
-  /****************************************************************************/
+  /* ************************************************************************ */
   // drush $command_name. DO NOT EDIT.
-  /****************************************************************************/";
+  /* ************************************************************************ */";
 
       // Validate.
       $validate_method = 'drush_' . str_replace('-', '_', $command_key) . '_validate';
@@ -1453,9 +1488,9 @@ $methods
 }";
   }
 
-  /******************************************************************************/
+  /* ************************************************************************** */
   // Helper functions.
-  /******************************************************************************/
+  /* ************************************************************************** */
 
   /**
    * Validate webform_id argument and source entity-type and entity-id options.

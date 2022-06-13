@@ -26,16 +26,18 @@ class SearchExcludeNodeSearch extends NodeSearch {
     // per cron run.
     $limit = (int) $this->searchSettings->get('index.cron_limit');
 
-    $query = db_select('node', 'n', array('target' => 'replica'));
+    $query = $this->database->select('node', 'n');
     $query->addField('n', 'nid');
-    $query->leftJoin('search_dataset', 'sd', 'sd.sid = n.nid AND sd.type = :type', array(':type' => $this->getPluginId()));
+    $query->leftJoin('search_dataset', 'sd', 'sd.sid = n.nid AND sd.type = :type', [':type' => $this->getPluginId()]);
     $query->addExpression('CASE MAX(sd.reindex) WHEN NULL THEN 0 ELSE 1 END', 'ex');
     $query->addExpression('MAX(sd.reindex)', 'ex2');
-    $query->condition('n.type', $this->configuration['excluded_bundles'], 'NOT IN');
+    if (!empty($this->configuration['excluded_bundles'])) {
+      $query->condition('n.type', $this->configuration['excluded_bundles'], 'NOT IN');
+    }
     $query->condition(
         $query->orConditionGroup()
-        ->where('sd.sid IS NULL')
-        ->condition('sd.reindex', 0, '<>')
+          ->where('sd.sid IS NULL')
+          ->condition('sd.reindex', 0, '<>')
       );
     $query->orderBy('ex', 'DESC')
       ->orderBy('ex2')
@@ -48,9 +50,17 @@ class SearchExcludeNodeSearch extends NodeSearch {
       return;
     }
 
-    $node_storage = $this->entityManager->getStorage('node');
-    foreach ($node_storage->loadMultiple($nids) as $node) {
-      $this->indexNode($node);
+    $node_storage = $this->entityTypeManager->getStorage('node');
+    $words = [];
+    try {
+      foreach ($node_storage->loadMultiple($nids) as $node) {
+        $words += $this->indexNode($node);
+      }
+    }
+    finally {
+      if (isset($this->searchIndex)) {
+        $this->searchIndex->updateWordWeights($words);
+      }
     }
   }
 
@@ -62,10 +72,13 @@ class SearchExcludeNodeSearch extends NodeSearch {
       return parent::indexStatus();
     }
 
-    $total = $this->database->query('SELECT COUNT(*) FROM {node} WHERE type NOT IN (:excluded_bundles[])', array(':excluded_bundles[]' => $this->configuration['excluded_bundles']))->fetchField();
-    $remaining = $this->database->query("SELECT COUNT(DISTINCT n.nid) FROM {node} n LEFT JOIN {search_dataset} sd ON sd.sid = n.nid AND sd.type = :type WHERE (sd.sid IS NULL OR sd.reindex <> 0) AND n.type NOT IN (:excluded_bundles[])", array(':type' => $this->getPluginId(), ':excluded_bundles[]' => $this->configuration['excluded_bundles']))->fetchField();
+    $total = $this->database->query('SELECT COUNT(*) FROM {node} WHERE type NOT IN (:excluded_bundles[])', [':excluded_bundles[]' => $this->configuration['excluded_bundles']])->fetchField();
+    $remaining = $this->database->query("SELECT COUNT(DISTINCT n.nid) FROM {node} n LEFT JOIN {search_dataset} sd ON sd.sid = n.nid AND sd.type = :type WHERE (sd.sid IS NULL OR sd.reindex <> 0) AND n.type NOT IN (:excluded_bundles[])", [
+      ':type' => $this->getPluginId(),
+      ':excluded_bundles[]' => $this->configuration['excluded_bundles'],
+    ])->fetchField();
 
-    return array('remaining' => $remaining, 'total' => $total);
+    return ['remaining' => $remaining, 'total' => $total];
   }
 
   /**
@@ -96,7 +109,7 @@ class SearchExcludeNodeSearch extends NodeSearch {
     $form = parent::buildConfigurationForm($form, $form_state);
 
     // Get node bundles.
-    $bundles = array_map(array('\Drupal\Component\Utility\Html', 'escape'), node_type_get_names());
+    $bundles = array_map(['\Drupal\Component\Utility\Html', 'escape'], node_type_get_names());
 
     // Only show the form if we have node bundles.
     if (!count($bundles)) {
@@ -110,7 +123,7 @@ class SearchExcludeNodeSearch extends NodeSearch {
     ];
 
     $form['exclude_bundles']['info'] = [
-      '#markup' => '<p><em>' . $this->t('Select the content types to exclude from the search index.') . '</em></p>'
+      '#markup' => '<p><em>' . $this->t('Select the content types to exclude from the search index.') . '</em></p>',
     ];
 
     $form['exclude_bundles']['excluded_bundles'] = [
@@ -147,7 +160,7 @@ class SearchExcludeNodeSearch extends NodeSearch {
       }
       $node = $entity->getCommentedEntity();
     }
-    else if ($entity instanceof NodeInterface) {
+    elseif ($entity instanceof NodeInterface) {
       $node = $entity;
     }
     else {
@@ -158,7 +171,9 @@ class SearchExcludeNodeSearch extends NodeSearch {
     if (in_array($node->getType(), $this->configuration['excluded_bundles'])) {
       return;
     }
-    search_mark_for_reindex('search_exclude_node_search', $node->id());
+    /** @var \Drupal\search\SearchIndex $searchIndex */
+    $search_index = \Drupal::service('search.index');
+    $search_index->markForReindex('search_exclude_node_search', $node->id());
   }
 
 }

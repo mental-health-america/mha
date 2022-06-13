@@ -35,12 +35,12 @@ class SalesforcePushQueueProcessorRestTest extends UnitTestCase {
    *
    * @var array
    */
-  static public $modules = ['salesforce_pull'];
+  protected static $modules = ['salesforce_pull'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     $this->entityType = 'default';
 
     $this->queue = $this->getMockBuilder(PushQueueInterface::CLASS)->getMock();

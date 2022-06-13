@@ -141,15 +141,19 @@ class DraggableViewsField extends BulkForm {
     }
 
     if ($this->currentUser->hasPermission('access draggableviews')) {
-      $options = [
-        'table_id' => $draggableviews->getHtmlId(),
-        'action' => 'match',
-        'relationship' => 'group',
-        'group' => 'draggableviews-parent',
-        'subgroup' => 'draggableviews-parent',
-        'source' => 'draggableviews-id',
-      ];
-      drupal_attach_tabledrag($form, $options);
+      // Get an array of field group titles.
+      $fieldGrouping = $draggableviews->fieldGrouping();
+      foreach ($fieldGrouping as $key => $row) {
+        $options = [
+          'table_id' => $draggableviews->getHtmlId($key),
+          'action' => 'match',
+          'relationship' => 'parent',
+          'group' => 'draggableviews-parent',
+          'subgroup' => 'draggableviews-parent',
+          'source' => 'draggableviews-id',
+        ];
+        drupal_attach_tabledrag($form, $options);
+      }
     }
   }
 

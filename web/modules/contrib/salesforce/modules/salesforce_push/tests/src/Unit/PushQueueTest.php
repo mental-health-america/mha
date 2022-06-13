@@ -31,12 +31,12 @@ use Prophecy\Argument;
  * @group salesforce_push
  */
 class PushQueueTest extends UnitTestCase {
-  static public $modules = ['salesforce_push'];
+  static protected $modules = ['salesforce_push'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     $this->schema = $this->getMockBuilder(Schema::class)
       ->disableOriginalConstructor()
       ->getMock();

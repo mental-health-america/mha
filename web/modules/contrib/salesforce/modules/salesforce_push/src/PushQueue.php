@@ -472,7 +472,7 @@ class PushQueue extends DatabaseQueue implements PushQueueInterface {
         // Getting a Requeue here is weird for a group of items, but we'll
         // deal with it.
         $this->releaseItems($items);
-        $this->eventDispatcher->dispatch(SalesforceEvents::WARNING, new SalesforceErrorEvent($e));
+        $this->eventDispatcher->dispatch(new SalesforceErrorEvent($e), SalesforceEvents::WARNING);
         continue;
       }
       catch (SuspendQueueException $e) {
@@ -480,14 +480,14 @@ class PushQueue extends DatabaseQueue implements PushQueueInterface {
         // or authorization error. Release items and move on to the next
         // mapping in this case.
         $this->releaseItems($items);
-        $this->eventDispatcher->dispatch(SalesforceEvents::WARNING, new SalesforceErrorEvent($e));
+        $this->eventDispatcher->dispatch(new SalesforceErrorEvent($e), SalesforceEvents::WARNING);
         return $i;
       }
       catch (\Exception $e) {
         // In case of any other kind of exception, log it and leave the item
         // in the queue to be processed again later.
         // @TODO: this is how Cron.php queue works, but I don't really understand why it doesn't get re-queued.
-        $this->eventDispatcher->dispatch(SalesforceEvents::ERROR, new SalesforceErrorEvent($e));
+        $this->eventDispatcher->dispatch(new SalesforceErrorEvent($e), SalesforceEvents::ERROR);
       }
       finally {
         // If we've reached our limit, we're done. Otherwise, continue to next
@@ -516,7 +516,7 @@ class PushQueue extends DatabaseQueue implements PushQueueInterface {
         '%id' => $item->entity_id,
         '%mapping' => $mapping->id(),
       ];
-      $this->eventDispatcher->dispatch(SalesforceEvents::ERROR, new SalesforceErrorEvent(NULL, $message, $args));
+      $this->eventDispatcher->dispatch(new SalesforceErrorEvent(NULL, $message, $args), SalesforceEvents::ERROR);
       $this->deleteItem($item);
       return;
     }
@@ -537,7 +537,7 @@ class PushQueue extends DatabaseQueue implements PushQueueInterface {
       '%item' => $item->item_id,
       '%fail' => $item->failures,
     ];
-    $this->eventDispatcher->dispatch(SalesforceEvents::ERROR, new SalesforceErrorEvent(NULL, $message, $args));
+    $this->eventDispatcher->dispatch(new SalesforceErrorEvent(NULL, $message, $args), SalesforceEvents::ERROR);
 
     // Failed items will remain in queue, but not be released. They'll be
     // retried only when the current lease expires.
@@ -567,7 +567,7 @@ class PushQueue extends DatabaseQueue implements PushQueueInterface {
       return $update->execute();
     }
     catch (\Exception $e) {
-      $this->eventDispatcher->dispatch(SalesforceEvents::ERROR, new SalesforceErrorEvent($e));
+      $this->eventDispatcher->dispatch(new SalesforceErrorEvent($e), SalesforceEvents::ERROR);
       $this->catchException($e);
       // If the table doesn't exist we should consider the item released.
       return TRUE;

@@ -54,7 +54,10 @@ class BlazyDefault {
    * Returns settings provided by various UI.
    */
   public static function anywhereSettings() {
-    return ['fx' => '', 'style' => ''];
+    return [
+      'lazy'  => '',
+      'style' => '',
+    ];
   }
 
   /**
@@ -62,9 +65,8 @@ class BlazyDefault {
    */
   public static function baseSettings() {
     $settings = [
-      'cache'             => 0,
-      'current_view_mode' => '',
-      'skin'              => '',
+      'cache' => 0,
+      'skin'  => '',
     ] + self::anywhereSettings();
 
     blazy_alterable_settings($settings);
@@ -81,7 +83,6 @@ class BlazyDefault {
       'media_switch'    => '',
       'ratio'           => '',
       'thumbnail_style' => '',
-      '_uri'            => '',
     ];
   }
 
@@ -95,20 +96,28 @@ class BlazyDefault {
       'box_caption_custom'     => '',
       'box_media_style'        => '',
       'caption'                => [],
+      'loading'                => 'lazy',
+      'preload'                => FALSE,
       'responsive_image_style' => '',
     ] + self::cherrySettings();
   }
 
   /**
-   * Returns deprecated settings.
+   * Returns deprecated, or previously wrong room settings.
    *
    * @todo remove custom breakpoints anytime before 3.x.
    */
   public static function deprecatedSettings() {
     return [
       'breakpoints' => [],
-      'sizes'       => '',
+      'current_view_mode' => '',
+      'fx' => '',
+      'icon' => '',
+      'id' => '',
+      'sizes' => '',
       'grid_header' => '',
+      'loading' => 'lazy',
+      'preload' => FALSE,
     ];
   }
 
@@ -117,10 +126,9 @@ class BlazyDefault {
    */
   public static function imageSettings() {
     return [
-      'icon'      => '',
       'layout'    => '',
       'view_mode' => '',
-    ] + self::baseSettings() + self::baseImageSettings() + self::deprecatedSettings();
+    ] + self::baseSettings() + self::baseImageSettings();
   }
 
   /**
@@ -160,9 +168,7 @@ class BlazyDefault {
    * Returns optional grid field formatter and Views settings.
    */
   public static function gridSettings() {
-    return ['grid_header' => '']
-      + self::gridBaseSettings()
-      + self::anywhereSettings();
+    return self::gridBaseSettings() + self::anywhereSettings();
   }
 
   /**
@@ -196,14 +202,20 @@ class BlazyDefault {
   public static function richSettings() {
     return [
       'background'   => FALSE,
-      'lazy'         => '',
-      'lightbox'     => FALSE,
+      // 'lightbox'     => FALSE,
       'media_switch' => '',
-      'placeholder'  => '',
-      'resimage'     => FALSE,
-      'use_loading'  => FALSE,
+      // 'placeholder'  => '',
+      // 'resimage'     => FALSE,
+      // 'use_loading'  => FALSE,
       'type'         => 'rich',
     ] + self::anywhereSettings();
+  }
+
+  /**
+   * Returns text settings.
+   */
+  public static function textSettings() {
+    return self::gridBaseSettings() + ['style' => ''];
   }
 
   /**
@@ -211,7 +223,11 @@ class BlazyDefault {
    */
   public static function uiSettings() {
     return [
-      'decode'              => FALSE,
+      'blur_client'         => FALSE,
+      'blur_storage'        => FALSE,
+      'blur_minwidth'       => 0,
+      'fx'                  => '',
+      'nojs'                => [],
       'one_pixel'           => TRUE,
       'noscript'            => FALSE,
       'placeholder'         => '',
@@ -221,22 +237,72 @@ class BlazyDefault {
   }
 
   /**
+   * Grouping for sanity till all settings converted into BlazySettings.
+   *
+   * It was a pre-release RC7 @todo, partially implemented since 2.7.
+   * The hustle is sub-modules are not aware, yet. Yet better started before 3.
+   * While some configurable settings are intact, blazies are more for grouping
+   * dynamic, non-configurable settings. But it can also store blazy-specific.
+   *
+   * @todo do not set keys, unless required to allow default/fallback kicks in.
+   */
+  public static function blazies() {
+    return [
+      'bgs' => [],
+      'box' => [],
+      'box_media' => [],
+      'image' => [],
+      'images' => [],
+      'initial' => 0,
+      'is' => [],
+      'item' => ['delta' => 0],
+      'lazy' => ['attribute' => 'src', 'class' => 'b-lazy'],
+      'libs' => [],
+      'lightbox' => [],
+      'media' => [],
+      'resimage' => [],
+      'ui' => self::uiSettings(),
+      'use' => [],
+      'switch' => NULL,
+      'thumbnail' => [],
+      'view' => [],
+    ];
+  }
+
+  /**
    * Returns sensible default container settings to shutup notices when lacking.
+   *
+   * @todo remove blazy_data for blazies due to problematic with picture where
+   * we can't have uniform sizes or aspect ratios.
+   * @todo move safe settings into blazies: new or not used by sub-modules.
    */
   public static function htmlSettings() {
     return [
-      'blazy_data' => [],
-      'lightbox'   => FALSE,
-      'namespace'  => 'blazy',
-      'id'         => '',
-      'is_preview' => FALSE,
-      '_richbox'   => FALSE,
+      'blazies' => Blazy::settings(self::blazies()),
+      'inited' => TRUE,
+
+      // @todo deprecated for blazies after sub-module updates:
+      'bundle' => '',
+      'id' => '',
       'route_name' => '',
-      'use_field'  => FALSE,
-      'unstyled'   => FALSE,
-      'view_name'  => '',
-      'accessible_title' => '',
-    ] + self::imageSettings() + self::uiSettings();
+      'is_preview' => FALSE,
+      // 'namespace' => 'blazy',
+      // 'label' => '',
+      // 'unstyled' => FALSE,
+      // '_resimage' => FALSE,
+      // '_image_url' => '',
+      // 'check_blazy' => FALSE,
+      // 'first_image' => NULL,
+      // '_richbox' => FALSE,
+      // 'blazy_data' => [],
+      // 'compat' => FALSE,
+      // 'lightbox' => FALSE,
+      // 'resimage' => FALSE,
+      // 'unlazy' => FALSE,
+      // 'view_name' => '',
+      // @todo revert  + self::uiSettings()
+    ] + self::imageSettings()
+      + self::gridSettings();
   }
 
   /**
@@ -244,31 +310,29 @@ class BlazyDefault {
    */
   public static function itemSettings() {
     return [
-      '_api'           => FALSE,
-      'bundle'         => '',
-      'classes'        => [],
-      'content_url'    => '',
-      'delta'          => 0,
-      'embed_url'      => '',
-      'entity_type_id' => '',
-      'extension'      => '',
-      'image_url'      => '',
-      'item_id'        => 'blazy',
-      'lazy_attribute' => 'src',
-      'lazy_class'     => 'b-lazy',
-      'padding_bottom' => '',
-      'placeholder_fx' => '',
-      'placeholder_ui' => '',
-      'player'         => FALSE,
-      'resimage'       => FALSE,
-      'scheme'         => '',
-      'type'           => 'image',
-      'uri'            => '',
-      'use_data_uri'   => FALSE,
-      'use_loading'    => TRUE,
-      'use_media'      => FALSE,
-      'height'         => NULL,
-      'width'          => NULL,
+      'classes' => [],
+      'image_url' => '',
+      'height' => NULL,
+      'width' => NULL,
+
+      // @todo move into and deprecated for BlazySettings under blazies:
+      // 'delta' => 0,
+      // 'embed_url' => '',
+      // 'extension' => '',
+      // 'scheme' => '',
+      // 'type' => 'image',
+      // 'uri' => '',
+      // 'content_url' => '',
+      // 'use_data_uri' => FALSE,
+      // 'use_loading' => TRUE,
+      // 'use_media' => FALSE,
+      // 'item_id' => 'blazy',
+      // 'lazy_attribute' => 'src',
+      // 'lazy_class' => 'b-lazy',
+      // 'placeholder_fx' => '',
+      // 'placeholder_ui' => '',
+      // 'player' => FALSE,
+      // 'entity_type_id' => '',
     ] + self::htmlSettings();
   }
 
@@ -310,17 +374,76 @@ class BlazyDefault {
   /**
    * Returns available components.
    */
-  public static function components() {
+  public static function components(): array {
+    return array_merge(self::grids(), [
+      'animate',
+      'background',
+      'blur',
+      'compat',
+      'filter',
+      'media',
+      'mfp',
+      'photobox',
+      'ratio',
+    ]);
+  }
+
+  /**
+   * Returns available grid components.
+   */
+  public static function grids(): array {
     return [
       'column',
-      'filter',
       'flex',
       'grid',
       'nativegrid',
       'nativegrid.masonry',
-      'media',
-      'photobox',
-      'ratio',
+    ];
+  }
+
+  /**
+   * Returns available plugins.
+   */
+  public static function plugins(): array {
+    return [
+      'eventify',
+      'viewport',
+      'xlazy',
+      'css',
+      'dom',
+      'animate',
+      'dataset',
+      'background',
+      'observer',
+    ];
+  }
+
+  /**
+   * Returns available nojs components related to core Blazy functionality.
+   */
+  public static function polyfills(): array {
+    return [
+      'polyfill',
+      'classlist',
+      'promise',
+      'raf',
+      'webp',
+    ];
+  }
+
+  /**
+   * Returns available nojs components related to core Blazy functionality.
+   */
+  public static function nojs(): array {
+    return array_merge(['lazy'], self::polyfills());
+  }
+
+  /**
+   * Returns optional polyfills, not loaded till enabled and a feature meets.
+   */
+  public static function ondemandPolyfills(): array {
+    return [
+      'fullscreen',
     ];
   }
 

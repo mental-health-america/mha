@@ -74,11 +74,17 @@ class WebformResultsMassEmailForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state, WebformInterface $webform = NULL) {
-    // Get all email elements for the select list.
+    // Get all email elements for the select list and store its types.
     $email_elements = [];
+    $email_element_types = [];
     foreach ($webform->getElementsDecodedAndFlattened() as $id => $element) {
-      if ($element['#type'] === 'email') {
+      if (in_array($element['#type'], [
+        'email',
+        'webform_email_confirm',
+        'webform_email_multiple',
+      ])) {
         $email_elements[$id] = $element['#title'];
+        $email_element_types[$id] = $element['#type'];
       }
     }
 
@@ -117,16 +123,22 @@ class WebformResultsMassEmailForm extends FormBase {
       '#options' => $email_elements,
       '#required' => TRUE,
     ];
+    $form['webform_mass_email']['element_types'] = [
+      '#type' => 'value',
+      '#value' => $email_element_types,
+    ];
     $form['webform_mass_email']['subject'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Subject'),
       '#description' => $this->t('Enter the email subject.'),
+      '#default_value' => '',
       '#required' => TRUE,
     ];
     $form['webform_mass_email']['body'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Body'),
       '#description' => $this->t('Enter the email body text. Webform submission tokens are supported.'),
+      '#default_value' => '',
       '#required' => TRUE,
     ];
     if ($html) {
@@ -163,6 +175,7 @@ class WebformResultsMassEmailForm extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $webform = $form_state->getValue('webform');
     $element = $form_state->getValue('element');
+    $element_types = $form_state->getValue('element_types');
     $subject = $form_state->getValue('subject');
     $body = $form_state->getValue('body');
     if (is_array($body) && isset($body['value'])) {
@@ -191,20 +204,34 @@ class WebformResultsMassEmailForm extends FormBase {
     // Loop through the submissions, pick up submission ID + email and
     // enqueue the request for the cron to fetch.
     foreach ($submissions as $id => $email) {
+      $values = [];
 
-      // There's email for this submission and it's not already queued.
-      if (!empty($email) && !in_array($email, $emails)) {
-        // Set queue values.
-        $queue_values['id'] = $id;
-        $queue_values['email'] = $email;
+      // Split multiple emails inside single submission.
+      if ($element_types[$element] === 'webform_email_multiple') {
+        foreach (preg_split('/\s*,\s*/', $email) as $value) {
+          $values[] = trim($value);
+        }
+      }
+      else {
+        // Use single value for all other element types.
+        $values[] = trim($email);
+      }
 
-        // Queue the values into the 'queue' table.
-        $queue = $this->queueFactory->get('webform_mass_email');
-        $queue->createItem($queue_values);
+      foreach ($values as $value) {
+        // There's email for this submission and it's not already queued.
+        if (!empty($value) && !in_array($value, $emails)) {
+          // Set queue values.
+          $queue_values['id'] = $id;
+          $queue_values['email'] = $value;
 
-        $count++;
-        // Store the email.
-        $emails[] = $email;
+          // Queue the values into the 'queue' table.
+          $queue = $this->queueFactory->get('webform_mass_email');
+          $queue->createItem($queue_values);
+
+          $count++;
+          // Store the email.
+          $emails[] = $value;
+        }
       }
     }
 

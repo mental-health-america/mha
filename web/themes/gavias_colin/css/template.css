@@ -212,6 +212,7 @@ a.disable {
   color: #fff;
 }
 
+/*
 #edit-preview {
   background: #5468ff;
   color: #fff;
@@ -223,7 +224,7 @@ a.disable {
 #edit-preview:hover {
   background: #8795ff;
 }
-
+*/
 .breadcrumb-content-inner {
   margin-bottom: 30px;
   text-align: center;

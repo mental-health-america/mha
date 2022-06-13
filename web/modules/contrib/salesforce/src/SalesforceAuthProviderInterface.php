@@ -17,7 +17,7 @@ interface SalesforceAuthProviderInterface extends ServiceInterface, PluginFormIn
   const AUTH_TOKEN_PATH = '/services/oauth2/token';
   const AUTH_ENDPOINT_PATH = '/services/oauth2/authorize';
   const SOAP_CLASS_PATH = '/services/Soap/class/';
-  const LATEST_API_VERSION = '44.0';
+  const LATEST_API_VERSION = '52.0';
 
   /**
    * Id of this service.

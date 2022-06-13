@@ -154,6 +154,14 @@ class RestClient implements RestClientInterface {
     return $this;
   }
 
+  public function getShortTermCacheLifetime() {
+    return $this->immutableConfig->get('short_term_cache_lifetime') ?? static::CACHE_LIFETIME;
+  }
+
+  public function getLongTermCacheLifetime() {
+    return $this->immutableConfig->get('long_term_cache_lifetime') ?? static::LONGTERM_CACHE_LIFETIME;
+  }
+
   /**
    * {@inheritdoc}
    */
@@ -377,7 +385,7 @@ class RestClient implements RestClientInterface {
     foreach ($response->data as $version) {
       $versions[$version['version']] = $version;
     }
-    $this->cache->set('salesforce:versions', $versions, $this->getRequestTime() + self::LONGTERM_CACHE_LIFETIME, ['salesforce']);
+    $this->cache->set('salesforce:versions', $versions, $this->getRequestTime() + $this->getLongTermCacheLifetime(), ['salesforce']);
     return $versions;
   }
 
@@ -417,7 +425,7 @@ class RestClient implements RestClientInterface {
     }
     else {
       $result = $this->apiCall('sobjects');
-      $this->cache->set('salesforce:objects', $result, $this->getRequestTime() + self::CACHE_LIFETIME, ['salesforce']);
+      $this->cache->set('salesforce:objects', $result, $this->getRequestTime() + $this->getShortTermCacheLifetime(), ['salesforce']);
     }
     // print_r($result);
     $sobjects = [];
@@ -485,7 +493,7 @@ class RestClient implements RestClientInterface {
     }
     else {
       $response = new RestResponseDescribe($this->apiCall("sobjects/{$name}/describe", [], 'GET', TRUE));
-      $this->cache->set('salesforce:object:' . $name, $response, $this->getRequestTime() + self::CACHE_LIFETIME, ['salesforce']);
+      $this->cache->set('salesforce:object:' . $name, $response, $this->getRequestTime() + $this->getShortTermCacheLifetime(), ['salesforce']);
       return $response;
     }
   }
@@ -605,7 +613,7 @@ class RestClient implements RestClientInterface {
       foreach ($result->records() as $rt) {
         $record_types[$rt->field('SobjectType')][$rt->field('DeveloperName')] = $rt;
       }
-      $this->cache->set('salesforce:record_types', $record_types, $this->getRequestTime() + self::CACHE_LIFETIME, ['salesforce']);
+      $this->cache->set('salesforce:record_types', $record_types, $this->getRequestTime() + $this->getShortTermCacheLifetime(), ['salesforce']);
     }
 
     if ($name != NULL) {

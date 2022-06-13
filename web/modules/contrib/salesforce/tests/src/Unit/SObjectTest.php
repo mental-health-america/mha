@@ -17,7 +17,7 @@ class SObjectTest extends UnitTestCase {
    *
    * @var array
    */
-  static public $modules = ['salesforce'];
+  protected static $modules = ['salesforce'];
 
   /**
    * Test object instantiation.

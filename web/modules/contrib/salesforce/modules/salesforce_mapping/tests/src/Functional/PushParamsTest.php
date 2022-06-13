@@ -31,7 +31,7 @@ class PushParamsTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'typed_data',
     'options',
     'dynamic_entity_reference',
