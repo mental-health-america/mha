@@ -52,7 +52,6 @@ sites/*/example.sites.php
 #/web/modules
 /web/modules/.gitkeep
 /web/modules/custom/.gitkeep
-.cpanel.yml
 #/vendor
 #/web/.csslintrc
 #/web/.editorconfig
