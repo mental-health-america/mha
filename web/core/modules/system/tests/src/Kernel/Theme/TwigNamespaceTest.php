@@ -63,8 +63,8 @@ class TwigNamespaceTest extends KernelTestBase {
     $test = ['#theme' => 'twig_namespace_test'];
     $this->setRawContent(\Drupal::service('renderer')->renderRoot($test));
 
-    $this->assertText('This line is from twig_namespace_a/templates/county-state-map-depression.html.twig');
-    $this->assertText('This line is from twig_namespace_b/templates/county-state-map-depression.html.twig');
+    $this->assertText('This line is from twig_namespace_a/templates/test.html.twig');
+    $this->assertText('This line is from twig_namespace_b/templates/test.html.twig');
   }
 
 }
