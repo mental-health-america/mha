@@ -58,7 +58,7 @@ function views_test_data_preprocess_views_view_table(&$variables) {
 /**
  * Prepares variables for the mapping row style test templates.
  *
- * Default template: views-view-mapping-county-state-map-depression.html.twig.
+ * Default template: views-view-mapping-test.html.twig.
  *
  * @param array $variables
  *   An associative array containing:
