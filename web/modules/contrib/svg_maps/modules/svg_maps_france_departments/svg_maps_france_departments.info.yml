@@ -1,0 +1,7 @@
+name: 'Svg Maps France departments'
+type: module
+description: 'Svg Maps France departments'
+core_version_requirement: ^8.8 || ^9
+package: 'SvgMaps'
+dependencies:
+  - svg_maps

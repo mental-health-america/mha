@@ -1,0 +1,7 @@
+name: 'Svg Maps USA states'
+type: module
+description: 'Svg Maps USA states'
+core_version_requirement: ^8.8 || ^9
+package: 'SvgMaps'
+dependencies:
+  - svg_maps
