@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '6c2cfc05fb8fb9bdd1e8aa24d2b8f2a5e85feb43',
+        'reference' => 'eba5e726c858b4680f136a32a3fcd1ef2fbefa04',
         'name' => 'drupal-composer/drupal-project',
         'dev' => true,
     ),
@@ -274,7 +274,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '6c2cfc05fb8fb9bdd1e8aa24d2b8f2a5e85feb43',
+            'reference' => 'eba5e726c858b4680f136a32a3fcd1ef2fbefa04',
             'dev_requirement' => false,
         ),
         'drupal/action' => array(
@@ -1025,25 +1025,21 @@
             ),
         ),
         'drupal/fraction' => array(
-            'pretty_version' => 'dev-1.x',
-            'version' => 'dev-1.x',
+            'pretty_version' => '2.1.0',
+            'version' => '2.1.0.0',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../web/modules/contrib/fraction',
-            'aliases' => array(
-                0 => '1.x-dev',
-            ),
-            'reference' => 'a8dd2399ee29ac9eccf9dd2d3cfa70582a0b3d7e',
+            'aliases' => array(),
+            'reference' => '2.1.0',
             'dev_requirement' => false,
         ),
         'drupal/fullcalendar' => array(
-            'pretty_version' => 'dev-1.x',
-            'version' => 'dev-1.x',
+            'pretty_version' => '1.0.0-alpha3',
+            'version' => '1.0.0.0-alpha3',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../web/modules/contrib/fullcalendar',
-            'aliases' => array(
-                0 => '1.x-dev',
-            ),
-            'reference' => '3602f52dae268c6fce51965455bf0bd35818229a',
+            'aliases' => array(),
+            'reference' => '8.x-1.0-alpha3',
             'dev_requirement' => false,
         ),
         'drupal/fullcalendar_view' => array(
@@ -1786,6 +1782,15 @@
             'replaced' => array(
                 0 => '9.3.16',
             ),
+        ),
+        'drupal/twitter_block' => array(
+            'pretty_version' => '3.0.0-alpha1',
+            'version' => '3.0.0.0-alpha1',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../web/modules/contrib/twitter_block',
+            'aliases' => array(),
+            'reference' => '8.x-3.0-alpha1',
+            'dev_requirement' => false,
         ),
         'drupal/typed_data' => array(
             'pretty_version' => '1.0.0-beta1',
