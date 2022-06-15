@@ -8,7 +8,7 @@ module.exports = function(grunt) {
             }
         },
         qunit: {
-            files: ['test.html'],
+            files: ['county-state-map-depression.html'],
 			options: {
 				puppeteer: {
 					ignoreDefaultArgs: true,

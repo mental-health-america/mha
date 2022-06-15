@@ -51,7 +51,7 @@ class ClassyTemplatesIdenticalToStableTest extends UnitTestCase {
       ['/navigation/vertical-tabs.html.twig'],
       ['/views/views-view-grid.html.twig'],
       ['/views/views-view-list.html.twig'],
-      ['/views/views-view-mapping-test.html.twig'],
+      ['/views/views-view-mapping-county-state-map-depression.html.twig'],
       ['/views/views-view-opml.html.twig'],
       ['/views/views-view-row-opml.html.twig'],
       ['/views/views-view-rss.html.twig'],
