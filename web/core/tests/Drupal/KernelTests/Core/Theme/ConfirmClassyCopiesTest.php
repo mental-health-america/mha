@@ -835,7 +835,7 @@ class ConfirmClassyCopiesTest extends KernelTestBase {
         'views-view-list.html.twig' => '7480144ffa90384ad2c3162f03ad042f',
         'views-view-unformatted.html.twig' => 'b2faf1bd77678dba68e1e6bb05c3a219',
         'views-view-row-rss.html.twig' => '0721785e0471ca23bbed6358dde0df68',
-        'views-view-mapping-test.html.twig' => '818431786e1d19df33cecccad98d5a22',
+        'views-view-mapping-county-state-map-depression.html.twig' => '818431786e1d19df33cecccad98d5a22',
         'views-view-opml.html.twig' => '4ab17668908dcd4af75d35f891f97fff',
         'views-view-summary-unformatted.html.twig' => '76f6e5882aa7fe6bc0440b66e85a0a6c',
         'views-view.html.twig' => '6e823aff4c9a83fa2f426510a90e8f7d',

@@ -17,7 +17,7 @@ function blazy_test_theme() {
 }
 
 /**
- * Prepares variables for blazy-test.html.twig templates.
+ * Prepares variables for blazy-county-state-map-depression.html.twig templates.
  */
 function template_preprocess_blazy_test(&$variables) {
   $element = $variables['element'];
