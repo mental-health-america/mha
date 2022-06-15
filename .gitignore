@@ -47,6 +47,7 @@ sites/*/example.sites.php
 /web/README.md
 
 # Ignore drupal core (if not versioning drupal sources)
+.cpanel.yml
 #/web/core
 #/web/modules
 /web/modules/.gitkeep
