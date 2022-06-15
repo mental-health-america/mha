@@ -5261,37 +5261,40 @@
         },
         {
             "name": "drupal/fraction",
-            "version": "dev-1.x",
-            "version_normalized": "dev-1.x",
+            "version": "2.1.0",
+            "version_normalized": "2.1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/fraction.git",
-                "reference": "a8dd2399ee29ac9eccf9dd2d3cfa70582a0b3d7e"
+                "reference": "2.1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/fraction-2.1.0.zip",
+                "reference": "2.1.0",
+                "shasum": "23d44116a9c9e0620610f20397d6ca3c14387fc8"
             },
             "require": {
-                "drupal/core": "^8 || ^9"
+                "drupal/core": "^8.8 || ^9"
             },
             "require-dev": {
                 "drupal/feeds": "^3.0"
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
-                    "version": "8.x-1.3+46-dev",
-                    "datestamp": "1590586409",
+                    "version": "2.1.0",
+                    "datestamp": "1638483550",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 }
             },
             "installation-source": "source",
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
@@ -5316,12 +5319,18 @@
         },
         {
             "name": "drupal/fullcalendar",
-            "version": "dev-1.x",
-            "version_normalized": "dev-1.x",
+            "version": "1.0.0-alpha3",
+            "version_normalized": "1.0.0.0-alpha3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/fullcalendar.git",
-                "reference": "3602f52dae268c6fce51965455bf0bd35818229a"
+                "reference": "8.x-1.0-alpha3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/fullcalendar-8.x-1.0-alpha3.zip",
+                "reference": "8.x-1.0-alpha3",
+                "shasum": "fd399948e748e4fe0cdb37e3a3be0bba82405ec5"
             },
             "require": {
                 "drupal/core": "^8 || ^9"
@@ -5331,15 +5340,12 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
-                    "version": "8.x-1.0-alpha3+1-dev",
-                    "datestamp": "1587453047",
+                    "version": "8.x-1.0-alpha3",
+                    "datestamp": "1587382056",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "message": "Alpha releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -8639,6 +8645,69 @@
                 "source": "https://git.drupalcode.org/project/token_filter"
             },
             "install-path": "../../web/modules/contrib/token_filter"
+        },
+        {
+            "name": "drupal/twitter_block",
+            "version": "3.0.0-alpha1",
+            "version_normalized": "3.0.0.0-alpha1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/twitter_block.git",
+                "reference": "8.x-3.0-alpha1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/twitter_block-8.x-3.0-alpha1.zip",
+                "reference": "8.x-3.0-alpha1",
+                "shasum": "1ca5c6e30cda07b633273916bc0c3206e3928d81"
+            },
+            "require": {
+                "drupal/core": "^8.8 || ^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-3.0-alpha1",
+                    "datestamp": "1603037906",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Devin Carlson",
+                    "homepage": "https://www.drupal.org/user/290182"
+                },
+                {
+                    "name": "ZenDoodles",
+                    "homepage": "https://www.drupal.org/user/226976"
+                },
+                {
+                    "name": "cweagans",
+                    "homepage": "https://www.drupal.org/user/404732"
+                },
+                {
+                    "name": "naveenvalecha",
+                    "homepage": "https://www.drupal.org/user/2665733"
+                },
+                {
+                    "name": "subhojit777",
+                    "homepage": "https://www.drupal.org/user/1812492"
+                }
+            ],
+            "description": "Provides configurable blocks for a Twitter feed.",
+            "homepage": "http://drupal.org/project/twitter_block",
+            "support": {
+                "source": "https://git.drupalcode.org/project/twitter_block"
+            },
+            "install-path": "../../web/modules/contrib/twitter_block"
         },
         {
             "name": "drupal/typed_data",
