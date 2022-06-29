@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '04e3f2243377bd440f31cf5b4b4e32c9766d475c',
+        'reference' => 'dffbf15f1ec3987f829d219b6fee7f9c44e2e0b6',
         'name' => 'drupal-composer/drupal-project',
         'dev' => true,
     ),
@@ -274,7 +274,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '04e3f2243377bd440f31cf5b4b4e32c9766d475c',
+            'reference' => 'dffbf15f1ec3987f829d219b6fee7f9c44e2e0b6',
             'dev_requirement' => false,
         ),
         'drupal/action' => array(
@@ -1958,6 +1958,15 @@
             'install_path' => __DIR__ . '/../../web/modules/contrib/webform_views',
             'aliases' => array(),
             'reference' => '8.x-5.0-beta1',
+            'dev_requirement' => false,
+        ),
+        'drupal/webp' => array(
+            'pretty_version' => '1.0.0-beta6',
+            'version' => '1.0.0.0-beta6',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../web/modules/contrib/webp',
+            'aliases' => array(),
+            'reference' => '8.x-1.0-beta6',
             'dev_requirement' => false,
         ),
         'drupal/workflows' => array(

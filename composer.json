@@ -150,6 +150,7 @@
         "drupal/webform_submission_export_import": "^6.0",
         "drupal/webform_ui": "^5.0",
         "drupal/webform_views": "^5.0@alpha",
+        "drupal/webp": "^1.0@beta",
         "drupal/yaml_editor": "^1.1",
         "drupal/yoast_seo": "^1.7",
         "drush/drush": "^10.4",
