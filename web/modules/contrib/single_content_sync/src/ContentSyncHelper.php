@@ -7,11 +7,13 @@ use Drupal\Core\Archiver\ArchiverInterface;
 use Drupal\Core\Archiver\ArchiverManager;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\file\FileInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 class ContentSyncHelper implements ContentSyncHelperInterface {
 
@@ -53,6 +55,13 @@ class ContentSyncHelper implements ContentSyncHelperInterface {
   protected $configFactory;
 
   /**
+   * The entity repository.
+   *
+   * @var \Drupal\Core\Entity\EntityRepositoryInterface
+   */
+  protected $entityRepository;
+
+  /**
    * ContentSyncHelper constructor.
    *
    * @param \Drupal\Component\Uuid\UuidInterface $uuid
@@ -66,12 +75,13 @@ class ContentSyncHelper implements ContentSyncHelperInterface {
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory.
    */
-  public function __construct(UuidInterface $uuid, FileSystemInterface $file_system, ArchiverManager $archiver_manager, EntityTypeManagerInterface $entity_type_manager, ConfigFactoryInterface $config_factory) {
+  public function __construct(UuidInterface $uuid, FileSystemInterface $file_system, ArchiverManager $archiver_manager, EntityTypeManagerInterface $entity_type_manager, ConfigFactoryInterface $config_factory, EntityRepositoryInterface $entity_repository) {
     $this->uuid = $uuid;
     $this->fileSystem = $file_system;
     $this->archiverManager = $archiver_manager;
     $this->entityTypeManager = $entity_type_manager;
     $this->configFactory = $config_factory;
+    $this->entityRepository = $entity_repository;
   }
 
   /**
@@ -163,6 +173,28 @@ class ContentSyncHelper implements ContentSyncHelperInterface {
     }
 
     return $this->fileSystem->realpath($file->getFileUri());
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getDefaultLanguageEntity(ParameterBag $parameters): EntityInterface {
+    $entity_uuid = $parameters->getIterator()->current()->uuid();
+    $entity_type_id = $parameters->getIterator()->current()->getEntityTypeId();
+    /** @var \Drupal\Core\Entity\EntityInterface $entity */
+    $entity = $this->entityRepository->loadEntityByUuid($entity_type_id, $entity_uuid);
+
+    return $entity;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function access(EntityInterface $entity): bool {
+    $config = $this->configFactory->get('single_content_sync.settings');
+    $allowed_entity_types = $config->get('allowed_entity_types');
+
+    return $entity->getEntityType()->hasLinkTemplate('single-content:export') && $entity->access('single-content:export') && !empty($allowed_entity_types[$entity->getEntityTypeId()]);
   }
 
 }

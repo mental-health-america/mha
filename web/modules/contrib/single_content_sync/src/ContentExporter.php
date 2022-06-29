@@ -4,11 +4,11 @@ namespace Drupal\single_content_sync;
 
 use Drupal\block_content\BlockContentInterface;
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
-use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -53,13 +53,6 @@ class ContentExporter implements ContentExporterInterface {
   protected $messenger;
 
   /**
-   * The database connection.
-   *
-   * @var \Drupal\Core\Database\Connection
-   */
-  protected $database;
-
-  /**
    * The private temp store of the module.
    *
    * @var \Drupal\Core\TempStore\PrivateTempStore
@@ -81,6 +74,13 @@ class ContentExporter implements ContentExporterInterface {
   private $entityOutputCache = [];
 
   /**
+   * The language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * ContentExporter constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -89,17 +89,15 @@ class ContentExporter implements ContentExporterInterface {
    *   The module handler.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger.
-   * @param \Drupal\Core\Database\Connection $database
-   *   The database connection.
    * @param \Drupal\Core\TempStore\PrivateTempStore $store
    *   The private temp store of the module.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler, MessengerInterface $messenger, Connection $database, PrivateTempStore $store) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler, MessengerInterface $messenger, PrivateTempStore $store, LanguageManagerInterface $language_manager) {
     $this->entityTypeManager = $entity_type_manager;
     $this->moduleHandler = $module_handler;
     $this->messenger = $messenger;
-    $this->database = $database;
     $this->privateTempStore = $store;
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -203,8 +201,8 @@ class ContentExporter implements ContentExporterInterface {
     if ($this->extractTranslationsMode && $entity->isTranslatable()) {
       $translations = $entity->getTranslationLanguages();
 
-      // Exclude the active language from the translations.
-      unset($translations[$entity->language()->getId()]);
+      // Exclude the default language from the translations.
+      unset($translations[$this->languageManager->getDefaultLanguage()->getId()]);
 
       if (count($translations)) {
         foreach ($translations as $language) {
@@ -462,16 +460,12 @@ class ContentExporter implements ContentExporterInterface {
       case 'layout_section':
         $block_storage = $this->entityTypeManager->getStorage('block_content');
         $block_list = [];
-
-        $sections = $this->database->select('node__layout_builder__layout', 'n')
-          ->fields('n', ['layout_builder__layout_section'])
-          ->condition('n.entity_id', $field->getEntity()->id())
-          ->execute()
-          ->fetchCol();
+        $sections = [];
 
         foreach ($field->getValue() as $section_array) {
           /** @var \Drupal\layout_builder\Section $section */
           $section = $section_array['section'];
+          $sections[] = serialize($section);
           $components = $section->getComponents();
           foreach ($components as $component) {
             if ($component->getPlugin() instanceof InlineBlock) {
