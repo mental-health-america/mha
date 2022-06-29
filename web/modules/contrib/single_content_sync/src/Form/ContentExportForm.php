@@ -2,14 +2,18 @@
 
 namespace Drupal\single_content_sync\Form;
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\file\FileInterface;
+use Drupal\node\Plugin\views\filter\Access;
 use Drupal\single_content_sync\ContentExporterInterface;
 use Drupal\single_content_sync\ContentFileGeneratorInterface;
+use Drupal\single_content_sync\ContentSyncHelperInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -41,6 +45,13 @@ class ContentExportForm extends FormBase {
   protected $fileGenerator;
 
   /**
+   * The content sync helper.
+   *
+   * @var \Drupal\single_content_sync\ContentSyncHelperInterface
+   */
+  protected $contentSyncHelper;
+
+  /**
    * ContentExportForm constructor.
    *
    * @param \Drupal\single_content_sync\ContentExporterInterface $content_exporter
@@ -49,11 +60,14 @@ class ContentExportForm extends FormBase {
    *   The entity type manager.
    * @param \Drupal\single_content_sync\ContentFileGeneratorInterface $file_generator
    *   The content file generator.
+   * @param \Drupal\single_content_sync\ContentSyncHelperInterface $content_sync_helper
+   *   The content sync helper.
    */
-  public function __construct(ContentExporterInterface $content_exporter, EntityTypeManagerInterface $entity_type_manager, ContentFileGeneratorInterface $file_generator) {
+  public function __construct(ContentExporterInterface $content_exporter, EntityTypeManagerInterface $entity_type_manager, ContentFileGeneratorInterface $file_generator, ContentSyncHelperInterface $content_sync_helper) {
     $this->contentExporter = $content_exporter;
     $this->entityTypeManager = $entity_type_manager;
     $this->fileGenerator = $file_generator;
+    $this->contentSyncHelper = $content_sync_helper;
   }
 
   /**
@@ -63,7 +77,8 @@ class ContentExportForm extends FormBase {
     return new static(
       $container->get('single_content_sync.exporter'),
       $container->get('entity_type.manager'),
-      $container->get('single_content_sync.file_generator')
+      $container->get('single_content_sync.file_generator'),
+      $container->get('single_content_sync.helper')
     );
   }
 
@@ -121,7 +136,8 @@ class ContentExportForm extends FormBase {
 
     $extract_translations = $form_state->getValue('translation', FALSE);
     $parameters = $this->getRouteMatch()->getParameters();
-    $entity = $parameters->getIterator()->current();
+    $entity = $this->contentSyncHelper->getDefaultLanguageEntity($parameters);
+
     $export_in_yaml = $this->contentExporter->doExportToYml($entity, $extract_translations);
 
     $form['output'] = [
@@ -192,7 +208,7 @@ class ContentExportForm extends FormBase {
     $button = $form_state->getTriggeringElement();
     $extract_translations = $form_state->getValue('translation', FALSE);
     $parameters = $this->getRouteMatch()->getParameters();
-    $entity = $parameters->getIterator()->current();
+    $entity = $this->contentSyncHelper->getDefaultLanguageEntity($parameters);
 
     switch ($button['#name']) {
       case 'download_file':
@@ -223,6 +239,26 @@ class ContentExportForm extends FormBase {
         ],
       ]);
     }
+  }
+
+  /**
+   * Check if user has access to the export form.
+   */
+  public function access() {
+    $parameters = $this->getRouteMatch()->getParameters();
+    $entity = $parameters->getIterator()->current();
+
+    if (is_string($entity)) {
+      $entity = $parameters->get($entity);
+    }
+
+    if (!$entity instanceof EntityInterface) {
+      return AccessResult::forbidden();
+    }
+
+    $hasAccess = $this->contentSyncHelper->access($entity);
+
+    return $hasAccess ? AccessResult::allowed() : AccessResult::forbidden();
   }
 
 }

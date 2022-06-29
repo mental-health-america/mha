@@ -5,6 +5,7 @@ namespace Drupal\single_content_sync;
 use Drupal\Core\Archiver\ArchiverInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\file\FileInterface;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 interface ContentSyncHelperInterface {
 
@@ -88,5 +89,28 @@ interface ContentSyncHelperInterface {
    *   The real path of the file.
    */
   public function getFileRealPathById(int $fid): string;
+
+  /**
+   * Get an entity object from the default language configuration.
+   *
+   * @param \Symfony\Component\HttpFoundation\ParameterBag $parameters
+   *   The parameters from which to get the entity object.
+   *
+   * @return \Drupal\Core\Entity\EntityInterface
+   *   The entity interface from the default language configuration.
+   */
+  public function getDefaultLanguageEntity(ParameterBag $parameters): EntityInterface;
+
+  /**
+   * Returns TRUE or FALSE based on the configuration of the module.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity for which to check access.
+   *
+   * @return bool
+   *   Returns TRUE if the entity is allowed to be exported,
+   *   else returns FALSE.
+   */
+  public function access(EntityInterface $entity): bool;
 
 }
