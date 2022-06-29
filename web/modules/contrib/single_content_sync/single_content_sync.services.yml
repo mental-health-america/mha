@@ -5,8 +5,8 @@ services:
       - '@entity_type.manager'
       - '@module_handler'
       - '@messenger'
-      - '@database'
       - '@single_content_sync.store'
+      - '@language_manager'
 
   single_content_sync.importer:
     class: Drupal\single_content_sync\ContentImporter
@@ -33,6 +33,7 @@ services:
       - '@plugin.manager.archiver'
       - '@entity_type.manager'
       - '@config.factory'
+      - '@entity.repository'
 
   single_content_sync.store:
     class: \Drupal\Core\TempStore\PrivateTempStore

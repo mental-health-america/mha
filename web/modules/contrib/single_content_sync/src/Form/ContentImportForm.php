@@ -2,7 +2,6 @@
 
 namespace Drupal\single_content_sync\Form;
 
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\single_content_sync\ContentImporterInterface;
@@ -120,11 +119,15 @@ class ContentImportForm extends FormBase {
       $fid = reset($upload_file);
       $file_real_path = $this->contentSyncHelper->getFileRealPathById($fid);
       $file_info = pathinfo($file_real_path);
+      $entity = NULL;
 
       try {
-        $entity = $file_info['extension'] === 'zip'
-        ? $this->contentImporter->importFromZip($file_real_path)
-        : $this->contentImporter->importFromFile($file_real_path);
+        if ($file_info['extension'] === 'zip') {
+          $this->contentImporter->importFromZip($file_real_path);
+        }
+        else {
+          $entity = $this->contentImporter->importFromFile($file_real_path);
+        }
       }
       catch (\Exception $e) {
         $this->messenger()->addError($e->getMessage());
@@ -142,13 +145,7 @@ class ContentImportForm extends FormBase {
       }
     }
 
-    $entities = !is_array($entity) ? [$entity] : $entity;
-
-    if (count($entities) > 1) {
-      $this->messenger()->addStatus($this->t('The bulk import of content has been successful performed.'));
-    }
-    else {
-      $entity = array_pop($entities);
+    if ($entity) {
       $this->messenger()->addStatus($this->t('The content has been synced @link', [
         '@link' => $entity->toLink()->toString(),
       ]));

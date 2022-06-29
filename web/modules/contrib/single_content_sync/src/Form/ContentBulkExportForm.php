@@ -2,6 +2,7 @@
 
 namespace Drupal\single_content_sync\Form;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -28,6 +29,13 @@ class ContentBulkExportForm extends ConfirmFormBase {
   protected $fileGenerator;
 
   /**
+   * The config factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * Construct of ContentBulkExportForm.
    *
    * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $temp_store_factory
@@ -35,9 +43,10 @@ class ContentBulkExportForm extends ConfirmFormBase {
    * @param \Drupal\single_content_sync\ContentFileGeneratorInterface $file_generator
    *   The custom file generator to export content.
    */
-  public function __construct(PrivateTempStoreFactory $temp_store_factory, ContentFileGeneratorInterface $file_generator) {
+  public function __construct(PrivateTempStoreFactory $temp_store_factory, ContentFileGeneratorInterface $file_generator, ConfigFactoryInterface $config_factory) {
     $this->privateTempStore = $temp_store_factory->get('single_content_sync');
     $this->fileGenerator = $file_generator;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -46,7 +55,8 @@ class ContentBulkExportForm extends ConfirmFormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('tempstore.private'),
-      $container->get('single_content_sync.file_generator')
+      $container->get('single_content_sync.file_generator'),
+      $container->get('config.factory')
     );
   }
 
@@ -133,6 +143,23 @@ class ContentBulkExportForm extends ConfirmFormBase {
     $this->privateTempStore->delete($this->currentUser()->id());
 
     if ($form_state->getValue('confirm')) {
+      $allowed_entity_types = $this->configFactory->get('single_content_sync.settings')->get('allowed_entity_types');
+      $entity_types = [];
+
+      // Fill an array with entity types to be exported.
+      foreach ($entities as $entity) {
+        if (!in_array($entity->getEntityTypeId(), $entity_types)) {
+          $entity_types[$entity->getEntityTypeId()] = $entity->getEntityTypeId();
+        }
+      }
+      // If not all entity types to be exported are part of
+      // $allowed_entity_types, abort the export operation.
+      if (array_intersect_assoc($entity_types, $allowed_entity_types) !== $entity_types) {
+        $this->messenger()->addError($this->t("The export couldn't be completed since it contains disallowed content. Please check the configuration of the Single Content Sync module, or select only allowed content."));
+        $form_state->setRedirect('system.admin_content');
+        return;
+      }
+
       $extract_translations = $form_state->getValue('translation', FALSE);
       $extract_assets = $form_state->getValue('assets', FALSE);
 

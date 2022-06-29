@@ -1,31 +1,3 @@
-single_content_sync.node_export:
-  path: '/node/{node}/export'
-  defaults:
-    _form: '\Drupal\single_content_sync\Form\ContentExportForm'
-    _title: 'Export content'
-  options:
-    _node_operation_route: TRUE
-    parameters:
-      node:
-        type: entity:node
-  requirements:
-    node: \d+
-    _permission: 'export single content'
-
-single_content_sync.block_content_export:
-  path: '/block/{block_content}/export'
-  defaults:
-    _form: '\Drupal\single_content_sync\Form\ContentExportForm'
-    _title: 'Export content'
-  options:
-    _admin_route: TRUE
-    parameters:
-      block_content:
-        type: entity:block_content
-  requirements:
-    block_content: \d+
-    _permission: 'export single content'
-
 single_content_sync.file_download:
   path: '/content/export/download/file'
   defaults:
@@ -49,3 +21,14 @@ single_content_sync.bulk_export:
     _title: 'Bulk export content'
   requirements:
     _permission: 'export single content'
+
+single_content_sync.config_settings:
+  path: '/admin/config/content/single-content-sync'
+  defaults:
+    _form: '\Drupal\single_content_sync\Form\ContentSyncConfigForm'
+    _title: 'Single Content Sync Settings'
+  requirements:
+    _permission: 'administer single content sync'
+
+route_callbacks:
+  - '\Drupal\single_content_sync\Routing\ContentExportRoutes::routes'

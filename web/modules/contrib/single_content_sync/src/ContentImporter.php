@@ -9,10 +9,13 @@ use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Entity\RevisionableInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\File\FileSystemInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\TypedData\TranslatableInterface;
 use Drupal\layout_builder\Plugin\Block\InlineBlock;
 
 class ContentImporter implements ContentImporterInterface {
+
+  use StringTranslationTrait;
 
   /**
    * The entity type manager.
@@ -441,43 +444,61 @@ class ContentImporter implements ContentImporterInterface {
   /**
    * {@inheritdoc}
    */
-  public function importFromZip(string $file_real_path): array {
+  public function importFromZip(string $file_real_path): void {
     // Extract zip files to the unique local directory.
     $zip = $this->contentSyncHelper->createZipInstance($file_real_path);
     $import_directory = $this->contentSyncHelper->createImportDirectory();
     $zip->extract($import_directory);
 
-    $default_scheme = $this->contentSyncHelper->getDefaultFileScheme();
     $content_file_path = NULL;
-    $entity_array = [];
+    $batch = [
+      'title' => $this->t('Importing entities'),
+      'operations' => [],
+      'file' => '\Drupal\single_content_sync\ContentBatchImporter',
+      'finished' => '\Drupal\single_content_sync\ContentBatchImporter::batchImportFinishedCallback',
+    ];
 
     foreach ($zip->listContents() as $zip_file) {
       $original_file_path = "{$import_directory}/{$zip_file}";
 
-      // Move the extracted assets to the proper destination.
       if (strpos($zip_file, 'assets') === 0) {
-        // Use default schema instead of the assets destinations.
-        $destination = str_replace('assets/', "{$default_scheme}://", $zip_file);
-        $directory = $this->fileSystem->dirname($destination);
-        $this->contentSyncHelper->prepareFilesDirectory($directory);
-        $this->fileSystem->move($original_file_path, $destination, FileSystemInterface::EXISTS_REPLACE);
+        $batch['operations'][] = [
+          '\Drupal\single_content_sync\ContentBatchImporter::batchImportAssets',
+          [$original_file_path, $zip_file],
+        ];
       }
       else {
-        // An array is made of entities to accommodate the import of a zip
-        // from the Bulk export function.
         $content_file_path = $original_file_path;
-        $entity_array[] = $this->importFromFile($content_file_path);
+        $batch['operations'][] = [
+          '\Drupal\single_content_sync\ContentBatchImporter::batchImportFile',
+          [$original_file_path],
+        ];
       }
     }
+
+    $batch['operations'][] = [
+      '\Drupal\single_content_sync\ContentBatchImporter::cleanImportDirectory',
+      [$import_directory],
+    ];
 
     if (is_null($content_file_path)) {
       throw new \Exception('The content file in YAML format could not be found.');
     }
 
-    // Clean up extracted files/folder that are left after successful import.
-    $this->fileSystem->deleteRecursive($import_directory);
+    batch_set($batch);
+  }
 
-    return $entity_array;
+  /**
+   * {@inheritdoc}
+   */
+  public function importAssets(string $extracted_file_path, string $zip_file_path): void {
+    $default_scheme = $this->contentSyncHelper->getDefaultFileScheme();
+
+    // Use default scheme instead of the assets destinations.
+    $destination = str_replace('assets/', "{$default_scheme}://", $zip_file_path);
+    $directory = $this->fileSystem->dirname($destination);
+    $this->contentSyncHelper->prepareFilesDirectory($directory);
+    $this->fileSystem->move($extracted_file_path, $destination, FileSystemInterface::EXISTS_REPLACE);
   }
 
   /**
