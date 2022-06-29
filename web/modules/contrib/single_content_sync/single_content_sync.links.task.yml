@@ -1,14 +1,5 @@
-single_content_sync.node_export:
-  route_name: single_content_sync.node_export
-  base_route: entity.node.canonical
-  title: 'Export'
-  weight: 10
-
-single_content_sync.block_content_export:
-  route_name: single_content_sync.block_content_export
-  base_route: entity.block_content.canonical
-  title: 'Export'
-  weight: 10
+single_content_sync.export:
+  deriver: \Drupal\single_content_sync\Plugin\Derivative\ContentExportLocalTasks
 
 single_content_sync.import:
   route_name: single_content_sync.import
