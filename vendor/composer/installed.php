@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '734686bbdf6435db301059eed49319136e08da22',
+        'reference' => '7fcda857d562b8498afbe6842560020757855f98',
         'name' => 'drupal-composer/drupal-project',
         'dev' => true,
     ),
@@ -274,7 +274,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '734686bbdf6435db301059eed49319136e08da22',
+            'reference' => '7fcda857d562b8498afbe6842560020757855f98',
             'dev_requirement' => false,
         ),
         'drupal/action' => array(
@@ -2314,8 +2314,8 @@
         'psr/container-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '^1.0',
-                1 => '1.0',
+                0 => '1.0',
+                1 => '^1.0',
             ),
         ),
         'psr/event-dispatcher-implementation' => array(

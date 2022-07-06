@@ -8,3 +8,8 @@ configure: admin/config/user-interface/fullcalendar
 dependencies:
   - views
   - datetime
+
+# Information added by Drupal.org packaging script on 2020-04-20
+version: '8.x-1.0-alpha3'
+project: 'fullcalendar'
+datestamp: 1587382059

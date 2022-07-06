@@ -8,3 +8,8 @@ dependencies:
 
 test_dependencies:
   - feeds:feeds
+
+# Information added by Drupal.org packaging script on 2021-12-02
+version: '2.1.0'
+project: 'fraction'
+datestamp: 1638483552
