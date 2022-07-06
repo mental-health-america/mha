@@ -27,7 +27,7 @@ final class TwigDeprecationAnalyzerTest extends KernelTestBase {
       $this->assertCount(1, $twig_deprecations, var_export($twig_deprecations, TRUE));
       $this->assertEquals(new DeprecationMessage(
         'Twig Filter "deprecatedfilter" is deprecated. See https://drupal.org/node/3071078.',
-        'modules/contrib/upgrade_status/tests/modules/upgrade_status_test_twig/templates/county-state-map-depression.html.twig',
+        'modules/contrib/upgrade_status/tests/modules/upgrade_status_test_twig/templates/test.html.twig',
         '10'
       ), $twig_deprecations[0]);
     }
@@ -35,7 +35,7 @@ final class TwigDeprecationAnalyzerTest extends KernelTestBase {
       $this->assertCount(2, $twig_deprecations, var_export($twig_deprecations, TRUE));
       $this->assertContainsEquals(new DeprecationMessage(
         'Twig Filter "deprecatedfilter" is deprecated. See https://drupal.org/node/3071078.',
-        'modules/contrib/upgrade_status/tests/modules/upgrade_status_test_twig/templates/county-state-map-depression.html.twig',
+        'modules/contrib/upgrade_status/tests/modules/upgrade_status_test_twig/templates/test.html.twig',
         '10'
       ), $twig_deprecations);
       $this->assertContainsEquals(new DeprecationMessage(
