@@ -3,266 +3,369 @@
  * Fullcalendar View plugin JavaScript file.
  */
 
-(function($, Drupal) {
-  Drupal.behaviors.fullcalendarView = {
-    attach: function(context, settings) {
-      $('.js-drupal-fullcalendar', context)
-        .once("absCustomBehavior")
-        .each(function() {
-          // Date entry clicked.
-          let slotDate;
-          // Day entry click call back function.
-          function dayClickCallback(date) {
-            slotDate = date;
+// Jquery wrapper for drupal to avoid conflicts between libraries.
+(function ($) {
+  var initialLocaleCode = 'en';
+  // Dialog index.
+  var dialogIndex = 0;
+  // Dialog objects.
+  var dialogs = [];
+  // Date entry clicked.
+  var slotDate;
+
+  /**
+   * Event render handler
+   */
+  function eventRender (info) {
+    // Event title html markup.
+    let eventTitleEle = info.el.getElementsByClassName('fc-title');
+    if(eventTitleEle.length > 0) {
+      eventTitleEle[0].innerHTML = info.event.title;
+    }
+    // Event list tile html markup.
+    let eventListTitleEle = info.el.getElementsByClassName('fc-list-item-title');
+    if(eventListTitleEle.length > 0) {
+      if (info.event.url) {
+        eventListTitleEle[0].innerHTML = '<a href="' + info.event.url + '">' + info.event.title + '</a>';
+      }
+      else {
+        eventListTitleEle[0].innerHTML = info.event.title;
+      }
+    }
+  }
+  /**
+   * Event resize handler
+   */
+  function eventResize(info) {
+    const end = info.event.end;
+    const start = info.event.start;
+    let strEnd = '';
+    let strStart = '';
+    let viewIndex = parseInt(this.el.getAttribute("calendar-view-index"));
+    let viewSettings = drupalSettings.fullCalendarView[viewIndex];
+    const formatSettings = {
+        month: '2-digit',
+        year: 'numeric',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        timeZone: 'UTC',
+        locale: 'sv-SE'
+      };
+    // define the end date string in 'YYYY-MM-DD' format.
+    if (end) {
+      // The end date of an all-day event is exclusive.
+      // For example, the end of 2018-09-03
+      // will appear to 2018-09-02 in the calendar.
+      // So we need one day subtract
+      // to ensure the day stored in Drupal
+      // is the same as when it appears in
+      // the calendar.
+      if (end.getHours() == 0 && end.getMinutes() == 0 && end.getSeconds() == 0) {
+        end.setDate(end.getDate() - 1);
+      }
+      // String of the end date.
+      strEnd = FullCalendar.formatDate(end, formatSettings);
+    }
+    // define the start date string in 'YYYY-MM-DD' format.
+    if (start) {
+      strStart = FullCalendar.formatDate(start, formatSettings);
+    }
+    const title = info.event.title.replace(/(<([^>]+)>)/ig,"");;
+    const msg = Drupal.t('@title end is now @event_end. Do you want to save this change?', {
+      '@title': title,
+      '@event_end': strEnd
+    });
+
+    if (
+        viewSettings.updateConfirm === 1 &&
+        !confirm(msg)
+    ) {
+      info.revert();
+    }
+    else {
+      /**
+       * Perform ajax call for event update in database.
+       */
+      jQuery
+        .post(
+          drupalSettings.path.baseUrl +
+            "fullcalendar-view-event-update",
+          {
+            eid: info.event.extendedProps.eid,
+            entity_type: viewSettings.entityType,
+            start: strStart,
+            end: strEnd,
+            start_field: viewSettings.startField,
+            end_field: viewSettings.endField,
+            token: viewSettings.token
           }
-          $(".js-drupal-fullcalendar").fullCalendar({
-            header: {
-              left: drupalSettings.leftButtons,
-              center: "title",
-              right: drupalSettings.rightButtons
-            },
-            titleFormat: drupalSettings.titleFormat,
-            defaultDate: drupalSettings.defaultDate,
-            firstDay: drupalSettings.firstDay,
-            defaultView: drupalSettings.defaultView,
-            locale: drupalSettings.defaultLang,
-            timeFormat: drupalSettings.timeFormat,
-            // Can click day/week names to navigate views.
-            navLinks: drupalSettings.navLinks !== 0,
-            columnHeaderFormat: drupalSettings.columnHeaderFormat,
-            editable: drupalSettings.updateAllowed !== 0,
-            eventLimit: true, // Allow "more" link when too many events.
-            events: drupalSettings.fullCalendarView,
-            eventOverlap: drupalSettings.alloweventOverlap !== 0,
-            dayClick: dayClickCallback,
-            eventRender: function(event, $el) {
-              // Event title with HTML markup.
-              $el.find(".fc-title, .fc-list-item-title").html(event.title);
-              // Popup tooltip.
-              if (event.description) {
-                if ($el.fullCalendarTooltip !== "undefined") {
-                  $el.fullCalendarTooltip(event.title, event.description);
-                }
-              }
-              // Recurring event.
-              if (event.ranges) {
-                return (
-                  event.ranges.filter(function(range) {
-                    // Eclude dates from renge if exists.
-                    if (range.excluding_dates) {
-                      for (let i = 0; i < range.excluding_dates.length; i++) {
-                        if (event.start.isSame(moment.utc(range.excluding_dates[i], "YYYY-MM-DD"), 'day')) {
-                          return false;
-                        }
-                      }
-                    }
+        )
+        .done(function(data) {
+          if (data !== '1') {
+            alert("Error: " + data);
+            info.revert();
+          }
+        });
+    }
+  }
+  
+  // Day entry click call back function.
+  function dayClickCallback(info) {
+    slotDate = info.dateStr;
+  }
+  
+  // Event click call back function.
+  function eventClick(info) {
+    slotDate = null;
+    info.jsEvent.preventDefault();
+    let thisEvent = info.event;
+    let viewIndex = parseInt(this.el.getAttribute("calendar-view-index"));
+    let viewSettings = drupalSettings.fullCalendarView[viewIndex];
+    let des = thisEvent.extendedProps.des;
+    // Show the event detail in a pop up dialog.
+    if (viewSettings.dialogWindow) {
+      let dataDialogOptionsDetails = {};
+      if ( des == '') {
+        return false;
+      }
+      
+      const jsFrame = new JSFrame({
+        parentElement:info.el,//Set the parent element to which the jsFrame is attached here
+      });
+      // Position offset.
+      let posOffset = dialogIndex * 20;
+      // Dialog options.
+      let dialogOptions = JSON.parse(viewSettings.dialog_options);
+      dialogOptions.left += posOffset + info.jsEvent.pageX;
+      dialogOptions.top += posOffset + info.jsEvent.pageY;
+      dialogOptions.title = dialogOptions.title ? dialogOptions.title : thisEvent.title.replace(/(<([^>]+)>)/ig,"");
+      dialogOptions.html = des;
+      //Create window
+      dialogs[dialogIndex] = jsFrame.create(dialogOptions);
+      
+      dialogs[dialogIndex].show();
+      dialogIndex++;
 
-                    if (event.dom) {
-                      let isTheDay = false;
-                      const dom = event.dom;
-                      for (let i = 0; i < dom.length; i++) {
-                        if (dom[i] === event.start.format("D")) {
-                          isTheDay = true;
-                          break;
-                        }
-                      }
-                      if (!isTheDay) {
-                        return false;
-                      }
-                    }
-                    // Test event against all the ranges.
-                    if (range.end) {
-                      return (
-                        event.start.isBefore(
-                          moment.utc(range.end, "YYYY-MM-DD")
-                        ) &&
-                        event.end.isAfter(moment.utc(range.start, "YYYY-MM-DD"))
-                      );
-                    }
-                    return event.start.isAfter(
-                      moment.utc(range.start, "YYYY-MM-DD")
-                    );
-                  }).length > 0
-                ); // If it isn't in one of the ranges, don't render it (by returning false)
-              }
-            },
-            eventResize: function(event, delta, revertFunc) {
-              // The end day of an event is exclusive.
-              // For example, the end of 2018-09-03
-              // will appear to 2018-09-02 in the callendar.
-              // So we need one day subtract
-              // to ensure the day stored in Drupal
-              // is the same as when it appears in
-              // the calendar.
-              if (event.end && event.end.format("HH:mm:ss") === "00:00:00") {
-                event.end.subtract(1, "days");
-              }
-              // Event title.
-              const title = $($.parseHTML(event.title)).text();
-              if (
-                drupalSettings.updateConfirm === 1 &&
-                !confirm(
-                  title +
-                    " end is now " +
-                    event.end.format() +
-                    ". Do you want to save the change?"
-                )
-              ) {
-                revertFunc();
-              } else {
-                /**
-                 * Perform ajax call for event update in database.
-                 */
-                jQuery
-                  .post(
-                    drupalSettings.path.baseUrl +
-                      "fullcalendar-view-event-update",
-                    {
-                      eid: event.id,
-                      entity_type: drupalSettings.entityType,
-                      start: event.start.format(),
-                      end: event.end ? event.end.format() : "",
-                      start_field: drupalSettings.startField,
-                      end_field: drupalSettings.endField,
-                      token: drupalSettings.token
-                    }
-                  )
-                  .done(function(data) {
-                    // alert("Response: " + data);
-                  });
-              }
-            },
-            eventDrop: function(event, delta, revertFunc) {
-              // Event title.
-              const title = $($.parseHTML(event.title)).text();
-              const msg =
-                title +
-                " was updated to " +
-                event.start.format() +
-                ". Are you sure about this change?";
-              // The end day of an event is exclusive.
-              // For example, the end of 2018-09-03
-              // will appear to 2018-09-02 in the callendar.
-              // So we need one day subtract
-              // to ensure the day stored in Drupal
-              // is the same as when it appears in
-              // the calendar.
-              if (event.end && event.end.format("HH:mm:ss") === "00:00:00") {
-                event.end.subtract(1, "days");
-              }
-              if (drupalSettings.updateConfirm === 1 && !confirm(msg)) {
-                revertFunc();
-              } else {
-                /**
-                 * Perform ajax call for event update in database.
-                 */
-                jQuery
-                  .post(
-                    drupalSettings.path.baseUrl +
-                      "fullcalendar-view-event-update",
-                    {
-                      eid: event.id,
-                      entity_type: drupalSettings.entityType,
-                      start: event.start.format(),
-                      end: event.end ? event.end.format() : "",
-                      start_field: drupalSettings.startField,
-                      end_field: drupalSettings.endField,
-                      token: drupalSettings.token
-                    }
-                  )
-                  .done(function(data) {
-                    // alert("Response: " + data);
-                  });
-              }
-            },
-            eventClick: function(calEvent, jsEvent, view) {
-              slotDate = null;
-              if (drupalSettings.linkToEntity) {
-                // Open a time slot details in a dialog
-                if (drupalSettings.dialogWindow) {
-                  let dataDialogOptionsDetails = {};
-                  var modalLink = $('<a id="fullcalendar-view-dialog"></a>');
-                  dataDialogOptionsDetails.draggable = true;
-                  dataDialogOptionsDetails.autoResize = false;
-                  dataDialogOptionsDetails.title = calEvent.title.replace(/(<([^>]+)>)/ig,"");
+      return false;
+    }
+    // Open a new window to show the details of the event.
+    if (thisEvent.url) {
+      let eventURL = new URL(thisEvent.url, location.origin);
+      if (eventURL.origin === "null") {
+        // Invalid URL.
+        return false;
+      }
+      if (viewSettings.openEntityInNewTab) {
+        // Open a new window to show the details of the event.
+       window.open(thisEvent.url);
+       return false;
+      }
+      else {
+        // Open in same window
+        window.location.href = thisEvent.url;
+        return false;
+      }
+    }
 
-                  modalLink.addClass('use-ajax');
-                  modalLink.attr('href', calEvent.url);
-                  modalLink.attr('data-dialog-type', 'dialog');
-                  modalLink.attr('data-dialog-options', JSON.stringify(dataDialogOptionsDetails));
-                  modalLink.appendTo($('body'));
+    return false;
+  }
+  
+  // Event drop call back function.
+  function eventDrop(info) {
+    const end = info.event.end;
+    const start = info.event.start;
+    let strEnd = '';
+    let strStart = '';
+    let viewIndex = parseInt(this.el.getAttribute("calendar-view-index"));
+    let viewSettings = drupalSettings.fullCalendarView[viewIndex];
+    const formatSettings = {
+        month: '2-digit',
+        year: 'numeric',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        timeZone: 'UTC',
+        locale: 'sv-SE'
+      };
+    // define the end date string in 'YYYY-MM-DD' format.
+    if (end) {
+      // The end date of an all-day event is exclusive.
+      // For example, the end of 2018-09-03
+      // will appear to 2018-09-02 in the calendar.
+      // So we need one day subtract
+      // to ensure the day stored in Drupal
+      // is the same as when it appears in
+      // the calendar.
+      if (end.getHours() == 0 && end.getMinutes() == 0 && end.getSeconds() == 0) {
+        end.setDate(end.getDate() - 1);
+      }
+      // String of the end date.
+      strEnd = FullCalendar.formatDate(end, formatSettings);
+    }
+    // define the start date string in 'YYYY-MM-DD' format.
+    if (start) {
+      strStart = FullCalendar.formatDate(start, formatSettings);
+    }
+    const title = info.event.title.replace(/(<([^>]+)>)/ig,"");;
+    const msg = Drupal.t('@title start is now @event_start and end is now @event_end - Do you want to save this change?', {
+      '@title': title,
+      '@event_start': strStart,
+      '@event_end': strEnd
+    });
 
-                  Drupal.attachBehaviors();
-                  modalLink.trigger('click').remove();
-                  // The entry element object.
-                  let $thisEntry = $(this);
-                  if (typeof $thisEntry.qtip === "function") {
-                    // Hide the pop tip.
-                    $thisEntry.qtip("hide");
-                  }
+    if (
+        viewSettings.updateConfirm === 1 &&
+        !confirm(msg)
+    ) {
+      info.revert();
+    }
+    else {
+      /**
+       * Perform ajax call for event update in database.
+       */
+      jQuery
+        .post(
+          drupalSettings.path.baseUrl +
+            "fullcalendar-view-event-update",
+          {
+            eid: info.event.extendedProps.eid,
+            entity_type: viewSettings.entityType,
+            start: strStart,
+            end: strEnd,
+            start_field: viewSettings.startField,
+            end_field: viewSettings.endField,
+            token: viewSettings.token
+          }
+        )
+        .done(function(data) {
+          if (data !== '1') {
+            alert("Error: " + data);
+            info.revert();
+          }
+        });
 
-                  return false;
-                }
-                // Open a new window to show the details of the event.
-                if (calEvent.url) {
-                  if (drupalSettings.openEntityInNewTab) {
-                    // Open a new window to show the details of the event.
-                   window.open(calEvent.url);
-                   return false;
-                  }
-                  else {
-                    // Open in same window
-                    return true;
-                  }
-                }
-              }
-
-              return false;
+    }
+  }
+  
+  // Build the calendar objects.
+  function buildCalendars() {
+    $('.js-drupal-fullcalendar')
+    .each(function() {              
+      let calendarEl = this;
+      let viewIndex = parseInt(calendarEl.getAttribute("calendar-view-index"));
+      let viewSettings = drupalSettings.fullCalendarView[viewIndex];
+      var calendarOptions = JSON.parse(viewSettings.calendar_options);
+      // Bind the render event handler.
+      calendarOptions.eventRender = eventRender;
+      // Bind the resize event handler.
+      calendarOptions.eventResize = eventResize;
+      // Bind the day click handler.
+      calendarOptions.dateClick = dayClickCallback;
+      // Bind the event click handler.
+      calendarOptions.eventClick = eventClick;
+      // Bind the drop event handler.
+      calendarOptions.eventDrop = eventDrop;
+      // Language select element.
+      var localeSelectorEl = document.getElementById('locale-selector-' + viewIndex);
+      // Initial the calendar.
+      if (calendarEl) {
+        if (drupalSettings.calendar) {
+          drupalSettings.calendar[viewIndex] = new FullCalendar.Calendar(calendarEl, calendarOptions);
+        }
+        else {
+          drupalSettings.calendar = [];
+          drupalSettings.calendar[viewIndex] = new FullCalendar.Calendar(calendarEl, calendarOptions);
+        }
+        let calendarObj = drupalSettings.calendar[viewIndex];
+        calendarObj.render();
+        // Language dropdown box.
+        if (viewSettings.languageSelector) {
+          // build the locale selector's options
+          calendarObj.getAvailableLocaleCodes().forEach(function(localeCode) {
+            var optionEl = document.createElement('option');
+            optionEl.value = localeCode;
+            optionEl.selected = localeCode == calendarOptions.locale;
+            optionEl.innerText = localeCode;
+            localeSelectorEl.appendChild(optionEl);
+          });
+          // when the selected option changes, dynamically change the calendar option
+          localeSelectorEl.addEventListener('change', function() {
+            if (this.value) {
+              let viewIndex = parseInt(this.getAttribute("calendar-view-index")); 
+              drupalSettings.calendar[viewIndex].setOption('locale', this.value);
             }
           });
-
-          if (drupalSettings.languageSelector) {
-            // Build the locale selector's options.
-            $.each($.fullCalendar.locales, function(localeCode) {
-              $("#locale-selector").append(
-                $("<option/>")
-                  .attr("value", localeCode)
-                  .prop("selected", localeCode === drupalSettings.defaultLang)
-                  .text(localeCode)
-              );
-            });
-            // When the selected option changes, dynamically change the calendar option.
-            $("#locale-selector").on("change", function() {
-              if (this.value) {
-                $(".js-drupal-fullcalendar").fullCalendar("option", "locale", this.value);
-              }
-            });
-          } else {
-            $(".locale-selector").hide();
-          }
-
-          $(".js-drupal-fullcalendar").dblclick(function() {
-            if (
+        }
+        else if (localeSelectorEl){
+          localeSelectorEl.style.display = "none";
+        }
+        
+        // Double click event.
+        calendarEl.addEventListener('dblclick' , function(e) {
+          let viewIndex = parseInt(this.getAttribute("calendar-view-index"));
+          let viewSettings = drupalSettings.fullCalendarView[viewIndex];
+          // New event window can be open if following conditions match.
+          // * The new event content type are specified.
+          // * Allow to create a new event by double click.
+          // * User has the permission to create a new event.
+          // * The add form for the new event type is known.
+          if (
               slotDate &&
-              drupalSettings.eventBundleType &&
-              drupalSettings.dblClickToCreate &&
-              drupalSettings.updateAllowed &&
-              drupalSettings.addForm !== ""
+              viewSettings.eventBundleType &&
+              viewSettings.dblClickToCreate &&
+              viewSettings.addForm !== ""
             ) {
-              const date = slotDate.format();
               // Open a new window to create a new event (content).
               window.open(
-                drupalSettings.path.baseUrl +
-                  drupalSettings.addForm +
+                  drupalSettings.path.baseUrl +
+                  viewSettings.addForm +
                   "?start=" +
-                  date +
+                  slotDate +
                   "&start_field=" +
-                  drupalSettings.startField,
+                  viewSettings.startField +
+                  "&destination=" + window.location.pathname,
                 "_blank"
               );
             }
-          });
+
         });
+      }
+    });
+  }
+  
+  // document.ready event does not work with BigPipe.
+  // The workaround is to ckeck the document state
+  // every 100 milliseconds until it is completed.
+  // @see https://www.drupal.org/project/drupal/issues/2794099#comment-13274828
+  var checkReadyState = setInterval(function() {
+    if (
+        document.readyState === "complete" &&
+        $('.js-drupal-fullcalendar').length > 0
+        ) {
+      clearInterval(checkReadyState);
+      // Build calendar objects.
+      buildCalendars();
     }
-  };
+  }, 100);
+  
+  // After an Ajax call, the calendar objects need to rebuild,
+  // to reflect the changes, such as Ajax filter.
+  $( document ).ajaxComplete(function( event, request, settings ) {    
+    // Remove the existing calendars except updating Ajax events.
+    if (
+        drupalSettings.calendar &&
+        settings.url !== '/fullcalendar-view-event-update'
+        ) {
+      // Rebuild the calendars.
+      drupalSettings.calendar.forEach(function(calendar) {
+        calendar.destroy();
+      });
+      //Re-build calendars.
+      buildCalendars();
+    }
+  });
+  
 })(jQuery, Drupal);

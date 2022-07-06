@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '7fcda857d562b8498afbe6842560020757855f98',
+        'reference' => 'e9bdb45473cd0b350963dc408a12f18dee65e3f7',
         'name' => 'drupal-composer/drupal-project',
         'dev' => true,
     ),
@@ -274,7 +274,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '7fcda857d562b8498afbe6842560020757855f98',
+            'reference' => 'e9bdb45473cd0b350963dc408a12f18dee65e3f7',
             'dev_requirement' => false,
         ),
         'drupal/action' => array(
@@ -1043,12 +1043,12 @@
             'dev_requirement' => false,
         ),
         'drupal/fullcalendar_view' => array(
-            'pretty_version' => '2.8.0',
-            'version' => '2.8.0.0',
+            'pretty_version' => '5.1.5',
+            'version' => '5.1.5.0',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../web/modules/contrib/fullcalendar_view',
             'aliases' => array(),
-            'reference' => '8.x-2.8',
+            'reference' => '5.1.5',
             'dev_requirement' => false,
         ),
         'drupal/geofield' => array(
@@ -2314,8 +2314,8 @@
         'psr/container-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '1.0',
-                1 => '^1.0',
+                0 => '^1.0',
+                1 => '1.0',
             ),
         ),
         'psr/event-dispatcher-implementation' => array(
