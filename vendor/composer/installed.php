@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'e9bdb45473cd0b350963dc408a12f18dee65e3f7',
+        'reference' => 'aa23d0acac36057ea9338fc4c18e9d418544254f',
         'name' => 'drupal-composer/drupal-project',
         'dev' => true,
     ),
@@ -274,7 +274,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'e9bdb45473cd0b350963dc408a12f18dee65e3f7',
+            'reference' => 'aa23d0acac36057ea9338fc4c18e9d418544254f',
             'dev_requirement' => false,
         ),
         'drupal/action' => array(
@@ -976,6 +976,15 @@
             'reference' => '8.x-3.2',
             'dev_requirement' => false,
         ),
+        'drupal/field_inheritance' => array(
+            'pretty_version' => '2.0.0-rc5',
+            'version' => '2.0.0.0-RC5',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../web/modules/contrib/field_inheritance',
+            'aliases' => array(),
+            'reference' => '2.0.0-rc5',
+            'dev_requirement' => false,
+        ),
         'drupal/field_layout' => array(
             'dev_requirement' => false,
             'replaced' => array(
@@ -1532,6 +1541,15 @@
             'install_path' => __DIR__ . '/../../web/modules/contrib/recaptcha',
             'aliases' => array(),
             'reference' => '8.x-3.0',
+            'dev_requirement' => false,
+        ),
+        'drupal/recurring_events' => array(
+            'pretty_version' => '2.0.0-rc3',
+            'version' => '2.0.0.0-RC3',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../web/modules/contrib/recurring_events',
+            'aliases' => array(),
+            'reference' => '2.0.0-rc3',
             'dev_requirement' => false,
         ),
         'drupal/redirect' => array(
