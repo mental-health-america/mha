@@ -534,6 +534,36 @@ a .btn.btn-primary
   color: #fff !important;
 }
 
+#blue-accordian p,
+#blue-accordian ul,
+#blue-accordian li,
+#blue-accordian span p {
+  color: #262626 !important;
+}
+
+.panel-default > .panel-heading + .panel-collapse > .panel-body {
+  color: #262626 !important;
+}
+
+#blue-accordian .panel {
+  background: #ffffff  !important;
+  color: #262626  !important;
+}
+
+#blue-accordian .panel .panel-heading .panel-title > a,
+#blue-accordian .panel .panel-heading .panel-title > a,
+#blue-accordian .btn.btn-primary,
+#blue-accordian .btn-primary.ext,
+#blue-accordian .btn-primary,
+#blue-accordian .btn.btn-primary,
+#blue-accordian .btn-primary.ext,
+#blue-accordian a.btn.btn-primary,
+#blue-accordian a.btn-primary .ext,
+#blue-accordian a .btn.btn-primary {
+  background: #ffffff  !important;
+  color: #262626  !important;
+}
+
 @media (max-width: 480px) {
   header .gva-view .view-content-wrap {
     padding: .5rem;
