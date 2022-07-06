@@ -59,7 +59,6 @@ sites/*/example.sites.php
 #/web/.eslintrc.json
 #/web/.gitattributes
 /web/.htaccess
-.cpanel.yml
 #/autoload.php
 #/composer.lock
 #/web/index.php
