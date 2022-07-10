@@ -1,0 +1,35 @@
+uuid: d206d8ab-b736-44c5-b9c5-24254fbf5388
+langcode: en
+status: true
+dependencies:
+  config:
+    - webform.webform.email_youth_and_young_adult_emai
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - webform
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: webform_2
+theme: gavias_colin
+region: other
+weight: 0
+provider: null
+plugin: webform_block
+settings:
+  id: webform_block
+  label: 'Webform - Youth and Young Adult Email Sign Up'
+  label_display: '0'
+  provider: webform
+  webform_id: email_youth_and_young_adult_emai
+  default_data: ''
+  redirect: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''

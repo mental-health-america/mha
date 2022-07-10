@@ -1,0 +1,18 @@
+_core:
+  default_config_hash: 7LkiviGITIpniIOOIzpuxR7r4XzqqYN_cwu0fb0kx1M
+content_access_roles_gids:
+  anonymous: 1
+  authenticated: 2
+  administrator: 3
+  affiliate: 4
+  mha_admin: 5
+  test: 6
+  notification: 7
+content_access_node_type:
+  reaffiliation_application: 'a:2:{s:8:"view_own";a:1:{i:0;s:13:"administrator";}s:4:"view";a:1:{i:0;s:13:"administrator";}}'
+  blog_post: 'a:2:{s:8:"view_own";a:3:{i:0;s:9:"anonymous";i:1;s:13:"authenticated";i:2;s:9:"mha_admin";}s:4:"view";a:3:{i:0;s:9:"anonymous";i:1;s:13:"authenticated";i:2;s:9:"mha_admin";}}'
+  page: 'a:3:{s:8:"view_own";a:3:{i:0;s:9:"anonymous";i:1;s:13:"authenticated";i:2;s:9:"mha_admin";}s:4:"view";a:3:{i:0;s:9:"anonymous";i:1;s:13:"authenticated";i:2;s:9:"mha_admin";}s:8:"per_node";i:1;}'
+  audience: 'a:2:{s:8:"view_own";a:2:{i:0;s:13:"administrator";i:1;s:9:"mha_admin";}s:4:"view";a:4:{i:0;s:9:"anonymous";i:1;s:13:"authenticated";i:2;s:13:"administrator";i:3;s:9:"mha_admin";}}'
+  condition: 'a:2:{s:8:"view_own";a:4:{i:0;s:9:"anonymous";i:1;s:13:"authenticated";i:2;s:13:"administrator";i:3;s:9:"mha_admin";}s:4:"view";a:4:{i:0;s:9:"anonymous";i:1;s:13:"authenticated";i:2;s:13:"administrator";i:3;s:9:"mha_admin";}}'
+  event: 'a:0:{}'
+  webform: 'a:1:{s:8:"per_node";i:1;}'

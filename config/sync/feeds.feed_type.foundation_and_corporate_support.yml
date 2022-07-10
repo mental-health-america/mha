@@ -1,0 +1,119 @@
+uuid: 34f7d881-3be8-4201-ac32-0461891a2209
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.foundation_and_corporate_support.field_amount
+    - field.field.node.foundation_and_corporate_support.field_donor
+    - field.field.node.foundation_and_corporate_support.field_purpose
+    - field.field.node.foundation_and_corporate_support.field_quarter
+    - field.field.node.foundation_and_corporate_support.field_sort
+    - field.field.node.foundation_and_corporate_support.field_title
+    - field.field.node.foundation_and_corporate_support.field_year
+    - node.type.foundation_and_corporate_support
+  module:
+    - node
+id: foundation_and_corporate_support
+label: 'Foundation and Corporate Support '
+description: ''
+help: null
+import_period: -1
+fetcher: upload
+fetcher_configuration:
+  allowed_extensions: 'txt csv tsv xml opml'
+  directory: 'private://feeds'
+parser: csv
+parser_configuration:
+  delimiter: ','
+  no_headers: false
+  line_limit: 100
+processor: 'entity:node'
+processor_configuration:
+  values:
+    type: foundation_and_corporate_support
+  update_existing: 1
+  update_non_existent: _delete
+  skip_hash_check: false
+  authorize: true
+  expire: -1
+  owner_feed_author: true
+  owner_id: 0
+  insert_new: 1
+  langcode: en
+custom_sources:
+  sort:
+    value: Sort
+    label: Sort
+    machine_name: sort
+    type: csv
+  title:
+    value: Title
+    label: Title
+    machine_name: title
+    type: csv
+  year:
+    value: Year
+    label: Year
+    machine_name: year
+    type: csv
+  quarter:
+    value: Quarter
+    label: Quarter
+    machine_name: quarter
+    type: csv
+  donor:
+    value: Donor
+    label: Donor
+    machine_name: donor
+    type: csv
+  purpose:
+    value: Purpose
+    label: Purpose
+    machine_name: purpose
+    type: csv
+  amount:
+    value: Amount
+    label: Amount
+    machine_name: amount
+    type: csv
+mappings:
+  -
+    target: title
+    map:
+      value: 'parent:title'
+    unique: {  }
+  -
+    target: field_sort
+    map:
+      value: sort
+    unique: {  }
+  -
+    target: field_title
+    map:
+      value: title
+    unique: {  }
+  -
+    target: field_year
+    map:
+      value: year
+    unique: {  }
+  -
+    target: field_quarter
+    map:
+      value: quarter
+    unique: {  }
+  -
+    target: field_donor
+    map:
+      value: donor
+    unique: {  }
+  -
+    target: field_purpose
+    map:
+      value: purpose
+    unique: {  }
+  -
+    target: field_amount
+    map:
+      value: amount
+    unique: {  }

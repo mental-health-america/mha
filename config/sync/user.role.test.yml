@@ -1,0 +1,12 @@
+uuid: 164eca72-5518-43bf-a46e-df509c630bca
+langcode: en
+status: true
+dependencies:
+  module:
+    - protected_pages
+id: test
+label: test
+weight: 5
+is_admin: null
+permissions:
+  - 'access protected page password screen'

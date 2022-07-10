@@ -201,11 +201,15 @@ class RegistrationCreationService {
 
     switch ($this->getRegistrationType()) {
       case 'series':
-        $properties['eventseries_id'] = $this->eventSeries->id();
+        if (!empty($this->eventSeries->id())) {
+          $properties['eventseries_id'] = $this->eventSeries->id();
+        }
         break;
 
       case 'instance':
-        $properties['eventinstance_id'] = $this->eventInstance->id();
+        if (!empty($this->eventInstance->id())) {
+          $properties['eventinstance_id'] = $this->eventInstance->id();
+        }
         break;
     }
     $results = $this->storage->loadByProperties($properties);
@@ -784,5 +788,28 @@ class RegistrationCreationService {
   public function registrationUniqueEmailAddress() {
     return $this->eventSeries->event_registration->unique_email_address;
   }
+
+  /**
+   * Which roles are allowed to register for this event? Comma delimited.
+   *
+   * @return array
+   *   An array of roles that are allowed to register for this event.
+   */
+  public function registrationPermittedRoles() {
+    // Remove extra spaces from the list of roles
+    $permitted_roles_string = str_replace(' ', '', $this->eventSeries->event_registration->permitted_roles);
+
+    // Convert the string into an array of roles
+    $permitted_roles = [];
+    if (!empty($permitted_roles_string)) {
+      if (strpos($permitted_roles_string, ','))
+        $permitted_roles = explode(',', $permitted_roles_string);
+      else {
+        $permitted_roles[] = $permitted_roles_string;
+      }
+    }
+    return $permitted_roles;
+  }
+
 
 }

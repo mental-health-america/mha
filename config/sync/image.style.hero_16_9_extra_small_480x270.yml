@@ -1,0 +1,17 @@
+uuid: e84bf274-a58e-4b5b-90b3-12dbdbbeb2bd
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+name: hero_16_9_extra_small_480x270
+label: 'Hero 16:9 Extra Small (480x270)'
+effects:
+  25c92fb9-6612-428e-b356-68338769b2f3:
+    uuid: 25c92fb9-6612-428e-b356-68338769b2f3
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 480
+      height: 270
+      crop_type: focal_point

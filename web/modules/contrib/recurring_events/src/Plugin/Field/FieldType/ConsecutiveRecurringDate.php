@@ -138,7 +138,7 @@ class ConsecutiveRecurringDate extends DateRangeItem implements RecurringEventsF
     $config = [];
 
     $user_timezone = new \DateTimeZone(date_default_timezone_get());
-    $user_input = $form_state->getUserInput();
+    $user_input = $form_state->getValues();
 
     $time = $user_input['consecutive_recurring_date'][0]['time'];
     if (is_array($time)) {
@@ -152,16 +152,18 @@ class ConsecutiveRecurringDate extends DateRangeItem implements RecurringEventsF
       $end_time = $temp->format('h:i A');
     }
 
-    if (!empty($user_input['consecutive_recurring_date'][0]['value']['date'])
-    && !empty($user_input['consecutive_recurring_date'][0]['end_value']['date'])
+    if (!empty($user_input['consecutive_recurring_date'][0]['value'])
+    && !empty($user_input['consecutive_recurring_date'][0]['end_value'])
     && !empty($user_input['consecutive_recurring_date'][0]['time'])) {
       $time_parts = static::convertTimeTo24hourFormat($time);
       $timestamp = implode(':', $time_parts);
-      $start_timestamp = $user_input['consecutive_recurring_date'][0]['value']['date'] . 'T' . $timestamp;
+      $user_input['consecutive_recurring_date'][0]['value']->setTimezone($user_timezone);
+      $start_timestamp = $user_input['consecutive_recurring_date'][0]['value']->format('Y-m-d') . 'T' . $timestamp;
       $start_date = DrupalDateTime::createFromFormat(DateTimeItemInterface::DATETIME_STORAGE_FORMAT, $start_timestamp, $user_timezone);
       $start_date->setTime(0, 0, 0);
 
-      $end_timestamp = $user_input['consecutive_recurring_date'][0]['end_value']['date'] . 'T' . $timestamp;
+      $user_input['consecutive_recurring_date'][0]['end_value']->setTimezone($user_timezone);
+      $end_timestamp = $user_input['consecutive_recurring_date'][0]['end_value']->format('Y-m-d') . 'T' . $timestamp;
       $end_date = DrupalDateTime::createFromFormat(DateTimeItemInterface::DATETIME_STORAGE_FORMAT, $end_timestamp, $user_timezone);
       $end_date->setTime(0, 0, 0);
 

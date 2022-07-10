@@ -1,0 +1,23 @@
+uuid: ddff2e5a-396d-4d43-8dfc-c38a669e6bd4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_consumers_of_mental_health
+    - node.type.reaffiliation_application
+id: node.reaffiliation_application.field_consumers_of_mental_health
+field_name: field_consumers_of_mental_health
+entity_type: node
+bundle: reaffiliation_application
+label: 'Consumers of Mental Health Services'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: '%'
+field_type: integer

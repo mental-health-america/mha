@@ -1,0 +1,23 @@
+uuid: 05ecca30-b42e-4ab5-91dd-4ee34c63bbbb
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_multiracial_other
+    - node.type.reaffiliation_application
+id: node.reaffiliation_application.field_multiracial_other
+field_name: field_multiracial_other
+entity_type: node
+bundle: reaffiliation_application
+label: Multiracial/Other
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: '%'
+field_type: integer

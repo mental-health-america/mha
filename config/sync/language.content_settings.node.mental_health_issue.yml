@@ -1,0 +1,11 @@
+uuid: 718cf54c-641a-42ab-9826-906d9a1d86f9
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.mental_health_issue
+id: node.mental_health_issue
+target_entity_type_id: node
+target_bundle: mental_health_issue
+default_langcode: site_default
+language_alterable: false

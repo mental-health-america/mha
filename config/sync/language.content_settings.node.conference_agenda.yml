@@ -1,0 +1,11 @@
+uuid: dbc37e1e-9a74-4872-8fb9-c1167040e261
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.conference_agenda
+id: node.conference_agenda
+target_entity_type_id: node
+target_bundle: conference_agenda
+default_langcode: site_default
+language_alterable: false

@@ -1,0 +1,23 @@
+uuid: 335c2af1-1ddc-4a17-b174-7b9841eeec94
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.feeds_item
+    - node.type.foundation_and_corporate_support
+  module:
+    - feeds
+id: node.foundation_and_corporate_support.feeds_item
+field_name: feeds_item
+entity_type: node
+bundle: foundation_and_corporate_support
+label: 'Feeds item'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:feeds_feed'
+  handler_settings: {  }
+field_type: feeds_item

@@ -1,0 +1,29 @@
+uuid: 7be99207-59d6-4a95-8493-0099c0204a3d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_sponsorship_level_2
+    - node.type.clifford_beers_society
+    - taxonomy.vocabulary.clifford_beers_society
+id: node.clifford_beers_society.field_sponsorship_level_2
+field_name: field_sponsorship_level_2
+entity_type: node
+bundle: clifford_beers_society
+label: 'Sponsorship Level'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      clifford_beers_society: clifford_beers_society
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

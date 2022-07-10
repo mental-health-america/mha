@@ -1,0 +1,11 @@
+uuid: f2f37952-5c68-44b7-905f-61f56a9f01ff
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.clifford_beers_society
+id: node.clifford_beers_society
+target_entity_type_id: node
+target_bundle: clifford_beers_society
+default_langcode: site_default
+language_alterable: false

@@ -1,0 +1,21 @@
+uuid: b148f053-ddcc-43cb-bb00-83728b4c0619
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_yoast_seo
+    - node.type.conference_awards
+  module:
+    - yoast_seo
+id: node.conference_awards.field_yoast_seo
+field_name: field_yoast_seo
+entity_type: node
+bundle: conference_awards
+label: 'Real-time SEO'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: yoast_seo

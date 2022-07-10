@@ -20,6 +20,9 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\recurring_events_registration\Entity\RegistrantInterface;
 use Drupal\recurring_events_registration\Form\RegistrantForm;
 use Drupal\recurring_events_registration\Entity\Registrant;
+use Drupal\recurring_events_registration\Plugin\ComputedField\AvailabilityCount;
+use Drupal\recurring_events_registration\Plugin\ComputedField\RegistrationCount;
+use Drupal\recurring_events_registration\Plugin\ComputedField\WaitlistCount;
 
 /**
  * Implements hook_help().
@@ -64,6 +67,32 @@ function recurring_events_registration_entity_base_field_info_alter(&$fields, En
         'type' => 'event_registration',
         'weight' => 10,
       ]);
+  }
+
+  if ($entity_type->id() === 'eventinstance') {
+    $fields['availability_count'] = BaseFieldDefinition::create('integer')
+      ->setName('availability_count')
+      ->setLabel(t('Availability Count'))
+      ->setDescription('The availability for this event.')
+      ->setReadOnly(TRUE)
+      ->setComputed(TRUE)
+      ->setClass(AvailabilityCount::class);
+
+    $fields['registration_count'] = BaseFieldDefinition::create('integer')
+      ->setName('registration_count')
+      ->setLabel(t('Registration Count'))
+      ->setDescription('The number of registrants for this event.')
+      ->setReadOnly(TRUE)
+      ->setComputed(TRUE)
+      ->setClass(RegistrationCount::class);
+
+    $fields['waitlist_count'] = BaseFieldDefinition::create('integer')
+      ->setName('waitlist_count')
+      ->setLabel(t('Waitlist Count'))
+      ->setDescription('The number of waitlisted registrants for this event.')
+      ->setReadOnly(TRUE)
+      ->setComputed(TRUE)
+      ->setClass(WaitlistCount::class);
   }
 }
 
@@ -281,7 +310,8 @@ function recurring_events_registration_recurring_events_pre_delete_instances(Eve
 function recurring_events_registration_send_notification($key, RegistrantInterface $registrant) {
   $config = \Drupal::config('recurring_events_registration.registrant.config');
   $send_email = $config->get('email_notifications');
-  if ($send_email) {
+  $send_email_key = $config->get('notifications' . '.' . $key . '.enabled');
+  if ($send_email && $send_email_key) {
     $params = [
       'registrant' => $registrant,
     ];

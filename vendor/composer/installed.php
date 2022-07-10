@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '45f1dcbf19e0341dd64d37ac6ff475db1bb0e3c1',
+        'reference' => 'ab5b7bfd245d06c448ab4a492f8f48aaef5b174f',
         'name' => 'drupal-composer/drupal-project',
         'dev' => true,
     ),
@@ -274,7 +274,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '45f1dcbf19e0341dd64d37ac6ff475db1bb0e3c1',
+            'reference' => 'ab5b7bfd245d06c448ab4a492f8f48aaef5b174f',
             'dev_requirement' => false,
         ),
         'drupal/action' => array(
@@ -1544,12 +1544,12 @@
             'dev_requirement' => false,
         ),
         'drupal/recurring_events' => array(
-            'pretty_version' => '2.0.0-rc3',
-            'version' => '2.0.0.0-RC3',
+            'pretty_version' => '2.0.0-rc4',
+            'version' => '2.0.0.0-RC4',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../web/modules/contrib/recurring_events',
             'aliases' => array(),
-            'reference' => '2.0.0-rc3',
+            'reference' => '2.0.0-rc4',
             'dev_requirement' => false,
         ),
         'drupal/redirect' => array(

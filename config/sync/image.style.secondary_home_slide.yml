@@ -1,0 +1,15 @@
+uuid: 67fc88f3-33d9-476e-8a94-08d068dc3e39
+langcode: en
+status: true
+dependencies: {  }
+name: secondary_home_slide
+label: secondary_home_slide
+effects:
+  623b9e86-07a5-4403-a308-d950e86bb34a:
+    uuid: 623b9e86-07a5-4403-a308-d950e86bb34a
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 476
+      height: 288
+      anchor: center-center

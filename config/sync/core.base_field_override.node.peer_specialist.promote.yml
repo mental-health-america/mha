@@ -1,0 +1,22 @@
+uuid: 72a1139c-8240-4baa-bf0d-5643add2162a
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.peer_specialist
+id: node.peer_specialist.promote
+field_name: promote
+entity_type: node
+bundle: peer_specialist
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

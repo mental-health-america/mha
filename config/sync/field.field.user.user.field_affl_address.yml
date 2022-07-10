@@ -1,0 +1,40 @@
+uuid: 044cddb5-3663-47a9-88c5-c769aa4681b1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_affl_address
+  module:
+    - address
+    - user
+id: user.user.field_affl_address
+field_name: field_affl_address
+entity_type: user
+bundle: user
+label: Address
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    langcode: ''
+    country_code: US
+    administrative_area: ''
+    locality: ''
+    dependent_locality: null
+    postal_code: ''
+    sorting_code: null
+    address_line1: ''
+    address_line2: ''
+    organization: ''
+    given_name: ''
+    additional_name: null
+    family_name: ''
+default_value_callback: ''
+settings:
+  available_countries:
+    US: US
+  langcode_override: ''
+  field_overrides: {  }
+  fields: {  }
+field_type: address

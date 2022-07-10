@@ -7,6 +7,7 @@ use Drupal\datetime_range\Plugin\Field\FieldWidget\DateRangeDefaultWidget;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\user\Entity\Role;
 
 /**
  * Plugin implementation of the 'event registration' widget.
@@ -84,6 +85,27 @@ class EventRegistrationWidget extends DateRangeDefaultWidget {
       '#description' => $this->t('Select this box to only allow an email address to register for an event one time.'),
       '#weight' => 1,
       '#default_value' => $items[$delta]->unique_email_address ?: '',
+      '#states' => [
+        'visible' => [
+          ':input[name="event_registration[0][registration]"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
+
+    $role_options = [];
+    $roles = Role::loadMultiple();
+    if (!empty($roles)) {
+      foreach ($roles as $role) {
+        $role_options[$role->id()] = $role->label();
+      }
+    }
+    $element['permitted_roles'] = [
+      '#type' => 'checkboxes',
+      '#title' => $this->t('Which roles can register for this series?'),
+      '#description' => $this->t('Select all the roles that can register, or leave blank to allow anybody to register.'),
+      '#weight' => 1,
+      '#default_value' => $items[$delta]->permitted_roles ? explode(',', $items[$delta]->permitted_roles) : [],
+      '#options' => $role_options,
       '#states' => [
         'visible' => [
           ':input[name="event_registration[0][registration]"]' => ['checked' => TRUE],
@@ -319,6 +341,10 @@ class EventRegistrationWidget extends DateRangeDefaultWidget {
       $item['instance_schedule_close_units'] = $item['instance_registration']['close_registration']['instance_schedule_close_units'];
       $item['instance_schedule_close_type'] = $item['instance_registration']['close_registration']['instance_schedule_close_type'];
       $item['capacity'] = (int) $item['capacity'];
+      $selected_roles = array_filter($item['permitted_roles'], function ($i) {
+        return $i !== 0;
+      });
+      $item['permitted_roles'] = implode(',', $selected_roles);
       unset($item['series_registration']);
       unset($item['instance_registration']);
 
@@ -380,6 +406,10 @@ class EventRegistrationWidget extends DateRangeDefaultWidget {
 
       if (empty($item['unique_email_address'])) {
         $item['unique_email_address'] = 0;
+      }
+
+      if (empty($item['permitted_roles'])) {
+        $item['permitted_roles'] = '';
       }
 
     }

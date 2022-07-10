@@ -474,6 +474,21 @@ function recurring_events_update_8011() {
     ],
   ];
 
+  $updates = [
+    'tables' => [
+      'eventseries_field_data',
+      'eventseries_field_revision',
+      ],
+    'fields' => [
+      'daily_recurring_date__value',
+      'daily_recurring_date__end_value',
+      'weekly_recurring_date__value',
+      'weekly_recurring_date__end_value',
+      'monthly_recurring_date__value',
+      'monthly_recurring_date__end_value',
+    ],
+  ];
+
   $entity_type_manager = \Drupal::entityTypeManager();
 
   $storage = $entity_type_manager->getStorage('eventseries');
@@ -487,6 +502,15 @@ function recurring_events_update_8011() {
 
   $database = \Drupal::database();
   $definition_manager = \Drupal::entityDefinitionUpdateManager();
+
+  foreach ($updates['tables'] as $table) {
+    foreach ($updates['fields'] as $field) {
+      $database->update($table)
+        ->fields([$field => ''])
+        ->isNull($field)
+        ->execute();
+    }
+  }
 
   $basefield_definitions = \Drupal::service('entity_field.manager')->getBaseFieldDefinitions('eventseries');
 
@@ -504,10 +528,14 @@ function recurring_events_update_8011() {
       ->execute()
       ->fetchAll();
 
-    $update_fields = array_fill_keys($field_fields, NULL);
-    $database->update($table_name)
-      ->fields($update_fields)
-      ->execute();
+    foreach ($database_values as &$value) {
+      $duration_field = $machine_name . '__duration';
+      if (property_exists($value, $duration_field)) {
+        if (empty($value->{$duration_field})) {
+          $value->{$duration_field} = 0;
+        }
+      }
+    }
 
     // Remove the existing daily/monthly/weekly recurring date field.
     $field_storage_definition = $definition_manager->getFieldStorageDefinition($machine_name, 'eventseries');
@@ -540,7 +568,7 @@ function recurring_events_update_8011() {
           $revision_key => $value->{$revision_key},
         ];
         foreach ($field_fields as $field) {
-          $values_to_restore[$field] = rtrim($value->{$field}, 's');
+          $values_to_restore[$field] = $value->{$field};
         }
         $values_to_restore[$machine_name . '__end_time'] = NULL;
         $values_to_restore[$machine_name . '__duration_or_end_time'] = 'duration';
@@ -557,4 +585,67 @@ function recurring_events_update_8011() {
       }
     }
   }
+}
+
+/**
+ * Remove the event_instance entity reference field, now use computed field.
+ */
+function recurring_events_update_8012() {
+  $definition_manager = \Drupal::entityDefinitionUpdateManager();
+  $field_storage_definition = $definition_manager->getFieldStorageDefinition('event_instances', 'eventseries');
+  $definition_manager->uninstallFieldStorageDefinition($field_storage_definition);
+}
+
+/**
+ * Update any views that use old event instance relationship.
+ */
+function recurring_events_update_8013() {
+
+  $config_factory = \Drupal::configFactory();
+
+  if (!$views = \Drupal\views\Views::getAllViews()) {
+    return [];
+  }
+
+  $messages = [];
+
+  foreach ($views as $view_id => $view) {
+
+    $config = $config_factory->getEditable('views.view.' . $view_id);
+    if (!$displays = $config->get('display')) {
+      continue;
+    }
+
+    $changed = FALSE;
+    foreach ($displays as $display_id => $display) {
+      if (empty($display['display_options']['relationships'])) {
+        continue;
+      }
+      foreach ($display['display_options']['relationships'] as $id => $relationship) {
+        $table = $relationship['table'] ?? NULL;
+        if ($table != 'eventseries__event_instances') {
+          continue;
+        }
+        $relationship['table'] = 'eventseries_field_data';
+        if ($relationship['admin_label'] == 'Event Instance entity') {
+          // Change label if it wasn't customized.
+          $relationship['admin_label'] = 'Event Series Instances';
+        }
+        unset($relationship['entity_field']);
+        $displays[$display_id]['display_options']['relationships'][$id] = $relationship;
+        $changed = TRUE;
+      }
+    }
+
+    if ($changed) {
+      $config->set('display', $displays);
+      $config->save(TRUE);
+      $messages[] = t('Updated view @id.', ['@id' => $view_id]);
+    }
+  }
+
+  if (!empty($messages)) {
+    return implode("</br> \n", $messages);
+  }
+  return t('No Recurring events views to update.');
 }

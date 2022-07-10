@@ -1,0 +1,17 @@
+uuid: 2d83f5c1-1b8d-4537-8616-a76252231974
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+name: hero_16_9_medium_768x432
+label: 'Hero 16:9 Medium (768x432)'
+effects:
+  742a9fe6-c21b-495f-ab40-566ba0a0b72f:
+    uuid: 742a9fe6-c21b-495f-ab40-566ba0a0b72f
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 768
+      height: 432
+      crop_type: focal_point

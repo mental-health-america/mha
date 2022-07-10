@@ -1,0 +1,9 @@
+uuid: 3bc10547-aa16-4c80-897a-63de7473439b
+langcode: en
+status: true
+dependencies: {  }
+id: hero_16_9_extra_small_480x270_
+label: 'Hero 16:9 Extra Small (480x270)'
+image_style_mappings: {  }
+breakpoint_group: responsive_image
+fallback_image_style: '_original image_'

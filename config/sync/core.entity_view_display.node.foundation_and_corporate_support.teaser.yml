@@ -1,0 +1,43 @@
+uuid: 52a32e5a-00a3-4d26-8f0e-ecefe4feb9c6
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.foundation_and_corporate_support.feeds_item
+    - field.field.node.foundation_and_corporate_support.field_amount
+    - field.field.node.foundation_and_corporate_support.field_donor
+    - field.field.node.foundation_and_corporate_support.field_meta_tags
+    - field.field.node.foundation_and_corporate_support.field_purpose
+    - field.field.node.foundation_and_corporate_support.field_quarter
+    - field.field.node.foundation_and_corporate_support.field_sort
+    - field.field.node.foundation_and_corporate_support.field_title
+    - field.field.node.foundation_and_corporate_support.field_year
+    - field.field.node.foundation_and_corporate_support.field_yoast_seo
+    - node.type.foundation_and_corporate_support
+  module:
+    - user
+id: node.foundation_and_corporate_support.teaser
+targetEntityType: node
+bundle: foundation_and_corporate_support
+mode: teaser
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  addtoany: true
+  feeds_item: true
+  field_amount: true
+  field_donor: true
+  field_meta_tags: true
+  field_purpose: true
+  field_quarter: true
+  field_sort: true
+  field_title: true
+  field_year: true
+  field_yoast_seo: true
+  langcode: true
+  search_api_excerpt: true

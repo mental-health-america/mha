@@ -1,0 +1,9 @@
+uuid: e75c733c-55c4-4948-9005-e4cf0ef3212a
+langcode: en
+status: true
+dependencies: {  }
+id: hero_16_9_medium_768x432_
+label: 'Hero 16:9 Medium (768x432)'
+image_style_mappings: {  }
+breakpoint_group: responsive_image
+fallback_image_style: '_original image_'

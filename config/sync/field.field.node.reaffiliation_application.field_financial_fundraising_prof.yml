@@ -1,0 +1,23 @@
+uuid: e36d70e4-921f-432d-be5a-9aa0b46b4c68
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_financial_fundraising_prof
+    - node.type.reaffiliation_application
+id: node.reaffiliation_application.field_financial_fundraising_prof
+field_name: field_financial_fundraising_prof
+entity_type: node
+bundle: reaffiliation_application
+label: 'Financial/Fundraising Professionals'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: '%'
+field_type: integer

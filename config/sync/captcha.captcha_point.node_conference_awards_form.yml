@@ -1,0 +1,7 @@
+uuid: 075cfcfb-fec5-4443-b139-67549c1086ac
+langcode: en
+status: false
+dependencies: {  }
+formId: node_conference_awards_form
+captchaType: default
+label: null

@@ -1,0 +1,21 @@
+uuid: 58e89698-e07c-457d-8c89-877eb016706e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_what_population_serve
+    - node.type.reaffiliation_application
+  module:
+    - options
+id: node.reaffiliation_application.field_what_population_serve
+field_name: field_what_population_serve
+entity_type: node
+bundle: reaffiliation_application
+label: 'What population area does your organization serve?'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

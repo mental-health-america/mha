@@ -1,0 +1,18 @@
+uuid: 8d8bb065-bd0b-49d9-91da-feadafcb44f6
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.peer_specialist
+id: node.peer_specialist.title
+field_name: title
+entity_type: node
+bundle: peer_specialist
+label: 'Speaker Name'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

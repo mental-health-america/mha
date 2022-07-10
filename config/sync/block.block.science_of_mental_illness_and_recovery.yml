@@ -1,0 +1,40 @@
+uuid: b17e7db0-4d0d-4970-96fe-7a9cac44aa74
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.mental-health-month
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: mha-menu
+id: science_of_mental_illness_and_recovery
+theme: gavias_colin
+region: sidebar_left
+weight: 31
+provider: null
+plugin: 'system_menu_block:mental-health-month'
+settings:
+  id: 'system_menu_block:mental-health-month'
+  label: 'Mental Health Month'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: "/mental-health-month\r\n/mental-health-month-toolkits-years-past\r\n/node/19324\r\n/node/19326\r\n/node/19327\r\n/node/19336\r\n/node/19335\r\n/node/19334\r\n/node/19332\r\n/node/19333\r\n/node/19330\r\n/node/19328\r\n/node/19329\r\n/node/19331\r\n/node/21628\r\n/node/21629\r\n/node/21630\r\n/node/21631\r\n/node/21632\r\n/node/21635\r\n/node/21636"

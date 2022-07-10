@@ -1,0 +1,39 @@
+uuid: 6c4bb813-8f76-4c35-a2ce-2575f08f44ef
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:6eb3dbd7-6b8b-4885-a26d-5c55db379084'
+  module:
+    - block_content
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: countystatemapsbuttonscharts
+theme: gavias_colin
+region: other
+weight: 0
+provider: null
+plugin: 'block_content:6eb3dbd7-6b8b-4885-a26d-5c55db379084'
+settings:
+  id: 'block_content:6eb3dbd7-6b8b-4885-a26d-5c55db379084'
+  label: 'County State Maps - Buttons & Charts'
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    pages: /node/21319

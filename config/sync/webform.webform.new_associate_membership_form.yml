@@ -1,0 +1,485 @@
+uuid: bba4f1e2-feda-4f06-b352-7e2de1ca7a35
+langcode: en
+status: open
+dependencies: {  }
+weight: 0
+open: null
+close: null
+uid: 1380
+template: false
+archive: false
+id: new_associate_membership_form
+title: 'APPLICATION: Associate Membership Application'
+description: ''
+category: ''
+elements: |-
+  organizationinformation:
+    '#type': webform_markup
+    '#markup': '<h2>Organization Information</h2>'
+  organization_full_name_no_acronyms_or_abbreviations_:
+    '#type': textfield
+    '#title': 'Organization Full Name (No acronyms or abbreviations)'
+    '#required': true
+  acronym_or_abbreviation_for_your_organization_if_applicable_and_:
+    '#type': textfield
+    '#title': 'Acronym or Abbreviation for your Organization (if applicable and used publicly)'
+  torganization_company_type:
+    '#type': webform_checkboxes_other
+    '#title': 'Organization/Company Type'
+    '#options':
+      'For Profit': 'For Profit'
+      'Non Profit': 'Non Profit'
+  organization_mailing_address:
+    '#type': webform_address
+    '#title': 'Organization Mailing Address'
+    '#required': true
+    '#address__required': true
+    '#city__required': true
+    '#state_province__required': true
+    '#state_province__type': webform_select_other
+    '#postal_code__required': true
+    '#country__required': true
+    '#country__type': webform_select_other
+  organization_website:
+    '#type': textfield
+    '#title': 'Organization Website'
+    '#required': true
+  facebook_url:
+    '#type': textfield
+    '#title': 'Facebook URL'
+  twitter_handle:
+    '#type': textfield
+    '#title': 'Twitter Handle'
+  linkedin_profile:
+    '#type': textfield
+    '#title': 'LinkedIn Profile'
+  instagram_profile:
+    '#type': textfield
+    '#title': 'Instagram Profile'
+  number_of_employees:
+    '#type': textfield
+    '#title': 'Number of Employees'
+  primarymembershipcontact:
+    '#type': webform_markup
+    '#markup': '<h2>Primary Membership Contact</h2>'
+  first_name:
+    '#type': textfield
+    '#title': 'First Name'
+    '#required': true
+  last_name:
+    '#type': textfield
+    '#title': 'Last Name'
+    '#required': true
+  title:
+    '#type': textfield
+    '#title': Title
+    '#required': true
+  email:
+    '#type': email
+    '#title': Email
+    '#required': true
+  phone_number:
+    '#type': tel
+    '#title': 'Phone Number'
+    '#required': true
+    '#international': true
+    '#international_initial_country': US
+    '#international_preferred_countries':
+      - US
+  secondarycontactinformation:
+    '#type': webform_markup
+    '#markup': '<h2>Secondary Membership Contact</h2>'
+  first_name2:
+    '#type': textfield
+    '#title': 'First Name'
+  last_name2:
+    '#type': textfield
+    '#title': 'Last Name'
+  title2:
+    '#type': textfield
+    '#title': Title
+  email2:
+    '#type': email
+    '#title': Email
+  phone_number2:
+    '#type': tel
+    '#title': 'Phone Number'
+    '#international': true
+    '#international_initial_country': US
+    '#international_preferred_countries':
+      - US
+  please_provide_the_name_and_emails_of_any_additional_staff_membe:
+    '#type': textarea
+    '#title': 'Please provide the name and emails of any additional staff members from your organization who would like to receive associate member email updates'
+  please_briefly_describe_your_organization_s_mission_150_words_or:
+    '#type': textarea
+    '#title': 'Please briefly describe your organization’s mission (150 words or less)'
+    '#required': true
+    '#counter_type': word
+    '#counter_minimum': 1
+    '#counter_maximum': 150
+  please_provide_an_official_description_of_your_organization_for_:
+    '#type': textarea
+    '#title': 'Please provide an official description of your organization for use in public capacity (only if different than the mission you shared above).'
+  does_your_organization_have_a_list_of_set_values_that_guide_your:
+    '#type': checkboxes
+    '#title': 'Does your organization have a list of set values that guide your work? '
+    '#options': yes_no
+    '#required': true
+  if_yes_please_share_:
+    '#type': textarea
+    '#title': 'If yes, please share.'
+    '#states':
+      visible:
+        ':input[name="does_your_organization_have_a_list_of_set_values_that_guide_your[Yes]"]':
+          checked: true
+  what_populations_do_you_serve_:
+    '#type': webform_checkboxes_other
+    '#title': 'What populations do you serve?'
+    '#options':
+      Youth: Youth
+      'College Students': 'College Students'
+      'Older Adults': 'Older Adults'
+      Parents: Parents
+      'Mental Health Professionals': 'Mental Health Professionals'
+      'BIPOC Communities': 'BIPOC Communities'
+    '#required': true
+  please_briefly_describe_the_services_products_or_programs_your_o:
+    '#type': textarea
+    '#title': 'Please briefly describe the services, products or programs your organization offers to help fulfill your mission.'
+    '#required': true
+  mission:
+    '#type': webform_markup
+    '#markup': |
+      The Associate Membership program is for organizations that align with Mental Health America&rsquo;s B4Stage4 Philosophy, the idea that we should treat mental health concerns before they are at a crisis point (learn more on our <a href="https://www.mhanational.org/b4stage4-philosophy">website</a>) and MHA&rsquo;s overall mission.<br />
+      <br />
+      <em>Founded in 1909 by Clifford W. Beers, Mental Health America (MHA) is the nation&rsquo;s leading community-based nonprofit dedicated to addressing the needs of those living with mental illness and promoting the overall mental health of all. MHA&rsquo;s work is driven by its commitment to promote mental health as a critical part of overall wellness, including prevention services for all; early identification and intervention for those at risk; integrated care, services, and supports for those who need them; with recovery as the goal.</em>
+      
+  please_describe_how_your_organization_s_work_aligns_and_or_suppo:
+    '#type': textarea
+    '#title': 'Please describe how your organization’s work aligns and/or supports MHA’s mission and B4Stage4 philosophy.'
+    '#required': true
+  in_june_of_2020_as_an_organization_mental_health_america_took_an:
+    '#type': textarea
+    '#title': 'In June of 2020, as an organization, Mental Health America took an anti-racist pledge, vowing to work against individual racism, interpersonal racism and institutional racism in all their forms. We are committed to working with our associate members to ensure this pledge. How does organization incorporate anti-racist practices into your organizational work? OR what is your organization doing to address racism through the work you do?'
+  has_your_organization_worked_with_mha_in_any_capacity_in_the_pas:
+    '#type': checkboxes
+    '#title': 'Has your organization worked with MHA in any capacity in the past?'
+    '#options': yes_no
+    '#required': true
+  if_yes_please_explain_how_you_have_worked_with_mha_in_the_past_:
+    '#type': textarea
+    '#title': 'If yes, please explain how you have worked with MHA in the past.'
+    '#states':
+      visible:
+        ':input[name="has_your_organization_worked_with_mha_in_any_capacity_in_the_pas[Yes]"]':
+          checked: true
+  is_your_organization_involved_in_any_policy_work_at_the_local_st:
+    '#type': checkboxes
+    '#title': 'Is your organization involved in any policy work at the local, state or federal level? '
+    '#options': yes_no
+    '#required': true
+  if_you_answered_yes_please_briefly_describe_the_policy_work_you_:
+    '#type': textarea
+    '#title': 'If you answered yes, please briefly describe the policy work you are involved in.'
+    '#states':
+      visible:
+        ':input[name="is_your_organization_involved_in_any_policy_work_at_the_local_st[Yes]"]':
+          checked: true
+  please_briefly_explain_why_your_organization_is_interested_in_jo:
+    '#type': textarea
+    '#title': 'Please briefly explain why your organization is interested in joining MHA’s Associate Membership program and what you hope to get out of your membership.'
+    '#required': true
+  membershipbenefits:
+    '#type': webform_markup
+    '#markup': '<h2>Membership Benefits</h2>'
+  please_select_all_the_activities_and_benefits_your_organization_:
+    '#type': checkboxes
+    '#title': 'Please select all the activities and benefits your organization is interested in engaging with as a part of your membership. Please note that this does not confirm your participation. The goal is to get a general sense of your interest in different areas of membership.'
+    '#options':
+      'Participation in MHA public education campaigns ( i.e. Mental Health Month, BIPOC Mental Health Month, Back to School)': 'Participation in MHA public education campaigns ( i.e. Mental Health Month, BIPOC Mental Health Month, Back to School)'
+      'Participation in live events (i.e. annual conference, regional policy council meetings, policy institute)': 'Participation in live events (i.e. annual conference, regional policy council meetings, policy institute)'
+      'Writing Screening to Support content': 'Writing Screening to Support content'
+      'A unique URL for online mental health screenings': 'A unique URL for online mental health screenings'
+      'Data from online mental health screenings ': 'Data from online mental health screenings '
+      'Hosting joint webinar with MHA ': 'Hosting joint webinar with MHA '
+      'Consultation with MHA subject matter expert on specific area of interest ': 'Consultation with MHA subject matter expert on specific area of interest '
+      'Engagement with Mental Health America’s local affiliate organizations ': 'Engagement with Mental Health America’s local affiliate organizations '
+      'Connections with other Mental Health America Associate Members and Partners ': 'Connections with other Mental Health America Associate Members and Partners '
+      'Displaying the Associate Membership logo on your organization’s website. ': 'Displaying the Associate Membership logo on your organization’s website. '
+  what_are_the_most_important_goals_or_objectives_for_your_members:
+    '#type': textarea
+    '#title': 'What are the most important goals or objectives for your membership with Mental Health America? (Please feel free to use bullet points).'
+    '#required': true
+  statements:
+    '#type': webform_markup
+    '#markup': '<h2>Please read the following information and initial after each one as your recognition that you understand and abide.</h2>'
+  i_understand_that_my_associate_membership_is_not_complete_until_:
+    '#type': textfield
+    '#title': 'I understand that my Associate Membership is not complete until I receive final approval from Mental Health America. Initials:'
+  i_understand_that_until_my_organization_s_application_and_member:
+    '#type': textfield
+    '#title': 'I understand that until my organization’s application and membership is approved, I can not advertise my organization as a Mental Health America associate member. Initials:'
+  voteboard:
+    '#type': textfield
+    '#title': 'I understand that Associate Membership does not entitle my organization to vote for MHA Board Members. Initials:'
+  i_am_authorized_to_submit_this_application_on_behalf_of_my_organ:
+    '#type': textfield
+    '#title': 'I am authorized to submit this application on behalf of my organization. Initials:'
+css: ''
+javascript: ''
+settings:
+  ajax: false
+  ajax_scroll_top: form
+  ajax_progress_type: ''
+  ajax_effect: ''
+  ajax_speed: null
+  page: true
+  page_submit_path: ''
+  page_confirm_path: ''
+  page_theme_name: ''
+  form_title: both
+  form_submit_once: false
+  form_open_message: ''
+  form_close_message: ''
+  form_exception_message: ''
+  form_previous_submissions: true
+  form_confidential: false
+  form_confidential_message: ''
+  form_disable_remote_addr: false
+  form_convert_anonymous: false
+  form_prepopulate: false
+  form_prepopulate_source_entity: false
+  form_prepopulate_source_entity_required: false
+  form_prepopulate_source_entity_type: ''
+  form_unsaved: false
+  form_disable_back: false
+  form_submit_back: false
+  form_disable_autocomplete: false
+  form_novalidate: false
+  form_disable_inline_errors: false
+  form_required: false
+  form_autofocus: false
+  form_details_toggle: false
+  form_reset: false
+  form_access_denied: default
+  form_access_denied_title: ''
+  form_access_denied_message: ''
+  form_access_denied_attributes: {  }
+  form_file_limit: ''
+  form_attributes: {  }
+  form_method: ''
+  form_action: ''
+  share: false
+  share_node: false
+  share_theme_name: ''
+  share_title: true
+  share_page_body_attributes: {  }
+  submission_label: ''
+  submission_exception_message: ''
+  submission_locked_message: ''
+  submission_log: false
+  submission_excluded_elements: {  }
+  submission_exclude_empty: false
+  submission_exclude_empty_checkbox: false
+  submission_views: {  }
+  submission_views_replace: {  }
+  submission_user_columns: {  }
+  submission_user_duplicate: false
+  submission_access_denied: default
+  submission_access_denied_title: ''
+  submission_access_denied_message: ''
+  submission_access_denied_attributes: {  }
+  previous_submission_message: ''
+  previous_submissions_message: ''
+  autofill: false
+  autofill_message: ''
+  autofill_excluded_elements: {  }
+  wizard_progress_bar: true
+  wizard_progress_pages: false
+  wizard_progress_percentage: false
+  wizard_progress_link: false
+  wizard_progress_states: false
+  wizard_start_label: ''
+  wizard_preview_link: false
+  wizard_confirmation: true
+  wizard_confirmation_label: ''
+  wizard_auto_forward: true
+  wizard_auto_forward_hide_next_button: false
+  wizard_keyboard: true
+  wizard_track: ''
+  wizard_prev_button_label: ''
+  wizard_next_button_label: ''
+  wizard_toggle: false
+  wizard_toggle_show_label: ''
+  wizard_toggle_hide_label: ''
+  preview: 0
+  preview_label: ''
+  preview_title: ''
+  preview_message: ''
+  preview_attributes: {  }
+  preview_excluded_elements: {  }
+  preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
+  draft: none
+  draft_multiple: false
+  draft_auto_save: false
+  draft_saved_message: ''
+  draft_loaded_message: ''
+  draft_pending_single_message: ''
+  draft_pending_multiple_message: ''
+  confirmation_type: page
+  confirmation_url: ''
+  confirmation_title: 'Thank you for filling out the Associate Membership Application.'
+  confirmation_message: "<h4>A member of our team will be in touch regarding your organization&rsquo;s application in 7-10 business days.<br />\r\n<br />\r\nIf you have any questions, please contact Whitney Ball at <a href=\"mailto:wball@mhanational.org\">wball@mhanational.org</a></h4>"
+  confirmation_attributes: {  }
+  confirmation_back: true
+  confirmation_back_label: ''
+  confirmation_back_attributes: {  }
+  confirmation_exclude_query: false
+  confirmation_exclude_token: false
+  confirmation_update: false
+  limit_total: null
+  limit_total_interval: null
+  limit_total_message: ''
+  limit_total_unique: false
+  limit_user: null
+  limit_user_interval: null
+  limit_user_message: ''
+  limit_user_unique: false
+  entity_limit_total: null
+  entity_limit_total_interval: null
+  entity_limit_user: null
+  entity_limit_user_interval: null
+  purge: none
+  purge_days: null
+  results_disabled: false
+  results_disabled_ignore: false
+  results_customize: false
+  token_view: false
+  token_update: false
+  token_delete: false
+  serial_disabled: false
+access:
+  create:
+    roles:
+      - anonymous
+      - authenticated
+    users: {  }
+    permissions: {  }
+  view_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  update_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  delete_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  purge_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  view_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  update_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  delete_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  administer:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  test:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  configuration:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+handlers:
+  email:
+    id: email
+    handler_id: email
+    label: 'Email Confirmation'
+    notes: ''
+    status: true
+    conditions: {  }
+    weight: 0
+    settings:
+      states:
+        - completed
+      to_mail: '[webform_submission:values:email:raw]'
+      to_options: {  }
+      bcc_mail: ''
+      bcc_options: {  }
+      cc_mail: ''
+      cc_options: {  }
+      from_mail: _default
+      from_options: {  }
+      from_name: _default
+      reply_to: wball@mhanational.org
+      return_path: ''
+      sender_mail: ''
+      sender_name: ''
+      subject: 'Thank you for filling out the Associate Membership Application'
+      body: "A member of our team will be in touch regarding your organization&rsquo;s application in 7-10 business days.<br />\r\n<br />\r\nIf you have any questions, please contact Whitney Ball at <a href=\"mailto:wball@mhanational.org\">wball@mhanational.org</a>.<br />\r\n<br />\r\nThank you,<br />\r\nMental Health America"
+      excluded_elements: {  }
+      ignore_access: false
+      exclude_empty: true
+      exclude_empty_checkbox: false
+      exclude_attachments: false
+      html: true
+      attachments: false
+      twig: false
+      theme_name: ''
+      parameters: {  }
+      debug: false
+  email_1:
+    id: email
+    handler_id: email_1
+    label: 'Email Copy to Whitney'
+    notes: ''
+    status: true
+    conditions: {  }
+    weight: 0
+    settings:
+      states:
+        - completed
+      to_mail: wball@mhanational.org
+      to_options: {  }
+      bcc_mail: ''
+      bcc_options: {  }
+      cc_mail: ''
+      cc_options: {  }
+      from_mail: _default
+      from_options: {  }
+      from_name: _default
+      reply_to: ''
+      return_path: ''
+      sender_mail: ''
+      sender_name: ''
+      subject: 'Associate Membership Application Submission'
+      body: _default
+      excluded_elements: {  }
+      ignore_access: false
+      exclude_empty: true
+      exclude_empty_checkbox: false
+      exclude_attachments: false
+      html: true
+      attachments: false
+      twig: false
+      theme_name: ''
+      parameters: {  }
+      debug: false
+variants: {  }

@@ -1,0 +1,21 @@
+uuid: d0734778-0060-4282-a293-fc25993ee86a
+langcode: en
+status: true
+dependencies:
+  module:
+    - gavias_content_builder
+    - node
+_core:
+  default_config_hash: P0nTpiZ6tv8M_K-H_2EN_XR0OgTRcyX79U7aM9sbg1s
+id: node.field_content_builder
+field_name: field_content_builder
+entity_type: node
+type: gavias_content_builder
+settings: {  }
+module: gavias_content_builder
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,41 @@
+uuid: ee2a2cb8-8970-4830-9f0a-e73f288de534
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:045cf2ff-25e6-4952-a6bf-1136f581446d'
+  module:
+    - block_content
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: getprofessionalhelpifyouneedit
+theme: gavias_colin
+region: sidebar_left
+weight: 38
+provider: null
+plugin: 'block_content:045cf2ff-25e6-4952-a6bf-1136f581446d'
+settings:
+  id: 'block_content:045cf2ff-25e6-4952-a6bf-1136f581446d'
+  label: 'Get Professional Help If You Need It '
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: /get-professional-help-if-you-need-it

@@ -1,0 +1,22 @@
+uuid: 63e3b9b1-ec43-46f5-bf7f-d27ac06afbd8
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: state_of_mental_health_in_america
+label: 'State of Mental Health in America'
+type: 'canonical_entities:node'
+pattern: 'state-of-mental-health-in-america/[node:nid]'
+selection_criteria:
+  8d633354-c321-4e1b-87c6-a2e827364bbc:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: 8d633354-c321-4e1b-87c6-a2e827364bbc
+    context_mapping:
+      node: node
+    bundles:
+      state_of_mental_health_in_americ: state_of_mental_health_in_americ
+selection_logic: and
+weight: -5
+relationships: {  }

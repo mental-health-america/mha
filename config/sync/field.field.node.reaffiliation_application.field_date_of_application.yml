@@ -1,0 +1,21 @@
+uuid: 018f255c-e25f-4d15-adba-9dda9c0702e9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_date_of_application
+    - node.type.reaffiliation_application
+  module:
+    - datetime
+id: node.reaffiliation_application.field_date_of_application
+field_name: field_date_of_application
+entity_type: node
+bundle: reaffiliation_application
+label: 'Date of Application'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

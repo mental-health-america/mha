@@ -1,0 +1,21 @@
+uuid: 6e3dc3dc-6dec-40b0-84ae-9ffc0ed415be
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_org_diversity
+    - node.type.reaffiliation_application
+  module:
+    - options
+id: node.reaffiliation_application.field_org_diversity
+field_name: field_org_diversity
+entity_type: node
+bundle: reaffiliation_application
+label: 'Does your organization have a staff, board, and programs that represent and respond to the diversity of the community?'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string
