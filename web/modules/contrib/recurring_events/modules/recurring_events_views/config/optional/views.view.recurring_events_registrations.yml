@@ -7,7 +7,7 @@ dependencies:
     - recurring_events
     - recurring_events_registration
     - user
-id: registrations
+id: recurring_events_registrations
 label: Registrations
 module: views
 description: 'A view showing all the registrants on the site'

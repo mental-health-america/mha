@@ -7,6 +7,8 @@
 
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\recurring_events\Entity\EventSeries;
@@ -19,6 +21,7 @@ use Drupal\Core\Url;
 use Drupal\Core\Link;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Component\Utility\Html;
+use Drupal\recurring_events\Plugin\ComputedField\EventInstances;
 
 /**
  * Implements hook_help().
@@ -141,36 +144,16 @@ function template_preprocess_eventseries_add_list(array &$variables) {
 }
 
 /**
- * Implements hook_ENTITY_TYPE_presave().
- */
-function recurring_events_eventseries_presave(EntityInterface $entity) {
-  $original = $entity->original;
-  $creation_service = \Drupal::service('recurring_events.event_creation_service');
-  $moderated = $entity->hasField('moderation_state');
-
-  // If the eventseries is being published, or created for the first time then
-  // there may be date recurrence changes that need to be converted into new
-  // eventinstance entities.
-  if ($entity->isPublished() || $entity->isNew() || !$moderated) {
-    if ($entity->isDefaultTranslation()) {
-      $creation_service->saveEvent($entity, $original);
-    }
-  }
-}
-
-/**
  * Implements hook_ENTITY_TYPE_insert().
  */
 function recurring_events_eventseries_insert(EntityInterface $entity) {
   if (\Drupal::isConfigSyncing()) {
     return;
   }
-  // When we initially create the eventseries we actually create the instances
-  // before the eventseries gets saved for the first time, so we have no ID for
-  // the series at that point. Now that the eventseries is properly saved we can
-  // go and set the eventseries_id on the eventinstances.
-  $instances = $entity->event_instances->referencedEntities();
   $creation_service = \Drupal::service('recurring_events.event_creation_service');
+  $creation_service->createInstances($entity);
+
+  $instances = $entity->event_instances->referencedEntities();
   if (!empty($instances)) {
     foreach ($instances as $instance) {
       $instance->set('eventseries_id', $entity->id());
@@ -225,12 +208,28 @@ function recurring_events_field_inheritance_update(EntityInterface $entity) {
  * Implements hook_ENTITY_TYPE_update().
  */
 function recurring_events_eventseries_update(EntityInterface $entity) {
+  $original = $entity->original;
+  $moderated = $entity->hasField('moderation_state');
   $creation_service = \Drupal::service('recurring_events.event_creation_service');
+
+  $date_changes = $creation_service->checkForOriginalRecurConfigChanges($entity, $original);
+  // If the eventseries is being published then
+  // there may be date recurrence changes that need to be converted into new
+  // eventinstance entities.
+  if ($date_changes) {
+    if ($entity->isPublished() || !$moderated) {
+      if ($entity->isDefaultTranslation()) {
+        $creation_service->clearEventInstances($entity);
+        $creation_service->createInstances($entity);
+      }
+    }
+    // Get a fresh version of the series to get the updated instances.
+    $entity = $entity->load($entity->id());
+  }
   $instances = $entity->event_instances->referencedEntities();
   $updated_statuses = $skipped_statuses = 0;
   if (!empty($instances)) {
     foreach ($instances as $instance) {
-      $creation_service->configureDefaultInheritances($instance, $entity->id());
       $status_updated = $creation_service->updateInstanceStatus($instance, $entity);
       if ($status_updated) {
         $updated_statuses++;
@@ -325,9 +324,9 @@ function recurring_events_eventseries_type_insert(EntityInterface $entity) {
 }
 
 /**
- * Implements hook_ENTITY_TYPE_delete().
+ * Implements hook_ENTITY_TYPE_predelete().
  */
-function recurring_events_eventseries_delete(EntityInterface $entity) {
+function recurring_events_eventseries_predelete(EntityInterface $entity) {
   // Only delete instances if we're deleting the default translation of the
   // series.
   if ($entity->isDefaultTranslation()) {
@@ -693,4 +692,27 @@ function recurring_events_theme_suggestions_eventinstance(array $variables) {
   $suggestions[] = 'eventinstance__' . $entity->id();
   $suggestions[] = 'eventinstance__' . $entity->id() . '__' . $sanitized_view_mode;
   return $suggestions;
+}
+
+/**
+ * Implements hook_entity_base_field_info_alter().
+ */
+function recurring_events_entity_base_field_info_alter(&$fields, EntityTypeInterface $entity_type) {
+  if ($entity_type->id() === 'eventseries') {
+    $fields['event_instances'] = BaseFieldDefinition::create('entity_reference')
+      ->setName('event_instances')
+      ->setLabel(t('Event Instances'))
+      ->setDescription('The event instances for this event.')
+      ->setTargetEntityTypeId('eventseries')
+      ->setReadOnly(TRUE)
+      ->setComputed(TRUE)
+      ->setSetting('target_type', 'eventinstance')
+      ->setDisplayConfigurable('view', TRUE)
+      ->setDisplayOptions('view', [
+        'label' => 'above',
+        'weight' => 0,
+      ])
+      ->setDisplayConfigurable('form', FALSE)
+      ->setClass(EventInstances::class);
+  }
 }

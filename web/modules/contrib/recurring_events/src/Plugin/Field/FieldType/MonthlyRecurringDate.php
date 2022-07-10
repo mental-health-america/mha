@@ -92,9 +92,9 @@ class MonthlyRecurringDate extends WeeklyRecurringDate implements RecurringEvent
     $config = [];
     $config['start_date'] = $event->getMonthlyStartDate();
     $config['end_date'] = $event->getMonthlyEndDate();
-    $config['time'] = $event->getMonthlyStartTime();
+    $config['time'] = strtoupper($event->getMonthlyStartTime());
+    $config['end_time'] = strtoupper($event->getMonthlyEndTime());
     $config['duration'] = $event->getMonthlyDuration();
-    $config['end_time'] = $event->getMonthlyEndTime();
     $config['duration_or_end_time'] = $event->getMonthlyDurationOrEndTime();
     $config['monthly_type'] = $event->getMonthlyType();
 
@@ -118,7 +118,7 @@ class MonthlyRecurringDate extends WeeklyRecurringDate implements RecurringEvent
     $config = [];
 
     $user_timezone = new \DateTimeZone(date_default_timezone_get());
-    $user_input = $form_state->getUserInput();
+    $user_input = $form_state->getValues();
 
     $time = $user_input['monthly_recurring_date'][0]['time'];
     if (is_array($time)) {
@@ -128,7 +128,8 @@ class MonthlyRecurringDate extends WeeklyRecurringDate implements RecurringEvent
     $time_parts = static::convertTimeTo24hourFormat($time);
     $timestamp = implode(':', $time_parts);
 
-    $start_timestamp = $user_input['monthly_recurring_date'][0]['value']['date'] . 'T' . $timestamp;
+    $user_input['monthly_recurring_date'][0]['value']->setTimezone($user_timezone);
+    $start_timestamp = $user_input['monthly_recurring_date'][0]['value']->format('Y-m-d') . 'T' . $timestamp;
     $start_date = DrupalDateTime::createFromFormat(DateTimeItemInterface::DATETIME_STORAGE_FORMAT, $start_timestamp, $user_timezone);
     $start_date->setTime(0, 0, 0);
 
@@ -140,17 +141,18 @@ class MonthlyRecurringDate extends WeeklyRecurringDate implements RecurringEvent
     $end_time_parts = static::convertTimeTo24hourFormat($end_time);
     $end_timestamp = implode(':', $end_time_parts);
 
-    $end_timestamp = $user_input['monthly_recurring_date'][0]['end_value']['date'] . 'T' . $end_timestamp;
+    $user_input['monthly_recurring_date'][0]['end_value']->setTimezone($user_timezone);
+    $end_timestamp = $user_input['monthly_recurring_date'][0]['end_value']->format('Y-m-d') . 'T' . $end_timestamp;
     $end_date = DrupalDateTime::createFromFormat(DateTimeItemInterface::DATETIME_STORAGE_FORMAT, $end_timestamp, $user_timezone);
     $end_date->setTime(0, 0, 0);
 
     $config['start_date'] = $start_date;
     $config['end_date'] = $end_date;
 
-    $config['time'] = $time;
+    $config['time'] = strtoupper($time);
+    $config['end_time'] = strtoupper($end_time);
     $config['duration'] = $user_input['monthly_recurring_date'][0]['duration'];
     $config['duration_or_end_time'] = $user_input['monthly_recurring_date'][0]['duration_or_end_time'];
-    $config['end_time'] = strtoupper($end_time);
     $config['monthly_type'] = $user_input['monthly_recurring_date'][0]['type'];
 
     switch ($config['monthly_type']) {
@@ -250,8 +252,6 @@ class MonthlyRecurringDate extends WeeklyRecurringDate implements RecurringEvent
           // Set the time of the start date to be the hours and
           // minutes.
           $monthly_date->setTime($time_parts[0], $time_parts[1]);
-          // Configure the timezone.
-          $monthly_date->setTimezone($utc_timezone);
           // Create a clone of this date.
           $monthly_date_end = clone $monthly_date;
           // Check whether we are using a duration or end time.
@@ -270,6 +270,11 @@ class MonthlyRecurringDate extends WeeklyRecurringDate implements RecurringEvent
               }
               break;
           }
+
+          // Configure the timezone.
+          $monthly_date->setTimezone($utc_timezone);
+          $monthly_date_end->setTimezone($utc_timezone);
+
           // Set this event to be created.
           $events_to_create[$monthly_date->format('r')] = [
             'start_date' => $monthly_date,

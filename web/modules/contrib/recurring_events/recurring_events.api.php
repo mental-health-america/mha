@@ -147,10 +147,8 @@ function hook_recurring_events_recur_field_types(&$fields) {
  *
  * @param Drupal\recurring_events\Entity\EventSeries $event_series
  *   The eventseries being altered.
- * @param Drupal\recurring_events\Entity\EventSeries $original
- *   The original, unaltered eventseries.
  */
-function hook_recurring_events_save_pre_instances_deletion(EventSeries $event_series, EventSeries $original) {
+function hook_recurring_events_save_pre_instances_deletion(EventSeries $event_series) {
 }
 
 /**
@@ -163,10 +161,8 @@ function hook_recurring_events_save_pre_instances_deletion(EventSeries $event_se
  *
  * @param Drupal\recurring_events\Entity\EventSeries $event_series
  *   The eventseries being altered.
- * @param Drupal\recurring_events\Entity\EventSeries $original
- *   The original, unaltered eventseries.
  */
-function hook_recurring_events_save_post_instances_deletion(EventSeries $event_series, EventSeries $original) {
+function hook_recurring_events_save_post_instances_deletion(EventSeries $event_series) {
 }
 
 /**

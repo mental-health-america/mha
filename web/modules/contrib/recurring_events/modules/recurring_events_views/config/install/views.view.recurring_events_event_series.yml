@@ -8,7 +8,7 @@ dependencies:
     - options
     - recurring_events
     - user
-id: event_series
+id: recurring_events_event_series
 label: 'Event Series'
 module: views
 description: 'A view showing all the event series on the site.'

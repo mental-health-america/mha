@@ -2,6 +2,7 @@ name: FullCalendar Options
 type: module
 description: FullCalendar configuration extenders.
 core: 8.x
+core_version_requirement: ^8 || ^9
 package: FullCalendar
 configure: admin/config/user-interface/fullcalendar/options
 dependencies:
