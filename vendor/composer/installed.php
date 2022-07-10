@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'b4e01b33575e57ebef76567d7566791772b1903f',
+        'reference' => '8cbafceec38b9e79e7108efea250c6b4f9c5c3b5',
         'name' => 'drupal-composer/drupal-project',
         'dev' => true,
     ),
@@ -274,7 +274,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'b4e01b33575e57ebef76567d7566791772b1903f',
+            'reference' => '8cbafceec38b9e79e7108efea250c6b4f9c5c3b5',
             'dev_requirement' => false,
         ),
         'drupal/action' => array(
@@ -471,6 +471,15 @@
             'replaced' => array(
                 0 => '9.4.2',
             ),
+        ),
+        'drupal/color-color' => array(
+            'pretty_version' => '1.0.1',
+            'version' => '1.0.1.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../web/modules/contrib/color-color',
+            'aliases' => array(),
+            'reference' => '1.0.1',
+            'dev_requirement' => false,
         ),
         'drupal/colorbox' => array(
             'pretty_version' => '1.10.0',
