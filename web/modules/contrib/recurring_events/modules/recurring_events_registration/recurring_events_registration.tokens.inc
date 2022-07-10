@@ -95,7 +95,7 @@ function recurring_events_registration_tokens($type, $tokens, array $data, array
 
         case 'edit_url':
           $url = $registrant->toUrl('edit-form')->setAbsolute(TRUE)->toString();
-          if ($registrant->user_id->target_id === '0') {
+          if ((int) $registrant->user_id->target_id === 0) {
             $url = $registrant->toUrl('anon-edit-form')->setAbsolute(TRUE)->toString();
           }
           $replacements[$original] = $url;
@@ -103,7 +103,7 @@ function recurring_events_registration_tokens($type, $tokens, array $data, array
 
         case 'delete_url':
           $url = $registrant->toUrl('delete-form')->setAbsolute(TRUE)->toString();
-          if ($registrant->user_id->target_id === '0') {
+          if ((int) $registrant->user_id->target_id === 0) {
             $url = $registrant->toUrl('anon-delete-form')->setAbsolute(TRUE)->toString();
           }
           $replacements[$original] = $url;

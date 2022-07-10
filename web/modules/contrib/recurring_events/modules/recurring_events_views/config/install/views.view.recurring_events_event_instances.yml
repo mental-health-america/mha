@@ -9,7 +9,7 @@ dependencies:
     - datetime_range
     - recurring_events
     - user
-id: events
+id: recurring_events_event_instances
 label: Events
 module: views
 description: 'A view showing all the event instances on the site'

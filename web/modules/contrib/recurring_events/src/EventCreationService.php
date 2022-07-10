@@ -153,8 +153,10 @@ class EventCreationService {
    *   TRUE if recurring config changes, FALSE otherwise.
    */
   public function checkForFormRecurConfigChanges(EventSeries $event, FormStateInterface $form_state) {
-    $entity_config = $this->convertEntityConfigToArray($event);
-    $form_config = $this->convertFormConfigToArray($form_state);
+    $entity_config = $this->convertArrayLowercaseSorted(
+      (array) $this->convertEntityConfigToArray($event));
+    $form_config = $this->convertArrayLowercaseSorted(
+      (array) $this->convertFormConfigToArray($form_state));
     return !(serialize($entity_config) === serialize($form_config));
   }
 
@@ -170,8 +172,10 @@ class EventCreationService {
    *   TRUE if recurring config changes, FALSE otherwise.
    */
   public function checkForOriginalRecurConfigChanges(EventSeries $event, EventSeries $original) {
-    $entity_config = $this->convertEntityConfigToArray($event);
-    $original_config = $this->convertEntityConfigToArray($original);
+    $entity_config = $this->convertArrayLowercaseSorted(
+      (array) $this->convertEntityConfigToArray($event));
+    $original_config = $this->convertArrayLowercaseSorted(
+      (array) $this->convertEntityConfigToArray($original));
     return !(serialize($entity_config) === serialize($original_config));
   }
 
@@ -218,9 +222,9 @@ class EventCreationService {
 
     $user_timezone = new \DateTimeZone(date_default_timezone_get());
     $utc_timezone = new \DateTimeZone(DateTimeItemInterface::STORAGE_TIMEZONE);
-    $user_input = $form_state->getUserInput();
+    $user_input = $form_state->getValues();
 
-    $config['type'] = $user_input['recur_type'];
+    $config['type'] = $user_input['recur_type'][0]['value'];
 
     $config['excluded_dates'] = [];
     if (!empty($user_input['excluded_dates'])) {
@@ -233,32 +237,18 @@ class EventCreationService {
     }
 
     if ($config['type'] === 'custom') {
-      foreach ($user_input['custom_date'] as $custom_date) {
+      foreach ($user_input['custom_date'] as $key => $custom_date) {
+        if (!is_numeric($key)) {
+          continue;
+        }
         $start_date = $end_date = NULL;
 
-        if (!empty($custom_date['value']['date'])
-          && !empty($custom_date['value']['time'])
-          && !empty($custom_date['end_value']['date'])
-          && !empty($custom_date['end_value']['time'])) {
+        if (!empty($custom_date['value']) && !empty($custom_date['end_value'])) {
 
-          // For some reason, sometimes we do not receive seconds from the
-          // date range picker.
-          if (strlen($custom_date['value']['time']) == 5) {
-            $custom_date['value']['time'] .= ':00';
-          }
-          if (strlen($custom_date['end_value']['time']) == 5) {
-            $custom_date['end_value']['time'] .= ':00';
-          }
-
-          $start_timestamp = implode('T', $custom_date['value']);
-          $start_date = DrupalDateTime::createFromFormat(DateTimeItemInterface::DATETIME_STORAGE_FORMAT, $start_timestamp, $user_timezone);
-          // Convert the DateTime object back to UTC timezone.
-          $start_date->setTimezone($utc_timezone);
-
-          $end_timestamp = implode('T', $custom_date['end_value']);
-          $end_date = DrupalDateTime::createFromFormat(DateTimeItemInterface::DATETIME_STORAGE_FORMAT, $end_timestamp, $user_timezone);
-          // Convert the DateTime object back to UTC timezone.
-          $end_date->setTimezone($utc_timezone);
+          $start_timestamp = $custom_date['value']->format(DateTimeItemInterface::DATETIME_STORAGE_FORMAT);
+          $end_timestamp = $custom_date['end_value']->format(DateTimeItemInterface::DATETIME_STORAGE_FORMAT);
+          $start_date = DrupalDateTime::createFromFormat(DateTimeItemInterface::DATETIME_STORAGE_FORMAT, $start_timestamp, $utc_timezone);
+          $end_date = DrupalDateTime::createFromFormat(DateTimeItemInterface::DATETIME_STORAGE_FORMAT, $end_timestamp, $utc_timezone);
 
           $config['custom_dates'][] = [
             'start_date' => $start_date,
@@ -276,6 +266,32 @@ class EventCreationService {
     $this->moduleHandler->alter('recurring_events_form_config_array', $config);
 
     return $config;
+  }
+
+  /**
+   * Normalize an array for equality checks, without having to worry about order
+   * or casing discrepencies.
+   *
+   * @param array $input
+   *   The array to clean and sort.
+   *
+   * @return array
+   *   A cleaned array.
+   */
+  public static function convertArrayLowercaseSorted(array $input) {
+    foreach ($input as $key => $val) {
+      if (is_object($val)) {
+        $input[$key] = self::convertArrayLowercaseSorted((array) $val);
+      }
+      if (is_array($val)) {
+        $input[$key] = self::convertArrayLowercaseSorted($val);
+      }
+      if (is_string($val)) {
+        $input[$key] = strtolower($val);
+      }
+    }
+    uksort($input, 'strcmp');
+    return $input;
   }
 
   /**
@@ -339,14 +355,20 @@ class EventCreationService {
         if ($entity_config['custom_dates'] !== $form_config['custom_dates']) {
           $stored_start_ends = $overridden_start_ends = [];
 
+          $user_timezone = new \DateTimeZone(date_default_timezone_get());
+
           foreach ($entity_config['custom_dates'] as $date) {
             if (!empty($date['start_date']) && !empty($date['end_date'])) {
+              $date['start_date']->setTimezone($user_timezone);
+              $date['end_date']->setTimezone($user_timezone);
               $stored_start_ends[] = $date['start_date']->format('Y-m-d h:ia') . ' - ' . $date['end_date']->format('Y-m-d h:ia');
             }
           }
 
           foreach ($form_config['custom_dates'] as $date) {
             if (!empty($date['start_date']) && !empty($date['end_date'])) {
+              $date['start_date']->setTimezone($user_timezone);
+              $date['end_date']->setTimezone($user_timezone);
               $overridden_start_ends[] = $date['start_date']->format('Y-m-d h:ia') . ' - ' . $date['end_date']->format('Y-m-d h:ia');
             }
           }
@@ -371,65 +393,48 @@ class EventCreationService {
   }
 
   /**
-   * Create an event based on the form submitted values.
+   * Clear out existing event instances..
    *
    * @param Drupal\recurring_events\Entity\EventSeries $event
-   *   The stored event series entity.
-   * @param Drupal\recurring_events\Entity\EventSeries $original
-   *   The original, unsaved event series entity.
+   *   The event series entity.
    */
-  public function saveEvent(EventSeries $event, EventSeries $original = NULL) {
-    // We want to always create instances if this is a brand new series.
-    if ($event->isNew()) {
-      $create_instances = TRUE;
-    }
-    else {
-      // If there are date differences, we need to clear out the instances.
-      $create_instances = $this->checkForOriginalRecurConfigChanges($event, $original);
-      if ($create_instances) {
-        // Allow other modules to react prior to the deletion of all instances.
-        $this->moduleHandler->invokeAll('recurring_events_save_pre_instances_deletion', [
+  public function clearEventInstances(EventSeries $event) {
+    // Allow other modules to react prior to the deletion of all instances.
+    $this->moduleHandler->invokeAll('recurring_events_save_pre_instances_deletion', [
+      $event
+    ]);
+
+    // Find all the instances and delete them.
+    $instances = $event->event_instances->referencedEntities();
+    if (!empty($instances)) {
+      foreach ($instances as $instance) {
+        // Allow other modules to react prior to deleting a specific
+        // instance after a date configuration change.
+        $this->moduleHandler->invokeAll('recurring_events_save_pre_instance_deletion', [
           $event,
-          $original,
+          $instance,
         ]);
 
-        // Find all the instances and delete them.
-        $instances = $event->event_instances->referencedEntities();
-        if (!empty($instances)) {
-          foreach ($instances as $instance) {
-            // Allow other modules to react prior to deleting a specific
-            // instance after a date configuration change.
-            $this->moduleHandler->invokeAll('recurring_events_save_pre_instance_deletion', [
-              $event,
-              $instance,
-            ]);
+        $instance->delete();
 
-            $instance->delete();
-
-            // Allow other modules to react after deleting a specific instance
-            // after a date configuration change.
-            $this->moduleHandler->invokeAll('recurring_events_save_post_instance_deletion', [
-              $event,
-              $instance,
-            ]);
-          }
-          $this->messenger->addStatus($this->translation->translate('A total of %count existing event instances were removed', [
-            '%count' => count($instances),
-          ]));
-        }
-
-        // Allow other modules to react after the deletion of all instances.
-        $this->moduleHandler->invokeAll('recurring_events_save_post_instances_deletion', [
+        // Allow other modules to react after deleting a specific instance
+        // after a date configuration change.
+        $this->moduleHandler->invokeAll('recurring_events_save_post_instance_deletion', [
           $event,
-          $original,
+          $instance,
         ]);
       }
+      $this->messenger->addStatus($this->translation->translate('A total of %count existing event instances were removed', [
+        '%count' => count($instances),
+      ]));
     }
 
-    // Only create instances if date changes have been made or the event is new.
-    if ($create_instances) {
-      $this->createInstances($event);
-    }
+    // Allow other modules to react after the deletion of all instances.
+    $this->moduleHandler->invokeAll('recurring_events_save_post_instances_deletion', [
+      $event
+    ]);
+
+    $this->entityTypeManager->getStorage('eventseries')->resetCache([$event->id()]);
   }
 
   /**
@@ -460,7 +465,9 @@ class EventCreationService {
 
           if (!empty($events_to_create)) {
             foreach ($events_to_create as $custom_event) {
-              $event_instances[] = $this->createEventInstance($event, $custom_event['start_date'], $custom_event['end_date']);
+              $instance = $this->createEventInstance($event, $custom_event['start_date'], $custom_event['end_date']);
+              $this->configureDefaultInheritances($instance, $event->id());
+              $event_instances[] = $instance;
             }
           }
         }
@@ -476,7 +483,9 @@ class EventCreationService {
 
         if (!empty($events_to_create)) {
           foreach ($events_to_create as $event_to_create) {
-            $event_instances[] = $this->createEventInstance($event, $event_to_create['start_date'], $event_to_create['end_date']);
+            $instance = $this->createEventInstance($event, $event_to_create['start_date'], $event_to_create['end_date']);
+            $this->configureDefaultInheritances($instance, $event->id());
+            $event_instances[] = $instance;
           }
         }
       }
@@ -486,7 +495,6 @@ class EventCreationService {
     $this->messenger->addMessage($this->translation->translate('A total of %items event instances were created as part of this event series.', [
       '%items' => count($event_instances),
     ]));
-    $event->set('event_instances', $event_instances);
   }
 
   /**
@@ -499,7 +507,7 @@ class EventCreationService {
    * @param Drupal\Core\Datetime\DrupalDateTime $end_date
    *   The end date and time of the event.
    *
-   * @return static
+   * @return \Drupal\recurring_events\Entity\EventInstance
    *   The created event instance entity object.
    */
   public function createEventInstance(EventSeries $event, DrupalDateTime $start_date, DrupalDateTime $end_date) {
@@ -604,11 +612,14 @@ class EventCreationService {
     $dates = [];
 
     if (!empty($field)) {
-      foreach ($field as $date) {
-        if (!empty($date['value']['date']) && !empty($date['end_value']['date'])) {
+      foreach ($field as $key => $date) {
+        if (!is_numeric($key)) {
+          continue;
+        }
+        if (!empty($date['value']) && !empty($date['end_value'])) {
           $dates[] = [
-            'value' => $date['value']['date'],
-            'end_value' => $date['end_value']['date'],
+            'value' => $date['value']->format('Y-m-d'),
+            'end_value' => $date['end_value']->format('Y-m-d'),
           ];
         }
       }

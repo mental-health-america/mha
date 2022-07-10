@@ -194,7 +194,7 @@ class RegistrantForm extends ContentEntityForm {
 
     // Use the registration creation service to grab relevant data.
     $this->creationService->setEventInstance($event_instance);
-    $availability = $this->creationService->retrieveAvailability();
+    $availability = $event_instance->availability_count->getValue()[0]['value'];
     $waitlist = $this->creationService->hasWaitlist();
     $registration_open = $this->creationService->registrationIsOpen();
     $reg_type = $this->creationService->getRegistrationType();
@@ -333,6 +333,27 @@ class RegistrantForm extends ContentEntityForm {
     }
     $form['actions']['submit']['#value'] = $save_label;
 
+    // Hide the form if user is not allowed to register for this series.
+    $permitted_roles = $this->creationService->registrationPermittedRoles();
+    $role_permitted = empty($permitted_roles);
+    if (!$role_permitted) {
+      $user_roles = $this->currentUser->getRoles();
+      if (in_array('administrator', $user_roles)) {
+        $role_permitted = true;
+      }
+      else {
+        foreach($user_roles as $user_role) {
+          if (in_array($user_role, $permitted_roles)) {
+            $role_permitted = true;
+            break;
+          }
+        }
+      }
+    }
+    if (!$role_permitted) {
+      $this->messenger->addMessage('You are not allowed to register for events in this series.', $this->messenger::TYPE_WARNING);
+      $form['#disabled'] = true;
+    }
     return $form;
   }
 
@@ -348,10 +369,16 @@ class RegistrantForm extends ContentEntityForm {
     /** @var \Drupal\recurring_events_registration\Entity\Registrant $entity */
     $entity = $this->entity;
     $new = $entity->isNew();
+    if ($new) {
+      $event_instance = $this->routeMatch->getParameter('eventinstance');
+    }
+    else {
+      $event_instance = $entity->getEventInstance();
+    }
 
     $form_fields = $this->fieldManager->getFieldDefinitions('registrant', $this->entity->getBundle());
 
-    $availability = $this->creationService->retrieveAvailability();
+    $availability = $event_instance->availability_count->getValue()[0]['value'];
     $waitlist = $this->creationService->hasWaitlist();
     $registration_open = $this->creationService->registrationIsOpen();
 
@@ -402,7 +429,7 @@ class RegistrantForm extends ContentEntityForm {
       // Just to be sure we have a fresh copy of the event series.
       $this->creationService->setEventSeries($event_series);
 
-      $availability = $this->creationService->retrieveAvailability();
+      $availability = $event_instance->availability_count->getValue()[0]['value'];
       $waitlist = $this->creationService->hasWaitlist();
       $registration_open = $this->creationService->registrationIsOpen();
 
@@ -456,7 +483,7 @@ class RegistrantForm extends ContentEntityForm {
     // Just to be sure we have a fresh copy of the event series.
     $this->creationService->setEventSeries($event_series);
 
-    $availability = $this->creationService->retrieveAvailability();
+    $availability = $event_instance->availability_count->getValue()[0]['value'];
     $waitlist = $this->creationService->hasWaitlist();
     $registration_open = $this->creationService->registrationIsOpen();
     $reg_type = $this->creationService->getRegistrationType();

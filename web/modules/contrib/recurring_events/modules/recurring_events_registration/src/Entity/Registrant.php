@@ -95,6 +95,14 @@ class Registrant extends EditorialContentEntityBase implements RegistrantInterfa
       }
       recurring_events_registration_send_notification($key, $this);
     }
+
+    if ($update) {
+      // if originally on waitlist and was promoted, send the promotion notification
+      if ($this->original->getWaitlist() && !$this->getWaitlist()) {
+        $key = 'promotion_notification';
+        recurring_events_registration_send_notification($key, $this);
+      }
+    }
   }
 
   /**

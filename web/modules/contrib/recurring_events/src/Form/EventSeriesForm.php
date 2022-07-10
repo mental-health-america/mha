@@ -338,14 +338,13 @@ class EventSeriesForm extends ContentEntityForm {
     $editing = ($form_state->getBuildInfo()['form_id'] == 'eventseries_' . $entity->bundle() . '_edit_form');
     $trigger = $form_state->getTriggeringElement();
 
-    $ignored_triggers = [
-      'consecutive_recurring_date[0][duration]',
-      'consecutive_recurring_date[0][duration_units]',
-      'excluded_dates_add_more',
-      'included_dates_add_more',
-    ];
-
-    if ($trigger['#id'] !== 'edit-confirm' && array_search($trigger['#name'], $ignored_triggers) === FALSE && $editing) {
+    // We only want to trigger the diff generation when the main form submit has
+    // been clicked, rather than on any AJAX field submit. This causes problems
+    // with multi-value fields, which use AJAX to add more field options. The
+    // main submit button of the form has the #name of 'op'. We also do not want
+    // to trigger this when the confirm box edit button is clicked, this is the
+    // one which shows underneath the diff.
+    if ($trigger['#id'] !== 'edit-confirm' && $trigger['#name'] === 'op' && $editing) {
       $original = $this->storage->loadUnchanged($entity->id());
       if (empty($form_state->getErrors()) && $this->creationService->checkForFormRecurConfigChanges($original, $form_state)) {
         $this->step = 1;
