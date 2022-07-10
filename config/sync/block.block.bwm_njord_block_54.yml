@@ -1,0 +1,32 @@
+uuid: 55a8d099-3875-486c-af3c-166936c153fc
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:b9d0a9c6-337d-4d52-b703-59c5a174f8c6'
+  module:
+    - block_content
+    - system
+  theme:
+    - gavias_colin
+id: bwm_njord_block_54
+theme: gavias_colin
+region: content
+weight: -41
+provider: null
+plugin: 'block_content:b9d0a9c6-337d-4d52-b703-59c5a174f8c6'
+settings:
+  id: 'block_content:b9d0a9c6-337d-4d52-b703-59c5a174f8c6'
+  label: ''
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: |-
+      /node/1037
+      /node/1041

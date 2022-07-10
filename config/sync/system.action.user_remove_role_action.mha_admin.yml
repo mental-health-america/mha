@@ -1,0 +1,14 @@
+uuid: 96c99eb3-30d9-4e36-908f-8203de1f6fed
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.mha_admin
+  module:
+    - user
+id: user_remove_role_action.mha_admin
+label: 'Remove the MHA Admin role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: mha_admin

@@ -1,0 +1,40 @@
+uuid: cec576b9-dea0-4f9b-bf37-78b1e857892c
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.criminal-justice-issues
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: criminaljusticeissues
+theme: gavias_colin
+region: sidebar_left
+weight: 57
+provider: null
+plugin: 'system_menu_block:criminal-justice-issues'
+settings:
+  id: 'system_menu_block:criminal-justice-issues'
+  label: 'Criminal Justice Issues'
+  label_display: visible
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: "/position-statements/criminal-justice-issues\r\n/issues/position-statement-59-responding-behavioral-health-crises\r\n/issues/position-statement-58-life-without-parole-juvenile-offenders\r\n/issues/position-statement-57-support-insanity-defense\r\n/issues/position-statement-56-mental-health-treatment-correctional-facilities\r\n/issues/position-statement-55-confining-sexual-predators-mental-health-system\r\n/issues/position-statement-54-death-penalty-and-people-mental-illnesses\r\n/issues/position-statement-53-mental-health-courts\r\n/issues/position-statement-52-support-maximum-diversion-persons-serious-mental-illness-criminal\r\n/issues/position-statement-51-children-emotional-disorders-juvenile-justice-system"

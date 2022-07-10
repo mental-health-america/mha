@@ -4,8 +4,6 @@ namespace Drupal\recurring_events_registration\Plugin\views\filter;
 
 use Drupal\views\Plugin\views\filter\FilterPluginBase;
 use Drupal\Core\Form\FormStateInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\recurring_events_registration\RegistrationCreationService;
 
 /**
  * Filter handler to show the availability of registrations for event instances.
@@ -15,44 +13,6 @@ use Drupal\recurring_events_registration\RegistrationCreationService;
  * @ViewsFilter("eventinstance_registration_availability")
  */
 class EventInstanceRegistrationAvailability extends FilterPluginBase {
-
-  /**
-   * The registration creation service.
-   *
-   * @var \Drupal\recurring_events_registration\RegistrationCreationService
-   */
-  protected $registrationCreationService;
-
-  /**
-   * Constructs a new EventInstanceRegistrationAvailability object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin ID for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\recurring_events_registration\RegistrationCreationService $registration_creation_service
-   *   The registration creation service.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, RegistrationCreationService $registration_creation_service) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->registrationCreationService = $registration_creation_service;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static(
-      $configuration,
-      $plugin_id,
-      $plugin_definition,
-      $container->get('recurring_events_registration.creation_service')
-    );
-  }
 
   /**
    * {@inheritdoc}
@@ -200,8 +160,7 @@ class EventInstanceRegistrationAvailability extends FilterPluginBase {
 
     if (!empty($view->result)) {
       foreach ($view->result as $key => $result) {
-        $this->registrationCreationService->setEventInstance($result->_entity);
-        $availability = $this->registrationCreationService->retrieveAvailability();
+        $availability = $result->_entity->get('availability_count')->getValue()[0]['value'] ?? -1;
 
         switch ($available) {
           // Filtering for available events means unlimited availability of an

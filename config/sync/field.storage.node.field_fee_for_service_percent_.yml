@@ -1,0 +1,20 @@
+uuid: d6036262-d2ca-4511-8e08-2de258547ad5
+langcode: und
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_fee_for_service_percent_
+field_name: field_fee_for_service_percent_
+entity_type: node
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -418,6 +418,12 @@ class NotificationService {
    *   The parsed string.
    */
   public function parseTokenizedString($string) {
+    // #3272196 for some reason the Registrant entity is sometimes null. So here
+    // we check first to avoid throwing PHP notices.
+    if (empty($this->entity)) {
+      return $string;
+    }
+
     $data = [
       'registrant' => $this->entity,
       'eventinstance' => $this->entity ? $this->entity->getEventInstance() : NULL,

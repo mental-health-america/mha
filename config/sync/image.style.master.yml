@@ -1,0 +1,15 @@
+uuid: c9094e12-11b9-4df0-a00b-3aebad00be72
+langcode: en
+status: true
+dependencies: {  }
+name: master
+label: Master
+effects:
+  8eb539ee-fc99-4a7e-b487-3180914fba3b:
+    uuid: 8eb539ee-fc99-4a7e-b487-3180914fba3b
+    id: image_scale
+    weight: 1
+    data:
+      width: 1800
+      height: null
+      upscale: false

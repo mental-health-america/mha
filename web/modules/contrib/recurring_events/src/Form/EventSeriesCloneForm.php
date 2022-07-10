@@ -16,8 +16,6 @@ class EventSeriesCloneForm extends EventSeriesForm {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $this->entity = $this->entity->createDuplicate();
-    // Clear all references to event instances.
-    unset($this->entity->event_instances);
     return parent::buildForm($form, $form_state);
   }
 

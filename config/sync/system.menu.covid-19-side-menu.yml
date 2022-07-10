@@ -1,0 +1,8 @@
+uuid: 4839f609-4d36-4ff3-9336-c8fd943e2212
+langcode: en
+status: true
+dependencies: {  }
+id: covid-19-side-menu
+label: 'Covid-19 SIDE MENU'
+description: ''
+locked: false

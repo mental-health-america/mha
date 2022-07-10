@@ -1,0 +1,11 @@
+uuid: 5ca65cc6-b015-4bac-b29b-d7de9db4a00f
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.policy_issue
+id: node.policy_issue
+target_entity_type_id: node
+target_bundle: policy_issue
+default_langcode: site_default
+language_alterable: false

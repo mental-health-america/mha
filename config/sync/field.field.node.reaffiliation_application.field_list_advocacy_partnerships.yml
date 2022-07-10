@@ -1,0 +1,19 @@
+uuid: c8b768d2-20da-4e0b-99f2-770e6f7bfb2e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_list_advocacy_partnerships
+    - node.type.reaffiliation_application
+id: node.reaffiliation_application.field_list_advocacy_partnerships
+field_name: field_list_advocacy_partnerships
+entity_type: node
+bundle: reaffiliation_application
+label: 'List advocacy partnerships or coalitions you belong to.'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

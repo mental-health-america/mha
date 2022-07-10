@@ -93,11 +93,11 @@ function recurring_events_tokens($type, $tokens, array $data, array $options, Bu
 
       switch ($name) {
         case 'title':
-          $replacements[$original] = $event_instance->title->value;
+          $replacements[$original] = ($event_instance->hasField('title')) ? $event_instance->title->value : '';
           break;
 
         case 'description':
-          $replacements[$original] = $event_instance->description->value;
+          $replacements[$original] = ($event_instance->hasField('description')) ? $event_instance->description->value : '';
           break;
 
         case 'date':

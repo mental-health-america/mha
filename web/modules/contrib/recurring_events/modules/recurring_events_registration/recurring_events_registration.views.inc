@@ -29,6 +29,23 @@ function recurring_events_registration_views_data_alter(array &$data) {
     ],
   ];
 
+  $data['eventinstance_field_data']['registration_availability_count'] = [
+    'title' => t('Registration Availability Count'),
+    'filter' => [
+      'title' => t('Registration Availability Count'),
+      'help' => t('The number of registration spaces available for an event instance.'),
+      'field' => 'event_registration__capacity',
+      'id' => 'eventinstance_registration_availability_count',
+    ],
+    'argument' => [
+      'title' => t('Registration Availability Count'),
+      'help' => t('The number of registration spaces available for an event instance.'),
+      'field' => 'event_registration__capacity',
+      'id' => 'eventinstance_registration_availability_count',
+      'filter' => 'intval',
+    ],
+  ];
+
   $data['eventinstance_field_data']['capacity'] = [
     'title' => t('Capacity'),
     'field' => [

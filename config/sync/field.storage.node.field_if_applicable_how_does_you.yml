@@ -1,0 +1,19 @@
+uuid: 026b0057-d869-4b03-9379-26325180e1da
+langcode: und
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_if_applicable_how_does_you
+field_name: field_if_applicable_how_does_you
+entity_type: node
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

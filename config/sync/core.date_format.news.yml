@@ -1,0 +1,8 @@
+uuid: f7607b6b-6d65-4721-88fb-63457db5a192
+langcode: en
+status: true
+dependencies: {  }
+id: news
+label: News
+locked: false
+pattern: 'l, F j, Y'

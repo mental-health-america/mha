@@ -1,0 +1,21 @@
+uuid: 1fba8ac9-d1b1-4c2f-8c7e-6a534522bc92
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_model_type
+    - node.type.reaffiliation_application
+  module:
+    - options
+id: node.reaffiliation_application.field_model_type
+field_name: field_model_type
+entity_type: node
+bundle: reaffiliation_application
+label: 'Model Type'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

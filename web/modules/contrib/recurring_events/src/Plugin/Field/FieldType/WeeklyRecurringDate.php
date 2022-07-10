@@ -68,9 +68,9 @@ class WeeklyRecurringDate extends DailyRecurringDate implements RecurringEventsF
     $config = [];
     $config['start_date'] = $event->getWeeklyStartDate();
     $config['end_date'] = $event->getWeeklyEndDate();
-    $config['time'] = $event->getWeeklyStartTime();
+    $config['time'] = strtoupper($event->getWeeklyStartTime());
+    $config['end_time'] = strtoupper($event->getWeeklyEndTime());
     $config['duration'] = $event->getWeeklyDuration();
-    $config['end_time'] = $event->getWeeklyEndTime();
     $config['duration_or_end_time'] = $event->getWeeklyDurationOrEndTime();
     $config['days'] = $event->getWeeklyDays();
     return $config;
@@ -83,7 +83,7 @@ class WeeklyRecurringDate extends DailyRecurringDate implements RecurringEventsF
     $config = [];
 
     $user_timezone = new \DateTimeZone(date_default_timezone_get());
-    $user_input = $form_state->getUserInput();
+    $user_input = $form_state->getValues();
 
     $time = $user_input['weekly_recurring_date'][0]['time'];
     if (is_array($time)) {
@@ -93,7 +93,8 @@ class WeeklyRecurringDate extends DailyRecurringDate implements RecurringEventsF
     $time_parts = static::convertTimeTo24hourFormat($time);
     $timestamp = implode(':', $time_parts);
 
-    $start_timestamp = $user_input['weekly_recurring_date'][0]['value']['date'] . 'T' . $timestamp;
+    $user_input['weekly_recurring_date'][0]['value']->setTimezone($user_timezone);
+    $start_timestamp = $user_input['weekly_recurring_date'][0]['value']->format('Y-m-d') . 'T' . $timestamp;
     $start_date = DrupalDateTime::createFromFormat(DateTimeItemInterface::DATETIME_STORAGE_FORMAT, $start_timestamp, $user_timezone);
     $start_date->setTime(0, 0, 0);
 
@@ -105,7 +106,8 @@ class WeeklyRecurringDate extends DailyRecurringDate implements RecurringEventsF
     $end_time_parts = static::convertTimeTo24hourFormat($end_time);
     $end_timestamp = implode(':', $end_time_parts);
 
-    $end_timestamp = $user_input['weekly_recurring_date'][0]['end_value']['date'] . 'T' . $end_timestamp;
+    $user_input['weekly_recurring_date'][0]['end_value']->setTimezone($user_timezone);
+    $end_timestamp = $user_input['weekly_recurring_date'][0]['end_value']->format('Y-m-d') . 'T' . $end_timestamp;
     $end_date = DrupalDateTime::createFromFormat(DateTimeItemInterface::DATETIME_STORAGE_FORMAT, $end_timestamp, $user_timezone);
     $end_date->setTime(0, 0, 0);
 
@@ -155,8 +157,6 @@ class WeeklyRecurringDate extends DailyRecurringDate implements RecurringEventsF
       foreach ($dates as $weekly_date) {
         // Set the time of the start date to be the hours and minutes.
         $weekly_date->setTime($time_parts[0], $time_parts[1]);
-        // Configure the right timezone.
-        $weekly_date->setTimezone($utc_timezone);
         // Create a clone of this date.
         $weekly_date_end = clone $weekly_date;
         // Check whether we are using a duration or end time.
@@ -175,6 +175,11 @@ class WeeklyRecurringDate extends DailyRecurringDate implements RecurringEventsF
             }
             break;
         }
+
+        // Set the storage timezone.
+        $weekly_date->setTimezone($utc_timezone);
+        $weekly_date_end->setTimezone($utc_timezone);
+
         // Set this event to be created.
         $events_to_create[$weekly_date->format('r')] = [
           'start_date' => $weekly_date,

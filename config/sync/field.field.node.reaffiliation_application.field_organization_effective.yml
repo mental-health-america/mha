@@ -1,0 +1,21 @@
+uuid: 67ba2381-1484-4d1f-aca3-60b8885f0094
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_organization_effective
+    - node.type.reaffiliation_application
+  module:
+    - options
+id: node.reaffiliation_application.field_organization_effective
+field_name: field_organization_effective
+entity_type: node
+bundle: reaffiliation_application
+label: 'Does your organization develop effective and realistic strategies for financial management and operation? '
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

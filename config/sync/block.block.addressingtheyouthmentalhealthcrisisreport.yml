@@ -1,0 +1,40 @@
+uuid: aba9cfb4-7d2a-4b19-8923-21db51713d5d
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.addressing-the-youth-mental-heal
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: mha-menu
+id: addressingtheyouthmentalhealthcrisisreport
+theme: gavias_colin
+region: sidebar_left
+weight: 7
+provider: null
+plugin: 'system_menu_block:addressing-the-youth-mental-heal'
+settings:
+  id: 'system_menu_block:addressing-the-youth-mental-heal'
+  label: 'Addressing The Youth Mental Health Crisis Report'
+  label_display: visible
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: true
+    context_mapping: {  }
+    pages: ''

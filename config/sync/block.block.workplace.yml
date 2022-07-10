@@ -1,0 +1,40 @@
+uuid: b97159f7-e20a-43e4-8034-57b72776613f
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.workplace
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: workplace
+theme: gavias_colin
+region: main_menu
+weight: 0
+provider: null
+plugin: 'system_menu_block:workplace'
+settings:
+  id: 'system_menu_block:workplace'
+  label: Workplace
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: "/node/1592\r\n/node/2569\r\n/node/17656\r\n/node/17690\r\n/node/17691\r\n/node/17692\r\n/node/17693\r\n/node/17694\r\n/node/17695\r\n/node/131\r\n/node/17696\r\n/node/17704\r\n/node/17705\r\n/node/17706\r\n/node/17707\r\n/node/17708\r\n/node/17709\r\n/node/17710\r\n/node/17711\r\n/node/17712\r\n/node/17713\r\n/node/17715\r\n/node/17717\r\n/node/17716\r\n/node/17718\r\n/node/17719\r\n/node/17720\r\n/node/17721\r\n/node/17722\r\n/node/17723\r\n/node/17724\r\n/node/17725\r\n/node/17726\r\n/node/17727\r\n/node/17728\r\n/node/17729\r\n/node/17730\r\n/node/17731\r\n/node/17732\r\n/node/17733\r\n/node/17734\r\n/node/17735\r\n/node/17736\r\n/node/17737\r\n/node/17738\r\n/node/17739\r\n/node/17740\r\n/node/17741"

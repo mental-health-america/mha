@@ -131,7 +131,9 @@ class EntityEventSeries extends EntityContentBase {
           'value' => $start_event->format(self::DATETIME_FORMAT),
           'end_value' => $end_series->format(self::DATETIME_FORMAT),
           'time' => $start_event->format('h:i a'),
+          'end_time' => $end_event->format('h:i a'),
           'duration' => $duration,
+          'duration_or_end_time' => 'end_time',
           'days' => $rrule['BYDAY']['days'] ?? strtolower($start_event->format('l')),
         ];
         break;
@@ -142,7 +144,9 @@ class EntityEventSeries extends EntityContentBase {
           'value' => $start_event->format(self::DATETIME_FORMAT),
           'end_value' => $end_series->format(self::DATETIME_FORMAT),
           'time' => $start_event->format('h:i a'),
+          'end_time' => $end_event->format('h:i a'),
           'duration' => $duration,
+          'duration_or_end_time' => 'end_time',
           'days' => $rrule['BYDAY']['days'] ?? strtolower($start_event->format('l')),
           'type' => (!empty($rrule['BYMONTHDAY'])) ? 'monthday' : 'weekday',
           'day_occurrence' => $rrule['BYDAY']['day_occurrence'] ?? NULL,

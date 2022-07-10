@@ -95,6 +95,11 @@ class EventRegistration extends DateRangeItem {
       'unsigned' => TRUE,
     ];
 
+    $schema['columns']['permitted_roles'] = [
+      'type' => 'varchar',
+      'length' => 1023,
+    ];
+
     return $schema;
   }
 
@@ -115,12 +120,14 @@ class EventRegistration extends DateRangeItem {
     $instance_schedule_close_units = $this->get('instance_schedule_close_units')->getValue();
     $instance_schedule_close_type = $this->get('instance_schedule_close_type')->getValue();
     $unique_email_address = $this->get('unique_email_address')->getValue();
+    $permitted_roles = $this->get('permitted_roles')->getValue();
     return parent::isEmpty() && empty($registration) && empty($registration_type)
       && empty($registration_dates) && empty($capacity) && empty($waitlist)
       && empty($instance_schedule_open) && empty($instance_schedule_open_amount)
       && empty($instance_schedule_open_units) && empty($instance_schedule_close)
       && empty($instance_schedule_close_amount) && empty($instance_schedule_close_units)
-      && empty($instance_schedule_close_type) && empty($unique_email_address);
+      && empty($instance_schedule_close_type) && empty($unique_email_address)
+      && empty($permitted_roles);
   }
 
   /**
@@ -185,6 +192,10 @@ class EventRegistration extends DateRangeItem {
     $properties['unique_email_address'] = DataDefinition::create('boolean')
       ->setLabel(t('Restrict registration to once per email address?'))
       ->setDescription(t('Select whether to prevent a single email address from registering multiple times for the same event.'));
+
+    $properties['permitted_roles'] = DataDefinition::create('string')
+    ->setLabel(t('Which roles can register for this series?'))
+    ->setDescription(t('Provide a comma-separated list of machine names for the roles that have permission to register for this series.  Leave blank to allow anybody to register.'));
 
     return $properties;
   }

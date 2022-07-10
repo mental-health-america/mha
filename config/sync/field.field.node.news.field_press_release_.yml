@@ -1,0 +1,23 @@
+uuid: e7a6a73a-88a4-4f53-a4cf-e57568614c1f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_press_release_
+    - node.type.news
+id: node.news.field_press_release_
+field_name: field_press_release_
+entity_type: node
+bundle: news
+label: 'Press Release?'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

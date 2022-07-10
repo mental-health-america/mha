@@ -1,0 +1,95 @@
+uuid: 80f2c0dc-305a-4801-a5c2-2476a5b0a978
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser_2
+    - field.field.node.event.body
+    - field.field.node.event.comment_node_event
+    - field.field.node.event.field_date
+    - field.field.node.event.field_date_range
+    - field.field.node.event.field_event_address
+    - field.field.node.event.field_event_image
+    - field.field.node.event.field_event_map
+    - field.field.node.event.field_event_start
+    - field.field.node.event.field_event_time
+    - field.field.node.event.field_featured
+    - field.field.node.event.field_link
+    - field.field.node.event.field_meta_tags
+    - field.field.node.event.field_placement
+    - field.field.node.event.field_yoast_seo
+    - image.style.small
+    - node.type.event
+  module:
+    - datetime
+    - image
+    - text
+    - user
+_core:
+  default_config_hash: t1Uvi4PWM9_y9ptUS1oo0-Sz27YTVvCKEsk2FETwz18
+id: node.event.teaser_2
+targetEntityType: node
+bundle: event
+mode: teaser_2
+content:
+  body:
+    type: text_trimmed
+    label: hidden
+    settings:
+      trim_length: 120
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_event_address:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_event_image:
+    type: image
+    label: hidden
+    settings:
+      image_link: content
+      image_style: small
+      image_loading:
+        attribute: lazy
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_event_start:
+    type: datetime_default
+    label: hidden
+    settings:
+      timezone_override: ''
+      format_type: html_date
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_event_time:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  addtoany: true
+  comment_node_event: true
+  field_date: true
+  field_date_range: true
+  field_event_map: true
+  field_featured: true
+  field_link: true
+  field_meta_tags: true
+  field_placement: true
+  field_yoast_seo: true
+  langcode: true

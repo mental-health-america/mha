@@ -1,0 +1,29 @@
+uuid: 5496b1d3-d1c2-47fc-a61a-18ab5d79ae03
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_conference_year
+    - node.type.peer_specialist
+    - taxonomy.vocabulary.annual_conference_year
+id: node.peer_specialist.field_conference_year
+field_name: field_conference_year
+entity_type: node
+bundle: peer_specialist
+label: 'Conference Year'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      annual_conference_year: annual_conference_year
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

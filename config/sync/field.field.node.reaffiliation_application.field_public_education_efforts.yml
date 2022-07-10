@@ -1,0 +1,21 @@
+uuid: 6561f3ce-6b71-45f6-8cec-87687a7692df
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_public_education_efforts
+    - node.type.reaffiliation_application
+  module:
+    - options
+id: node.reaffiliation_application.field_public_education_efforts
+field_name: field_public_education_efforts
+entity_type: node
+bundle: reaffiliation_application
+label: 'Does your organization plan and implement public education and media efforts in partnership with the other parts of the MHA?'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

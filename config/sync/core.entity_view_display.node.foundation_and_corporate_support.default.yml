@@ -1,0 +1,105 @@
+uuid: 587de1c4-cab2-41a6-80a2-a80978441a2c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.foundation_and_corporate_support.feeds_item
+    - field.field.node.foundation_and_corporate_support.field_amount
+    - field.field.node.foundation_and_corporate_support.field_donor
+    - field.field.node.foundation_and_corporate_support.field_meta_tags
+    - field.field.node.foundation_and_corporate_support.field_purpose
+    - field.field.node.foundation_and_corporate_support.field_quarter
+    - field.field.node.foundation_and_corporate_support.field_sort
+    - field.field.node.foundation_and_corporate_support.field_title
+    - field.field.node.foundation_and_corporate_support.field_year
+    - field.field.node.foundation_and_corporate_support.field_yoast_seo
+    - node.type.foundation_and_corporate_support
+  module:
+    - metatag
+    - user
+id: node.foundation_and_corporate_support.default
+targetEntityType: node
+bundle: foundation_and_corporate_support
+mode: default
+content:
+  field_amount:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 107
+    region: content
+  field_donor:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 105
+    region: content
+  field_meta_tags:
+    type: metatag_empty_formatter
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 108
+    region: content
+  field_purpose:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 106
+    region: content
+  field_quarter:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 104
+    region: content
+  field_sort:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  field_title:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 102
+    region: content
+  field_year:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 103
+    region: content
+  field_yoast_seo:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 109
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  addtoany: true
+  feeds_item: true
+  langcode: true
+  search_api_excerpt: true

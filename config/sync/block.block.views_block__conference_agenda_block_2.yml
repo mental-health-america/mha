@@ -1,0 +1,40 @@
+uuid: f4c6752d-a1c6-49df-b5cf-9faae8ee47b7
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.conference_agenda
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+    - views
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: views_block__conference_agenda_block_2
+theme: gavias_colin
+region: other
+weight: 0
+provider: null
+plugin: 'views_block:conference_agenda-block_2'
+settings:
+  id: 'views_block:conference_agenda-block_2'
+  label: ''
+  label_display: visible
+  provider: views
+  views_label: ''
+  items_per_page: none
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: /2020/annual-conference/agenda/test

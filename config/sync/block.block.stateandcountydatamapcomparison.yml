@@ -1,0 +1,39 @@
+uuid: 5782f53f-a9e3-4fdb-811b-e8b1e6304a0c
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:3d2d01a1-2572-4052-a118-b111e7d34f05'
+  module:
+    - block_content
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: stateandcountydatamapcomparison
+theme: gavias_colin
+region: other
+weight: 8
+provider: null
+plugin: 'block_content:3d2d01a1-2572-4052-a118-b111e7d34f05'
+settings:
+  id: 'block_content:3d2d01a1-2572-4052-a118-b111e7d34f05'
+  label: 'State and County Data Map - Comparison'
+  label_display: visible
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    pages: "/node/17507\r\n/node/21319"

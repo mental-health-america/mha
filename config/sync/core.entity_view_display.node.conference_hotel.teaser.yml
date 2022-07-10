@@ -1,0 +1,44 @@
+uuid: 4b09fa92-e713-49fe-a85b-36ef5dd2c119
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.conference_hotel.body
+    - field.field.node.conference_hotel.field_conference_year
+    - field.field.node.conference_hotel.field_hotel_information
+    - field.field.node.conference_hotel.field_image
+    - field.field.node.conference_hotel.field_link
+    - field.field.node.conference_hotel.field_meta_tags
+    - field.field.node.conference_hotel.field_yoast_seo
+    - node.type.conference_hotel
+  module:
+    - text
+    - user
+id: node.conference_hotel.teaser
+targetEntityType: node
+bundle: conference_hotel
+mode: teaser
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  addtoany: true
+  field_conference_year: true
+  field_hotel_information: true
+  field_image: true
+  field_link: true
+  field_meta_tags: true
+  field_yoast_seo: true
+  langcode: true

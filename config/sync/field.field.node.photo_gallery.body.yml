@@ -1,0 +1,23 @@
+uuid: 1e4ce6d0-9145-4a01-b9ae-61c8b599c7ac
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.photo_gallery
+  module:
+    - text
+id: node.photo_gallery.body
+field_name: body
+entity_type: node
+bundle: photo_gallery
+label: Body
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+  required_summary: false
+field_type: text_with_summary

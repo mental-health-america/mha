@@ -1,0 +1,15 @@
+uuid: e40061bf-e436-4cf3-8e50-4b5751a3eeb4
+langcode: en
+status: true
+dependencies: {  }
+name: staff
+label: Staff
+effects:
+  ae013dd9-fa65-48f8-a334-3e41f2ed7832:
+    uuid: ae013dd9-fa65-48f8-a334-3e41f2ed7832
+    id: image_scale
+    weight: 1
+    data:
+      width: 500
+      height: 375
+      upscale: true

@@ -1,0 +1,21 @@
+uuid: 4ca2dad5-7165-4a61-86c9-a7da5cafe841
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_rebranding
+    - node.type.reaffiliation_application
+  module:
+    - options
+id: node.reaffiliation_application.field_rebranding
+field_name: field_rebranding
+entity_type: node
+bundle: reaffiliation_application
+label: 'Are you interested in rebranding to Mental Health America?'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string
