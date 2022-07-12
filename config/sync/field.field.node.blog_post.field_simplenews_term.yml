@@ -1,0 +1,33 @@
+uuid: 77af0f91-1537-4921-b453-81feb4d31a58
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_simplenews_term
+    - node.type.blog_post
+    - taxonomy.vocabulary.newsletter
+  content:
+    - 'taxonomy_term:newsletter:525a5add-a098-4986-a769-871121d6db31'
+id: node.blog_post.field_simplenews_term
+field_name: field_simplenews_term
+entity_type: node
+bundle: blog_post
+label: 'Newsletter category'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    target_uuid: 525a5add-a098-4986-a769-871121d6db31
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      newsletter: newsletter
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

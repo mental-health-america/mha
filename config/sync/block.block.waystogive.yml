@@ -1,0 +1,40 @@
+uuid: cd3d25df-7553-402d-9916-4aed9c234b74
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.ways-to-give
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: waystogive
+theme: gavias_colin
+region: sidebar_left
+weight: 69
+provider: null
+plugin: 'system_menu_block:ways-to-give'
+settings:
+  id: 'system_menu_block:ways-to-give'
+  label: 'Ways to Give'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: "/donate-mental-health-america\r\n/get-involved/volunteer\r\n/planned-giving\r\n/node/548\r\n/other-ways-give\r\n/node/19208\r\n/partner-us\r\n/associate-membership\r\n/volunteer\r\n/node/19205\r\n/node/19206\r\n/node/19252\r\n/node/19413"

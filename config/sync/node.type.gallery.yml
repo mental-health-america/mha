@@ -1,0 +1,32 @@
+uuid: 7bc22c47-5f73-4b7d-9267-b08d3ab39a5e
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+    - scheduler
+third_party_settings:
+  menu_ui:
+    available_menus:
+      - main
+    parent: 'main:'
+  scheduler:
+    expand_fieldset: when_required
+    fields_display_mode: vertical_tab
+    publish_enable: false
+    publish_past_date: error
+    publish_required: false
+    publish_revision: false
+    publish_touch: false
+    unpublish_enable: false
+    unpublish_required: false
+    unpublish_revision: false
+_core:
+  default_config_hash: F2rCbKbx5FoL1VyIWzerDJV6-ZlH6Iz5B-DVvYZrB3s
+name: Gallery
+type: gallery
+description: ''
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: false

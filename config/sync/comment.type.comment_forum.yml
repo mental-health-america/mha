@@ -1,0 +1,8 @@
+uuid: e194f094-b427-44f5-ab4e-7abf5ab28bdf
+langcode: en
+status: true
+dependencies: {  }
+id: comment_forum
+label: 'Forum Topic comment'
+target_entity_type_id: node
+description: null

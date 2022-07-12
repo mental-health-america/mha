@@ -1,0 +1,8 @@
+uuid: 42765674-83e0-47b5-be31-007285cbd6aa
+langcode: en
+status: true
+dependencies: {  }
+id: working-with-a-provider
+label: 'Working With a Provider'
+description: ''
+locked: false

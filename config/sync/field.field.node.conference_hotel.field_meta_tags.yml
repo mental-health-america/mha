@@ -1,0 +1,21 @@
+uuid: 6ef5801b-ab53-430b-86b3-eedf2416cc4b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_meta_tags
+    - node.type.conference_hotel
+  module:
+    - metatag
+id: node.conference_hotel.field_meta_tags
+field_name: field_meta_tags
+entity_type: node
+bundle: conference_hotel
+label: 'Meta tags'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: metatag

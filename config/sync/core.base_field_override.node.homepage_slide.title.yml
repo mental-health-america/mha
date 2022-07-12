@@ -1,0 +1,18 @@
+uuid: d70e4b1f-23ca-4c55-9ac4-3abf473277ad
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.homepage_slide
+id: node.homepage_slide.title
+field_name: title
+entity_type: node
+bundle: homepage_slide
+label: Title
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

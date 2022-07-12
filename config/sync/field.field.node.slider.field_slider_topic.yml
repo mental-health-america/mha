@@ -1,0 +1,29 @@
+uuid: 6e274bcf-6106-4065-ae94-751c2a345203
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_slider_topic
+    - node.type.slider
+    - taxonomy.vocabulary.slider_topics
+id: node.slider.field_slider_topic
+field_name: field_slider_topic
+entity_type: node
+bundle: slider
+label: 'Slider Topic'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      slider_topics: slider_topics
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

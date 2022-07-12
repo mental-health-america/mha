@@ -1,0 +1,40 @@
+uuid: d9e21988-d44f-4932-873b-d23aa64b1a01
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.covid-19-side-menu
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: covid19sidemenu
+theme: gavias_colin
+region: quick_side
+weight: 0
+provider: null
+plugin: 'system_menu_block:covid-19-side-menu'
+settings:
+  id: 'system_menu_block:covid-19-side-menu'
+  label: 'Covid-19 SIDE MENU'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: "/covid-19-cloned\r\n/covid19\r\n/covid19/*"

@@ -1,0 +1,41 @@
+uuid: 8c892d33-2818-442d-85a6-e48d8e0aa966
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:733d8805-7910-49ae-b11a-d0bdcccf1060'
+  module:
+    - block_content
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: bwm_njord_block_25
+theme: gavias_colin
+region: content_bottom
+weight: 0
+provider: null
+plugin: 'block_content:733d8805-7910-49ae-b11a-d0bdcccf1060'
+settings:
+  id: 'block_content:733d8805-7910-49ae-b11a-d0bdcccf1060'
+  label: 'RSS Subscription'
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: "/newsroom/chiming-in\r\n/newsroom/chiming-in/*\r\n/tags\r\n/tags/*\r\n/archive\r\n/archive/*\r\n/blog\r\n/blog/*"
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''

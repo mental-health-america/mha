@@ -1,0 +1,23 @@
+uuid: 77519f96-77ac-493d-84e8-e671c3f7eaba
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_urban
+    - node.type.reaffiliation_application
+id: node.reaffiliation_application.field_urban
+field_name: field_urban
+entity_type: node
+bundle: reaffiliation_application
+label: Urban
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: '%'
+field_type: integer

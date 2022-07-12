@@ -1,0 +1,8 @@
+uuid: d2364bbc-d58f-4c40-9827-eedc1734d1c6
+langcode: en
+status: true
+dependencies: {  }
+id: self-help-tools
+label: 'Self-Help Tools'
+description: ''
+locked: false

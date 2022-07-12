@@ -1,0 +1,48 @@
+uuid: 41c7ccdb-5e69-4fc6-8a8d-e37c773e5bf6
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.conference_agenda.body
+    - field.field.node.conference_agenda.field_agenda_date
+    - field.field.node.conference_agenda.field_conference_year
+    - field.field.node.conference_agenda.field_meta_tags
+    - field.field.node.conference_agenda.field_pre_con
+    - field.field.node.conference_agenda.field_session_title
+    - field.field.node.conference_agenda.field_speaker_session_2
+    - field.field.node.conference_agenda.field_time
+    - field.field.node.conference_agenda.field_yoast_seo
+    - node.type.conference_agenda
+  module:
+    - text
+    - user
+id: node.conference_agenda.teaser
+targetEntityType: node
+bundle: conference_agenda
+mode: teaser
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  addtoany: true
+  field_agenda_date: true
+  field_conference_year: true
+  field_meta_tags: true
+  field_pre_con: true
+  field_session_title: true
+  field_speaker_session_2: true
+  field_time: true
+  field_yoast_seo: true
+  langcode: true

@@ -1,0 +1,21 @@
+uuid: daddbde2-6695-4d54-ae98-14a5cd965160
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_bronze
+    - node.type.conference_sponsor_benefits_
+id: node.conference_sponsor_benefits_.field_bronze
+field_name: field_bronze
+entity_type: node
+bundle: conference_sponsor_benefits_
+label: Bronze
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: X
+default_value_callback: ''
+settings: {  }
+field_type: string

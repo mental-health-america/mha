@@ -1,0 +1,21 @@
+uuid: 9273730f-652a-44c1-8e60-cab2115a7fe3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_team_education
+    - node.type.peer_specialist
+_core:
+  default_config_hash: 2r_2tEyXu1NlaopYYv1yTvVhhPVWjawLIPGcf26EPVc
+id: node.peer_specialist.field_team_education
+field_name: field_team_education
+entity_type: node
+bundle: peer_specialist
+label: 'Speaker Education'
+description: 'Sample: MBA, Rotterdam School of Management, Erasmus University'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

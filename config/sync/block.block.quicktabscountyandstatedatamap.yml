@@ -1,0 +1,34 @@
+uuid: 5465f053-3505-4708-ad1e-56695a97b252
+langcode: en
+status: true
+dependencies:
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - quicktabs
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: quicktabscountyandstatedatamap
+theme: gavias_colin
+region: other
+weight: 0
+provider: null
+plugin: 'quicktabs_block:county_and_state_data_map'
+settings:
+  id: 'quicktabs_block:county_and_state_data_map'
+  label: 'County And State Data Map'
+  label_display: '0'
+  provider: quicktabs
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    pages: /node/21319

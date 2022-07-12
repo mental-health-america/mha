@@ -1,0 +1,40 @@
+uuid: 76ecd9da-2ab8-4614-988c-c574f062e312
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.system-transformation-issue
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: systemtransformationissues
+theme: gavias_colin
+region: sidebar_left
+weight: 61
+provider: null
+plugin: 'system_menu_block:system-transformation-issue'
+settings:
+  id: 'system_menu_block:system-transformation-issue'
+  label: 'System Transformation Issues '
+  label_display: visible
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: "/issues/position-statement-12-evidence-based-healthcare-22\r\n/issues/position-statement-11-support-recovery-based-systems-transformation\r\n/issues/position-statement-12-evidence-based-healthcare\r\n/issues/position-statement-13-integration-mental-and-general-health-care\r\n/issues/position-statement-14-federal-governments-responsibilities-mental-health-services\r\n/issues/position-statement-15-parity-health-insurance\r\n/issues/position-statement-16-addressing-health-related-social-needs-people-mental-health-and\r\n/issues/position-statement-17-promotion-mental-wellness\r\n/issues/position-statement-18-cultural-and-linguistic-competency-mental-health-systems\r\n/position-statements/system-transformation-issues"

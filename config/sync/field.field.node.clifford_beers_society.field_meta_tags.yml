@@ -1,0 +1,21 @@
+uuid: 1f5eaf71-527a-4b07-b039-9a1b6fbf25b5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_meta_tags
+    - node.type.clifford_beers_society
+  module:
+    - metatag
+id: node.clifford_beers_society.field_meta_tags
+field_name: field_meta_tags
+entity_type: node
+bundle: clifford_beers_society
+label: 'Meta tags'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: metatag

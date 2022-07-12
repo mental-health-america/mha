@@ -1,0 +1,61 @@
+uuid: 5c81fa12-d4e6-4ed9-aabb-af47d0bb8d0d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.conference_speaker_inormation.field_speaker_name
+    - field.field.paragraph.conference_speaker_inormation.field_speaker_profile
+    - field.field.paragraph.conference_speaker_inormation.field_speaker_title
+    - paragraphs.paragraphs_type.conference_speaker_inormation
+  module:
+    - field_group
+    - link
+third_party_settings:
+  field_group:
+    group_session:
+      children:
+        - field_speaker_name
+        - field_speaker_title
+        - field_speaker_profile
+      label: Session
+      region: content
+      parent_name: ''
+      weight: 0
+      format_type: fieldset
+      format_settings:
+        classes: ''
+        id: ''
+        description: ''
+        required_fields: true
+id: paragraph.conference_speaker_inormation.default
+targetEntityType: paragraph
+bundle: conference_speaker_inormation
+mode: default
+content:
+  field_speaker_name:
+    type: string_textfield
+    weight: 6
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_speaker_profile:
+    type: link_default
+    weight: 8
+    region: content
+    settings:
+      placeholder_url: /annual-conference/speaker/first-last
+      placeholder_title: 'View Profile'
+    third_party_settings: {  }
+  field_speaker_title:
+    type: string_textfield
+    weight: 7
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

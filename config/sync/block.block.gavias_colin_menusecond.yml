@@ -1,0 +1,36 @@
+uuid: dd35f6fc-c053-4c01-92c8-9dcee6d70efa
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.menu-second
+  module:
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+_core:
+  default_config_hash: Z6OhXTzzm8VTDdXgKzpPArhvFC6aL3JLyqoOkVNWpsQ
+id: gavias_colin_menusecond
+theme: gavias_colin
+region: sidebar_right
+weight: -91
+provider: null
+plugin: 'system_menu_block:menu-second'
+settings:
+  id: 'system_menu_block:menu-second'
+  label: Company
+  label_display: visible
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: "/team-grid\r\n/team-list\r\n/node/69\r\n/node/71\r\n/node/73\r\n/node/74\r\n/node/75\r\n/team-grid\r\n/team-list"

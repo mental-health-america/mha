@@ -1,0 +1,23 @@
+uuid: b6e738f6-916b-46b1-b908-ac8ae1fc71b0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_united_way_funding_cfc
+    - node.type.reaffiliation_application
+id: node.reaffiliation_application.field_united_way_funding_cfc
+field_name: field_united_way_funding_cfc
+entity_type: node
+bundle: reaffiliation_application
+label: 'United Way Funding/CFC'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: '%'
+field_type: integer

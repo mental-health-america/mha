@@ -1,0 +1,21 @@
+uuid: 3e9d0a80-f2fc-44e2-8ab4-d7c226f3d75e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_team_skills
+    - node.type.team
+_core:
+  default_config_hash: EOOa8w-pP-Hu5rzbyo-977uCdV8_KV-VWfyet2fSjXg
+id: node.team.field_team_skills
+field_name: field_team_skills
+entity_type: node
+bundle: team
+label: 'Speaker Skills'
+description: 'Format: Title Skills -- Value (Example: Design--50) '
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

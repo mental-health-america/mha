@@ -1,0 +1,36 @@
+uuid: 7fe45752-2af2-40e0-bb00-56a2a3e10b9b
+langcode: en
+status: true
+dependencies:
+  module:
+    - block_visibility_groups
+    - gavias_sliderlayer
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: gaviassliderlayerexcoriationdisorder
+theme: gavias_colin
+region: slideshow_content
+weight: 0
+provider: null
+plugin: 'gavias_sliderlayer_block:gavias_sliderlayer_block____27'
+settings:
+  id: 'gavias_sliderlayer_block:gavias_sliderlayer_block____27'
+  label: 'Excoriation Disorder (Skin Picking or Dermatillomania)'
+  label_display: visible
+  provider: gavias_sliderlayer
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: /conditions/excoriation-disorder-skin-picking-or-dermatillomania

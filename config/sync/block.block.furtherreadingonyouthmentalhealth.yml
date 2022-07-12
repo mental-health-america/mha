@@ -1,0 +1,40 @@
+uuid: ffd3b3e1-37be-4963-8226-06a205c8aa68
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.further-reading-on-youth-me
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: furtherreadingonyouthmentalhealth
+theme: gavias_colin
+region: sidebar_left
+weight: 47
+provider: null
+plugin: 'system_menu_block:further-reading-on-youth-me'
+settings:
+  id: 'system_menu_block:further-reading-on-youth-me'
+  label: 'Further reading on youth mental health'
+  label_display: visible
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: "/bullying-tips-parents\r\n/bipolar-disorder-children\r\n/bullying-lgbt-youth\r\n/depression-teens-0\r\n/healthy-mental-and-emotional-development\r\n/helping-children-cope-loss\r\n/helping-children-cope-tragedy-related-anxiety\r\n/helping-children-deal-deployment\r\n/blog/how-teach-your-child-body-positivity\r\n/reconnecting-your-children\r\n/parenting\r\n/psychosis-schizophrenia-children-and-youth\r\n/recognizing-mental-health-problems-children\r\n/talking-kids-about-fear-and-violence\r\n/talking-kids-about-school-safety\r\n/talking-adolescents-and-teens-time-talk\r\n/convio-form\r\n/talking-adolescents-and-teens-what-do-and-where-go\r\n/what-every-child-needs-good-mental-health\r\n/talking-adolescents-and-teens-starting-conversation\r\n/node/154"

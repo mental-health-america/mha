@@ -1,0 +1,23 @@
+uuid: 5d43490a-9666-4674-918d-5f28d13063d7
+langcode: und
+status: true
+dependencies:
+  module:
+    - file
+    - node
+id: node.field_management_letter
+field_name: field_management_letter
+entity_type: node
+type: file
+settings:
+  target_type: file
+  display_field: false
+  display_default: false
+  uri_scheme: public
+module: file
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
