@@ -1,8 +1,0 @@
-uuid: cacd08cc-1e25-4d68-8112-808c19542c7f
-langcode: en
-status: true
-dependencies: {  }
-id: comment_node_webform_report
-label: 'Webform report comment'
-target_entity_type_id: node
-description: null

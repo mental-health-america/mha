@@ -1,8 +1,0 @@
-uuid: 9aabe4df-d453-4600-8900-3d96822b3590
-langcode: en
-status: true
-dependencies: {  }
-id: comment_node_policy_issue
-label: 'Policy Issue & Statement comment'
-target_entity_type_id: node
-description: null

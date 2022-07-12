@@ -574,3 +574,249 @@ a .btn.btn-primary
     border-right: 1rem solid #f7f7f7;
   }
 }
+
+/* full_calendar overrides */
+
+.fc-list-heading-main::before {
+  font-family: 'FontAwesome';
+  font-size: 1rem;
+  content: '\f274';
+  color: inherit;
+  display: initial;
+  text-decoration: none;
+  margin: 0 0.75rem;
+}
+
+.fc-toolbar.fc-header-toolbar {
+  margin-bottom: 1.25em;
+  background: #f0f0f0;
+  padding: 0.5rem;
+  border-radius: 3px;
+}
+
+.fc-unthemed .fc-divider,
+.fc-unthemed .fc-list-heading td,
+.fc-unthemed .fc-popover .fc-header {
+  background: #2f5270 !important;
+}
+
+.fc-ltr .fc-list-heading-main,
+.fc-ltr .fc-list-heading-alt,
+.fc-rtl .fc-list-heading-main {
+  color: white !important;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.fc-unthemed .fc-content,
+.fc-unthemed .fc-divider,
+.fc-unthemed .fc-list-heading td,
+.fc-unthemed .fc-list-view,
+.fc-unthemed .fc-popover,
+.fc-unthemed .fc-row,
+.fc-unthemed tbody,
+.fc-unthemed td,
+.fc-unthemed th,
+.fc-unthemed thead {
+  border-color: #e1e1e1 !important
+}
+
+.fc-event-dot {
+  background-color: #0030574a !important;
+}
+
+.fc-list-item-time.fc-widget-content,
+.fc-list-item-marker.fc-widget-content,
+.fc-list-item-title.fc-widget-content {
+  padding: 10px 20px !important;
+  font-weight: 600;
+}
+
+.fc-button-primary:disabled,
+.fc-dayGridMonth-button.fc-button.fc-button-primary {
+  color: white !important;
+  background-color: #ea7901 !important;
+  border-color: #ea7901 !important;
+}
+
+.js-drupal-fullcalendar.fc-button.fc-button-primary,
+.fc-timeGridWeek-button.fc-button.fc-button-primary,
+.fc-listWeek-button.fc-button.fc-button-primary,
+.fc-listMonth-button.fc-button.fc-button-primary {
+  background: #ea7901 !important;
+  border-color: #ea7901 !important;
+  color: white !important;
+}
+
+.js-drupal-fullcalendar.fc-button.fc-button-primary.fc-button-active,
+.fc-listWeek-button.fc-button.fc-button-primary.fc-button-active,
+.fc-timeGridWeek-button.fc-button.fc-button-primary.fc-button-active,
+button.fc-dayGridMonth-button.fc-button.fc-button-primary.fc-button-active,
+.fc-listMonth-button.fc-button.fc-button-primary.fc-button-active {
+  color: black !important;
+  background: #ea7901 !important;
+  border-color: #ea7901 !important;
+}
+
+.fc-timeGridWeek-view table {
+  margin: 0 !important;
+}
+
+.fc-timeGridWeek-view .fc-widget-content {
+  padding: 0 .17rem;
+}
+
+.fc-timeGridWeek-view .fc-time-grid-event .fc-time {
+  display: none;
+}
+
+.fc-time-grid-event.fc-event.fc-start.fc-end,
+.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end {
+  background-color: white !important;
+  border: 1px solid white !important;
+  padding: 5px !important;
+}
+
+.fc-time-grid-event.fc-event.fc-start.fc-end {
+  margin: 0 0 0 1rem;
+}
+
+.fc-timeGridWeek-view .fc-time-grid-event .fc-title {
+  padding: 0 1px;
+  line-height: 1 !important;
+  color: #385887;
+}
+
+.fc-listDay-button.fc-button.fc-button-primary.fc-button-active {
+  position: relative;
+  left: -9999px;
+}
+
+.fc-view.fc-dayGridMonth-view.fc-dayGrid-view table {
+  margin: 0 !important;
+}
+
+.fc-list-item-title a[href]:hover {
+  text-decoration: none !important;
+}
+
+.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end .fc-time {
+  display: none;
+}
+
+.fc-ltr .fc-list-heading-alt {
+  margin: 0 .75rem 0 0;
+}
+
+.fc-time-grid .fc-event {
+  position: relative;
+}
+
+.fc-day-grid-event .fc-content {
+  /* white-space: wrap; */
+  overflow: hidden;
+  white-space: normal;
+}
+
+.fc-view-container * {
+  line-height: 1.1;
+}
+
+.fc-button:disabled {
+  opacity: 1;
+}
+
+.fc-list-heading-main {
+  padding: .5rem;
+}
+
+.fc-list-heading-alt {
+  padding: .5rem;
+}
+
+.fc-unthemed .fc-list-empty {
+  font-size: 1.5rem;
+  background-color: transparent;
+  border-radius: 2px;
+  font-weight: 600;
+}
+
+.fc-ltr .fc-dayGrid-view .fc-day-top .fc-day-number {
+  float: right;
+  color: black !important;
+  padding: 0.25rem 0.5rem;
+}
+
+
+.fc-scroller {
+  height: auto !important;
+}
+
+.fc-unthemed .fc-list-empty {
+  padding: 2rem;
+}
+
+.fc-list-item-time.fc-widget-content,
+.fc-list-item-marker.fc-widget-content,
+.fc-list-item-title.fc-widget-content {
+  padding: 1.25rem 1rem !important;
+  font-weight: 600;
+}
+
+.frontpage button.fc-today-button.fc-button.fc-button-primary,
+.frontpage button.fc-listMonth-button.fc-button.fc-button-primary.fc-button-active,
+button.fc-today-button.fc-button.fc-button-primary,
+button.fc-listWeek-button.fc-button.fc-button-primary.fc-button-active,
+button.fc-listMonth-button.fc-button.fc-button-primary.fc-button-active,
+button.fc-listYear-button.fc-button.fc-button-primary.fc-button-active {
+  display: none;
+}
+
+.fc-list-item-title.fc-widget-content {
+  padding: 1.25rem 1rem !important;
+  font-weight: 600;
+  text-align: left;
+}
+
+.fc-list-item-time.fc-widget-content {
+  font-weight: 600;
+}
+
+.fc-list-item-marker.fc-widget-content {
+  padding: 1.3rem 0 0 0 !important;
+}
+
+.fc-head-container .fc-widget-header table a,
+.fc-head-container .fc-widget-header table a:visited {
+  color: white !important;
+  font-size: .85rem;
+  line-height: 2;
+}
+
+.fc-view.fc-timeGridWeek-view.fc-timeGrid-view .fc-timeGridWeek-view th {
+  padding: .5rem !important;
+}
+
+.fc-view.fc-timeGridWeek-view.fc-timeGrid-view .fc-time-grid .fc-event {
+  position: absolute !important;
+}
+
+.fc-view.fc-timeGridWeek-view.fc-timeGrid-view .h5 {
+  font-size: .8rem;
+  color: darkblue !important;
+}
+
+.fc-view.fc-timeGridWeek-view.fc-timeGrid-view span {
+  font-size: .8rem;
+  font-weight: 600;
+  color: black;
+  padding: .2rem;
+}
+
+.menu--event-calendar .gva_menu > li > a, .menu--event-calendar .gva_menu > li.menu-item--active-trail > a {
+  padding: .4rem 2rem !important;
+  margin: 0 .5rem 0 !important;
+  background: #385887 !important;
+  color: #fff !important;
+  border-radius: 15px;
+}

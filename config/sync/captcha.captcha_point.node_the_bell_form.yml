@@ -1,7 +1,0 @@
-uuid: 352d80fe-0bd1-4b53-91aa-c5e3d21c3a05
-langcode: en
-status: false
-dependencies: {  }
-formId: node_the_bell_form
-captchaType: default
-label: null

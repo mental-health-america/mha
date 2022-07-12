@@ -2,6 +2,7 @@ name: FullCalendar Colors
 type: module
 description: Allows definition of colors for FullCalendar events based on taxonomies, node types, etc.
 core: 8.x
+core_version_requirement: ^8 || ^9
 package: FullCalendar
 dependencies:
     - colors

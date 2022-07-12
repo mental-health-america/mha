@@ -1,8 +1,0 @@
-uuid: afc9f895-3158-448e-a394-6fc11a0d843c
-langcode: en
-status: true
-dependencies: {  }
-id: about-us
-label: 'About Us'
-description: 'About us footer menu'
-locked: false

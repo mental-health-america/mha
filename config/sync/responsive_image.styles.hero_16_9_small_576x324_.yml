@@ -1,9 +1,0 @@
-uuid: 73b02fed-90f5-4f52-9779-bd8a2ba4d175
-langcode: en
-status: true
-dependencies: {  }
-id: hero_16_9_small_576x324_
-label: 'Hero 16:9 Small (576x324)'
-image_style_mappings: {  }
-breakpoint_group: responsive_image
-fallback_image_style: '_original image_'

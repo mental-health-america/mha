@@ -1,8 +1,0 @@
-uuid: 9e487363-7099-4ddf-954d-0d62ba6d20f0
-langcode: en
-status: true
-dependencies: {  }
-id: comment_node_staff_member
-label: 'Staff Member comment'
-target_entity_type_id: node
-description: null

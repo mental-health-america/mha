@@ -1,8 +1,0 @@
-uuid: d6ac09a7-33a3-4be5-8ff7-21d6edb9d399
-langcode: en
-status: true
-dependencies: {  }
-id: top-menu
-label: 'Top Menu'
-description: 'Menu at the top of the header'
-locked: false

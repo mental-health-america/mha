@@ -1,7 +1,0 @@
-uuid: 9a19a941-3e3a-4ca0-8b70-9db15f2b65d3
-langcode: en
-status: false
-dependencies: {  }
-formId: node_conference_registration_form
-captchaType: default
-label: null

@@ -1,8 +1,0 @@
-uuid: 05b560bf-f428-411e-9713-f2dcd48e761f
-langcode: en
-status: true
-dependencies: {  }
-id: menu-secondary-footer-menu
-label: 'Secondary Footer Menu'
-description: 'Single Level Navigation at the bottom of all pages.'
-locked: false

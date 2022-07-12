@@ -1,8 +1,0 @@
-uuid: 3133ce83-22f4-4caa-8df3-e14f311d9313
-langcode: en
-status: true
-dependencies: {  }
-id: data-top-menu
-label: 'Data Top Menu'
-description: ''
-locked: false

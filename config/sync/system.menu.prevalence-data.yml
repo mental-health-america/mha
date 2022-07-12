@@ -1,8 +1,0 @@
-uuid: d64a0905-e1cf-47d6-b819-702c6259faff
-langcode: en
-status: true
-dependencies: {  }
-id: prevalence-data
-label: 'Prevalence Data'
-description: ''
-locked: false

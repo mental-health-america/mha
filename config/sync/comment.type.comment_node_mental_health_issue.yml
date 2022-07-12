@@ -1,8 +1,0 @@
-uuid: f076bb33-3257-47be-a493-4c456b7a7876
-langcode: en
-status: true
-dependencies: {  }
-id: comment_node_mental_health_issue
-label: 'Mental Health Issue comment'
-target_entity_type_id: node
-description: null

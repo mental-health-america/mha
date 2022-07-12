@@ -1,8 +1,0 @@
-uuid: 59f5794b-ee8e-420f-8846-201d8d514142
-langcode: en
-status: true
-dependencies: {  }
-name: 'Partner Type'
-vid: partner_type
-description: 'Current or Past'
-weight: 0

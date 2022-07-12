@@ -1,8 +1,0 @@
-uuid: 12210c1c-35a3-4f9a-a129-dc21eb570000
-langcode: en
-status: true
-dependencies: {  }
-id: comment_node_the_bell
-label: 'The Bell comment'
-target_entity_type_id: node
-description: null

@@ -1,8 +1,0 @@
-uuid: e0f78146-1969-4590-8af2-0df1fb1666ee
-langcode: en
-status: true
-dependencies: {  }
-id: peer-partners
-label: 'Peer Partners'
-description: peerpartners
-locked: false

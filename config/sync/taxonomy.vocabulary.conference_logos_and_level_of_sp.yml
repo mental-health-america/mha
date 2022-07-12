@@ -1,8 +1,0 @@
-uuid: aa79e624-4e58-4ebf-b94d-88b419d445d6
-langcode: en
-status: true
-dependencies: {  }
-name: 'Conference Logos and Level of Sponsors'
-vid: conference_logos_and_level_of_sp
-description: 'Levels of Annual Conference sponsorship'
-weight: 0
