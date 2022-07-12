@@ -1,8 +1,0 @@
-uuid: 7bb3a7b2-67fd-49b4-bfd1-46cdf86e47ab
-langcode: en
-status: true
-dependencies: {  }
-id: tools-2-thrive
-label: 'Tools 2 Thrive'
-description: tools2thrive
-locked: false

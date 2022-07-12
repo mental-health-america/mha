@@ -1,8 +1,0 @@
-uuid: b7cb4bf9-bab1-45f6-addc-17d2992dc75a
-langcode: en
-status: true
-dependencies: {  }
-id: annual-conference-2019
-label: 'Annual Conference Menu'
-description: 'Master menu for annual conferences'
-locked: false

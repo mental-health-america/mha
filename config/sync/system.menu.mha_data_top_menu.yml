@@ -1,8 +1,0 @@
-uuid: 7a81d381-8480-471d-8cd3-2e04e3cc6203
-langcode: en
-status: true
-dependencies: {  }
-id: mha_data_top_menu
-label: 'MHA - Data - Top Menu'
-description: ''
-locked: false

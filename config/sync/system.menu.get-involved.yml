@@ -1,8 +1,0 @@
-uuid: 5d4f5f81-253d-4ecb-8c7c-39b636c06236
-langcode: en
-status: true
-dependencies: {  }
-id: get-involved
-label: 'Get Involved'
-description: 'Get Involved Footer Menu'
-locked: false

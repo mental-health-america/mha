@@ -1,8 +1,0 @@
-uuid: 3470c781-a613-4b6e-bad7-5e0a20014c7d
-langcode: en
-status: true
-dependencies: {  }
-name: 'Annual Conference Year'
-vid: annual_conference_year
-description: ''
-weight: 0

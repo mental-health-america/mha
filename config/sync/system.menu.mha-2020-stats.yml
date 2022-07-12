@@ -1,8 +1,0 @@
-uuid: 3f5786bd-a736-4fcb-9d52-9b860bfffbbc
-langcode: en
-status: true
-dependencies: {  }
-id: mha-2020-stats
-label: 'MHA 2020 Stats'
-description: ''
-locked: false

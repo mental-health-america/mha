@@ -1,8 +1,0 @@
-uuid: f766e83e-e678-4229-8e7c-fdbd081c3d18
-langcode: en
-status: true
-dependencies: {  }
-id: resources
-label: Resources
-description: 'Resources for Footer Memu'
-locked: false

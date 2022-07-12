@@ -1,8 +1,0 @@
-uuid: fe54bd95-6dc6-461a-93c5-98deb263a7ef
-langcode: en
-status: true
-dependencies: {  }
-id: reaffiliation_application
-label: 'Reaffiliation Application'
-target_entity_type_id: comment
-description: ''
