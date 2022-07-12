@@ -824,3 +824,14 @@ button.fc-listYear-button.fc-button.fc-button-primary.fc-button-active {
 .fc-event-dot {
   margin: 0 .5rem;
 }
+
+.panel .panel-heading .panel-title > a::after {
+  top: 0 !important;
+  right: 0 !important;
+  color: #ae5d04 !important;
+  font-weight: bold;
+}
+.panel .panel-heading .panel-title > a:hover {
+  color: #ae5d04 !important;
+}
+

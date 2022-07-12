@@ -3507,7 +3507,6 @@ div.error {
 }
 
 .panel {
-  border: none !important;
   margin-top: 0 !important;
   -webkit-box-shadow: none !important;
   -ms-box-shadow: none !important;
@@ -3515,6 +3514,8 @@ div.error {
   box-shadow: none !important;
   background: #fff;
   padding: 15px;
+  border: 1px solid #ccc !important;
+  margin: 0 0 1rem !important;
 }
 .panel .panel-heading {
   background: none !important;
