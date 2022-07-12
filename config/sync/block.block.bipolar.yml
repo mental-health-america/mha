@@ -1,0 +1,40 @@
+uuid: 999b373f-5ad7-4301-b44f-3758adbf15a7
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.bipolar
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: bipolar
+theme: gavias_colin
+region: other
+weight: -88
+provider: null
+plugin: 'system_menu_block:bipolar'
+settings:
+  id: 'system_menu_block:bipolar'
+  label: Bipolar
+  label_display: visible
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: /node/6

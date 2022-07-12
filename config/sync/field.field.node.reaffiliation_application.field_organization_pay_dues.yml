@@ -1,0 +1,21 @@
+uuid: c25312d8-6c28-431b-89b4-e92637c72fa6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_organization_pay_dues
+    - node.type.reaffiliation_application
+  module:
+    - options
+id: node.reaffiliation_application.field_organization_pay_dues
+field_name: field_organization_pay_dues
+entity_type: node
+bundle: reaffiliation_application
+label: 'Is your organization current on its dues to national?'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

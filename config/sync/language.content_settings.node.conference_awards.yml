@@ -1,0 +1,11 @@
+uuid: 35d51c8f-ec06-4234-8b63-f78ad37a7523
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.conference_awards
+id: node.conference_awards
+target_entity_type_id: node
+target_bundle: conference_awards
+default_langcode: site_default
+language_alterable: false

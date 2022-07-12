@@ -1,0 +1,40 @@
+uuid: d2f89c71-08a0-434b-9ba3-8fd649155b44
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.minority-mental-health-
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: minoritymentalhealth
+theme: gavias_colin
+region: sidebar_left
+weight: 51
+provider: null
+plugin: 'system_menu_block:minority-mental-health-'
+settings:
+  id: 'system_menu_block:minority-mental-health-'
+  label: 'BIPOC Mental Health '
+  label_display: visible
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: "/issues/position-statement-18-cultural-and-linguistic-competency-mental-health-systems\r\n/minority-mental-health-month-2018-mystorymyway\r\n/minority-mental-health-month-2017-notacharacterflaw\r\n/bullying-lgbt-youth\r\n/issues/lesbiangaybisexualtransgender-communities-and-mental-health\r\n/issues/native-american-communities-and-mental-health\r\n/issues/asian-americanpacific-islander-communities-and-mental-health\r\n/issues/latinohispanic-communities-and-mental-health\r\n/issues/black-african-american-communities-and-mental-health\r\n/depression-african-americans\r\n/node/2390\r\n/infographic-minority-mental-health\r\n/issues/healthcare-disparities-among-racial-and-ethnic-minority-populations\r\n/minority-mental-health-month\r\n/bipolar-disorder-and-african-americans\r\n/african-american-pioneers-mental-health\r\n/node/1702"

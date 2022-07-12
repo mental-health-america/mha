@@ -1,0 +1,21 @@
+uuid: 1ea0f86e-304f-46ff-906b-c8d4b7c4e8b2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_team_position
+    - node.type.team
+_core:
+  default_config_hash: 0V0Y_0E_mdsGHJ_Km_KQEgEKuPREmFILEEMOSsZxXBw
+id: node.team.field_team_position
+field_name: field_team_position
+entity_type: node
+bundle: team
+label: 'Speaker Position'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

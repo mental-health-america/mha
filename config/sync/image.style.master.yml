@@ -1,0 +1,21 @@
+uuid: c9094e12-11b9-4df0-a00b-3aebad00be72
+langcode: en
+status: true
+dependencies: {  }
+name: master
+label: Master
+effects:
+  8eb539ee-fc99-4a7e-b487-3180914fba3b:
+    uuid: 8eb539ee-fc99-4a7e-b487-3180914fba3b
+    id: image_scale
+    weight: 1
+    data:
+      width: 1800
+      height: null
+      upscale: false
+  b468d212-9cea-45f6-8cbb-6e18986fc93a:
+    uuid: b468d212-9cea-45f6-8cbb-6e18986fc93a
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

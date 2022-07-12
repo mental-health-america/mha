@@ -1,0 +1,11 @@
+uuid: 04f9d1a4-f9af-4736-addc-4fe0febb506e
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.blog_post
+id: node.blog_post
+target_entity_type_id: node
+target_bundle: blog_post
+default_langcode: site_default
+language_alterable: false

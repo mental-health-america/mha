@@ -1,0 +1,19 @@
+uuid: 6a64631b-c599-4977-a7af-68e6d872e4b7
+langcode: en
+status: true
+dependencies:
+  module:
+    - address
+    - user
+id: user.field_affl_address
+field_name: field_affl_address
+entity_type: user
+type: address
+settings: {  }
+module: address
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

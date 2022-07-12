@@ -1,0 +1,21 @@
+uuid: b33dfccd-6413-4176-818b-aebcb0e8cf58
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_meta_tags
+    - node.type.conference_agenda
+  module:
+    - metatag
+id: node.conference_agenda.field_meta_tags
+field_name: field_meta_tags
+entity_type: node
+bundle: conference_agenda
+label: 'Meta tags'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: metatag

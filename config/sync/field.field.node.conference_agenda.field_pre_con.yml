@@ -1,0 +1,23 @@
+uuid: 38a34075-177c-4573-b013-2af92dba7ad1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_pre_con
+    - node.type.conference_agenda
+id: node.conference_agenda.field_pre_con
+field_name: field_pre_con
+entity_type: node
+bundle: conference_agenda
+label: Pre-Conference
+description: 'Is this entry for Pre-Conference day? If "yes" select to appear on both agenda pages.'
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

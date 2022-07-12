@@ -1,0 +1,21 @@
+uuid: 133aa875-9a20-4ff3-b002-35bdec5a7564
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_annual_reporting_1
+    - node.type.reaffiliation_application
+  module:
+    - options
+id: node.reaffiliation_application.field_annual_reporting_1
+field_name: field_annual_reporting_1
+entity_type: node
+bundle: reaffiliation_application
+label: 'Does your MHA have a written financial contingency plan current within the last 3 years (i.e. - for disaster, bad ecomony, etc.)'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

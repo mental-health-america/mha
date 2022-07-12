@@ -1,0 +1,23 @@
+uuid: 7eb57a54-89cf-4548-972a-f96a462bb828
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+name: hero_16_9_extra_small_480x270
+label: 'Hero 16:9 Extra Small (480x270)'
+effects:
+  b5039afb-c933-482b-8172-e6c9836e08d6:
+    uuid: b5039afb-c933-482b-8172-e6c9836e08d6
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 480
+      height: 270
+      crop_type: focal_point
+  0ce2a29c-6d10-439c-9b67-f98ff269bf33:
+    uuid: 0ce2a29c-6d10-439c-9b67-f98ff269bf33
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

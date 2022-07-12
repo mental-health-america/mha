@@ -1,0 +1,41 @@
+uuid: 967233f5-86f4-4b19-8f45-948a907d2148
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:783dd202-a29e-407e-9825-163b7302bd1f'
+  module:
+    - block_content
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: getphysicallyactive
+theme: gavias_colin
+region: sidebar_left
+weight: 37
+provider: null
+plugin: 'block_content:783dd202-a29e-407e-9825-163b7302bd1f'
+settings:
+  id: 'block_content:783dd202-a29e-407e-9825-163b7302bd1f'
+  label: 'Get Physically Active '
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: /get-physically-active

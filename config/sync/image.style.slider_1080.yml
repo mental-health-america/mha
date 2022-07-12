@@ -1,0 +1,23 @@
+uuid: 864fbc81-1943-4df5-8939-9e68b3eb633a
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+name: slider_1080
+label: 'Slider (1080x1080)'
+effects:
+  5b921678-9e62-4d98-a967-e2970e9110af:
+    uuid: 5b921678-9e62-4d98-a967-e2970e9110af
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 1080
+      height: 1080
+      crop_type: focal_point
+  80a9b5bd-ff14-4038-94ba-652d8f3673a8:
+    uuid: 80a9b5bd-ff14-4038-94ba-652d8f3673a8
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

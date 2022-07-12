@@ -1,0 +1,8 @@
+uuid: d691f575-5bdf-498b-a02c-4208f7a8c1af
+langcode: en
+status: true
+dependencies: {  }
+name: 'Ranking Sub-Category'
+vid: ranking_sub_category
+description: ''
+weight: 0

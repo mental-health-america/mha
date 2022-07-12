@@ -1,0 +1,21 @@
+uuid: fcda6619-5513-4bf5-83c1-7546691f14db
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_assessment_last_review
+    - node.type.reaffiliation_application
+  module:
+    - options
+id: node.reaffiliation_application.field_assessment_last_review
+field_name: field_assessment_last_review
+entity_type: node
+bundle: reaffiliation_application
+label: 'Has your organization conducted or participated in a community needs assesment since your last review?'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

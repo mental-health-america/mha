@@ -1,0 +1,22 @@
+uuid: 66fc9681-154d-4ba3-8b76-5af8b901ccab
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - gavias_colin
+_core:
+  default_config_hash: 9EoWV2Lot6FVSr50t4hoKgiz1LIXYWNG-IIPYsWxBqo
+id: bwm_njord_system_main
+theme: gavias_colin
+region: content
+weight: -48
+provider: null
+plugin: system_main_block
+settings:
+  id: system_main_block
+  label: ''
+  label_display: '0'
+  provider: system
+visibility: {  }

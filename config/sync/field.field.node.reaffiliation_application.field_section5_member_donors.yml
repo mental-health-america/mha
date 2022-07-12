@@ -1,0 +1,21 @@
+uuid: 9c548683-4458-4658-ad75-a6d3b558e926
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_section5_member_donors
+    - node.type.reaffiliation_application
+  module:
+    - options
+id: node.reaffiliation_application.field_section5_member_donors
+field_name: field_section5_member_donors
+entity_type: node
+bundle: reaffiliation_application
+label: 'Are your donors considered members?'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

@@ -1,0 +1,35 @@
+uuid: c3104804-da95-4412-8df7-179b9bc4acb4
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.get-involved
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: getinvolved
+theme: gavias_colin
+region: footer_third
+weight: -14
+provider: null
+plugin: 'system_menu_block:get-involved'
+settings:
+  id: 'system_menu_block:get-involved'
+  label: 'Get Involved'
+  label_display: visible
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''

@@ -1,0 +1,28 @@
+uuid: 29a50c4f-90c1-459c-9b6d-e783293b928d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_speaker_profile
+    - paragraphs.paragraphs_type.conference_speaker_inormation
+  module:
+    - link
+id: paragraph.conference_speaker_inormation.field_speaker_profile
+field_name: field_speaker_profile
+entity_type: paragraph
+bundle: conference_speaker_inormation
+label: 'Speaker Profile'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    attributes: {  }
+    uri: 'internal:/annual-conference/speaker/'
+    title: 'View Profile'
+    options: {  }
+default_value_callback: ''
+settings:
+  title: 1
+  link_type: 17
+field_type: link

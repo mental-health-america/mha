@@ -1,0 +1,40 @@
+uuid: e4920396-23c1-4be1-9f57-940a07619e4b
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.top-menu
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: topmenu
+theme: gavias_colin
+region: header_right
+weight: -11
+provider: null
+plugin: 'system_menu_block:top-menu'
+settings:
+  id: 'system_menu_block:top-menu'
+  label: 'Top Menu'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: true
+    context_mapping: {  }
+    pages: "/*/annual-conference/*\r\n/covid-19-cloned\r\n/covid19\r\n/covid19/*\r\n/youngleaders\r\n/youngleaders/*\r\n/node/21354\r\n/node/21454"

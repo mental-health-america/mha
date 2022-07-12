@@ -1,0 +1,11 @@
+uuid: 6606cd83-50c8-4c91-b664-43b48c85df2a
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.conference_logos_and_level_of_sp
+id: taxonomy_term.conference_logos_and_level_of_sp
+target_entity_type_id: taxonomy_term
+target_bundle: conference_logos_and_level_of_sp
+default_langcode: site_default
+language_alterable: false

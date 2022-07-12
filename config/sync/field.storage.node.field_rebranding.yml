@@ -1,0 +1,30 @@
+uuid: 0c5ce230-7cf4-42cf-a499-d0224d0967c2
+langcode: und
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_rebranding
+field_name: field_rebranding
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: 'Yes'
+      label: 'Yes'
+    -
+      value: 'No'
+      label: 'No'
+    -
+      value: 'Already branded to Mental Health America'
+      label: 'Already branded to Mental Health America'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

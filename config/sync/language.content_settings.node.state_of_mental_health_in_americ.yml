@@ -1,0 +1,11 @@
+uuid: c99bfcd7-9f83-4c9d-86c1-c907c2db4844
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.state_of_mental_health_in_americ
+id: node.state_of_mental_health_in_americ
+target_entity_type_id: node
+target_bundle: state_of_mental_health_in_americ
+default_langcode: site_default
+language_alterable: false

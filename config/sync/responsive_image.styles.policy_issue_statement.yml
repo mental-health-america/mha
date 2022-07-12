@@ -1,0 +1,23 @@
+uuid: a559984d-d56b-478c-a486-9a95c3de5244
+langcode: en
+status: true
+dependencies:
+  config:
+    - image.style.max_1300x1300
+    - image.style.max_325x325
+    - image.style.max_650x650
+id: policy_issue_statement
+label: 'Policy Issue & Statement'
+image_style_mappings:
+  -
+    image_mapping_type: sizes
+    image_mapping:
+      sizes: '(min-width:800px) 800px, 100vw.'
+      sizes_image_styles:
+        - max_1300x1300
+        - max_325x325
+        - max_650x650
+    breakpoint_id: responsive_image.viewport_sizing
+    multiplier: 1x
+breakpoint_group: responsive_image
+fallback_image_style: max_1300x1300

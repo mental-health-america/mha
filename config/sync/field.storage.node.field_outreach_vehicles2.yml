@@ -1,0 +1,48 @@
+uuid: d71e7cac-07f5-4d92-80ab-54f3305c3cdb
+langcode: und
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_outreach_vehicles2
+field_name: field_outreach_vehicles2
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: Blog
+      label: Blog
+    -
+      value: Website
+      label: Website
+    -
+      value: Twitter
+      label: Twitter
+    -
+      value: Newsletter
+      label: Newsletter
+    -
+      value: eNewsletter
+      label: eNewsletter
+    -
+      value: Email
+      label: Email
+    -
+      value: Facebook
+      label: Facebook
+    -
+      value: Brochures
+      label: Brochures
+    -
+      value: Flyers
+      label: Flyers
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,19 @@
+uuid: d604fa89-aac1-4347-84b5-9ec96132e2a0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_general_public
+    - node.type.conference_registration
+id: node.conference_registration.field_general_public
+field_name: field_general_public
+entity_type: node
+bundle: conference_registration
+label: 'General Public'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

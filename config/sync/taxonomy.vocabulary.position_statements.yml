@@ -1,0 +1,8 @@
+uuid: 6fef42a8-3c36-44b3-9256-4163b3fbd596
+langcode: en
+status: true
+dependencies: {  }
+name: 'Position Statements'
+vid: position_statements
+description: ''
+weight: 0

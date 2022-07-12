@@ -1,0 +1,23 @@
+uuid: 051a5c41-5a0a-4dbc-b4b4-671e663ec8d0
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+name: hero_16_9_extra_large_1200x675
+label: 'Hero 16:9 Extra Large (1200x675)'
+effects:
+  ffcfa699-ac57-4882-a19c-90319d5b33fc:
+    uuid: ffcfa699-ac57-4882-a19c-90319d5b33fc
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 1200
+      height: 675
+      crop_type: focal_point
+  6fac621d-0e0c-40b6-b601-bedfc06b60be:
+    uuid: 6fac621d-0e0c-40b6-b601-bedfc06b60be
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

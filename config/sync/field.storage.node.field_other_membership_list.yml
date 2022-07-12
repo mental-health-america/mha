@@ -1,0 +1,19 @@
+uuid: d88c93e7-7c7b-4ab2-9c82-87d67814f336
+langcode: und
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_other_membership_list
+field_name: field_other_membership_list
+entity_type: node
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,23 @@
+uuid: 66d859c0-a965-4699-93eb-f14cd1d6fe70
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_city_county
+    - node.type.reaffiliation_application
+id: node.reaffiliation_application.field_city_county
+field_name: field_city_county
+entity_type: node
+bundle: reaffiliation_application
+label: City/County
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

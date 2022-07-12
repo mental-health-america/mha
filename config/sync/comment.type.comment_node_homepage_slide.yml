@@ -1,0 +1,8 @@
+uuid: be30fd1a-990a-42a3-8d27-979a198c321e
+langcode: en
+status: true
+dependencies: {  }
+id: comment_node_homepage_slide
+label: 'Homepage Slide comment'
+target_entity_type_id: node
+description: null
