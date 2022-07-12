@@ -820,3 +820,7 @@ button.fc-listYear-button.fc-button.fc-button-primary.fc-button-active {
   color: #fff !important;
   border-radius: 15px;
 }
+
+.fc-event-dot {
+  margin: 0 .5rem;
+}
