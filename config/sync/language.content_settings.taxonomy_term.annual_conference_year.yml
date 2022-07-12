@@ -1,0 +1,11 @@
+uuid: 3ebf6506-aa43-4b12-a379-8219b8798134
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.annual_conference_year
+id: taxonomy_term.annual_conference_year
+target_entity_type_id: taxonomy_term
+target_bundle: annual_conference_year
+default_langcode: site_default
+language_alterable: false

@@ -1,0 +1,29 @@
+uuid: 5439c783-f31a-4ccb-8b8b-09f3be954cc4
+langcode: en
+status: true
+dependencies:
+  config:
+    - comment.type.comment_node_mental_health_issue
+    - field.field.comment.comment_node_mental_health_issue.comment_body
+  module:
+    - text
+id: comment.comment_node_mental_health_issue.default
+targetEntityType: comment
+bundle: comment_node_mental_health_issue
+mode: default
+content:
+  comment_body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  addtoany: true
+  langcode: true

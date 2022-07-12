@@ -1,0 +1,19 @@
+uuid: e21930e1-a27a-4cae-a1f3-31f89026e5d5
+langcode: und
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_describe_your_signature_pr
+field_name: field_describe_your_signature_pr
+entity_type: node
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

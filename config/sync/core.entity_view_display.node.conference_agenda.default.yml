@@ -1,0 +1,101 @@
+uuid: 2707aa80-f66c-4b1a-a4e4-df7580f7f5a9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.conference_agenda.body
+    - field.field.node.conference_agenda.field_agenda_date
+    - field.field.node.conference_agenda.field_conference_year
+    - field.field.node.conference_agenda.field_meta_tags
+    - field.field.node.conference_agenda.field_pre_con
+    - field.field.node.conference_agenda.field_session_title
+    - field.field.node.conference_agenda.field_speaker_session_2
+    - field.field.node.conference_agenda.field_time
+    - field.field.node.conference_agenda.field_yoast_seo
+    - node.type.conference_agenda
+  module:
+    - datetime
+    - entity_reference_revisions
+    - metatag
+    - text
+    - user
+    - yoast_seo
+id: node.conference_agenda.default
+targetEntityType: node
+bundle: conference_agenda
+mode: default
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_agenda_date:
+    type: datetime_custom
+    label: hidden
+    settings:
+      timezone_override: America/New_York
+      date_format: 'l, F d, Y'
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_conference_year:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_meta_tags:
+    type: metatag_empty_formatter
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 7
+    region: content
+  field_session_title:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings:
+      field_formatter_class:
+        class: session-title
+    weight: 1
+    region: content
+  field_speaker_session_2:
+    type: entity_reference_revisions_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_time:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_yoast_seo:
+    type: yoastseo_formatter
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 8
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 6
+    region: content
+hidden:
+  addtoany: true
+  field_pre_con: true
+  langcode: true

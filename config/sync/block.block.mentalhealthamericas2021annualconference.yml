@@ -1,0 +1,40 @@
+uuid: cad12441-39aa-4be5-a218-13b76b09c156
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.mha2021con
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: mentalhealthamericas2021annualconference
+theme: gavias_colin
+region: main_menu
+weight: 0
+provider: null
+plugin: 'system_menu_block:mha2021con'
+settings:
+  id: 'system_menu_block:mha2021con'
+  label: 'Mental Health Americas 2021 Annual Conference'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: "/2021/annual-conference\r\n/2021/annual-conference/*\r\n/2022/annual-conference\r\n/2022/annual-conference/*\r\n/node/19385\r\n/node/21454"

@@ -1,0 +1,19 @@
+uuid: 668142c2-3757-4039-94a0-6c14cf8b6bca
+langcode: und
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_what_is_your_best_accompli
+field_name: field_what_is_your_best_accompli
+entity_type: node
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

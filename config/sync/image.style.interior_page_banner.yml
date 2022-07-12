@@ -1,0 +1,21 @@
+uuid: b12e9971-eb15-4133-85ce-16528e42748f
+langcode: en
+status: true
+dependencies: {  }
+name: interior_page_banner
+label: 'Interior Page Banner'
+effects:
+  751b9470-ef14-4925-82bc-8b0d51521f16:
+    uuid: 751b9470-ef14-4925-82bc-8b0d51521f16
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 665
+      height: 184
+      anchor: center-center
+  095d0f08-94d8-4c99-8fdc-1d1200c8d240:
+    uuid: 095d0f08-94d8-4c99-8fdc-1d1200c8d240
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

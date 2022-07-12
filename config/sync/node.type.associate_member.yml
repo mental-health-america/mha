@@ -1,0 +1,30 @@
+uuid: 31db4b16-dd20-4342-a60a-191a3a4dea21
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+    - scheduler
+third_party_settings:
+  menu_ui:
+    available_menus:
+      - main
+    parent: 'main:'
+  scheduler:
+    expand_fieldset: when_required
+    fields_display_mode: vertical_tab
+    publish_enable: false
+    publish_past_date: error
+    publish_required: false
+    publish_revision: false
+    publish_touch: false
+    unpublish_enable: false
+    unpublish_required: false
+    unpublish_revision: false
+name: 'Associate Member'
+type: associate_member
+description: 'Add a new Associate Member.'
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: false

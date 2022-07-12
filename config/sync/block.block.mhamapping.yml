@@ -1,0 +1,38 @@
+uuid: 48f055fb-07e2-4f6b-8537-9d643100ded3
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.mha-mapping
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: mhamapping
+theme: gavias_colin
+region: main_menu
+weight: 0
+provider: null
+plugin: 'system_menu_block:mha-mapping'
+settings:
+  id: 'system_menu_block:mha-mapping'
+  label: 'MHA Mapping'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    pages: "/node/21451\r\n/node/21450\r\n/node/21447\r\n/node/21446\r\n/node/21445\r\n/node/21361"

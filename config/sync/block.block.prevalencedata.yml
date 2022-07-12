@@ -1,0 +1,40 @@
+uuid: a5c0399e-b499-41bf-9576-7fd4a88ef9fc
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.prevalence-data
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: mha-menu
+id: prevalencedata
+theme: gavias_colin
+region: sidebar_left
+weight: 19
+provider: null
+plugin: 'system_menu_block:prevalence-data'
+settings:
+  id: 'system_menu_block:prevalence-data'
+  label: 'Prevalence Data'
+  label_display: visible
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: "/issues/mental-health-america-prevalence-data\r\n/issues/mental-health-america-prevalence-data-2\r\n/issues/2020/mental-health-america-prevalence-data\r\n/issues/2020/mental-health-america-prevalence-data-2"

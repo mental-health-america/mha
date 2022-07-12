@@ -1,0 +1,75 @@
+uuid: 735cdf49-93c4-4585-af60-f137fb7cb7e2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.board_of_directors.body
+    - field.field.node.board_of_directors.field_address
+    - field.field.node.board_of_directors.field_bod_position
+    - field.field.node.board_of_directors.field_current_company
+    - field.field.node.board_of_directors.field_image
+    - field.field.node.board_of_directors.field_meta_tags
+    - field.field.node.board_of_directors.field_mha_position
+    - field.field.node.board_of_directors.field_professional_position
+    - field.field.node.board_of_directors.field_yoast_seo
+    - image.style.staff
+    - node.type.board_of_directors
+  module:
+    - colorbox
+    - field_formatter_class
+    - metatag
+    - text
+    - user
+id: node.board_of_directors.default
+targetEntityType: node
+bundle: board_of_directors
+mode: default
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_image:
+    type: colorbox
+    label: hidden
+    settings:
+      colorbox_node_style: staff
+      colorbox_node_style_first: ''
+      colorbox_image_style: ''
+      colorbox_gallery: post
+      colorbox_gallery_custom: ''
+      colorbox_caption: auto
+      colorbox_caption_custom: ''
+    third_party_settings:
+      field_formatter_class:
+        class: mb-3
+    weight: 0
+    region: content
+  field_meta_tags:
+    type: metatag_empty_formatter
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_yoast_seo:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 3
+    region: content
+hidden:
+  addtoany: true
+  field_address: true
+  field_bod_position: true
+  field_current_company: true
+  field_mha_position: true
+  field_professional_position: true
+  langcode: true
+  links: true
+  search_api_excerpt: true

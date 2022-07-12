@@ -1,0 +1,23 @@
+uuid: 49f7d90b-c34f-4720-8c65-87d6fc41e2b5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_average_employment
+    - node.type.reaffiliation_application
+id: node.reaffiliation_application.field_average_employment
+field_name: field_average_employment
+entity_type: node
+bundle: reaffiliation_application
+label: 'In years, what is the average length of employment of staff?'
+description: 'Please answer with whole numbers only (example 2 or 3).'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

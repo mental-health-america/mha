@@ -1,0 +1,40 @@
+uuid: 81a34f5f-1050-4a34-b8ce-5440608f981f
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.tools-2-thrive
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: mha-menu
+id: tools2thrive_2
+theme: gavias_colin
+region: sidebar_left
+weight: 10
+provider: null
+plugin: 'system_menu_block:tools-2-thrive'
+settings:
+  id: 'system_menu_block:tools-2-thrive'
+  label: 'Tools 2 Thrive'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: "/node/19253\r\n/node/17313\r\n/node/17312\r\n/node/17310\r\n/node/17309\r\n/node/17420\r\n/node/17421\r\n/node/17422\r\n/node/17423\r\n/node/17424\r\n/node/17425\r\n\r\n/node/17314\r\n/node/17303"

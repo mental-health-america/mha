@@ -1,0 +1,21 @@
+uuid: 24f4e952-c82b-4a25-bdc4-016b77b53ef7
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node_condition
+label: 'Content - Condition'
+type: 'canonical_entities:node'
+pattern: 'conditions/[node:title]'
+selection_criteria:
+  -
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: node
+    bundles:
+      condition: condition
+selection_logic: and
+weight: 0
+relationships: {  }

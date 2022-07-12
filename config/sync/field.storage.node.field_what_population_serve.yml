@@ -1,0 +1,36 @@
+uuid: c987f766-c6d2-4273-a554-e78edb67b2d5
+langcode: und
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_what_population_serve
+field_name: field_what_population_serve
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: 'Single county/city'
+      label: 'Single county/city'
+    -
+      value: 'Multiple counties/cities'
+      label: 'Multiple counties/cities'
+    -
+      value: 'Major metropolitan area'
+      label: 'Major metropolitan area'
+    -
+      value: State
+      label: State
+    -
+      value: Region
+      label: Region
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

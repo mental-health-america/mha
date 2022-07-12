@@ -1,0 +1,21 @@
+uuid: eb42ff63-a96d-44fa-a34d-d521e1023e5c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_meta_tags
+    - node.type.simplenews
+  module:
+    - metatag
+id: node.simplenews.field_meta_tags
+field_name: field_meta_tags
+entity_type: node
+bundle: simplenews
+label: 'Meta tags'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: metatag

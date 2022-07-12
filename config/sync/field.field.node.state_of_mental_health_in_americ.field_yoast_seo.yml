@@ -1,0 +1,21 @@
+uuid: 2f52c13d-0c29-46a8-8051-ea96fd71013f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_yoast_seo
+    - node.type.state_of_mental_health_in_americ
+  module:
+    - yoast_seo
+id: node.state_of_mental_health_in_americ.field_yoast_seo
+field_name: field_yoast_seo
+entity_type: node
+bundle: state_of_mental_health_in_americ
+label: 'Real-time SEO'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: yoast_seo

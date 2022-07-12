@@ -1,0 +1,23 @@
+uuid: 410cbcec-bfed-4a88-a003-111f60e7e1c5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_percentage_change_from_pri
+    - node.type.reaffiliation_application
+id: node.reaffiliation_application.field_percentage_change_from_pri
+field_name: field_percentage_change_from_pri
+entity_type: node
+bundle: reaffiliation_application
+label: 'Percentage change from prior year'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

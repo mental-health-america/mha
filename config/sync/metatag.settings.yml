@@ -1,0 +1,37 @@
+entity_type_groups:
+  node:
+    blog_post:
+      basic: basic
+      advanced: advanced
+    conference_agenda:
+      basic: basic
+      open_graph: open_graph
+    conference_awards:
+      basic: basic
+      open_graph: open_graph
+    conference_hotel:
+      basic: basic
+    conference_logos_and_level_of_sp:
+      basic: basic
+      open_graph: open_graph
+    conference_registration:
+      basic: basic
+      open_graph: open_graph
+    conference_sponsor_benefits_:
+      basic: basic
+    conference_sponsor_opportunities:
+      basic: basic
+      open_graph: open_graph
+    news:
+      basic: basic
+      advanced: advanced
+      open_graph: open_graph
+    pre_conference_agenda:
+      basic: basic
+      open_graph: open_graph
+    slider:
+      basic: basic
+      advanced: advanced
+    team:
+      basic: basic
+      open_graph: open_graph

@@ -1,0 +1,19 @@
+uuid: 5cb288a1-179a-45d9-9c5d-86581497344f
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: hj6zGNwndnW_J6lKfFcg-tY5e5YqWfgXyt0qioGtXL8
+name: 'MHA Blog newsletter'
+id: default
+description: 'This is the blog newsletter.'
+format: html
+priority: 3
+receipt: false
+from_name: 'Mental Health America Blog'
+subject: '[[simplenews-newsletter:name]] [node:title]'
+from_address: webmaster@mhanational.org
+hyperlinks: false
+new_account: 'on'
+opt_inout: double
+weight: 0

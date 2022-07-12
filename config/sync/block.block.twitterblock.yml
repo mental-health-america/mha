@@ -1,0 +1,46 @@
+uuid: 81317bfd-9b50-48e1-828a-84e2183594aa
+langcode: en
+status: true
+dependencies:
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - twitter_block
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: twitterblock
+theme: gavias_colin
+region: other
+weight: -78
+provider: null
+plugin: twitter_block
+settings:
+  id: twitter_block
+  label: 'Twitter block'
+  label_display: '0'
+  provider: twitter_block
+  username: mentalhealtham
+  theme: ''
+  link_color: ''
+  width: ''
+  height: ''
+  chrome:
+    noheader: noheader
+    nofooter: nofooter
+    noborders: noborders
+    noscrollbar: noscrollbar
+    transparent: transparent
+  border_color: ''
+  language: ''
+  tweet_limit: '1'
+  related: ''
+  polite: polite
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''

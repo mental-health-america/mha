@@ -287,8 +287,8 @@ span.mailto {
 .btn-info.active,
 .open > .btn-info.dropdown-toggle {
   color: #fff !important;
-  background-color: #98a927 !important;
-  border-color: #98a927 !important;
+  background-color: #98a927!important;
+  border-color: #98a927!important;
 }
 
 .btn-inline {
@@ -834,7 +834,7 @@ span.mailto {
 }
 
 .btn-theme {
-  background: #98a927 !important;
+  background: #98a927!important;
   color: #262626 !important;
   padding: 10px 20px !important;
   text-decoration: none !important;
@@ -842,7 +842,7 @@ span.mailto {
 
 .btn-theme:hover {
   background: #262626 !important;
-  color: #98a927 !important;
+  color: #98a927!important;
 }
 
 /*
@@ -1323,16 +1323,12 @@ body.footer-white #footer .footer-center {
 }
 
 .fc-day-top.fc-mon.fc-today {
-  background: #98a927 !important;
+  background: #98a927!important;
   color: #fff !important;
 }
 
 .fc-day-top.fc-mon.fc-today a {
   color: #fff !important;
-}
-
-.fc-unthemed td.fc-today {
-  background: #98a927;
 }
 
 .fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end.fc-draggable {
@@ -1709,8 +1705,8 @@ footer .block .block-title {
 }
 
 .gsc-button.donate-btn.extra-large {
-  color: #98a927 !important;
-  border-color: #98a927 !important;
+  color: #98a927!important;
+  border-color: #98a927!important;
 }
 
 .gsc-button.donate-btn.extra-large:hover {
@@ -1790,7 +1786,7 @@ footer .block .block-title {
 
 .gsc-video-box.style-1 .video-content .right,
 .gsc-video-box.style-1 .image .popup-video .icon {
-  background: #98a927 !important;
+  background: #98a927!important;
 }
 
 .gsc-video-box.style-1 .video-content .left .video-title {
@@ -1843,7 +1839,7 @@ footer .block .block-title {
 }
 
 .gsc-call-to-action.button-bottom.text-light .title::after {
-  background: #98a927 !important;
+  background: #98a927!important;
 }
 
 
@@ -2041,9 +2037,9 @@ hr {
   padding: 3px;
   text-decoration: none;
   background-color: #fff;
-  color: #98a927 !important;
+  color: #98a927!important;
   font-weight: 600;
-  border: 1px solid #98a927 !important;
+  border: 1px solid #98a927!important;
   text-align: center;
 }
 
@@ -2683,7 +2679,7 @@ ol.special li::before {
 }
 
 #superfish-main li:nth-child(5) a.sf-depth-1 {
-  background: #98a927 !important;
+  background: #98a927!important;
 }
 
 .partner-logos .views-field-field-image {
@@ -2817,7 +2813,7 @@ ol.special li::before {
 .panel .panel-heading .panel-title > a::after {
   top: 20px;
   right: 20px !important;
-  color: #98a927 !important;
+  color: #98a927!important;
 }
 
 .panel-default > .panel-heading + .panel-collapse > .panel-body {
@@ -3164,7 +3160,7 @@ span.country {
 }
 
 .sidebar .block-menu ul li.menu-item--active-trail > a {
-  color: #98a927 !important;
+  color: #98a927!important;
 }
 
 .sidebar.sidebar-left {
@@ -3313,8 +3309,8 @@ table h5 {
 }
 
 table > thead:first-child > tr:first-child > th {
-  background: #a6cc37;
-  color: #000;
+  background: #98a927;
+  color: #000 !important;
 }
 
 table > thead:first-child > tr:first-child > th a {
@@ -3498,7 +3494,7 @@ td.time-style {
 }
 
 .timeline-item-wrapper h2 {
-  color: #98a927 !important;
+  color: #98a927!important;
   font-size: 75px !important;
   font-weight: 100 !important;
 }
@@ -6509,7 +6505,7 @@ h3.title-news a:hover {
     font-size: 10px;
   }
   .sponsorship-wrapper table > thead:first-child > tr:first-child > th {
-    background: #a6cc37;
+    background: #98a927;
     color: #000;
     max-width: 50px;
     overflow: hidden;

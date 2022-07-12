@@ -1,0 +1,22 @@
+uuid: c26aece2-830b-427a-b40f-edf1ed27c31e
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.conference_sponsor_opportunities
+id: node.conference_sponsor_opportunities.promote
+field_name: promote
+entity_type: node
+bundle: conference_sponsor_opportunities
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

@@ -1,0 +1,35 @@
+uuid: 13016baf-83a2-4a73-aa22-dd03971b09be
+langcode: en
+status: true
+dependencies:
+  config:
+    - webform.webform.center_peer_support_news_signup
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - webform
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: cps_signup_webform_block
+theme: gavias_colin
+region: other
+weight: 0
+provider: null
+plugin: webform_block
+settings:
+  id: webform_block
+  label: 'Webform - Center for Peer Support Newsletter Signup'
+  label_display: '0'
+  provider: webform
+  webform_id: center_peer_support_news_signup
+  default_data: ''
+  redirect: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''

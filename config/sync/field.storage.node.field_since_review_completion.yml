@@ -1,0 +1,51 @@
+uuid: 6ae2bd6d-5925-4564-9599-e32b7d47bc6d
+langcode: und
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_since_review_completion
+field_name: field_since_review_completion
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: 'Developed or implemented a public education plan'
+      label: 'Developed or implemented a public education plan'
+    -
+      value: 'Participated/exhibited at a health fair'
+      label: 'Participated/exhibited at a health fair'
+    -
+      value: 'Disseminated brochures/fact sheets about MH topics'
+      label: 'Disseminated brochures/fact sheets about MH topics'
+    -
+      value: 'Done radio or print PSAs'
+      label: 'Done radio or print PSAs'
+    -
+      value: 'Conducted an annual May is Mental Health Month campaign'
+      label: 'Conducted an annual May is Mental Health Month campaign'
+    -
+      value: 'Established a speaker''s bureau willing to speak on MH topics'
+      label: 'Established a speaker''s bureau willing to speak on MH topics'
+    -
+      value: 'Presented training or workshops on mental health topics'
+      label: 'Presented training or workshops on mental health topics'
+    -
+      value: 'Developed or maintained a newsletter'
+      label: 'Developed or maintained a newsletter'
+    -
+      value: 'Had an article or op-ed published by local media'
+      label: 'Had an article or op-ed published by local media'
+    -
+      value: 'Developed or implemented a media plan'
+      label: 'Developed or implemented a media plan'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

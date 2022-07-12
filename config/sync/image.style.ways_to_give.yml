@@ -1,0 +1,23 @@
+uuid: 6b6a15d6-350c-434d-ad58-90ec79f174a9
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+name: ways_to_give
+label: 'Ways to Give (500×345)'
+effects:
+  d70a8d31-2eec-474b-9743-70f8b01aab49:
+    uuid: d70a8d31-2eec-474b-9743-70f8b01aab49
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 500
+      height: 345
+      crop_type: focal_point
+  ead4caba-8d03-4763-b9fc-8181f8e044bb:
+    uuid: ead4caba-8d03-4763-b9fc-8181f8e044bb
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

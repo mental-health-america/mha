@@ -1,0 +1,19 @@
+uuid: 3708b93e-f6ff-4809-8322-f6cfcc186403
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_board_chair_s_name
+    - node.type.reaffiliation_application
+id: node.reaffiliation_application.field_board_chair_s_name
+field_name: field_board_chair_s_name
+entity_type: node
+bundle: reaffiliation_application
+label: 'Board Chair''s Name'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

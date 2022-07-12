@@ -1,0 +1,20 @@
+uuid: 238d5063-2de1-4816-ac56-e1490f5316e6
+langcode: en
+status: true
+dependencies:
+  module:
+    - comment
+    - node
+id: node.comment_node_photo_gallery
+field_name: comment_node_photo_gallery
+entity_type: node
+type: comment
+settings:
+  comment_type: comment_node_photo_gallery
+module: comment
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

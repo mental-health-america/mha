@@ -1,0 +1,30 @@
+uuid: 6cc3434f-76bc-45e6-917f-b549b674c44a
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:b3d5ab73-8c80-43e2-9b97-21f6dfe3be3a'
+  module:
+    - block_content
+    - system
+  theme:
+    - gavias_colin
+id: bwm_njord_block_81
+theme: gavias_colin
+region: content
+weight: -23
+provider: null
+plugin: 'block_content:b3d5ab73-8c80-43e2-9b97-21f6dfe3be3a'
+settings:
+  id: 'block_content:b3d5ab73-8c80-43e2-9b97-21f6dfe3be3a'
+  label: 'maps test 2'
+  label_display: visible
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /node/1805

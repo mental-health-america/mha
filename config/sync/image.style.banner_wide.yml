@@ -1,0 +1,21 @@
+uuid: abe06602-1c39-4d61-80b1-9541e6577e28
+langcode: en
+status: true
+dependencies: {  }
+name: banner_wide
+label: 'Banner Wide'
+effects:
+  b9a128db-0fec-48c6-b3c9-5de527c4155b:
+    uuid: b9a128db-0fec-48c6-b3c9-5de527c4155b
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 990
+      height: 190
+      anchor: center-center
+  4a5c4efb-90f1-4c69-a618-edcf39513960:
+    uuid: 4a5c4efb-90f1-4c69-a618-edcf39513960
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

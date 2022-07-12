@@ -1,0 +1,21 @@
+uuid: 87db11e8-3a8a-4d47-af45-10cd76feaaaf
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_meta_tags
+    - node.type.conference_awards
+  module:
+    - metatag
+id: node.conference_awards.field_meta_tags
+field_name: field_meta_tags
+entity_type: node
+bundle: conference_awards
+label: 'Meta tags'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: metatag

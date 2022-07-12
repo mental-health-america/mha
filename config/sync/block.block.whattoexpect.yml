@@ -1,0 +1,40 @@
+uuid: bd79a9a9-2090-4de2-9f40-0cfbff823f32
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.what-to-expect
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: whattoexpect
+theme: gavias_colin
+region: sidebar_left
+weight: 68
+provider: null
+plugin: 'system_menu_block:what-to-expect'
+settings:
+  id: 'system_menu_block:what-to-expect'
+  label: 'What to Expect'
+  label_display: visible
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: "/hospitalization\r\n/node/178\r\n/node/138\r\n/node/406\r\n/node/408\r\n/node/709\r\n/node/711\r\n/what-expect\r\n/what-expect\r\n/node/178\r\n/node/458\r\n/node/457\r\n/node/404"

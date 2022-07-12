@@ -1,0 +1,5 @@
+_core:
+  default_config_hash: NoIRmbT4M8FB7ndhS8bYtlGgrX0Fu7DsPuEQ5Rw7Vfg
+cron: 15
+html: true
+log: false
