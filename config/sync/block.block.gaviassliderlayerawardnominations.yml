@@ -1,0 +1,34 @@
+uuid: 9d9a86d3-4026-4c7f-a53f-ff1511423311
+langcode: en
+status: true
+dependencies:
+  module:
+    - block_visibility_groups
+    - gavias_sliderlayer
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: gaviassliderlayerawardnominations
+theme: gavias_colin
+region: slideshow_content
+weight: 0
+provider: null
+plugin: 'gavias_sliderlayer_block:gavias_sliderlayer_block____90'
+settings:
+  id: 'gavias_sliderlayer_block:gavias_sliderlayer_block____90'
+  label: 'Gavias SliderLayer - Award Nominations'
+  label_display: '0'
+  provider: gavias_sliderlayer
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    pages: /2022/annual-conference/awards

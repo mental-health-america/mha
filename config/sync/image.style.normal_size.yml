@@ -1,0 +1,23 @@
+uuid: ac5a4449-407f-41fb-9083-51fbceaaff3d
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: EzihVdnh3tblu9bT2a_PmgJ5RQ1pqoq1CXD7OveRd88
+name: normal_size
+label: 'Normal (500 x 375)'
+effects:
+  356b0231-c7fd-49a3-ab03-3f6c6e2642d0:
+    uuid: 356b0231-c7fd-49a3-ab03-3f6c6e2642d0
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 500
+      height: 375
+      anchor: center-center
+  ba3128ef-339f-419d-827a-ef48b81135c1:
+    uuid: ba3128ef-339f-419d-827a-ef48b81135c1
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

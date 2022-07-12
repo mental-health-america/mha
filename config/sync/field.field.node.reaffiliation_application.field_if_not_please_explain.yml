@@ -1,0 +1,19 @@
+uuid: 2430258f-4310-45dd-9f2b-0c49943f4c19
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_if_not_please_explain
+    - node.type.reaffiliation_application
+id: node.reaffiliation_application.field_if_not_please_explain
+field_name: field_if_not_please_explain
+entity_type: node
+bundle: reaffiliation_application
+label: 'If not, please explain'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

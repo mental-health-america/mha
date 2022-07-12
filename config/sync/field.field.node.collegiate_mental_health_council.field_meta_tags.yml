@@ -1,0 +1,21 @@
+uuid: a1fcb855-ea77-40cc-8782-1e3889eb4b6d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_meta_tags
+    - node.type.collegiate_mental_health_council
+  module:
+    - metatag
+id: node.collegiate_mental_health_council.field_meta_tags
+field_name: field_meta_tags
+entity_type: node
+bundle: collegiate_mental_health_council
+label: 'Meta tags'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: metatag

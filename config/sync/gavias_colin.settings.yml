@@ -1,0 +1,24 @@
+features:
+  node_user_picture: 1
+  comment_user_picture: 1
+  comment_user_verification: 1
+  favicon: 1
+logo:
+  use_default: 1
+  path: 'public://logo.png'
+favicon:
+  use_default: 1
+  path: 'public://favicon_1.ico'
+  mimetype: image/vnd.microsoft.icon
+theme_skin: ''
+enable_customize: '0'
+sticky_menu: '0'
+site_layout: wide
+preloader: '0'
+default_header: header
+footer_skin: ''
+footer_first_size: '3'
+footer_second_size: '2'
+footer_third_size: '2'
+footer_four_size: '5'
+customize_css: ".field--name-field-newsletter-image .item-image img {\r\n    border: 0;\r\n    vertical-align: top;\r\n    max-width: inherit;\r\n    height: auto;\r\n    min-width: inherit;\r\n}"

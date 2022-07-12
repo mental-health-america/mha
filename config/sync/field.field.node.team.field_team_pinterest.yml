@@ -1,0 +1,21 @@
+uuid: 5a718ad7-bf2a-41da-9f6e-b44e716c3f86
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_team_pinterest
+    - node.type.team
+_core:
+  default_config_hash: uJTa42XyZr7fdRKBpAhY_zrWHcc6ABdAUD_m2bFJNVc
+id: node.team.field_team_pinterest
+field_name: field_team_pinterest
+entity_type: node
+bundle: team
+label: 'Speaker Pinterest'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

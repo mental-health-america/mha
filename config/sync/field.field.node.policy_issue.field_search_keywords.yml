@@ -1,0 +1,19 @@
+uuid: 1650347d-0850-4947-b188-e2b1a48bc194
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_search_keywords
+    - node.type.policy_issue
+id: node.policy_issue.field_search_keywords
+field_name: field_search_keywords
+entity_type: node
+bundle: policy_issue
+label: 'Search Keywords'
+description: 'Add keywords here to help with website search results'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

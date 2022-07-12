@@ -1,0 +1,23 @@
+uuid: 1af8d962-8afb-49d8-8446-8a0a60ee7f82
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.collegiate_mental_health_council
+  module:
+    - text
+id: node.collegiate_mental_health_council.body
+field_name: body
+entity_type: node
+bundle: collegiate_mental_health_council
+label: Body
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+  required_summary: false
+field_type: text_with_summary

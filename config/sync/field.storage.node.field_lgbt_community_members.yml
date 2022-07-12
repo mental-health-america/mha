@@ -1,0 +1,20 @@
+uuid: 811f7829-29f0-4814-a079-7ca2b45eadd1
+langcode: und
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_lgbt_community_members
+field_name: field_lgbt_community_members
+entity_type: node
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

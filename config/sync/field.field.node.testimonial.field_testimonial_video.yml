@@ -1,0 +1,21 @@
+uuid: 7142b652-24b0-45b7-8d10-b05dc471891d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_testimonial_video
+    - node.type.testimonial
+_core:
+  default_config_hash: iuXYbvqg0eWo8HaWx6_o6AwVQeleyLjMNWEEHIKM9vk
+id: node.testimonial.field_testimonial_video
+field_name: field_testimonial_video
+entity_type: node
+bundle: testimonial
+label: 'Testimonial Video'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

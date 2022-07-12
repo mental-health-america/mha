@@ -1,0 +1,41 @@
+uuid: 30366d3b-9e7b-4beb-bc9b-8168e9d1d180
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:555788e3-76cb-45c9-8549-d64984124742'
+  module:
+    - block_content
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: bwm_njord_block_46
+theme: gavias_colin
+region: after_content
+weight: 3
+provider: null
+plugin: 'block_content:555788e3-76cb-45c9-8549-d64984124742'
+settings:
+  id: 'block_content:555788e3-76cb-45c9-8549-d64984124742'
+  label: 'Twine Social Hero'
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: /node/1188
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''

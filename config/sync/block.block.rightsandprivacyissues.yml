@@ -1,0 +1,40 @@
+uuid: a8c8927c-1e6a-4805-a948-e1bd9f69b38c
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.rights-and-privacy-issues
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: rightsandprivacyissues
+theme: gavias_colin
+region: sidebar_left
+weight: 23
+provider: null
+plugin: 'system_menu_block:rights-and-privacy-issues'
+settings:
+  id: 'system_menu_block:rights-and-privacy-issues'
+  label: 'Rights and Privacy Issues'
+  label_display: visible
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: "/issues/position-statement-24-seclusion-and-restraints\r\n/position-statements/rights-and-privacy-issues\r\n/issues/position-statement-24-seclusion-and-restraints\r\n/issues/position-statement-27-standards-management-and-access-consumer-information\r\n/issues/position-statement-26-participant-protections-psychiatric-research\r\n/issues/position-statement-25-community-inclusion-after-olmstead\r\n/issues/position-statement-23-psychiatric-advance-directives\r\n/issues/position-statement-22-involuntary-mental-health-treatment\r\n/issues/position-statement-21-rights-people-mental-health-and-substance-use-conditions"

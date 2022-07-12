@@ -1,0 +1,35 @@
+uuid: 99f44ff8-e9e9-4340-83dc-0fdf140c8ee7
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.anxiety-disorders
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: block-menu
+id: anxietydisorders
+theme: gavias_colin
+region: other
+weight: -89
+provider: null
+plugin: 'system_menu_block:anxiety-disorders'
+settings:
+  id: 'system_menu_block:anxiety-disorders'
+  label: Anxiety
+  label_display: visible
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''

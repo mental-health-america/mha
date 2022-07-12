@@ -1,0 +1,8 @@
+uuid: 328ef2a6-127d-4146-9474-af55b2d5bf5a
+langcode: en
+status: true
+dependencies: {  }
+id: access-to-care-data
+label: 'Access to Care Data'
+description: ''
+locked: false

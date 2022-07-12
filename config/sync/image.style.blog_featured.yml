@@ -1,0 +1,21 @@
+uuid: 45ec2091-9bb0-441a-80fe-20fb21d46c7d
+langcode: en
+status: true
+dependencies: {  }
+name: blog_featured
+label: 'Blog Featured'
+effects:
+  e507c85b-d92f-4be3-8112-21156de7a254:
+    uuid: e507c85b-d92f-4be3-8112-21156de7a254
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 1500
+      height: 600
+      anchor: center-center
+  b088d552-939f-4768-80f1-01eafe24172c:
+    uuid: b088d552-939f-4768-80f1-01eafe24172c
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

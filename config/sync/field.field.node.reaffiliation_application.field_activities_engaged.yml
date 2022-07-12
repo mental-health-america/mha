@@ -1,0 +1,21 @@
+uuid: 3f03b97c-1f34-4f12-ab0e-dcff9403733f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_activities_engaged
+    - node.type.reaffiliation_application
+  module:
+    - options
+id: node.reaffiliation_application.field_activities_engaged
+field_name: field_activities_engaged
+entity_type: node
+bundle: reaffiliation_application
+label: 'Check activities you have engaged in since last review period? '
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

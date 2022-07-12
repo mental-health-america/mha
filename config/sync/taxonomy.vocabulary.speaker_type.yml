@@ -1,0 +1,8 @@
+uuid: f9d0e690-3cf1-4349-9092-81399d62424c
+langcode: en
+status: true
+dependencies: {  }
+name: 'Speaker Type'
+vid: speaker_type
+description: 'Breakout or Plenary Speaker'
+weight: 0

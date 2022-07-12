@@ -1,0 +1,35 @@
+uuid: f7ae845d-b93d-460e-b6b2-4f0ef85af5fd
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:79fc4927-d751-4c8d-9f5c-16fb949005e5'
+  module:
+    - block_content
+    - block_visibility_groups
+    - gaviasthemer
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: text-white
+id: bannermessage
+theme: gavias_colin
+region: other
+weight: 0
+provider: null
+plugin: 'block_content:79fc4927-d751-4c8d-9f5c-16fb949005e5'
+settings:
+  id: 'block_content:79fc4927-d751-4c8d-9f5c-16fb949005e5'
+  label: 'Banner Message'
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''

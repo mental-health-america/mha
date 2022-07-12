@@ -1,0 +1,21 @@
+uuid: 748b5313-54d0-486d-88b9-f383e32bb522
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_diamond
+    - node.type.conference_sponsor_benefits_
+id: node.conference_sponsor_benefits_.field_diamond
+field_name: field_diamond
+entity_type: node
+bundle: conference_sponsor_benefits_
+label: Diamond
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: X
+default_value_callback: ''
+settings: {  }
+field_type: string

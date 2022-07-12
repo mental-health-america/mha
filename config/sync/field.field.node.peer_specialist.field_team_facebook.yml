@@ -1,0 +1,21 @@
+uuid: 04979c60-4b6e-450f-a813-5cb3ac74ebc1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_team_facebook
+    - node.type.peer_specialist
+_core:
+  default_config_hash: QK_0Lquc4JCrNPYt25lqGFka5aoZzazeeaB2PuSPWPo
+id: node.peer_specialist.field_team_facebook
+field_name: field_team_facebook
+entity_type: node
+bundle: peer_specialist
+label: 'Speaker Facebook'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,8 @@
+uuid: e8442426-c6bc-469c-ac82-1ddef050005e
+langcode: en
+status: true
+dependencies: {  }
+name: 'Specialty Areas'
+vid: specialty_areas
+description: 'National Certified Peer Specialist - Specialty Areas'
+weight: 0

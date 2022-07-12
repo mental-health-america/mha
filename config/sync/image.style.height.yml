@@ -1,0 +1,30 @@
+uuid: 99751483-d87a-45e5-ba6a-a54bef90f494
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: FXcCgbqKYaRls44ryTMpGg6gI__Ckhn3TTs7zA6_hYM
+name: height
+label: 'Height (600 x770)'
+effects:
+  cb230ccc-1b36-4a58-b6a3-e4957bebff24:
+    uuid: cb230ccc-1b36-4a58-b6a3-e4957bebff24
+    id: image_resize
+    weight: -10
+    data:
+      width: 600
+      height: 770
+  b45513c4-b0e7-43ae-94df-fc6ad284f22d:
+    uuid: b45513c4-b0e7-43ae-94df-fc6ad284f22d
+    id: image_scale_and_crop
+    weight: 2
+    data:
+      width: 600
+      height: 770
+      anchor: center-center
+  468fb11c-ea3a-4b59-8645-3dc194b13af4:
+    uuid: 468fb11c-ea3a-4b59-8645-3dc194b13af4
+    id: image_convert
+    weight: 3
+    data:
+      extension: webp

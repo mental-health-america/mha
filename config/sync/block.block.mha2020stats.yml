@@ -1,0 +1,40 @@
+uuid: 378fb2bc-cb2c-4b1c-bbdb-14cd37e43d9c
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.mha-2020-stats
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: mha2020stats
+theme: gavias_colin
+region: sidebar_left
+weight: 70
+provider: null
+plugin: 'system_menu_block:mha-2020-stats'
+settings:
+  id: 'system_menu_block:mha-2020-stats'
+  label: 'Statistics 2020'
+  label_display: visible
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: "/issues/2020\r\n/issues/2020/*\r\n/issues/2021\r\n/issues/2021/*\r\n/issues/2022\r\n/issues/2022/*\r\n/issues/state-mental-health-america"

@@ -1,0 +1,21 @@
+uuid: 5a897750-d69a-4857-83ff-c8be8af79298
+langcode: en
+status: true
+dependencies: {  }
+name: home_slide
+label: 'Home Slider'
+effects:
+  ed02de8e-a1aa-403f-afbb-7c1585cfac0b:
+    uuid: ed02de8e-a1aa-403f-afbb-7c1585cfac0b
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 665
+      height: 380
+      anchor: center-center
+  6bb679c2-6379-4320-94ce-2e481e1c6afd:
+    uuid: 6bb679c2-6379-4320-94ce-2e481e1c6afd
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

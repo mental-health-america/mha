@@ -1,0 +1,19 @@
+uuid: cd4bf180-c251-438c-b877-d8ad66836eb5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_chartered_affiliates
+    - node.type.reaffiliation_application
+id: node.reaffiliation_application.field_chartered_affiliates
+field_name: field_chartered_affiliates
+entity_type: node
+bundle: reaffiliation_application
+label: 'Does organization have chartered affiliates?'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,36 @@
+uuid: d9355101-d02d-4bca-8eb6-0c7856c6aca5
+langcode: en
+status: true
+dependencies:
+  module:
+    - block_visibility_groups
+    - gavias_sliderlayer
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: gaviassliderlayertools2thrive
+theme: gavias_colin
+region: slideshow_content
+weight: 0
+provider: null
+plugin: 'gavias_sliderlayer_block:gavias_sliderlayer_block____74'
+settings:
+  id: 'gavias_sliderlayer_block:gavias_sliderlayer_block____74'
+  label: 'Tools 2 Thrive'
+  label_display: '0'
+  provider: gavias_sliderlayer
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: /node/19253

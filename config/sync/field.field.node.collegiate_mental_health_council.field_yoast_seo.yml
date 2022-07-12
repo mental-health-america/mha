@@ -1,0 +1,21 @@
+uuid: f6903b8a-a580-48fe-9408-d34dc2751792
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_yoast_seo
+    - node.type.collegiate_mental_health_council
+  module:
+    - yoast_seo
+id: node.collegiate_mental_health_council.field_yoast_seo
+field_name: field_yoast_seo
+entity_type: node
+bundle: collegiate_mental_health_council
+label: 'Real-time SEO'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: yoast_seo

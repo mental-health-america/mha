@@ -1,0 +1,21 @@
+uuid: 02e5a357-604d-4d4e-84ba-7d2836ade55b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_since_review_completion
+    - node.type.reaffiliation_application
+  module:
+    - options
+id: node.reaffiliation_application.field_since_review_completion
+field_name: field_since_review_completion
+entity_type: node
+bundle: reaffiliation_application
+label: 'Since last review, which of the following have you done?'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

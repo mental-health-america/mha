@@ -1,0 +1,23 @@
+uuid: 5ea7aaf4-85b9-4e8b-b0e6-e51bd08edf80
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.the_bell
+  module:
+    - text
+id: node.the_bell.body
+field_name: body
+entity_type: node
+bundle: the_bell
+label: Body
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+  required_summary: false
+field_type: text_with_summary

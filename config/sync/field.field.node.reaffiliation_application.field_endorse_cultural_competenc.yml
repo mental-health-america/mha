@@ -1,0 +1,21 @@
+uuid: 882d4e2b-3e17-4128-ba57-b9d75114bfd3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_endorse_cultural_competenc
+    - node.type.reaffiliation_application
+  module:
+    - options
+id: node.reaffiliation_application.field_endorse_cultural_competenc
+field_name: field_endorse_cultural_competenc
+entity_type: node
+bundle: reaffiliation_application
+label: 'Does your organization develop, endorse, and implement a statement and plan related to cultural competency?'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

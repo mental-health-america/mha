@@ -1,0 +1,19 @@
+uuid: 17f3e1be-f681-4b5c-a058-547d06d476b6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_person_to_contact_for_reaf
+    - node.type.reaffiliation_application
+id: node.reaffiliation_application.field_person_to_contact_for_reaf
+field_name: field_person_to_contact_for_reaf
+entity_type: node
+bundle: reaffiliation_application
+label: 'Person to Contact for Reaffiliation'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,20 @@
+uuid: 43dfe760-bebf-4ee5-befe-747d6fe59026
+langcode: und
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_financial_fundraising_prof
+field_name: field_financial_fundraising_prof
+entity_type: node
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,40 @@
+uuid: fa3918ee-bfd2-4b56-b4b4-1e2248489c25
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.covid-19
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: covid19
+theme: gavias_colin
+region: main_menu
+weight: 0
+provider: null
+plugin: 'system_menu_block:covid-19'
+settings:
+  id: 'system_menu_block:covid-19'
+  label: Covid-19
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: "/node/17469\r\n/node/17479\r\n/node/17480\r\n/node/17481\r\n/node/17482\r\n/node/17483\r\n/node/17484\r\n/node/17485\r\n/node/17488\r\n/node/17489\r\n/node/17490\r\n/node/17491\r\n/node/17492\r\n/node/17493\r\n/node/17494\r\n/node/17496\r\n/node/17498"

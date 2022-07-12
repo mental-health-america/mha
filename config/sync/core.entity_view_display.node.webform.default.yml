@@ -1,0 +1,91 @@
+uuid: aafa1e94-173b-4530-bfc9-781908f84306
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.webform.body
+    - field.field.node.webform.comment_node_webform
+    - field.field.node.webform.field_content_builder
+    - field.field.node.webform.field_image
+    - field.field.node.webform.field_meta_tags
+    - field.field.node.webform.field_yoast_seo
+    - field.field.node.webform.webform
+    - node.type.webform
+  module:
+    - field_group
+    - gavias_content_builder
+    - metatag
+    - text
+    - user
+    - webform
+third_party_settings:
+  field_group:
+    group_webform_wrapper:
+      children: {  }
+      label: 'Webform Wrapper'
+      parent_name: ''
+      region: hidden
+      weight: 4
+      format_type: html_element
+      format_settings:
+        label: 'Webform Wrapper'
+        classes: bb-container
+        id: webform-wrapper
+        element: div
+        show_label: false
+        label_element: h3
+        attributes: ''
+        effect: none
+        speed: fast
+id: node.webform.default
+targetEntityType: node
+bundle: webform
+mode: default
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_content_builder:
+    type: gavias_content_builder_formatter
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_meta_tags:
+    type: metatag_empty_formatter
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_yoast_seo:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  webform:
+    type: webform_entity_reference_entity_view
+    label: hidden
+    settings:
+      source_entity: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
+hidden:
+  addtoany: true
+  comment_node_webform: true
+  field_image: true
+  langcode: true

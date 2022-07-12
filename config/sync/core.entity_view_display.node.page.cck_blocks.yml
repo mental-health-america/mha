@@ -1,0 +1,47 @@
+uuid: 8418279d-d44e-485f-aeb8-adf0a31f1694
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.cck_blocks
+    - field.field.node.page.body
+    - field.field.node.page.comment_node_page
+    - field.field.node.page.field_content_builder
+    - field.field.node.page.field_content_builder_three
+    - field.field.node.page.field_content_builder_two
+    - field.field.node.page.field_image
+    - field.field.node.page.field_intro
+    - field.field.node.page.field_meta_tags
+    - field.field.node.page.field_metatags
+    - field.field.node.page.field_search_keywords
+    - field.field.node.page.field_topic
+    - field.field.node.page.field_yoast_seo
+    - node.type.page
+  module:
+    - user
+id: node.page.cck_blocks
+targetEntityType: node
+bundle: page
+mode: cck_blocks
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  addtoany: true
+  body: true
+  comment_node_page: true
+  field_content_builder: true
+  field_content_builder_three: true
+  field_content_builder_two: true
+  field_image: true
+  field_intro: true
+  field_meta_tags: true
+  field_metatags: true
+  field_search_keywords: true
+  field_topic: true
+  field_yoast_seo: true
+  langcode: true
+  search_api_excerpt: true

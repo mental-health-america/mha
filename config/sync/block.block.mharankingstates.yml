@@ -1,0 +1,40 @@
+uuid: d0944b6b-5d50-4697-a96e-9a7569c7cd45
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.mha---ranking-states
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: mha-menu
+id: mharankingstates
+theme: gavias_colin
+region: sidebar_left
+weight: 18
+provider: null
+plugin: 'system_menu_block:mha---ranking-states'
+settings:
+  id: 'system_menu_block:mha---ranking-states'
+  label: 'Ranking States'
+  label_display: visible
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: "/issues/ranking-states-2\r\n/issues/ranking-states\r\n/issues/2020/ranking-states"

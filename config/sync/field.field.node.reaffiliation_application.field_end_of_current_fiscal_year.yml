@@ -1,0 +1,21 @@
+uuid: 41e7bdf5-ec11-406d-8973-ca9f7dcc7034
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_end_of_current_fiscal_year
+    - node.type.reaffiliation_application
+  module:
+    - datetime
+id: node.reaffiliation_application.field_end_of_current_fiscal_year
+field_name: field_end_of_current_fiscal_year
+entity_type: node
+bundle: reaffiliation_application
+label: 'End of current fiscal year?'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime
