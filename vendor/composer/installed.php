@@ -5,11 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-<<<<<<< HEAD
-        'reference' => 'ab5b7bfd245d06c448ab4a492f8f48aaef5b174f',
-=======
-        'reference' => 'b4e01b33575e57ebef76567d7566791772b1903f',
->>>>>>> dev
+        'reference' => '67e8a5771fb654d2b9c8a1016f9842fbbaebe879',
         'name' => 'drupal-composer/drupal-project',
         'dev' => true,
     ),
@@ -279,10 +275,14 @@
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
 <<<<<<< HEAD
+<<<<<<< HEAD
             'reference' => 'ab5b7bfd245d06c448ab4a492f8f48aaef5b174f',
 =======
             'reference' => 'b4e01b33575e57ebef76567d7566791772b1903f',
 >>>>>>> dev
+=======
+            'reference' => '67e8a5771fb654d2b9c8a1016f9842fbbaebe879',
+>>>>>>> master
             'dev_requirement' => false,
         ),
         'drupal/action' => array(
@@ -479,6 +479,15 @@
             'replaced' => array(
                 0 => '9.4.2',
             ),
+        ),
+        'drupal/color-color' => array(
+            'pretty_version' => '1.0.1',
+            'version' => '1.0.1.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../web/modules/contrib/color-color',
+            'aliases' => array(),
+            'reference' => '1.0.1',
+            'dev_requirement' => false,
         ),
         'drupal/colorbox' => array(
             'pretty_version' => '1.10.0',
@@ -781,12 +790,12 @@
             'dev_requirement' => false,
         ),
         'drupal/date_popup' => array(
-            'pretty_version' => '1.1.0',
-            'version' => '1.1.0.0',
+            'pretty_version' => '1.2.0',
+            'version' => '1.2.0.0',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../web/modules/contrib/date_popup',
             'aliases' => array(),
-            'reference' => '8.x-1.1',
+            'reference' => '8.x-1.2',
             'dev_requirement' => false,
         ),
         'drupal/datetime' => array(
@@ -1285,12 +1294,12 @@
             ),
         ),
         'drupal/mailsystem' => array(
-            'pretty_version' => '4.3.0',
-            'version' => '4.3.0.0',
+            'pretty_version' => '4.4.0',
+            'version' => '4.4.0.0',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../web/modules/contrib/mailsystem',
             'aliases' => array(),
-            'reference' => '8.x-4.3',
+            'reference' => '8.x-4.4',
             'dev_requirement' => false,
         ),
         'drupal/media' => array(
@@ -1345,12 +1354,12 @@
             ),
         ),
         'drupal/metatag' => array(
-            'pretty_version' => '1.19.0',
-            'version' => '1.19.0.0',
+            'pretty_version' => '1.20.0',
+            'version' => '1.20.0.0',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../web/modules/contrib/metatag',
             'aliases' => array(),
-            'reference' => '8.x-1.19',
+            'reference' => '8.x-1.20',
             'dev_requirement' => false,
         ),
         'drupal/migrate' => array(
@@ -2293,12 +2302,12 @@
             'dev_requirement' => false,
         ),
         'phpstan/phpstan' => array(
-            'pretty_version' => '1.8.0',
-            'version' => '1.8.0.0',
+            'pretty_version' => '1.8.1',
+            'version' => '1.8.1.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../phpstan/phpstan',
             'aliases' => array(),
-            'reference' => 'b7648d4ee9321665acaf112e49da9fd93df8fbd5',
+            'reference' => '8dbba631fa32f4b289404469c2afd6122fd61d67',
             'dev_requirement' => false,
         ),
         'phpstan/phpstan-deprecation-rules' => array(
