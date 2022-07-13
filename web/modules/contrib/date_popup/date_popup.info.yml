@@ -5,7 +5,7 @@ core: 8.x
 core_version_requirement: ^8 || ^9
 package: Date
 
-# Information added by Drupal.org packaging script on 2020-06-11
-version: '8.x-1.1'
+# Information added by Drupal.org packaging script on 2022-07-12
+version: '8.x-1.2'
 project: 'date_popup'
-datestamp: 1591849809
+datestamp: 1657668221
