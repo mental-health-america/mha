@@ -1,0 +1,22 @@
+uuid: 6e075ecf-6a81-4cb0-89a1-854396665ef7
+langcode: en
+status: true
+dependencies:
+  theme:
+    - gavias_colin
+_core:
+  default_config_hash: X9I1OB0W3WlWtrK-CNcg6hNWwa8wficanpH8pYnDZDE
+id: gavias_colin_local_tasks
+theme: gavias_colin
+region: help
+weight: -43
+provider: null
+plugin: local_tasks_block
+settings:
+  id: local_tasks_block
+  label: Tabs
+  label_display: '0'
+  provider: core
+  primary: true
+  secondary: true
+visibility: {  }

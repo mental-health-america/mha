@@ -274,7 +274,11 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
+<<<<<<< HEAD
             'reference' => '955af3814af9487f17854ef99e6b902e171c69fe',
+=======
+            'reference' => '500e9681136bf326c2c677e2b4d59b56cb31d76f',
+>>>>>>> dev
             'dev_requirement' => false,
         ),
         'drupal/action' => array(

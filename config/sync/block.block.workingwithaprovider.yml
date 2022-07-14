@@ -1,0 +1,40 @@
+uuid: cb0d1770-5641-4fcb-9dad-744219846d2e
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.working-with-a-provider
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: workingwithaprovider
+theme: gavias_colin
+region: sidebar_left
+weight: 67
+provider: null
+plugin: 'system_menu_block:working-with-a-provider'
+settings:
+  id: 'system_menu_block:working-with-a-provider'
+  label: 'Working With a Provider '
+  label_display: visible
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: "/hospitalization\r\n/node/178\r\n/node/138\r\n/node/406\r\n/node/408\r\n/node/709\r\n/node/711\r\n/what-expect"

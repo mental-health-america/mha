@@ -1,0 +1,23 @@
+uuid: bc8f336d-abfa-4f67-9dba-015f0c35d52a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.workplace_advisory_board
+  module:
+    - text
+id: node.workplace_advisory_board.body
+field_name: body
+entity_type: node
+bundle: workplace_advisory_board
+label: Copy
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+  required_summary: false
+field_type: text_with_summary

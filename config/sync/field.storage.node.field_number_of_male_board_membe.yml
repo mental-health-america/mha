@@ -1,0 +1,20 @@
+uuid: a67f69b6-b934-4729-9fb1-a5b01b5eb5a4
+langcode: und
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_number_of_male_board_membe
+field_name: field_number_of_male_board_membe
+entity_type: node
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

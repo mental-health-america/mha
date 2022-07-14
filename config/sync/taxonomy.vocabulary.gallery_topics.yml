@@ -1,0 +1,8 @@
+uuid: 4e3e5c7a-f96e-4149-9e17-30debe6b4acf
+langcode: en
+status: true
+dependencies: {  }
+name: 'Gallery Topics'
+vid: gallery_topics
+description: ''
+weight: 0

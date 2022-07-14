@@ -1,0 +1,7 @@
+uuid: 28cd39be-e3cd-41f1-a812-6010e6fde200
+langcode: en
+status: false
+dependencies: {  }
+formId: node_conference_logos_and_level_of_sp_form
+captchaType: default
+label: null

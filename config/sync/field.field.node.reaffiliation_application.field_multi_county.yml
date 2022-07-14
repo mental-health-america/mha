@@ -1,0 +1,23 @@
+uuid: 82a2dd72-58c5-46cf-9ed1-ae807eef3c19
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_multi_county
+    - node.type.reaffiliation_application
+id: node.reaffiliation_application.field_multi_county
+field_name: field_multi_county
+entity_type: node
+bundle: reaffiliation_application
+label: Multi-County
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

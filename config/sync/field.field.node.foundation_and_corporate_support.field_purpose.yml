@@ -1,0 +1,19 @@
+uuid: 5ffdf797-105d-4dd5-befd-e7819bac58ec
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_purpose
+    - node.type.foundation_and_corporate_support
+id: node.foundation_and_corporate_support.field_purpose
+field_name: field_purpose
+entity_type: node
+bundle: foundation_and_corporate_support
+label: Purpose
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

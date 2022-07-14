@@ -1,0 +1,21 @@
+uuid: 3a035445-22f1-4095-8994-9ebc16f370e8
+langcode: en
+status: true
+dependencies:
+  config:
+    - image.style.slider_1080
+    - image.style.slider_540x540_
+id: slider
+label: Slider
+image_style_mappings:
+  -
+    image_mapping_type: sizes
+    image_mapping:
+      sizes: 100vw
+      sizes_image_styles:
+        - slider_1080
+        - slider_540x540_
+    breakpoint_id: responsive_image.viewport_sizing
+    multiplier: 1x
+breakpoint_group: responsive_image
+fallback_image_style: slider_1080

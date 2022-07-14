@@ -1,0 +1,20 @@
+uuid: 19352cfe-3a62-4d52-997c-86baa15df885
+langcode: und
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_black
+field_name: field_black
+entity_type: node
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

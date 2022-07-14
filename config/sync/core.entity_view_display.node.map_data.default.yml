@@ -1,0 +1,64 @@
+uuid: e74c612c-ef26-4a59-ab99-41ebcc322594
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.map_data.field_copy
+    - field.field.node.map_data.field_js
+    - field.field.node.map_data.field_js_map_id
+    - field.field.node.map_data.field_meta_tags
+    - field.field.node.map_data.field_year
+    - field.field.node.map_data.field_yoast_seo
+    - node.type.map_data
+  module:
+    - metatag
+    - text
+    - user
+id: node.map_data.default
+targetEntityType: node
+bundle: map_data
+mode: default
+content:
+  field_copy:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_js:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_meta_tags:
+    type: metatag_empty_formatter
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_year:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_yoast_seo:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 4
+    region: content
+hidden:
+  addtoany: true
+  field_js_map_id: true
+  langcode: true
+  links: true
+  search_api_excerpt: true

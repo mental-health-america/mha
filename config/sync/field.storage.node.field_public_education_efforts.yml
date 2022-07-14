@@ -1,0 +1,27 @@
+uuid: 753e10a5-fdc4-4c81-8e64-92a91b4adc8a
+langcode: und
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_public_education_efforts
+field_name: field_public_education_efforts
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: 'Yes'
+      label: 'Yes'
+    -
+      value: 'No'
+      label: 'No'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

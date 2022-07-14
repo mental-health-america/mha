@@ -1,0 +1,38 @@
+uuid: 1f82cd59-4837-42b5-8c42-43e5ecba7b42
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_image
+    - node.type.conference_awards
+  module:
+    - image
+id: node.conference_awards.field_image
+field_name: field_image
+entity_type: node
+bundle: conference_awards
+label: Image
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: '[date:custom:Y]-[date:custom:m]'
+  file_extensions: 'png gif jpg jpeg webp'
+  max_filesize: ''
+  max_resolution: ''
+  min_resolution: ''
+  alt_field: true
+  alt_field_required: false
+  title_field: false
+  title_field_required: false
+  default_image:
+    uuid: ''
+    alt: ''
+    title: ''
+    width: 800
+    height: 600
+field_type: image

@@ -1,0 +1,34 @@
+uuid: bd1664e8-00c1-4ee5-ab88-2db0af57c49f
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.mhra
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: mhra
+id: mhra_2
+theme: gavias_colin
+region: other
+weight: 0
+provider: null
+plugin: 'system_menu_block:mhra'
+settings:
+  id: 'system_menu_block:mhra'
+  label: 'More Information'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    block_visibility_group: ''

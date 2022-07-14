@@ -1,0 +1,19 @@
+uuid: 38f4020a-f2ee-4e79-a0c4-e0b1ed5b57f2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_sort
+    - node.type.foundation_and_corporate_support
+id: node.foundation_and_corporate_support.field_sort
+field_name: field_sort
+entity_type: node
+bundle: foundation_and_corporate_support
+label: Sort
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,22 @@
+uuid: f5b37b6b-490d-4c94-b025-fbb8342b411f
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.workplace_advisory_board
+id: node.workplace_advisory_board.promote
+field_name: promote
+entity_type: node
+bundle: workplace_advisory_board
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

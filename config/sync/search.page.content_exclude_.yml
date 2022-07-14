@@ -1,0 +1,51 @@
+uuid: 5726e516-4512-44ad-ab12-35d55f205427
+langcode: en
+status: true
+dependencies:
+  module:
+    - search_exclude
+id: content_exclude_
+label: 'Content (Exclude)'
+path: internal
+weight: 0
+plugin: search_exclude_node_search
+configuration:
+  rankings: {  }
+  excluded_bundles:
+    article: article
+    associate_member: associate_member
+    audience: audience
+    banner: banner
+    board_of_directors: board_of_directors
+    clifford_beers_society: clifford_beers_society
+    collegiate_mental_health_council: collegiate_mental_health_council
+    conference_agenda: conference_agenda
+    conference_awards: conference_awards
+    conference_hotel: conference_hotel
+    conference_logos_and_level_of_sp: conference_logos_and_level_of_sp
+    conference_registration: conference_registration
+    conference_sponsor_benefits_: conference_sponsor_benefits_
+    conference_sponsor_opportunities: conference_sponsor_opportunities
+    forum: forum
+    foundation_and_corporate_support: foundation_and_corporate_support
+    gallery: gallery
+    homepage_slide: homepage_slide
+    map_data: map_data
+    other_ways_to_give: other_ways_to_give
+    our_history: our_history
+    partners: partners
+    peer_specialist: peer_specialist
+    photo_gallery: photo_gallery
+    portfolio: portfolio
+    pre_conference_agenda: pre_conference_agenda
+    reaffiliation_application: reaffiliation_application
+    screening_results: screening_results
+    simplenews: simplenews
+    simplenews_issue: simplenews_issue
+    slider: slider
+    team: team
+    testimonial: testimonial
+    the_bell: the_bell
+    webform_pre_design: webform_pre_design
+    webform_report: webform_report
+    workplace_advisory_board: workplace_advisory_board

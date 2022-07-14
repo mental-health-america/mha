@@ -1,0 +1,11 @@
+uuid: e7ba4627-c314-412f-a890-8a65bd2683e2
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.conference_sponsor_benefits_
+id: node.conference_sponsor_benefits_
+target_entity_type_id: node
+target_bundle: conference_sponsor_benefits_
+default_langcode: site_default
+language_alterable: false

@@ -1,0 +1,32 @@
+uuid: 194ed019-e0a9-4592-8605-0eaac6f54ffb
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+    - scheduler
+third_party_settings:
+  menu_ui:
+    available_menus:
+      - main
+    parent: 'main:'
+  scheduler:
+    expand_fieldset: when_required
+    fields_display_mode: vertical_tab
+    publish_enable: false
+    publish_past_date: error
+    publish_required: false
+    publish_revision: false
+    publish_touch: false
+    unpublish_enable: false
+    unpublish_required: false
+    unpublish_revision: false
+_core:
+  default_config_hash: IAUAV4m2qWnDIQNb37iX6_CUagOwgUdI3UONDXJ7nok
+name: Banner
+type: banner
+description: ''
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: true

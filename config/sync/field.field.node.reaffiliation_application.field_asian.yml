@@ -1,0 +1,23 @@
+uuid: 0f1c7a5b-b7a8-46ed-b242-cbc16c744df8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_asian
+    - node.type.reaffiliation_application
+id: node.reaffiliation_application.field_asian
+field_name: field_asian
+entity_type: node
+bundle: reaffiliation_application
+label: Asian
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: '%'
+field_type: integer

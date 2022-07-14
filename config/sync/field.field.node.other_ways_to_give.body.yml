@@ -1,0 +1,23 @@
+uuid: ff481fae-220e-48e6-97d4-f8f3ff5e5576
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.other_ways_to_give
+  module:
+    - text
+id: node.other_ways_to_give.body
+field_name: body
+entity_type: node
+bundle: other_ways_to_give
+label: Body
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+  required_summary: false
+field_type: text_with_summary

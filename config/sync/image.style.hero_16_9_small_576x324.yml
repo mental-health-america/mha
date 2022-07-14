@@ -1,0 +1,23 @@
+uuid: b94da6f4-15b5-4ba2-8532-d35ddc62945a
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+name: hero_16_9_small_576x324
+label: 'Hero 16:9 Small (576x324)'
+effects:
+  d89c8125-b592-4520-93f2-7ab8703ea176:
+    uuid: d89c8125-b592-4520-93f2-7ab8703ea176
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 576
+      height: 324
+      crop_type: focal_point
+  7e936329-78e2-4ef9-927b-04a3ecea424c:
+    uuid: 7e936329-78e2-4ef9-927b-04a3ecea424c
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

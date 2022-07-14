@@ -1,0 +1,12 @@
+uuid: f29a04a2-e7fb-430a-a74a-3a99dc3f0565
+langcode: en
+status: true
+dependencies:
+  module:
+    - protected_pages
+id: notification
+label: Notification
+weight: 6
+is_admin: null
+permissions:
+  - 'access protected page password screen'

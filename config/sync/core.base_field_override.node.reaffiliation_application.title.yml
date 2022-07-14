@@ -1,0 +1,18 @@
+uuid: e758eee3-e65d-45c2-a5c9-9e89d5b88f44
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.reaffiliation_application
+id: node.reaffiliation_application.title
+field_name: title
+entity_type: node
+bundle: reaffiliation_application
+label: Title
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

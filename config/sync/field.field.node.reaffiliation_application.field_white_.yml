@@ -1,0 +1,23 @@
+uuid: c10e2f73-fa84-474e-af5f-3400da17ca82
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_white_
+    - node.type.reaffiliation_application
+id: node.reaffiliation_application.field_white_
+field_name: field_white_
+entity_type: node
+bundle: reaffiliation_application
+label: 'White '
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: '%'
+field_type: integer

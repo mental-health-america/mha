@@ -1,0 +1,130 @@
+uuid: 59f341f9-d8d3-4efb-b4b8-aaefb3737207
+langcode: en
+status: true
+dependencies: {  }
+id: county_and_state_data_map
+label: 'County And State Data Map'
+renderer: quick_tabs
+hide_empty_tabs: false
+default_tab: 0
+options:
+  quick_tabs:
+    ajax: false
+    class: ''
+    style: on-the-gray
+configuration_data:
+  -
+    title: Depression
+    weight: 0
+    type: block_content
+    content:
+      node_content:
+        options:
+          nid: ''
+          view_mode: full
+          hide_title: true
+      view_content:
+        options:
+          vid: 2021_map_data
+          display: default
+          args: ''
+      qtabs_content:
+        options:
+          machine_name: partners_current_tabs_
+      block_content:
+        options:
+          bid: 'block_content:1f1dec45-f669-4dcb-8b6a-896c2b378c11'
+          block_title: ''
+          display_title: false
+  -
+    title: Suicide
+    weight: 0
+    type: block_content
+    content:
+      node_content:
+        options:
+          nid: ''
+          view_mode: full
+          hide_title: true
+      view_content:
+        options:
+          vid: 2021_map_data
+          display: default
+          args: ''
+      qtabs_content:
+        options:
+          machine_name: partners_current_tabs_
+      block_content:
+        options:
+          bid: 'block_content:39e77407-dc45-4558-b77a-291424eee834'
+          block_title: ''
+          display_title: false
+  -
+    title: PTSD
+    weight: 0
+    type: block_content
+    content:
+      node_content:
+        options:
+          nid: ''
+          view_mode: full
+          hide_title: true
+      view_content:
+        options:
+          vid: 2021_map_data
+          display: default
+          args: ''
+      qtabs_content:
+        options:
+          machine_name: partners_current_tabs_
+      block_content:
+        options:
+          bid: 'block_content:6b26a6a2-110f-450e-8681-4034b4b95997'
+          block_title: ''
+          display_title: false
+  -
+    title: 'Trauma Survivors'
+    weight: 0
+    type: block_content
+    content:
+      node_content:
+        options:
+          nid: ''
+          view_mode: full
+          hide_title: true
+      view_content:
+        options:
+          vid: 2021_map_data
+          display: default
+          args: ''
+      qtabs_content:
+        options:
+          machine_name: partners_current_tabs_
+      block_content:
+        options:
+          bid: 'block_content:fa2f412f-e5a0-49a6-af99-e01e91cb4dcf'
+          block_title: ''
+          display_title: false
+  -
+    title: Psychosis
+    weight: 0
+    type: block_content
+    content:
+      node_content:
+        options:
+          nid: ''
+          view_mode: full
+          hide_title: true
+      view_content:
+        options:
+          vid: 2021_map_data
+          display: default
+          args: ''
+      qtabs_content:
+        options:
+          machine_name: partners_current_tabs_
+      block_content:
+        options:
+          bid: 'block_content:f0bd0009-6c3e-47f9-8bcf-2a0aa85e94af'
+          block_title: ''
+          display_title: false

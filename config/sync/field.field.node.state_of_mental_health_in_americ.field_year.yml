@@ -1,0 +1,19 @@
+uuid: eb7ac9cb-a95f-4fce-83ef-620aa9614176
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_year
+    - node.type.state_of_mental_health_in_americ
+id: node.state_of_mental_health_in_americ.field_year
+field_name: field_year
+entity_type: node
+bundle: state_of_mental_health_in_americ
+label: Year
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

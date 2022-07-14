@@ -1,0 +1,24 @@
+features:
+  node_user_picture: 1
+  comment_user_picture: 1
+  comment_user_verification: 1
+  favicon: 1
+logo:
+  use_default: 1
+  path: 'public://logo.png'
+favicon:
+  use_default: 1
+  path: 'public://favicon_1.ico'
+  mimetype: image/vnd.microsoft.icon
+theme_skin: ''
+enable_customize: '0'
+sticky_menu: '0'
+site_layout: wide
+preloader: '0'
+default_header: header
+footer_skin: ''
+footer_first_size: '3'
+footer_second_size: '2'
+footer_third_size: '2'
+footer_four_size: '5'
+customize_css: ".field--name-field-newsletter-image .item-image img {\r\n    border: 0;\r\n    vertical-align: top;\r\n    max-width: inherit;\r\n    height: auto;\r\n    min-width: inherit;\r\n}\r\n\r\n.post-content .field__item {\r\n    margin: 0 !important;\r\n}\r\n\r\n.btn a.ext {\r\n    text-decoration: none !important;\r\n}\r\n\r\n.btn.btn-primary {\r\n    background-color: inherit !important;\r\n    border-radius: 0 !important;\r\n    padding: 0 !important;\r\n    margin: 0 !important;\r\n\r\n}\r\n\r\n.fc-time, .sf-sub-indicator, .fc-content {\r\n    color: #385887 !important;\r\n}\r\n\r\n.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end .fc-time {\r\n    display: block;\r\n}\r\n.fc .fc-list-table {\r\n    table-layout: auto;\r\n    border: 7px solid #f0f0f0!important;\r\n    /* border-radius: 20px !important; */\r\n}\r\n\r\n.fc-unthemed .fc-list-view {\r\nborder-color: transparent !important;\r\n}\r\n\r\n.event-full .event-info {\r\n    background: #385887;\r\n    color: white;\r\n    padding: 10px 20px;\r\n    font-size: 1.25rem;\r\n}\r\n\r\n.node--type-event .fa-calendar:before {\r\n    color: white;\r\n} \r\n\r\n.node--type-event .fa-clock-o:before {\r\n   display: none\r\n}\r\n\r\n.field.field--name-field-event-time.field--type-string.field--label-hidden.field__item.quickedit-field {\r\n    float: right;\r\n}\r\n\r\n.field.field--name-field-event-time.field--type-string.field--label-hidden.field__item.quickedit-field::before {\r\n     content: \"\\f017\";\r\n     font-family: 'FontAwesome';\r\n     color: white;\r\n     margin: 0 10px 0\r\n}\r\n\r\n.node--type-event .node__content.clearfix {\r\n    margin: 0 30px;\r\n}\r\n\r\n.event-full {\r\n    margin-bottom: 0;\r\n    border: 4px solid #385887;\r\n    background: #fffefe;\r\n}\r\n\r\nbutton.fc-timeGridDay-button.fc-button.fc-button-primary {\r\n    background: #ea7901;\r\n    border: 1px solid #ea7902;\r\n}"

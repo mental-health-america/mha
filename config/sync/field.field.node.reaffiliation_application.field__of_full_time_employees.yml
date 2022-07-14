@@ -1,0 +1,23 @@
+uuid: 2109107b-e8e4-49bb-8865-134a262078ca
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field__of_full_time_employees
+    - node.type.reaffiliation_application
+id: node.reaffiliation_application.field__of_full_time_employees
+field_name: field__of_full_time_employees
+entity_type: node
+bundle: reaffiliation_application
+label: '# of Full Time Employees'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

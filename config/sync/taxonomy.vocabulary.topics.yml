@@ -1,0 +1,8 @@
+uuid: fc0d0857-9708-4de1-a551-8c19ac0314e5
+langcode: en
+status: true
+dependencies: {  }
+name: Topics
+vid: topics
+description: 'List of topics for the Basic Page content type'
+weight: 0

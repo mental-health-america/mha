@@ -1,0 +1,23 @@
+uuid: 07787399-5c11-4836-9cda-6a301c066019
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.conference_agenda
+  module:
+    - text
+id: node.conference_agenda.body
+field_name: body
+entity_type: node
+bundle: conference_agenda
+label: Body
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+  required_summary: false
+field_type: text_with_summary

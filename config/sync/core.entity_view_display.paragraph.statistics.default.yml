@@ -1,0 +1,48 @@
+uuid: a60ccf77-6355-4264-b49c-5e1250f499a4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.statistics.field_address
+    - field.field.paragraph.statistics.field_number
+    - field.field.paragraph.statistics.field_percentage
+    - field.field.paragraph.statistics.field_rank
+    - paragraphs.paragraphs_type.statistics
+  module:
+    - address
+id: paragraph.statistics.default
+targetEntityType: paragraph
+bundle: statistics
+mode: default
+content:
+  field_address:
+    type: address_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_number:
+    type: number_unformatted
+    label: above
+    settings: {  }
+    third_party_settings:
+      field_formatter_class:
+        class: ''
+    weight: 3
+    region: content
+  field_percentage:
+    type: number_unformatted
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_rank:
+    type: number_unformatted
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden: {  }

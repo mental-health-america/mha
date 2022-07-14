@@ -1,0 +1,40 @@
+uuid: bdca1786-0414-4545-b210-a22a2f13d025
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.center-for-peer-support
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: centerforpeersupport
+theme: gavias_colin
+region: main_menu
+weight: 1
+provider: null
+plugin: 'system_menu_block:center-for-peer-support'
+settings:
+  id: 'system_menu_block:center-for-peer-support'
+  label: 'Center for Peer Support'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: "/cps-blogs\r\n/peer-workforce\r\n/resources-and-support-peers\r\n/center-peer-support\r\n/get-involved/center-peer-support-newsletter-signup\r\n/national-certified-peer-specialist-ncps-certification-get-certified\r\n/national-certified-peer-specialist-ncps-certification-benefits-resources\r\n/what-peer-0\r\n/what-peer\r\n/peer-support-research-and-reports-0\r\n/peer-workforce\r\n/mha-peer-programs-0\r\n/cps-blogs\r\n/resources-and-support-peers-0\r\n/mha-peer-programs\r\n/peer-support-research-and-reports-0\r\n/peer-support-research-and-reports"

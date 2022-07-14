@@ -1,0 +1,40 @@
+uuid: 08423467-4e56-4576-968a-cd0eeae3e444
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.top-ten-tools
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: toptentools
+theme: gavias_colin
+region: sidebar_left
+weight: 25
+provider: null
+plugin: 'system_menu_block:top-ten-tools'
+settings:
+  id: 'system_menu_block:top-ten-tools'
+  label: 'The 10 Tools'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: "/live-your-life-well\r\n/ten-tools\r\n/connect-others\r\n/create-joy-and-satisfaction\r\n/deal-better-hard-times\r\n/eat-well\r\n/get-enough-sleep\r\n/get-physically-active\r\n/get-professional-help-if-you-need-it\r\n/help-others\r\n/stay-positive\r\n/take-care-your-spirit\r\n/deal-better-hard-times"

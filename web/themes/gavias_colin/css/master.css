@@ -3170,11 +3170,12 @@ span.country {
 .sidebar .block-menu ul li a {
   background: #385887 !important;
   color: #fff !important;
-  text-decoration: none;
+  text-decoration: none !important;
   border: 1px solid #385887 !important;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
+  font-weight: 400;
 }
 
 .sidebar .block-menu ul li a:hover {
@@ -3213,11 +3214,6 @@ span.country {
   display: block;
   background: #f5f5f5;
   margin: 25px 0 0;
-}
-
-.sidebar .block-menu ul li a {
-  font-weight: 400;
-  letter-spacing: .5px;
 }
 
 .sidebar .block .block-title {

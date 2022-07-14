@@ -1,0 +1,33 @@
+uuid: 50e74874-77e0-4e46-876c-b2bb3e837be3
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+_core:
+  default_config_hash: UQTreGkmJa2jTb7ub485mTwQyXjENtIy6ZeGB_R7neQ
+id: content
+label: Content
+type: 'canonical_entities:node'
+pattern: '[node:title]'
+selection_criteria:
+  bfec1d7f-97f5-4514-ba05-a73c013877f5:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: bfec1d7f-97f5-4514-ba05-a73c013877f5
+    context_mapping:
+      node: node
+    bundles:
+      article: article
+      banner: banner
+      gallery: gallery
+      news: news
+      page: page
+      photo_gallery: photo_gallery
+      portfolio: portfolio
+      staff_member: staff_member
+      team: team
+      testimonial: testimonial
+selection_logic: and
+weight: -5
+relationships: {  }

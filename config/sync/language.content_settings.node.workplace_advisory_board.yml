@@ -1,0 +1,11 @@
+uuid: a1c3199e-55fd-4044-a376-598a5c11ee84
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.workplace_advisory_board
+id: node.workplace_advisory_board
+target_entity_type_id: node
+target_bundle: workplace_advisory_board
+default_langcode: site_default
+language_alterable: false

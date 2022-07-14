@@ -1,0 +1,40 @@
+uuid: 3efe1829-549c-4e95-b562-9a1ed889397a
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.associate_members
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+    - views
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: views_block__associate_members_block_1
+theme: gavias_colin
+region: content_bottom
+weight: 1
+provider: null
+plugin: 'views_block:associate_members-block_1'
+settings:
+  id: 'views_block:associate_members-block_1'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+  items_per_page: none
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: /associate-membership

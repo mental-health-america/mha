@@ -1,0 +1,22 @@
+uuid: ebd4defe-72ec-4afe-aa74-622e0688d429
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - gavias_colin
+_core:
+  default_config_hash: jQQUUWN2Uxr5qZtc9zcJKBCxpKY8orN1u2HPqYYRQDI
+id: gavias_colin_powered
+theme: gavias_colin
+region: other
+weight: -93
+provider: null
+plugin: system_powered_by_block
+settings:
+  id: system_powered_by_block
+  label: 'Powered by Drupal'
+  label_display: '0'
+  provider: system
+visibility: {  }

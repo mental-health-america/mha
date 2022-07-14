@@ -1,0 +1,21 @@
+uuid: 0a89d8c5-e1d7-47c9-bda0-8fddc077649c
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node_policy_issue
+label: 'Content - Policy Issue & Statement'
+type: 'canonical_entities:node'
+pattern: 'issues/[node:title]'
+selection_criteria:
+  -
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: node
+    bundles:
+      policy_issue: policy_issue
+selection_logic: and
+weight: 0
+relationships: {  }

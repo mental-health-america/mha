@@ -1,0 +1,21 @@
+uuid: f61f757c-fcbc-4956-85cf-8981cd9b4ffb
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_meta_tags
+    - node.type.foundation_and_corporate_support
+  module:
+    - metatag
+id: node.foundation_and_corporate_support.field_meta_tags
+field_name: field_meta_tags
+entity_type: node
+bundle: foundation_and_corporate_support
+label: 'Meta tags'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: metatag
