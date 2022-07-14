@@ -929,3 +929,7 @@ button.fc-timeGridDay-button.fc-button.fc-button-primary {
   background: #ea7901;
   border: 1px solid #ea7902;
 }
+
+a:hover, a:focus, a:active, a:visited {
+  color: #ae5e06;
+}
