@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '67e8a5771fb654d2b9c8a1016f9842fbbaebe879',
+        'reference' => '955af3814af9487f17854ef99e6b902e171c69fe',
         'name' => 'drupal-composer/drupal-project',
         'dev' => true,
     ),
@@ -274,15 +274,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-<<<<<<< HEAD
-<<<<<<< HEAD
-            'reference' => 'ab5b7bfd245d06c448ab4a492f8f48aaef5b174f',
-=======
-            'reference' => 'b4e01b33575e57ebef76567d7566791772b1903f',
->>>>>>> dev
-=======
-            'reference' => '67e8a5771fb654d2b9c8a1016f9842fbbaebe879',
->>>>>>> master
+            'reference' => '955af3814af9487f17854ef99e6b902e171c69fe',
             'dev_requirement' => false,
         ),
         'drupal/action' => array(
@@ -994,12 +986,12 @@
             'dev_requirement' => false,
         ),
         'drupal/field_inheritance' => array(
-            'pretty_version' => '2.0.0-rc5',
-            'version' => '2.0.0.0-RC5',
+            'pretty_version' => '2.0.0-rc6',
+            'version' => '2.0.0.0-RC6',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../web/modules/contrib/field_inheritance',
             'aliases' => array(),
-            'reference' => '2.0.0-rc5',
+            'reference' => '2.0.0-rc6',
             'dev_requirement' => false,
         ),
         'drupal/field_layout' => array(
@@ -2233,12 +2225,12 @@
             'dev_requirement' => false,
         ),
         'mglaman/phpstan-drupal' => array(
-            'pretty_version' => '1.1.21',
-            'version' => '1.1.21.0',
+            'pretty_version' => '1.1.23',
+            'version' => '1.1.23.0',
             'type' => 'phpstan-extension',
             'install_path' => __DIR__ . '/../mglaman/phpstan-drupal',
             'aliases' => array(),
-            'reference' => '8acaa1e4a15b266cfbd404c6fcb4e1be398f05f8',
+            'reference' => 'ad47ecc886433a17e928c2f47682bb237b51fdc0',
             'dev_requirement' => false,
         ),
         'nikic/php-parser' => array(

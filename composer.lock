@@ -2771,6 +2771,10 @@
                     "name": "Travis Carden",
                     "homepage": "https://www.drupal.org/user/236758",
                     "email": "travis.carden@gmail.com"
+                },
+                {
+                    "name": "VladimirAus",
+                    "homepage": "https://www.drupal.org/user/673120"
                 }
             ],
             "description": "Provides an API for creating fillable, persistent checklists.",
@@ -2879,12 +2883,12 @@
                     "role": "Maintainer"
                 },
                 {
-                    "name": "jenlampton",
-                    "homepage": "https://www.drupal.org/user/85586"
+                    "name": "RenatoG",
+                    "homepage": "https://www.drupal.org/user/3326031"
                 },
                 {
-                    "name": "paulmckibben",
-                    "homepage": "https://www.drupal.org/user/279003"
+                    "name": "Unsupported Projects",
+                    "homepage": "https://www.drupal.org/user/291168"
                 }
             ],
             "description": "A light-weight, customizable lightbox plugin for jQuery.",
@@ -4973,26 +4977,26 @@
         },
         {
             "name": "drupal/field_inheritance",
-            "version": "2.0.0-rc5",
+            "version": "2.0.0-rc6",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/field_inheritance.git",
-                "reference": "2.0.0-rc5"
+                "reference": "2.0.0-rc6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/field_inheritance-2.0.0-rc5.zip",
-                "reference": "2.0.0-rc5",
-                "shasum": "579da754a2983c7f9a9d49db3403bd8a9e45e87a"
+                "url": "https://ftp.drupal.org/files/projects/field_inheritance-2.0.0-rc6.zip",
+                "reference": "2.0.0-rc6",
+                "shasum": "e8d3ed482a91de2dda3d8332e10baeb00aeae0b7"
             },
             "require": {
-                "drupal/core": "^8.8 || ^9"
+                "drupal/core": "^8.8 || ^9 || ^10"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.0-rc5",
-                    "datestamp": "1642195918",
+                    "version": "2.0.0-rc6",
+                    "datestamp": "1657744599",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -6557,7 +6561,7 @@
             "extra": {
                 "drupal": {
                     "version": "8.x-1.20",
-                    "datestamp": "1657722289",
+                    "datestamp": "1657810826",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -11100,16 +11104,16 @@
         },
         {
             "name": "mglaman/phpstan-drupal",
-            "version": "1.1.21",
+            "version": "1.1.23",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mglaman/phpstan-drupal.git",
-                "reference": "8acaa1e4a15b266cfbd404c6fcb4e1be398f05f8"
+                "reference": "ad47ecc886433a17e928c2f47682bb237b51fdc0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mglaman/phpstan-drupal/zipball/8acaa1e4a15b266cfbd404c6fcb4e1be398f05f8",
-                "reference": "8acaa1e4a15b266cfbd404c6fcb4e1be398f05f8",
+                "url": "https://api.github.com/repos/mglaman/phpstan-drupal/zipball/ad47ecc886433a17e928c2f47682bb237b51fdc0",
+                "reference": "ad47ecc886433a17e928c2f47682bb237b51fdc0",
                 "shasum": ""
             },
             "require": {
@@ -11184,7 +11188,7 @@
             "description": "Drupal extension and rules for PHPStan",
             "support": {
                 "issues": "https://github.com/mglaman/phpstan-drupal/issues",
-                "source": "https://github.com/mglaman/phpstan-drupal/tree/1.1.21"
+                "source": "https://github.com/mglaman/phpstan-drupal/tree/1.1.23"
             },
             "funding": [
                 {
@@ -11200,7 +11204,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-07-07T19:39:04+00:00"
+            "time": "2022-07-14T12:15:55+00:00"
         },
         {
             "name": "nikic/php-parser",
