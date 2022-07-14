@@ -1,0 +1,40 @@
+uuid: 47819f0d-67f2-4d51-95eb-276e8264642b
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.questions-to-ask-a-provider
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: questionstoaskaprovider
+theme: gavias_colin
+region: sidebar_left
+weight: 64
+provider: null
+plugin: 'system_menu_block:questions-to-ask-a-provider'
+settings:
+  id: 'system_menu_block:questions-to-ask-a-provider'
+  label: 'Questions to Ask a Provider'
+  label_display: visible
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: /questions-ask-provider

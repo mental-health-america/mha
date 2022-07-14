@@ -1,0 +1,21 @@
+uuid: 833b2e27-1fa8-42a7-8344-867d40241286
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_yoast_seo
+    - node.type.clifford_beers_society
+  module:
+    - yoast_seo
+id: node.clifford_beers_society.field_yoast_seo
+field_name: field_yoast_seo
+entity_type: node
+bundle: clifford_beers_society
+label: 'Real-time SEO'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: yoast_seo

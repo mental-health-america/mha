@@ -1,0 +1,23 @@
+uuid: 922a6a99-d45e-4c5e-a0d6-8a5445a975d6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_business_community_leaders
+    - node.type.reaffiliation_application
+id: node.reaffiliation_application.field_business_community_leaders
+field_name: field_business_community_leaders
+entity_type: node
+bundle: reaffiliation_application
+label: 'Business/Community Leaders'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: '%'
+field_type: integer

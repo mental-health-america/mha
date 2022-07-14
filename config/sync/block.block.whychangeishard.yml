@@ -1,0 +1,41 @@
+uuid: 59e7f3d1-6902-4175-89ee-0804429332dc
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:4e8faad5-a78c-4a52-99ec-9ce96d5627c3'
+  module:
+    - block_content
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: whychangeishard
+theme: gavias_colin
+region: sidebar_left
+weight: 28
+provider: null
+plugin: 'block_content:4e8faad5-a78c-4a52-99ec-9ce96d5627c3'
+settings:
+  id: 'block_content:4e8faad5-a78c-4a52-99ec-9ce96d5627c3'
+  label: 'When Change is Hard'
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: /deal-better-hard-times

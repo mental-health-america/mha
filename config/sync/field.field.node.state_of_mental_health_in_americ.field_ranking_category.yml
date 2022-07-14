@@ -1,0 +1,19 @@
+uuid: 90cee9c2-b1d7-4341-89b5-57f708274493
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_ranking_category
+    - node.type.state_of_mental_health_in_americ
+id: node.state_of_mental_health_in_americ.field_ranking_category
+field_name: field_ranking_category
+entity_type: node
+bundle: state_of_mental_health_in_americ
+label: 'Ranking Category'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

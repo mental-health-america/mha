@@ -1,0 +1,27 @@
+uuid: 2e915fc0-e0f5-496d-b371-b53eee10d0a0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_management_letter
+    - node.type.reaffiliation_application
+  module:
+    - file
+id: node.reaffiliation_application.field_management_letter
+field_name: field_management_letter
+entity_type: node
+bundle: reaffiliation_application
+label: 'Management Letter'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: reaffiliates-supporting-documents
+  file_extensions: 'doc docx pdf txt xls xlsx'
+  max_filesize: ''
+  description_field: true
+field_type: file

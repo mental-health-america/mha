@@ -1,0 +1,23 @@
+uuid: a82f7043-a6a0-4145-9d6f-d3501dc22355
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_non_medical_mental_health_
+    - node.type.reaffiliation_application
+id: node.reaffiliation_application.field_non_medical_mental_health_
+field_name: field_non_medical_mental_health_
+entity_type: node
+bundle: reaffiliation_application
+label: 'Non-Medical Mental Health Providers'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: '%'
+field_type: integer

@@ -1,10 +1,10 @@
 name: 'Field Inheritance'
 type: module
 description: 'Provides the ability to inherit data from one entity to another'
-core_version_requirement: ^8.8 || ^9
+core_version_requirement: ^8.8 || ^9 || ^10
 package: 'Field Inheritance'
 
-# Information added by Drupal.org packaging script on 2022-01-14
-version: '2.0.0-rc5'
+# Information added by Drupal.org packaging script on 2022-07-13
+version: '2.0.0-rc6'
 project: 'field_inheritance'
-datestamp: 1642195921
+datestamp: 1657744601

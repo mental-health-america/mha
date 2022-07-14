@@ -1,0 +1,40 @@
+uuid: 4a536e6d-1c3d-4c3f-b914-14c1492dbd95
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.ranking-the-states-2022
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: rankingthestates2022
+theme: gavias_colin
+region: sidebar_left
+weight: 1
+provider: null
+plugin: 'system_menu_block:ranking-the-states-2022'
+settings:
+  id: 'system_menu_block:ranking-the-states-2022'
+  label: 'Ranking the States 2022'
+  label_display: visible
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: "/issues/2022/ranking-states\r\n/issues/2022/ranking-states/*"

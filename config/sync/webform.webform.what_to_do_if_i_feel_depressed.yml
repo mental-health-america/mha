@@ -1,0 +1,278 @@
+uuid: 3ff234d1-2d95-48d1-8927-8a6d2550b38f
+langcode: en
+status: open
+dependencies: {  }
+weight: 0
+open: null
+close: null
+uid: 2
+template: false
+archive: false
+id: what_to_do_if_i_feel_depressed
+title: 'What To Do If I Feel Depressed'
+description: ''
+category: ''
+elements: |-
+  has_reviewing_this_decision_aid_been_helpful:
+    '#type': radios
+    '#title': 'Has reviewing this decision aid been helpful?'
+    '#options':
+      'Yes': 'Yes'
+      'No': 'No'
+      'I don''t know': 'I don''t know'
+  please_tell_us_why_this_decision_aid_has_been_helpful:
+    '#type': radios
+    '#title': 'Please tell us why this decision aid has been helpful'
+    '#options':
+      'I feel more informed about treatment for depression': 'I feel more informed about treatment for depression'
+      'I feel more confident to seek advice about depression': 'I feel more confident to seek advice about depression'
+      'I feel less anxious about my symptoms': 'I feel less anxious about my symptoms'
+    '#states':
+      visible:
+        ':input[name="has_reviewing_this_decision_aid_been_helpful"]':
+          value: 'Yes'
+  please_tell_us_why_this_decision_aid_was_not_helpful:
+    '#type': radios
+    '#title': 'Please tell us why this decision aid was not helpful'
+    '#options':
+      'I feel more confused about treatment for depression': 'I feel more confused about treatment for depression'
+      'I feel less confident to seek advice about depression': 'I feel less confident to seek advice about depression'
+      'I feel more anxious about my symptoms': 'I feel more anxious about my symptoms'
+    '#states':
+      visible:
+        ':input[name="has_reviewing_this_decision_aid_been_helpful"]':
+          value: 'No'
+  do_you_currently_receive_treatment_for_depression:
+    '#type': radios
+    '#title': 'Do you currently receive treatment for depression?'
+    '#options': yes_no
+  which_treatment:
+    '#type': webform_checkboxes_other
+    '#title': 'Which treatment(s) do you currently receive? [Select all that apply]'
+    '#options':
+      'Watchful Waiting': 'Watchful Waiting'
+      'Talk Therapy In-Person': 'Talk Therapy In-Person'
+      'Talk Therapy Online': 'Talk Therapy Online'
+      Medication: Medication
+    '#states':
+      visible:
+        ':input[name="do_you_currently_receive_treatment_for_depression"]':
+          value: 'Yes'
+  are_you_planning_on_seeking_treatment:
+    '#type': radios
+    '#title': 'Are you planning on seeking treatment?'
+    '#options':
+      'Yes': 'Yes'
+      'No': 'No'
+      'I don''t know': 'I don''t know'
+    '#states':
+      visible:
+        ':input[name="do_you_currently_receive_treatment_for_depression"]':
+          value: 'No'
+  now_that_you_ve_reviewed_the_decision_aid_what_next_steps_do_you:
+    '#type': checkboxes
+    '#title': 'Now that you’ve reviewed the Decision Aid, what next steps do you plan to take after screening? [Select all that apply]'
+    '#options':
+      'Discuss the treatment options with a family member, a friend or a professional': 'Discuss the treatment options with a family member, a friend or a professional'
+      'Find additional information online': 'Find additional information online'
+      'Choose one of the three treatment options presented in the decision aid': 'Choose one of the three treatment options presented in the decision aid'
+      'Monitor my health by taking screens regularly': 'Monitor my health by taking screens regularly'
+      'None at this time': 'None at this time'
+  if_you_could_discuss_your_symptoms_with_a_clinician_online_is_th:
+    '#type': radios
+    '#title': 'If you could discuss your symptoms with a clinician online, is this something you would consider doing? '
+    '#options': yes_no
+  10_point_scale:
+    '#type': radios
+    '#title': 'Using a 10 point scale, where 0 is least likely and 10 most likely, how likely is it that you would recommend this decision aid to a family member or friend?'
+    '#options': likert_ten_scale
+  please_leave_your_email:
+    '#type': email
+    '#title': 'Please leave your email if you are happy for us to contact you by email in two weeks.'
+css: ''
+javascript: ''
+settings:
+  ajax: false
+  ajax_scroll_top: form
+  ajax_progress_type: ''
+  ajax_effect: ''
+  ajax_speed: null
+  page: true
+  page_submit_path: ''
+  page_confirm_path: ''
+  page_theme_name: ''
+  form_title: both
+  form_submit_once: false
+  form_open_message: ''
+  form_close_message: ''
+  form_exception_message: ''
+  form_previous_submissions: true
+  form_confidential: false
+  form_confidential_message: ''
+  form_disable_remote_addr: false
+  form_convert_anonymous: false
+  form_prepopulate: false
+  form_prepopulate_source_entity: false
+  form_prepopulate_source_entity_required: false
+  form_prepopulate_source_entity_type: ''
+  form_unsaved: false
+  form_disable_back: false
+  form_submit_back: false
+  form_disable_autocomplete: false
+  form_novalidate: false
+  form_disable_inline_errors: false
+  form_required: false
+  form_autofocus: false
+  form_details_toggle: false
+  form_reset: false
+  form_access_denied: default
+  form_access_denied_title: ''
+  form_access_denied_message: ''
+  form_access_denied_attributes: {  }
+  form_file_limit: ''
+  form_attributes: {  }
+  form_method: ''
+  form_action: ''
+  share: false
+  share_node: false
+  share_theme_name: ''
+  share_title: true
+  share_page_body_attributes: {  }
+  submission_label: ''
+  submission_exception_message: ''
+  submission_locked_message: ''
+  submission_log: false
+  submission_excluded_elements: {  }
+  submission_exclude_empty: false
+  submission_exclude_empty_checkbox: false
+  submission_views: {  }
+  submission_views_replace:
+    webform_routes: {  }
+    node_routes: {  }
+  submission_user_columns:
+    - serial
+    - created
+  submission_user_duplicate: false
+  submission_access_denied: default
+  submission_access_denied_title: ''
+  submission_access_denied_message: ''
+  submission_access_denied_attributes: {  }
+  previous_submission_message: ''
+  previous_submissions_message: ''
+  autofill: false
+  autofill_message: ''
+  autofill_excluded_elements: {  }
+  wizard_progress_bar: true
+  wizard_progress_pages: false
+  wizard_progress_percentage: false
+  wizard_progress_link: false
+  wizard_progress_states: false
+  wizard_start_label: ''
+  wizard_preview_link: false
+  wizard_confirmation: true
+  wizard_confirmation_label: ''
+  wizard_auto_forward: true
+  wizard_auto_forward_hide_next_button: false
+  wizard_keyboard: true
+  wizard_track: ''
+  wizard_prev_button_label: ''
+  wizard_next_button_label: ''
+  wizard_toggle: false
+  wizard_toggle_show_label: ''
+  wizard_toggle_hide_label: ''
+  preview: 0
+  preview_label: ''
+  preview_title: ''
+  preview_message: ''
+  preview_attributes: {  }
+  preview_excluded_elements: {  }
+  preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
+  draft: none
+  draft_multiple: false
+  draft_auto_save: false
+  draft_saved_message: ''
+  draft_loaded_message: ''
+  draft_pending_single_message: ''
+  draft_pending_multiple_message: ''
+  confirmation_type: inline
+  confirmation_url: ''
+  confirmation_title: ''
+  confirmation_message: ''
+  confirmation_attributes: {  }
+  confirmation_back: false
+  confirmation_back_label: ''
+  confirmation_back_attributes: {  }
+  confirmation_exclude_query: false
+  confirmation_exclude_token: false
+  confirmation_update: false
+  limit_total: null
+  limit_total_interval: null
+  limit_total_message: ''
+  limit_total_unique: false
+  limit_user: null
+  limit_user_interval: null
+  limit_user_message: ''
+  limit_user_unique: false
+  entity_limit_total: null
+  entity_limit_total_interval: null
+  entity_limit_user: null
+  entity_limit_user_interval: null
+  purge: none
+  purge_days: null
+  results_disabled: false
+  results_disabled_ignore: false
+  results_customize: false
+  token_view: false
+  token_update: false
+  token_delete: false
+  serial_disabled: false
+access:
+  create:
+    roles:
+      - anonymous
+      - authenticated
+    users: {  }
+    permissions: {  }
+  view_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  update_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  delete_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  purge_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  view_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  update_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  delete_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  administer:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  test:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  configuration:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+handlers: {  }
+variants: {  }

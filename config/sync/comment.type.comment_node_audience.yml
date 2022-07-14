@@ -1,0 +1,8 @@
+uuid: b624b860-67bd-498c-a2a9-2b27ff47bbf8
+langcode: en
+status: true
+dependencies: {  }
+id: comment_node_audience
+label: 'Audience comment'
+target_entity_type_id: node
+description: null

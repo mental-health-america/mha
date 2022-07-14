@@ -1,0 +1,20 @@
+uuid: a15c9683-562e-4420-a918-1a9166bbfc5e
+langcode: und
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_consumers_of_mental_health
+field_name: field_consumers_of_mental_health
+entity_type: node
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

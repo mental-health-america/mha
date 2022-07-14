@@ -1,0 +1,19 @@
+uuid: 0c7839b6-15fb-4cb8-aafc-ee68f901d0b3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_professional_position
+    - node.type.board_of_directors
+id: node.board_of_directors.field_professional_position
+field_name: field_professional_position
+entity_type: node
+bundle: board_of_directors
+label: 'Professional Position'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

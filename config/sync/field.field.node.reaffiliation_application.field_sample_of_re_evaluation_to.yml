@@ -1,0 +1,27 @@
+uuid: 9dee909e-1554-48b5-bfbd-19fc1d4cff42
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_sample_of_re_evaluation_to
+    - node.type.reaffiliation_application
+  module:
+    - file
+id: node.reaffiliation_application.field_sample_of_re_evaluation_to
+field_name: field_sample_of_re_evaluation_to
+entity_type: node
+bundle: reaffiliation_application
+label: 'Sample of re-evaluation tool (Optional)'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: reaffiliates-supporting-documents
+  file_extensions: 'doc docx xls xlsx pdf txt'
+  max_filesize: ''
+  description_field: true
+field_type: file

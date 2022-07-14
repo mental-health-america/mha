@@ -1,0 +1,31 @@
+uuid: ad30af05-519f-4378-826d-a6b917a051b4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_speaker_session_2
+    - node.type.conference_agenda
+    - paragraphs.paragraphs_type.conference_speaker_inormation
+  module:
+    - entity_reference_revisions
+id: node.conference_agenda.field_speaker_session_2
+field_name: field_speaker_session_2
+entity_type: node
+bundle: conference_agenda
+label: Speaker/s
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      conference_speaker_inormation: conference_speaker_inormation
+    negate: 0
+    target_bundles_drag_drop:
+      conference_speaker_inormation:
+        weight: 2
+        enabled: true
+field_type: entity_reference_revisions

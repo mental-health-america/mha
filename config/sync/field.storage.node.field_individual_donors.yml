@@ -1,0 +1,20 @@
+uuid: c4360711-fb05-42f0-be7d-b2bf3e5b060c
+langcode: und
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_individual_donors
+field_name: field_individual_donors
+entity_type: node
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,29 @@
+uuid: 98351c03-e4ee-4c3d-b773-a8581ece372a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_bod_position
+    - node.type.board_of_directors
+    - taxonomy.vocabulary.board_of_directors_positing
+id: node.board_of_directors.field_bod_position
+field_name: field_bod_position
+entity_type: node
+bundle: board_of_directors
+label: 'BOD Position'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      board_of_directors_positing: board_of_directors_positing
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

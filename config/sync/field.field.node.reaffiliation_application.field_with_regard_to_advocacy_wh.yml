@@ -1,0 +1,19 @@
+uuid: 3d0b599c-4b31-4587-9ab2-d4e8dd6aa24d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_with_regard_to_advocacy_wh
+    - node.type.reaffiliation_application
+id: node.reaffiliation_application.field_with_regard_to_advocacy_wh
+field_name: field_with_regard_to_advocacy_wh
+entity_type: node
+bundle: reaffiliation_application
+label: 'With regard to advocacy, what is your best achievement since last review?'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

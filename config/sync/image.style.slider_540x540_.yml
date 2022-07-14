@@ -1,0 +1,23 @@
+uuid: e49b54c6-ad5b-4ce4-b565-353d4fef2a2c
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+name: slider_540x540_
+label: 'Slider (540x540)'
+effects:
+  5b921678-9e62-4d98-a967-e2970e9110af:
+    uuid: 5b921678-9e62-4d98-a967-e2970e9110af
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 540
+      height: 540
+      crop_type: focal_point
+  80a9b5bd-ff14-4038-94ba-652d8f3673a8:
+    uuid: 80a9b5bd-ff14-4038-94ba-652d8f3673a8
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

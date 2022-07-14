@@ -1,0 +1,11 @@
+uuid: 1a5297ee-2cf9-4bb1-a4d3-15673fc667aa
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.conference_logos_and_level_of_sp
+id: node.conference_logos_and_level_of_sp
+target_entity_type_id: node
+target_bundle: conference_logos_and_level_of_sp
+default_langcode: site_default
+language_alterable: false

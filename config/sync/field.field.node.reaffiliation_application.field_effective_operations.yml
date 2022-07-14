@@ -1,0 +1,21 @@
+uuid: 8f8aafc2-7b8b-41a3-974a-049c8018f8a7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_effective_operations
+    - node.type.reaffiliation_application
+  module:
+    - options
+id: node.reaffiliation_application.field_effective_operations
+field_name: field_effective_operations
+entity_type: node
+bundle: reaffiliation_application
+label: 'Are you a 501c3 or c4 tax-exempt nonprofit organization maintaining awareness of the limitations?'
+description: 'The limitations regarding lobbying, and actively taking appropriate steps to protect tax-exempt status. '
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

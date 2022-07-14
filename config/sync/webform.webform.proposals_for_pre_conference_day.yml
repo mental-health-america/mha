@@ -1,0 +1,480 @@
+uuid: c284ad74-9d14-423a-8d52-c2c125d6686a
+langcode: en
+status: closed
+dependencies: {  }
+weight: 0
+open: null
+close: null
+uid: 2
+template: false
+archive: false
+id: proposals_for_pre_conference_day
+title: 'ANNUAL CONFERENCE: Call for Proposals for Affiliate Pre-Conference Day'
+description: ''
+category: ''
+elements: |-
+  call_for_pre_conference_day_proposals:
+    '#type': webform_markup
+    '#markup': '<strong>Call for Workshop Proposals for Pre-Conference Day 2022 Submission Form</strong>'
+  program_title:
+    '#type': textfield
+    '#title': 'Program Title'
+    '#required': true
+  select_60_or_90_minute_session:
+    '#type': radios
+    '#title': 'Select your Session'
+    '#description': '<em>&nbsp;(*Only one person permitted for each recorded 10 Minute TED-style Talk)</em>'
+    '#options':
+      60: '60 Minute Breakout'
+      10: '10 Minute (TED-style Talk) prerecorded'
+    '#options_display': two_columns
+    '#required': true
+    '#options__properties': ''
+  point_of_contact_one:
+    '#type': textfield
+    '#title': 'Point of Contact'
+    '#required': true
+  point_of_contact_email:
+    '#type': email
+    '#title': 'Point of Contact Email'
+    '#required': true
+  point_of_contact_phone:
+    '#type': tel
+    '#title': 'Point of Contact Phone'
+    '#required': true
+  presenter_one:
+    '#type': textfield
+    '#title': 'Presenter One'
+  presenter_two:
+    '#type': textfield
+    '#title': 'Presenter Two'
+  presenter_three:
+    '#type': textfield
+    '#title': 'Presenter Three'
+  summary:
+    '#type': textarea
+    '#title': 'ABSTRACT. Please provide a brief summary (250 words or less) of your proposed presentation.'
+    '#required': true
+    '#counter_type': word
+    '#counter_minimum': 1
+    '#counter_maximum': 250
+  objectives:
+    '#type': webform_markup
+    '#markup': |-
+      <p><strong>Objectives</strong></p>
+
+      <p>Please provide 2 learning objectives for the attendees of your presentation.&nbsp;<em>(i.e. Attendees will learn how to operationalize peer support as a billable service</em>.<em>)</em></p>
+  objective_1:
+    '#type': textarea
+    '#title': 'Objective 1'
+    '#required': true
+  objective_2:
+    '#type': textarea
+    '#title': 'Objective 2'
+    '#required': true
+  first_presenter:
+    '#type': webform_markup
+    '#markup': |
+      <hr />
+      <p><strong>First Presenter Information</strong></p>
+  name:
+    '#type': textfield
+    '#title': Name
+    '#required': true
+  affiliate_name:
+    '#type': textfield
+    '#title': 'Affiliate Name'
+    '#required': true
+  title:
+    '#type': textfield
+    '#title': Title
+    '#required': true
+  presenter1:
+    '#type': webform_address
+    '#title': 'First Presenter'
+    '#required': true
+    '#address__required': true
+    '#address_2__access': false
+    '#city__required': true
+    '#state_province__required': true
+    '#postal_code__title': Zipcode
+    '#postal_code__required': true
+    '#country__access': false
+    '#select2': true
+  cellphone_required:
+    '#type': tel
+    '#title': 'Cellphone (Required)'
+    '#required': true
+  email:
+    '#type': email
+    '#title': Email
+    '#required': true
+  biography:
+    '#type': textarea
+    '#title': Biography
+    '#required': true
+    '#counter_type': word
+    '#counter_minimum': 1
+    '#counter_maximum': 100
+    '#counter_maximum_message': '(Briefly describe the presenter''s relevant professional training and experience in 100 words or less.)'
+  second_presenter:
+    '#type': webform_markup
+    '#markup': |
+      <hr />
+      <p><strong>Second Presenter Information</strong> <em>(If applicable)</em></p>
+  name2p:
+    '#type': textfield
+    '#title': Name
+  affiliate_name2p:
+    '#type': textfield
+    '#title': 'Affiliate Name'
+  title2p:
+    '#type': textfield
+    '#title': Title
+  presenter2:
+    '#type': webform_address
+    '#title': 'Second Presenter'
+    '#address_2__access': false
+    '#postal_code__title': Zipcode
+    '#country__access': false
+    '#select2': true
+  cellphone_2p:
+    '#type': tel
+    '#title': Cellphone
+  email_2p:
+    '#type': email
+    '#title': Email
+  biography_2p:
+    '#type': textarea
+    '#title': Biography
+    '#counter_type': word
+    '#counter_minimum': 1
+    '#counter_maximum': 100
+    '#counter_maximum_message': '(Briefly describe the presenter''s relevant professional training and experience in 100 words or less.)'
+  third_presenter:
+    '#type': webform_markup
+    '#markup': |
+      <hr />
+      <p><strong>Third Presenter Information</strong><em> (If applicable)</em></p>
+  name_3p:
+    '#type': textfield
+    '#title': Name
+  affiliate_name3p:
+    '#type': textfield
+    '#title': 'Affiliate Name'
+  title3p:
+    '#type': textfield
+    '#title': Title
+  presenter3:
+    '#type': webform_address
+    '#title': 'Third Presenter'
+    '#address_2__access': false
+    '#postal_code__title': Zipcode
+    '#country__access': false
+    '#select2': true
+  cellphone_3p:
+    '#type': tel
+    '#title': Cellphone
+  email_3p:
+    '#type': email
+    '#title': Email
+  biography_3p:
+    '#type': textarea
+    '#title': Biography
+    '#counter_type': word
+    '#counter_minimum': 1
+    '#counter_maximum': 100
+    '#counter_maximum_message': '(Briefly describe the presenter''s relevant professional training and experience in 100 words or less.)'
+  social_media_handles_of_organization:
+    '#type': textfield
+    '#title': 'Social Media Handles of Organization (Primarily Twitter) (If none, list N/A)'
+css: ''
+javascript: ''
+settings:
+  ajax: false
+  ajax_scroll_top: ''
+  ajax_progress_type: ''
+  ajax_effect: ''
+  ajax_speed: null
+  page: true
+  page_submit_path: ''
+  page_confirm_path: ''
+  page_theme_name: ''
+  form_title: source_entity_webform
+  form_submit_once: false
+  form_open_message: ''
+  form_close_message: ''
+  form_exception_message: ''
+  form_previous_submissions: true
+  form_confidential: false
+  form_confidential_message: ''
+  form_disable_remote_addr: false
+  form_convert_anonymous: false
+  form_prepopulate: false
+  form_prepopulate_source_entity: false
+  form_prepopulate_source_entity_required: false
+  form_prepopulate_source_entity_type: ''
+  form_unsaved: false
+  form_disable_back: false
+  form_submit_back: false
+  form_disable_autocomplete: false
+  form_novalidate: false
+  form_disable_inline_errors: false
+  form_required: false
+  form_autofocus: false
+  form_details_toggle: false
+  form_reset: false
+  form_access_denied: default
+  form_access_denied_title: ''
+  form_access_denied_message: ''
+  form_access_denied_attributes: {  }
+  form_file_limit: ''
+  form_attributes: {  }
+  form_method: ''
+  form_action: ''
+  share: false
+  share_node: false
+  share_theme_name: ''
+  share_title: true
+  share_page_body_attributes: {  }
+  submission_label: ''
+  submission_exception_message: ''
+  submission_locked_message: ''
+  submission_log: false
+  submission_excluded_elements: {  }
+  submission_exclude_empty: false
+  submission_exclude_empty_checkbox: false
+  submission_views: {  }
+  submission_views_replace: {  }
+  submission_user_columns: {  }
+  submission_user_duplicate: false
+  submission_access_denied: default
+  submission_access_denied_title: ''
+  submission_access_denied_message: ''
+  submission_access_denied_attributes: {  }
+  previous_submission_message: ''
+  previous_submissions_message: ''
+  autofill: false
+  autofill_message: ''
+  autofill_excluded_elements: {  }
+  wizard_progress_bar: true
+  wizard_progress_pages: false
+  wizard_progress_percentage: false
+  wizard_progress_link: false
+  wizard_progress_states: false
+  wizard_start_label: ''
+  wizard_preview_link: false
+  wizard_confirmation: true
+  wizard_confirmation_label: ''
+  wizard_auto_forward: true
+  wizard_auto_forward_hide_next_button: false
+  wizard_keyboard: true
+  wizard_track: ''
+  wizard_prev_button_label: ''
+  wizard_next_button_label: ''
+  wizard_toggle: true
+  wizard_toggle_show_label: ''
+  wizard_toggle_hide_label: ''
+  preview: 0
+  preview_label: ''
+  preview_title: ''
+  preview_message: ''
+  preview_attributes: {  }
+  preview_excluded_elements: {  }
+  preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
+  draft: none
+  draft_multiple: false
+  draft_auto_save: false
+  draft_saved_message: ''
+  draft_loaded_message: ''
+  draft_pending_single_message: ''
+  draft_pending_multiple_message: ''
+  confirmation_type: page
+  confirmation_url: ''
+  confirmation_title: ''
+  confirmation_message: "<h2 style=\"text-align:center\">Thank you for your submission!</h2>\r\n\r\n<h2 style=\"text-align:center\">If your proposal is accepted, you will receive a notification&nbsp;by <strong>March 11, 2022</strong>.</h2>\r\n\r\n<p style=\"text-align:center\"><em>Please print a copy of this page as confirmation of your submission.</em></p>"
+  confirmation_attributes: {  }
+  confirmation_back: false
+  confirmation_back_label: ''
+  confirmation_back_attributes: {  }
+  confirmation_exclude_query: false
+  confirmation_exclude_token: false
+  confirmation_update: false
+  limit_total: null
+  limit_total_interval: null
+  limit_total_message: ''
+  limit_total_unique: false
+  limit_user: null
+  limit_user_interval: null
+  limit_user_message: ''
+  limit_user_unique: false
+  entity_limit_total: null
+  entity_limit_total_interval: null
+  entity_limit_user: null
+  entity_limit_user_interval: null
+  purge: none
+  purge_days: null
+  results_disabled: false
+  results_disabled_ignore: false
+  results_customize: false
+  token_view: false
+  token_update: false
+  token_delete: false
+  serial_disabled: false
+access:
+  create:
+    roles:
+      - anonymous
+      - authenticated
+    users: {  }
+    permissions: {  }
+  view_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  update_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  delete_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  purge_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  view_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  update_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  delete_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  administer:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  test:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  configuration:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+handlers:
+  email:
+    id: email
+    handler_id: email
+    label: Email
+    notes: ''
+    status: true
+    conditions: {  }
+    weight: 0
+    settings:
+      states:
+        - completed
+      to_mail: vsterns@mhanational.org
+      to_options: {  }
+      bcc_mail: ''
+      bcc_options: {  }
+      cc_mail: ''
+      cc_options: {  }
+      from_mail: _default
+      from_options: {  }
+      from_name: _default
+      reply_to: ''
+      return_path: ''
+      sender_mail: ''
+      sender_name: ''
+      subject: 'Pre-Conference Call for Proposals Submission'
+      body: _default
+      excluded_elements: {  }
+      ignore_access: false
+      exclude_empty: true
+      exclude_empty_checkbox: false
+      exclude_attachments: false
+      html: true
+      attachments: false
+      twig: false
+      theme_name: ''
+      parameters: {  }
+      debug: false
+  email_1:
+    id: email
+    handler_id: email_1
+    label: Email
+    notes: ''
+    status: true
+    conditions: {  }
+    weight: 0
+    settings:
+      states:
+        - completed
+      to_mail: '[webform_submission:values:email:raw]'
+      to_options: {  }
+      bcc_mail: ''
+      bcc_options: {  }
+      cc_mail: ''
+      cc_options: {  }
+      from_mail: _default
+      from_options: {  }
+      from_name: _default
+      reply_to: ''
+      return_path: ''
+      sender_mail: ''
+      sender_name: ''
+      subject: 'Thank you for submitting a proposal for MHA''s Annual Conference Affiliate Pre-Conference Day'
+      body: "Thank you!<br />\r\n<br />\r\nThis email confirms your proposal submission for Mental Health America&#39;s Affiliate Pre-Conference Day 2022: <strong>Engage, Enlarge, Empower the Affiliate Network</strong>.<br />\r\n<br />\r\nSelected participants will be notified on March 11, 2022.<br />\r\n<br />\r\nQuestions should be directed to <a href=\"mailto:vsterns@mhanational.org\">vsterns@mhanational.org</a>"
+      excluded_elements:
+        program_title: program_title
+        select_60_or_90_minute_session: select_60_or_90_minute_session
+        point_of_contact_one: point_of_contact_one
+        point_of_contact_email: point_of_contact_email
+        point_of_contact_phone: point_of_contact_phone
+        presenter_one: presenter_one
+        presenter_two: presenter_two
+        presenter_three: presenter_three
+        summary: summary
+        objective_1: objective_1
+        objective_2: objective_2
+        name: name
+        affiliate_name: affiliate_name
+        title: title
+        presenter1: presenter1
+        cellphone_required: cellphone_required
+        email: email
+        biography: biography
+        name2p: name2p
+        affiliate_name2p: affiliate_name2p
+        title2p: title2p
+        presenter2: presenter2
+        cellphone_2p: cellphone_2p
+        email_2p: email_2p
+        biography_2p: biography_2p
+        name_3p: name_3p
+        affiliate_name3p: affiliate_name3p
+        title3p: title3p
+        presenter3: presenter3
+        cellphone_3p: cellphone_3p
+        email_3p: email_3p
+        biography_3p: biography_3p
+        social_media_handles_of_organization: social_media_handles_of_organization
+      ignore_access: false
+      exclude_empty: true
+      exclude_empty_checkbox: false
+      exclude_attachments: false
+      html: true
+      attachments: false
+      twig: false
+      theme_name: ''
+      parameters: {  }
+      debug: false
+variants: {  }

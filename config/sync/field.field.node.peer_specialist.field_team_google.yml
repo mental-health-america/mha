@@ -1,0 +1,21 @@
+uuid: 90549160-565c-4719-a7a5-10374525edd8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_team_google
+    - node.type.peer_specialist
+_core:
+  default_config_hash: 8OKCxxeP198Ws3Pdy0PWSST2uNaz8uUjBnqbRlQEI3E
+id: node.peer_specialist.field_team_google
+field_name: field_team_google
+entity_type: node
+bundle: peer_specialist
+label: 'Speaker Google'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

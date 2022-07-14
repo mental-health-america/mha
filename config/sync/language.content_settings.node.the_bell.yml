@@ -1,0 +1,11 @@
+uuid: 741ff2d2-c6ec-454d-ad82-3adccfb24dc5
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.the_bell
+id: node.the_bell
+target_entity_type_id: node
+target_bundle: the_bell
+default_langcode: site_default
+language_alterable: false

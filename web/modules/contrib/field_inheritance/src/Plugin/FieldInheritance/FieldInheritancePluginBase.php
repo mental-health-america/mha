@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\field_inheritance\FieldInheritancePluginInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\Core\Entity\EntityTypeManager;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\KeyValueStore\KeyValueFactory;
 
 /**
@@ -96,12 +96,12 @@ abstract class FieldInheritancePluginBase extends PluginBase implements FieldInh
    *   The plugin definition.
    * @param Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager service.
-   * @param Drupal\Core\Entity\EntityTypeManager $entity_type_manager
+   * @param Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
    * @param Drupal\Core\KeyValueStore\KeyValueFactory $key_value
    *   The key value store.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LanguageManagerInterface $language_manager, EntityTypeManager $entity_type_manager, KeyValueFactory $key_value) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LanguageManagerInterface $language_manager, EntityTypeManagerInterface $entity_type_manager, KeyValueFactory $key_value) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->fieldInheritanceId = $configuration['id'];
     $this->entity = $configuration['entity'];

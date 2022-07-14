@@ -1,0 +1,36 @@
+uuid: 0ff910c8-7ca8-46c5-b0f8-526dfbc7cd0e
+langcode: und
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_does_your_organization
+field_name: field_does_your_organization
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: 'Include visuals/story of the Bell in presentations'
+      label: 'Include visuals and the story of the Bell in our public presentations'
+    -
+      value: 'Use colors in materials that are consistent'
+      label: 'Use colors in its letterhead and other materials that are consistent with those of the national movement'
+    -
+      value: 'Disseminate MHA materials'
+      label: 'Disseminate MHA materials'
+    -
+      value: 'Link its website to the Mental Health America website'
+      label: 'Link its website to the Mental Health America website'
+    -
+      value: 'Identify publicly as an affiliate of Mental Health America'
+      label: 'Identify publicly as an affiliate of Mental Health America (on letterhead, newsletter, website, etc.)'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

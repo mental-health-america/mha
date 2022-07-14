@@ -1,0 +1,8 @@
+uuid: d331dd49-c74c-44a8-bba7-be5b3011a2d5
+langcode: en
+status: true
+dependencies: {  }
+id: bipolar
+label: Bipolar
+description: ''
+locked: false

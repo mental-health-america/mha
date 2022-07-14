@@ -1,0 +1,41 @@
+uuid: 9c5eb438-9f63-4392-8e02-4e15dc11f07e
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:13afa408-2879-47cd-b73f-cbd5373e6eb0'
+  module:
+    - block_content
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: bwm_njord_block_48
+theme: gavias_colin
+region: after_content
+weight: 2
+provider: null
+plugin: 'block_content:13afa408-2879-47cd-b73f-cbd5373e6eb0'
+settings:
+  id: 'block_content:13afa408-2879-47cd-b73f-cbd5373e6eb0'
+  label: 'Mental Illness Feels Like'
+  label_display: visible
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: /feelslike
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''

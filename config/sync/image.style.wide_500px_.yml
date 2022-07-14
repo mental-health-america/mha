@@ -1,0 +1,21 @@
+uuid: 942d4aba-fc32-4792-88aa-4d5f3ab3a87c
+langcode: en
+status: true
+dependencies: {  }
+name: wide_500px_
+label: 'Wide (500px)'
+effects:
+  f6c5aec4-2831-4a96-aad6-910606e5b314:
+    uuid: f6c5aec4-2831-4a96-aad6-910606e5b314
+    id: image_scale
+    weight: 1
+    data:
+      width: 500
+      height: null
+      upscale: false
+  61e1277c-a345-4da8-aaf6-172868b55543:
+    uuid: 61e1277c-a345-4da8-aaf6-172868b55543
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

@@ -1,0 +1,40 @@
+uuid: cf2eb293-30b6-4922-9318-875057464b75
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.linkage-to-broader-issues
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: linkagetobroaderissues
+theme: gavias_colin
+region: sidebar_left
+weight: 58
+provider: null
+plugin: 'system_menu_block:linkage-to-broader-issues'
+settings:
+  id: 'system_menu_block:linkage-to-broader-issues'
+  label: 'Linkage to Broader Issues'
+  label_display: visible
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: "/position-statements/linkage-broader-issues\r\n/issues/position-statement-73-college-and-university-response-mental-health-crises\r\n/issues/position-statement-71-health-care-reform\r\n/issues/position-statement-72-violence-community-mental-health-response"

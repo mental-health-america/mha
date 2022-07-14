@@ -1,0 +1,24 @@
+uuid: 923d7558-2a39-4544-af05-a8b29972a371
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_mha_affiliate
+  module:
+    - user
+id: user.user.field_mha_affiliate
+field_name: field_mha_affiliate
+entity_type: user
+bundle: user
+label: 'MHA Affiliate'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

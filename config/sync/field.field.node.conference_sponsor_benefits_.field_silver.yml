@@ -1,0 +1,21 @@
+uuid: 01271715-269f-4b35-8dff-bc790c89755e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_silver
+    - node.type.conference_sponsor_benefits_
+id: node.conference_sponsor_benefits_.field_silver
+field_name: field_silver
+entity_type: node
+bundle: conference_sponsor_benefits_
+label: Silver
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: X
+default_value_callback: ''
+settings: {  }
+field_type: string

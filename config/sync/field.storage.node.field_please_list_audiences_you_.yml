@@ -1,0 +1,19 @@
+uuid: 98d589f5-fc7f-449f-97d8-6a3717cf6601
+langcode: und
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_please_list_audiences_you_
+field_name: field_please_list_audiences_you_
+entity_type: node
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
