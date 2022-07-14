@@ -3203,11 +3203,6 @@ span.country {
 .sidebar .block-menu ul li.menu-item--active-trail > a {
   color: #fff !important;
   background: #ea7901 !important;
-  border: none !important;
-  font-size: inherit;
-  font-weight: 600;
-  text-transform: uppercase !important;
-  border-radius: 0;
 }
 
 /*
