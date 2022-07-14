@@ -3204,14 +3204,13 @@ span.country {
   color: #fff !important;
   background: #ea7901 !important;
   border: none !important;
-  font-size: 16px;
+  font-size: inherit;
   font-weight: 600;
   text-transform: uppercase !important;
-  position: relative;
-  padding: 14px 0 14px 65px;
   border-radius: 0;
 }
 
+/*
 .sidebar .block-menu ul li.menu-item--active-trail > a::before {
   content: '';
   background:url("../images/small-bell.png") no-repeat;
@@ -3223,7 +3222,7 @@ span.country {
   left:0;
   border: none !important;
 }
-
+*/
 .sidebar .block-menu ul li span {
   font-size: 12px;
   font-weight: 600;
