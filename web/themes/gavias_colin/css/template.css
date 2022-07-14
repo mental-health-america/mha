@@ -234,13 +234,16 @@ a.disable {
   z-index: 9;
 }
 .breadcrumb-content-inner .gva-breadcrumb-content .page-title {
-  font-size: 30px;
-  font-weight: 500;
+  font-size: 2.5rem !important;
   top: 0;
   left: 0;
   width: 100%;
-  text-align: center;
   margin-bottom: 5px;
+  text-align: left !important;
+  line-height: 1.1 !important;
+  font-weight: 300 !important;
+  color: #385887 !important;
+  letter-spacing: 2px !important;
 }
 .breadcrumb-content-inner .gva-breadcrumb-content .gva-block-breadcrumb .breadcrumb-style {
   padding: 90px 0 90px;
@@ -4545,7 +4548,7 @@ div.resizable-textarea textarea {
   list-style-type: none;
 }
 .sidebar .block-menu ul li a {
-  padding: 8px 10px 8px 15px;
+  padding: 5px 10px;
   display: block;
   border: 1px solid rgba(0, 0, 0, 0.1);
   text-transform: none;
