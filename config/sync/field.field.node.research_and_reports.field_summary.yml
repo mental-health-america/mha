@@ -1,0 +1,19 @@
+uuid: 2f2fc0bb-1ca6-429d-9381-3b19b0e45a72
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_summary
+    - node.type.research_and_reports
+id: node.research_and_reports.field_summary
+field_name: field_summary
+entity_type: node
+bundle: research_and_reports
+label: Summary
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

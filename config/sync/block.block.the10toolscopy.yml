@@ -1,0 +1,41 @@
+uuid: cb91c2ea-0038-44b9-9efc-8c22427c4f1f
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:c5016920-49ef-471c-862d-e3fa261644d1'
+  module:
+    - block_content
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: the10toolscopy
+theme: gavias_colin
+region: sidebar_left
+weight: 24
+provider: null
+plugin: 'block_content:c5016920-49ef-471c-862d-e3fa261644d1'
+settings:
+  id: 'block_content:c5016920-49ef-471c-862d-e3fa261644d1'
+  label: 'The 10 Tools Copy'
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: "/live-your-life-well\r\n/ten-tools\r\n/connect-others\r\n/create-joy-and-satisfaction\r\n/deal-better-hard-times\r\n/eat-well\r\n/get-enough-sleep\r\n/get-physically-active\r\n/get-professional-help-if-you-need-it\r\n/help-others\r\n/stay-positive\r\n/take-care-your-spirit\r\n/deal-better-hard-times"

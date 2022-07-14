@@ -1,0 +1,21 @@
+uuid: 379d4518-f016-4c74-9897-48eb19f81c22
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node_reaffiliation_application
+label: 'Content - Reaffiliation Application'
+type: 'canonical_entities:node'
+pattern: 'reaffiliation-application/[node:title]'
+selection_criteria:
+  -
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: node
+    bundles:
+      reaffiliation_application: reaffiliation_application
+selection_logic: and
+weight: 0
+relationships: {  }

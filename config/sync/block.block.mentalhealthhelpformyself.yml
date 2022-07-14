@@ -1,0 +1,40 @@
+uuid: 3f096204-ea52-414d-ba30-6cd46f7ed1d3
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.mental-health-help-for-myse
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: mha-menu
+id: mentalhealthhelpformyself
+theme: gavias_colin
+region: sidebar_left
+weight: 55
+provider: null
+plugin: 'system_menu_block:mental-health-help-for-myse'
+settings:
+  id: 'system_menu_block:mental-health-help-for-myse'
+  label: 'Which best describes the person you care about?'
+  label_display: visible
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: /im-looking-mental-health-help-someone-else

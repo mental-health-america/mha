@@ -1,0 +1,19 @@
+uuid: 25c0f651-6b8a-4a6b-a18e-72a1df67c11f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_describe_the_population
+    - node.type.reaffiliation_application
+id: node.reaffiliation_application.field_describe_the_population
+field_name: field_describe_the_population
+entity_type: node
+bundle: reaffiliation_application
+label: 'Describe the population area (i.e. Arlington County, the state of Virginia)'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,21 @@
+uuid: db93cd0e-275c-44eb-97ab-d3a3ecf436b5
+langcode: en
+status: true
+dependencies: {  }
+name: blog_main_image
+label: 'Blog Main Image'
+effects:
+  0d964bf0-fd76-4b4b-88e7-cad0a7e43a3f:
+    uuid: 0d964bf0-fd76-4b4b-88e7-cad0a7e43a3f
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 600
+      height: 400
+      anchor: center-center
+  b232dfd0-876f-4abe-b1da-29b1ad70e542:
+    uuid: b232dfd0-876f-4abe-b1da-29b1ad70e542
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

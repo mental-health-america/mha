@@ -1,0 +1,30 @@
+uuid: 96d5de04-8004-4c45-a4c7-eee20b681fba
+langcode: und
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_increase_or_decrease_over_
+field_name: field_increase_or_decrease_over_
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: Increase
+      label: Increase
+    -
+      value: Decrease
+      label: Decrease
+    -
+      value: 'About the Same'
+      label: 'About the Same'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

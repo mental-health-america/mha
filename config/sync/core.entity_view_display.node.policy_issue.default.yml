@@ -1,0 +1,101 @@
+uuid: 0e72492c-60e8-461d-b35b-66c2f86aa725
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.policy_issue.body
+    - field.field.node.policy_issue.body_2
+    - field.field.node.policy_issue.comment_node_policy_issue
+    - field.field.node.policy_issue.field_image
+    - field.field.node.policy_issue.field_meta_tags
+    - field.field.node.policy_issue.field_policy_statement_area
+    - field.field.node.policy_issue.field_search_keywords
+    - field.field.node.policy_issue.field_sources
+    - field.field.node.policy_issue.field_type
+    - field.field.node.policy_issue.field_yoast_seo
+    - node.type.policy_issue
+    - responsive_image.styles.policy_issue_statement
+  module:
+    - field_formatter_class
+    - metatag
+    - responsive_image
+    - text
+    - user
+    - yoast_seo
+id: node.policy_issue.default
+targetEntityType: node
+bundle: policy_issue
+mode: default
+content:
+  addtoany:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  body_2:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_image:
+    type: responsive_image
+    label: hidden
+    settings:
+      responsive_image_style: policy_issue_statement
+      image_link: ''
+    third_party_settings:
+      field_formatter_class:
+        class: ''
+    weight: 2
+    region: content
+  field_meta_tags:
+    type: metatag_empty_formatter
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 7
+    region: content
+  field_policy_statement_area:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: false
+    third_party_settings:
+      field_formatter_class:
+        class: uppercase
+    weight: 0
+    region: content
+  field_sources:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_yoast_seo:
+    type: yoastseo_formatter
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 8
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 6
+    region: content
+hidden:
+  comment_node_policy_issue: true
+  field_search_keywords: true
+  field_type: true
+  langcode: true
+  search_api_excerpt: true

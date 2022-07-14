@@ -1,0 +1,40 @@
+uuid: 682727ab-fe6f-4602-aa24-29bad6273efd
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.depression
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: depression
+theme: gavias_colin
+region: other
+weight: -87
+provider: null
+plugin: 'system_menu_block:depression'
+settings:
+  id: 'system_menu_block:depression'
+  label: Depression
+  label_display: visible
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: /node/6

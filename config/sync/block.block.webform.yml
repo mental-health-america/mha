@@ -1,0 +1,35 @@
+uuid: 637b4806-02bf-44fd-ba08-9337413cc10a
+langcode: en
+status: true
+dependencies:
+  config:
+    - webform.webform.join_our_mailing_list
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - webform
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: email-button
+id: webform
+theme: gavias_colin
+region: other
+weight: 0
+provider: null
+plugin: webform_block
+settings:
+  id: webform_block
+  label: 'Webform - Join Our Mailing List'
+  label_display: '0'
+  provider: webform
+  webform_id: join_our_mailing_list
+  default_data: ''
+  redirect: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''

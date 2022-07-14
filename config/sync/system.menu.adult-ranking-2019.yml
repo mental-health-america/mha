@@ -1,0 +1,8 @@
+uuid: 6419ed9d-b86b-4ecf-9763-bc2ce7b00f00
+langcode: en
+status: true
+dependencies: {  }
+id: adult-ranking-2019
+label: 'MHA - Adult Ranking'
+description: ''
+locked: false

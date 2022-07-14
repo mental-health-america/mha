@@ -1,0 +1,8 @@
+uuid: 36dbe4fb-1761-4b1d-bf58-434e2423a961
+langcode: en
+status: true
+dependencies: {  }
+id: comment_node_condition
+label: 'Condition comment'
+target_entity_type_id: node
+description: null

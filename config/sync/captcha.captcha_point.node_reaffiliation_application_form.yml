@@ -1,0 +1,7 @@
+uuid: 930e5253-f42a-423b-9689-fec9a4d1ef82
+langcode: en
+status: false
+dependencies: {  }
+formId: node_reaffiliation_application_form
+captchaType: default
+label: null

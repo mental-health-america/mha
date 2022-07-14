@@ -1,0 +1,30 @@
+uuid: 1d8054b5-1dab-4c47-adf0-673eabf905ca
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+    - scheduler
+third_party_settings:
+  menu_ui:
+    available_menus:
+      - main
+    parent: 'main:'
+  scheduler:
+    expand_fieldset: when_required
+    fields_display_mode: vertical_tab
+    publish_enable: false
+    publish_past_date: error
+    publish_required: false
+    publish_revision: false
+    publish_touch: false
+    unpublish_enable: false
+    unpublish_required: false
+    unpublish_revision: false
+name: 'Conference Logos and Level of Sponsors'
+type: conference_logos_and_level_of_sp
+description: 'Add logo/level-of-sponsor items for the Annual MHA conference.'
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: false

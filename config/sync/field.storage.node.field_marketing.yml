@@ -1,0 +1,27 @@
+uuid: d4313c39-68b7-4c34-bad9-55864f3f5798
+langcode: und
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_marketing
+field_name: field_marketing
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: 'Yes'
+      label: 'Yes'
+    -
+      value: 'No'
+      label: 'No'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

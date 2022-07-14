@@ -1,0 +1,21 @@
+uuid: eee9f5b2-73e2-44e9-bda3-43cc89fdd0dd
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_required_audit
+    - node.type.reaffiliation_application
+  module:
+    - options
+id: node.reaffiliation_application.field_required_audit
+field_name: field_required_audit
+entity_type: node
+bundle: reaffiliation_application
+label: 'Organization required to have an audit? '
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

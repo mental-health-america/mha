@@ -1,0 +1,21 @@
+uuid: 229a8946-ad31-4201-bec7-337c25dc4fa0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_does_your_organization
+    - node.type.reaffiliation_application
+  module:
+    - options
+id: node.reaffiliation_application.field_does_your_organization
+field_name: field_does_your_organization
+entity_type: node
+bundle: reaffiliation_application
+label: 'Does your organization...'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

@@ -1,0 +1,40 @@
+uuid: 1534c9d0-661f-45a0-90ec-983281250c40
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.how-insurance-works-
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: howinsuranceworks
+theme: gavias_colin
+region: sidebar_left
+weight: 48
+provider: null
+plugin: 'system_menu_block:how-insurance-works-'
+settings:
+  id: 'system_menu_block:how-insurance-works-'
+  label: 'Jump To:'
+  label_display: visible
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: /how-insurance-works

@@ -1,0 +1,10 @@
+uuid: 4d232e0b-199f-4f68-ad94-bf76afab2b54
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.cck_blocks
+label: cck_blocks
+targetEntityType: node
+cache: true

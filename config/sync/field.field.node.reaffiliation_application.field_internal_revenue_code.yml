@@ -1,0 +1,21 @@
+uuid: b5ee3137-41cb-498c-96a3-06467f2b7de4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_internal_revenue_code
+    - node.type.reaffiliation_application
+  module:
+    - options
+id: node.reaffiliation_application.field_internal_revenue_code
+field_name: field_internal_revenue_code
+entity_type: node
+bundle: reaffiliation_application
+label: 'Has your organization elected to operate under section 501h of the Internal Revenue Code with regard to lobbying?'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

@@ -1,0 +1,23 @@
+uuid: 76cd897a-5565-4fd2-8d48-8fd05c0cf28e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_black
+    - node.type.reaffiliation_application
+id: node.reaffiliation_application.field_black
+field_name: field_black
+entity_type: node
+bundle: reaffiliation_application
+label: Black
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: '%'
+field_type: integer

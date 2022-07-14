@@ -1,0 +1,21 @@
+uuid: 4d3ec872-e1dc-4eea-84f1-b13ea66e4786
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_meta_tags
+    - node.type.state_of_mental_health_in_americ
+  module:
+    - metatag
+id: node.state_of_mental_health_in_americ.field_meta_tags
+field_name: field_meta_tags
+entity_type: node
+bundle: state_of_mental_health_in_americ
+label: 'Meta tags'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: metatag

@@ -1,0 +1,8 @@
+uuid: 96dd32fe-721e-4e77-9075-115dc16da044
+langcode: en
+status: true
+dependencies: {  }
+name: 'Slider Topics'
+vid: slider_topics
+description: ''
+weight: 0

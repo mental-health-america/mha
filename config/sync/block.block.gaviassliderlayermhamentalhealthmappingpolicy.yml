@@ -1,0 +1,34 @@
+uuid: bf0fe984-ef5e-4482-99d7-6ad17cb992fd
+langcode: en
+status: true
+dependencies:
+  module:
+    - block_visibility_groups
+    - gavias_sliderlayer
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: gaviassliderlayermhamentalhealthmappingpolicy
+theme: gavias_colin
+region: slideshow_content
+weight: 0
+provider: null
+plugin: 'gavias_sliderlayer_block:gavias_sliderlayer_block____87'
+settings:
+  id: 'gavias_sliderlayer_block:gavias_sliderlayer_block____87'
+  label: 'Gavias SliderLayer - MHA Mental Health Mapping - Policy'
+  label_display: '0'
+  provider: gavias_sliderlayer
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    pages: /node/21446

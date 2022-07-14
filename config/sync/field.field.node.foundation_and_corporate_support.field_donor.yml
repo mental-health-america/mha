@@ -1,0 +1,19 @@
+uuid: 3edc0775-a01d-497e-b5ee-97f502a00414
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_donor
+    - node.type.foundation_and_corporate_support
+id: node.foundation_and_corporate_support.field_donor
+field_name: field_donor
+entity_type: node
+bundle: foundation_and_corporate_support
+label: Donor
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

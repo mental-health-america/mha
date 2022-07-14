@@ -1,0 +1,36 @@
+uuid: 77b6b1aa-3688-48fd-a286-f94c489b9226
+langcode: en
+status: true
+dependencies:
+  module:
+    - block_visibility_groups
+    - gavias_sliderlayer
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: gaviassliderlayersocialanxietydisorder
+theme: gavias_colin
+region: slideshow_content
+weight: 0
+provider: null
+plugin: 'gavias_sliderlayer_block:gavias_sliderlayer_block____43'
+settings:
+  id: 'gavias_sliderlayer_block:gavias_sliderlayer_block____43'
+  label: 'Social Anxiety Disorder'
+  label_display: visible
+  provider: gavias_sliderlayer
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: /conditions/social-anxiety-disorder

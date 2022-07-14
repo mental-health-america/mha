@@ -1,0 +1,23 @@
+uuid: ffa7372f-3dca-42ce-8f78-cfdcdd59e274
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_major_metro_area_
+    - node.type.reaffiliation_application
+id: node.reaffiliation_application.field_major_metro_area_
+field_name: field_major_metro_area_
+entity_type: node
+bundle: reaffiliation_application
+label: 'Major Metro Area '
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

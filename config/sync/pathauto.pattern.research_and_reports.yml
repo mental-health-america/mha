@@ -1,0 +1,22 @@
+uuid: df134a60-6e38-4c6e-9676-27442345f0d0
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: research_and_reports
+label: 'Content - Research and Reports'
+type: 'canonical_entities:node'
+pattern: 'research-reports/[node:title]'
+selection_criteria:
+  9a12ff97-b66e-4b05-9f1c-88a75f3ab9f5:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: 9a12ff97-b66e-4b05-9f1c-88a75f3ab9f5
+    context_mapping:
+      node: node
+    bundles:
+      research_and_reports: research_and_reports
+selection_logic: and
+weight: -5
+relationships: {  }

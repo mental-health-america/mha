@@ -1,0 +1,27 @@
+uuid: 0228faed-9fc4-4a73-9f1c-fc966762c7bf
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_irs_form_990_990_ez_or_990
+    - node.type.reaffiliation_application
+  module:
+    - file
+id: node.reaffiliation_application.field_irs_form_990_990_ez_or_990
+field_name: field_irs_form_990_990_ez_or_990
+entity_type: node
+bundle: reaffiliation_application
+label: 'IRS Form 990, 990-EZ, or 990-N'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: reaffiliates-supporting-documents
+  file_extensions: 'doc docx pdf txt xls xlsx'
+  max_filesize: ''
+  description_field: true
+field_type: file

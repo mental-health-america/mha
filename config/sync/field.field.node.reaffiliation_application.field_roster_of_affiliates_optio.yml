@@ -1,0 +1,27 @@
+uuid: c2353059-506b-4e3c-99a6-3c08af6cecb2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_roster_of_affiliates_optio
+    - node.type.reaffiliation_application
+  module:
+    - file
+id: node.reaffiliation_application.field_roster_of_affiliates_optio
+field_name: field_roster_of_affiliates_optio
+entity_type: node
+bundle: reaffiliation_application
+label: 'Roster of Affiliates (Optional)'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: reaffiliates-supporting-documents
+  file_extensions: 'doc docx pdf txt xls xlsx'
+  max_filesize: ''
+  description_field: true
+field_type: file

@@ -1,0 +1,72 @@
+uuid: 1c745bc9-b47b-4c63-b8ef-046a0fd144f3
+langcode: und
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_activities_engaged
+field_name: field_activities_engaged
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: 'Responded to legislative alerts from MHA'
+      label: 'Responded to legislative alerts from MHA National'
+    -
+      value: 'Made Hill visits during Annual Meeting'
+      label: 'Made Hill visits during MHA''s Annual Meeting'
+    -
+      value: 'Worked with affiliates on advocacy'
+      label: 'Worked with state and/or local affiliates on advocacy'
+    -
+      value: 'Participated in RPC webinars or calls'
+      label: 'Participated in Regional Policy Council webinars or conference calls'
+    -
+      value: 'Attended hearings'
+      label: 'Attended local, state, or federal hearings'
+    -
+      value: 'Served on policy committees'
+      label: 'Served on local or state policy committees'
+    -
+      value: 'Healthcare reform coalitions'
+      label: 'Participated in healthcare reform coalitions'
+    -
+      value: 'State or local advocacy coalition'
+      label: 'Participated in state or local policy or advocacy coalitions'
+    -
+      value: 'Visited government decision-makers'
+      label: 'Made visits to local, state, or federal decision-makers'
+    -
+      value: 'Called government decision-makers'
+      label: 'Telephoned local, state or federal decision-makers'
+    -
+      value: 'Wrote to government decision-makers'
+      label: 'Written local, state or federal decision-makers'
+    -
+      value: 'Organized a legislative network'
+      label: 'Organized a legislative network, like a telephone tree, to contact decision-makers rapidly'
+    -
+      value: 'Conducted town hall meetings/forums'
+      label: 'Conducted town hall meetings or forums on mental health related policy issues'
+    -
+      value: 'Held legislative meal for policy makers'
+      label: 'Held a legislative breakfast/lunch/dinner for local or state policy makers'
+    -
+      value: 'Wrote position paper on policy issue'
+      label: 'Developed a position paper on a mental health policy related issue'
+    -
+      value: 'Worked with affiliates on policy efforts'
+      label: 'If a state affiliate only, your affiliates worked with you on advocacy and policy efforts'
+    -
+      value: 'Presented testimony at local, state, or federal hearings'
+      label: 'Presented testimony at local, state, or federal hearings'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

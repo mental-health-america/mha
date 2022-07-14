@@ -1,0 +1,39 @@
+uuid: 139a7227-ad3b-494d-a37d-0c7aad9e26f6
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:c6bd66d8-28e2-4417-9958-c04c27ef8d8b'
+  module:
+    - block_content
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: bwm_njord_block_16
+theme: gavias_colin
+region: content
+weight: -46
+provider: null
+plugin: 'block_content:c6bd66d8-28e2-4417-9958-c04c27ef8d8b'
+settings:
+  id: 'block_content:c6bd66d8-28e2-4417-9958-c04c27ef8d8b'
+  label: 'Calendar Disclaimer'
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: "/event-calendar\r\n/event-calendar/*"
+  condition_group:
+    id: condition_group
+    negate: false
+    block_visibility_group: ''

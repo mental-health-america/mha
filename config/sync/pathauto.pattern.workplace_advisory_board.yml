@@ -1,0 +1,22 @@
+uuid: e5e515d4-d175-47a1-b1d9-8af49d054bbc
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: workplace_advisory_board
+label: 'Workplace Advisory Board'
+type: 'canonical_entities:node'
+pattern: 'workplace-advisory-board/[node:title]'
+selection_criteria:
+  1a4e21b6-f89e-4a28-9191-03629179dafb:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: 1a4e21b6-f89e-4a28-9191-03629179dafb
+    context_mapping:
+      node: node
+    bundles:
+      workplace_advisory_board: workplace_advisory_board
+selection_logic: and
+weight: -5
+relationships: {  }

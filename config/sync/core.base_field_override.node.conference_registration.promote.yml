@@ -1,0 +1,22 @@
+uuid: f7a88feb-6cf9-42f8-9b7b-358a2e7abd13
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.conference_registration
+id: node.conference_registration.promote
+field_name: promote
+entity_type: node
+bundle: conference_registration
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

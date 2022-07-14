@@ -1,0 +1,21 @@
+uuid: b83b25b8-d6be-4525-b08f-03245df2b731
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_since_the_last_review
+    - node.type.reaffiliation_application
+  module:
+    - options
+id: node.reaffiliation_application.field_since_the_last_review
+field_name: field_since_the_last_review
+entity_type: node
+bundle: reaffiliation_application
+label: 'Since the last review, has your organization...'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

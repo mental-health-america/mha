@@ -1,0 +1,19 @@
+uuid: b32ede31-a7a6-48ee-83d4-8b013a6b3c1b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_please_list_audiences_you_
+    - node.type.reaffiliation_application
+id: node.reaffiliation_application.field_please_list_audiences_you_
+field_name: field_please_list_audiences_you_
+entity_type: node
+bundle: reaffiliation_application
+label: 'Please list audiences you present to'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

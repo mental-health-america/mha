@@ -1,0 +1,21 @@
+uuid: 07cfa0ec-228b-4749-bb24-e4b14ddc58e2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_agenda_date
+    - node.type.pre_conference_agenda
+  module:
+    - datetime
+id: node.pre_conference_agenda.field_agenda_date
+field_name: field_agenda_date
+entity_type: node
+bundle: pre_conference_agenda
+label: 'Agenda Date'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

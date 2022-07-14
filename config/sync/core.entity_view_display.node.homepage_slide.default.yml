@@ -1,0 +1,98 @@
+uuid: 5ab54e01-ccf4-4305-b955-dcf013e02cf3
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_display.comment.comment_node_homepage_slide.default
+    - field.field.node.homepage_slide.body
+    - field.field.node.homepage_slide.comment_node_homepage_slide
+    - field.field.node.homepage_slide.field_meta_tags
+    - field.field.node.homepage_slide.field_slide_image
+    - field.field.node.homepage_slide.field_slide_link
+    - field.field.node.homepage_slide.field_slide_location
+    - field.field.node.homepage_slide.field_yoast_seo
+    - node.type.homepage_slide
+    - responsive_image.styles.hero_image
+  module:
+    - comment
+    - field_formatter_class
+    - link
+    - metatag
+    - options
+    - responsive_image
+    - text
+    - user
+    - yoast_seo
+id: node.homepage_slide.default
+targetEntityType: node
+bundle: homepage_slide
+mode: default
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  comment_node_homepage_slide:
+    type: comment_default
+    label: hidden
+    settings:
+      view_mode: default
+      pager_id: 0
+    third_party_settings: {  }
+    weight: 20
+    region: content
+  field_meta_tags:
+    type: metatag_empty_formatter
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  field_slide_image:
+    type: responsive_image
+    label: above
+    settings:
+      responsive_image_style: hero_image
+      image_link: ''
+    third_party_settings:
+      field_formatter_class:
+        class: ''
+    weight: 1
+    region: content
+  field_slide_link:
+    type: link
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_slide_location:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_yoast_seo:
+    type: yoastseo_formatter
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 102
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  addtoany: true
+  langcode: true

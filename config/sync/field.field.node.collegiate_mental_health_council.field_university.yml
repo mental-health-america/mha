@@ -1,0 +1,19 @@
+uuid: add93c28-0132-43e0-86bf-248902349e7d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_university
+    - node.type.collegiate_mental_health_council
+id: node.collegiate_mental_health_council.field_university
+field_name: field_university
+entity_type: node
+bundle: collegiate_mental_health_council
+label: University
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string
