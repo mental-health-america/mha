@@ -1,0 +1,11 @@
+uuid: 3e8cd2de-a3cb-4291-ac24-00a2e84486d0
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.conference_hotel
+id: node.conference_hotel
+target_entity_type_id: node
+target_bundle: conference_hotel
+default_langcode: site_default
+language_alterable: false

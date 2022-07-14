@@ -1,0 +1,11 @@
+uuid: 96dfad7d-451c-469f-9906-1938d51f1931
+langcode: en
+status: true
+dependencies: {  }
+id: oauth_default
+label: 'OAuth Default'
+provider: oauth
+provider_settings:
+  consumer_key: 3MVG9yZ.WNe6byQAsOhoUFNR8Tnsu27xv9cn344FamdqUegQtEiE9D_1bMsNWyr.0emkUCFBUpjdEGF21.JuD
+  consumer_secret: '8817888262877744650'
+  login_url: 'https://login.salesforce.com'

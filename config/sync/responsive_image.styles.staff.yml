@@ -1,0 +1,16 @@
+uuid: 3ccd2b53-0c48-4a4e-bc29-b76839430f0e
+langcode: en
+status: true
+dependencies:
+  config:
+    - image.style.staff
+id: staff
+label: Staff
+image_style_mappings:
+  -
+    image_mapping_type: image_style
+    image_mapping: staff
+    breakpoint_id: responsive_image.viewport_sizing
+    multiplier: 1x
+breakpoint_group: responsive_image
+fallback_image_style: staff

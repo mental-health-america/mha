@@ -1,0 +1,21 @@
+uuid: 254f2bf0-a729-42c8-a378-0f46d6182bf6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_presenting
+    - node.type.conference_sponsor_benefits_
+id: node.conference_sponsor_benefits_.field_presenting
+field_name: field_presenting
+entity_type: node
+bundle: conference_sponsor_benefits_
+label: Presenting
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: X
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,36 @@
+uuid: 62d9308e-6fda-4bbb-b0fe-7beec5900f19
+langcode: en
+status: true
+dependencies:
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - quicktabs
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: quicktabspastpartnerstabs
+theme: gavias_colin
+region: after_content
+weight: 1
+provider: null
+plugin: 'quicktabs_block:past_current_tabs_'
+settings:
+  id: 'quicktabs_block:past_current_tabs_'
+  label: 'Past Partners'
+  label_display: visible
+  provider: quicktabs
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: /partner-us

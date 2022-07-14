@@ -1,0 +1,87 @@
+uuid: c0881337-73d1-4aea-8a46-05a5d84fa2c4
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.main
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - superfish
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: mainmenu
+theme: gavias_colin
+region: main_menu
+weight: 2
+provider: null
+plugin: 'superfish:main'
+settings:
+  id: 'superfish:main'
+  label: 'Main menu'
+  label_display: '0'
+  provider: superfish
+  level: '1'
+  depth: '0'
+  expand_all_items: false
+  menu_type: horizontal
+  style: default
+  arrow: 0
+  shadow: 0
+  speed: normal
+  delay: '800'
+  slide: easeInSine_vertical
+  supposition: 1
+  hoverintent: 1
+  touch: '0'
+  touchbh: '2'
+  touchbp: '991'
+  touchua: '0'
+  touchual: ''
+  touchuam: '0'
+  small: '2'
+  smallbp: '991'
+  smallua: '0'
+  smallual: ''
+  smalluam: '0'
+  smallact: '1'
+  smallset: ''
+  smallasa: 0
+  smallcmc: 0
+  smallecm: ''
+  smallchc: 0
+  smallech: ''
+  smallicm: ''
+  smallich: ''
+  smallamt: ''
+  smallabt: '1'
+  supersubs: 1
+  minwidth: '20'
+  maxwidth: '40'
+  multicolumn: 1
+  multicolumn_depth: '1'
+  multicolumn_levels: '1'
+  pathlevels: '1'
+  expanded: 0
+  clone_parent: 0
+  hide_linkdescription: 0
+  add_linkdescription: 0
+  link_depth_class: 1
+  custom_list_class: ''
+  custom_item_class: ''
+  custom_link_class: ''
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: true
+    context_mapping: {  }
+    pages: "/2022/annual-conference\r\n/2022/annual-conference/*\r\n/covid-19-cloned\r\n/2020/annual-conference/sponsors\r\n/cps-blogs\r\n/peer-workforce\r\n/national-certified-peer-specialist-ncps-certification-get-certified\r\n/national-certified-peer-specialist-ncps-certification-benefits-resources\r\n/get-involved/center-peer-support-newsletter-signup\r\n/center-peer-support\r\n/what-peer\r\n/mha-peer-programs-0\r\n/mha-peer-programs\r\n/resources-and-support-peers\r\n/peer-support-research-and-reports-0\r\n/peer-support-research-and-reports\r\n/annualconference\r\n/2020/annual-conference\r\n/2020/annual-conference/\r\n/2020/annual-conference/*\r\n/2021/annual-conference*\r\n/node/2580/\r\n/node/1803\r\n/node/17469\r\n/node/17479\r\n/node/17480\r\n/node/17481\r\n/node/17482\r\n/node/17483\r\n/node/17484\r\n/node/17485\r\n/node/17488\r\n/node/17489\r\n/node/17490\r\n/node/17491\r\n/node/17492\r\n/node/17493\r\n/node/17494\r\n/node/17496\r\n/node/17498\r\n/node/17656\r\n/node/17690\r\n/node/17691\r\n/node/17692\r\n/node/17693\r\n/node/17694\r\n/node/17695\r\n/node/17696\r\n/node/17704\r\n/node/17705\r\n/node/17706\r\n/node/17707\r\n/node/17708\r\n/node/17709\r\n/node/17710\r\n/node/17711\r\n/node/17712\r\n/node/17713\r\n/node/17715\r\n/node/17717\r\n/node/17716\r\n/node/17718\r\n/node/17719\r\n/node/17720\r\n/node/17721\r\n/node/17722\r\n/node/17723\r\n/node/17724\r\n/node/17725\r\n/node/17726\r\n/node/17727\r\n/node/17728\r\n/node/17729\r\n/node/17730\r\n/node/17731\r\n/node/17732\r\n/node/17733\r\n/node/17734\r\n/node/17735\r\n/node/17736\r\n/node/17737\r\n/node/17738\r\n/node/17739\r\n/node/17740\r\n/node/17741\r\n/node/1592\r\n/node/2569\r\n/node/18931\r\n/youngleaders\r\n/youngleaders/*\r\n/node/19385\r\n/node/21354\r\n/node/21451\r\n/node/21450\r\n/node/21447\r\n/node/21446\r\n/node/21445\r\n/node/21454\r\n/node/21361"

@@ -1,0 +1,40 @@
+uuid: 35c72152-4d8c-44d5-a22b-a8928f952580
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.children-s-issues-
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: childrensissues
+theme: gavias_colin
+region: sidebar_left
+weight: 30
+provider: null
+plugin: 'system_menu_block:children-s-issues-'
+settings:
+  id: 'system_menu_block:children-s-issues-'
+  label: 'Children''s Issues '
+  label_display: visible
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: "/position-statements/childrens-issues\r\n/issues/position-statement-46-promotion-mental-health-during-early-childhood\r\n/issues/position-statement-47-custody-relinquishment-and-funding-care-and-treatment-children\r\n/issues/position-statement-45-discipline-and-positive-behavior-support-schools\r\n/issues/position-statement-44-residential-treatment-children-and-adolescents-serious-mental-health\r\n/issues/position-statement-43-federal-role-services-address-health-and-wellness-children-youth-and\r\n/issues/position-statement-42-services-children-mental-health-conditions-and-their-families\r\n/issues/position-statement-41-early-identification-mental-health-issues-young-people\r\n/issues/position-statement-48-prevention-mental-health-and-substance-use-disorders-young-people\r\n/issues/position-statement-49-perinatal-mental-health"

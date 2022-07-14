@@ -1,0 +1,11 @@
+uuid: 1df0570e-f582-4a16-983a-fdbeeb0ecc40
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.ranking_category
+id: taxonomy_term.ranking_category
+target_entity_type_id: taxonomy_term
+target_bundle: ranking_category
+default_langcode: site_default
+language_alterable: false

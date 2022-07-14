@@ -1,0 +1,20 @@
+uuid: 8e6e1c18-dfc6-4709-8007-9ad952ff1b1a
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - taxonomy
+id: node.field_conference_year
+field_name: field_conference_year
+entity_type: node
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

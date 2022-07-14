@@ -1,0 +1,1156 @@
+uuid: d7095636-3518-426a-9e7b-66a1566250ff
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.reaffiliation_application.field_501c3_letter_from_irs
+    - field.field.node.reaffiliation_application.field__of_donors
+    - field.field.node.reaffiliation_application.field__of_full_time_employees
+    - field.field.node.reaffiliation_application.field__of_members
+    - field.field.node.reaffiliation_application.field__of_volunteers
+    - field.field.node.reaffiliation_application.field_activities_engaged
+    - field.field.node.reaffiliation_application.field_affiliate_name_
+    - field.field.node.reaffiliation_application.field_american_indian
+    - field.field.node.reaffiliation_application.field_annual_biannual_review
+    - field.field.node.reaffiliation_application.field_annual_report
+    - field.field.node.reaffiliation_application.field_annual_reporting
+    - field.field.node.reaffiliation_application.field_annual_reporting_1
+    - field.field.node.reaffiliation_application.field_asian
+    - field.field.node.reaffiliation_application.field_assessment_last_review
+    - field.field.node.reaffiliation_application.field_audited_financial_statemen
+    - field.field.node.reaffiliation_application.field_average_employment
+    - field.field.node.reaffiliation_application.field_black
+    - field.field.node.reaffiliation_application.field_board_chair_s_email_addres
+    - field.field.node.reaffiliation_application.field_board_chair_s_name
+    - field.field.node.reaffiliation_application.field_board_chair_s_phone_number
+    - field.field.node.reaffiliation_application.field_board_roster
+    - field.field.node.reaffiliation_application.field_business_community_leaders
+    - field.field.node.reaffiliation_application.field_cc_email
+    - field.field.node.reaffiliation_application.field_chartered_affiliates
+    - field.field.node.reaffiliation_application.field_city_county
+    - field.field.node.reaffiliation_application.field_consumers_of_mental_health
+    - field.field.node.reaffiliation_application.field_corporate_funding
+    - field.field.node.reaffiliation_application.field_cultural_competency_statem
+    - field.field.node.reaffiliation_application.field_date_of_application
+    - field.field.node.reaffiliation_application.field_describe_the_most_dramatic
+    - field.field.node.reaffiliation_application.field_describe_the_population
+    - field.field.node.reaffiliation_application.field_describe_your_signature_pr
+    - field.field.node.reaffiliation_application.field_does_your_org
+    - field.field.node.reaffiliation_application.field_does_your_organization
+    - field.field.node.reaffiliation_application.field_effective_operations
+    - field.field.node.reaffiliation_application.field_ein_number
+    - field.field.node.reaffiliation_application.field_email_of_contact_for_reaff
+    - field.field.node.reaffiliation_application.field_emaill_address
+    - field.field.node.reaffiliation_application.field_emergency_plan_3_yrs
+    - field.field.node.reaffiliation_application.field_end_of_current_fiscal_year
+    - field.field.node.reaffiliation_application.field_endorse_cultural_competenc
+    - field.field.node.reaffiliation_application.field_ensure_materials
+    - field.field.node.reaffiliation_application.field_exec_ceo_name
+    - field.field.node.reaffiliation_application.field_family_members
+    - field.field.node.reaffiliation_application.field_fee_for_service_percent_
+    - field.field.node.reaffiliation_application.field_financial_fundraising_prof
+    - field.field.node.reaffiliation_application.field_frontier_area_
+    - field.field.node.reaffiliation_application.field_government_contracts
+    - field.field.node.reaffiliation_application.field_government_grants
+    - field.field.node.reaffiliation_application.field_handbook_policies
+    - field.field.node.reaffiliation_application.field_hispanic_latino
+    - field.field.node.reaffiliation_application.field_how_often_does_board_meet
+    - field.field.node.reaffiliation_application.field_if_applicable_how_does_you
+    - field.field.node.reaffiliation_application.field_if_not_please_explain
+    - field.field.node.reaffiliation_application.field_incorporated
+    - field.field.node.reaffiliation_application.field_increase_or_decrease_over_
+    - field.field.node.reaffiliation_application.field_individual_donors
+    - field.field.node.reaffiliation_application.field_internal_revenue_code
+    - field.field.node.reaffiliation_application.field_irs_form_990_990_ez_or_990
+    - field.field.node.reaffiliation_application.field_legal_professionals
+    - field.field.node.reaffiliation_application.field_less_than_three_categories
+    - field.field.node.reaffiliation_application.field_lgbt_community_members
+    - field.field.node.reaffiliation_application.field_list_advocacy_partnerships
+    - field.field.node.reaffiliation_application.field_major_metro_area_
+    - field.field.node.reaffiliation_application.field_management_letter
+    - field.field.node.reaffiliation_application.field_marketing
+    - field.field.node.reaffiliation_application.field_marketing_communications_p
+    - field.field.node.reaffiliation_application.field_medical_mental_health_prov
+    - field.field.node.reaffiliation_application.field_meta_tags
+    - field.field.node.reaffiliation_application.field_mha_mission_policies
+    - field.field.node.reaffiliation_application.field_mission_statement
+    - field.field.node.reaffiliation_application.field_model_type
+    - field.field.node.reaffiliation_application.field_mos_recent_fiscal_year_exp
+    - field.field.node.reaffiliation_application.field_most_recent_revenue_report
+    - field.field.node.reaffiliation_application.field_multi_county
+    - field.field.node.reaffiliation_application.field_multiracial_other
+    - field.field.node.reaffiliation_application.field_non_medical_mental_health_
+    - field.field.node.reaffiliation_application.field_number_of_board_members
+    - field.field.node.reaffiliation_application.field_number_of_female_board_mem
+    - field.field.node.reaffiliation_application.field_number_of_male_board_membe
+    - field.field.node.reaffiliation_application.field_org_diversity
+    - field.field.node.reaffiliation_application.field_organization_effective
+    - field.field.node.reaffiliation_application.field_organization_pay_dues
+    - field.field.node.reaffiliation_application.field_other
+    - field.field.node.reaffiliation_application.field_other_membership_list
+    - field.field.node.reaffiliation_application.field_outreach_vehicles2
+    - field.field.node.reaffiliation_application.field_pacific_islander
+    - field.field.node.reaffiliation_application.field_part_time_employees
+    - field.field.node.reaffiliation_application.field_percentage_change_from_pri
+    - field.field.node.reaffiliation_application.field_person_to_contact_for_reaf
+    - field.field.node.reaffiliation_application.field_phone_number
+    - field.field.node.reaffiliation_application.field_please_list_audiences_you_
+    - field.field.node.reaffiliation_application.field_private_foundations
+    - field.field.node.reaffiliation_application.field_public_education_efforts
+    - field.field.node.reaffiliation_application.field_rebranding
+    - field.field.node.reaffiliation_application.field_region
+    - field.field.node.reaffiliation_application.field_required_audit
+    - field.field.node.reaffiliation_application.field_roster_of_affiliates_optio
+    - field.field.node.reaffiliation_application.field_rural
+    - field.field.node.reaffiliation_application.field_sample_of_re_evaluation_to
+    - field.field.node.reaffiliation_application.field_section5_member_donors
+    - field.field.node.reaffiliation_application.field_since_review_completion
+    - field.field.node.reaffiliation_application.field_since_the_last_review
+    - field.field.node.reaffiliation_application.field_special_events
+    - field.field.node.reaffiliation_application.field_state_us
+    - field.field.node.reaffiliation_application.field_strategic_plan_
+    - field.field.node.reaffiliation_application.field_submit_for_review
+    - field.field.node.reaffiliation_application.field_suburban
+    - field.field.node.reaffiliation_application.field_succession_plan1
+    - field.field.node.reaffiliation_application.field_trusts_and_bequests
+    - field.field.node.reaffiliation_application.field_united_way_funding_cfc
+    - field.field.node.reaffiliation_application.field_urban
+    - field.field.node.reaffiliation_application.field_website_address
+    - field.field.node.reaffiliation_application.field_what_activities_from_natio
+    - field.field.node.reaffiliation_application.field_what_evidence_based_or_pro
+    - field.field.node.reaffiliation_application.field_what_is_your_best_accompli
+    - field.field.node.reaffiliation_application.field_what_kind_of_programs_serv
+    - field.field.node.reaffiliation_application.field_what_policy_issuse_are_mos
+    - field.field.node.reaffiliation_application.field_what_population_serve
+    - field.field.node.reaffiliation_application.field_which_groups_represent
+    - field.field.node.reaffiliation_application.field_white_
+    - field.field.node.reaffiliation_application.field_why_or_why_not_
+    - field.field.node.reaffiliation_application.field_with_regard_to_advocacy_wh
+    - field.field.node.reaffiliation_application.field_written_plan_3_yrs
+    - field.field.node.reaffiliation_application.field_yoast_seo
+    - node.type.reaffiliation_application
+  module:
+    - datetime
+    - file
+    - metatag
+    - options
+    - user
+id: node.reaffiliation_application.default
+targetEntityType: node
+bundle: reaffiliation_application
+mode: default
+content:
+  field_501c3_letter_from_irs:
+    type: file_default
+    label: above
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+    weight: 24
+    region: content
+  field__of_donors:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 66
+    region: content
+  field__of_full_time_employees:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 47
+    region: content
+  field__of_members:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 65
+    region: content
+  field__of_volunteers:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 49
+    region: content
+  field_activities_engaged:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 103
+    region: content
+  field_affiliate_name_:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_american_indian:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 39
+    region: content
+  field_annual_biannual_review:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 50
+    region: content
+  field_annual_report:
+    type: file_default
+    label: above
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+    weight: 18
+    region: content
+  field_annual_reporting:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 76
+    region: content
+  field_annual_reporting_1:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 79
+    region: content
+  field_asian:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 38
+    region: content
+  field_assessment_last_review:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 106
+    region: content
+  field_audited_financial_statemen:
+    type: file_default
+    label: above
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+    weight: 21
+    region: content
+  field_average_employment:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 51
+    region: content
+  field_black:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 37
+    region: content
+  field_board_chair_s_email_addres:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 14
+    region: content
+  field_board_chair_s_name:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 12
+    region: content
+  field_board_chair_s_phone_number:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 15
+    region: content
+  field_board_roster:
+    type: file_default
+    label: above
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+    weight: 19
+    region: content
+  field_business_community_leaders:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 89
+    region: content
+  field_cc_email:
+    type: email_mailto
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 126
+    region: content
+  field_chartered_affiliates:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 96
+    region: content
+  field_city_county:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 31
+    region: content
+  field_consumers_of_mental_health:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 85
+    region: content
+  field_corporate_funding:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 59
+    region: content
+  field_cultural_competency_statem:
+    type: file_default
+    label: above
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+    weight: 25
+    region: content
+  field_date_of_application:
+    type: datetime_default
+    label: inline
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_describe_the_most_dramatic:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 73
+    region: content
+  field_describe_the_population:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 30
+    region: content
+  field_describe_your_signature_pr:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 107
+    region: content
+  field_does_your_org:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 77
+    region: content
+  field_does_your_organization:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 124
+    region: content
+  field_effective_operations:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 75
+    region: content
+  field_ein_number:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_email_of_contact_for_reaff:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 17
+    region: content
+  field_emaill_address:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  field_emergency_plan_3_yrs:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 81
+    region: content
+  field_end_of_current_fiscal_year:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 68
+    region: content
+  field_endorse_cultural_competenc:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 114
+    region: content
+  field_ensure_materials:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 120
+    region: content
+  field_exec_ceo_name:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 9
+    region: content
+  field_family_members:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 86
+    region: content
+  field_fee_for_service_percent_:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 55
+    region: content
+  field_financial_fundraising_prof:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 91
+    region: content
+  field_frontier_area_:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 43
+    region: content
+  field_government_contracts:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 61
+    region: content
+  field_government_grants:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 62
+    region: content
+  field_handbook_policies:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 52
+    region: content
+  field_hispanic_latino:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 41
+    region: content
+  field_how_often_does_board_meet:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 94
+    region: content
+  field_if_applicable_how_does_you:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 97
+    region: content
+  field_if_not_please_explain:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 53
+    region: content
+  field_incorporated:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 74
+    region: content
+  field_increase_or_decrease_over_:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 70
+    region: content
+  field_individual_donors:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 56
+    region: content
+  field_internal_revenue_code:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 102
+    region: content
+  field_irs_form_990_990_ez_or_990:
+    type: file_default
+    label: above
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+    weight: 23
+    region: content
+  field_legal_professionals:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 92
+    region: content
+  field_less_than_three_categories:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 117
+    region: content
+  field_lgbt_community_members:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 93
+    region: content
+  field_list_advocacy_partnerships:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  field_major_metro_area_:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 33
+    region: content
+  field_management_letter:
+    type: file_default
+    label: above
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+    weight: 22
+    region: content
+  field_marketing:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 119
+    region: content
+  field_marketing_communications_p:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 90
+    region: content
+  field_medical_mental_health_prov:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 87
+    region: content
+  field_meta_tags:
+    type: metatag_empty_formatter
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 128
+    region: content
+  field_mha_mission_policies:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 99
+    region: content
+  field_mission_statement:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 121
+    region: content
+  field_model_type:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_mos_recent_fiscal_year_exp:
+    type: number_decimal
+    label: above
+    settings:
+      thousand_separator: ''
+      decimal_separator: .
+      scale: 2
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 69
+    region: content
+  field_most_recent_revenue_report:
+    type: number_decimal
+    label: above
+    settings:
+      thousand_separator: ''
+      decimal_separator: .
+      scale: 2
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 72
+    region: content
+  field_multi_county:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 32
+    region: content
+  field_multiracial_other:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 42
+    region: content
+  field_non_medical_mental_health_:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 88
+    region: content
+  field_number_of_board_members:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 82
+    region: content
+  field_number_of_female_board_mem:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 84
+    region: content
+  field_number_of_male_board_membe:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 83
+    region: content
+  field_org_diversity:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 115
+    region: content
+  field_organization_effective:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 78
+    region: content
+  field_organization_pay_dues:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 98
+    region: content
+  field_other:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 64
+    region: content
+  field_other_membership_list:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 125
+    region: content
+  field_outreach_vehicles2:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 112
+    region: content
+  field_pacific_islander:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 40
+    region: content
+  field_part_time_employees:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 48
+    region: content
+  field_percentage_change_from_pri:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 71
+    region: content
+  field_person_to_contact_for_reaf:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 16
+    region: content
+  field_phone_number:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 11
+    region: content
+  field_please_list_audiences_you_:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 111
+    region: content
+  field_private_foundations:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 63
+    region: content
+  field_public_education_efforts:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 109
+    region: content
+  field_rebranding:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 122
+    region: content
+  field_region:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 35
+    region: content
+  field_required_audit:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 28
+    region: content
+  field_roster_of_affiliates_optio:
+    type: file_default
+    label: above
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+    weight: 26
+    region: content
+  field_rural:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 44
+    region: content
+  field_sample_of_re_evaluation_to:
+    type: file_default
+    label: above
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+    weight: 27
+    region: content
+  field_section5_member_donors:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 67
+    region: content
+  field_since_review_completion:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 110
+    region: content
+  field_since_the_last_review:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 118
+    region: content
+  field_special_events:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 58
+    region: content
+  field_state_us:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 34
+    region: content
+  field_strategic_plan_:
+    type: file_default
+    label: above
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+    weight: 20
+    region: content
+  field_submit_for_review:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 127
+    region: content
+  field_suburban:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 46
+    region: content
+  field_succession_plan1:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 54
+    region: content
+  field_trusts_and_bequests:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 57
+    region: content
+  field_united_way_funding_cfc:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 60
+    region: content
+  field_urban:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 45
+    region: content
+  field_website_address:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 8
+    region: content
+  field_what_activities_from_natio:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 95
+    region: content
+  field_what_evidence_based_or_pro:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 108
+    region: content
+  field_what_is_your_best_accompli:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 113
+    region: content
+  field_what_kind_of_programs_serv:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 105
+    region: content
+  field_what_policy_issuse_are_mos:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+  field_what_population_serve:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 29
+    region: content
+  field_which_groups_represent:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 116
+    region: content
+  field_white_:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 36
+    region: content
+  field_why_or_why_not_:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 123
+    region: content
+  field_with_regard_to_advocacy_wh:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 104
+    region: content
+  field_written_plan_3_yrs:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 80
+    region: content
+  field_yoast_seo:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 129
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  addtoany: true
+  langcode: true

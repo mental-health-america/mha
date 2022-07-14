@@ -1,0 +1,20 @@
+uuid: ead5159b-5fcb-42cb-9a69-9e914f78a229
+langcode: und
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_number_of_board_members
+field_name: field_number_of_board_members
+entity_type: node
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

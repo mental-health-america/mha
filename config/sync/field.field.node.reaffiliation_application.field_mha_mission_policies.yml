@@ -1,0 +1,21 @@
+uuid: 2778f634-3138-4996-85bc-7e31d58313b1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_mha_mission_policies
+    - node.type.reaffiliation_application
+  module:
+    - options
+id: node.reaffiliation_application.field_mha_mission_policies
+field_name: field_mha_mission_policies
+entity_type: node
+bundle: reaffiliation_application
+label: 'Does your organization advocate for policies consistent with MHA mission?'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

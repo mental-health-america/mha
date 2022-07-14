@@ -1,0 +1,36 @@
+uuid: 3c933836-58eb-4186-a272-b2e3863d1576
+langcode: en
+status: true
+dependencies:
+  module:
+    - block_visibility_groups
+    - gavias_sliderlayer
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: gaviassliderlayercovid19
+theme: gavias_colin
+region: slideshow_content
+weight: 0
+provider: null
+plugin: 'gavias_sliderlayer_block:gavias_sliderlayer_block____55'
+settings:
+  id: 'gavias_sliderlayer_block:gavias_sliderlayer_block____55'
+  label: 'Gavias SliderLayer - Covid-19'
+  label_display: '0'
+  provider: gavias_sliderlayer
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: "/covid-19-cloned\r\n/node/17469\r\n/node/17479\r\n/node/17480\r\n/node/17481\r\n/node/17482\r\n/node/17483\r\n/node/17484\r\n/node/17485\r\n/node/17488\r\n/node/17489\r\n/node/17490\r\n/node/17491\r\n/node/17492\r\n/node/17493\r\n/node/17494\r\n/node/17496\r\n/node/17498\r\n/node/19132"

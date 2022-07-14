@@ -1,0 +1,18 @@
+uuid: 407c2fb6-4b07-4847-b80f-f76a8251b2cb
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.conference_awards
+id: node.conference_awards.title
+field_name: title
+entity_type: node
+bundle: conference_awards
+label: Award
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

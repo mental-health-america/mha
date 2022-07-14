@@ -1,0 +1,16 @@
+uuid: ce25011f-2893-471d-9213-69aa4bf0788d
+langcode: en
+status: true
+dependencies:
+  config:
+    - image.style.ways_to_give
+id: ways_to_give_500_345_
+label: 'Ways to Give (500×345)'
+image_style_mappings:
+  -
+    image_mapping_type: image_style
+    image_mapping: ways_to_give
+    breakpoint_id: responsive_image.viewport_sizing
+    multiplier: 1x
+breakpoint_group: responsive_image
+fallback_image_style: ways_to_give

@@ -1,0 +1,16 @@
+uuid: 304d8e28-649c-4be5-b861-a52605178ab5
+langcode: en
+status: true
+dependencies:
+  config:
+    - image.style.wide_500px_
+id: wide_500_
+label: 'Wide (500x)'
+image_style_mappings:
+  -
+    image_mapping_type: image_style
+    image_mapping: wide_500px_
+    breakpoint_id: responsive_image.viewport_sizing
+    multiplier: 1x
+breakpoint_group: responsive_image
+fallback_image_style: wide_500px_

@@ -1,0 +1,21 @@
+uuid: 48569e9c-8cdd-4621-b03d-408e33eb41a7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_yoast_seo
+    - node.type.mental_health_issue
+  module:
+    - yoast_seo
+id: node.mental_health_issue.field_yoast_seo
+field_name: field_yoast_seo
+entity_type: node
+bundle: mental_health_issue
+label: 'Real-time SEO'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: yoast_seo

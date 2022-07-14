@@ -1,0 +1,16 @@
+uuid: 53b1ad6b-58d0-4e97-b7e3-1db05ca84728
+langcode: en
+status: true
+dependencies:
+  config:
+    - image.style.square_200x200
+id: square_200x200_
+label: 'Square (200x200)'
+image_style_mappings:
+  -
+    image_mapping_type: image_style
+    image_mapping: square_200x200
+    breakpoint_id: responsive_image.viewport_sizing
+    multiplier: 1x
+breakpoint_group: responsive_image
+fallback_image_style: square_200x200

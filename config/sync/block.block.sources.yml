@@ -1,0 +1,41 @@
+uuid: 9cff4f7f-1b12-426e-84a6-71422895cf41
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:1aab4a6b-82fd-49ff-949c-5acb1e3bd095'
+  module:
+    - block_content
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: sources
+theme: gavias_colin
+region: after_content
+weight: 4
+provider: null
+plugin: 'block_content:1aab4a6b-82fd-49ff-949c-5acb1e3bd095'
+settings:
+  id: 'block_content:1aab4a6b-82fd-49ff-949c-5acb1e3bd095'
+  label: Sources
+  label_display: visible
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: /node/1964

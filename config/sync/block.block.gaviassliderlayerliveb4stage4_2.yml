@@ -1,0 +1,36 @@
+uuid: 96283a9b-8e94-4692-8ea4-9c466e0596a9
+langcode: en
+status: true
+dependencies:
+  module:
+    - block_visibility_groups
+    - gavias_sliderlayer
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: lime-slider-wrapper
+id: gaviassliderlayerliveb4stage4_2
+theme: gavias_colin
+region: slideshow_content
+weight: -48
+provider: null
+plugin: 'gavias_sliderlayer_block:gavias_sliderlayer_block____3'
+settings:
+  id: 'gavias_sliderlayer_block:gavias_sliderlayer_block____3'
+  label: 'Slider: Live B4stage4'
+  label_display: '0'
+  provider: gavias_sliderlayer
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: "/live-b4stage4\r\n/node/3"

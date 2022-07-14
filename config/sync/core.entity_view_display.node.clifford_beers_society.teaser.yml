@@ -1,0 +1,29 @@
+uuid: 9f26d71c-2499-48a1-a94c-a705752d06fb
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.clifford_beers_society.field_meta_tags
+    - field.field.node.clifford_beers_society.field_sponsorship_level_2
+    - field.field.node.clifford_beers_society.field_yoast_seo
+    - node.type.clifford_beers_society
+  module:
+    - user
+id: node.clifford_beers_society.teaser
+targetEntityType: node
+bundle: clifford_beers_society
+mode: teaser
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  addtoany: true
+  field_meta_tags: true
+  field_sponsorship_level_2: true
+  field_yoast_seo: true
+  langcode: true
+  search_api_excerpt: true

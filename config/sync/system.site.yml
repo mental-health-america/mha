@@ -1,0 +1,15 @@
+_core:
+  default_config_hash: yXadRE77Va-G6dxhd2kPYapAvbnSvTF6hO4oXiOEynI
+langcode: en
+uuid: ca7a5d99-b38a-424f-acaf-0d068d5d951a
+name: 'Mental Health America'
+mail: webmaster@mhanational.org
+slogan: ''
+page:
+  403: /node/371
+  404: /node/12487
+  front: /node/93
+admin_compact_mode: false
+weight_select_max: 100
+default_langcode: en
+mail_notification: ''

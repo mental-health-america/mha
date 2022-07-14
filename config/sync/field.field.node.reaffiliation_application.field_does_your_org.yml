@@ -1,0 +1,21 @@
+uuid: b9f5f924-8721-491f-bb7c-d1e4d670b89d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_does_your_org
+    - node.type.reaffiliation_application
+  module:
+    - options
+id: node.reaffiliation_application.field_does_your_org
+field_name: field_does_your_org
+entity_type: node
+bundle: reaffiliation_application
+label: 'Does your organization provide annual reporting on a timely basis as required by law?'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

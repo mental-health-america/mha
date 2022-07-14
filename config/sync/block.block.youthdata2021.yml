@@ -1,0 +1,40 @@
+uuid: de691dd2-5c3e-4ea6-9d2c-03730aa64ced
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.youth-data-2021
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: mha-menu
+id: youthdata2021
+theme: gavias_colin
+region: sidebar_left
+weight: 14
+provider: null
+plugin: 'system_menu_block:youth-data-2021'
+settings:
+  id: 'system_menu_block:youth-data-2021'
+  label: 'Youth Data 2021'
+  label_display: visible
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    context_mapping: {  }
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: "/issues/2021/mental-health-america-youth-data\r\n/issues/2021/mental-health-america-youth-data/*"

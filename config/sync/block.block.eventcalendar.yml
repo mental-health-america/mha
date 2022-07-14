@@ -1,0 +1,38 @@
+uuid: eef074c0-95d7-46b9-8c03-8335351962b4
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.event-calendar
+  module:
+    - block_visibility_groups
+    - gaviasthemer
+    - system
+  theme:
+    - gavias_colin
+third_party_settings:
+  gaviasthemer:
+    classes: ''
+id: eventcalendar
+theme: gavias_colin
+region: before_content
+weight: 0
+provider: null
+plugin: 'system_menu_block:event-calendar'
+settings:
+  id: 'system_menu_block:event-calendar'
+  label: 'Event Calendar'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    pages: "/event-calendar\r\n/event-calendar/*"

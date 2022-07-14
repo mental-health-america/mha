@@ -1,0 +1,42 @@
+uuid: cbe34751-b911-4d54-a4e8-a38713447d28
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.conference_awards.body
+    - field.field.node.conference_awards.field_conference_year
+    - field.field.node.conference_awards.field_image
+    - field.field.node.conference_awards.field_image_caption
+    - field.field.node.conference_awards.field_meta_tags
+    - field.field.node.conference_awards.field_yoast_seo
+    - node.type.conference_awards
+  module:
+    - text
+    - user
+id: node.conference_awards.teaser
+targetEntityType: node
+bundle: conference_awards
+mode: teaser
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  addtoany: true
+  field_conference_year: true
+  field_image: true
+  field_image_caption: true
+  field_meta_tags: true
+  field_yoast_seo: true
+  langcode: true

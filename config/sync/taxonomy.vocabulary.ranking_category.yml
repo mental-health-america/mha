@@ -1,0 +1,8 @@
+uuid: 9321ab99-aada-483a-ab4d-7fc1b6bb35de
+langcode: en
+status: true
+dependencies: {  }
+name: 'Ranking Category'
+vid: ranking_category
+description: ''
+weight: 0

@@ -1,0 +1,32 @@
+uuid: 93ee20b5-1d8d-4bc2-9a1d-588ce0a67090
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+    - scheduler
+third_party_settings:
+  menu_ui:
+    available_menus:
+      - main
+    parent: 'main:'
+  scheduler:
+    expand_fieldset: when_required
+    fields_display_mode: vertical_tab
+    publish_enable: false
+    publish_past_date: error
+    publish_required: false
+    publish_revision: false
+    publish_touch: false
+    unpublish_enable: false
+    unpublish_required: false
+    unpublish_revision: false
+_core:
+  default_config_hash: 3BiX0lHzQ8EyHRnO56OziilMZPNxJImXpSAQUTuALLU
+name: 'Newsletter Issue'
+type: simplenews_issue
+description: 'Use <em>Newsletter Issue</em> for newsletters.'
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: false

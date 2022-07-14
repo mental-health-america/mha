@@ -1,0 +1,21 @@
+uuid: 381b464d-65c0-4c96-8c24-6920960bac65
+langcode: en
+status: true
+dependencies: {  }
+name: conference_speaker
+label: 'Conference Speaker'
+effects:
+  595371c6-f4c7-46a8-af8b-8abbcf25f19c:
+    uuid: 595371c6-f4c7-46a8-af8b-8abbcf25f19c
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 600
+      height: 600
+      anchor: center-center
+  b56d93f7-8da2-4203-ab1f-85bf10317cb0:
+    uuid: b56d93f7-8da2-4203-ab1f-85bf10317cb0
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

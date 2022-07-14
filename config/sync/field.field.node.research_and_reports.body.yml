@@ -1,0 +1,23 @@
+uuid: e3ea595c-81f7-4606-9ecc-3f1901eb6443
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.research_and_reports
+  module:
+    - text
+id: node.research_and_reports.body
+field_name: body
+entity_type: node
+bundle: research_and_reports
+label: Body
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+  required_summary: false
+field_type: text_with_summary

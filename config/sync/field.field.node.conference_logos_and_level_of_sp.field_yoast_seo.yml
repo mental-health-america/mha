@@ -1,0 +1,21 @@
+uuid: eba40f6f-73fd-4140-bad4-9c1f9f8c2eed
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_yoast_seo
+    - node.type.conference_logos_and_level_of_sp
+  module:
+    - yoast_seo
+id: node.conference_logos_and_level_of_sp.field_yoast_seo
+field_name: field_yoast_seo
+entity_type: node
+bundle: conference_logos_and_level_of_sp
+label: 'Real-time SEO'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: yoast_seo

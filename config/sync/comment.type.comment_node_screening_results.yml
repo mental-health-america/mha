@@ -1,0 +1,8 @@
+uuid: 4a5473a2-5d1c-4059-9cb1-22d7cdeaac1e
+langcode: en
+status: true
+dependencies: {  }
+id: comment_node_screening_results
+label: 'Screening Results comment'
+target_entity_type_id: node
+description: null

@@ -1,0 +1,9 @@
+uuid: 7471fada-8875-4ea3-8a7a-63235134f03a
+langcode: en
+status: true
+dependencies: {  }
+id: conference_speaker_inormation
+label: 'Conference Speaker'
+icon_uuid: null
+description: ''
+behavior_plugins: {  }
