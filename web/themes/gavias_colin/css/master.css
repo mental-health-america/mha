@@ -3164,14 +3164,14 @@ span.country {
 }
 
 .sidebar.sidebar-left {
-  /*margin: inherit;*/
+  margin: 1.5rem 0 0;
 }
 
 .sidebar .block-menu ul li a {
-  background: #385887 !important;
-  color: #fff !important;
+  background: #fff !important;
+  color: #385887 !important;
   text-decoration: none !important;
-  border: 1px solid #385887 !important;
+  border: 1px solid transparent !important;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
@@ -3179,9 +3179,9 @@ span.country {
 }
 
 .sidebar .block-menu ul li a:hover {
-  background: #fff !important;
-  color: #385887 !important;
-  text-decoration: none;
+  background: #385887 !important;
+  color: #fff !important;
+  text-decoration: none !important;
 }
 
 .slideshow_content.area .block-title {
@@ -3201,19 +3201,46 @@ span.country {
 }
 
 .sidebar .block-menu ul li.menu-item--active-trail > a {
-  color: #385887 !important;
-  background: #fff !important;
-}
-
-.sidebar .block-menu ul li span {
+  color: #fff !important;
+  background: #ea7901 !important;
+  border: none !important;
   font-size: 16px;
   font-weight: 600;
   text-transform: uppercase !important;
-  color: #122b46 !important;
+  position: relative;
+  padding: 14px 0 14px 65px;
+  border-radius: 0;
+}
+
+.sidebar .block-menu ul li.menu-item--active-trail > a::before {
+  content: '';
+  background:url("../images/small-bell.png") no-repeat;
+  width: 54px;
+  height: 51px;
+  display: block;
+  position:absolute;
+  top:0;
+  left:0;
+  border: none !important;
+}
+
+.sidebar .block-menu ul li span {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase !important;
+  color: #fff !important;
   padding: 10px !important;
   display: block;
-  background: #f5f5f5;
+  background: #122b46;
   margin: 25px 0 0;
+}
+
+.sidebar .block-menu ul li span::before {
+  content: '\f0f3';
+  display: inline-block;
+  font-size: inherit;
+  font-family: 'FontAwesome';
+  margin: 0 10px 0 0;
 }
 
 .sidebar .block .block-title {
