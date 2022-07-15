@@ -1022,5 +1022,5 @@ a:hover, a:focus, a:active, a:visited {
 }
 
 .main.main-page {
-  margin: 40px 0 0;
+  margin: 40px 0 0 !important;
 }
