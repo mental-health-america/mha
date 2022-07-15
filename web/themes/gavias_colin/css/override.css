@@ -1065,3 +1065,12 @@ header {
   display: block;
   margin: 0 0 0.5rem;
 }
+
+.blog-wrapper, .bio.wrapper, .bio .wrapper {
+  margin: 0 0 50px;
+  border: 1px solid #efefef;
+  padding: 30px;
+  box-shadow: 7px 9px 8px -8px rgba(209,209,209,0.5);
+  -webkit-box-shadow: 7px 9px 8px -8px rgba(209,209,209,0.5);
+  -moz-box-shadow: 7px 9px 8px -8px rgba(209,209,209,0.5);
+}
