@@ -968,15 +968,12 @@ button.fc-listYear-button.fc-button.fc-button-primary.fc-button-active {
   color: #fff !important;
   border-radius: 25px !important;
   padding: 10px 20px !important;
-  margin: 0 !important;
+  margin: 0 2px 10px !important;
 }
 
 .btn.btn-primary:hover, a.btn.btn-primary:hover {
   background-color:#385887 !important;
   color: #fff !important;
-  border-radius: 25px !important;
-  padding: 10px 20px !important;
-  margin: 0 !important;
 }
 
 .fc-unthemed .fc-list-view {
