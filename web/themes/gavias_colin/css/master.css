@@ -1597,7 +1597,7 @@ footer .block .block-title {
 }
 
 .gsc-button.medium {
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.75);
   color: #000 !important;
   overflow: hidden;
   font-size: .8rem !important;
@@ -2589,7 +2589,7 @@ p em {
 }
 
 .node__content h2:first-of-type {
-  margin-top: 0 !important;
+  margin-top: 0;
 }
 
 
@@ -3076,10 +3076,9 @@ ul.sf-menu.sf-accordion {
 
 .slideshow_content.area {
   position: relative;
-  top: -56px;
+  top: -75px;
   margin-top: 19px !important;
 }
-
 
 .sf-multicolumn-column,
 ul.sf-menu.sf-style-default li.sf-multicolumn-wrapper ol li {
@@ -3237,7 +3236,17 @@ span.country {
   margin: 0 0 10px !important;
   padding: 10px !important;
   background: #98a927;
+  border-bottom: 4px solid #385887
 }
+
+.sidebar .block .block-title::before {
+  content: '\f0f3';
+  display: inline-block;
+  font-size: inherit;
+  font-family: 'FontAwesome';
+  margin: 0 10px 0 0;
+}
+
 
 .sidebarsidebar-left .block .block-title {
   width: 90% !important;

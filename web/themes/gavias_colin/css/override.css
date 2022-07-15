@@ -943,7 +943,7 @@ button.fc-listYear-button.fc-button.fc-button-primary.fc-button-active {
 }
 
 .btn.btn-primary {
-  background-color: inherit !important;
+  background-color: #385887 !important;
   border-radius: 0 !important;
   padding: 0 !important;
   margin: 0 !important;
@@ -961,6 +961,22 @@ button.fc-listYear-button.fc-button.fc-button-primary.fc-button-active {
   table-layout: auto;
   border: 7px solid #f0f0f0 !important;
   /* border-radius: 20px !important; */
+}
+
+.btn.btn-primary, a.btn.btn-primary {
+  background-color: #98a927 !important;
+  color: #fff !important;
+  border-radius: 25px !important;
+  padding: 10px 20px !important;
+  margin: 0 !important;
+}
+
+.btn.btn-primary:hover, a.btn.btn-primary:hover {
+  background-color:#385887 !important;
+  color: #fff !important;
+  border-radius: 25px !important;
+  padding: 10px 20px !important;
+  margin: 0 !important;
 }
 
 .fc-unthemed .fc-list-view {
@@ -1012,3 +1028,40 @@ a:hover, a:focus, a:active, a:visited {
   color: #ae5e06;
 }
 
+.remove-top-padding .gbb-row .bb-inner {
+  padding-top: 0 !important;
+}
+
+.remove-bottom-padding .gbb-row .bb-inner {
+  padding-bottom: 0 !important;
+}
+
+.main.main-page {
+  margin: 40px 0 0;
+}
+
+.panel .panel-heading .panel-title > a:after {
+display: none;
+}
+
+.panel .panel-heading .panel-title > a.collapsed:after {
+  display: none;
+}
+
+.panel .panel-heading .panel-title > a:before {
+  content: "\f068";
+  font-family: "FontAwesome";
+  font-size: 15px;
+  z-index: 1;
+  color: #ae5e06;
+  padding: 0 7px 0;
+}
+
+.panel .panel-heading .panel-title > a.collapsed:before {
+  content: "\f067";
+}
+
+header {
+  display: block;
+  margin: 0 0 0.5rem;
+}
