@@ -1012,15 +1012,3 @@ a:hover, a:focus, a:active, a:visited {
   color: #ae5e06;
 }
 
-.gbb-row .bb-inner {
-  padding-top: 0 !important;
-  padding-bottom: 80px;
-}
-
-.breadcrumbs {
-  margin: 40px 0 0;
-}
-
-.main.main-page {
-  margin: 40px 0 0 !important;
-}
