@@ -1433,13 +1433,6 @@ footer .block .block-title {
   border: none;
 }
 
-.gsc-button.extra-large:hover {
-  color: #fff !important;
-  border-color: #fff !important;
-  background: inherit;
-}
-
-
 .gsc-heading.style-1 .title {
   font-size: 40px;
   text-transform: initial !important;
@@ -1653,6 +1646,7 @@ footer .block .block-title {
 .gsc-button.extra-large:hover {
   color: #fff !important;
   border-color: #fff !important;
+  background: inherit;
 }
 
 .gbb-row .bb-inner.remove_padding_col > .bb-container > .row > .row-wrapper > div.gsc-column.image-button {

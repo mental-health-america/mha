@@ -20,7 +20,6 @@ global-styling:
       //fonts.googleapis.com/css?family=Montserrat:100,300,400,600,800,900": { type: external }
       //cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css: { type: external }
       css/bootstrap-four.css: { }
-      css/update.css: { }
       css/master.css: { }
       css/search.css: { }
       css/override.css: { }
