@@ -1074,3 +1074,7 @@ header {
   -webkit-box-shadow: 7px 9px 8px -8px rgba(209,209,209,0.5);
   -moz-box-shadow: 7px 9px 8px -8px rgba(209,209,209,0.5);
 }
+
+.views-exposed-form div#edit-actions {
+  margin: 0;
+}
