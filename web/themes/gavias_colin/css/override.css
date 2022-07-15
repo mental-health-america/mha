@@ -1075,3 +1075,11 @@ header {
 .views-exposed-form div#edit-actions {
   margin: 0;
 }
+
+#blue-accordian .panel-group .panel {
+  border-radius: 25px;
+  -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
+  width: 100% !important;
+  display: inline-flex;
+}
