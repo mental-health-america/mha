@@ -1020,3 +1020,7 @@ a:hover, a:focus, a:active, a:visited {
 .breadcrumbs {
   margin: 40px 0 0;
 }
+
+.main.main-page {
+  margin: 40px 0 0;
+}
