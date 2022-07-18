@@ -953,12 +953,12 @@
             'dev_requirement' => false,
         ),
         'drupal/feeds' => array(
-            'pretty_version' => '3.0.0-beta1',
-            'version' => '3.0.0.0-beta1',
+            'pretty_version' => '3.0.0-beta2',
+            'version' => '3.0.0.0-beta2',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../web/modules/contrib/feeds',
             'aliases' => array(),
-            'reference' => '8.x-3.0-beta1',
+            'reference' => '8.x-3.0-beta2',
             'dev_requirement' => false,
         ),
         'drupal/field' => array(
@@ -1346,12 +1346,12 @@
             ),
         ),
         'drupal/metatag' => array(
-            'pretty_version' => '1.20.0',
-            'version' => '1.20.0.0',
+            'pretty_version' => '1.21.0',
+            'version' => '1.21.0.0',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../web/modules/contrib/metatag',
             'aliases' => array(),
-            'reference' => '8.x-1.20',
+            'reference' => '8.x-1.21',
             'dev_requirement' => false,
         ),
         'drupal/migrate' => array(
@@ -1625,12 +1625,12 @@
             ),
         ),
         'drupal/search_api' => array(
-            'pretty_version' => '1.24.0',
-            'version' => '1.24.0.0',
+            'pretty_version' => '1.25.0',
+            'version' => '1.25.0.0',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../web/modules/contrib/search_api',
             'aliases' => array(),
-            'reference' => '8.x-1.24',
+            'reference' => '8.x-1.25',
             'dev_requirement' => false,
         ),
         'drupal/search_exclude' => array(
