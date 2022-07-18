@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '955af3814af9487f17854ef99e6b902e171c69fe',
+        'reference' => '630d6612fced4eeb3d48a9343a183ec8384ac00f',
         'name' => 'drupal-composer/drupal-project',
         'dev' => true,
     ),
@@ -274,11 +274,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-<<<<<<< HEAD
-            'reference' => '955af3814af9487f17854ef99e6b902e171c69fe',
-=======
-            'reference' => '500e9681136bf326c2c677e2b4d59b56cb31d76f',
->>>>>>> dev
+            'reference' => '630d6612fced4eeb3d48a9343a183ec8384ac00f',
             'dev_requirement' => false,
         ),
         'drupal/action' => array(
@@ -957,12 +953,12 @@
             'dev_requirement' => false,
         ),
         'drupal/feeds' => array(
-            'pretty_version' => '3.0.0-beta1',
-            'version' => '3.0.0.0-beta1',
+            'pretty_version' => '3.0.0-beta2',
+            'version' => '3.0.0.0-beta2',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../web/modules/contrib/feeds',
             'aliases' => array(),
-            'reference' => '8.x-3.0-beta1',
+            'reference' => '8.x-3.0-beta2',
             'dev_requirement' => false,
         ),
         'drupal/field' => array(
@@ -1074,12 +1070,12 @@
             'dev_requirement' => false,
         ),
         'drupal/geofield' => array(
-            'pretty_version' => '1.40.0',
-            'version' => '1.40.0.0',
+            'pretty_version' => '1.41.0',
+            'version' => '1.41.0.0',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../web/modules/contrib/geofield',
             'aliases' => array(),
-            'reference' => '8.x-1.40',
+            'reference' => '8.x-1.41',
             'dev_requirement' => false,
         ),
         'drupal/geofield_map' => array(
@@ -1350,12 +1346,12 @@
             ),
         ),
         'drupal/metatag' => array(
-            'pretty_version' => '1.20.0',
-            'version' => '1.20.0.0',
+            'pretty_version' => '1.21.0',
+            'version' => '1.21.0.0',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../web/modules/contrib/metatag',
             'aliases' => array(),
-            'reference' => '8.x-1.20',
+            'reference' => '8.x-1.21',
             'dev_requirement' => false,
         ),
         'drupal/migrate' => array(
@@ -1629,12 +1625,12 @@
             ),
         ),
         'drupal/search_api' => array(
-            'pretty_version' => '1.24.0',
-            'version' => '1.24.0.0',
+            'pretty_version' => '1.25.0',
+            'version' => '1.25.0.0',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../web/modules/contrib/search_api',
             'aliases' => array(),
-            'reference' => '8.x-1.24',
+            'reference' => '8.x-1.25',
             'dev_requirement' => false,
         ),
         'drupal/search_exclude' => array(
@@ -1923,12 +1919,12 @@
             'dev_requirement' => false,
         ),
         'drupal/views_term_hierarchy_weight_field' => array(
-            'pretty_version' => '1.1.0',
-            'version' => '1.1.0.0',
+            'pretty_version' => '1.2.0',
+            'version' => '1.2.0.0',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../web/modules/contrib/views_term_hierarchy_weight_field',
             'aliases' => array(),
-            'reference' => '8.x-1.1',
+            'reference' => '8.x-1.2',
             'dev_requirement' => false,
         ),
         'drupal/views_ui' => array(
@@ -2129,6 +2125,15 @@
             'reference' => 'e98e3e6d4f86621a9b75f623996e6bbdeb4b9318',
             'dev_requirement' => false,
         ),
+        'itamair/geophp' => array(
+            'pretty_version' => '1.3',
+            'version' => '1.3.0.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../itamair/geophp',
+            'aliases' => array(),
+            'reference' => 'd7bccf9902a62430ceb2ac0771bb1e9d1deac4e9',
+            'dev_requirement' => false,
+        ),
         'laminas/laminas-diactoros' => array(
             'pretty_version' => '2.13.0',
             'version' => '2.13.0.0',
@@ -2229,12 +2234,12 @@
             'dev_requirement' => false,
         ),
         'mglaman/phpstan-drupal' => array(
-            'pretty_version' => '1.1.23',
-            'version' => '1.1.23.0',
+            'pretty_version' => '1.1.24',
+            'version' => '1.1.24.0',
             'type' => 'phpstan-extension',
             'install_path' => __DIR__ . '/../mglaman/phpstan-drupal',
             'aliases' => array(),
-            'reference' => 'ad47ecc886433a17e928c2f47682bb237b51fdc0',
+            'reference' => '64ff8525e4cd12869ab0b2c3c96d6a79d49d4f74',
             'dev_requirement' => false,
         ),
         'nikic/php-parser' => array(
@@ -2286,15 +2291,6 @@
             'install_path' => __DIR__ . '/../pear/pear_exception',
             'aliases' => array(),
             'reference' => 'b14fbe2ddb0b9f94f5b24cf08783d599f776fff0',
-            'dev_requirement' => false,
-        ),
-        'phayes/geophp' => array(
-            'pretty_version' => '1.2',
-            'version' => '1.2.0.0',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../phayes/geophp',
-            'aliases' => array(),
-            'reference' => '015404e85b602e0df1f91441f8db0f9e98f7e567',
             'dev_requirement' => false,
         ),
         'phpstan/phpstan' => array(

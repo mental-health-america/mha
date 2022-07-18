@@ -1,0 +1,4 @@
+services:
+  views_term_hierarchy_weight_field.fields:
+    class: \Drupal\views_term_hierarchy_weight_field\Fields
+    arguments: ['@entity_type.manager']

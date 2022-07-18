@@ -10,13 +10,5 @@
       "name": "Pol Dellaiera",
       "email": "pol.dellaiera@protonmail.com"
     }
-  ],
-  "require-dev": {
-    "drupol/drupal-conventions": "^1.4"
-  },
-  "extra": {
-    "grumphp": {
-      "config-default-path": "vendor/drupol/drupal-conventions/config/drupal8/grumphp.yml"
-    }
-  }
+  ]
 }
