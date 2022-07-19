@@ -2429,8 +2429,8 @@ li:hover {
   position: absolute;
   z-index: 2;
   color: #fff;
-  top: 70%;
-  width: 100%;
+  top: 60%;
+  width: 90%;
   background: rgba(0, 0, 0, 0.5);
   padding: 10px 30px;
 }
