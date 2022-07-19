@@ -233,6 +233,10 @@
             "initial": {
                 ".editorconfig": "../.editorconfig",
                 ".gitattributes": "../.gitattributes"
+            },
+            "file-mapping": {
+                "[web-root]/.htaccess": false,
+                "[web-root]/.cpanel.yml": false
             }
         }
     }
