@@ -96,7 +96,7 @@
         "drupal/geofield": "^1.1",
         "drupal/geofield_map": "^2.42",
         "drupal/geolocation": "^3.0",
-        "drupal/google_analytics": "^2.4",
+        "drupal/google_analytics": "^4.0",
         "drupal/honeypot": "^2.0",
         "drupal/imce": "^2.3",
         "drupal/jquery_ui_accordion": "^1.1",
@@ -233,12 +233,6 @@
             "initial": {
                 ".editorconfig": "../.editorconfig",
                 ".gitattributes": "../.gitattributes"
-            },
-            "file-mapping": {
-                "/.htaccess": false,
-                "/.cpanel.yml": false,
-                "[web-root]/sites/default.services.yml": false,
-                "[web-root]/sites/default.settings.php": false
             }
         }
     }
