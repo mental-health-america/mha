@@ -1091,7 +1091,12 @@ header {
 }
 
 .main-blog-wrapper {
-  position: relative;}
+  position: relative;
+}
+
+.main-blog-container {
+  width: 97.5% !important;
+}
 
 .main-blog-container {
   position: absolute;
