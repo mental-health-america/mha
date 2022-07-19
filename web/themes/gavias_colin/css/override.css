@@ -1103,4 +1103,7 @@ header {
     position: relative;
     top: inherit;
   }
+  .a2a_kit, .a2a_menu, .a2a_modal, .a2a_overlay {
+    display: none;
+  }
 }
