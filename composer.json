@@ -235,8 +235,10 @@
                 ".gitattributes": "../.gitattributes"
             },
             "file-mapping": {
-                "[web-root]/.htaccess": false,
-                "[web-root]/.cpanel.yml": false
+                ".htaccess": false,
+                ".cpanel.yml": false,
+                "[web-root]/sites/default.services.yml": false,
+                "[web-root]/sites/default.settings.php": false
             }
         }
     }
