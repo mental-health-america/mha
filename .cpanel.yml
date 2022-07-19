@@ -4,6 +4,8 @@ deployment:
     - export DEPLOYPATH=/home/stagingmha/drupal
     - /bin/cp -R * $DEPLOYPATH
 
+
+
 ######################
 
 # - export DEPLOYPATH=/home/mhanational/drupal
