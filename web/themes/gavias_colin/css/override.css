@@ -1089,3 +1089,18 @@ header {
 .fa-long-arrow-right::before {
   margin: 0 10px 0;
 }
+
+.main-blog-wrapper {
+  position: relative;}
+
+.main-blog-container {
+  position: absolute;
+  top: 60%;
+}
+
+@media (max-width: 768px) {
+  .main-blog-container {
+    position: relative;
+    top: inherit;
+  }
+}
