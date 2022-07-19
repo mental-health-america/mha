@@ -1087,3 +1087,8 @@ header {
 .fa-long-arrow-right::before {
   margin: 0 10px 0;
 }
+
+.gbb-row .bb-inner {
+  padding-top: 0 !important;
+  padding-bottom: 80px;
+}
