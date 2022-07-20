@@ -18,8 +18,8 @@
 
 		<div role="main" class="main main-page{{ has_breadcrumb }}">
 
-			<div class="clearfix"></div>
 			{% if page.slideshow_content %}
+        <div class="clearfix"></div>
 				<div class="slideshow_content area">
 					{{ page.slideshow_content }}
 				</div>
@@ -35,8 +35,8 @@
 				</div>
 			{% endif %}
 
-			<div class="clearfix"></div>
 			{% if page.before_content %}
+        <div class="clearfix"></div>
 				<div class="before_content area">
 					<div class="container">
 						<div class="row">
@@ -49,7 +49,6 @@
 			{% endif %}
 
 			<div class="clearfix"></div>
-
 			<div id="content" class="content content-full">
 				<div class="container container-bg">
 					{% include directory ~ '/templates/page/main.html.twig' %}
