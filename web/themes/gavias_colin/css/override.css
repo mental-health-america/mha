@@ -16,6 +16,7 @@ body div.body-page {
 .site-branding-logo {
   max-height: inherit;
 }
+
 .site-branding-logo img {
   max-height: 80px;
   width: auto;
@@ -29,6 +30,7 @@ header .site-branding-logo img.logo-site {
 .js-form-item.form-item {
   padding: 0 0 1rem !important;
 }
+
 .field--type-webform {
   margin: 4rem 0;
   padding: 2rem !important;
@@ -972,7 +974,7 @@ button.fc-listYear-button.fc-button.fc-button-primary.fc-button-active {
 }
 
 .btn.btn-primary:hover, a.btn.btn-primary:hover {
-  background-color:#385887 !important;
+  background-color: #385887 !important;
   color: #fff !important;
 }
 
@@ -1038,7 +1040,7 @@ a:hover, a:focus, a:active, a:visited {
 }
 
 .panel .panel-heading .panel-title > a:after {
-display: none;
+  display: none;
 }
 
 .panel .panel-heading .panel-title > a.collapsed:after {
@@ -1066,10 +1068,10 @@ header {
 .blog-wrapper, .bio.wrapper, .bio .wrapper {
   margin: 0 0 50px;
   border: 1px solid #efefef;
-  padding: 30px;
-  box-shadow: 7px 9px 8px -8px rgba(209,209,209,0.5);
-  -webkit-box-shadow: 7px 9px 8px -8px rgba(209,209,209,0.5);
-  -moz-box-shadow: 7px 9px 8px -8px rgba(209,209,209,0.5);
+  padding: 0;
+  box-shadow: 7px 9px 8px -8px rgba(209, 209, 209, 0.5);
+  -webkit-box-shadow: 7px 9px 8px -8px rgba(209, 209, 209, 0.5);
+  -moz-box-shadow: 7px 9px 8px -8px rgba(209, 209, 209, 0.5);
 }
 
 .views-exposed-form div#edit-actions {
@@ -1086,4 +1088,31 @@ header {
 
 .fa-long-arrow-right::before {
   margin: 0 10px 0;
+}
+
+.main-blog-wrapper {
+  position: relative;
+}
+
+.main-blog-container {
+  width: 97.5% !important;
+}
+
+.main-blog-container {
+  position: absolute;
+  top: 60%;
+}
+
+@media (max-width: 768px) {
+  .main-blog-container {
+    position: relative;
+    top: inherit;
+  }
+  .a2a_kit, .a2a_menu, .a2a_modal, .a2a_overlay {
+    display: none;
+  }
+}
+
+.hidden-title {
+
 }
