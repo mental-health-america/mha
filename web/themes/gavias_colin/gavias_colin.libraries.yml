@@ -5,11 +5,12 @@ global-styling:
     theme:
       //fonts.googleapis.com/css?family=Montserrat:100,300,400,600,800,900": { type: external }
       //fonts.googleapis.com/css?family=Roboto:400,700: { type: external }
-      //cdnjs:cloudflare:com/ajax/libs/font-awesome/5:2:0/css/all:min:css: { type: external }
       css/bootstrap-four.css: { }
       css/master.css: { }
       css/search.css: { }
+      css/override.css: { }
       css/sliderlayer.css: {}
+      css/font-awesome/css/all.min.css: { }
       css/ionicon/css/ionicons.min.css: {}
       css/animate.css: {}
       vendor/owl-carousel/assets/owl.carousel.min.css: {}
@@ -19,8 +20,7 @@ global-styling:
       vendor/magnific/magnific-popup.css: {}
       vendor/popup-gallery/css/lightgallery.min.css: {}
       vendor/popup-gallery/css/lg-transitions.min.css: {}
-      css/override.css: { }
-      //cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css: { type: external }
+      css/datatables: { }
 
   js:
     vendor/jquery-migrate.min.js: {}
