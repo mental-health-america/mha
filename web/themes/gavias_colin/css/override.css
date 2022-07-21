@@ -1103,6 +1103,10 @@ header {
   top: 60%;
 }
 
+.node--type-blog-post .col-lg-3 {
+  width: 20%;
+}
+
 @media (max-width: 768px) {
   .main-blog-container {
     position: relative;
@@ -1111,8 +1115,4 @@ header {
   .a2a_kit, .a2a_menu, .a2a_modal, .a2a_overlay {
     display: none;
   }
-}
-
-.hidden-title {
-
 }
