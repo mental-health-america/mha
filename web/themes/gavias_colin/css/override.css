@@ -1096,15 +1096,33 @@ header {
 
 .main-blog-container {
   width: 97.5% !important;
-}
-
-.main-blog-container {
   position: absolute;
   top: 60%;
 }
 
+.block-gavias-sliderlayer a,
+.block-gavias-sliderlayer a:visited {
+  text-decoration: none !important;
+}
+
+.fa-tumblr:before {
+  display:none;
+}
+
+#block-socialmedialinks .fa.fa-tumblr.fa-2x {
+  padding: 0.95em 0.98em;
+}
+
 .node--type-blog-post .col-lg-3 {
   width: 20%;
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+  font-style: normal;
+}
+
+.bio.link a {
+  font-weight: 400 !important;
 }
 
 @media (max-width: 768px) {
