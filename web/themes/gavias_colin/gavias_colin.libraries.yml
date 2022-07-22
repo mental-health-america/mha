@@ -21,7 +21,8 @@ global-styling:
       vendor/magnific/magnific-popup.css: {}
       vendor/popup-gallery/css/lightgallery.min.css: {}
       vendor/popup-gallery/css/lg-transitions.min.css: {}
-      css/datatables: { }
+      css/datatables.css: {}
+      css/newheader.css: {}
 
   js:
     vendor/jquery-migrate.min.js: {}

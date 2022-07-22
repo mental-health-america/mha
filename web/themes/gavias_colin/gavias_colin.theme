@@ -46,7 +46,7 @@ function gavias_colin_preprocess_page(&$variables) {
   if(file_exists($theme_path . '/templates/page/' . trim($header) . '.html.twig')){
     $variables['header_skin'] = $variables['directory'] . '/templates/page/' . trim($header) . '.html.twig';
   }else{
-    $variables['header_skin'] = $variables['directory'] . '/templates/page/backup-header.html.twig';
+    $variables['header_skin'] = $variables['directory'] . '/templates/page/backup-backup-header.html.twig';
   }
 
 }

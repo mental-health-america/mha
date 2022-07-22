@@ -2093,10 +2093,6 @@ header.header-default .main-menu ul.gva_menu_main {
   background: #0086b3 !important;
 }
 
-.header-main-inner.p-relative {
-  float: right;
-}
-
 .header-inner .navigation #block-topmenu .gva_menu > li.menu-item--active-trail > a {
   color: #ea7901 !important;
   background: transparent !important;
