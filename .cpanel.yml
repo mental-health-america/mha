@@ -1,7 +1,7 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/mhanational/drupal
+    - export DEPLOYPATH=/home/stagingmha/drupal
     - /bin/cp -R * $DEPLOYPATH
 
 
