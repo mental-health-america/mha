@@ -588,10 +588,10 @@ header .header-info .content-inner .desc {
 
 .quick-side-icon {
   position: absolute;
-  right: 15px;
-  top: 50%;
-  margin-top: -10px;
   z-index: 1;
+  right: 15px !important;
+  top: 2px !important;
+  margin-top: 0 !important;
 }
 
 .quick-side-icon .icon {

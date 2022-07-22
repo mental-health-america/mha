@@ -33,7 +33,7 @@
   {% if items %}
     {% if menu_level == 0 %}
       <ul {{ attributes.addClass('gva_menu gva_menu_main') }}>
-      
+
     {% else %}
       <ul class="menu sub-menu">
     {% endif %}
@@ -41,11 +41,11 @@
       {% set class_mega_menu = '' %}
       {% set class_columns = '' %}
       {% if item.attributes.gva_layout == 'menu-block' and menu_level == 0 %}
-        {% set class_mega_menu = 'gva-mega-menu mega-menu-block' %} 
-      {% elseif item.attributes.gva_layout == 'menu-grid' and menu_level == 0 %}   
-        {% set class_mega_menu = 'gva-mega-menu megamenu menu-grid' %} 
+        {% set class_mega_menu = 'gva-mega-menu mega-menu-block' %}
+      {% elseif item.attributes.gva_layout == 'menu-grid' and menu_level == 0 %}
+        {% set class_mega_menu = 'gva-mega-menu megamenu menu-grid' %}
         {% set class_columns = ['menu-columns-', item.attributes.gva_layout_columns]|join('') %}
-      {% endif %}    
+      {% endif %}
       {%
         set classes = [
           'menu-item',
@@ -63,7 +63,7 @@
         </a>
         {% if item.attributes.gva_layout == 'menu-block' and menu_level == 0 %}
           <div class="sub-menu">{{ item.gva_block_content|trim }}</div>
-        {% endif %}  
+        {% endif %}
         {% if item.below %}{{ menus.menu_links(item.below, attributes, menu_level + 1) }}{% endif %}
       </li>
     {% endfor %}
