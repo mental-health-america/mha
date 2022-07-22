@@ -1125,11 +1125,6 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   font-weight: 400 !important;
 }
 
-.panel .panel-heading .panel-title > a:before {
-  position: absolute;
-  left: -1px;
-}
-
 @media (max-width: 768px) {
   .main-blog-container {
     position: relative;
