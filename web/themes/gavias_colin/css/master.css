@@ -2350,50 +2350,6 @@ li:hover {
 /* ------------------- M ------------------ */
 /* ------------------- M ------------------ */
 /* ------------------- M ------------------ */
-.menu--annual-conference-2019 a {
-  color: #fff;
-  border: 1px solid #fff;
-  min-width: 292px;
-  text-align: center;
-}
-
-.menu--annual-conference-2019 li:nth-child(1n+1) a {
-  background: #a6cc36;
-  text-align: center !important;
-}
-
-.menu--annual-conference-2019 li:nth-child(1n+1) a:hover {
-  background: #000;
-  color: #fff;
-}
-
-.menu--annual-conference-2019 li:nth-child(2n+1) a {
-  background: #b6b8ba;
-  text-align: center !important;
-}
-
-.menu--annual-conference-2019 li:nth-child(2n+1) a:hover {
-  background: #a6cc36;
-  color: #fff;
-}
-
-.menu--annual-conference-2019 li:nth-child(3n+1) a {
-  background: #000;
-  text-align: center !important;
-}
-
-.menu--annual-conference-2019 li:nth-child(3n+1) a:hover {
-  background: #a6cc36;
-  color: #fff;
-}
-
-.menu--annual-conference-2019 ul li a {
-  font-size: 16px !important;
-  font-weight: 600 !important;
-  padding: 12px 15px !important;
-  text-transform: initial !important;
-  text-align: center !important;
-}
 
 .mha-breadcrumb {
   margin: 10px 0 0;

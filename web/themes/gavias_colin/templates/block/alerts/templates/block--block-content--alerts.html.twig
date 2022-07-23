@@ -38,6 +38,7 @@
 {# Set CSS Classes #}
 {% set classes = [
   'clearfix',
+  'alert-block',
   'block',
   'block-' ~ configuration.provider|clean_class,
   'block-' ~ plugin_id|clean_class,
@@ -56,9 +57,11 @@
       <div class="row">
         {# Column One #}
         <div class="col-md-10 alert-wrapper">
+         <div class="{{ content.field_hidden_title.0 }}">
           {% if label %}
             <h4 class=" alert-{{ alert_style }}">{{ label }}</h4>
           {% endif %}
+           </div>
           {% if body %}
             {{ body }}
           {% endif %}
