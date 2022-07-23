@@ -1,3 +1,10 @@
+{# Alert #}
+{% if page.alert %}
+  {% block alert %}
+    {{ page.alert }}
+  {% endblock %}
+{% endif %}
+
 <header id="header" class="header-default border-bottom border-light shadow-sm">
 
   {% if page.topbar %}

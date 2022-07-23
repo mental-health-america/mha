@@ -1,3 +1,4 @@
+
 /*!
 This CSS file is set to override all things theme related - proceed with caution**
 ** Roll into css/override.css when moved to LIVE server.
@@ -123,7 +124,7 @@ body, p, .node__content p, html, .gsc-column ul li {
   font-weight: 400 !important;
   font-size: 1rem !important;
   line-height: 1.5 !important;
-  color: rgba(0, 0, 0, 0.9) !important;
+  color: #262626 !important;
 }
 
 .mb-30 {
