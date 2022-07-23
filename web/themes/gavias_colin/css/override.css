@@ -1125,6 +1125,55 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   font-weight: 400 !important;
 }
 
+.footer .gva_menu {
+  background: transparent !important;
+}
+
+.sidebar.sidebar-left {
+  margin: 0;
+}
+
+.panel .panel-heading .panel-title > a:before {
+  position: absolute;
+  left: -1px;
+}
+
+.field.field--name-field-image.field--type-image.field--label-hidden.field__items {
+  margin: 0 0 2rem;
+}
+
+.gva_menu {
+  background: #f2f2f2;
+}
+.sidebar .block .block-title,
+.sidebar .block-menu ul li span {
+  font-size: 12px;
+  margin: 0 ;
+  background: #385887;
+}
+
+.sidebar .block-menu ul li {
+
+  margin: 5px 0 0 0 !important;
+  padding: 0 !important;
+}
+
+.sidebar .block-menu ul li a {
+  background: transparent !important;
+}
+
+.sidebar .block-menu ul li.menu-item--active-trail > a {
+  color: #ea7901 !important;
+  background: transparent !important;
+}
+
+.sidebar .block-menu ul li a:hover {
+  background:  transparent !important;
+  color: #ea7901 !important;
+  text-decoration: none !important;
+}
+
+
 @media (max-width: 768px) {
   .main-blog-container {
     position: relative;
