@@ -30,20 +30,21 @@
   border-radius: 0;
 }
 
+.quick-side-icon .icon a:hover {
+  border: 1px solid var(--mha-navy);
+  background: var(--mha-navy);
+}
+
 header.header-default .header-main {
-  padding: 1rem 0 !important;
+  padding: .75rem 0 !important;
 }
 
 header.header-default .main-menu {
-  margin: .1rem 0 0 !important;
+  margin: 0 !important;
 }
 
 .site-branding-logo img {
   max-height: 60px !important;
-}
-
-.border-light {
-  border-color: var(--mha-light-grey) !important;
 }
 
 #block-topmenu .gva_menu {
@@ -51,7 +52,8 @@ header.header-default .main-menu {
 }
 
 ul.sf-menu.sf-horizontal ul,
-ul.sf-menu.sf-vertical ul, ul.sf-menu.sf-navbar ul ul {
+ul.sf-menu.sf-vertical ul,
+ul.sf-menu.sf-navbar ul ul {
   border-radius: 0;
 }
 
@@ -79,6 +81,11 @@ input[type="submit"],
   font-weight: 400;
 }
 
+input[type="submit"]:hover,
+#edit-wizard-prev:hover {
+  background: var(--mha-orange);
+}
+
 div#edit-actions {
   margin: 0;
 }
@@ -95,6 +102,12 @@ div#edit-actions {
 }
 
 /* SuperFish */
+ul.sf-menu.sf-style-default {
+  float: left;
+  margin-bottom: .25rem;
+  padding: 0;
+}
+
 #superfish-main li:nth-child(1) a.sf-depth-1 {
   padding: 5px 20px 5px 0 !important;
   margin: 1px 0 0 0 !important;
@@ -104,7 +117,7 @@ div#edit-actions {
 #superfish-main li:nth-child(2) a.sf-depth-1,
 #superfish-main li:nth-child(3) a.sf-depth-1,
 #superfish-main li:nth-child(4) a.sf-depth-1 {
-  background: var(--mha-white)fff !important;
+  background: var(--mha-white) fff !important;
   color: var(--mha-navy) !important;
   border: none !important;
   border-right: 1px solid var(--mha-navy) !important;
@@ -153,7 +166,7 @@ div#edit-actions {
 #superfish-main li:nth-child(4) a.sf-depth-1:hover {
   color: var(--mha-orange) !important;
   text-decoration: none;
-  background: var(--mha-white)fff !important;
+  background: var(--mha-white) fff !important;
 }
 
 #superfish-main a {
