@@ -1,0 +1,270 @@
+/********* MHA Official Web Colors *********/
+:root {
+  /*** Primary Colors ***/
+  --mha-black: #262626;
+  --mha-white: #ffffff;
+
+  /* Link Blue */
+  --mha-blue-link: #ae5d04;
+
+  /* Link Hover Blue */
+  --mha-blue-hover: #375887;
+
+  /* MHA Primary Colors */
+  /* Lime Green  */
+  --mha-lime: #9aac2d;
+
+  /* Orange  */
+  --mha-orange: #ea7901;
+
+  /* Blue  */
+  --mha-blue: #005494;
+
+  /* Navy  */
+  --mha-navy: #385878;
+
+  /* Bootstrap Common Colors  */
+  /* Success  */
+  --mha-success: #349e08;
+
+  /* Danger (horizon) */
+  --mha-danger: #f95e10;
+
+  /* Warning */
+  --mha-warning: #ff0101;
+
+  /* Information (mha navy) */
+  --mha-info: #003057;
+
+
+  /* Information (mha navy) */
+  --mha-gold: #988100;
+
+
+  /* Grey */
+
+  /* Light Grey */
+  --mha-light-grey: #bdbdbd;
+
+  /* Medium Grey */
+  --mha-med-grey: #6e6e6e;
+
+  /* Dark Grey */
+  --mha-dark-grey: #3b3b3b;
+}
+
+/* -- END ROOT -- */
+#mha-alert p {
+  margin-bottom: .2rem;
+  line-height: 1.3;
+  font-size: .9rem;
+}
+
+.alert {
+  position: relative;
+  padding: .75rem 1.25rem;
+  margin-bottom: 0;
+  border: 1px solid transparent;
+  border-radius: .25rem;
+}
+
+a.primary,
+a.secondary,
+a.success,
+a.danger,
+a.warning,
+a.info,
+a.light,
+a.dark {
+  display: block;
+  font-weight: 300 !important;
+  padding: .2rem .5rem;
+  text-decoration: none !important;
+  margin: 0 0 .65rem;
+  width: max-content;
+  font-size: .8rem !important;
+}
+
+/* MHA Alerts */
+
+/* Alert Colors */
+.alert-primary {
+  color: var(--mha-white) !important;
+  background-color: var(--mha-blue) !important;
+  border-color: var(--mha-blue) !important;
+}
+
+.alert-primary p,
+.alert-primary h1,
+.alert-primary h4 {
+  color: var(--mha-white) !important;
+}
+
+.alert-text p {
+  padding: 0 !important;
+  margin: .3rem 0 !important;
+  font-size: .85rem !important;
+}
+
+.alert-wrapper h4 {
+  padding: 0 !important;
+  margin: 15px 0 0 !important;
+}
+
+.alert-primary a.primary {
+  color: var(--mha-white) !important;
+  border: 1px solid var(--mha-white) !important;
+}
+
+.alert-primary a.primary:hover {
+  color: var(--mha-black) !important;
+  border: 1px solid var(--mha-black) !important;
+}
+
+.alert-secondary {
+  color: var(--mha-dark-grey);
+  background-color: var(--mha-light-grey);
+  border-color: var(--mha-light-grey);
+}
+
+.alert-secondary a.secondary {
+  color: var(--mha-dark-grey) !important;
+  border: 1px solid var(--mha-dark-grey) !important;
+}
+
+.alert-success {
+  color: var(--mha-white);
+  background-color: var(--mha-success);
+  border-color: var(--mha-success);
+}
+
+.alert-success a.success {
+  color: var(--mha-white);
+  background-color: var(--mha-success);
+  border: 1px solid var(--mha-white);
+}
+
+.alert-success a.success:hover {
+  color: var(--mha-success);
+  background-color: var(--mha-white);
+}
+
+.alert-success p {
+  color: var(--mha-white);
+}
+
+.alert-danger {
+  color: var(--mha-black);
+  background-color: var(--mha-warning);
+  border-color: var(--mha-warning);
+}
+
+.alert-danger a.danger {
+  border: 2px solid var(--mha-black);
+  font-weight: bold !important;
+}
+
+.alert-danger a.danger:hover {
+  color: var(--mha-warning);
+  background-color: var(--mha-black);
+  border-color: var(--mha-warning);
+}
+
+.alert-danger p {
+  color: var(--mha-black);
+}
+
+.alert-warning {
+  color: var(--mha-black);
+  background-color: var(--mha-gold);
+  border-color: var(--mha-gold);
+}
+
+.alert-warning a.warning {
+  color: var(--mha-dark-grey) !important;
+  border: 1px solid var(--mha-dark-grey) !important;
+}
+
+.alert-warning a.warning:hover {
+  color: var(--mha-gold) !important;
+  background-color: var(--mha-black);
+  border: 1px solid var(--mha-gold) !important;
+}
+
+.alert-warning p {
+  color: var(--mha-black);
+}
+
+.alert-info {
+  color: var(--mha-white);
+  background-color: var(--mha-info);
+  border-color: var(--mha-info);
+}
+
+.alert-info a.info {
+  color: var(--mha-black) !important;
+  background-color: transparent;
+  border: 1px solid var(--mha-black) !important;
+}
+
+.alert-info a.info:hover {
+  color: var(--mha-info) !important;
+  background-color: var(--mha-white) !important;
+  border-color: var(--mha-white) !important;
+}
+
+.alert-info p {
+  color: var(--mha-white);
+}
+
+.alert-light {
+  color: var(--mha-med-grey);
+  background-color: var(--mha-light-grey);
+}
+
+.alert-light a.light {
+  color: var(--mha-med-grey);
+  background-color: transparent;
+  border: 1px solid var(--mha-med-grey);
+}
+
+.alert-light a.light:hover {
+  color: var(--mha-black);
+  background-color: var(--mha-med-grey);
+  border: 1px solid var(--mha-black);
+}
+
+.alert-dark {
+  color: var(--mha-black);
+  background-color: var(--mha-light-grey);
+  border-color: var(--mha-light-grey);
+}
+
+.alert-dark a.dark {
+  color: var(--mha-black);
+  background-color: transparent;
+  border: 1px solid var(--mha-black);
+}
+
+.alert-dark a.dark:hover {
+  color: var(--mha-light-grey);
+  background-color: var(--mha-black);
+  border: 1px solid var(--mha-black);
+}
+
+.btn-alert-close {
+  background: transparent;
+  color: inherit;
+  overflow: hidden;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0 .5rem;
+  position: absolute;
+  display: inline-block;
+  z-index: 1;
+  letter-spacing: 1px;
+  border-radius: 3px;
+  border: none;
+  right: 30px;
+  top: 15px;
+}

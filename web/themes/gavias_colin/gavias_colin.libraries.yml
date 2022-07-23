@@ -60,6 +60,15 @@ gavias_colin.skin.default:
       css/bootstrap.css: {}
       css/template.css: {}
 
+#Alerts
+mha-alerts:
+  version: "1.0.x"
+  css:
+    theme:
+      templates/block/alerts/css/mha-alerts.css: {}
+  js:
+    templates/block/alerts/js/waypoint.js: {}
+
 maintenance_page:
   version: VERSION
   css:
