@@ -20,12 +20,12 @@
 .quick-side-icon .icon a,
 .quick-side-icon .icon a:link {
   line-height: 1.4;
-  color: #fff;
+  color: var(--mha-white);
   font-weight: 400 !important;
   text-decoration: none;
   font-family: 'Montserrat', sans-serif !important;
-  border: 1px solid #ea7901;
-  background: #ea7901;
+  border: 1px solid var(--mha-orange);
+  background: var(--mha-orange);
   padding: 2px 7px;
   border-radius: 0;
 }
@@ -43,7 +43,7 @@ header.header-default .main-menu {
 }
 
 .border-light {
-  border-color: #e8e8e8 !important;
+  border-color: var(--mha-light-grey) !important;
 }
 
 #block-topmenu .gva_menu {
@@ -69,8 +69,8 @@ input[type="submit"],
   height: 25px;
   line-height: 0;
   padding: 0 .75rem;
-  background: #385878;
-  color: #fff;
+  background: var(--mha-blue);
+  color: var(--mha-white);
   font-size: 12px;
   width: auto;
   border: none !important;
@@ -88,7 +88,7 @@ div#edit-actions {
 }
 
 #edit-keys {
-  border: 1px solid #ccc;
+  border: 1px solid var(--mha-light-grey);
   padding: 2px;
   margin: 0 0 1rem;
   font-size: .8rem;
@@ -104,10 +104,10 @@ div#edit-actions {
 #superfish-main li:nth-child(2) a.sf-depth-1,
 #superfish-main li:nth-child(3) a.sf-depth-1,
 #superfish-main li:nth-child(4) a.sf-depth-1 {
-  background: #ffffff !important;
-  color: #385887 !important;
+  background: var(--mha-white)fff !important;
+  color: var(--mha-navy) !important;
   border: none !important;
-  border-right: 1px solid #385887 !important;
+  border-right: 1px solid var(--mha-navy) !important;
   margin-top: 4px;
   border-radius: 0 !important;
 }
@@ -123,13 +123,15 @@ div#edit-actions {
 
 #superfish-main li:nth-child(5) a.sf-depth-1 {
   background: #385878 !important;
-  border-radius: 0 !important;
+  border-radius: 15px !important;
+  font-size: 10px !important;
 }
 
 #superfish-main li:nth-child(6) a.sf-depth-1 {
-  color: #fff;
-  background: #9aac2d !important;
-  border-radius: 0 !important;
+  color: var(--mha-white);
+  background: var(--mha-lime) !important;
+  border-radius: 15px !important;
+  font-size: 10px !important;
 }
 
 #superfish-main li:nth-child(1) a.sf-depth-1:hover,
@@ -149,9 +151,9 @@ div#edit-actions {
 #superfish-main li:nth-child(2) a.sf-depth-1:hover,
 #superfish-main li:nth-child(3) a.sf-depth-1:hover,
 #superfish-main li:nth-child(4) a.sf-depth-1:hover {
-  color: #ea7901 !important;
+  color: var(--mha-orange) !important;
   text-decoration: none;
-  background: #ffffff !important;
+  background: var(--mha-white)fff !important;
 }
 
 #superfish-main a {
@@ -159,7 +161,7 @@ div#edit-actions {
 }
 
 #superfish-main a:hover {
-  color: #ea7901 !important;
+  color: var(--mha-orange) !important;
   background: white !important;
   text-decoration: none !important;
   border-radius: 0 !important;
@@ -169,3 +171,37 @@ div#edit-actions {
   padding: 1rem 0 0 !important;
 }
 
+.right-header .navigation .gva_menu {
+  float: left !important;
+  top: 0;
+  position: absolute;
+  display: inline-flex;
+}
+
+.right-header .navigation {
+  position: absolute !important;
+  clear: both;
+}
+
+.right-header .gva_menu > li > a,
+.right-header .navigation .gva_menu > li > a {
+  color: var(--mha-white) !important;
+  font-size: 11px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0 !important;
+  text-transform: initial !important;
+  padding: 5px 20px !important;
+  margin: 0 5px 0;
+  background: var(--mha-blue);
+  width: max-content;
+  border-radius: 25px;
+}
+
+.right-header .gva_menu > li > a:hover,
+.right-header .navigation .gva_menu > li > a:hover {
+  background: var(--mha-orange) !important;
+}
+
+.right-header .gva_menu {
+  background: transparent;
+}

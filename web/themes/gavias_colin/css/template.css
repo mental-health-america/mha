@@ -4844,7 +4844,7 @@ div.resizable-textarea textarea {
 
 .block {
   background: transparent;
-  margin-bottom: 30px;
+  margin-bottom: inherit;
 }
 
 .block .block {

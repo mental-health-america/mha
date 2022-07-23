@@ -1,0 +1,56 @@
+/********* MHA Official Web Colors *********/
+:root {
+  /*** Primary Colors ***/
+  --mha-black: #262626;
+  --mha-white: #ffffff;
+
+  /* Link Blue */
+  --mha-blue-link: #ae5d04;
+
+  /* Link Hover Blue */
+  --mha-blue-hover: #375887;
+
+  /* MHA Primary Colors */
+  /* Lime Green  */
+  --mha-lime: #9aac2d;
+
+  /* Orange  */
+  --mha-orange: #ea7901;
+
+  /* Blue  */
+  --mha-blue: #005494;
+
+  /* Navy  */
+  --mha-navy: #385878;
+
+  /* Bootstrap Common Colors  */
+  /* Success  */
+  --mha-success: #349e08;
+
+  /* Danger (horizon) */
+  --mha-danger: #f95e10;
+
+  /* Warning */
+  --mha-warning: #ff0101;
+
+  /* Information (mha navy) */
+  --mha-info: #003057;
+
+
+  /* Information (mha navy) */
+  --mha-gold: #988100;
+
+
+  /* Grey */
+
+  /* Light Grey */
+  --mha-light-grey: #bdbdbd;
+
+  /* Medium Grey */
+  --mha-med-grey: #6e6e6e;
+
+  /* Dark Grey */
+  --mha-dark-grey: #3b3b3b;
+}
+
+/* -- END ROOT -- */
