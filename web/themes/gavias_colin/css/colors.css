@@ -42,6 +42,9 @@
   /* Navy  */
   --mha-navy: #385878;
 
+  /* Blue med  */
+  --mha-blue-med: #5468ff;
+
   /* Bootstrap Common Colors  */
 
   /* Success  */
@@ -86,6 +89,9 @@
 
   /* Table even */
   --mha-even: #f9f9f9;
+
+  /* Table border */
+  --mha-table-border: #ddd;
 }
 
 
