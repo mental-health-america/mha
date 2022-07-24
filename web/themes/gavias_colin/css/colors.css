@@ -4,26 +4,46 @@
   --mha-black: #262626;
   --mha-white: #ffffff;
 
+  /* Link Orange */
+  --mha-link-orange: #ae5d04;
+
   /* Link Blue */
-  --mha-blue-link: #ae5d04;
+  --mha-blue-link: #375887;
 
   /* Link Hover Blue */
-  --mha-blue-hover: #375887;
+  --mha-blue-hover: #45668a;
 
   /* MHA Primary Colors */
+
   /* Lime Green  */
   --mha-lime: #9aac2d;
+
+  /* Green Light */
+  --mha-avocada: #5e6f20;
 
   /* Orange  */
   --mha-orange: #ea7901;
 
+  /* Bright Orange  */
+  --mha-orange-bright: #f79941;
+
   /* Blue  */
   --mha-blue: #005494;
+
+  /* Bright Blue  */
+  --mha-blue-bright: #0086b3;
+
+  /* Bright Blue  */
+  --mha-blue-light: #5bc0de;
+
+  /* Aqua  */
+  --mha-aqua: #346677;
 
   /* Navy  */
   --mha-navy: #385878;
 
   /* Bootstrap Common Colors  */
+
   /* Success  */
   --mha-success: #349e08;
 
@@ -33,14 +53,23 @@
   /* Warning */
   --mha-warning: #ff0101;
 
+  /* Red Dark */
+  --mha-red-dark: #84160d;
+
+  /*Salmon */
+  --mha-salmon: #f95d62;
+
+  /*Pink */
+  --mha-pink: #975381;
+
   /* Information (mha navy) */
   --mha-info: #003057;
 
-
-  /* Information (mha navy) */
+  /* Information (mha gold) */
   --mha-gold: #988100;
 
-
+  /* Light Yellow */
+  --mha-light-yellow: #fed970;
   /* Grey */
 
   /* Light Grey */
@@ -51,6 +80,14 @@
 
   /* Dark Grey */
   --mha-dark-grey: #3b3b3b;
+
+  /* Table odd */
+  --mha-odd: #f4f4f4;
+
+  /* Table even */
+  --mha-even: #f9f9f9;
 }
 
+
+ /**/
 /* -- END ROOT -- */
