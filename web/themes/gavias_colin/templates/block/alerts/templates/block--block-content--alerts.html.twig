@@ -58,16 +58,16 @@
         {# Column One #}
         <div class="col-md-10 alert-wrapper">
          <div class="{{ content.field_hidden_title.0 }}">
-          {% if label %}
+          {% if label is not empty and link_url is empty %}
             <h4 class=" alert-{{ alert_style }}">{{ label }}</h4>
+            {% else %}
+              <a href="{{ link_url }}">
+                <h4 class=" alert-{{ alert_style }}">{{ label }}</h4>
+              </a>
           {% endif %}
            </div>
           {% if body %}
             {{ body }}
-          {% endif %}
-          {% if link_url %}
-            <a href="{{ link_url }}" tabindex="0" role='navigation' aria-labelledby="{{ link_title }}"
-               class="{{ alert_style }}">{{ link_text }}</a>
           {% endif %}
         </div>
       </div>

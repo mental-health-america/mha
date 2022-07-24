@@ -22,7 +22,7 @@ a.info,
 a.light,
 a.dark {
   display: block;
-  font-weight: 300 !important;
+  font-weight: 600 !important;
   padding: .2rem .5rem;
   text-decoration: none !important;
   margin: 0 0 .65rem;
@@ -35,8 +35,8 @@ a.dark {
 /* Alert Colors */
 .alert-primary {
   color: var(--mha-white) !important;
-  background-color: var(--mha-blue) !important;
-  border-color: var(--mha-blue) !important;
+  background-color: var(--mha-navy) !important;
+  border-color: var(--mha-navy) !important;
 }
 
 .alert-primary p,
@@ -50,10 +50,12 @@ a.dark {
   background-color: var(--mha-lime) !important;
   border-color: var(--mha-lime) !important;
 }
+
 .alert-text p {
   padding: 0 !important;
-  margin: .3rem 0 !important;
+  margin: .3rem 0 1rem !important;
   font-size: .85rem !important;
+  line-height: 1.1 !important;
 }
 
 .alert-wrapper h4 {
@@ -69,17 +71,24 @@ a.dark {
 .alert-primary a.primary:hover {
   color: var(--mha-black) !important;
   border: 1px solid var(--mha-black) !important;
+  background-color: var(--mha-white);
 }
 
 .alert-secondary {
-  color: var(--mha-dark-grey);
-  background-color: var(--mha-light-grey);
-  border-color: var(--mha-light-grey);
+  color: var(--mha-black);
+  background-color: var(--mha-orange);
+  border-color: var(--mha-orange);
 }
 
 .alert-secondary a.secondary {
-  color: var(--mha-dark-grey) !important;
-  border: 1px solid var(--mha-dark-grey) !important;
+  color: var(--mha-black) !important;
+  border: 1px solid var(--mha-black) !important;
+}
+
+.alert-secondary a, .alert-secondary a:link {
+  line-height: 1.1;
+  color: var(--mha-black);
+  font-weight: 600;
 }
 
 .alert-success {

@@ -60,6 +60,7 @@ ul.sf-menu.sf-navbar ul ul {
 /* Search */
 .gva-search-region {
   margin-top: -12px;
+  right: 70px !important;
 }
 
 #block-searchform {
@@ -99,6 +100,10 @@ div#edit-actions {
   padding: 2px;
   margin: 0 0 1rem;
   font-size: .8rem;
+}
+
+.gva-search-region .search-content form.search-block-form input#edit-keys {
+  width: 11rem !important;
 }
 
 /* SuperFish */
@@ -145,6 +150,15 @@ ul.sf-menu.sf-style-default {
   background: var(--mha-lime) !important;
   border-radius: 15px !important;
   font-size: 10px !important;
+}
+
+#superfish-main li:nth-child(6) a.sf-depth-1::before {
+  content: '\f004';
+  display: inline-block;
+  font-size: inherit;
+  font-family: 'FontAwesome';
+  margin: 0 5px 0 0;
+  text-rendering: auto;
 }
 
 #superfish-main li:nth-child(1) a.sf-depth-1:hover,
@@ -217,4 +231,64 @@ ul.sf-menu.sf-style-default {
 
 .right-header .gva_menu {
   background: transparent;
+}
+
+/* TopBar */
+
+.topbar {
+  background: var(--mha-blue) !important;
+  color: var(--mha-black) !important;
+  font-size: inherit;
+  padding: 0.35rem 0 !important;
+  margin-top: 0 !important;
+}
+
+.topbar .navigation .gva_menu {
+  float: right;
+  background: transparent !important;
+}
+
+.topbar ul li {
+  line-height: 0;
+  margin: 0;
+}
+
+.topbar .navigation .gva_menu > li > a {
+  color: var(--mha-white) !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  padding: 0!important;
+  margin: 0 .75rem !important;
+  text-transform: initial !important;
+  text-decoration: none !important;
+  border-radius: 0;
+  letter-spacing: 0 !important;
+}
+
+.topbar .navigation .gva_menu > li > a:hover {
+  color: var(--mha-orange) !important;
+}
+
+.topbar .navigation .gva_menu > li:last-child > a:before {
+  content: '\f07a';
+  display: inline-block;
+  font-size: inherit;
+  font-family: 'FontAwesome';
+  margin: 0 5px 0 0;
+  text-rendering: auto;
+  color: var(--mha-orange) !important;
+}
+
+.topbar .tele a,
+.topbar .tele a:link {
+  line-height: 1.1;
+  color: var(--mha-white) !important;
+}
+
+.topbar .tele a:hover {
+  color: var(--mha-orange) !important;
+}
+
+.topbar  i.fa.fa-phone.mr-2 {
+  font-size: 13px !important;
 }
