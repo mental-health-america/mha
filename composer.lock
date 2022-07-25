@@ -5685,16 +5685,16 @@
             "authors": [
                 {
                     "name": "Jeff Geerling",
-                    "homepage": "https://www.drupal.org/user/213194",
+                    "homepage": "https://www.drupal.org/user/389011",
                     "email": "geerlingguy@mac.com"
+                },
+                {
+                    "name": "Manuel Garcia",
+                    "homepage": "https://www.drupal.org/user/213194"
                 },
                 {
                     "name": "TR",
                     "homepage": "https://www.drupal.org/user/202830"
-                },
-                {
-                    "name": "geerlingguy",
-                    "homepage": "https://www.drupal.org/user/389011"
                 },
                 {
                     "name": "vijaycs85",
@@ -6399,12 +6399,12 @@
                     "homepage": "https://www.drupal.org/user/213194"
                 },
                 {
-                    "name": "Nafes",
-                    "homepage": "https://www.drupal.org/user/2489926"
-                },
-                {
                     "name": "miro_dietiker",
                     "homepage": "https://www.drupal.org/user/227761"
+                },
+                {
+                    "name": "Nafes",
+                    "homepage": "https://www.drupal.org/user/2489926"
                 },
                 {
                     "name": "pillarsdotnet",
@@ -7339,26 +7339,26 @@
         },
         {
             "name": "drupal/rebuild_cache_access",
-            "version": "1.7.0",
+            "version": "1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/rebuild_cache_access.git",
-                "reference": "8.x-1.7"
+                "reference": "8.x-1.8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/rebuild_cache_access-8.x-1.7.zip",
-                "reference": "8.x-1.7",
-                "shasum": "96bba176bce2bfc8b691ea77ec19d78dcab34032"
+                "url": "https://ftp.drupal.org/files/projects/rebuild_cache_access-8.x-1.8.zip",
+                "reference": "8.x-1.8",
+                "shasum": "afe57559cd5fbd939211eee63351b3a47f6819a8"
             },
             "require": {
-                "drupal/core": "^8 || ^9"
+                "drupal/core": "^8 || ^9 || ^10"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.7",
-                    "datestamp": "1591970433",
+                    "version": "8.x-1.8",
+                    "datestamp": "1658665206",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -8179,8 +8179,8 @@
                     "role": "Maintainer"
                 },
                 {
-                    "name": "gbyte",
-                    "homepage": "https://www.drupal.org/user/2381352"
+                    "name": "WalkingDexter",
+                    "homepage": "https://www.drupal.org/user/3251330"
                 }
             ],
             "description": "Creates a standard conform hreflang XML sitemap of the site content and provides a framework for developing other sitemap types.",
