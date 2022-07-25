@@ -1240,6 +1240,11 @@ footer .btn {
   color: var(--mha-white) !important;
 }
 
+.event-full .btn.btn-primary,
+.event-full .page-node-type-event a.btn.btn-primary {
+  background-color: transparent !important;
+}
+
 body.footer-white #footer .footer-center {
   padding: 50px 0 35px;
   background: var(--mha-black);

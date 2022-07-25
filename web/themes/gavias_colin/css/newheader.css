@@ -33,6 +33,7 @@
 .quick-side-icon .icon a:hover {
   border: 1px solid var(--mha-navy);
   background: var(--mha-navy);
+  border-radius: 50%;
 }
 
 header.header-default .header-main {
