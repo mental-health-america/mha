@@ -8309,6 +8309,7 @@ ul[data-drupal-views-infinite-scroll-pager].pager a:hover, ul[data-drupal-views-
 .gsc-call-to-action .button-action > a {
   margin: 0 10px;
   display: inline-block;
+  text-decoration: none !important;
 }
 
 .gsc-call-to-action .button-action > a:first-child {
@@ -12446,10 +12447,12 @@ ul[data-drupal-views-infinite-scroll-pager].pager a:hover, ul[data-drupal-views-
 
 .gsc-image-content.skin-v2:hover .box-content a:hover {
   color: var(--mha-orange-bright) !important;
+  background: inherit;
 }
 
 .gsc-image-content.skin-v2:hover .box-content a:hover:after {
   color: var(--mha-orange-bright);
+  background: inherit;
 }
 
 .gsc-image-content.skin-v2:hover .box-content .title {

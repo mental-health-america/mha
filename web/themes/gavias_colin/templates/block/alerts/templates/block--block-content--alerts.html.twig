@@ -26,8 +26,6 @@
 */
 #}
 
-
-
 {# Preprocess #}
 {% set body = (content.body) %}
 {% set alert_style = (content.field_alert_style.0) %}
@@ -45,7 +43,6 @@
 ] %}
 
 {# Content #}
-
 <div{{ attributes.addClass(classes|join(' ')) }}>
   {% block content %}
   <div id="mha-alert" class="jumbotron-fluid alert-{{ alert_style }}" role="alert">

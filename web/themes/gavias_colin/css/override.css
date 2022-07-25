@@ -52,7 +52,7 @@ header .site-branding-logo img.logo-site {
   padding: 0 35px;
   position: relative;
   display: inline-block;
-  line-height: 38px;
+  line-height: inherit;
   z-index: 1;
   border-radius: 30px;
   -webkit-border-radius: 30px;
@@ -276,8 +276,14 @@ header.header-v1 .header-main-inner .header-inner {
   padding-right: 80px !important;
 }
 
+/*
 .node--type-webform .col-sm-4 {
   float: inline-start !important;
+}
+*/
+
+#block-gavias-colin-webform .node--type-webform .col-sm-4 {
+  float: none !important;
 }
 
 .national-spot {
@@ -625,6 +631,7 @@ a .btn.btn-primary {
 
 .frontpage .gsc-button.extra-large:hover {
   color: var(--mha-white) !important;
+  background: var(--mha-navy) !important;
 }
 
 #blue-accordian p,

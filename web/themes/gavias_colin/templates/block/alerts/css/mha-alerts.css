@@ -63,6 +63,11 @@ a.dark {
   margin: 15px 0 0 !important;
 }
 
+.alert-wrapper h4:hover {
+ text-decoration: underline;
+}
+
+
 .alert-primary a.primary {
   color: var(--mha-white) !important;
   border: 1px solid var(--mha-white) !important;
@@ -231,4 +236,8 @@ a.dark {
 .alert-block .block {
   background: transparent;
   margin-bottom: 0 !important;
+}
+
+#mha-alert a:hover {
+  text-decoration: underline !important;
 }

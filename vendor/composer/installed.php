@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'd467637b6c6d226163f73cac5ddb54d962b5e0a5',
+        'reference' => '343d864e62c9c1cf6c579570a697f5e50aad9cc0',
         'name' => 'drupal-composer/drupal-project',
         'dev' => true,
     ),
@@ -274,7 +274,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'd467637b6c6d226163f73cac5ddb54d962b5e0a5',
+            'reference' => '343d864e62c9c1cf6c579570a697f5e50aad9cc0',
             'dev_requirement' => false,
         ),
         'drupal/action' => array(
@@ -914,6 +914,15 @@
             'install_path' => __DIR__ . '/../../web/modules/contrib/entity_reference_revisions',
             'aliases' => array(),
             'reference' => '8.x-1.9',
+            'dev_requirement' => false,
+        ),
+        'drupal/eu_cookie_compliance' => array(
+            'pretty_version' => '1.19.0',
+            'version' => '1.19.0.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../web/modules/contrib/eu_cookie_compliance',
+            'aliases' => array(),
+            'reference' => '8.x-1.19',
             'dev_requirement' => false,
         ),
         'drupal/extlink' => array(

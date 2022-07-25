@@ -1000,11 +1000,75 @@ div#partner-logo img {
 /* ------------------- E ------------------ */
 /* ------------------- E ------------------ */
 /* ------------------- E ------------------ */
+div#sliding-popup,
+div#sliding-popup,
+.eu-cookie-withdraw-banner,
+.eu-cookie-withdraw-tab {
+  background: var(--mha-navy);
+}
+
+.eu-cookie-compliance-banner h4 {
+  font-size: 13px !important;
+  color: var(--mha-white) !important;
+}
+
+.eu-cookie-compliance-banner a,
+.eu-cookie-compliance-banner a:link {
+  color: var(--mha-white) !important;
+  text-decoration: underline !important;
+  font-weight: inherit !important;
+}
+
+.eu-cookie-compliance-banner a:hover {
+  color: var(--mha-orange) !important;
+}
+
+.disagree-button.eu-cookie-compliance-more-button,
+.eu-cookie-compliance-agree-button,
+.eu-cookie-compliance-default-button,
+.eu-cookie-compliance-hide-button,
+.eu-cookie-compliance-more-button-thank-you,
+.eu-cookie-withdraw-button,
+.eu-cookie-compliance-save-preferences-button {
+  cursor: pointer;
+  margin-right: 5px;
+  margin-top: 1em;
+  vertical-align: middle;
+  overflow: visible;
+  width: auto;
+  box-shadow: none;
+  background-color: var(--mha-white);
+  color: var(--mha-navy);
+  background-image: none;
+  border-radius: 6px;
+  border: none;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 8px;
+  text-decoration: none;
+  text-shadow: none;
+}
+
+.disagree-button.eu-cookie-compliance-more-button:hover,
+.eu-cookie-compliance-agree-button:hover,
+.eu-cookie-compliance-default-button:hover,
+.eu-cookie-compliance-hide-button:hover,
+.eu-cookie-compliance-more-button-thank-you:hover,
+.eu-cookie-withdraw-button:hover,
+.eu-cookie-compliance-save-preferences-button:hover {
+  background-color: var(--mha-orange);
+}
+
 #edit-submit-webinar, #edit-submit-conditions {
   background: var(--mha-blue-hover);
   border: none;
   color: var(--mha-white);
   text-transform: uppercase;
+}
+
+#sliding-popup h1, #sliding-popup h2, #sliding-popup h3, #sliding-popup p, #sliding-popup label, #sliding-popup div, .eu-cookie-compliance-more-button, .eu-cookie-compliance-secondary-button, .eu-cookie-withdraw-tab {
+  color: var(--mha-white);
+  font-size: 13px;
 }
 
 #edit-submit-conference-agenda,
@@ -1170,7 +1234,9 @@ footer .btn {
   text-align: left !important;
 }
 
-#footer .navigation .gva_menu > li > a:hover {
+#footer .navigation .gva_menu > li > a:hover,
+#footer .navigation .gva_menu > li > a:active,
+#footer .navigation .gva_menu > li > a:visited {
   color: var(--mha-white) !important;
 }
 
@@ -1511,7 +1577,7 @@ footer .block .block-title {
 .gsc-image-content.skin-v2 .box-content a {
   color: var(--mha-aqua) !important;
   text-transform: initial;
-  text-decoration: none;
+  text-decoration: none !important;
 }
 
 .gsc-image-content.skin-v2:hover .box-content a:hover {
@@ -1580,6 +1646,7 @@ footer .block .block-title {
 
 .gsc-button.large:hover {
   color: var(--mha-white) !important;
+  background: var(--mha-orange) !important;
 }
 
 .gsc-button.medium {
