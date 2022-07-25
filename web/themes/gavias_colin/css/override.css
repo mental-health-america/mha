@@ -1197,3 +1197,73 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 }
 
 
+
+.sticky-wrapper .stuck {
+  margin: 0 !important;
+  width: 100% !important;
+}
+
+.stuck {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 99 !important;
+  width: 100% !important;
+  box-shadow: 0 0 5px 5px rgb(0 0 0 / 10%);
+  -webkit-transition: all 0.35s;
+  -o-transition: all 0.35s;
+  transition: all 0.35s;
+  -moz-transition: all 0.35s;
+  -ms-transition: all 0.35s;
+}
+.gv-sticky-menu {
+  position: static;
+  top: -75px;
+  -webkit-transition: all 0.25s;
+  -o-transition: all 0.25s;
+  transition: all 0.25s;
+  -moz-transition: all 0.25s;
+  -ms-transition: all 0.25s;
+}
+.stuck {
+  top: 130px;
+  left: 0;
+  box-shadow: 0 0.125rem 0.25rem rgb(0 0 0 / 8%) !important;
+}
+.gv-sticky-menu {
+  width: 100%;
+}
+
+.stuck .header-main-inner.p-relative {
+  padding: 8px 0 0;
+  left: 0 !important;
+}
+
+.stuck #superfish-main a {
+  font-size: 10px !important;
+}
+
+.stuck #superfish-main li:nth-child(5) a.sf-depth-1,
+.stuck #superfish-main li:nth-child(6) a.sf-depth-1 {
+  padding: 2px 18px !important;
+  margin: 3px 10px 0;
+}
+
+.stuck .gva-search-region .icon {
+  top: -5px;
+  position: absolute;
+  right: 5px;
+}
+.stuck .quick-side-icon {
+  position: absolute;
+  z-index: 1;
+  right: 15px !important;
+  top: -2px !important;
+  margin-top: 0 !important;
+}
+
+.stuck .gva-search-region .search-content {
+  top: 0 !important;
+  right: 50px !important;
+}
