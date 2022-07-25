@@ -1059,6 +1059,77 @@ div#sliding-popup,
   background-color: var(--mha-orange);
 }
 
+body .eu-cookie-withdraw-tab .eu-cookie-compliance-buttons button,
+body div.sliding-popup-bottom .eu-cookie-compliance-buttons button,
+body div.sliding-popup-bottom .eu-cookie-withdraw-banner .eu-cookie-compliance-buttons button {
+  display: inline-flex;
+  align-items: center;
+  text-align: center;
+  font-weight: 600;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color .1s,background .25s,border .25s;
+  box-shadow: none;
+  font-size: 11px !important;
+  height: 2rem;
+  padding: 0 1.875rem;
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  backface-visibility: hidden;
+  border: 1px solid var(--mha-white);
+  background-color: var(--mha-white);
+  color: var(--mha-blue-bright);
+  letter-spacing: .125rem;
+  line-height: 1.125rem;
+  text-transform: uppercase;
+  order: 2;
+}
+
+body div.sliding-popup-bottom .eu-cookie-compliance-buttons button:last-child {
+  display: inline-flex;
+  align-items: center;
+  text-align: center;
+  font-weight: 600;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color .1s,background .25s,border .25s;
+  box-shadow: none;
+  font-size: 11px !important;
+  height: 2rem;
+  padding: 0 1.875rem;
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  backface-visibility: hidden;
+  border: 1px solid var(--mha-white);
+  background-color: var(--mha-blue-bright);
+  color: var(--mha-white)!important;
+  order: 1;
+}
+
+
+body div.sliding-popup-bottom .eu-cookie-compliance-buttons button:hover {
+  background-image: none !important;
+  background-color: var(--mha-orange) !important;
+  color: var(--mha-white) !important;
+}
+
+.eu-cookie-compliance-default-button:hover {
+  background-image: none !important;
+  background-color: var(--mha-orange) !important;
+}
+
+.eu-cookie-compliance-default-button {
+  border-radius: 0 !important;
+}
+
 #edit-submit-webinar, #edit-submit-conditions {
   background: var(--mha-blue-hover);
   border: none;

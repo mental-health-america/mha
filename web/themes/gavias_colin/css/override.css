@@ -1177,6 +1177,14 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   text-decoration: none !important;
 }
 
+.node__content h2:first-of-type {
+  margin-top: 0 !important;
+}
+
+.sidebar.sidebar-left {
+  margin: 20px 0 0 !important;
+}
+
 
 @media (max-width: 768px) {
   .main-blog-container {
