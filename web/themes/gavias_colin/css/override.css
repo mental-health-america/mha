@@ -1267,3 +1267,42 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   top: 0 !important;
   right: 50px !important;
 }
+.gv-sticky-menu img {
+  display: none;
+}
+
+.stuck img {
+  display: block;
+  border: 0;
+  vertical-align: top;
+  max-width: 98px !important;
+  height: 30px !important;
+  padding: 0!important;
+  top: 4px;
+  left: 13px;
+  box-shadow: none !important;
+}
+
+.stuck ul.sf-menu.sf-style-default {
+  margin-left: 120px;
+}
+
+/* Keyframes for the fade-in */
+@-webkit-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+@-moz-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+.fade-in {
+  opacity:0;
+  -webkit-animation:fadeIn ease-in .5s;
+  -moz-animation:fadeIn ease-in .5s;
+  animation:fadeIn ease-in .5s;
+
+  -webkit-animation-fill-mode:forwards;
+  -moz-animation-fill-mode:forwards;
+  animation-fill-mode:forwards;
+
+  -webkit-animation-duration:.75s;
+  -moz-animation-duration:.75s;
+  animation-duration:.75s;
+}
