@@ -1008,8 +1008,9 @@ div#sliding-popup,
 }
 
 .eu-cookie-compliance-banner h4 {
-  font-size: 13px !important;
+  font-size: 14px !important;
   color: var(--mha-white) !important;
+  font-weight: 400 !important;
 }
 
 .eu-cookie-compliance-banner a,
@@ -1042,7 +1043,7 @@ div#sliding-popup,
   background-image: none;
   border-radius: 6px;
   border: none;
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 600;
   padding: 4px 8px;
   text-decoration: none;
@@ -1071,9 +1072,9 @@ body div.sliding-popup-bottom .eu-cookie-withdraw-banner .eu-cookie-compliance-b
   appearance: none;
   cursor: pointer;
   white-space: nowrap;
-  transition: color .1s,background .25s,border .25s;
+  transition: color .1s, background .25s, border .25s;
   box-shadow: none;
-  font-size: 11px !important;
+  font-size: 10px !important;
   height: 2rem;
   padding: 0 1.875rem;
   position: relative;
@@ -1099,9 +1100,9 @@ body div.sliding-popup-bottom .eu-cookie-compliance-buttons button:last-child {
   appearance: none;
   cursor: pointer;
   white-space: nowrap;
-  transition: color .1s,background .25s,border .25s;
+  transition: color .1s, background .25s, border .25s;
   box-shadow: none;
-  font-size: 11px !important;
+  font-size: 10px !important;
   height: 2rem;
   padding: 0 1.875rem;
   position: relative;
@@ -1110,7 +1111,7 @@ body div.sliding-popup-bottom .eu-cookie-compliance-buttons button:last-child {
   backface-visibility: hidden;
   border: 1px solid var(--mha-white);
   background-color: var(--mha-blue-bright);
-  color: var(--mha-white)!important;
+  color: var(--mha-white) !important;
   order: 1;
 }
 
@@ -3694,7 +3695,7 @@ ul.sf-multicolumn {
   -webkit-box-shadow: -1px 0 22px -6px rgba(0, 0, 0, 0.52);
   -moz-box-shadow: -1px 0 22px -6px rgba(0, 0, 0, 0.52);
   box-shadow: -1px 0 22px -6px rgba(0, 0, 0, 0.52);
-  border: 2px solid var(--mha-light-grey) !important;
+  border: none !important;
 }
 
 ul.sf-menu.sf-style-default li.sf-multicolumn-wrapper ol li {
@@ -5736,6 +5737,8 @@ a.white {
 }
 
 #footer .sli-input {
+  background-color: rgba(255,255, 255, 0.1) !important;
+  color: var(--mha-white) !important;
   width: 100%;
 }
 
@@ -6182,11 +6185,15 @@ ul.quicktabs-tabs li {
 .blog-wrapper h3 {
   font-size: 1.2rem !important;
 }
-
 .views-exposed-form input[type="submit"] {
   background: var(--mha-lime);
   color: var(--mha-black);
   border-radius: 0;
+  padding: 1.08rem 2rem;
+}
+
+.views-exposed-form input[type="submit"]:hover {
+  background: var(--mha-orange);
 }
 
 .views-exposed-form div#edit-actions {

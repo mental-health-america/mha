@@ -1146,9 +1146,6 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   margin: 0 0 2rem;
 }
 
-.gva_menu {
-  background: var(--mha-even);
-}
 .sidebar .block .block-title,
 .sidebar .block-menu ul li span {
   font-size: 12px;
@@ -1306,3 +1303,6 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   -moz-animation-duration:.75s;
   animation-duration:.75s;
 }
+
+
+
