@@ -62,6 +62,7 @@ ul.sf-menu.sf-navbar ul ul {
 .gva-search-region {
   margin-top: -12px;
   right: 70px !important;
+  text-decoration: none !important;
 }
 
 #block-searchform {
@@ -267,7 +268,7 @@ ul.sf-menu.sf-style-default {
 }
 
 .topbar .navigation .gva_menu > li > a:hover {
-  color: var(--mha-orange) !important;
+  color: var(--mha-lime-bright) !important;
 }
 
 .topbar .navigation .gva_menu > li:last-child > a:before {
@@ -277,7 +278,7 @@ ul.sf-menu.sf-style-default {
   font-family: 'FontAwesome';
   margin: 0 5px 0 0;
   text-rendering: auto;
-  color: var(--mha-orange) !important;
+  color: var(--mha-lime-bright) !important;
 }
 
 .topbar .tele a,
@@ -287,7 +288,7 @@ ul.sf-menu.sf-style-default {
 }
 
 .topbar .tele a:hover {
-  color: var(--mha-orange) !important;
+  color: var(--mha-lime-bright) !important;
 }
 
 .topbar  i.fa.fa-phone.mr-2 {
