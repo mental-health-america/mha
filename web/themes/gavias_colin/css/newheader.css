@@ -41,7 +41,7 @@ header.header-default .header-main {
 }
 
 header.header-default .main-menu {
-  margin: 0 !important;
+  margin: .5rem 0 .5rem 0 !important;
 }
 
 .site-branding-logo img {
@@ -56,12 +56,19 @@ ul.sf-menu.sf-horizontal ul,
 ul.sf-menu.sf-vertical ul,
 ul.sf-menu.sf-navbar ul ul {
   border-radius: 0;
+  padding: 0 1rem 2rem 1rem;
+}
+
+.sf-depth-2 a {
+  line-height: 1.1;
+  margin-bottom: .75rem !important;
+  padding: 0 10px 0 0 !important;
 }
 
 /* Search */
 .gva-search-region {
   margin-top: -12px;
-  right: 70px !important;
+  right: 30px !important;
   text-decoration: none !important;
 }
 
@@ -115,9 +122,19 @@ ul.sf-menu.sf-style-default {
   padding: 0;
 }
 
-#superfish-main li:nth-child(1) a.sf-depth-1 {
-  padding: 5px 20px 5px 0 !important;
-  margin: 1px 0 0 0 !important;
+#superfish-main a {
+  font-size: 12px !important;
+}
+
+#superfish-main li:nth-child(1) a.sf-depth-1{
+  background: var(--mha-white) fff !important;
+  color: var(--mha-blue) !important;
+  border: none !important;
+  border-right-color: currentcolor;
+  border-right: 1px solid var(--mha-orange-bright) !important;
+  margin-top: 2px;
+  padding: 1px 20px 1px 0 !important;
+  border-radius: 0 !important;
 }
 
 #superfish-main li:nth-child(1) a.sf-depth-1,
@@ -125,11 +142,35 @@ ul.sf-menu.sf-style-default {
 #superfish-main li:nth-child(3) a.sf-depth-1,
 #superfish-main li:nth-child(4) a.sf-depth-1 {
   background: var(--mha-white) fff !important;
-  color: var(--mha-navy) !important;
+  color: var(--mha-blue) !important;
   border: none !important;
-  border-right: 1px solid var(--mha-navy) !important;
+  border-right-color:inherit;
+  border-right: 1px solid var(--mha-orange-bright) !important;
   margin-top: 4px;
+  padding: 1px 20px 1px 0 !important;
   border-radius: 0 !important;
+}
+
+#superfish-main li:nth-child(1) a.sf-depth-1::after,
+#superfish-main li:nth-child(2) a.sf-depth-1::after,
+#superfish-main li:nth-child(3) a.sf-depth-1::after,
+#superfish-main li:nth-child(4) a.sf-depth-1::after {
+  content: '\f078';
+  color: var(--mha-navy) !important;
+  display: inline-block;
+  font-size: inherit;
+  font-family: 'FontAwesome';
+  margin: 0 0 0 5px;
+  text-rendering: auto;
+}
+
+#superfish-main li:nth-child(1) a.sf-depth-1:hover::after,
+#superfish-main li:nth-child(2) a.sf-depth-1:hover::after,
+#superfish-main li:nth-child(3) a.sf-depth-1:hover::after,
+#superfish-main li:nth-child(4) a.sf-depth-1:hover::after {
+  color: var(--mha-orange) !important;
+  font-family: "FontAwesome";
+  content: '\f077';
 }
 
 #superfish-main li:nth-child(4) a.sf-depth-1 {
@@ -152,6 +193,15 @@ ul.sf-menu.sf-style-default {
   background: var(--mha-lime) !important;
   border-radius: 15px !important;
   font-size: 10px !important;
+}
+
+#superfish-main li:nth-child(5) a.sf-depth-1::before {
+  content: '\f256';
+  display: inline-block;
+  font-size: inherit;
+  font-family: 'FontAwesome';
+  margin: 0 5px 0 0;
+  text-rendering: auto;
 }
 
 #superfish-main li:nth-child(6) a.sf-depth-1::before {
@@ -186,7 +236,8 @@ ul.sf-menu.sf-style-default {
 }
 
 #superfish-main a {
-  padding: 2px 1rem !important;
+  padding: 0 20px 0 0 !important;
+  margin: 0 20px 0 0;
 }
 
 #superfish-main a:hover {
@@ -217,17 +268,15 @@ ul.sf-menu.sf-style-default {
   margin: 4px 0 0;
 }
 
-
-.right-header .gva_menu > li > a,
-.right-header .navigation .gva_menu > li > a {
-  color: var(--mha-white) !important;
+.right-header .gva_menu > li > a, .right-header .navigation .gva_menu > li > a {
+  color: var(--mha-navy) !important;
   font-size: 11px !important;
-  font-weight: 400 !important;
+  font-weight: 600 !important;
   letter-spacing: 0 !important;
   text-transform: initial !important;
-  padding: 5px 20px !important;
-  margin: 0 5px 0;
-  background: var(--mha-blue);
+  padding: 4px 20px !important;
+  margin: 0 1px 0;
+  background: var(--mha-odd);
   width: max-content;
   border-radius: 25px;
 }
@@ -235,6 +284,7 @@ ul.sf-menu.sf-style-default {
 .right-header .gva_menu > li > a:hover,
 .right-header .navigation .gva_menu > li > a:hover {
   background: var(--mha-orange) !important;
+  color: var(--mha-white) !important;
 }
 
 .right-header .gva_menu {
