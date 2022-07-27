@@ -350,3 +350,8 @@ ul.sf-menu.sf-style-default {
 .topbar  i.fa.fa-phone.mr-2 {
   font-size: 13px !important;
 }
+
+.stuck ul.sf-menu.sf-style-default li,
+.stuck ul.sf-menu.sf-style-default.sf-navbar {
+  margin-bottom: 10px !important;
+}
