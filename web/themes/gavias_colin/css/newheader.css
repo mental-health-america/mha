@@ -200,6 +200,7 @@ ul.sf-menu.sf-style-default {
   padding: 1rem 0 0 !important;
 }
 
+/*
 .right-header .navigation .gva_menu {
   float: left !important;
   top: 0;
@@ -211,6 +212,11 @@ ul.sf-menu.sf-style-default {
   position: absolute !important;
   clear: both;
 }
+*/
+.col-md-9.col-sm-8.col-xs-8.right-header {
+  margin: 4px 0 0;
+}
+
 
 .right-header .gva_menu > li > a,
 .right-header .navigation .gva_menu > li > a {
