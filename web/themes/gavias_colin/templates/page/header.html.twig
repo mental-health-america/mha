@@ -6,24 +6,20 @@
 {% endif %}
 
 <header id="header" class="header-default border-bottom border-light shadow-sm">
-
   {% if page.topbar %}
     <div class="topbar">
       <div class="topbar-inner">
         <div class="container">
           <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-4 col-sm-5">
               <span class="tele float-left">
                 <a href="tel:800.969.6642"><i class="fa fa-phone mr-2" aria-hidden="true"></i>Toll Free (800) 969.6642</a>
                 <a href="/get-involved/contact-us"><i class="fa fa-comments-o ml-3 mr-2" aria-hidden="true"></i>Contact Us</a>
               </span>
-
             </div>
-
-            <div class="col-md-8">
+            <div class="col-md-8 col-sm-7">
               {{ page.topbar }}
             </div>
-
           </div>
         </div>
       </div>
@@ -39,7 +35,7 @@
               {{ page.branding }}
             {% endif %}
           </div>
-          <div class="col-md-9 col-sm-8 col-xs-8 right-header">
+          <div class="col-md-9 col-sm-8 col-xs-8 right-header d-none d-lg-block ">
             {% if page.header_right %}
               {{ page.header_right }}
             {% endif %}
@@ -66,6 +62,11 @@
                       {{ page.offcanvas }}
                     </div>
                  {% endif %}
+                  <div class="d-lg-none">
+                  {% if page.header_right %}
+                    {{ page.header_right }}
+                  {% endif %}
+                  </div>
                 </div>
 
                 <div id="menu-bar" class="menu-bar hidden-lg hidden-md">
@@ -73,24 +74,28 @@
                   <span class="two"></span>
                   <span class="three"></span>
                 </div>
-
-
               </div>
             </div>
           </div>
-          <div class="col">  {% if page.search %}
+
+          <div class="col">
+            {% if page.search %}
               <div class="gva-search-region search-region">
                 <span class="icon"><i class="fa fa-search"></i></span>
-                <div class="search-content">
+                <div class="search-content w-100">
                   {{ page.search }}
                 </div>
               </div>
-            {% endif %}</div>
-          <div class="col"> {% if page.quick_side %}
+
+            {% endif %}
+          </div>
+          <div class="col">
+            {% if page.quick_side %}
               <div class="quick-side-icon hidden-xs hidden-sm">
                 <div class="icon"><a href="#"><span class="qicon fa fa-bars"></span></a></div>
               </div>
-            {% endif %}</div>
+            {% endif %}
+          </div>
         </div>{# /row #}
       </div>
     </div>
