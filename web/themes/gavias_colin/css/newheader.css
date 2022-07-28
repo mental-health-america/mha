@@ -156,7 +156,7 @@ ul.sf-menu.sf-style-default {
 #superfish-main li:nth-child(3) a.sf-depth-1::after,
 #superfish-main li:nth-child(4) a.sf-depth-1::after {
   content: '\f078';
-  color: var(--mha-navy) !important;
+  color: #d0d0d0 !important;
   display: inline-block;
   font-size: inherit;
   font-family: 'FontAwesome';
@@ -200,7 +200,7 @@ ul.sf-menu.sf-style-default {
   display: inline-block;
   font-size: inherit;
   font-family: 'FontAwesome';
-  margin: 0 5px 0 0;
+  margin: 0 7px 0 0;
   text-rendering: auto;
 }
 
@@ -209,7 +209,7 @@ ul.sf-menu.sf-style-default {
   display: inline-block;
   font-size: inherit;
   font-family: 'FontAwesome';
-  margin: 0 5px 0 0;
+  margin: 0 7px 0 0;
   text-rendering: auto;
 }
 
@@ -270,21 +270,21 @@ ul.sf-menu.sf-style-default {
 
 .right-header .gva_menu > li > a, .right-header .navigation .gva_menu > li > a {
   color: var(--mha-navy) !important;
-  font-size: 11px !important;
+  font-size: 12px !important;
   font-weight: 600 !important;
   letter-spacing: 0 !important;
   text-transform: initial !important;
-  padding: 4px 20px !important;
+  padding: 4px 10px !important;
   margin: 0 1px 0;
-  background: var(--mha-odd);
+  background: transparent;
   width: max-content;
   border-radius: 25px;
 }
 
 .right-header .gva_menu > li > a:hover,
 .right-header .navigation .gva_menu > li > a:hover {
-  background: var(--mha-orange) !important;
-  color: var(--mha-white) !important;
+  background: transparent !important;
+  color: var(--mha-orange) !important;
 }
 
 .right-header .gva_menu {
@@ -354,4 +354,10 @@ ul.sf-menu.sf-style-default {
 .stuck ul.sf-menu.sf-style-default li,
 .stuck ul.sf-menu.sf-style-default.sf-navbar {
   margin-bottom: 10px !important;
+}
+ul.sf-menu.sf-horizontal ul {
+  border-bottom: 5px solid var(--mha-navy) !important;
+  box-shadow: 0 2px 15px 3px rgba(0,0,0,0.15)!important;
+  -webkit-box-shadow: 0 2px 15px 3px rgba(0,0,0,0.15)!important;
+  -moz-box-shadow: 0 2px 15px 3px rgba(0,0,0,0.15)!important;
 }
