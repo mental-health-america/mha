@@ -1134,3 +1134,16 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     display: none;
   }
 }
+
+.right-header .navigation .gva_menu {
+  float: right !important;
+  margin-right: 20px !important;
+}
+
+.gva-search-region {
+  position: absolute;
+  right: 0 !important;
+  top: 3px !important;
+  margin-top: -12px;
+  z-index: 9;
+}
