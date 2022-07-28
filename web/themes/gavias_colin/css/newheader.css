@@ -396,3 +396,23 @@ ul.sf-menu.sf-horizontal ul {
   bottom: 0;
   z-index: 1;
 }
+.sidebar .block .block-title, .sidebar .block-menu ul li span {
+  border-radius: 2px;
+}
+
+.sidebar .block .block-title::before {
+  position: absolute;
+  left: -10px;
+  color: var(--mha-orange);
+}
+
+.sidebar .block .block-title, .sidebar .block-menu ul li span {
+  font-size: 14px;
+  margin: 0;
+  background: transparent;
+  color: var(--mha-orange) !important;
+}
+
+.sidebar.sidebar-left {
+  margin: 0 !important;
+}
