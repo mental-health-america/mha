@@ -18,8 +18,10 @@
   {% if site_logo %}
     <a href="{{ path('<front>') }}" title="{{ 'Home'|t }}" rel="home" class="site-branding-logo">
       {% if setting_logo %}
-         <img class="logo-default" src="{{ site_logo|replace({'.svg': '.png'}) }}" alt="{{ 'Home'|t }}" />
-         <img class="logo-default logo-white hidden" src="{{ site_logo|replace({'logo.svg': 'logo-white.png'}) }}" alt="{{ 'Home'|t }}" />
+          <picture>
+              <source type="image/svg+xml" srcset="../themes/gavias_colin/images/mha-logo.svg">
+              <img src="../themes/gavias_colin/images/mha-logo.png" alt="">
+          </picture>
       {% else %}  
         <img class="logo-site" src="{{ site_logo }}" alt="{{ 'Home'|t }}" />
       {% endif %}  
