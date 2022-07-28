@@ -323,15 +323,15 @@ ul.sf-menu.sf-horizontal ul li {
 }
 
 .topbar .navigation .gva_menu > li > a {
-    color: var(--mha-white) !important;
-    font-size: 12px !important;
-    font-weight: 600 !important;
-    padding: 0 !important;
-    margin: 0 .75rem !important;
-    text-transform: initial !important;
-    text-decoration: none !important;
-    border-radius: 0;
-    letter-spacing: 0 !important;
+  color: var(--mha-white) !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  padding: 0 !important;
+  margin: .1rem 1.5rem 0 0 !important;
+  text-transform: initial !important;
+  text-decoration: none !important;
+  border-radius: 0;
+  letter-spacing: 0 !important;
 }
 
 .topbar .navigation .gva_menu > li > a:hover {
