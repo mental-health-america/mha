@@ -25,19 +25,6 @@
             {% endif %}
           </div>
           <div class="col-md-8 col-sm-7 col-xs-7 right-header hidden-sm hidden-xs">
-            {% if page.header_right %}
-              {{ page.header_right }}
-            {% endif %}
-          </div>
-
-          <div class="col-md-1 col-sm-8 col-xs-8 right-header">
-
-            <div id="menu-bar" class="menu-bar hidden-lg hidden-md">
-              <span class="one"></span>
-              <span class="two"></span>
-              <span class="three"></span>
-            </div>
-
             {% if page.search %}
               <div class="gva-search-region search-region">
                 <span class="icon"><i class="fa fa-search"></i></span>
@@ -46,6 +33,18 @@
                 </div>
               </div>
             {% endif %}
+            {% if page.header_right %}
+              {{ page.header_right }}
+            {% endif %}
+
+          </div>
+
+          <div class="col-md-1 col-sm-8 col-xs-8 right-header d-lg-none">
+            <div id="menu-bar" class="menu-bar hidden-lg hidden-md">
+              <span class="one"></span>
+              <span class="two"></span>
+              <span class="three"></span>
+            </div>
           </div>
 
         </div>
