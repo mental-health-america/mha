@@ -1639,13 +1639,13 @@ footer .block .block-title {
 }
 
 .gsc-button.extra-large {
-  color: #346677 !important;
-  border-color: #346677 !important;
+  color: #ffffff;
+  border-color: #346677;
 }
 
 .gsc-button.extra-large:hover {
-  color: #fff !important;
-  border-color: #fff !important;
+  color: #ffffff;
+  border-color: #ffffff;
   background: inherit;
 }
 
