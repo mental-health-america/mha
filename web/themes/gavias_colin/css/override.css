@@ -1275,7 +1275,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   max-width: 98px !important;
   height: 30px !important;
   padding: 0!important;
-  top: 4px;
+  top: 7px !important;
   left: 13px;
   box-shadow: none !important;
 }
