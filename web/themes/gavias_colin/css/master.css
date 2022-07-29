@@ -1072,7 +1072,7 @@ footer .btn {
 }
 
 #footer {
-  background: url('/sites/default/files/inline-images/footer-image.jpg') top center !important;
+  background: url('/sites/default/files/inline-images/footer-image.webp') top center !important;
   background-repeat: repeat-x !important;
   background-color: #316474 !important;
   background-size: auto;
@@ -5958,7 +5958,7 @@ header.header-v1 .header-main-inner .header-inner {
 
 #footer {
   background-color: #385887;
-  background: url('/sites/default/files/inline-images/footer-image.jpg') top center;
+  background: url('/sites/default/files/inline-images/footer-image.webp') top center;
 }
 
 #footer-2 a:hover,
