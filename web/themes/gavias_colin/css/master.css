@@ -223,8 +223,8 @@ span.mailto {
 /* BTN */
 .btn-primary {
   color: transparent;
-  background-color: var(--mha-blue-bright);
-  border-color: var(--mha-blue-bright);
+  background-color: var(--mha-navy);
+  border-color: var(--mha-navy);
   padding: 0;
   margin: 0;
   clear: both;
@@ -233,10 +233,13 @@ span.mailto {
 .btn-primary a {
   color: var(--mha-blue-hover) !important;
   background-color: var(--mha-white);
+  border: 1px solid var(--mha-blue-hover) !important;
   padding: 8px 20px !important;
   margin: 20px 0 !important;
   clear: both !important;
-  border: 1px solid var(--mha-blue-hover) !important;
+  font-size: 13px;
+  font-weight: 600;
+
 }
 
 .btn-primary a:hover {
@@ -2890,13 +2893,12 @@ ol.special li::before {
   padding: 25px !important;
 }
 
-.pager li.is-active > a,
-.pager li > a:hover,
-.pager li > a:focus {
+.pager li.is-active > a, .pager li > a:hover, .pager li > a:focus {
   background-color: var(--mha-orange) !important;
   border: 1px solid var(--mha-orange) !important;
   color: var(--mha-black) !important;
   font-family: 'Montserrat', sans-serif !important;
+  font-weight: 600;
 }
 
 .pager li > a,
@@ -2905,6 +2907,7 @@ ol.special li::before {
   background-color: var(--mha-blue-hover) !important;
   border: 1px solid var(--mha-blue-hover) !important;
   font-family: 'Montserrat', sans-serif !important;
+  font-weight: 600;
 }
 
 .pl-10 {
@@ -3242,11 +3245,10 @@ span.country {
   background: var(--mha-white) !important;
   color: var(--mha-blue-hover) !important;
   text-decoration: none !important;
-  border: 1px solid transparent !important;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  border-radius: 2px;
-  font-weight: 400;
+  border: none !important;
+  border-radius: 0;
+  font-weight: 400 !important;
+  line-height: 1.3;
 }
 
 .sidebar .block-menu ul li a:hover {
@@ -3293,6 +3295,9 @@ span.country {
   font-size: inherit;
   font-family: 'FontAwesome';
   margin: 0 10px 0 0;
+  position: absolute;
+  left: -10px;
+  color: var(--mha-orange);
 }
 
 .sidebar .block .block-title {
