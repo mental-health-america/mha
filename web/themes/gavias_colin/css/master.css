@@ -1198,7 +1198,7 @@ footer .btn {
 }
 
 #footer {
-  background: url('/sites/default/files/inline-images/footer-image.jpg') top center !important;
+  background: url('/sites/default/files/inline-images/footer-image.webp') top center !important;
   background-repeat: repeat-x !important;
   background-color: var(--mha-aqua) !important;
   background-size: auto;
@@ -5984,7 +5984,7 @@ header.header-v1 .header-main-inner .header-inner {
 
 #footer {
   background-color: var(--mha-blue-hover);
-  background: url('/sites/default/files/inline-images/footer-image.jpg') top center;
+  background: url('/sites/default/files/inline-images/footer-image.webp') top center;
 }
 
 #footer-2 a:hover,
