@@ -5138,8 +5138,7 @@ div.resizable-textarea textarea {
 }
 
 .sidebar .block-menu ul li {
-  border: none;
-  margin: 0 0 10px !important;
+  margin: 0 0 0 !important;
   padding: 0 !important;
   border: none !important;
   float: left;

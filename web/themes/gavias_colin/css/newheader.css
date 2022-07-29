@@ -401,6 +401,11 @@ ul.sf-menu.sf-horizontal ul {
     border-radius: 2px;
 }
 
+.sidebar .block-menu ul li {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
 .sidebar .block .block-title::before {
     position: absolute;
     left: -10px;
@@ -410,8 +415,10 @@ ul.sf-menu.sf-horizontal ul {
 .sidebar .block .block-title, .sidebar .block-menu ul li span {
     font-size: 14px;
     margin: 0;
+    margin: .5rem 0 !important;
     background: transparent;
-    color: var(--mha-orange) !important;
+    color: var(--mha-navy) !important;
+    font-weight: 600;
 }
 
 .sidebar.sidebar-left {
