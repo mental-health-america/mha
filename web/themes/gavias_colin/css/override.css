@@ -1279,6 +1279,11 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   left: 13px;
   box-shadow: none !important;
 }
+#footer .contact-info-logo, #footer .contact-info-address {
+  display: grid;
+  padding: 0;
+  float: left;
+}
 
 .stuck ul.sf-menu.sf-style-default {
   margin-left: 120px;
