@@ -5706,7 +5706,7 @@ header.header-v2 .header-main {
 
 .pull-right.better {
   float: right !important;
-  margin: 0 0 20px;
+  margin: 20px 0 20px;
 }
 
 #footer .copyright {
