@@ -305,7 +305,7 @@ ul.sf-menu.sf-horizontal ul li {
 /* TopBar */
 
 .topbar {
-    background: var(--mha-blue) !important;
+    background: var(--mha-navy) !important;
     color: var(--mha-black) !important;
     font-size: inherit;
     padding: 0.35rem 0 !important;

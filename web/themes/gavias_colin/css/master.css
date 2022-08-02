@@ -1007,7 +1007,8 @@ div#sliding-popup,
 div#sliding-popup,
 .eu-cookie-withdraw-banner,
 .eu-cookie-withdraw-tab {
-  background: var(--mha-navy);
+  background: var(--mha-black);
+  color: var(--mha-white);
 }
 
 .eu-cookie-compliance-banner h4 {
