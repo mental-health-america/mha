@@ -1087,7 +1087,7 @@ body div.sliding-popup-bottom .eu-cookie-withdraw-banner .eu-cookie-compliance-b
   backface-visibility: hidden;
   border: 1px solid var(--mha-white);
   background-color: var(--mha-white);
-  color: var(--mha-blue-bright);
+  color: var(--mha-navy);
   letter-spacing: .125rem;
   line-height: 1.125rem;
   text-transform: uppercase;
@@ -1114,7 +1114,7 @@ body div.sliding-popup-bottom .eu-cookie-compliance-buttons button:last-child {
   overflow: hidden;
   backface-visibility: hidden;
   border: 1px solid var(--mha-white);
-  background-color: var(--mha-blue-bright);
+  background-color: var(--mha-navy);
   color: var(--mha-white) !important;
   order: 1;
 }
