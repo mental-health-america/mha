@@ -8174,6 +8174,12 @@ ul[data-drupal-views-infinite-scroll-pager].pager a:hover, ul[data-drupal-views-
   display: none !important;
 }
 
+.hidden-title .before_content.area {
+  margin: 0;
+  position: absolute;
+  left: -9999px;
+}
+
 .widget.gsc-block-drupal.title-align-center .block-title {
   text-align: center;
 }
