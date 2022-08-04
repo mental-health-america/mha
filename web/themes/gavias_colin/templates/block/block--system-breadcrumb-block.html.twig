@@ -49,10 +49,10 @@
       <div class="breadcrumb-style gva-parallax-background" style="{{ custom_style }}">
         <div class="container">
           <div class="breadcrumb-content-main">
-            <h2 class="page-title">{{ breadcrumb_title }} </h2>
+            <h1 class="page-title">{{ breadcrumb_title }}</h1>
             {{ title_prefix }} 
               {% if label %}
-                <h2 class="block-title" {{ title_attributes }}><span>{{ label }}</span></h2>
+                <h1 class="block-title" {{ title_attributes }}><span>{{ label }}</span></h1>
               {% endif %}
             {{ title_suffix }}
             {% block content %}

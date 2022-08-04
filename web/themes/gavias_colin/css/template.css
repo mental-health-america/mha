@@ -233,6 +233,13 @@ a.disable {
   text-align: center;
 }
 
+.hidden-title .breadcrumb-content-inner {
+  margin-bottom: 0 !important;
+  text-align: left;
+  position: absolute;
+  left: -9999px;
+}
+
 .breadcrumb-content-inner .breadcrumb-content-main {
   position: relative;
   z-index: 9;
