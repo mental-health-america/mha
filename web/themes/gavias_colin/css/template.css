@@ -250,7 +250,7 @@ a.disable {
   top: 0;
   left: 0;
   width: 100%;
-  margin-bottom: 5px;
+  margin: 2rem 0 4rem !important;
   text-align: left !important;
   line-height: 1.1 !important;
   font-weight: 300 !important;

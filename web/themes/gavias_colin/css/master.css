@@ -257,12 +257,12 @@ span.mailto {
   border: none !important;
   box-shadow: none !important;
   border-radius: 20px !important;
-  font-size: .9rem;
+  font-size: .85rem;
   padding: .75rem 3rem !important;
   margin: 10px 5px 0 !important;
   clear: both !important;
   text-transform: capitalize;
-  font-weight: 600 !important;
+  font-weight: 400 !important;
 }
 
 .btn.btn-primary:hover, .btn-primary.ext:hover {
@@ -6578,3 +6578,7 @@ h3.title-news a:hover {
 }
 
 
+.feature-archives h3, .feature-archives .h3 {
+  font-size: 1.25rem !important;
+  margin: 0!important;
+}
