@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '97abd469a40a88daacf4372ac133e77e58ce56bf',
+        'reference' => 'd3317ffc49362bc785a1c4c28d5d3695f30b4457',
         'name' => 'drupal-composer/drupal-project',
         'dev' => true,
     ),
@@ -274,7 +274,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '97abd469a40a88daacf4372ac133e77e58ce56bf',
+            'reference' => 'd3317ffc49362bc785a1c4c28d5d3695f30b4457',
             'dev_requirement' => false,
         ),
         'drupal/address' => array(
@@ -1067,6 +1067,15 @@
             'install_path' => __DIR__ . '/../../web/modules/contrib/scheduler',
             'aliases' => array(),
             'reference' => '8.x-1.4',
+            'dev_requirement' => false,
+        ),
+        'drupal/schema_metatag' => array(
+            'pretty_version' => '2.3.0',
+            'version' => '2.3.0.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../web/modules/contrib/schema_metatag',
+            'aliases' => array(),
+            'reference' => '8.x-2.3',
             'dev_requirement' => false,
         ),
         'drupal/search_api' => array(

@@ -84,3 +84,12 @@ views-infinite-scroll:
     - core/jquery
     - core/drupal
     - core/drupal.debounce
+
+# MHA Feature.
+features:
+  version: "1.0.x"
+  css:
+    base:
+      templates/block/features/css/mha-features.css: { }
+  js:
+    templates/block/features/js/waypoint.js: {}
