@@ -512,6 +512,11 @@ header.header-default .header-main .site-branding-logo img {
 .gva-search-region .search-content form.search-block-form #edit-submit:hover {
     background: var(--mha-blue) !important;
 }
+
 .gva-search-region .search-content form.search-block-form input#edit-keys {
     border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.popup-content.info.eu-cookie-compliance-content {
+    margin: 1rem 0 0;
 }
