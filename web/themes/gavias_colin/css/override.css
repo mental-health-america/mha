@@ -1323,3 +1323,8 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   font-size: 90%;
   font-weight: 400;
 }
+
+.btn.btn-primary, a.btn.btn-primary {
+  padding: 5px 20px !important;
+  margin: 10px 2px 10px !important;
+}
