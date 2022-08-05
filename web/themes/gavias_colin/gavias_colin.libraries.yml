@@ -6,6 +6,7 @@ global-styling:
       //fonts.googleapis.com/css?family=Montserrat:100,300,400,600,800,900": { type: external }
       //fonts.googleapis.com/css?family=Roboto:400,700: { type: external }
       css/bootstrap-four.css: {}
+      css/colors.css: {}
       css/master.css: {}
       css/search.css: {}
       css/override.css: {}
@@ -21,7 +22,8 @@ global-styling:
       vendor/magnific/magnific-popup.css: {}
       vendor/popup-gallery/css/lightgallery.min.css: {}
       vendor/popup-gallery/css/lg-transitions.min.css: {}
-      css/datatables: { }
+      css/datatables.css: {}
+      css/newlayout.css: {}
 
   js:
     vendor/jquery-migrate.min.js: {}
@@ -59,6 +61,15 @@ gavias_colin.skin.default:
       css/bootstrap.css: {}
       css/template.css: {}
 
+#Alerts
+mha-alerts:
+  version: "1.0.x"
+  css:
+    theme:
+      templates/block/alerts/css/mha-alerts.css: {}
+  js:
+    templates/block/alerts/js/waypoint.js: {}
+
 maintenance_page:
   version: VERSION
   css:
@@ -73,3 +84,12 @@ views-infinite-scroll:
     - core/jquery
     - core/drupal
     - core/drupal.debounce
+
+# MHA Feature.
+features:
+  version: "1.0.x"
+  css:
+    base:
+      templates/block/features/css/mha-features.css: { }
+  js:
+    templates/block/features/js/waypoint.js: {}
