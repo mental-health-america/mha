@@ -29,8 +29,14 @@
  * @see template_preprocess_views_view_fields()
  */
 #}
-
+{#
+/**
+ * @file
+ * Default theme implementation to display an image.
+ */
+#}
 {# Content #}
+
 <div id="mha-features" class="mha-features-position-relative shadow-sm">
     {# Banner image and link #}
     {% if fields.field_image.content is not empty and fields.field_hero_video.content is empty %}
