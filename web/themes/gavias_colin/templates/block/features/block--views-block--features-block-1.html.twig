@@ -29,17 +29,25 @@
 {# Attach the library #}
 {{ attach_library('gavias_colin/features') }}
 
-<div class="container-fluid p-0 m-0 bg-transparent shadow-sm tp-parallax-wrap">
-  <div class="container-xl">
-    <div class="row no-gutters">
-      {# # content #}
-      <div class="col-sm-12 mha-spotlight">
-        {% block content %}
-         {{ content }}
-        {% endblock %}
-      </div>
+{# Set CSS Classes #}
+{% set classes = [
+    'clearfix',
+    'block',
+    'block-' ~ configuration.provider|clean_class,
+    'block-' ~ plugin_id|clean_class,
+] %}
+
+<div{{ attributes.addClass(classes|join(' ', 'container-fluid p-0 m-0 bg-transparent shadow-sm')) }}>
+    <div class="container-xl">
+        <div class="row no-gutters">
+            {# # content #}
+            <div class="col-sm-12 mha-spotlight">
+                {% block content %}
+                    {{ content }}
+                {% endblock %}
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 

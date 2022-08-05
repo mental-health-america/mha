@@ -110,9 +110,18 @@ gavis_colin.srcset.wide_500_:
   multipliers:
     - 1x
 
-gavis_colin.srcset. wide:
+gavis_colin.srcset.wide:
   label: 'Wide (1290x)'
   mediaQuery: ''
   weight: 16
   multipliers:
     - 1x
+
+gavis_colin.srcset.mha_features:
+  label: 'MHA Features (2400x/1350x)'
+  mediaQuery: ''
+  weight: 17
+  multipliers:
+    - 1x
+
+
