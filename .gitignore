@@ -4,6 +4,7 @@
 
 # Place local settings in settings.local.php
 sites/*/settings.local.php
+sites/*/settings.php
 sites/*/example.settings.local.php
 sites/*/example.sites.php
 /web/sites/*/settings.local.php
@@ -48,6 +49,7 @@ sites/*/example.sites.php
 
 # Ignore drupal core (if not versioning drupal sources)
 .cpanel.yml
+/.cpanel.yml
 #/web/core
 #/web/modules
 /web/modules/.gitkeep

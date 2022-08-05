@@ -1,0 +1,248 @@
+/* GT Banner */
+h1, h2, h3, h4, h5, h6,
+h3:first-of-type {
+    margin: 0 0 .75rem !important;
+    color: white !important;
+}
+
+#mha-features h3, #mha-features .h3 {
+    margin: 0 !important;
+}
+
+#mha-features .mha-features-position-relative {
+    position: relative !important;
+}
+
+#mha-features .mha-features-position-absolute {
+    position: absolute !important;
+    bottom: 0;
+}
+
+.mha-features-position-relative {
+    position: relative !important;
+}
+
+/* Banner */
+.mha-features .view-content-wrap {
+    max-width: 66.67%;
+    float: left;
+}
+
+.mha-features-attachment .view-content-wrap {
+    max-width: 33.33%;
+    float: right;
+}
+
+#mha-features img,
+.mha-features-attachment img {
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.mha-features-position-absolute.mha-slide-teaser-wrapper {
+    background-color: #365888d4;
+    width: 85%;
+    border-radius: 25px;
+    margin-left: 6%;
+    margin-right: 10%;
+    margin-bottom: 3%;
+    padding: 1rem 2rem;
+    color: var(--mha-white);
+}
+
+.mha-features-attachment .mha-features-position-absolute.mha-slide-teaser-wrapper {
+    background-color: transparent !important;
+}
+
+.mha-features-attachment a,
+.mha-features-attachment a:link {
+    line-height: 1.4;
+    color: var(--mha-white);
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 2rem;
+    text-shadow: 0 0 4px rgba(0, 0, 0, 0.7);
+}
+
+.mha-features-attachment .mha-teaser-link {
+    display: none !important;
+}
+
+#mha-features p,
+#mha-features a,
+#mha-features .summary-sentence,
+#mha-features h4 a,
+#mha-features h4 a:link {
+    color: var(--mha-white) !important;
+    text-shadow: 0 2px 2px rgba(0, 0, 05, 0.4);
+}
+
+#mha-features h4 a,
+#mha-features h4 a:link {
+    font-size: 2rem !important;
+    line-height: 1.1 !important;
+    text-decoration: none !important;
+}
+
+#mha-features h4 a:hover {
+    color: var(--mha-orange) !important;
+}
+
+#mha-features p {
+    font-size: 1rem;
+    line-height: 1.1;
+}
+
+#mha-features a {
+    text-decoration: none;
+}
+
+#mha-features p a {
+    text-decoration: underline;
+}
+
+a.btn.btn-primary.ext {
+    background: var(--mha-navy) !important;
+    border: none !important;
+    font-size: .8rem !important;
+    border-radius: 20px !important;
+    padding: .75rem 2rem !important;
+}
+
+a.btn.btn-primary.ext:hover {
+    background: var(--mha-orange) !important;
+    border: none !important;
+}
+
+h4.mha-teaser-title {
+    color: var(--mha-white) !important;
+    font-size: 2rem;
+}
+
+.mha-features-position-relative a.btn.btn-primary {
+    background-color: var(--mha-navy) !important;
+    color: var(--mha-white) !important;
+    border: 1px solid white !important;
+    padding: .5rem 2rem !important;
+}
+
+.mha-features-position-relative a.btn.btn-primary:hover {
+    background-color: var(--mha-orange) !important;
+    color: var(--mha-black) !important;
+    border: 1px solid white !important;
+    padding: .5rem 2rem !important;
+}
+
+.mha-features-attachment.mha-features-image img {
+    height: 100vh !important
+}
+
+.modal-backdrop.in {
+    display: none;
+}
+
+#mha-features img:hover {
+    webkit-filter: blur(3px); /* Chrome, Safari, Opera */
+    filter: blur(3px);
+}
+
+/* :::::::: Breakpoints ::::::::::::::::::::: */
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (max-width: 1200px) {
+    #mha-features .mha-spotlight .h3.title {
+        font-size: 1.75rem;
+    }
+
+    #mha-features .secondary .h3.title {
+        font-size: 1.5rem;
+    }
+
+    #mha-features .mha-spotlight .h5.summary-sentence {
+        font-size: 1.25rem;
+    }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (max-width: 992px) {
+    #mha-features .mha-spotlight .h3.title {
+        font-size: 1.5rem;
+    }
+
+    #mha-features .secondary .h3.title {
+        font-size: 1rem;
+    }
+
+    #mha-features .mha-spotlight .h5.summary-sentence {
+        font-size: 1.2rem;
+    }
+
+    #mha-features p {
+        font-size: 1rem;
+    }
+}
+
+/* Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpoint */
+@media (max-width: 768px) {
+    #mha-features .mha-spotlight .h3.title {
+        font-size: 1.25rem;
+    }
+
+    #mha-features .secondary .h3.title {
+        font-size: 1.1rem;
+    }
+
+    #mha-features .mha-spotlight .h5.summary-sentence {
+        font-size: 1rem;
+    }
+
+    #mha-features p {
+        font-size: .85rem;
+    }
+}
+
+
+/* Small devices (landscape phones, 544px and up) */
+@media (max-width: 544px) {
+    #mha-features .mha-spotlight .h3.title {
+        font-size: 1.1rem;
+    }
+
+    #mha-features .mha-secondary .h3.title {
+        font-size: 1rem;
+    }
+
+    #mha-features p {
+        font-size: .8rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .mha-features .view-content-wrap {
+        max-width: 100%;
+        float: left;
+    }
+
+    .mha-features-attachment .view-content-wrap {
+        max-width: 100%;
+        float: right;
+    }
+
+    .mha-slide-teaser-wrapper .mha-teaser-text {
+        border-left: none;
+    }
+
+    .mha-slide-teaser-wrapper h4 {
+        margin: 0 0 5px 30px;
+    }
+}
+
+/*
+
+
+ */
+

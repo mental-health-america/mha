@@ -5,12 +5,14 @@ package: gaviasthemes
 base theme: false
 libraries:
   - gavias_colin/global-styling
+  - gavias_colin/mha-alerts
   - core/jquery
 
 libraries-override:
   views_infinite_scroll/views-infinite-scroll: gavias_colin/views-infinite-scroll
 
 regions:
+  alert: 'Alert'
   offcanvas: 'After Offcanvas'
   topbar: 'Topbar'
   quick_side: 'Quick Side'

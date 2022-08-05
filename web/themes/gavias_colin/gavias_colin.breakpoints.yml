@@ -25,3 +25,108 @@ gavis_colin.xlarge:
   weight: 3
   multipliers:
     - 1x
+
+gavis_colin.srcset.banner_wide:
+  label: 'Banner Wide'
+  mediaQuery: ''
+  weight: 4
+  multipliers:
+    - 1x
+
+gavis_colin.srcset.hero_image:
+  label: 'Hero'
+  mediaQuery: ''
+  weight: 5
+  multipliers:
+    - 1x
+
+gavis_colin.srcset.max:
+  label: 'Max (650x650)'
+  mediaQuery: ''
+  weight: 6
+  multipliers:
+    - 1x
+
+gavis_colin.srcset.max_1300x:
+  label: 'Max 1300x'
+  mediaQuery: ''
+  weight: 7
+  multipliers:
+    - 1x
+
+gavis_colin.srcset.narrow:
+  label: 'Narrow'
+  mediaQuery: ''
+  weight: 8
+  multipliers:
+    - 1x
+
+gavis_colin.srcset.policy_issue_statement:
+  label: 'Policy Issue & Statement'
+  mediaQuery: ''
+  weight: 9
+  multipliers:
+    - 1x
+
+gavis_colin.srcset.slider:
+  label: 'Slider'
+  mediaQuery: ''
+  weight: 10
+  multipliers:
+    - 1x
+
+gavis_colin.srcset.square_200x200_:
+  label: 'Square 200x200'
+  mediaQuery: ''
+  weight: 11
+  multipliers:
+    - 1x
+
+gavis_colin.srcset.staff:
+  label: 'Staff'
+  mediaQuery: ''
+  weight: 12
+  multipliers:
+    - 1x
+
+gavis_colin.srcset.ways_to_give_500_345_:
+  label: 'Ways to Give (500×345)'
+  mediaQuery: ''
+  weight: 13
+  multipliers:
+    - 1x
+
+gavis_colin.srcset.wide_300x_:
+  label: 'Banner Wide'
+  mediaQuery: ''
+  weight: 14
+  multipliers:
+    - 1x
+
+gavis_colin.srcset.wide_500_:
+  label: 'Wide 500'
+  mediaQuery: ''
+  weight: 15
+  multipliers:
+    - 1x
+
+gavis_colin.srcset.wide:
+  label: 'Wide (1290x)'
+  mediaQuery: ''
+  weight: 16
+  multipliers:
+    - 1x
+
+gavis_colin.srcset.mha_features:
+  label: 'MHA Features (2400x/1350x)'
+  mediaQuery: ''
+  weight: 17
+  multipliers:
+    - 1x
+
+gavis_colin.srcset.hero_16_9_extra_extra_large_1800x1013:
+  label: 'hero_16_9_extra_extra_large_1800x1013'
+  mediaQuery: ''
+  weight: 17
+  multipliers:
+    - 1x
