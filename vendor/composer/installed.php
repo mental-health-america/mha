@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '47a9be4cf4287f58405081ef312903fad1f1363e',
+        'reference' => 'fecce93501aba75f04e0c799405713238ab31dc3',
         'name' => 'drupal-composer/drupal-project',
         'dev' => true,
     ),
@@ -274,7 +274,11 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
+<<<<<<< HEAD
             'reference' => '47a9be4cf4287f58405081ef312903fad1f1363e',
+=======
+            'reference' => 'fecce93501aba75f04e0c799405713238ab31dc3',
+>>>>>>> stage
             'dev_requirement' => false,
         ),
         'drupal/address' => array(
@@ -740,6 +744,15 @@
             'install_path' => __DIR__ . '/../../web/modules/contrib/entity_reference_revisions',
             'aliases' => array(),
             'reference' => '8.x-1.9',
+            'dev_requirement' => false,
+        ),
+        'drupal/eu_cookie_compliance' => array(
+            'pretty_version' => '1.19.0',
+            'version' => '1.19.0.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../web/modules/contrib/eu_cookie_compliance',
+            'aliases' => array(),
+            'reference' => '8.x-1.19',
             'dev_requirement' => false,
         ),
         'drupal/extlink' => array(
@@ -1210,6 +1223,18 @@
             'reference' => '8.x-1.4',
             'dev_requirement' => false,
         ),
+<<<<<<< HEAD
+=======
+        'drupal/schema_metatag' => array(
+            'pretty_version' => '2.3.0',
+            'version' => '2.3.0.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../web/modules/contrib/schema_metatag',
+            'aliases' => array(),
+            'reference' => '8.x-2.3',
+            'dev_requirement' => false,
+        ),
+>>>>>>> stage
         'drupal/search_api' => array(
             'pretty_version' => '1.25.0',
             'version' => '1.25.0.0',
@@ -1327,6 +1352,18 @@
             'reference' => '8.x-1.4',
             'dev_requirement' => false,
         ),
+<<<<<<< HEAD
+=======
+        'drupal/twig_tweak' => array(
+            'pretty_version' => '3.1.3',
+            'version' => '3.1.3.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../web/modules/contrib/twig_tweak',
+            'aliases' => array(),
+            'reference' => '3.1.3',
+            'dev_requirement' => false,
+        ),
+>>>>>>> stage
         'drupal/twitter_block' => array(
             'pretty_version' => '3.0.0-alpha1',
             'version' => '3.0.0.0-alpha1',

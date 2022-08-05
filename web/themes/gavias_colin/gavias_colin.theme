@@ -46,7 +46,7 @@ function gavias_colin_preprocess_page(&$variables) {
   if(file_exists($theme_path . '/templates/page/' . trim($header) . '.html.twig')){
     $variables['header_skin'] = $variables['directory'] . '/templates/page/' . trim($header) . '.html.twig';
   }else{
-    $variables['header_skin'] = $variables['directory'] . '/templates/page/header.html.twig';
+    $variables['header_skin'] = $variables['directory'] . '/templates/page/backup-backup-header.html.twig';
   }
 
 }
@@ -352,4 +352,15 @@ function gavias_colin_preprocess_views_view(&$variables){
   }
 }
 
-
+/**
+ * Implements hook_theme_suggestions_block_alter().
+ */
+function gavias_colin_theme_suggestions_block_alter(array &$suggestions, array $variables, $hook) {
+  $element = $variables['elements'];
+  if (!empty($element['content']['#block_content'])) {
+    $block_bundle = $element['content']['#block_content']->bundle();
+    $suggestions_name = 'block__block_content__' . $block_bundle;
+    // Put it after 2 items from behind.
+    array_splice($suggestions, -2, 0, $suggestions_name);
+  }
+}

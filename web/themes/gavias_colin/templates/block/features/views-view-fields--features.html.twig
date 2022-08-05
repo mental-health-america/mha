@@ -1,0 +1,109 @@
+{#
+/**
+ * @file
+ * Theme override to display all the fields in a row.
+ *
+ * Available variables:
+ * - view: The view in use.
+ * - fields: A list of fields, each one contains:
+ *   - content: The output of the field.
+ *   - raw: The raw data for the field, if it exists. This is NOT output safe.
+ *   - class: The safe class ID to use.
+ *   - handler: The Views field handler controlling this field.
+ *   - inline: Whether or not the field should be inline.
+ *   - wrapper_element: An HTML element for a wrapper.
+ *   - wrapper_attributes: List of attributes for wrapper element.
+ *   - separator: An optional separator that may appear before a field.
+ *   - label: The field's label text.
+ *   - label_element: An HTML element for a label wrapper.
+ *   - label_attributes: List of attributes for label wrapper.
+ *   - label_suffix: Colon after the label.
+ *   - element_type: An HTML element for the field content.
+ *   - element_attributes: List of attributes for HTML element for field content.
+ *   - has_label_colon: A boolean indicating whether to display a colon after
+ *     the label.
+ *   - element_type: An HTML element for the field content.
+ *   - element_attributes: List of attributes for HTML element for field content.
+ * - row: The raw result from the query, with all data it fetched.
+ *
+ * @see template_preprocess_views_view_fields()
+ */
+#}
+{#
+/**
+ * @file
+ * Default theme implementation to display an image.
+ */
+#}
+{# Content #}
+
+<div id="mha-features" class="mha-features-position-relative shadow-sm">
+    {# Banner image and link #}
+    {% if fields.field_image.content is not empty and fields.field_hero_video.content is empty %}
+        <a href="{{ fields.field_link.content }}">
+            <img class="img-responsive" src="{{ fields.field_image.content }}" alt="{{ fields.field_image_1.content }}">
+        </a>
+    {% else %}
+        <!-- Button trigger modal -->
+        <a href="#" data-toggle="modal" data-target="#videoMHA">
+            <img class="img-responsive" src="{{ fields.field_image.content }}" alt="{{ fields.field_image_1.content }}">
+        </a>
+        <!-- Modal -->
+        <div class="modal fade" id="videoMHA" tabindex="-1" role="dialog" aria-labelledby="videoMHALabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <iframe width="560" height="315"
+                                src="https://www.youtube.com/embed/{{ fields.field_hero_video.content }}"
+                                title="YouTube video player" frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen></iframe>
+                    </div>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {#  Content #}
+    {% if fields.field_hero_video.content is empty %}
+    <div class="mha-features-position-absolute mha-slide-teaser-wrapper">
+
+        {# Title #}
+        <div class="row pl-md-4 pl-sm-3 pb-md-3 pb-sm-1 my-sm-2">
+            {% if fields.title.content is not empty %}
+                <h4 class="mha-teaser-title">
+                    {{ fields.title.content }}
+                </h4>
+            {% endif %}
+
+            {#  Body #}
+            {% if fields.body.content is not empty %}
+                <div class="mha-teaser-text">
+                    {{ fields.body.content }}
+                </div>
+            {% endif %}
+
+            {#  Link #}
+            {% if fields.field_link_1.content is not empty %}
+                <div class="mha-teaser-link">
+                    {{ fields.field_link_1.content }}
+                </div>
+            {% endif %}
+
+            {#  Edit #}
+            {% if fields.edit_node.content is not empty %}
+                <div class="mt-2">
+                    {{ fields.edit_node.content }}
+                </div>
+            {% endif %}
+        </div>{# end position-absolute wrapper #}
+        {% endif %}
+
+    </div>{# end row wrapper #}
+</div>{# end wrapper #}
+
+
