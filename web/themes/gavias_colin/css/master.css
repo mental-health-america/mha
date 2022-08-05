@@ -6576,9 +6576,3 @@ h3.title-news a:hover {
     overflow: hidden;
   }
 }
-
-
-.feature-archives h3, .feature-archives .h3 {
-  font-size: 1.25rem !important;
-  margin: 0!important;
-}
