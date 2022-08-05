@@ -30,38 +30,36 @@
  */
 #}
 
-
+{# Content #}
 <div id="mha-features" class="mha-features-position-relative shadow-sm">
     {# Banner image and link #}
     {% if fields.field_image.content is not empty and fields.field_hero_video.content is empty %}
-    <a href="{{ fields.field_link.content }}">
-        <figure>
-            <img src="{{ fields.field_image.content }}" alt="{{ fields.field_image_1.content }}">
-        </figure>
-    </a>
+        <a href="{{ fields.field_link.content }}">
+            <img class="img-responsive" src="{{ fields.field_image.content }}" alt="{{ fields.field_image_1.content }}">
+        </a>
     {% else %}
         <!-- Button trigger modal -->
         <a href="#" data-toggle="modal" data-target="#videoMHA">
-            <img src="{{ fields.field_image.content }}" alt="{{ fields.field_image_1.content }}">
+            <img class="img-responsive" src="{{ fields.field_image.content }}" alt="{{ fields.field_image_1.content }}">
         </a>
-
         <!-- Modal -->
-        <div class="modal fade" id="videoMHA" tabindex="-1" role="dialog" aria-labelledby="videoMHALabel" aria-hidden="true">
+        <div class="modal fade" id="videoMHA" tabindex="-1" role="dialog" aria-labelledby="videoMHALabel"
+             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
-
                     <div class="modal-header">
-                        <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ fields.field_hero_video.content }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <iframe width="560" height="315"
+                                src="https://www.youtube.com/embed/{{ fields.field_hero_video.content }}"
+                                title="YouTube video player" frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen></iframe>
                     </div>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-
                 </div>
             </div>
         </div>
-
-
     {% endif %}
 
     {#  Content #}
@@ -77,16 +75,23 @@
             {% endif %}
 
             {#  Body #}
-            {% if fields.body.content is not empty%}
+            {% if fields.body.content is not empty %}
                 <div class="mha-teaser-text">
                     {{ fields.body.content }}
                 </div>
             {% endif %}
 
             {#  Link #}
-            {% if fields.field_link_1.content is not empty%}
+            {% if fields.field_link_1.content is not empty %}
                 <div class="mha-teaser-link">
                     {{ fields.field_link_1.content }}
+                </div>
+            {% endif %}
+
+            {#  Edit #}
+            {% if fields.edit_node.content is not empty %}
+                <div class="mt-2">
+                    {{ fields.edit_node.content }}
                 </div>
             {% endif %}
         </div>{# end position-absolute wrapper #}
