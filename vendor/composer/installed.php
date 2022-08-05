@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'd08fde3342431ae9781168805ce73cfd3d643673',
+        'reference' => '265f00555bae8f60af76508a30bf187e5dfdbfe8',
         'name' => 'drupal-composer/drupal-project',
         'dev' => true,
     ),
@@ -274,7 +274,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'd08fde3342431ae9781168805ce73cfd3d643673',
+            'reference' => '265f00555bae8f60af76508a30bf187e5dfdbfe8',
             'dev_requirement' => false,
         ),
         'drupal/address' => array(
@@ -1343,6 +1343,15 @@
             'install_path' => __DIR__ . '/../../web/modules/contrib/token_filter',
             'aliases' => array(),
             'reference' => '8.x-1.4',
+            'dev_requirement' => false,
+        ),
+        'drupal/twig_tweak' => array(
+            'pretty_version' => '3.1.3',
+            'version' => '3.1.3.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../web/modules/contrib/twig_tweak',
+            'aliases' => array(),
+            'reference' => '3.1.3',
             'dev_requirement' => false,
         ),
         'drupal/twitter_block' => array(
