@@ -116,3 +116,18 @@ gavis_colin.srcset.wide:
   weight: 16
   multipliers:
     - 1x
+
+gavis_colin.srcset.mha_features:
+  label: 'MHA Features (2400x/1350x)'
+  mediaQuery: ''
+  weight: 17
+  multipliers:
+    - 1x
+
+gavis_colin.srcset.hero_16_9_extra_extra_large_1800x1013:
+  label: 'hero_16_9_extra_extra_large_1800x1013'
+  mediaQuery: ''
+  weight: 18
+  multipliers:
+    - 1x
+
