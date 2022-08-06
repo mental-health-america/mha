@@ -85,7 +85,7 @@ ul.sf-menu.sf-style-default {
     font-size: 11px !important;
     font-weight: 600 !important;
     padding: 0 !important;
-    margin: .1rem .6rem 0 1rem!important;
+    margin: .1rem .6rem 0 1rem !important;
     text-transform: initial !important;
     text-decoration: none !important;
     border-radius: 0;
@@ -118,4 +118,95 @@ ul.sf-menu.sf-style-default {
 
 .topbar i.fa.fa-phone.mr-2 {
     font-size: 13px !important;
+}
+
+small, .small {
+    font-size: 86% !important;
+}
+
+span.important.mr-1 {
+    color: red;
+}
+
+.feature-archives .views-view-grid .views-row {
+    color: var(--mha-orange);
+    font-size: 2rem;
+}
+
+.feature-archives .views-view-grid .views-row:first-of-type::before {
+    content: "Featured";
+    margin: 0 0 1rem 0.8rem;
+}
+
+.feature-archives .views-view-grid .views-row:nth-child(2)::before {
+    content: "Second";
+    margin: 0 0 1rem 0.8rem;
+}
+
+.feature-archives .views-view-grid .views-row:nth-child(3)::before {
+    content: "Third";
+    margin: 0 0 1rem 0.8rem;
+}
+
+.feature-archives .views-view-grid .views-row:nth-child(4)::before {
+    content: "Unpromoted";
+    margin: 0 0 1rem 0.8rem;
+}
+
+h4.mha-teaser-title {
+    color: var(--mha-white) !important;
+    font-size: 1rem;
+    line-height: 1.1 !important;
+}
+
+#mha-features i.fa.fa-pencil-square {
+    color: #ffffff;
+}
+
+.topbar {
+    color: var(--mha-light-grey) !important;
+    font-size: 12px !important;
+}
+
+.event-full .btn.btn-primary,
+.event-full .page-node-type-event a.btn.btn-primary {
+    background-color: transparent !important;
+}
+
+.gsc-button.extra-large {
+    font-size: 14px;
+    padding: 20px 60px;
+    color: #ffffff;
+}
+
+.gsc-button.extra-large {
+    background: inherit;
+}
+
+.awards-button {
+    background-color: #cdde4b;
+    font-size: 24px !important;
+    text-transform: initial;
+    border-radius: 30px;
+    text-align: center;
+}
+
+.blog-wrapper, .bio.wrapper, .bio .wrapper {
+    margin: 0 0 50px;
+    border: none !important;
+    padding: 0;
+    box-shadow: none !important;
+}
+
+.gsc-heading.style-1 .title {
+    font-weight: 600 !important;
+    position: relative;
+    padding-bottom: 20px;
+    font-size: 24px !important;
+    text-align: left;
+}
+
+.field--name-body ul li {
+    font-size: 95%;
+    font-weight: 400;
 }

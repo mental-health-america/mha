@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'fecce93501aba75f04e0c799405713238ab31dc3',
+        'reference' => '69c7311ac822e9a6e9d9e0ad90978eb7d15c114e',
         'name' => 'drupal-composer/drupal-project',
         'dev' => true,
     ),
@@ -274,15 +274,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-<<<<<<< HEAD
-            'reference' => 'b822b375d66d6d53d05ac5f5b71548d498a399c4',
-=======
-<<<<<<< HEAD
-            'reference' => '47a9be4cf4287f58405081ef312903fad1f1363e',
-=======
-            'reference' => 'fecce93501aba75f04e0c799405713238ab31dc3',
->>>>>>> stage
->>>>>>> dev
+            'reference' => '69c7311ac822e9a6e9d9e0ad90978eb7d15c114e',
             'dev_requirement' => false,
         ),
         'drupal/address' => array(
@@ -949,12 +941,12 @@
             'dev_requirement' => false,
         ),
         'drupal/jquery_ui_datepicker' => array(
-            'pretty_version' => '1.2.0',
-            'version' => '1.2.0.0',
+            'pretty_version' => '1.3.0',
+            'version' => '1.3.0.0',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../web/modules/contrib/jquery_ui_datepicker',
             'aliases' => array(),
-            'reference' => '8.x-1.2',
+            'reference' => '8.x-1.3',
             'dev_requirement' => false,
         ),
         'drupal/jquery_ui_slider' => array(
@@ -1227,8 +1219,6 @@
             'reference' => '8.x-1.4',
             'dev_requirement' => false,
         ),
-<<<<<<< HEAD
-=======
         'drupal/schema_metatag' => array(
             'pretty_version' => '2.3.0',
             'version' => '2.3.0.0',
@@ -1238,7 +1228,6 @@
             'reference' => '8.x-2.3',
             'dev_requirement' => false,
         ),
->>>>>>> stage
         'drupal/search_api' => array(
             'pretty_version' => '1.25.0',
             'version' => '1.25.0.0',
@@ -1356,8 +1345,6 @@
             'reference' => '8.x-1.4',
             'dev_requirement' => false,
         ),
-<<<<<<< HEAD
-=======
         'drupal/twig_tweak' => array(
             'pretty_version' => '3.1.3',
             'version' => '3.1.3.0',
@@ -1367,7 +1354,6 @@
             'reference' => '3.1.3',
             'dev_requirement' => false,
         ),
->>>>>>> stage
         'drupal/twitter_block' => array(
             'pretty_version' => '3.0.0-alpha1',
             'version' => '3.0.0.0-alpha1',
