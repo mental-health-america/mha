@@ -148,6 +148,10 @@ h4.mha-teaser-title {
     filter: blur(3px);
 }
 
+.frontpage .a2a_kit.a2a_kit_size_32.a2a_overlay_style.a2a_vertical_style {
+    display: none !important;
+}
+
 /* :::::::: Breakpoints ::::::::::::::::::::: */
 
 /* Extra large devices (large desktops, 1200px and up) */
