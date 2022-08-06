@@ -24,6 +24,7 @@ global-styling:
       vendor/popup-gallery/css/lg-transitions.min.css: {}
       css/datatables.css: {}
       css/newlayout.css: {}
+      css/newheader.css: {}
 
   js:
     vendor/jquery-migrate.min.js: {}

@@ -5,7 +5,7 @@
   {% endblock %}
 {% endif %}
 
-<header id="header" class="header-default">
+<header id="header" class="header-default border-bottom border-light shadow-sm">
   {% if page.topbar %}
     <div class="topbar">
       <div class="topbar-inner">
@@ -35,13 +35,11 @@
               {{ page.branding }}
             {% endif %}
           </div>
-
           <div class="col-md-9 col-sm-8 col-xs-8 right-header d-none d-lg-block ">
             {% if page.header_right %}
               {{ page.header_right }}
             {% endif %}
           </div>
-
         </div>
       </div>
     </div>
@@ -49,7 +47,7 @@
 
   <div class="main-menu">
     <div class="container header-content-layout gv-sticky-menu">
-      <div class="header-main-inner p-relative float-right">
+      <div class="header-main-inner p-relative ">
         <div class="row">
           <div class="col">
             <div class="area-main-menu">
@@ -57,17 +55,17 @@
                 <div class="gva-offcanvas-mobile">
                   <div class="close-offcanvas hidden"><i class="fa fa-times"></i></div>
                   {% if page.main_menu %}
-                  {{ page.main_menu }}
+                    {{ page.main_menu }}
                   {% endif %}
                   {% if page.offcanvas %}
                     <div class="after-offcanvas hidden">
                       {{ page.offcanvas }}
                     </div>
-                 {% endif %}
-                  <div class="d-lg-none">
-                  {% if page.header_right %}
-                    {{ page.header_right }}
                   {% endif %}
+                  <div class="d-lg-none">
+                    {% if page.header_right %}
+                      {{ page.header_right }}
+                    {% endif %}
                   </div>
                 </div>
 
