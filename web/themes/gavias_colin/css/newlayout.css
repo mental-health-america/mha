@@ -60,3 +60,62 @@
 ul.sf-menu.sf-style-default {
     margin-bottom: 0.5rem;
 }
+
+/* TopBar */
+.topbar {
+    background: var(--mha-navy) !important;
+    color: var(--mha-black) !important;
+    font-size: inherit;
+    padding: 0.35rem 0 !important;
+    margin-top: 0 !important;
+}
+
+.topbar .navigation .gva_menu {
+    float: right;
+    background: transparent !important;
+}
+
+.topbar ul li {
+    line-height: 0;
+    margin: 0;
+}
+
+.topbar .navigation .gva_menu > li > a {
+    color: var(--mha-white) !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    padding: 0 !important;
+    margin: .1rem .6rem 0 1rem!important;
+    text-transform: initial !important;
+    text-decoration: none !important;
+    border-radius: 0;
+    letter-spacing: 0 !important;
+}
+
+.topbar .navigation .gva_menu > li > a:hover {
+    color: var(--mha-lime-bright) !important;
+}
+
+.topbar .navigation .gva_menu > li:last-child > a:before {
+    content: '\f07a';
+    display: inline-block;
+    font-size: inherit;
+    font-family: 'FontAwesome';
+    margin: 0 5px 0 0;
+    text-rendering: auto;
+    color: var(--mha-lime-bright) !important;
+}
+
+.topbar .tele a,
+.topbar .tele a:link {
+    line-height: 1.1;
+    color: var(--mha-white) !important;
+}
+
+.topbar .tele a:hover {
+    color: var(--mha-lime-bright) !important;
+}
+
+.topbar i.fa.fa-phone.mr-2 {
+    font-size: 13px !important;
+}
