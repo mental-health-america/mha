@@ -1427,3 +1427,19 @@ header.header-v1 .header-main {
 .a2a_kit.a2a_kit_size_32.a2a_overlay_style.a2a_vertical_style {
     display: none !important;
 }
+
+.header-v3 .gva-search-region {
+    position: absolute;
+    right: 100px !important;
+    top: -55px;
+    margin-top: -12px;
+    z-index: 9;
+}
+
+.header-v3 .quick-side-icon {
+    top: -80px !important;
+}
+
+.header-v3 .main.main-page {
+    margin: 0 !important;
+}

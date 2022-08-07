@@ -1,14 +1,33 @@
-<header id="header" class="header-v3">
+{# Alert #}
+{% if page.alert %}
+  {% block alert %}
+    {{ page.alert }}
+  {% endblock %}
+{% endif %}
 
+<header id="header" class="header-v3 mt-3">
+  {#
   {% if page.topbar %}
     <div class="topbar">
       <div class="topbar-inner">
         <div class="container">
-          <div class="content">{{ page.topbar }}</div>
+          <div class="row">
+            <div class="col-md-4 col-sm-5">
+              <span class="tele float-left">
+                <a href="tel:800.969.6642"><i class="fa fa-phone mr-2" aria-hidden="true"></i>Toll Free (800) 969.6642</a>
+                <a href="/get-involved/contact-us"><i class="fa fa-comments-o ml-3 mr-2" aria-hidden="true"></i>Contact Us</a>
+              </span>
+            </div>
+            <div class="col-md-8 col-sm-7">
+              {{ page.topbar }}
+            </div>
+          </div>
         </div>
       </div>
     </div>
   {% endif %}
+  #}
+
   <div class="header-main">
     <div class="container">
       <div class="header-inner clearfix">
@@ -18,33 +37,65 @@
               {{ page.branding }}
             {% endif %}
           </div>
-          <div class="col-md-8 col-sm-7 col-xs-7 hamit right-header">
-            {% if page.quick_side %}
-              <div class="quick-side-icon">
-                <div class="icon">
-                  <a href="#">
-                    <span class="qicon fa fa-bars"></span>
-                  </a>
-                </div>
-              </div>
-            {% endif %}
+          <div class="col-md-9 col-sm-8 col-xs-8 right-header d-none d-lg-block mt-3">
             {% if page.header_right %}
               {{ page.header_right }}
             {% endif %}
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-          <div class="col-md-1 col-sm-8 col-xs-8 mt-4 right-header">
+  <div class="main-menu">
+    <div class="container header-content-layout">
+      <div class="header-main-inner p-relative ">
+        <div class="row">
+          <div class="col">
+            <div class="area-main-menu">
+              <div class="area-inner">
+                <div class="gva-offcanvas-mobile">
+                  <div class="close-offcanvas hidden"><i class="fa fa-times"></i></div>
+                  {% if page.offcanvas %}
+                    <div class="after-offcanvas hidden">
+                      {{ page.offcanvas }}
+                    </div>
+                  {% endif %}
+                  <div class="d-lg-none">
+                    {% if page.header_right %}
+                      {{ page.header_right }}
+                    {% endif %}
+                  </div>
+                </div>
+
+                <div id="menu-bar" class="menu-bar hidden-lg hidden-md">
+                  <span class="one"></span>
+                  <span class="two"></span>
+                  <span class="three"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col">
             {% if page.search %}
               <div class="gva-search-region search-region">
                 <span class="icon"><i class="fa fa-search"></i></span>
-                <div class="search-content">
+                <div class="search-content w-100">
                   {{ page.search }}
                 </div>
               </div>
+
             {% endif %}
           </div>
-
-        </div>
+          <div class="col">
+            {% if page.quick_side %}
+              <div class="quick-side-icon hidden-xs hidden-sm">
+                <div class="icon"><a href="#"><span class="qicon fa fa-bars"></span></a></div>
+              </div>
+            {% endif %}
+          </div>
+        </div>{# /row #}
       </div>
     </div>
   </div>
