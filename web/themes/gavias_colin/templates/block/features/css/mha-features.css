@@ -70,13 +70,16 @@ h3:first-of-type {
     display: none !important;
 }
 
-#mha-features p,
 #mha-features a,
-#mha-features .summary-sentence,
 #mha-features h4 a,
 #mha-features h4 a:link {
-    color: var(--mha-white) !important;
+    color: var(--mha-white);
     text-shadow: 0 2px 2px rgba(0, 0, 05, 0.4);
+}
+
+#mha-features p,
+#mha-features .summary-sentence {
+    color: var(--mha-white) !important;
 }
 
 #mha-features h4 a,
@@ -152,6 +155,32 @@ h4.mha-teaser-title {
     display: none !important;
 }
 
+
+/* Trans Backgrounds */
+
+.bg-mha-orange {
+    background-color: var(--bg-mha-orange) !important;
+}
+
+.bg-mha-blue {
+    background-color: var(--bg-mha-blue) !important;
+}
+
+.bg-mha-lime {
+    background-color: var(--bg-mha-lime) !important;
+}
+
+.bg-mha-lime .btn.btn-primary,
+.bg-mha-lime a.btn.btn-primary{
+    background-color: var(--mha-white) !important;
+    color: var(--mha-black) !important;
+}
+
+.bg-mha-orange .btn.btn-primary,
+.bg-mha-orange a.btn.btn-primary{
+    background-color: var(--mha-white) !important;
+    color: var(--mha-black) !important;
+}
 /* :::::::: Breakpoints ::::::::::::::::::::: */
 
 /* Extra large devices (large desktops, 1200px and up) */
@@ -238,6 +267,7 @@ h4.mha-teaser-title {
 
     .mha-slide-teaser-wrapper .mha-teaser-text {
         border-left: none;
+        display: none !important;
     }
 
     .mha-slide-teaser-wrapper h4 {

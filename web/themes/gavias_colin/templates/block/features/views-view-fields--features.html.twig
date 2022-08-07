@@ -46,7 +46,7 @@
     {% else %}
         <!-- Button trigger modal -->
         <a href="#" data-toggle="modal" data-target="#videoMHA">
-            <img class="img-responsive" src="{{ fields.xfield_image.content }}" alt="{{ fields.field_image_1.content }}">
+            <img class="img-responsive" src="{{ fields.field_image.content }}" alt="{{ fields.field_image_1.content }}">
         </a>
         <!-- Modal -->
         <div class="modal fade" id="videoMHA" tabindex="-1" role="dialog" aria-labelledby="videoMHALabel"
@@ -70,7 +70,7 @@
 
     {#  Content #}
     {% if fields.field_hero_video.content is empty %}
-    <div class="mha-features-position-absolute mha-slide-teaser-wrapper">
+    <div class="mha-features-position-absolute mha-slide-teaser-wrapper shadow-sm {{ row._entity.field_background_color.value|clean_class }}">
 
         {# Title #}
         <div class="row pl-md-4 pl-sm-3 pb-md-3 pb-sm-1 my-sm-2">
