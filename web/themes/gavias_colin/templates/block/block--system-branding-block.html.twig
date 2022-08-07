@@ -17,7 +17,9 @@
 {% block content %}
   {% if site_logo %}
         <div class="contact-info-logo">
-            <a href="/"><img alt="Mental Health America Logo" src="../themes/gavias_colin/images/mha-logo.svg" height="50" width="185" /> </a>
+            <a href="/" title="{{ 'Mental Health America Home'|t }}">
+                <img src="/themes/gavias_colin/images/mha-white-logo.png" alt="{{ 'Mental Health America'|t }}" srcset="/themes/gavias_colin/images/mha-logo.svg" height="50" width="185">
+            </a>
         </div>
   {% endif %}
 {% endblock %}
