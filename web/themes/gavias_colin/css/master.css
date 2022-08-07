@@ -3587,7 +3587,8 @@ td.time-style {
 .title-news a {
   color: var(--mha-black);
   text-decoration: none;
-  line-height: 1.1;
+  line-height: 1.1 !important;
+  font-size: 14px !important;
 }
 
 .timeline-item-wrapper h2 {
@@ -6221,7 +6222,16 @@ ul.quicktabs-tabs li {
 
 .main-blog-container a.btn.btn-primary {
   color: var(--mha-white) !important;
+  background-color: var(--mha-navy) !important;
+  border: 1px solid var(--mha-navy) !important;
 }
+
+.main-blog-container a.btn.btn-primary:hover {
+  color: var(--mha-black) !important;
+  background-color: var(--mha-orange) !important;
+  border: 1px solid var(--mha-orange) !important;
+}
+
 
 .national-spot {
   color: var(--mha-red-dark) !important

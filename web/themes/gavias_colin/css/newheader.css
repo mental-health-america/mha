@@ -15,7 +15,7 @@
     position: absolute;
     width: 50px;
     height: 3px;
-    background: var(--mha-orange);
+    background: var(--mha-orange-bright) !important;
     left: 0;
     bottom: 0;
     z-index: 1;
@@ -232,14 +232,14 @@ h4.mha-teaser-title {
 }
 
 .quick-side-icon .icon a,
-.quick-side-icon .icon a:link {
+.quick-side-icon .icon a, .quick-side-icon .icon a:link {
     line-height: 1.4;
     color: var(--mha-white);
     font-weight: 400 !important;
     text-decoration: none;
     font-family: 'Montserrat', sans-serif !important;
-    border: 1px solid var(--mha-orange);
-    background: var(--mha-orange);
+    border: none;
+    background: transparent;
     padding: 2px 7px;
     border-radius: 0;
 }
@@ -784,6 +784,16 @@ div#content {
     font-weight: 600;
 }
 
+.quick-side-icon .icon a:hover {
+    color: var(--mha-orange) !important;
+    background-color: transparent !important;
+    border: none !important;
+}
+
+div#block-gaviassliderlayercovid19 {
+    margin-top: -110px !important;
+}
+
 /* Small devices (landscape phones, 544px and up) */
 @media (max-width: 544px) {
     .gva-search-region {
@@ -811,3 +821,4 @@ div#content {
         background-color: transparent;
     }
 }
+
