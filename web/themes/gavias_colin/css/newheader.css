@@ -643,6 +643,7 @@ ul.sf-menu.sf-horizontal ul {
 .btn.btn-primary, a.btn.btn-primary {
     padding: 5px 20px !important;
     margin: 10px 2px 10px !important;
+    font-weight: 500 !important;
 }
 
 .gva-search-region .search-content {
@@ -772,7 +773,7 @@ header.header-v1 .right-header .navigation .gva_menu {
 }
 
 h3, .h3 {
-    font-size: 1.4rem !important;
+    font-size: 1.25rem !important;
 }
 
 div#content {
@@ -820,5 +821,89 @@ div#block-gaviassliderlayercovid19 {
     .mha-features-position-absolute.mha-slide-teaser-wrapper {
         background-color: transparent;
     }
-}
 
+    .breadcrumb-content-inner .gva-breadcrumb-content .page-title {
+        font-size: 2rem !important;
+        margin: 0 1rem !important;
+    }
+
+    header.header-v1 .menu-bar {
+        right: 15px !important;
+        top: -27px !important;
+    }
+
+    .header-v1 .gva-search-region {
+        margin-top: -27px !important;
+        right: 60px !important;
+        text-decoration: none !important;
+    }
+
+    .header-v1 .gva-search-region .search-content form.search-block-form input#edit-keys {
+        width: 300px !important;
+    }
+
+    .gva-search-region .search-content form.search-block-form input#edit-keys {
+        width: 275px !important;
+    }
+
+    .header-v1 .navigation .gva_menu li a,
+    .header-v1 .navigation .gva_menu > li:last-child a {
+        background-color: transparent !important;
+        color: var(--mha-black) !important;
+        text-decoration: none !important;
+        font-size: 14px !important;
+    }
+
+    .header-v1 .navigation .gva_menu a,
+    .header-v1 .navigation .gva_menu .sub-menu,
+    .navigation .gva_menu .sub-menu {
+        color: var(--mha-white) !important;
+        padding: 0 !important;
+        margin: 0;
+        border: none !important;
+        font-size: 14px !important;
+    }
+
+    .header-v1 .navigation .gva_menu .sub-menu {
+        background-color: transparent !important;
+        color: var(--mha-black) !important;
+        text-decoration: none !important;
+        border-bottom: 0;
+        box-shadow:none !important;
+        border-radius: 0 !important;
+        padding: 0 !important;
+        border-top: none !important;
+    }
+
+    .header-v1  .block-menu.navigation ul li {
+        display: block !important;
+        list-style: none;
+    }
+
+    .header-v1 .navigation .gva_menu .sub-menu > li > a {
+        color: var(--mha-black);
+        font-size: 14px !important;
+        font-weight: 400 !important;
+        padding: 0 !important;
+        margin: 0;
+        text-transform: uppercase;
+        -webkit-border-radius: 15px;
+        -moz-border-radius: 15px;
+        border-radius: 0;
+    }
+
+    #block-topmenu ul {
+        margin: 0;
+        padding-left: 10px;
+        font-weight: 400;
+        font-size: 13px;
+        display: inline-grid;
+    }
+
+    #block-topmenu ul li {
+        list-style: none !important;
+        margin: 7px 0;
+        color: var(--mha-black);
+    }
+
+}

@@ -121,7 +121,7 @@ a.feed-icon {
 body, p, .node__content p, html, .gsc-column ul li {
   font-family: 'Montserrat', sans-serif !important;
   font-weight: 400 !important;
-  font-size: 1rem !important;
+  font-size: 16px !important;
   line-height: 1.5 !important;
   color: var(--mha-black) !important;
 }
@@ -1775,17 +1775,13 @@ footer .block .block-title {
 .gsc-button.extra-large {
   color: var(--mha-white);
   border-color: var(--mha-aqua);
+  background: var(--mha-aqua);
 }
 
 .gsc-button.extra-large:hover {
-  color: var(--mha-aqua)!important;
-  border-color: var(--mha-aqua) !important;
-}
-
-.gsc-button.extra-large:hover {
-  color: var(--mha-white) !important;
-  border-color: var(--mha-white) !important;
-  background: inherit;
+  color: var(--mha-aqua);
+  border-color: var(--mha-aqua);
+  background: var(--mha-white);
 }
 
 .gbb-row .bb-inner.remove_padding_col > .bb-container > .row > .row-wrapper > div.gsc-column.image-button {
@@ -3716,7 +3712,7 @@ ul.sf-menu.sf-style-default li.sf-multicolumn-wrapper ol li {
 }
 
 .uppercase {
-  color: var(--mha-black) !important;
+  color: var(--mha-lime) !important;
   font-family: Soleil, Helvetica, Arial, sans-serif;
   font-size: 12px;
   font-weight: 400 !important;
@@ -6588,5 +6584,9 @@ h3.title-news a:hover {
     color: var(--mha-black);
     max-width: 50px;
     overflow: hidden;
+  }
+
+  .slideshow_content.area .block-title {
+    font-size: 26px !important;
   }
 }
