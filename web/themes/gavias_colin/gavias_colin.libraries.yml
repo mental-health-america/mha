@@ -3,7 +3,7 @@ global-styling:
   header: true
   css:
     theme:
-      //fonts.googleapis.com/css?family=Montserrat:100,300,400,600,800,900": { type: external }
+      //fonts.googleapis.com/css?family=Montserrat:100,300,400,500,600": { type: external }
       //fonts.googleapis.com/css?family=Roboto:400,700: { type: external }
       css/bootstrap-four.css: {}
       css/colors.css: {}
