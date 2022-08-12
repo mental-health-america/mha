@@ -534,7 +534,7 @@ header .header-info .content-inner .desc {
   position: absolute;
   top: 43px;
   right: 0;
-  margin-top: -1px;
+  margin-top: 5px;
   z-index: 99;
   background: var(--mha-white);
   padding: 20px;
