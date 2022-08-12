@@ -1469,3 +1469,20 @@ footer a:active {
 #block-formgeneralemailsignup .node__content h2 {
     color: var(--mha-white) !important;
 }
+.field.field--name-field-blog-post-image.field--type-image.field--label-hidden.field__item img {
+   margin: 0 0 1rem;
+}
+.field.field--name-field-post-date.field--type-datetime.field--label-hidden.field__item {
+    font-weight: 400;
+    font-style: italic;
+    margin: 0 0 10px;
+    font-size: 90%;
+}
+
+.navigation .menu--the-state-of-mental-health- .gva_menu > li > a {
+    padding: 0 !important;
+}
+
+#block-thestateofmentalhealthinamerica {
+    margin-top: 2rem !important;
+}
