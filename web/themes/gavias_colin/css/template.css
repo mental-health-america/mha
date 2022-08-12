@@ -6943,8 +6943,8 @@ nav.breadcrumb ol > li span {
     font-size: 13px;
     font-weight: 600;
     letter-spacing: 1px;
-    text-transform: uppercase;
-    padding: 28px 15px;
+    text-transform: inherit;
+    padding: 5px 10px;
     -webkit-transition: all 0.35s;
     -o-transition: all 0.35s;
     transition: all 0.35s;
