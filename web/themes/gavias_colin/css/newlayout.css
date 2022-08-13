@@ -1,25 +1,3 @@
-.breadcrumb-content-inner .gva-breadcrumb-content .page-title {
-    background: 0 0;
-    position: relative;
-    margin: 0 0 2rem;
-    padding: 0 0 8px;
-    font-size: 2.2rem;
-    font-weight: 600;
-    color: var(--mha-navy);
-    font-family: din-2014, sans-serif;
-    line-height: 1.01;
-}
-
-.breadcrumb-content-inner .gva-breadcrumb-content .page-title:after {
-    content: '';
-    position: absolute;
-    width: 50px;
-    height: 3px;
-    background: var(--mha-orange);
-    left: 0;
-    bottom: 0;
-    z-index: 1;
-}
 
 .sidebar .block .block-title, .sidebar .block-menu ul li span {
     border-radius: 2px;

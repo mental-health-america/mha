@@ -446,16 +446,6 @@ span.mailto {
   margin: inherit;
 }
 
-.breadcrumb-content-inner .gva-breadcrumb-content .page-title {
-  color: var(--mha-blue) !important;
-  text-align: left !important;
-  font-size: 2em !important;
-  font-weight: 300 !important;
-  letter-spacing: 0 !important;
-  margin: 0 !important;
-  font-family: 'Montserrat', sans-serif !important;
-}
-
 .breadcrumb-content-inner .gva-breadcrumb-content .gva-block-breadcrumb .breadcrumb-style {
   padding: 0 !important;
   margin: 0 !important;
@@ -821,11 +811,6 @@ span.mailto {
   color: var(--mha-black) !important;
 }
 
-.breadcrumb-content-inner .gva-breadcrumb-content .page-title {
-  color: var(--mha-blue-hover) !important;
-  font-weight: 400 !important;
-}
-
 #block-bwm-njord-system-main ul li a {
   margin: inherit;
 }
@@ -855,11 +840,6 @@ span.mailto {
 #block-views-block-associate-members-block-1 .item-image img {
   max-width: 300px;
   min-width: 300px;
-}
-
-.breadcrumb-content-inner .gva-breadcrumb-content .page-title {
-  color: var(--mha-blue-hover) !important;
-  font-weight: 400 !important;
 }
 
 #block-adultranking2019, #block-youthdata, #block-mharankingstates, #block-prevalencedata, #block-accesstocaredata, #block-youthdata, #block-prevalencedata, #block-accesstocaredata {
