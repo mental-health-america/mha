@@ -14,6 +14,7 @@ libraries-override:
 regions:
   alert: 'Alert'
   offcanvas: 'After Offcanvas'
+  topbar_left: 'Topbar Left'
   topbar: 'Topbar'
   quick_side: 'Quick Side'
   search: 'Search'
