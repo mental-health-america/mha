@@ -932,4 +932,9 @@ div#block-gaviassliderlayercovid19 {
         margin: 0 0 0 0.75rem;
     }
 
+    div#block-formgeneralemailsignup {
+        background: #262626 !important;
+        padding: 2rem !important;
+    }
+
 }
