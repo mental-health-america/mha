@@ -1,14 +1,13 @@
 name: Facebook Pixel Commerce
 type: module
 core_version_requirement: ^8 || ^9
-description: Adds commerce events to Facebook Pixel
-core: 8.x
+description: Adds Drupal Commerce Events to Facebook Pixel
 package: Statistics
 dependencies:
-  - facebook_pixel
+  - facebook_pixel:facebook_pixel
   - commerce:commerce_checkout
 
-# Information added by Drupal.org packaging script on 2021-07-08
-version: '8.x-1.0-alpha5'
+# Information added by Drupal.org packaging script on 2022-08-12
+version: '2.0.0-rc3'
 project: 'facebook_pixel'
-datestamp: 1625773573
+datestamp: 1660300949

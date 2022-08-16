@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ce12d8f58ffc88529df88d0252b00da1",
+    "content-hash": "4a18932b1fd3cc301fac17739e5e2aec",
     "packages": [
         {
             "name": "alchemy/zippy",
@@ -4523,17 +4523,17 @@
         },
         {
             "name": "drupal/facebook_pixel",
-            "version": "1.0.0-alpha5",
+            "version": "2.0.0-rc3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/facebook_pixel.git",
-                "reference": "8.x-1.0-alpha5"
+                "reference": "2.0.0-rc3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/facebook_pixel-8.x-1.0-alpha5.zip",
-                "reference": "8.x-1.0-alpha5",
-                "shasum": "bbb4804b52d4730b8b2ee92e9d77e88604a3c965"
+                "url": "https://ftp.drupal.org/files/projects/facebook_pixel-2.0.0-rc3.zip",
+                "reference": "2.0.0-rc3",
+                "shasum": "e88925ab8635ec10577dae400c0fafb451af3238"
             },
             "require": {
                 "drupal/core": "^8 || ^9"
@@ -4544,11 +4544,11 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.0-alpha5",
-                    "datestamp": "1625773570",
+                    "version": "2.0.0-rc3",
+                    "datestamp": "1660300947",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Alpha releases are not covered by Drupal security advisories."
+                        "message": "RC releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -15561,7 +15561,7 @@
         "drupal/content_access": 15,
         "drupal/content_sync": 10,
         "drupal/entity_clone": 10,
-        "drupal/facebook_pixel": 15,
+        "drupal/facebook_pixel": 5,
         "drupal/feeds": 15,
         "drupal/flag": 15,
         "drupal/fullcalendar": 15,

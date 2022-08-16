@@ -4,6 +4,7 @@ namespace Drupal\facebook_pixel;
 
 use Drupal\Core\Session\SessionManager;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
  * Helper methods for facebook_pixel module.
@@ -34,16 +35,26 @@ class FacebookEvent implements FacebookEventInterface {
   protected $sessionManager;
 
   /**
+   * The module handler.
+   *
+   * @var Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * FacebookEvent constructor.
    *
    * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $temp_store_factory
    *   The temp store factory service.
    * @param \Drupal\Core\Session\SessionManager $session
    *   The session manager service.
+   * @param Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
+   *   The module handler.
    */
-  public function __construct(PrivateTempStoreFactory $temp_store_factory, SessionManager $session) {
+  public function __construct(PrivateTempStoreFactory $temp_store_factory, SessionManager $session, ModuleHandlerInterface $moduleHandler) {
     $this->privateTempStore = $temp_store_factory->get('user');
     $this->sessionManager = $session;
+    $this->moduleHandler = $moduleHandler;
   }
 
   /**
@@ -59,6 +70,11 @@ class FacebookEvent implements FacebookEventInterface {
    * @throws \Drupal\Core\TempStore\TempStoreException
    */
   public function addEvent($event, $data = '', $start_session = FALSE) {
+    // Allow to alter the event data using a hook:
+    $this->moduleHandler->invokeAll('facebook_pixel_event_data_alter', [
+      &$data,
+      $event,
+    ]);
     // Determine if we should use session or static storage.
     if ((!empty($this->sessionManager) && $this->sessionManager->isStarted()) || $start_session) {
       $this->addSessionEvent($event, $data);

@@ -84,7 +84,7 @@
         "drupal/entity_clone": "^1.0@beta",
         "drupal/eu_cookie_compliance": "^1.19",
         "drupal/extlink": "^1.1",
-        "drupal/facebook_pixel": "^1.0@alpha",
+        "drupal/facebook_pixel": "^2.0@RC",
         "drupal/features": "^3.8",
         "drupal/feeds": "^3.0@alpha",
         "drupal/field_formatter_class": "^1.1",
