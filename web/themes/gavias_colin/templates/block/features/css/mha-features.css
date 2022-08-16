@@ -52,8 +52,25 @@ h3:first-of-type {
     color: var(--mha-white);
 }
 
+.mha-features-attachment h4 a,
+.mha-features-attachment h4 a:link {
+    font-size: 1.5rem !important;
+}
+
 .mha-features-attachment .mha-features-position-absolute.mha-slide-teaser-wrapper {
-    background-color: transparent !important;
+    background: rgba(0,0,0,0.6) !important;
+    width: 100%;
+    border-radius: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    padding: 1rem 2rem;
+    color: var(--mha-white);
+}
+
+.mha-features-attachment .mha-features-position-absolute.mha-slide-teaser-wrapper  .pb-md-3,
+.mha-features-attachment .mha-features-position-absolute.mha-slide-teaser-wrapper .py-md-3 {
+    padding-bottom: 0 !important;
 }
 
 .mha-features-attachment a,
@@ -84,13 +101,29 @@ h3:first-of-type {
 
 #mha-features h4 a,
 #mha-features h4 a:link {
-    font-size: 2rem !important;
+    font-size: 2rem;
     line-height: 1.1 !important;
     text-decoration: none !important;
 }
 
 #mha-features h4 a:hover {
     color: var(--mha-orange) !important;
+}
+
+#mha-features h5 a,
+#mha-features h5 a:link {
+    font-size: 1rem !important;
+    line-height: 1.1 !important;
+    text-decoration: none !important;
+}
+
+#mha-features h5 a:hover {
+    color: var(--mha-orange) !important;
+}
+
+a.h5.ext {
+    color: white !important;
+    font-size: 1rem !important;
 }
 
 #mha-features p {
@@ -280,3 +313,6 @@ h4.mha-teaser-title {
 
  */
 
+.mha-features-attachment .mha-slide-teaser-wrapper {
+    background: rgba(0,0,0,0.7) !important;
+}
