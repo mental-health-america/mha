@@ -933,7 +933,7 @@ div#block-gaviassliderlayercovid19 {
     }
 
     div#block-formgeneralemailsignup {
-        background: #262626 !important;
+        background: var(--mha-salmon) !important;
         padding: 2rem !important;
     }
 

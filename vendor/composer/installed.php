@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'a39453e590c94aefca9af3ba27fd89e41efdaa89',
+        'reference' => 'a1c5ad3717d1ad6111e55d8e3c1d2ff17753ddce',
         'name' => 'drupal-composer/drupal-project',
         'dev' => true,
     ),
@@ -274,7 +274,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'a39453e590c94aefca9af3ba27fd89e41efdaa89',
+            'reference' => 'a1c5ad3717d1ad6111e55d8e3c1d2ff17753ddce',
             'dev_requirement' => false,
         ),
         'drupal/address' => array(
@@ -761,12 +761,12 @@
             'dev_requirement' => false,
         ),
         'drupal/facebook_pixel' => array(
-            'pretty_version' => '1.0.0-alpha5',
-            'version' => '1.0.0.0-alpha5',
+            'pretty_version' => '2.0.0-rc3',
+            'version' => '2.0.0.0-RC3',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../web/modules/contrib/facebook_pixel',
             'aliases' => array(),
-            'reference' => '8.x-1.0-alpha5',
+            'reference' => '2.0.0-rc3',
             'dev_requirement' => false,
         ),
         'drupal/fakeobjects' => array(
