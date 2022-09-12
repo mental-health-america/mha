@@ -5,6 +5,7 @@ namespace Drupal\eu_cookie_compliance\EventSubscriber;
 use Drupal\Core\Config\ConfigCrudEvent;
 use Drupal\Core\Config\ConfigEvents;
 use Drupal\Core\File\FileSystemInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\Component\Serialization\Json;
 
@@ -14,6 +15,8 @@ use Drupal\Component\Serialization\Json;
  * @package Drupal\eu_cookie_compliance\EventSubscriber
  */
 class EuCookieComplianceConfigEventsSubscriber implements EventSubscriberInterface {
+
+  use StringTranslationTrait;
 
   /**
    * {@inheritdoc}
@@ -38,17 +41,30 @@ class EuCookieComplianceConfigEventsSubscriber implements EventSubscriberInterfa
     if (($event->getConfig()->getName() === 'eu_cookie_compliance.settings')) {
 
       $disabled_javascripts = $event->getConfig()->get('disabled_javascripts');
-      $script_snippet = 'window.euCookieComplianceLoadScripts = function(category) {' . $this->getDisabledJsScriptSnippet($disabled_javascripts) . "}";
+      if ($disabled_javascripts) {
+        $script_snippet = 'window.euCookieComplianceLoadScripts = function(category) {' . $this->getDisabledJsScriptSnippet($disabled_javascripts) . "}";
 
-      // Check if already directory exists.
-      $directory = "public://eu_cookie_compliance";
-      if (!is_dir($directory) || !is_writable($directory)) {
-        $file_system = \Drupal::service('file_system');
-        $file_system->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
+        // Check if already directory exists.
+        $directory = "public://eu_cookie_compliance";
+        if (!is_dir($directory) || !is_writable($directory)) {
+          $file_system = \Drupal::service('file_system');
+          $file_system->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
+        }
+        $uri = $directory . "/eu_cookie_compliance.script.js";
+        if (is_writable($directory)) {
+          if ((float) \Drupal::VERSION < 9.3) {
+            file_save_data($script_snippet, $uri, FileSystemInterface::EXISTS_REPLACE);
+          }
+          else {
+            \Drupal::service('file.repository')
+              ->writeData($script_snippet, $uri, FileSystemInterface::EXISTS_REPLACE);
+          }
+        }
+        else {
+          \Drupal::messenger()
+            ->addError($this->t('Could not generate the EU Cookie Compliance JavaScript file that would be used for handling disabled JavaScripts. There may be a problem with your files folder.'));
+        }
       }
-      $uri = $directory . "/eu_cookie_compliance.script.js";
-      file_save_data($script_snippet, $uri, FileSystemInterface::EXISTS_REPLACE);
-
     }
   }
 
