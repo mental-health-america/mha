@@ -245,19 +245,6 @@ a.disable {
   z-index: 9;
 }
 
-.breadcrumb-content-inner .gva-breadcrumb-content .page-title {
-  font-size: 2.5rem !important;
-  top: 0;
-  left: 0;
-  width: 100%;
-  margin: 1rem 0 auto !important;
-  text-align: left !important;
-  line-height: 1.1 !important;
-  font-weight: 300 !important;
-  color: var(--mha-navy) !important;
-  letter-spacing: 2px !important;
-}
-
 .breadcrumb-content-inner .gva-breadcrumb-content .gva-block-breadcrumb .breadcrumb-style {
   padding: 90px 0 90px;
   margin-bottom: 45px;
@@ -534,7 +521,7 @@ header .header-info .content-inner .desc {
   position: absolute;
   top: 43px;
   right: 0;
-  margin-top: -1px;
+  margin-top: 5px;
   z-index: 99;
   background: var(--mha-white);
   padding: 20px;
@@ -6943,8 +6930,8 @@ nav.breadcrumb ol > li span {
     font-size: 13px;
     font-weight: 600;
     letter-spacing: 1px;
-    text-transform: uppercase;
-    padding: 28px 15px;
+    text-transform: inherit;
+    padding: 5px 10px;
     -webkit-transition: all 0.35s;
     -o-transition: all 0.35s;
     transition: all 0.35s;
