@@ -4,7 +4,6 @@
     {{ page.alert }}
   {% endblock %}
 {% endif %}
-
 <header id="header" class="header-default border-bottom border-light shadow-sm">
   {% if page.topbar or page.topbar_left %}
     <div class="topbar d-none d-md-block">
@@ -22,7 +21,6 @@
       </div>
     </div>
   {% endif %}
-
   <div class="header-main">
     <div class="container">
       <div class="header-inner clearfix">
@@ -41,7 +39,6 @@
       </div>
     </div>
   </div>
-
   <div class="main-menu">
     <div class="container header-content-layout gv-sticky-menu">
       <div class="header-main-inner p-relative ">
@@ -73,7 +70,6 @@
                     {% endif %}
                   </div>
                 </div>
-
                 <div id="menu-bar" class="menu-bar hidden-lg hidden-md">
                   <span class="one"></span>
                   <span class="two"></span>
@@ -82,7 +78,6 @@
               </div>
             </div>
           </div>
-
           <div class="col">
             {% if page.search %}
               <div class="gva-search-region search-region">
@@ -91,7 +86,6 @@
                   {{ page.search }}
                 </div>
               </div>
-
             {% endif %}
           </div>
           <div class="col">
@@ -105,5 +99,4 @@
       </div>
     </div>
   </div>
-
 </header>
