@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'b3189445f0ed44765d9f800d2bd76372a5dcd1e3',
+        'reference' => '85df60fd79a560106dfed94d70e508b5e0267168',
         'name' => 'drupal-composer/drupal-project',
         'dev' => true,
     ),
@@ -283,7 +283,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'b3189445f0ed44765d9f800d2bd76372a5dcd1e3',
+            'reference' => '85df60fd79a560106dfed94d70e508b5e0267168',
             'dev_requirement' => false,
         ),
         'drupal/address' => array(
@@ -392,6 +392,15 @@
             'install_path' => __DIR__ . '/../../web/modules/contrib/ckeditor',
             'aliases' => array(),
             'reference' => '1.0.1',
+            'dev_requirement' => false,
+        ),
+        'drupal/color' => array(
+            'pretty_version' => '1.0.2',
+            'version' => '1.0.2.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../web/modules/contrib/color',
+            'aliases' => array(),
+            'reference' => '1.0.2',
             'dev_requirement' => false,
         ),
         'drupal/color-color' => array(
