@@ -9,6 +9,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\facebook_pixel\FacebookEventInterface;
 use Drupal\facebook_pixel_commerce\FacebookCommerceInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Provides the completion message pane.
@@ -40,6 +41,13 @@ class FacebookCheckout extends CheckoutPaneBase {
   protected $facebookComment;
 
   /**
+   * The request stack.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected $requestStack;
+
+  /**
    * Constructs a new CheckoutPaneBase object.
    *
    * @param array $configuration
@@ -56,12 +64,15 @@ class FacebookCheckout extends CheckoutPaneBase {
    *   The facebook pixel event.
    * @param \Drupal\facebook_pixel_commerce\FacebookCommerceInterface $facebook_comment
    *   The facebook pixel commerce.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   The request stack.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, CheckoutFlowInterface $checkout_flow, EntityTypeManagerInterface $entity_type_manager, FacebookEventInterface $facebook_event, FacebookCommerceInterface $facebook_comment) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, CheckoutFlowInterface $checkout_flow, EntityTypeManagerInterface $entity_type_manager, FacebookEventInterface $facebook_event, FacebookCommerceInterface $facebook_comment, RequestStack $request_stack) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $checkout_flow, $entity_type_manager);
 
     $this->facebookEvent = $facebook_event;
     $this->facebookComment = $facebook_comment;
+    $this->requestStack = $request_stack;
   }
 
   /**
@@ -75,7 +86,8 @@ class FacebookCheckout extends CheckoutPaneBase {
       $checkout_flow,
       $container->get('entity_type.manager'),
       $container->get('facebook_pixel.facebook_event'),
-      $container->get('facebook_pixel_commerce.facebook_commerce')
+      $container->get('facebook_pixel_commerce.facebook_commerce'),
+      $container->get('request_stack')
     );
   }
 
@@ -84,7 +96,9 @@ class FacebookCheckout extends CheckoutPaneBase {
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
     // Only fire the FB event on page load.
-    if (!$form_state->getTriggeringElement()) {
+    // See https://www.drupal.org/project/facebook_pixel/issues/3246045#comment-14405106
+    // for the reasons. Otherwise it's fired multiple times on AJAX requests.
+    if (!$this->requestStack->getCurrentRequest()->isXmlHttpRequest()) {
       $data = $this->facebookComment->getOrderData($this->order);
       $this->facebookEvent->addEvent('InitiateCheckout', $data);
     }
