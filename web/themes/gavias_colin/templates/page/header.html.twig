@@ -4,20 +4,16 @@
     {{ page.alert }}
   {% endblock %}
 {% endif %}
-
-<header id="header" class="header-default">
-  {% if page.topbar %}
-    <div class="topbar">
+<header id="header" class="header-default border-bottom border-light shadow-sm">
+  {% if page.topbar or page.topbar_left %}
+    <div class="topbar d-none d-md-block">
       <div class="topbar-inner">
         <div class="container">
           <div class="row">
-            <div class="col-md-4 col-sm-5">
-              <span class="tele float-left">
-                <a href="tel:800.969.6642"><i class="fa fa-phone mr-2" aria-hidden="true"></i>Toll Free (800) 969.6642</a>
-                <a href="/get-involved/contact-us"><i class="fa fa-comments-o ml-3 mr-2" aria-hidden="true"></i>Contact Us</a>
-              </span>
+            <div class="col-md-4 col-sm-12 clearfix">
+              {{ page.topbar_left }}
             </div>
-            <div class="col-md-8 col-sm-7">
+            <div class="col-md-8 col-sm-12 clearfix">
               {{ page.topbar }}
             </div>
           </div>
@@ -25,7 +21,6 @@
       </div>
     </div>
   {% endif %}
-
   <div class="header-main">
     <div class="container">
       <div class="header-inner clearfix">
@@ -44,10 +39,9 @@
       </div>
     </div>
   </div>
-
   <div class="main-menu">
     <div class="container header-content-layout gv-sticky-menu">
-      <div class="header-main-inner p-relative float-right">
+      <div class="header-main-inner p-relative ">
         <div class="row">
           <div class="col">
             <div class="area-main-menu">
@@ -55,20 +49,27 @@
                 <div class="gva-offcanvas-mobile">
                   <div class="close-offcanvas hidden"><i class="fa fa-times"></i></div>
                   {% if page.main_menu %}
-                  {{ page.main_menu }}
+                    {{ page.main_menu }}
                   {% endif %}
                   {% if page.offcanvas %}
                     <div class="after-offcanvas hidden">
                       {{ page.offcanvas }}
                     </div>
-                 {% endif %}
-                  <div class="d-lg-none">
-                  {% if page.header_right %}
-                    {{ page.header_right }}
                   {% endif %}
+                  <div class="d-lg-none">
+                    {% if page.header_right %}
+                      {{ page.header_right }}
+                    {% endif %}
+                  </div>
+                  <div class="sub-menu-2 d-lg-none">
+                    {% if page.topbar_left %}
+                      {{ page.topbar_left }}
+                    {% endif %}
+                    {% if page.topbar %}
+                      {{ page.topbar }}
+                    {% endif %}
                   </div>
                 </div>
-
                 <div id="menu-bar" class="menu-bar hidden-lg hidden-md">
                   <span class="one"></span>
                   <span class="two"></span>
@@ -77,7 +78,6 @@
               </div>
             </div>
           </div>
-
           <div class="col">
             {% if page.search %}
               <div class="gva-search-region search-region">
@@ -86,7 +86,6 @@
                   {{ page.search }}
                 </div>
               </div>
-
             {% endif %}
           </div>
           <div class="col">
@@ -100,5 +99,4 @@
       </div>
     </div>
   </div>
-
 </header>

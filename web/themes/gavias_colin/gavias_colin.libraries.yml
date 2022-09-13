@@ -3,7 +3,7 @@ global-styling:
   header: true
   css:
     theme:
-      //fonts.googleapis.com/css?family=Montserrat:100,300,400,600,800,900": { type: external }
+      //fonts.googleapis.com/css?family=Montserrat:100,300,400,500,600": { type: external }
       //fonts.googleapis.com/css?family=Roboto:400,700: { type: external }
       css/bootstrap-four.css: {}
       css/colors.css: {}
@@ -23,7 +23,7 @@ global-styling:
       vendor/popup-gallery/css/lightgallery.min.css: {}
       vendor/popup-gallery/css/lg-transitions.min.css: {}
       css/datatables.css: {}
-      css/newlayout.css: {}
+      css/newheader.css: {}
 
   js:
     vendor/jquery-migrate.min.js: {}
