@@ -31,25 +31,23 @@
 #}
 {% set custom_classes = '' %}
 {% if label == '' %}
-{% set custom_classes = 'no-title' %}
+    {% set custom_classes = 'no-title' %}
 {% endif %}
-{%
-  set classes = [
+{% set classes = [
     'block',
     'block-' ~ configuration.provider|clean_class,
     'block-' ~ plugin_id|clean_class,
     custom_classes
-  ]
-%}
+] %}
 <div{{ attributes.addClass(classes) }}>
-  {{ title_prefix }}
-  {% if label %}
-    <h2 class="block-title" {{ title_attributes }}><span>{{ label }}</span></h2>
-  {% endif %}
-  {{ title_suffix }}
-  {% block content %}
-    <div{{ content_attributes.addClass('content block-content') }}>
-      {{ content }}
-    </div>
-  {% endblock %}
+    {{ title_prefix }}
+    {% if label %}
+        <h2 class="block-title" {{ title_attributes }}><span>{{ label }}</span></h2>
+    {% endif %}
+    {{ title_suffix }}
+    {% block content %}
+        <div{{ content_attributes.addClass('content block-content') }}>
+            {{ content }}
+        </div>
+    {% endblock %}
 </div>

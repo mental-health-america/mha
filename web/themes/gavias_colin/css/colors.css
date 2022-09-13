@@ -96,6 +96,14 @@
 
   /* Table border */
   --mha-table-border: #ddd;
+
+  /* Trans Backgrounds */
+
+  --bg-mha-blue: rgba(54, 88, 136, 0.80);
+
+  --bg-mha-orange: rgba(174, 93, 4, 0.80);
+
+  --bg-mha-lime: rgba(154, 172, 45, 0.80);
 }
 
 

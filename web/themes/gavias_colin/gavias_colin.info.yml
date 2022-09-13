@@ -14,6 +14,7 @@ libraries-override:
 regions:
   alert: 'Alert'
   offcanvas: 'After Offcanvas'
+  topbar_left: 'Topbar Left'
   topbar: 'Topbar'
   quick_side: 'Quick Side'
   search: 'Search'
@@ -33,7 +34,7 @@ regions:
   after_content: 'After Content'
   highlighted: 'Highlighted'
   before_footer: 'Before Footer'
-  footer_first: 'Footer Fisrt'
+  footer_first: 'Footer First'
   footer_second: 'Footer Second'
   footer_third: 'Footer Third'
   footer_four: 'Footer Four'
