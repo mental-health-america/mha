@@ -7,6 +7,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Link;
 use Drupal\recurring_events\EventCreationService;
+use Drupal\recurring_events\EventInstanceCreatorPluginManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -24,13 +25,23 @@ class EventSeriesSettingsForm extends ConfigFormBase {
   protected $creationService;
 
   /**
+   * The event instance creator plugin manager.
+   *
+   * @var \Drupal\recurring_events\EventInstanceCreatorPluginManager
+   */
+  protected $eventInstanceCreatorManager;
+
+  /**
    * Constructs a new EventSeriesSettingsForm.
    *
    * @param \Drupal\recurring_events\EventCreationService $creation_service
    *   The event creation service.
+   * @param \Drupal\recurring_events\EventInstanceCreatorPluginManager $creator_manager
+   *   The event creation service.
    */
-  public function __construct(EventCreationService $creation_service) {
+  public function __construct(EventCreationService $creation_service, EventInstanceCreatorPluginManager $creator_manager) {
     $this->creationService = $creation_service;
+    $this->eventInstanceCreatorManager = $creator_manager;
   }
 
   /**
@@ -38,7 +49,8 @@ class EventSeriesSettingsForm extends ConfigFormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('recurring_events.event_creation_service')
+      $container->get('recurring_events.event_creation_service'),
+      $container->get('plugin.manager.event_instance_creator')
     );
   }
 
@@ -101,6 +113,12 @@ class EventSeriesSettingsForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config('recurring_events.eventseries.config');
+
+    $plugin_definitions = $this->eventInstanceCreatorManager->getDefinitions();
+    $creator_plugins = [];
+    foreach ($plugin_definitions as $id => $plugin) {
+      $creator_plugins[$id] = (string) $plugin['description'];
+    }
 
     $form['creation'] = [
       '#type' => 'details',
@@ -244,6 +262,14 @@ class EventSeriesSettingsForm extends ConfigFormBase {
           'input[name="threshold_warning"]' => ['checked' => TRUE],
         ],
       ],
+    ];
+
+    $form['creation']['creator_plugin'] = [
+      '#type' => 'radios',
+      '#title' => $this->t('Event Instance Creator Plugin'),
+      '#description' => $this->t('Select the plugin to use when creating event instances.'),
+      '#default_value' => $config->get('creator_plugin'),
+      '#options' => $creator_plugins,
     ];
 
     $form['display'] = [

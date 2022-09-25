@@ -10,7 +10,7 @@ use Drupal\recurring_events\Entity\EventInstance;
 use Drupal\recurring_events\Entity\EventSeries;
 use Drupal\Core\Messenger\Messenger;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
-use Drupal\Core\Entity\EntityTypeManager;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandler;
 use Drupal\Core\Utility\Token;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -94,14 +94,14 @@ class RegistrationCreationService {
    *   The logger factory.
    * @param \Drupal\Core\Messenger\Messenger $messenger
    *   The messenger service.
-   * @param \Drupal\Core\Entity\EntityTypeManager $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager service.
    * @param \Drupal\Core\Extension\ModuleHandler $module_handler
    *   The module handler service.
    * @param \Drupal\Core\Utility\Token $token
    *   The token service.
    */
-  public function __construct(TranslationInterface $translation, Connection $database, LoggerChannelFactoryInterface $logger, Messenger $messenger, EntityTypeManager $entity_type_manager, ModuleHandler $module_handler, Token $token) {
+  public function __construct(TranslationInterface $translation, Connection $database, LoggerChannelFactoryInterface $logger, Messenger $messenger, EntityTypeManagerInterface $entity_type_manager, ModuleHandler $module_handler, Token $token) {
     $this->translation = $translation;
     $this->database = $database;
     $this->loggerFactory = $logger->get('recurring_events_registration');
@@ -752,12 +752,19 @@ class RegistrationCreationService {
       if ($registration_id === $ignored_registrant_id) {
         continue;
       }
-      // Compare the event instance ID and email address.
-      if (($this->eventInstance->id() == $registration_record->get('eventinstance_id')->target_id)
-        && ($this->cleanEmailAddress($email) == $this->cleanEmailAddress($registration_record->get('email')->value))) {
-        // Remember the existing registration ID and stop looking.
-        $existing_registration_id = $registration_id;
-        break;
+      if ($this->cleanEmailAddress($email) == $this->cleanEmailAddress($registration_record->get('email')->value)) {
+        if ($this->getRegistrationType() === 'instance') {
+          // Compare the event instance ID and email address.
+          if (($this->eventInstance->id() == $registration_record->get('eventinstance_id')->target_id)) {
+            // Remember the existing registration ID and stop looking.
+            $existing_registration_id = $registration_id;
+            break;
+          }
+        }
+        else {
+          $existing_registration_id = $registration_id;
+          break;
+        }
       }
     }
     return $existing_registration_id;

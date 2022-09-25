@@ -63,7 +63,7 @@
             else if (!drupalSettings.eu_cookie_compliance.hide_the_banner) {
               Drupal.eu_cookie_compliance.execute();
             }
-            $(element).addClass('eu-cookie-compliance-status-' + Drupal.eu_cookie_compliance.getCurrentStatus());
+            $(this).addClass('eu-cookie-compliance-status-' + Drupal.eu_cookie_compliance.getCurrentStatus());
           });
         }
         else {
@@ -802,10 +802,10 @@
   };
 
   Drupal.eu_cookie_compliance.setPreferenceCheckboxes = function (categories) {
-    if ((categories.length && Drupal.eu_cookie_compliance.getCookieStatus() !== null) || Drupal.eu_cookie_compliance.getCookieStatus() === cookieValueDisagreed) {
+    if (Drupal.eu_cookie_compliance.getCookieStatus() !== null || Drupal.eu_cookie_compliance.getCookieStatus() === cookieValueDisagreed) {
       // Unset all categories to prevent a problem where the checkboxes with a
       // default state set would always show up as checked.
-      $("#eu-cookie-compliance-categories input:checkbox").removeAttr("checked");
+      $("#eu-cookie-compliance-categories input:checkbox").not(":disabled").prop("checked", false);
     }
     // Check the appropriate checkboxes.
     for (var i in categories) {

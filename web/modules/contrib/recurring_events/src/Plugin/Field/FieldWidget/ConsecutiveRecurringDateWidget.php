@@ -318,7 +318,7 @@ class ConsecutiveRecurringDateWidget extends DateRangeDefaultWidget {
    */
   public function validateForm(array &$element, FormStateInterface $form_state, array &$complete_form) {
     $recur_type = $form_state->getValue('recur_type');
-    if ($recur_type[0]['value'] === 'consecutive_recurring_date') {
+    if (isset($recur_type[0]['value']) && $recur_type[0]['value'] === 'consecutive_recurring_date') {
       $values = $form_state->getValue('consecutive_recurring_date');
       if (empty($values[0])) {
         $form_state->setError($element, $this->t('Please configure the Consecutive Recurring Date settings'));

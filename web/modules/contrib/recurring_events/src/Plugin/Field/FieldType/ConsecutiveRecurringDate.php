@@ -77,8 +77,8 @@ class ConsecutiveRecurringDate extends DateRangeItem implements RecurringEventsF
     $buffer = $this->get('buffer')->getValue();
     $buffer_units = $this->get('buffer_units')->getValue();
     return parent::isEmpty() && empty($time) && empty($end_time)
-    && empty($duration) && empty($duration_units)
-    && empty($buffer) && empty($buffer_units);
+      && empty($duration) && empty($duration_units)
+      && empty($buffer) && empty($buffer_units);
   }
 
   /**
@@ -153,8 +153,8 @@ class ConsecutiveRecurringDate extends DateRangeItem implements RecurringEventsF
     }
 
     if (!empty($user_input['consecutive_recurring_date'][0]['value'])
-    && !empty($user_input['consecutive_recurring_date'][0]['end_value'])
-    && !empty($user_input['consecutive_recurring_date'][0]['time'])) {
+      && !empty($user_input['consecutive_recurring_date'][0]['end_value'])
+      && !empty($user_input['consecutive_recurring_date'][0]['time'])) {
       $time_parts = static::convertTimeTo24hourFormat($time);
       $timestamp = implode(':', $time_parts);
       $user_input['consecutive_recurring_date'][0]['value']->setTimezone($user_timezone);
@@ -185,20 +185,21 @@ class ConsecutiveRecurringDate extends DateRangeItem implements RecurringEventsF
    */
   public static function buildDiffArray(array $entity_config, array $form_config) {
     $diff = [];
-
-    if ($entity_config['start_date']->format(DateTimeItemInterface::DATETIME_STORAGE_FORMAT) !== $form_config['start_date']->format(DateTimeItemInterface::DATETIME_STORAGE_FORMAT)) {
-      $diff['start_date'] = [
-        'label' => t('Start Date'),
-        'stored' => $entity_config['start_date']->format(DateTimeItemInterface::DATE_STORAGE_FORMAT),
-        'override' => $form_config['start_date']->format(DateTimeItemInterface::DATE_STORAGE_FORMAT),
-      ];
-    }
-    if ($entity_config['end_date']->format(DateTimeItemInterface::DATETIME_STORAGE_FORMAT) !== $form_config['end_date']->format(DateTimeItemInterface::DATETIME_STORAGE_FORMAT)) {
-      $diff['end_date'] = [
-        'label' => t('End Date'),
-        'stored' => $entity_config['end_date']->format(DateTimeItemInterface::DATE_STORAGE_FORMAT),
-        'override' => $form_config['end_date']->format(DateTimeItemInterface::DATE_STORAGE_FORMAT),
-      ];
+    if (!empty($entity_config['start_date']) && !empty($entity_config['end_date'])) {
+      if ($entity_config['start_date']->format(DateTimeItemInterface::DATETIME_STORAGE_FORMAT) !== $form_config['start_date']->format(DateTimeItemInterface::DATETIME_STORAGE_FORMAT)) {
+        $diff['start_date'] = [
+          'label' => t('Start Date'),
+          'stored' => $entity_config['start_date']->format(DateTimeItemInterface::DATE_STORAGE_FORMAT),
+          'override' => $form_config['start_date']->format(DateTimeItemInterface::DATE_STORAGE_FORMAT),
+        ];
+      }
+      if ($entity_config['end_date']->format(DateTimeItemInterface::DATETIME_STORAGE_FORMAT) !== $form_config['end_date']->format(DateTimeItemInterface::DATETIME_STORAGE_FORMAT)) {
+        $diff['end_date'] = [
+          'label' => t('End Date'),
+          'stored' => $entity_config['end_date']->format(DateTimeItemInterface::DATE_STORAGE_FORMAT),
+          'override' => $form_config['end_date']->format(DateTimeItemInterface::DATE_STORAGE_FORMAT),
+        ];
+      }
     }
     if ((strtoupper($entity_config['time'] ?? '')) !== (strtoupper($form_config['time'] ?? ''))) {
       $diff['time'] = [
@@ -253,28 +254,30 @@ class ConsecutiveRecurringDate extends DateRangeItem implements RecurringEventsF
     $events_to_create = [];
     $utc_timezone = new \DateTimeZone(DateTimeItemInterface::STORAGE_TIMEZONE);
 
-    $daily_dates = static::findDailyDatesBetweenDates($form_data['start_date'], $form_data['end_date']);
-    $time_parts = static::convertTimeTo24hourFormat($form_data['time']);
+    if(!empty($form_data['start_date']) && !empty($form_data['end_date'])) {
+      $daily_dates = static::findDailyDatesBetweenDates($form_data['start_date'], $form_data['end_date']);
+      $time_parts = static::convertTimeTo24hourFormat($form_data['time']);
 
-    if (!empty($daily_dates)) {
-      foreach ($daily_dates as $daily_date) {
-        // Set the time of the start date to be the hours and minutes.
-        $daily_date->setTime($time_parts[0], $time_parts[1]);
-        // Configure the right timezone.
-        $daily_date->setTimezone($utc_timezone);
-        $day_times = static::findSlotsBetweenTimes($daily_date, $form_data);
+      if (!empty($daily_dates)) {
+        foreach ($daily_dates as $daily_date) {
+          // Set the time of the start date to be the hours and minutes.
+          $daily_date->setTime($time_parts[0], $time_parts[1]);
+          // Configure the right timezone.
+          $daily_date->setTimezone($utc_timezone);
+          $day_times = static::findSlotsBetweenTimes($daily_date, $form_data);
 
-        if (!empty($day_times)) {
-          foreach ($day_times as $day_time) {
-            // Create a clone of this date.
-            $daily_date_end = clone $day_time;
-            // Add the number of seconds specified in the duration field.
-            $daily_date_end->modify('+' . $form_data['duration'] . ' ' . $form_data['duration_units']);
-            // Set this event to be created.
-            $events_to_create[$day_time->format('r')] = [
-              'start_date' => $day_time,
-              'end_date' => $daily_date_end,
-            ];
+          if (!empty($day_times)) {
+            foreach ($day_times as $day_time) {
+              // Create a clone of this date.
+              $daily_date_end = clone $day_time;
+              // Add the number of seconds specified in the duration field.
+              $daily_date_end->modify('+' . $form_data['duration'] . ' ' . $form_data['duration_units']);
+              // Set this event to be created.
+              $events_to_create[$day_time->format('r')] = [
+                'start_date' => $day_time,
+                'end_date' => $daily_date_end,
+              ];
+            }
           }
         }
       }

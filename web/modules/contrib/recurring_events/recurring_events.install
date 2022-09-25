@@ -649,3 +649,12 @@ function recurring_events_update_8013() {
   }
   return t('No Recurring events views to update.');
 }
+
+/**
+ * Set the default event instance plugin creator.
+ */
+function recurring_events_update_8014() {
+  $config = \Drupal::configFactory()->getEditable('recurring_events.eventseries.config');
+  $config->set('creator_plugin', 'recurring_events_eventinstance_recreator');
+  $config->save(TRUE);
+}

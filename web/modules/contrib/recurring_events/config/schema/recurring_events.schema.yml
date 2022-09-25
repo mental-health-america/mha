@@ -44,6 +44,9 @@ recurring_events.eventseries.config:
     threshold_prevent_save:
       type: integer
       label: 'Prevent saving a series if too many instances are being created'
+    creator_plugin:
+      type: string
+      label: 'The creator plugin used when creating event instances'
 
 recurring_events.eventinstance.config:
   type: config_object

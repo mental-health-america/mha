@@ -219,11 +219,16 @@ function recurring_events_eventseries_update(EntityInterface $entity) {
   if ($date_changes) {
     if ($entity->isPublished() || !$moderated) {
       if ($entity->isDefaultTranslation()) {
-        $creation_service->clearEventInstances($entity);
-        $creation_service->createInstances($entity);
+        $plugin_manager = \Drupal::service('plugin.manager.event_instance_creator');
+        $config = \Drupal::config('recurring_events.eventseries.config');
+        $active_plugin = $plugin_manager->createInstance($config->get('creator_plugin'), []);
+        \Drupal::moduleHandler()->alter('recurring_events_event_instance_creator_plugin', $active_plugin, $plugin_manager, $entity);
+        $active_plugin->processInstances($entity);
       }
     }
     // Get a fresh version of the series to get the updated instances.
+    $storage = \Drupal::entityTypeManager()->getStorage('eventseries');
+    $storage->resetCache([$entity->id()]);
     $entity = $entity->load($entity->id());
   }
   $instances = $entity->event_instances->referencedEntities();

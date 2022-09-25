@@ -5,6 +5,10 @@
  * Custom hooks exposed by the recurring_events module.
  */
 
+use Drupal\recurring_events\Entity\EventSeries;
+use Drupal\recurring_events\EventInstanceCreatorInterface;
+use Drupal\recurring_events\EventInstanceCreatorPluginManager;
+
 /**
  * Alter the time options available when creating an event series entity.
  *
@@ -69,6 +73,23 @@ function hook_recurring_events_month_days_alter(array &$month_days = []) {
 function hook_recurring_events_event_instance_alter(array &$event_instance = []) {
   // Change the series ID.
   $event_instance['event_series_id'] = 12;
+}
+
+/**
+ * Alter the active EventInstanceCreator plugin.
+ *
+ * @param Drupal\recurring_events\EventInstanceCreatorInterface $active_plugin
+ *   The active plugin to use.
+ * @param Drupal\recurring_events\EventInstanceCreatorPluginManager $plugin_manager
+ *   The plugin manager to discover plugins.
+ * @param Drupal\recurring_events\Entity\EventSeries $series
+ *   The event series for which we need to create instances.
+ */
+function hook_recurring_events_event_instance_creator_plugin_alter(EventInstanceCreatorInterface &$active_plugin, EventInstanceCreatorPluginManager $plugin_manager, EventSeries $series) {
+  // If this is series #1 then use some-other-id plugin instead.
+  if ($series->id() === 1) {
+    $active_plugin = $plugin_manager->createInstance('some-other-id', []);
+  }
 }
 
 /**

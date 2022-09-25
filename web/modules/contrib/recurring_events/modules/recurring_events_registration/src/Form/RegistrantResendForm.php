@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\recurring_events_registration\RegistrationCreationService;
 use Drupal\recurring_events_registration\NotificationService;
 use Drupal\Core\Messenger\Messenger;
-use Drupal\Core\Mail\MailManager;
+use Drupal\Core\Mail\MailManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\Core\Render\Renderer;
 use Drupal\Core\Link;
@@ -54,7 +54,7 @@ class RegistrantResendForm extends FormBase {
   /**
    * The mail manager service.
    *
-   * @var \Drupal\Core\Mail\MailManager
+   * @var \Drupal\Core\Mail\MailManagerInterface
    */
   protected $mail;
 
@@ -104,7 +104,7 @@ class RegistrantResendForm extends FormBase {
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager service.
    */
-  public function __construct(RequestStack $request, RegistrationCreationService $creation_service, NotificationService $notification_service, Messenger $messenger, MailManager $mail, Renderer $renderer, LanguageManagerInterface $language_manager) {
+  public function __construct(RequestStack $request, RegistrationCreationService $creation_service, NotificationService $notification_service, Messenger $messenger, MailManagerInterface $mail, Renderer $renderer, LanguageManagerInterface $language_manager) {
     $this->request = $request;
     $this->creationService = $creation_service;
     $this->notificationService = $notification_service;
