@@ -237,7 +237,20 @@
             "initial": {
                 ".editorconfig": "../.editorconfig",
                 ".gitattributes": "../.gitattributes"
-            }
+            },
+            "locations": {
+                "web-root": "web"
+            },
+            "file-mapping": {
+                "docroot/.htaccess": false
+            },
+            "excludes": [
+                ".htaccess",
+                "robots.txt"
+            ]
         }
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^5.4"
     }
 }
