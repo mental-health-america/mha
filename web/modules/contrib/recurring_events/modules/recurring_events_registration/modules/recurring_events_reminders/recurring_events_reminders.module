@@ -95,8 +95,11 @@ function recurring_events_reminders_eventseries_insert(EntityInterface $entity) 
 function recurring_events_reminders_eventseries_update(EntityInterface $entity) {
   $original = $entity->original;
   if ($entity->registration_reminders->reminder) {
+    $entity = $entity->load($entity->id());
+
     if ($original->registration_reminders->reminder_amount !== $entity->registration_reminders->reminder_amount
-    || $original->registration_reminders->reminder_units !== $entity->registration_reminders->reminder_units) {
+      || $original->registration_reminders->reminder_units !== $entity->registration_reminders->reminder_units
+    ) {
       $amount = $entity->registration_reminders->reminder_amount;
       $units = $entity->registration_reminders->reminder_units;
       $instances = $entity->event_instances->referencedEntities();

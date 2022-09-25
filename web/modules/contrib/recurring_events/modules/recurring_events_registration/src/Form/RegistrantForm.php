@@ -4,6 +4,7 @@ namespace Drupal\recurring_events_registration\Form;
 
 use Drupal\Core\Entity\ContentEntityForm;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Messenger\Messenger;
@@ -544,7 +545,7 @@ class RegistrantForm extends ContentEntityForm {
       $this->messenger->addMessage(new FormattableMarkup($this->notificationService->parseTokenizedString($message), []));
     }
 
-    $form_state->setRedirect('entity.registrant.add_form', ['eventinstance' => $event_instance->id()]);
+    $form_state->setRedirectUrl(Url::fromRoute('<current>'));
 
     // @todo Remove when https://www.drupal.org/node/3173241 drops.
     if ($this->moderationInformation) {

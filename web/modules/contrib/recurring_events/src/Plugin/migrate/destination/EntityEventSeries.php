@@ -2,18 +2,19 @@
 
 namespace Drupal\recurring_events\Plugin\migrate\destination;
 
-use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
-use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\migrate\Plugin\migrate\destination\EntityContentBase;
-use Drupal\migrate\Plugin\MigrationInterface;
 use Drupal\migrate\Row;
-use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\recurring_events\Entity\EventSeries;
+use Drupal\recurring_events\Plugin\migrate\process\RecurringDate;
+use Drupal\recurring_events\Plugin\migrate\process\RRuleHelper;
 
 /**
  * The 'entity:eventseries' destination plugin for Recurring Events.
  *
  * Usage:
+ *
+ * When importing from a Drupal 7 source, use a config similar to the example
+ * below (where 'field_event_datetime' is the name of the source date field).
  *
  * @code
  * destination:
@@ -23,7 +24,48 @@ use Drupal\recurring_events\Entity\EventSeries;
  *   source_timezone: 'America/New_York'
  * @endcode
  *
- * Where "field_event_datetime" is the machine name of the existing date field.
+ * This will directly convert the source field to populate the recurrence
+ * options on the event series.
+ *
+ * If you are instead importing from a non-Drupal 7 source and want to use the
+ * process pipeline to construct the recur_type, recurrence options, and
+ * excluded/included dates data, you can use the following config (where 'dates'
+ * is a destination field built using the 'recurring_date' process plugin).
+ *
+ * @code
+ * destination:
+ *   plugin: 'entity:eventseries'
+ *   default_bundle: default
+ *   recurring_date_field: dates
+ * @endcode
+ *
+ * This will rename the recurring_date_field to match the recur_type before the
+ * destination entity is saved. For example:
+ *   - If the recur_type is 'weekly_recurring_date', the recurring_date_field
+ *     will be renamed to 'weekly_recurring_date' before saving.
+ *   - If the recur_type is 'custom', the recurring_date_field will be renamed
+ *     to 'custom_date' before saving.
+ *
+ * Finally, if you simply want to pass your processed destination fields through
+ * without any modification (for example, if you are using recur_type = 'custom'
+ * for all imported events and constructing your own 'custom_date' field), use
+ * the following config.
+ *
+ * @code
+ * destination:
+ *   plugin: 'entity:eventseries'
+ *   default_bundle: default
+ * @endcode
+ *
+ * Available configuration keys:
+ *   - source_date_field: (optional) When importing from a Drupal 7 source, this
+ *     is the name of the source field to use for the date recurrence pattern.
+ *   - source_timezone: (optional, but required when using 'source_date_field')
+ *     The timezone for the source_date_field data.
+ *   - recurring_date_field: (optional) When using the recurring_date process
+ *     plugin to construct recurrence pattern data, this is the name of the
+ *     destination field that contains that plugin's output. In this case, it is
+ *     assumed that a 'recur_type' destination field has also been properly set.
  *
  * @MigrateDestination(
  *   id = "entity:eventseries"
@@ -31,144 +73,66 @@ use Drupal\recurring_events\Entity\EventSeries;
  */
 class EntityEventSeries extends EntityContentBase {
 
-  const DATETIME_FORMAT = 'Y-m-d\TH:i:s';
-
-  /**
-   * Default event duration (in seconds).
-   *
-   * Used for events that have no end date in the source event.
-   */
-  const DEFAULT_DURATION = 60 * 60;
-
-  const DAYS_OF_WEEK_TR = [
-    'MO' => 'monday',
-    'TU' => 'tuesday',
-    'WE' => 'wednesday',
-    'TH' => 'thursday',
-    'FR' => 'friday',
-    'SA' => 'saturday',
-    'SU' => 'sunday',
-  ];
-
-  const BYDAY_TR = [
-    '+1' => 'first',
-    '+2' => 'second',
-    '+3' => 'third',
-    '+4' => 'fourth',
-    '-1' => 'last',
-  ];
-
-  /**
-   * {@inheritdoc}
-   */
-  public function fields(MigrationInterface $migration = NULL) {
-    return [
-      'source_date_field' => $this->t('The source date field.'),
-    ];
-  }
-
   /**
    * {@inheritdoc}
    */
   public function import(Row $row, array $old_destination_id_values = []) {
-    $source_date_field = $this->configuration['source_date_field'];
-    $source_timezone = new \DateTimeZone($this->configuration['source_timezone']);
-    date_default_timezone_set($this->configuration['source_timezone']);
-    $source = $row->getSourceProperty($source_date_field);
-    $this->setRecurringDateValues($source, $source_timezone, $row);
+    if (isset($this->configuration['source_date_field'])) {
+      $source = $row->getSourceProperty($this->configuration['source_date_field']);
+      $this->setRecurringDateValues($source, $this->configuration['source_timezone'], $row);
+    }
+    elseif (isset($this->configuration['recurring_date_field'])) {
+      $recurring_date_field = $row->getDestinationProperty($this->configuration['recurring_date_field']);
+      $recur_type = $row->getDestinationProperty('recur_type');
+      $this->setRecurringDateField($row, $recur_type, $recurring_date_field);
+    }
     return parent::import($row, $old_destination_id_values);
   }
 
   /**
-   * Convert date field data including RRULE values to format used by module.
+   * Adds recurrence data to the row in a field that matches the recur_type.
+   *
+   * @param \Drupal\migrate\Row $row
+   *   The current row being imported.
+   * @param string $recur_type
+   *   The recur_type for the eventseries destination entity.
+   * @param array $recurring_date_field
+   *   An array containing recurrence field data.
+   *
+   * @see \Drupal\recurring_events\Plugin\migrate\process\RecurringDate
+   */
+  private function setRecurringDateField(Row $row, string $recur_type, array $recurring_date_field) {
+    $recurring_date_field_name = ($recur_type === 'custom') ? 'custom_date' : $recur_type;
+    $row->setDestinationProperty($recurring_date_field_name, $recurring_date_field);
+  }
+
+  /**
+   * Set destination recurring date values directly on the row.
    *
    * @param array $source
-   *   Date field data.
-   * @param \DateTimeZone $source_timezone
-   *   The source timezone for the recurring dates.
+   *   The source date field data.
+   * @param string $source_timezone
+   *   The timezone for the source dates.
    * @param \Drupal\migrate\Row $row
-   *   Row object.
+   *   The current row being imported.
+   *
+   * @throws \Drupal\migrate\MigrateException
    */
-  private function setRecurringDateValues(array $source, \DateTimeZone $source_timezone, Row $row) {
+  private function setRecurringDateValues(array $source, string $source_timezone, Row $row) {
+    // Set the recur_type.
+    $rrule_string = $source[0]['rrule'] ?? NULL;
+    $rrule = isset($rrule_string) ? RRuleHelper::parseRule($rrule_string) : [];
+    $recur_type = RRuleHelper::getRecurType($rrule);
+    $row->setDestinationProperty('recur_type', $recur_type);
 
-    // @todo Fix problem of specifying what months here.
-    // @todo Fix problem of no yearly pattern here.
-    if (!$num_dates = count($source)) {
-      return;
-    }
-    $first = $source[0];
-    $last = $source[$num_dates - 1];
-
-    // Get values for the first event in the series.
-    $start_event = new DrupalDateTime($first['value'], DateTimeItemInterface::STORAGE_TIMEZONE);
-    $start_event->setTimezone($source_timezone);
-    $end_key = (!empty($first['value2'])) ? 'value2' : 'value';
-    $end_event = new DrupalDateTime($first[$end_key], DateTimeItemInterface::STORAGE_TIMEZONE);
-    $end_event->setTimezone($source_timezone);
-    if (!$duration = $end_event->getTimestamp() - $start_event->getTimestamp()) {
-      $duration = self::DEFAULT_DURATION;
-      $end_event->add(new \DateInterval('PT' . $duration . 'S'));
-    }
-
-    // Get values for the last event in the series (so we know when to end it).
-    $end_series = new DrupalDateTime($last['value'], DateTimeItemInterface::STORAGE_TIMEZONE);
-    $end_series->setTimezone($source_timezone);
-    $rule_in = $first['rrule'] ?? NULL;
-
-    if ($rule_in) {
-      if (!$rrule = $this->parseRule($rule_in)) {
-        // @todo Fix problem of what type of exception should be thrown here.
-        throw new InvalidDataTypeException('Invalid RRULE.');
-      }
-    }
-
-    $freq = $rrule['FREQ'] ?? NULL;
-    switch ($freq) {
-
-      case 'WEEKLY':
-        $recur_type = 'weekly_recurring_date';
-        $options = [
-          'value' => $start_event->format(self::DATETIME_FORMAT),
-          'end_value' => $end_series->format(self::DATETIME_FORMAT),
-          'time' => $start_event->format('h:i a'),
-          'end_time' => $end_event->format('h:i a'),
-          'duration' => $duration,
-          'duration_or_end_time' => 'end_time',
-          'days' => $rrule['BYDAY']['days'] ?? strtolower($start_event->format('l')),
-        ];
-        break;
-
-      case 'MONTHLY':
-        $recur_type = 'monthly_recurring_date';
-        $options = [
-          'value' => $start_event->format(self::DATETIME_FORMAT),
-          'end_value' => $end_series->format(self::DATETIME_FORMAT),
-          'time' => $start_event->format('h:i a'),
-          'end_time' => $end_event->format('h:i a'),
-          'duration' => $duration,
-          'duration_or_end_time' => 'end_time',
-          'days' => $rrule['BYDAY']['days'] ?? strtolower($start_event->format('l')),
-          'type' => (!empty($rrule['BYMONTHDAY'])) ? 'monthday' : 'weekday',
-          'day_occurrence' => $rrule['BYDAY']['day_occurrence'] ?? NULL,
-          'day_of_month' => $rrule['BYMONTHDAY'] ?? NULL,
-        ];
-        break;
-
-      default:
-        $recur_type = 'custom';
-        $options = [];
-        $custom = [];
-        foreach ($source as $date) {
-          $date_start = new DrupalDateTime($date['value'], $source_timezone);
-          $date_end = new DrupalDateTime($date['value2'], $source_timezone);
-          $custom[] = [
-            'value' => $date_start->format(self::DATETIME_FORMAT),
-            'end_value' => $date_end->format(self::DATETIME_FORMAT),
-          ];
-        } // Loop thru dates.
-        $row->setDestinationProperty('custom_date', $custom);
-
-    }
+    // Set the recurrence options.
+    $options = RecurringDate::calculateRecurringDateValues($source, [
+      'value_key' => 'value',
+      'end_value_key' => 'value2',
+      'rrule_key' => 'rrule',
+      'default_timezone' => $source_timezone,
+    ]);
+    $this->setRecurringDateField($row, $recur_type, $options);
 
     if (!empty($rrule['EXDATE'])) {
       $row->setDestinationProperty('excluded_dates', $rrule['EXDATE']);
@@ -176,147 +140,9 @@ class EntityEventSeries extends EntityContentBase {
 
     // @todo Fix problem of how to set this in D7 here.
     // if (!empty($rrule['INCDATE'])) {
-    // $row->setDestinationProperty('excluded_dates', $rrule['INCDATE']);
+    // $row->setDestinationProperty('included_dates', $rrule['INCDATE']);
     // }
-    $row->setDestinationProperty('recur_type', $recur_type);
-    $row->setDestinationProperty($recur_type, $options);
     // $row->setDestinationProperty('event_registration', ['value' => 0]);
-  }
-
-  /**
-   * Parse an RRULE into an array.
-   *
-   * @param string $rrule
-   *   The RRULE to parse.
-   */
-  private function parseRule($rrule) {
-
-    if (!$attrs = array_filter(explode(';', preg_replace('/^(?:RRULE|EXRULE):/i', '', str_replace("\n", ';', $rrule))))) {
-      return FALSE;
-    }
-
-    $options = [];
-    foreach ($attrs as $attr) {
-      [$key, $value] = preg_split('/[=:]/', $attr);
-      $key = strtoupper($key);
-      switch ($key) {
-
-        case 'COUNT':
-        case 'INTERVAL':
-        case 'BYSETPOS':
-        case 'BYMONTHDAY':
-        case 'BYYEARDAY':
-        case 'BYWEEKNO':
-        case 'BYHOUR':
-        case 'BYMINUTE':
-        case 'BYSECOND':
-        case 'FREQ':
-        case 'WKST':
-        case 'DTSTART':
-        case 'TZID':
-        case 'BYEASTER':
-          $options[$key] = $value;
-          break;
-
-        case 'UNTIL':
-          $options[$key] = $this->formatDate($value);
-          break;
-
-        case 'BYDAY':
-          if (preg_match('/([+-]\d)(.*)/', trim($value), $matches)) {
-            $options['BYDAY']['day_occurrence'] = $matches[1] ?? NULL;
-            $options['BYDAY']['day_occurrence'] = $this->formatByDay($options['BYDAY']['day_occurrence']);
-            $options['BYDAY']['days'] = $matches[2] ?? NULL;
-            $options['BYDAY']['days'] = $this->formatDaysOfWeek($options['BYDAY']['days']);
-          }
-          else {
-            $options['BYDAY']['days'] = $this->formatDaysOfWeek(trim($value));
-          }
-          break;
-
-        case 'BYMONTH':
-        case 'BYWEEKDAY':
-          $value = $this->formatDaysOfWeek($value);
-          $options[$key] = array_filter(explode(',', $value));
-          break;
-
-        case 'EXDATE':
-          foreach (array_filter(explode(',', $value)) as $datetime) {
-            $options['EXDATE'][] = [
-              'value' => $this->formatDate($datetime, 'Y-m-d'),
-              'end_value' => $this->formatDate($datetime, 'Y-m-d'),
-            ];
-          }
-          break;
-
-        default:
-          // @todo Fix problem of what type of exception should be thrown here.
-          throw new InvalidDataTypeException(sprintf('Invalid RRULE attribute of "%s".', $key));
-
-      }
-
-    } // Loop thru attributes.
-    return $options;
-
-  }
-
-  /**
-   * Get formatted date from RRULE data.
-   *
-   * @param string $value
-   *   Date in format 20210107T050000Z.
-   * @param string $format
-   *   Date format for output.
-   *
-   * @return false|string
-   *   Formatted date string.
-   */
-  private function formatDate($value, $format = self::DATETIME_FORMAT) {
-    $timestamp = $this->getTimestamp($value);
-    if ($timestamp === FALSE) {
-      return FALSE;
-    }
-    return date($format, $timestamp);
-  }
-
-  /**
-   * Get timestamp for RRULE data.
-   *
-   * @param string $value
-   *   Date in format 20210107T050000Z.
-   *
-   * @return false|int
-   *   Unix timestamp.
-   */
-  private function getTimestamp($value) {
-    $value = trim(preg_replace('/[TZ]/', ' ', $value));
-    return strtotime($value);
-  }
-
-  /**
-   * Convert RRULE day values to format used by recurring_events.
-   *
-   * @param string $value
-   *   Day(s) in RRULE format (e.g. MO,TU).
-   *
-   * @return string
-   *   Days in recurring_events format (e.g. monday,tuesday).
-   */
-  private function formatDaysOfWeek($value) {
-    return strtr($value, self::DAYS_OF_WEEK_TR);
-  }
-
-  /**
-   * Convert RRULE format for BYDAY to format used by recurring_events.
-   *
-   * @param string $value
-   *   BYDAY values like "+1" in "+1TH".
-   *
-   * @return string
-   *   BYDAY in recurring_events format (e.g. "first").
-   */
-  private function formatByDay($value) {
-    return strtr($value, self::BYDAY_TR);
   }
 
   /**

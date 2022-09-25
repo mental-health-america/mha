@@ -40,10 +40,10 @@ function recurring_events_views_help($route_name, RouteMatchInterface $route_mat
 function recurring_events_views_local_tasks_alter(&$local_tasks) {
   if (\Drupal::moduleHandler()->moduleExists('recurring_events_registration')) {
     try {
-      if (\Drupal::service('router.route_provider')->getRouteByName('view.registrations.event_registrant_list')) {
+      if (\Drupal::service('router.route_provider')->getRouteByName('view.recurring_events_registrations.event_registrant_list')) {
         if (!empty($local_tasks['entity.registrant.instance_listing'])) {
-          $local_tasks['entity.registrant.instance_listing']['route_name'] = 'view.registrations.event_registrant_list';
-          $local_tasks['entity.registrant.instance_listing']['id'] = 'view.registrations.event_registrant_list';
+          $local_tasks['entity.registrant.instance_listing']['route_name'] = 'view.recurring_events_registrations.event_registrant_list';
+          $local_tasks['entity.registrant.instance_listing']['id'] = 'view.recurring_events_registrations';
         }
       }
     }
@@ -51,7 +51,7 @@ function recurring_events_views_local_tasks_alter(&$local_tasks) {
       \Drupal::logger('recurring_events_views')->error($exception->getMessage());
     }
 
-    if (!empty($local_tasks['views_view:view.registrations.user_event_registrations'])) {
+    if (!empty($local_tasks['views_view:view.recurring_events_registrations.user_event_registrations'])) {
       unset($local_tasks['entity.user.registrations']);
     }
   }
