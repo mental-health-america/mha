@@ -404,9 +404,12 @@ input[type="submit"],
 }
 
 .path-issues header .gva-view .view-content-wrap {
-    background: var(--mha-white);
-    padding: 2rem;
-    border-top: 5px solid var(--mha-navy);
+    background: #fafafa;
+    padding: 3rem;
+}
+
+.ui-accordion .ui-accordion-content {
+    padding: 1em 0 0 1.3rem !important;
 }
 
 .path-issues tbody tr:nth-child(odd) {
@@ -430,7 +433,7 @@ input[type="submit"],
 
 .path-issues table > thead:first-child > tr:first-child > th {
     background: var(--mha-info);
-    color: var(--mha-white);
+    color: var(--mha-white) !important;
 }
 
 .path-issues .gva-view table {

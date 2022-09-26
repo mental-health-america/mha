@@ -6627,3 +6627,33 @@ h3.title-news a:hover {
 .cbs-accordion .views-row:nth-child(even) {
   background: #f9f9f9;
 }
+
+.mha-state-data .ui-state-default {
+  border: 1px solid #365888;
+  background: #ffffff;
+  font-size: 1rem !important;
+  font-weight: bold;
+  color: #365888 !important;
+}
+
+.mha-state-data .views-row {
+  padding: 0 3rem;
+  margin: 0 0 2rem;
+}
+
+.mha-state-data .ui-accordion-content .views-row {
+  font-size: .85rem !important;
+}
+
+.mha-state-data .ui-accordion-content .views-row {
+  padding: 0;
+  margin: 0;
+}
+
+.mha-state-data h3:first-of-type {
+  margin: 0 !important;
+}
+
+.mha-state-data .ui-widget-content {
+  border: 1px solid #365888;
+}
