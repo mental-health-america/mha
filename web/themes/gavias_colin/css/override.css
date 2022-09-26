@@ -1489,3 +1489,9 @@ footer a:active {
 #block-thestateofmentalhealthinamerica {
     margin-top: 2rem !important;
 }
+.map-bar.w-100.py-2 {
+    display: block;
+    background: #fff;
+    padding: 1rem 0.5rem 2rem !important;
+}
+
