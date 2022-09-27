@@ -405,7 +405,7 @@ input[type="submit"],
 
 .path-issues header .gva-view .view-content-wrap {
     background: #fafafa;
-    padding: 3rem;
+    padding: 0 2rem 3rem 2rem;
 }
 
 .ui-accordion .ui-accordion-content {
@@ -1489,9 +1489,30 @@ footer a:active {
 #block-thestateofmentalhealthinamerica {
     margin-top: 2rem !important;
 }
+
 .map-bar.w-100.py-2 {
     display: block;
     background: #fff;
     padding: 1rem 0.5rem 2rem !important;
 }
 
+.path-issues .gva-view table {
+    background: #fafafa;
+}
+
+.path-issues tbody tr:nth-child(2n) {
+    background: #f4f4f4;
+}
+
+.path-issues tbody tr:nth-child(2n+1) {
+    background: #eaeaea;
+}
+.path-issues header {
+    margin: 0;
+}
+
+.path-issues .gva-view table {
+    border-bottom: 4rem solid transparent !important;
+    border-left: 10rem solid transparent !important;
+    border-right: 10rem solid transparent !important;
+}
