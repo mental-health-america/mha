@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '2b428de26d5aa0d8dde0289a2aaf0801a3f89fbb',
+        'reference' => '4a62816aa6c4bee4b9f6c2f369bc83098dffb8d0',
         'name' => 'drupal-composer/drupal-project',
         'dev' => true,
     ),
@@ -283,7 +283,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '2b428de26d5aa0d8dde0289a2aaf0801a3f89fbb',
+            'reference' => '4a62816aa6c4bee4b9f6c2f369bc83098dffb8d0',
             'dev_requirement' => false,
         ),
         'drupal/address' => array(
@@ -941,12 +941,12 @@
             'dev_requirement' => false,
         ),
         'drupal/imce' => array(
-            'pretty_version' => '2.4.0',
-            'version' => '2.4.0.0',
+            'pretty_version' => '2.5.0',
+            'version' => '2.5.0.0',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../web/modules/contrib/imce',
             'aliases' => array(),
-            'reference' => '8.x-2.4',
+            'reference' => '8.x-2.5',
             'dev_requirement' => false,
         ),
         'drupal/jquery_ui' => array(
