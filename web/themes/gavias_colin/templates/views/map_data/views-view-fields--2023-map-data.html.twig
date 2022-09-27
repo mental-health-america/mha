@@ -23,6 +23,10 @@
     </div>
 </div>
 
+<div>
+    <br>
+</div>
+
 {# Map JS -- this is the actual map #}
 <div class="map-js">
     {# Attach General CSS #}
@@ -35,12 +39,6 @@
     {# Attach Node JS #}
     <script src="/libraries/mha-maps/2023/{{ map_id }}.js" type="text/javascript"></script>
 
-    {#
-    <link href="/libraries/mha-maps/ammap/mhamapcolors.css" rel="stylesheet" type="text/css">
-    <script src="/libraries/mha-maps/ammap/ammapblue2022javascript.js" type="text/javascript"></script>
-    <!-- map file should be included after ammap.js -->
-    <script src="/libraries/mha-maps/ammap/maps/js/usaLowChildRank2022.js" type="text/javascript"></script>
-    #}
     {# Attach Map #}
     {{ map }}
 </div>
@@ -51,7 +49,7 @@
 </div>
 
 {# Copy #}
-<div class="map-copy py-3">
+<div class="map-copy py-3 px-5">
     {{ map_copy }}
 </div>
 

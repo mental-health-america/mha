@@ -2999,6 +2999,7 @@ ol.special li::before {
   background: var(--mha-white);
   padding: 2rem;
   border-top: 5px solid var(--mha-blue-hover);
+
 }
 
 .path-issues tbody tr:nth-child(odd) {
