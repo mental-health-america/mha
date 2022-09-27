@@ -26,15 +26,14 @@
 {# Map JS -- this is the actual map #}
 <div class="map-js">
     {# Attach General CSS #}
-    <link href="/libraries/mha-maps/{{ year }}/style/colors.css" rel="stylesheet"
+    <link href="/libraries/mha-maps/2023/mhamapcolors2022.css" rel="stylesheet"
           type="text/css">
 
     {# Attach General JS #}
-    <script src="/libraries/mha-maps/{{ year }}/style/map.js" type="text/javascript"></script>
+    <script src="/libraries/mha-maps/2023/ammapblue2022javascript.js" type="text/javascript"></script>
 
     {# Attach Node JS #}
-    <script src="/libraries/mha-maps/{{ year }}/category/{{ map_id }}.js"
-            type="text/javascript"></script>
+    <script src="/libraries/mha-maps/2023/{{ map_id }}.js" type="text/javascript"></script>
 
     {# Attach Map #}
     {{ map }}
