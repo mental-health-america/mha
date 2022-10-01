@@ -264,4 +264,3 @@ AmCharts.maps.usaYouthPrivateInsuranceNoCoverage2023 = {
         }
     }
 };
-

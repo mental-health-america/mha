@@ -264,4 +264,3 @@ AmCharts.maps.usaYouthSevereMDE2023 = {
         }
     }
 };
-
