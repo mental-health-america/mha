@@ -1516,3 +1516,14 @@ footer a:active {
     border-left: 10rem solid transparent !important;
     border-right: 10rem solid transparent !important;
 }
+
+#block-thestateofmentalhealthinamerica .block-content::before {
+    font-family: 'FontAwesome';
+    display: inline-block;
+    font-size: inherit;
+    margin: 0 10px 0 0;
+    content: '\f015';
+    position: absolute;
+    left: -10px;
+    color: var(--mha-orange);
+}
