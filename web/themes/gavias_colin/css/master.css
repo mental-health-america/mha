@@ -2998,8 +2998,20 @@ ol.special li::before {
 .path-issues header .gva-view .view-content-wrap {
   background: var(--mha-white);
   padding: 2rem;
-  border-top: 5px solid var(--mha-blue-hover);
+  border-top: 5px solid #f4f4f4;
+  border-bottom: 5px solid #f4f4f4;
+}
 
+.issues-2023 .line span.one {
+  background: #522d46;
+}
+
+.issues-2023 .line span.second {
+  background: #836378;
+}
+
+.issues-2023 .line span.three {
+  background: #b398ab;
 }
 
 .path-issues tbody tr:nth-child(odd) {
@@ -6324,12 +6336,6 @@ input[type="submit"],
   background: var(--mha-white) !important;
   padding: 10px !important;
   margin: 1rem 0;
-}
-
-.path-issues header .gva-view .view-content-wrap {
-  background: var(--mha-white);
-  padding: 2rem;
-  border-top: 5px solid var(--mha-blue-hover);
 }
 
 .path-issues tbody tr:nth-child(odd) {
