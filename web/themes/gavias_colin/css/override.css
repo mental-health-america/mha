@@ -1531,4 +1531,5 @@ footer a:active {
 
 .issue-map-wrapper {
     border: 2px solid #f4f4f4;
+    background: #fff !important;
 }
