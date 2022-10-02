@@ -1507,6 +1507,7 @@ footer a:active {
 .path-issues tbody tr:nth-child(2n+1) {
     background: #eaeaea;
 }
+
 .path-issues header {
     margin: 0;
 }
@@ -1526,4 +1527,8 @@ footer a:active {
     position: absolute;
     left: -10px;
     color: var(--mha-orange);
+}
+
+.issue-map-wrapper {
+    border: 2px solid #f4f4f4;
 }
