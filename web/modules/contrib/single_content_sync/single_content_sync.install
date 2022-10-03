@@ -12,7 +12,7 @@ use Drupal\Core\Config\FileStorage;
  */
 function single_content_sync_update_9121(&$sandbox) {
   // Get file storage of optional configs in the module.
-  $config_path = drupal_get_path('module', 'single_content_sync') . '/config/install';
+  $config_path = \Drupal::service('extension.list.module')->getPath('single_content_sync') . '/config/install';
   $source = new FileStorage($config_path);
 
   /** @var \Drupal\Core\Config\StorageInterface $config_storage */
@@ -32,7 +32,7 @@ function single_content_sync_update_9121(&$sandbox) {
  */
 function single_content_sync_update_9130(&$sandbox) {
   // Get file storage of optional configs in the module.
-  $config_path = drupal_get_path('module', 'single_content_sync') . '/config/install';
+  $config_path = \Drupal::service('extension.list.module')->getPath('single_content_sync') . '/config/install';
   $source = new FileStorage($config_path);
 
   /** @var \Drupal\Core\Config\StorageInterface $config_storage */
