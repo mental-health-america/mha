@@ -405,8 +405,14 @@ input[type="submit"],
 
 .path-issues header .gva-view .view-content-wrap {
     background: #fafafa;
-    padding: 0 2rem 3rem 2rem;
+    padding: 1rem 2rem 3rem 2rem;
 }
+
+
+.path-issues header .issues-2023.gva-view .view-content-wrap {
+    padding:0 2rem 3rem 2rem !important;
+}
+
 
 .ui-accordion .ui-accordion-content {
     padding: 1em 0 0 1.3rem !important;
