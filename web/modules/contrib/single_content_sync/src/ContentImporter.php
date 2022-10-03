@@ -7,10 +7,12 @@ use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Entity\RevisionableInterface;
+use Drupal\Core\Entity\RevisionLogInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\TypedData\TranslatableInterface;
+use Drupal\file\FileRepositoryInterface;
 use Drupal\layout_builder\Plugin\Block\InlineBlock;
 
 class ContentImporter implements ContentImporterInterface {
@@ -46,6 +48,13 @@ class ContentImporter implements ContentImporterInterface {
   protected $fileSystem;
 
   /**
+   * The file repository.
+   *
+   * @var \Drupal\file\FileRepositoryInterface
+   */
+  protected $fileRepository;
+
+  /**
    * The content sync helper.
    *
    * @var \Drupal\single_content_sync\ContentSyncHelperInterface
@@ -70,14 +79,17 @@ class ContentImporter implements ContentImporterInterface {
    *   The module handler.
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   The file system.
+   * @param \Drupal\file\FileRepositoryInterface $file_repository
+   *   The file repository.
    * @param \Drupal\single_content_sync\ContentSyncHelperInterface $content_sync_helper
    *   The content sync helper.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, EntityRepositoryInterface $entity_repository, ModuleHandlerInterface $module_handler, FileSystemInterface $file_system, ContentSyncHelperInterface $content_sync_helper) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, EntityRepositoryInterface $entity_repository, ModuleHandlerInterface $module_handler, FileSystemInterface $file_system, FileRepositoryInterface $file_repository, ContentSyncHelperInterface $content_sync_helper) {
     $this->entityTypeManager = $entity_type_manager;
     $this->entityRepository = $entity_repository;
     $this->moduleHandler = $module_handler;
     $this->fileSystem = $file_system;
+    $this->fileRepository = $file_repository;
     $this->contentSyncHelper = $content_sync_helper;
   }
 
@@ -120,6 +132,19 @@ class ContentImporter implements ContentImporterInterface {
       case 'node':
         if (isset($content['base_fields']['author']) && ($account = user_load_by_mail($content['base_fields']['author']))) {
           $entity->setOwner($account);
+
+          if ($entity instanceof RevisionLogInterface) {
+            $entity->setNewRevision();
+            $entity->setRevisionCreationTime(\Drupal::time()->getCurrentTime());
+
+            if (isset($content['base_fields']['revision_uid'])) {
+              $entity->setRevisionUserId($content['base_fields']['revision_uid']);
+            }
+
+            if (isset($content['base_fields']['revision_log_message'])) {
+              $entity->setRevisionLogMessage($content['base_fields']['revision_log_message']);
+            }
+          }
         }
         break;
 
@@ -245,6 +270,7 @@ class ContentImporter implements ContentImporterInterface {
 
       case 'entity_reference':
       case 'entity_reference_revisions':
+      case 'dynamic_entity_reference':
         $values = [];
         foreach ($field_value as $child_entity) {
           // Import config relation just by setting target id.
@@ -328,7 +354,7 @@ class ContentImporter implements ContentImporterInterface {
             $directory = $this->fileSystem->dirname($file_item['uri']);
             $this->contentSyncHelper->prepareFilesDirectory($directory);
 
-            if ($file = file_save_data($content, $file_item['uri'], FileSystemInterface::EXISTS_REPLACE)) {
+            if ($file = $this->fileRepository->writeData($content, $file_item['uri'], FileSystemInterface::EXISTS_REPLACE)) {
               $file->setOwnerId(1);
               $file->setPermanent();
               $file->save();
@@ -458,6 +484,7 @@ class ContentImporter implements ContentImporterInterface {
       'finished' => '\Drupal\single_content_sync\ContentBatchImporter::batchImportFinishedCallback',
     ];
 
+    // Always import assets first, even if they're at the end of ZIP archive.
     foreach ($zip->listContents() as $zip_file) {
       $original_file_path = "{$import_directory}/{$zip_file}";
 
@@ -467,8 +494,14 @@ class ContentImporter implements ContentImporterInterface {
           [$original_file_path, $zip_file],
         ];
       }
-      else {
+    }
+
+    foreach ($zip->listContents() as $zip_file) {
+      $original_file_path = "{$import_directory}/{$zip_file}";
+
+      if (strpos($zip_file, 'assets') === FALSE) {
         $content_file_path = $original_file_path;
+
         $batch['operations'][] = [
           '\Drupal\single_content_sync\ContentBatchImporter::batchImportFile',
           [$original_file_path],

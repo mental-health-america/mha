@@ -251,6 +251,8 @@ class ContentExporter implements ContentExporterInterface {
             'created' => $entity->getCreatedTime(),
             'author' => $owner ? $owner->getEmail() : NULL,
             'url' => $entity->hasField('path') ? $entity->get('path')->alias : NULL,
+            'revision_log_message' => $entity->getRevisionLogMessage(),
+            'revision_uid' => $entity->getRevisionUserId(),
           ];
         }
         break;
@@ -299,8 +301,8 @@ class ContentExporter implements ContentExporterInterface {
             'langcode' => $entity->language()->getId(),
             'description' => $entity->getDescription(),
             'parent' => $entity->get('parent')->target_id
-            ? $this->doExportToArray($entity->get('parent')->entity)
-            : 0,
+              ? $this->doExportToArray($entity->get('parent')->entity)
+              : 0,
           ];
         }
         break;
@@ -363,33 +365,44 @@ class ContentExporter implements ContentExporterInterface {
         break;
 
       case 'entity_reference':
+      case 'dynamic_entity_reference':
         $value = [];
-        $ids = array_column($field->getValue(), 'target_id');
-        $storage = $this->entityTypeManager->getStorage($field->getSetting('target_type'));
-        $entities = $storage->loadMultiple($ids);
+        $ids_by_entity_type = [];
+        if ($field_type === 'entity_reference') {
+          $ids_by_entity_type[$field_definition->getSetting('target_type')] = array_column($field->getValue(), 'target_id');
+        }
+        else {
+          foreach ($field->getValue() as $item) {
+            $ids_by_entity_type[$item['target_type']][] = $item['target_id'];
+          }
+        }
 
-        foreach ($entities as $child_entity) {
-          if ($child_entity instanceof FieldableEntityInterface) {
-            if (!$this->isReferenceCached($child_entity)) {
-              // Export content entity relation.
-              $value[] = $this->doExportToArray($child_entity);
+        foreach ($ids_by_entity_type as $entity_type => $ids) {
+          $storage = $this->entityTypeManager->getStorage($entity_type);
+          $entities = $storage->loadMultiple($ids);
+          foreach ($entities as $child_entity) {
+            if ($child_entity instanceof FieldableEntityInterface) {
+              if (!$this->isReferenceCached($child_entity)) {
+                // Export content entity relation.
+                $value[] = $this->doExportToArray($child_entity);
+              }
+              else {
+                $value[] = [
+                  'uuid' => $child_entity->uuid(),
+                  'entity_type' => $child_entity->getEntityTypeId(),
+                  'base_fields' => $this->exportBaseValues($child_entity),
+                  'bundle' => $child_entity->bundle(),
+                ];
+              }
             }
-            else {
+            // Support basic export of config entity relation.
+            elseif ($child_entity instanceof ConfigEntityInterface) {
               $value[] = [
-                'uuid' => $child_entity->uuid(),
-                'entity_type' => $child_entity->getEntityTypeId(),
-                'base_fields' => $this->exportBaseValues($child_entity),
-                'bundle' => $child_entity->bundle(),
+                'type' => 'config',
+                'dependency_name' => $child_entity->getConfigDependencyName(),
+                'value' => $child_entity->id(),
               ];
             }
-          }
-          // Support basic export of config entity relation.
-          elseif ($child_entity instanceof ConfigEntityInterface) {
-            $value[] = [
-              'type' => 'config',
-              'dependency_name' => $child_entity->getConfigDependencyName(),
-              'value' => $child_entity->id(),
-            ];
           }
         }
         break;

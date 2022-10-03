@@ -1,14 +1,14 @@
-(function ($, Drupal) {
+(function ($, Drupal, once) {
 
   'use strict';
 
-  var source = '//cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/ace.min.js';
+  var source = '//cdnjs.cloudflare.com/ajax/libs/ace/1.11.2/ace.min.js';
 
   Drupal.behaviors.yamlEditor = {
-    attach: function (context) {
+    attach: function () {
       var initEditor = function () {
-        $('textarea[data-yaml-editor]', context).once('yaml-editor').each(function () {
-          var $textarea = $(this);
+        once('yaml-editor', $('textarea[data-yaml-editor]')).forEach(function (item) {
+          var $textarea = $(item);
           var $editDiv = $('<div>').insertBefore($textarea);
 
           $textarea.addClass('visually-hidden');
@@ -16,9 +16,7 @@
           // Init ace editor.
           var editor = ace.edit($editDiv[0]);
           editor.getSession().setValue($textarea.val());
-          editor.getSession().setMode('ace/mode/yaml');
           editor.getSession().setTabSize(2);
-          editor.setTheme('ace/theme/chrome');
           editor.setOptions({
             minLines: 3,
             maxLines: 20
@@ -40,4 +38,4 @@
       }
     }
   }
-})(jQuery, Drupal);
+})(jQuery, Drupal, once);

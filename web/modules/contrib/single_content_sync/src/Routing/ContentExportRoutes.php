@@ -59,7 +59,6 @@ class ContentExportRoutes implements ContainerInjectionInterface {
           [
             '_entity_access' => "{$entity_type_id}.single-content:export",
             '_custom_access' => '\Drupal\single_content_sync\Form\ContentExportForm::access',
-            $entity_type_id => '\d+',
           ],
           [
             'parameters' => [

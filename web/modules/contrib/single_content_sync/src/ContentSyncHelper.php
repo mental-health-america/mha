@@ -13,6 +13,7 @@ use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\file\FileInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\file\FileRepositoryInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 class ContentSyncHelper implements ContentSyncHelperInterface {
@@ -25,6 +26,13 @@ class ContentSyncHelper implements ContentSyncHelperInterface {
    * @var \Drupal\Core\File\FileSystemInterface
    */
   protected $fileSystem;
+
+  /**
+   * The file system.
+   *
+   * @var \Drupal\file\FileRepositoryInterface
+   */
+  protected $fileRepository;
 
   /**
    * The entity type manager.
@@ -68,16 +76,21 @@ class ContentSyncHelper implements ContentSyncHelperInterface {
    *   The uuid generator.
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   The file system service.
+   * @param \Drupal\file\FileRepositoryInterface $file_repository
+   *   The file repository.
    * @param \Drupal\Core\Archiver\ArchiverManager $archiver_manager
    *   The archive manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory.
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
+   *   The entity repository.
    */
-  public function __construct(UuidInterface $uuid, FileSystemInterface $file_system, ArchiverManager $archiver_manager, EntityTypeManagerInterface $entity_type_manager, ConfigFactoryInterface $config_factory, EntityRepositoryInterface $entity_repository) {
+  public function __construct(UuidInterface $uuid, FileSystemInterface $file_system, FileRepositoryInterface $file_repository, ArchiverManager $archiver_manager, EntityTypeManagerInterface $entity_type_manager, ConfigFactoryInterface $config_factory, EntityRepositoryInterface $entity_repository) {
     $this->uuid = $uuid;
     $this->fileSystem = $file_system;
+    $this->fileRepository = $file_repository;
     $this->archiverManager = $archiver_manager;
     $this->entityTypeManager = $entity_type_manager;
     $this->configFactory = $config_factory;
@@ -95,7 +108,7 @@ class ContentSyncHelper implements ContentSyncHelperInterface {
    * {@inheritdoc}
    */
   public function saveFileContentTemporary(string $content, string $destination): FileInterface {
-    $file = file_save_data($content, $destination);
+    $file = $this->fileRepository->writeData($content, $destination);
     $file->setTemporary();
     $file->save();
 
