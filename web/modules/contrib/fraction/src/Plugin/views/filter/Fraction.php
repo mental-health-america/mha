@@ -12,7 +12,8 @@ use Drupal\views\Plugin\views\filter\NumericFilter;
  *
  * Overrides operator functions (op_between, op_simple, and op_regex).
  *   Alter the add_where() method call in each to use the formula.
- *   Note that op_empty() is not included because we are not setting 'allow empty'.
+ *   Note that op_empty() is not included because we are not setting
+ *   'allow empty'.
  *
  * @ingroup views_filter_handlers
  *
@@ -28,8 +29,9 @@ class Fraction extends NumericFilter {
     // Ensure the main table for this field is included.
     $this->ensureMyTable();
 
-    // Formula for calculating the final value, by dividing numerator by denominator.
-    // These are added as additional fields in hook_field_views_data_alter().
+    // Formula for calculating the final value, by dividing numerator by
+    // denominator. These are added as additional fields in
+    // hook_field_views_data_alter().
     $numerator = $this->tableAlias . '.' . $this->definition['additional fields']['numerator'];
     $denominator = $this->tableAlias . '.' . $this->definition['additional fields']['denominator'];
     // Multiply the numerator field by 1.0 so the database returns a decimal

@@ -20,7 +20,7 @@ use Drupal\fraction\Fraction;
  *   category = @Translation("Number"),
  *   default_widget = "fraction",
  *   default_formatter = "fraction",
-*    constraints = {"FractionConstraint" = {}}
+ *   constraints = {"FractionConstraint" = {}}
  * )
  */
 class FractionItem extends NumericItemBase {
@@ -125,7 +125,7 @@ class FractionItem extends NumericItemBase {
   public function getConstraints() {
     /** @var \Symfony\Component\Validator\Constraint[] $constraints */
     $constraints = parent::getConstraints();
-    foreach ($constraints as $delta => &$constraint) {
+    foreach ($constraints as &$constraint) {
 
       // Replace 'value' with 'decimal' in min/max range constraints.
       if (!empty($constraint->properties['value'])) {

@@ -4,7 +4,6 @@ namespace Drupal\Tests\fraction\Functional;
 
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
-use Drupal\fraction\Fraction;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
@@ -22,7 +21,7 @@ class FractionFieldTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['node', 'entity_test', 'field_ui', 'fraction'];
+  protected static $modules = ['node', 'entity_test', 'field_ui', 'fraction'];
 
   /**
    * {@inheritdoc}
@@ -32,7 +31,7 @@ class FractionFieldTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->drupalLogin($this->drupalCreateUser([
       'view test entity',
@@ -83,18 +82,18 @@ class FractionFieldTest extends BrowserTestBase {
 
     // Display creation form.
     $this->drupalGet('entity_test/add');
-    $this->assertFieldByName("{$field_name}[0][decimal]", '', 'Widget is displayed');
+    $this->assertSession()->fieldValueEquals("{$field_name}[0][decimal]", '');
 
     // Submit decimal value.
     $value = '14.5678';
     $edit = [
       "{$field_name}[0][decimal]" => $value,
     ];
-    $this->drupalPostForm(NULL, $edit, $this->t('Save'));
+    $this->submitForm($edit, $this->t('Save'));
     preg_match('|entity_test/manage/(\d+)|', $this->getUrl(), $match);
     $id = $match[1];
-    $this->assertText($this->t('entity_test @id has been created.', ['@id' => $id]), 'Entity was created');
-    $this->assertRaw($value, 'Value is displayed.');
+    $this->assertSession()->pageTextContains($this->t('entity_test @id has been created.', ['@id' => $id]));
+    $this->assertSession()->responseContains($value);
 
     // Try to create entries with more than one decimal separator; assert fail.
     $wrong_entries = [
@@ -110,8 +109,8 @@ class FractionFieldTest extends BrowserTestBase {
       $edit = [
         "{$field_name}[0][decimal]" => $wrong_entry,
       ];
-      $this->drupalPostForm(NULL, $edit, $this->t('Save'));
-      $this->assertRaw($this->t('%name must be a number.', ['%name' => $field_name]), 'Correctly failed to save value with more than one decimal point.');
+      $this->submitForm($edit, $this->t('Save'));
+      $this->assertSession()->responseContains($this->t('%name must be a number.', ['%name' => $field_name]));
     }
 
     // Try to create entries with minus sign not in the first position.
@@ -128,8 +127,8 @@ class FractionFieldTest extends BrowserTestBase {
       $edit = [
         "{$field_name}[0][decimal]" => $wrong_entry,
       ];
-      $this->drupalPostForm(NULL, $edit, $this->t('Save'));
-      $this->assertRaw($this->t('%name must be a number.', ['%name' => $field_name]), 'Correctly failed to save value with minus sign in the wrong position.');
+      $this->submitForm($edit, $this->t('Save'));
+      $this->assertSession()->responseContains($this->t('%name must be a number.', ['%name' => $field_name]));
     }
 
     // Try to set a value above the maximum value.
@@ -137,24 +136,24 @@ class FractionFieldTest extends BrowserTestBase {
     $edit = [
       "{$field_name}[0][decimal]" => $max + 0.123,
     ];
-    $this->drupalPostForm(NULL, $edit, $this->t('Save'));
-    $this->assertRaw($this->t('%name: the value may be no greater than %maximum.', ['%name' => $field_name, '%maximum' => $max]), 'Correctly failed to save value greater than maximum allowed value.');
+    $this->submitForm($edit, $this->t('Save'));
+    $this->assertSession()->responseContains($this->t('%name: the value may be no greater than %maximum.', ['%name' => $field_name, '%maximum' => $max]));
 
     // Try to set a value below the minimum value.
     $this->drupalGet('entity_test/add');
     $edit = [
       "{$field_name}[0][decimal]" => $min - 0.123,
     ];
-    $this->drupalPostForm(NULL, $edit, $this->t('Save'));
-    $this->assertRaw($this->t('%name: the value may be no less than %minimum.', ['%name' => $field_name, '%minimum' => $min]), 'Correctly failed to save value less than minimum allowed value.');
+    $this->submitForm($edit, $this->t('Save'));
+    $this->assertSession()->responseContains($this->t('%name: the value may be no less than %minimum.', ['%name' => $field_name, '%minimum' => $min]));
 
     // Test the fraction decimal element limits.
     $this->drupalGet('entity_test/add');
     $edit = [
       "{$field_name}[0][decimal]" => 10.1234567891,
     ];
-    $this->drupalPostForm(NULL, $edit, $this->t('Save'));
-    $this->assertRaw($this->t('The maximum number of digits after the decimal place is 9.'));
+    $this->submitForm($edit, $this->t('Save'));
+    $this->assertSession()->responseContains($this->t('The maximum number of digits after the decimal place is 9.'));
   }
 
   /**
@@ -186,18 +185,18 @@ class FractionFieldTest extends BrowserTestBase {
 
     // Display creation form.
     $this->drupalGet('entity_test/add');
-    $this->assertFieldByName("{$field_name}[0][decimal]", '', 'Widget is displayed');
+    $this->assertSession()->fieldValueEquals("{$field_name}[0][decimal]", '');
 
     // Submit negative decimal value.
     $value = '-14.5678';
     $edit = [
       "{$field_name}[0][decimal]" => $value,
     ];
-    $this->drupalPostForm(NULL, $edit, $this->t('Save'));
+    $this->submitForm($edit, $this->t('Save'));
     preg_match('|entity_test/manage/(\d+)|', $this->getUrl(), $match);
     $id = $match[1];
-    $this->assertText($this->t('entity_test @id has been created.', ['@id' => $id]), 'Entity was created');
-    $this->assertRaw($value, 'Value is displayed.');
+    $this->assertSession()->pageTextContains($this->t('entity_test @id has been created.', ['@id' => $id]));
+    $this->assertSession()->responseContains($value);
   }
 
   /**
@@ -236,20 +235,20 @@ class FractionFieldTest extends BrowserTestBase {
 
     // Display creation form.
     $this->drupalGet('entity_test/add');
-    $this->assertFieldByName("{$field_name}[0][fraction][numerator]", '', 'Numerator is displayed');
-    $this->assertFieldByName("{$field_name}[0][fraction][denominator]", '', 'Denominator is displayed');
+    $this->assertSession()->fieldValueEquals("{$field_name}[0][fraction][numerator]", '');
+    $this->assertSession()->fieldValueEquals("{$field_name}[0][fraction][denominator]", '');
 
     // Submit fraction value.
     $edit = [
       "{$field_name}[0][fraction][numerator]" => 150,
       "{$field_name}[0][fraction][denominator]" => 10,
     ];
-    $this->drupalPostForm(NULL, $edit, $this->t('Save'));
+    $this->submitForm($edit, $this->t('Save'));
     preg_match('|entity_test/manage/(\d+)|', $this->getUrl(), $match);
     $id = $match[1];
-    $this->assertText($this->t('entity_test @id has been created.', ['@id' => $id]), 'Entity was created');
-    $this->assertRaw('150', 'Numerator is displayed.');
-    $this->assertRaw('10', 'Denominator is displayed.');
+    $this->assertSession()->pageTextContains($this->t('entity_test @id has been created.', ['@id' => $id]));
+    $this->assertSession()->responseContains('150');
+    $this->assertSession()->responseContains('10');
 
     // Try to set a value above the maximum value.
     $this->drupalGet('entity_test/add');
@@ -257,8 +256,8 @@ class FractionFieldTest extends BrowserTestBase {
       "{$field_name}[0][fraction][numerator]" => 15000,
       "{$field_name}[0][fraction][denominator]" => 10,
     ];
-    $this->drupalPostForm(NULL, $edit, $this->t('Save'));
-    $this->assertRaw($this->t('%name: the value may be no greater than %maximum.', ['%name' => $field_name, '%maximum' => $max]), 'Correctly failed to save value greater than maximum allowed value.');
+    $this->submitForm($edit, $this->t('Save'));
+    $this->assertSession()->responseContains($this->t('%name: the value may be no greater than %maximum.', ['%name' => $field_name, '%maximum' => $max]));
 
     // Try to set a value below the minimum value.
     $this->drupalGet('entity_test/add');
@@ -266,16 +265,16 @@ class FractionFieldTest extends BrowserTestBase {
       "{$field_name}[0][fraction][numerator]" => 1,
       "{$field_name}[0][fraction][denominator]" => 10,
     ];
-    $this->drupalPostForm(NULL, $edit, $this->t('Save'));
-    $this->assertRaw($this->t('%name: the value may be no less than %minimum.', ['%name' => $field_name, '%minimum' => $min]), 'Correctly failed to save value less than minimum allowed value.');
+    $this->submitForm($edit, $this->t('Save'));
+    $this->assertSession()->responseContains($this->t('%name: the value may be no less than %minimum.', ['%name' => $field_name, '%minimum' => $min]));
 
     // Empty denominator.
     $this->drupalGet('entity_test/add');
     $edit = [
       "{$field_name}[0][fraction][numerator]" => 1,
     ];
-    $this->drupalPostForm(NULL, $edit, $this->t('Save'));
-    $this->assertRaw($this->t('The denominator of a fraction cannot be zero or empty (if a numerator is provided).'));
+    $this->submitForm($edit, $this->t('Save'));
+    $this->assertSession()->responseContains($this->t('The denominator of a fraction cannot be zero or empty (if a numerator is provided).'));
 
     // Numerators must be between -9223372036854775808 and 9223372036854775807.
     $this->drupalGet('entity_test/add');
@@ -283,15 +282,15 @@ class FractionFieldTest extends BrowserTestBase {
       "{$field_name}[0][fraction][numerator]" => '-9223372036854775809',
       "{$field_name}[0][fraction][denominator]" => 10,
     ];
-    $this->drupalPostForm(NULL, $edit, $this->t('Save'));
-    $this->assertRaw($this->t('The numerator of a fraction must be between -9223372036854775808 and 9223372036854775807.'));
+    $this->submitForm($edit, $this->t('Save'));
+    $this->assertSession()->responseContains($this->t('The numerator of a fraction must be between -9223372036854775808 and 9223372036854775807.'));
     $this->drupalGet('entity_test/add');
     $edit = [
       "{$field_name}[0][fraction][numerator]" => '9223372036854775808',
       "{$field_name}[0][fraction][denominator]" => 10,
     ];
-    $this->drupalPostForm(NULL, $edit, $this->t('Save'));
-    $this->assertRaw($this->t('The numerator of a fraction must be between -9223372036854775808 and 9223372036854775807.'));
+    $this->submitForm($edit, $this->t('Save'));
+    $this->assertSession()->responseContains($this->t('The numerator of a fraction must be between -9223372036854775808 and 9223372036854775807.'));
 
     // Denominators must be between 0 and 2147483647.
     $this->drupalGet('entity_test/add');
@@ -299,15 +298,15 @@ class FractionFieldTest extends BrowserTestBase {
       "{$field_name}[0][fraction][numerator]" => 10,
       "{$field_name}[0][fraction][denominator]" => -1,
     ];
-    $this->drupalPostForm(NULL, $edit, $this->t('Save'));
-    $this->assertRaw($this->t('The denominator of a fraction must be greater than 0 and less than 2147483647.'));
+    $this->submitForm($edit, $this->t('Save'));
+    $this->assertSession()->responseContains($this->t('The denominator of a fraction must be greater than 0 and less than 2147483647.'));
     $this->drupalGet('entity_test/add');
     $edit = [
       "{$field_name}[0][fraction][numerator]" => 10,
       "{$field_name}[0][fraction][denominator]" => 2147483648,
     ];
-    $this->drupalPostForm(NULL, $edit, $this->t('Save'));
-    $this->assertRaw($this->t('The denominator of a fraction must be greater than 0 and less than 2147483647.'));
+    $this->submitForm($edit, $this->t('Save'));
+    $this->assertSession()->responseContains($this->t('The denominator of a fraction must be greater than 0 and less than 2147483647.'));
   }
 
   /**
@@ -360,31 +359,33 @@ class FractionFieldTest extends BrowserTestBase {
 
     // Display creation form.
     $this->drupalGet('entity_test/add');
-    $this->assertFieldByName("{$field_name}[0][decimal]", '', 'Widget is displayed');
+    $this->assertSession()->fieldValueEquals("{$field_name}[0][decimal]", '');
 
     // Submit decimal value.
     $value = '1.234';
     $edit = [
       "{$field_name}[0][decimal]" => $value,
     ];
-    $this->drupalPostForm(NULL, $edit, $this->t('Save'));
+    $this->submitForm($edit, $this->t('Save'));
     preg_match('|entity_test/manage/(\d+)|', $this->getUrl(), $match);
     $id = $match[1];
-    $this->assertText($this->t('entity_test @id has been created.', ['@id' => $id]), 'Entity was created');
-    $this->assertRaw($value, 'Value is displayed.');
+    $this->assertSession()->pageTextContains($this->t('entity_test @id has been created.', ['@id' => $id]));
+    $this->assertSession()->responseContains($value);
 
     // Empty the field.
     $edit = [
       "{$field_name}[0][decimal]" => NULL,
     ];
-    $this->drupalPostForm("entity_test/manage/$id/edit", $edit, $this->t('Save'));
-    $this->assertNoRaw($value, 'Value is removed.');
+    $this->drupalGet("entity_test/manage/$id/edit");
+    $this->submitForm($edit, $this->t('Save'));
+    $this->assertSession()->responseNotContains($value);
 
     // The field should have no value (not 0, just empty).
     $this->drupalGet("entity_test/manage/$id/edit");
-    $elements = $this->xpath($this->constructFieldXpath('name', "{$field_name}[0][decimal]"));
+    $xpath = $this->assertSession()->buildXPathQuery('//input[@name=:value]', [':value' => "{$field_name}[0][decimal]"]);
+    $elements = $this->xpath($xpath);
     $element = reset($elements);
-    $this->assertIdentical($element->getValue(), '', 'Field is empty');
+    $this->assertSame($element->getValue(), '', 'Field is empty');
   }
 
 }

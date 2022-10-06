@@ -22,7 +22,7 @@ function fraction_field_views_data_alter(&$data, $field) {
   $entity_type = $field->getTargetEntityTypeId();
 
   // Look up the field's most used instance label.
-  list($field_label, $other_labels) = views_entity_field_label($entity_type, $field_name);
+  $field_label = views_entity_field_label($entity_type, $field_name)[0];
 
   // Build a list of additional fields for the sort and filter handlers.
   $additional_fields = [
@@ -31,7 +31,7 @@ function fraction_field_views_data_alter(&$data, $field) {
   ];
 
   // Iterate through the results.
-  foreach ($data as $table_alias => &$definition) {
+  foreach ($data as &$definition) {
 
     // We will want to alter Views data for both the current field definition,
     // and the field revision definition. The current field definition will be
