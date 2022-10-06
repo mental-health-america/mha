@@ -126,8 +126,8 @@ class FractionTargetTest extends FieldTargetTestBase {
   public function testBuildConfigurationForm() {
     $method = $this->getMethod('Drupal\fraction\Feeds\Target\FractionTarget', 'prepareTarget')->getClosure();
     $configuration = [
-     'feed_type' => $this->createMock('Drupal\feeds\FeedTypeInterface'),
-     'target_definition' => $method($this->getMockFieldDefinition()),
+      'feed_type' => $this->createMock('Drupal\feeds\FeedTypeInterface'),
+      'target_definition' => $method($this->getMockFieldDefinition()),
     ];
     $target = new FractionTarget($configuration, 'fraction', []);
     $target->setStringTranslation($this->getStringTranslationStub());
@@ -136,4 +136,5 @@ class FractionTargetTest extends FieldTargetTestBase {
     $this->assertSame(count($form), 1);
     $this->assertArrayHasKey('type', $form);
   }
+
 }

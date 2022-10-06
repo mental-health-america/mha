@@ -21,7 +21,7 @@ class FractionConstraintTest extends EntityKernelTestBase {
   /**
    * {@inheritDoc}
    */
-  public static $modules = ['node', 'fraction'];
+  protected static $modules = ['node', 'fraction'];
 
   /**
    * EntityInterface.
@@ -40,7 +40,7 @@ class FractionConstraintTest extends EntityKernelTestBase {
   /**
    * {@inheritDoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     NodeType::create([

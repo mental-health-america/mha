@@ -13,13 +13,13 @@ use Drupal\fraction\Fraction;
 class FractionTest extends UnitTestCase {
 
   /**
-   * Returns a Fraction object from a a numerator and denominator.
+   * Returns a Fraction object from a numerator and denominator.
    *
    * This allows for easier chaining of Fraction methods in tests.
    *
-   * @param $numerator
+   * @param int $numerator
    *   The fraction's numerator.
-   * @param $denominator
+   * @param int $denominator
    *   The fraction's denominator.
    *
    * @return \Drupal\fraction\Fraction

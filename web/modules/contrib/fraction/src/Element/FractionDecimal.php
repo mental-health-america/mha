@@ -75,7 +75,7 @@ class FractionDecimal extends FormElement {
     Number::validateNumber($element, $form_state, $complete_form);
 
     // Only continue with validation if value is a valid number.
-    if(count($form_state->getErrors()) !== 0) {
+    if (count($form_state->getErrors()) !== 0) {
       return;
     }
 

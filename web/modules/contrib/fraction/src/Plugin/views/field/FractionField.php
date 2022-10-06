@@ -28,8 +28,8 @@ class FractionField extends EntityField {
     // Ensure the main table for this field is included.
     $this->ensureMyTable();
 
-    // Formula for calculating the final value, by dividing numerator by denominator.
-    // These are available as additional fields.
+    // Formula for calculating the final value, by dividing numerator by
+    // denominator. These are available as additional fields.
     $numerator = $this->tableAlias . '.' . $this->field . '_numerator';
     $denominator = $this->tableAlias . '.' . $this->field . '_denominator';
     // Multiply the numerator field by 1.0 so the database returns a decimal

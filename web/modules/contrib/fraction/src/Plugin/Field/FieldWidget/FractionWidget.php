@@ -32,8 +32,8 @@ class FractionWidget extends WidgetBase {
       '#type' => 'fraction',
       '#title' => $this->t('Fraction'),
       '#default_value' => [
-        'numerator' => isset($items[$delta]->numerator) ? $items[$delta]->numerator : NULL,
-        'denominator' => isset($items[$delta]->denominator) ? $items[$delta]->denominator : NULL,
+        'numerator' => $items[$delta]->numerator ?? NULL,
+        'denominator' => $items[$delta]->denominator ?? NULL,
       ],
     ];
 

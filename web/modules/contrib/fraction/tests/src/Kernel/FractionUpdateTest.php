@@ -35,7 +35,7 @@ class FractionUpdateTest extends EntityKernelTestBase {
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'fraction',
     'fraction_test',
     'node',
@@ -51,7 +51,7 @@ class FractionUpdateTest extends EntityKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->connection = Database::getConnection();
     $this->schema = $this->connection->schema();
@@ -125,13 +125,15 @@ class FractionUpdateTest extends EntityKernelTestBase {
   public function testUpdateDenominatorSigned() {
     // Unsigned fields should reject negative values.
     foreach ($this->fieldsToUpdate as $field) {
-      if ($field['table_name'] == 'node_field_data') continue;
+      if ($field['table_name'] == 'node_field_data') {
+        continue;
+      }
       $this->assertFalse($this->tryUnsignedInsert($field['table_name'], $field['columns']), 'Column rejected a negative value.');
     }
 
     // Run the fraction update only.
     $post_update_registry = $this->container->get('update.post_update_registry');
-    foreach ($post_update_registry->getModuleUpdateFunctions('fraction') as $function) {
+    foreach ($post_update_registry->getUpdateFunctions('fraction') as $function) {
       $function();
     }
 
@@ -140,7 +142,9 @@ class FractionUpdateTest extends EntityKernelTestBase {
     // checking that there's a change on behaviour regarding signed/unsigned is
     // the fastest way to check.
     foreach ($this->fieldsToUpdate as $field) {
-      if ($field['table_name'] == 'node_field_data') continue;
+      if ($field['table_name'] == 'node_field_data') {
+        continue;
+      }
       $this->assertTrue($this->tryUnsignedInsert($field['table_name'], $field['columns']), 'Column accepted a negative value.');
     }
   }
@@ -151,7 +155,9 @@ class FractionUpdateTest extends EntityKernelTestBase {
   public function testUpdateDenominatorSignedException() {
     // Unsigned fields should reject negative values.
     foreach ($this->fieldsToUpdate as $field) {
-      if ($field['table_name'] == 'node_field_data') continue;
+      if ($field['table_name'] == 'node_field_data') {
+        continue;
+      }
       $this->assertFalse($this->tryUnsignedInsert($field['table_name'], $field['columns']), 'Column rejected a negative value.');
     }
 
@@ -171,16 +177,17 @@ class FractionUpdateTest extends EntityKernelTestBase {
     try {
       // Run the fraction update only.
       $post_update_registry = $this->container->get('update.post_update_registry');
-      foreach ($post_update_registry->getModuleUpdateFunctions('fraction') as $function) {
+      foreach ($post_update_registry->getUpdateFunctions('fraction') as $function) {
         $function();
       }
       // If the code reach this point, means that the update succeeded.
       $this->fail('Failed due to update going through when it should not.');
     }
     catch (UpdateException $e) {
-      $this->pass('Updating with field values higher than the limit thows a message.');
       foreach ($this->fieldsToUpdate as $field) {
-        if ($field['table_name'] == 'node_field_data') continue;
+        if ($field['table_name'] == 'node_field_data') {
+          continue;
+        }
         $this->assertFalse($this->tryUnsignedInsert($field['table_name'], $field['columns']), 'Column rejected a negative value.');
       }
     }

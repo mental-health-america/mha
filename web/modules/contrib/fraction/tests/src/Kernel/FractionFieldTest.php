@@ -24,12 +24,12 @@ class FractionFieldTest extends FieldKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['node', 'fraction'];
+  protected static $modules = ['node', 'fraction'];
 
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
 
     $this->installEntitySchema('node');

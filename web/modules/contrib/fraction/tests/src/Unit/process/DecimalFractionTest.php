@@ -16,7 +16,7 @@ class DecimalFractionTest extends MigrateProcessTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     $this->plugin = new DecimalFraction([], 'decimal_fraction', []);
     parent::setUp();
   }

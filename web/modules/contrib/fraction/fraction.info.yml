@@ -1,7 +1,7 @@
 name: Fraction
 type: module
 description: Provides a field for storing decimals as fractions, for maximum precision.
-core_version_requirement: ^8.8 || ^9
+core_version_requirement: ^9.1 || ^10
 package: Field types
 dependencies:
   - drupal:field
@@ -9,7 +9,7 @@ dependencies:
 test_dependencies:
   - feeds:feeds
 
-# Information added by Drupal.org packaging script on 2021-12-02
-version: '2.1.0'
+# Information added by Drupal.org packaging script on 2022-10-05
+version: '2.2.0'
 project: 'fraction'
-datestamp: 1638483552
+datestamp: 1664995945

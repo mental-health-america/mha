@@ -364,7 +364,7 @@ class Fraction implements FractionInterface {
   /**
    * BCMath decimal rounding function.
    *
-   * @param $value
+   * @param int|float|string $value
    *   The value to round.
    * @param int $precision
    *   The desired decimal precision.

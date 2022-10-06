@@ -60,7 +60,12 @@ function fraction_post_update_make_denominator_signed() {
   }
 
   foreach ($fields_to_update as $field_to_update) {
-    extract($field_to_update);
+    $field_name = $field_to_update['field_name'];
+    $table_name = $field_to_update['table_name'];
+    $column_name = $field_to_update['column_name'];
+    $entity_type_id = $field_to_update['entity_type_id'];
+    $field_schema = $field_to_update['field_schema'];
+    $revision_table_name = $field_to_update['revision_table_name'];
     fraction_alter_denominator_helper($table_name, $column_name);
     unset($field_schema[$table_name]['fields'][$column_name]['unsigned']);
     if (\Drupal::database()->schema()->tableExists($revision_table_name)) {
@@ -133,11 +138,16 @@ function fraction_post_update_not_null_field_schema_fix() {
   }
 
   foreach ($fields_to_update as $field_to_update) {
-    extract($field_to_update);
+    $field_name = $field_to_update['field_name'];
+    $table_name = $field_to_update['table_name'];
+    $column_names = $field_to_update['column_names'];
+    $entity_type_id = $field_to_update['entity_type_id'];
+    $field_schema = $field_to_update['field_schema'];
+    $revision_table_name = $field_to_update['revision_table_name'];
 
     foreach ($column_names as $column_name) {
       $database_schema->changeField($table_name, $column_name, $column_name, [
-        'description' => 'Fraction ' . $column_name .' value',
+        'description' => 'Fraction ' . $column_name . ' value',
         'type' => 'int',
         'not null' => FALSE,
       ]);

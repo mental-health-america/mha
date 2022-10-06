@@ -17,7 +17,7 @@ use Drupal\fraction\Fraction as FractionClass;
 class Fraction extends FieldPluginBase {
 
   /**
-   * @inheritdoc
+   * {@inheritdoc}
    */
   protected function defineOptions() {
     $options = parent::defineOptions();
@@ -30,21 +30,21 @@ class Fraction extends FieldPluginBase {
   }
 
   /**
-   * @inheritdoc
+   * {@inheritdoc}
    */
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
 
     // Add fields for configuring precision and auto_precision.
     $form['precision'] = [
       '#type' => 'textfield',
-      '#title' => t('Precision'),
-      '#description' => t('Specify the number of digits after the decimal place to display when converting the fraction to a decimal. When "Auto precision" is enabled, this value essentially becomes a minimum fallback precision.'),
+      '#title' => $this->t('Precision'),
+      '#description' => $this->t('Specify the number of digits after the decimal place to display when converting the fraction to a decimal. When "Auto precision" is enabled, this value essentially becomes a minimum fallback precision.'),
       '#default_value' => $this->options['precision'],
     ];
     $form['auto_precision'] = [
       '#type' => 'checkbox',
-      '#title' => t('Auto precision'),
-      '#description' => t('Automatically determine the maximum precision if the fraction has a base-10 denominator. For example, 1/100 would have a precision of 2, 1/1000 would have a precision of 3, etc.'),
+      '#title' => $this->t('Auto precision'),
+      '#description' => $this->t('Automatically determine the maximum precision if the fraction has a base-10 denominator. For example, 1/100 would have a precision of 2, 1/1000 would have a precision of 3, etc.'),
       '#default_value' => $this->options['auto_precision'],
     ];
 
