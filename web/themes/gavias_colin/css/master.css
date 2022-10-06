@@ -3003,15 +3003,15 @@ ol.special li::before {
 }
 
 .issues-2023 .line span.one {
-  background: #522d46;
+  background: #8e577f;
 }
 
 .issues-2023 .line span.second {
-  background: #836378;
+  background: #a97f9e;
 }
 
 .issues-2023 .line span.three {
-  background: #b398ab;
+  background: #c4a6bc;
 }
 
 .path-issues tbody tr:nth-child(odd) {
