@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'de287481003c9c93b1083b60f1d0611ab70f6a19',
+        'reference' => '9bef277ff61244ff0cce9a450919f5a27bdd1389',
         'name' => 'drupal-composer/drupal-project',
         'dev' => true,
     ),
@@ -285,7 +285,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'de287481003c9c93b1083b60f1d0611ab70f6a19',
+            'reference' => '9bef277ff61244ff0cce9a450919f5a27bdd1389',
             'dev_requirement' => false,
         ),
         'drupal/address' => array(
@@ -877,15 +877,6 @@
             'install_path' => __DIR__ . '/../../web/modules/contrib/fraction',
             'aliases' => array(),
             'reference' => '2.2.0',
-            'dev_requirement' => false,
-        ),
-        'drupal/fullcalendar' => array(
-            'pretty_version' => '1.0.0-alpha3',
-            'version' => '1.0.0.0-alpha3',
-            'type' => 'drupal-module',
-            'install_path' => __DIR__ . '/../../web/modules/contrib/fullcalendar',
-            'aliases' => array(),
-            'reference' => '8.x-1.0-alpha3',
             'dev_requirement' => false,
         ),
         'drupal/fullcalendar_view' => array(
