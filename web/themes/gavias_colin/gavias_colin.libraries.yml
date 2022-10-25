@@ -11,6 +11,7 @@ global-styling:
       css/search.css: {}
       css/override.css: {}
       css/sliderlayer.css: {}
+      css/newheader.css: {}
       css/font-awesome/css/all.min.css: {}
       //stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css: { type: external }
       css/ionicon/css/ionicons.min.css: {}
@@ -23,7 +24,6 @@ global-styling:
       vendor/popup-gallery/css/lightgallery.min.css: {}
       vendor/popup-gallery/css/lg-transitions.min.css: {}
       css/datatables.css: {}
-      css/newheader.css: {}
 
   js:
     vendor/jquery-migrate.min.js: {}

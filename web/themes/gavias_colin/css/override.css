@@ -647,7 +647,11 @@ a .btn.btn-primary {
 #blue-accordian p,
 #blue-accordian ul,
 #blue-accordian li,
-#blue-accordian span p {
+#blue-accordian span p,
+.blue-accordian p,
+.blue-accordian ul,
+.blue-accordian li,
+.blue-accordian span p{
     color: var(--mha-black) !important;
 }
 
@@ -655,7 +659,8 @@ a .btn.btn-primary {
     color: var(--mha-black) !important;
 }
 
-#blue-accordian .panel {
+#blue-accordian .panel,
+.blue-accordian .panel {
     background: var(--mha-white) !important;
     color: var(--mha-black) !important;
 }
@@ -669,7 +674,17 @@ a .btn.btn-primary {
 #blue-accordian .btn-primary.ext,
 #blue-accordian a.btn.btn-primary,
 #blue-accordian a.btn-primary .ext,
-#blue-accordian a .btn.btn-primary {
+#blue-accordian a .btn.btn-primary,
+.blue-accordian .panel .panel-heading .panel-title > a,
+.blue-accordian .panel .panel-heading .panel-title > a,
+.blue-accordian .btn.btn-primary,
+.blue-accordian .btn-primary.ext,
+.blue-accordian .btn-primary,
+.blue-accordian .btn.btn-primary,
+.blue-accordian .btn-primary.ext,
+.blue-accordian a.btn.btn-primary,
+.blue-accordian a.btn-primary .ext,
+.blue-accordian a .btn.btn-primary {
     background: var(--mha-white) !important;
     color: var(--mha-black) !important;
 }
@@ -931,8 +946,6 @@ button.fc-listYear-button.fc-button.fc-button-primary.fc-button-active {
 }
 
 .panel .panel-heading .panel-title > a::after {
-    top: 0 !important;
-    right: 0 !important;
     color: var(--mha-link-orange) !important;
     font-weight: bold;
 }
@@ -1090,12 +1103,9 @@ header {
     margin: 0;
 }
 
-#blue-accordian .panel-group .panel {
+#blue-accordian .panel-group .panel,
+.blue-accordian .panel-group .panel{
     border-radius: 25px;
-    -webkit-border-radius: 25px;
-    -moz-border-radius: 25px;
-    width: 100% !important;
-    display: inline-flex;
 }
 
 .fa-long-arrow-right::before {
@@ -1143,11 +1153,6 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 
 .sidebar.sidebar-left {
     margin: 0;
-}
-
-.panel .panel-heading .panel-title > a:before {
-    position: absolute;
-    left: -1px;
 }
 
 .field.field--name-field-image.field--type-image.field--label-hidden.field__items {
