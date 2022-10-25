@@ -408,18 +408,21 @@ span.mailto {
 }
 
 /* blue-accordian */
-#blue-accordian .panel {
+#blue-accordian .panel,
+.blue-accordian .panel{
   background: var(--mha-black) !important;
   color: var(--mha-white) !important;
 }
 
-#blue-accordian .panel-group .panel {
+#blue-accordian .panel-group .panel,
+.blue-accordian .panel-group .panel{
   border-radius: 25px;
   -webkit-border-radius: 25px;
   -moz-border-radius: 25px;
 }
 
-#blue-accordian .panel .panel-heading .panel-title > a {
+#blue-accordian .panel .panel-heading .panel-title > a,
+.blue-accordian .panel .panel-heading .panel-title > a{
   display: block;
   letter-spacing: 0;
   color: var(--mha-white);
@@ -747,7 +750,8 @@ span.mailto {
   margin-top: 25px;
 }
 
-#blue-accordian .panel p {
+#blue-accordian .panel p,
+.blue-accordian .panel p{
   color: var(--mha-white);
   margin: 0 0 30px !important;
 }
@@ -807,7 +811,10 @@ span.mailto {
 
 #blue-accordian tr td,
 #blue-accordian tr td p,
-#blue-accordian .panel-body td ul li {
+#blue-accordian .panel-body td ul li,
+.blue-accordian tr td,
+.blue-accordian tr td p,
+.blue-accordian .panel-body td ul li {
   color: var(--mha-black) !important;
 }
 
@@ -862,7 +869,10 @@ span.mailto {
 
 #blue-accordian tr td,
 #blue-accordian tr td p,
-#blue-accordian .panel-body td ul li {
+#blue-accordian .panel-body td ul li,
+.blue-accordian tr td,
+.blue-accordian tr td p,
+.blue-accordian .panel-body td ul li{
   color: var(--mha-black) !important;
 }
 
