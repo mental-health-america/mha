@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'c53292283073c2d893e46354ab00e08d7bb7cabe',
+        'reference' => '90ef8bf99182205dba1caf11e988c277a64bbe45',
         'name' => 'drupal-composer/drupal-project',
         'dev' => true,
     ),
@@ -294,7 +294,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'c53292283073c2d893e46354ab00e08d7bb7cabe',
+            'reference' => '90ef8bf99182205dba1caf11e988c277a64bbe45',
             'dev_requirement' => false,
         ),
         'drupal/address' => array(
@@ -1345,6 +1345,15 @@
             'install_path' => __DIR__ . '/../../web/modules/contrib/single_content_sync',
             'aliases' => array(),
             'reference' => '1.3.7',
+            'dev_requirement' => false,
+        ),
+        'drupal/siteimprove' => array(
+            'pretty_version' => '1.12.0',
+            'version' => '1.12.0.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../web/modules/contrib/siteimprove',
+            'aliases' => array(),
+            'reference' => '8.x-1.12',
             'dev_requirement' => false,
         ),
         'drupal/social_media_links' => array(
