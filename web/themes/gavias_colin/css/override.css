@@ -623,6 +623,7 @@ a.ext {
 }
 
 #blue-accordian .panel .panel-heading .panel-title > a,
+.blue-accordian .panel .panel-heading .panel-title > a,
 .panel .panel-heading .panel-title > a,
 .btn.btn-primary,
 .btn-primary.ext,
@@ -1553,4 +1554,8 @@ footer a:active {
     .center-act .gsc-button.small {
         position: relative;
     }
+}
+
+.comment_author {
+    text-transform: none !important;
 }
