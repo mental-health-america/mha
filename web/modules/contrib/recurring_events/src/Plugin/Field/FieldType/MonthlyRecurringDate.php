@@ -19,7 +19,8 @@ use Drupal\recurring_events\Plugin\RecurringEventsFieldTrait;
  *   label = @Translation("Monthly Event"),
  *   description = @Translation("Stores a monthly recurring date configuration"),
  *   default_widget = "monthly_recurring_date",
- *   default_formatter = "monthly_recurring_date"
+ *   default_formatter = "",
+ *   no_ui = TRUE,
  * )
  */
 class MonthlyRecurringDate extends WeeklyRecurringDate implements RecurringEventsFieldTypeInterface {

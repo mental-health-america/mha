@@ -7,7 +7,7 @@ dependencies:
   - 'recurring_events:recurring_events'
   - 'group:group'
 
-# Information added by Drupal.org packaging script on 2022-09-23
-version: '2.0.0-rc5'
+# Information added by Drupal.org packaging script on 2022-11-29
+version: '2.0.0-rc6'
 project: 'recurring_events'
-datestamp: 1663900750
+datestamp: 1669740343

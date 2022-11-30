@@ -6,6 +6,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\recurring_events\Entity\EventSeries;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\system\SystemManager;
 use Drupal\recurring_events\EventInterface;
@@ -136,6 +137,37 @@ class EventSeriesController extends ControllerBase implements ContainerInjection
     $form = $this->entityFormBuilder()->getForm($eventseries);
 
     return $form;
+  }
+
+  /**
+   * Create a new event instance.
+   *
+   * @param \Drupal\recurring_events\Entity\EventSeries $eventseries
+   *   The eventseries.
+   */
+  public function addInstance(EventSeries $eventseries) {
+    $data = [
+      'eventseries_id' => $eventseries->id(),
+      'type' => $eventseries->getType(),
+    ];
+    $this->moduleHandler()->alter('recurring_events_event_instance', $data);
+
+    $entity = $this->entityTypeManager()->getStorage('eventinstance')->create($data);
+
+    return $this->entityFormBuilder()->getForm($entity);
+  }
+
+  /**
+   * The _title_callback for the entity.eventseries.add_instance_form route.
+   *
+   * @param \Drupal\recurring_events\Entity\EventSeries $eventseries
+   *   The eventseries.
+   *
+   * @return \Drupal\Core\StringTranslation\TranslatableMarkup
+   *   The page title.
+   */
+  public function addInstanceTitle(EventSeries $eventseries) {
+    return $this->t('Add new instance to %name', ['%name' => $eventseries->label()]);
   }
 
   /**

@@ -226,7 +226,7 @@ class EventSeriesForm extends ContentEntityForm {
     // suppressed then also suppress the fields associated with that.
     foreach ($all_recur_fields as $field_name => $field_label) {
       if (!isset($recur_fields[$field_name])) {
-        unset($form[$field_name]);
+        $form[$field_name]['#access'] = FALSE;
       }
     }
 
@@ -266,7 +266,12 @@ class EventSeriesForm extends ContentEntityForm {
             '#rows' => $diff_array,
           ];
 
-          if ($config->get('threshold_warning')) {
+          $consecutive_date_enabled = str_contains(
+            $config->get('enabled_fields'),
+            'consecutive_recurring_date'
+          );
+
+          if ($consecutive_date_enabled && $config->get('threshold_warning')) {
             $total = ConsecutiveRecurringDateWidget::checkDuration($form_state);
             if ($total > $config->get('threshold_count')) {
               $message = $config->get('threshold_message');

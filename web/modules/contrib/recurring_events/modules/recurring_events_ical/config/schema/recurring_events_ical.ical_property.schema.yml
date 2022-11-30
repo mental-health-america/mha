@@ -1,0 +1,27 @@
+recurring_events_ical.ical_property.summary:
+  type: string
+  label: 'SUMMARY'
+recurring_events_ical.ical_property.contact:
+  type: string
+  label: 'CONTACT'
+  nullable: true
+recurring_events_ical.ical_property.description:
+  type: string
+  label: 'DESCRIPTION'
+  nullable: true
+recurring_events_ical.ical_property.geo:
+  type: string
+  label: 'GEO'
+  nullable: true
+recurring_events_ical.ical_property.location:
+  type: string
+  label: 'LOCATION'
+  nullable: true
+recurring_events_ical.ical_property.priority:
+  type: string
+  label: 'PRIORITY'
+  nullable: true
+recurring_events_ical.ical_property.url:
+  type: string
+  label: 'URL'
+  nullable: true

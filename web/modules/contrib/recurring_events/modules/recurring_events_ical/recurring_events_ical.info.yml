@@ -1,0 +1,14 @@
+name: 'Recurring Events iCalendar'
+type: module
+description: 'Provides the ability to export recurring events as iCalendar files'
+core_version_requirement: ^8.9 || ^9
+package: 'Recurring Events'
+configure: entity.event_ical_mapping.collection
+dependencies:
+  - recurring_events:recurring_events
+  - token:token
+
+# Information added by Drupal.org packaging script on 2022-11-29
+version: '2.0.0-rc6'
+project: 'recurring_events'
+datestamp: 1669740343

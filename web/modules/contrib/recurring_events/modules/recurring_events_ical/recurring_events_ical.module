@@ -1,0 +1,134 @@
+<?php
+
+/**
+ * @file
+ * Contains recurring_events_ical.module.
+ */
+
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_entity_base_field_info_alter().
+ */
+function recurring_events_ical_entity_base_field_info_alter(&$fields, EntityTypeInterface $entity_type) {
+  if ($entity_type->id() === 'eventseries' || $entity_type->id() === 'eventinstance') {
+    $fields['event_ical_link'] = BaseFieldDefinition::create('event_ical_link')
+      ->setName('event_ical_link')
+      ->setLabel(t('Event iCalendar Link'))
+      ->setComputed(TRUE)
+      ->setClass('\Drupal\recurring_events_ical\Field\EventICalLinkItemList')
+      ->setTargetEntityTypeId($entity_type->id())
+      ->setDisplayConfigurable('form', FALSE)
+      ->setDisplayConfigurable('view', TRUE)
+      ->setDisplayOptions('view', [
+        'label' => 'hidden',
+        'weight' => 10,
+      ]);
+  }
+}
+
+/**
+ * Implements hook_entity_type_alter().
+ */
+function recurring_events_ical_entity_type_alter(array &$entity_types) {
+  /** @var \Drupal\Core\Entity\EntityTypeInterface[] $entity_types */
+  $entity_types['eventseries']->setLinkTemplate('ical', $entity_types['eventseries']->getLinkTemplate('canonical') . '/ical');
+  $entity_types['eventinstance']->setLinkTemplate('ical', $entity_types['eventinstance']->getLinkTemplate('canonical') . '/ical');
+}
+
+/**
+ * Implements hook_config_schema_info_alter().
+ */
+function recurring_events_ical_config_schema_info_alter(&$definitions) {
+  foreach (['eventseries', 'eventinstance'] as $entity_type) {
+    $definitions["recurring_events.$entity_type.config"]['mapping']['ical_link_title'] = [
+      'type' => 'string',
+      'label' => 'iCalendar link title',
+    ];
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter() for 'eventseries_settings'.
+ */
+function recurring_events_ical_form_eventseries_settings_alter(&$form, FormStateInterface $form_state, $form_id) {
+  _recurring_events_ical_settings($form, 'eventseries');
+  $form['#submit'][] = 'recurring_events_ical_form_eventseries_settings_submit';
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter() for 'eventinstance_settings'.
+ */
+function recurring_events_ical_form_eventinstance_settings_alter(&$form, FormStateInterface $form_state, $form_id) {
+  _recurring_events_ical_settings($form, 'eventinstance');
+  $form['#submit'][] = 'recurring_events_ical_form_eventinstance_settings_submit';
+}
+
+/**
+ * Helper function to add the iCalendar settings fields to a form.
+ *
+ * @param array &$form
+ *   Nested array of form elements that comprise the form.
+ * @param string $entity_type
+ *   The type of event entity, either 'eventseries' or 'eventinstance'.
+ */
+function _recurring_events_ical_settings(array &$form, string $entity_type) {
+  $config = \Drupal::config("recurring_events.$entity_type.config");
+
+  /** @var \Drupal\token\TokenEntityMapperInterface $token_entity_mapper */
+  $token_entity_mapper = \Drupal::service('token.entity_mapper');
+  $token_types[$entity_type] = $token_entity_mapper->getTokenTypeForEntityType($entity_type);
+
+  $form['ical'] = [
+    '#type' => 'details',
+    '#title' => t('iCalendar'),
+    '#open' => TRUE,
+  ];
+  $form['ical']['ical_link_title'] = [
+    '#type' => 'textfield',
+    '#title' => t('iCalendar Link Title'),
+    '#description' => t('Link text for the Event iCalendar Link field.'),
+    '#size' => 65,
+    '#maxlength' => 1280,
+    '#element_validate' => ['token_element_validate'],
+    '#after_build' => ['token_element_validate'],
+    '#token_types' => $token_types,
+    '#default_value' => $config->get('ical_link_title') ?? t('Download as iCal'),
+  ];
+  $form['ical']['token_browser'] = [
+    '#theme' => 'token_tree_link',
+    '#token_types' => $token_types,
+    '#global_types' => TRUE,
+    '#show_nested' => TRUE,
+  ];
+}
+
+/**
+ * Additional submission handler for the eventseries_settings form.
+ *
+ * @param array &$form
+ *   Nested array of form elements that comprise the form.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The form state.
+ */
+function recurring_events_ical_form_eventseries_settings_submit(array &$form, FormStateInterface $form_state) {
+  \Drupal::configFactory()->getEditable('recurring_events.eventseries.config')
+    ->set('ical_link_title', $form_state->getValue('ical_link_title'))
+    ->save();
+}
+
+/**
+ * Additional submission handler for the eventinstance_settings form.
+ *
+ * @param array &$form
+ *   Nested array of form elements that comprise the form.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The form state.
+ */
+function recurring_events_ical_form_eventinstance_settings_submit(array &$form, FormStateInterface $form_state) {
+  \Drupal::configFactory()->getEditable('recurring_events.eventinstance.config')
+    ->set('ical_link_title', $form_state->getValue('ical_link_title'))
+    ->save();
+}

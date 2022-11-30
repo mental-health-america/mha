@@ -1,4 +1,5 @@
 show_capacity: true
+use_admin_theme: false
 limit: 10
 date_format: 'F jS, Y h:iA'
 title: '[registrant:email]'

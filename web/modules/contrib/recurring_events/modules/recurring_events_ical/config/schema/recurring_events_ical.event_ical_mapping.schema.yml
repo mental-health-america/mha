@@ -1,0 +1,15 @@
+recurring_events_ical.event_ical_mapping.*:
+  type: config_entity
+  label: 'Event iCal property mapping'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    label:
+      type: label
+      label: 'Type'
+    properties:
+      type: sequence
+      label: 'Properties'
+      sequence:
+        type: recurring_events_ical.ical_property.[%key]

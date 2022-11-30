@@ -20,7 +20,8 @@ use Drupal\recurring_events\Plugin\RecurringEventsFieldTrait;
  *   label = @Translation("Consecutive Event"),
  *   description = @Translation("Stores a consecutive recurring date configuration"),
  *   default_widget = "consecutive_recurring_date",
- *   default_formatter = "consecutive_recurring_date"
+ *   default_formatter = "",
+ *   no_ui = TRUE,
  * )
  */
 class ConsecutiveRecurringDate extends DateRangeItem implements RecurringEventsFieldTypeInterface {

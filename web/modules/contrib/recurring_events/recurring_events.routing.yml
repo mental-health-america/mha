@@ -82,6 +82,20 @@ entity.eventseries.clone_form:
       eventseries:
         type: entity:eventseries
 
+# Add an event instance to an EventSeries.
+entity.eventseries.add_instance_form:
+  path: '/events/series/{eventseries}/add'
+  defaults:
+    _controller: '\Drupal\recurring_events\Controller\EventSeriesController::addInstance'
+    _title_callback: '\Drupal\recurring_events\Controller\EventSeriesController::addInstanceTitle'
+  requirements:
+    _entity_create_access: 'eventinstance'
+  options:
+    _recurring_events_operation_route: TRUE
+    parameters:
+      eventseries:
+        type: entity:eventseries
+
 # Event Series table list route.
 entity.eventseries.collection:
   path: '/events/series'

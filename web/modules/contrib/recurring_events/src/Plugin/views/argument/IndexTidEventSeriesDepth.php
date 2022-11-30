@@ -138,8 +138,6 @@ class IndexTidEventSeriesDepth extends IndexTidDepth {
     $ref_field_name = $this->options['reference_field'] . '_target_id';
     $ref_field_table = $this->entityType . '__' . $this->options['reference_field'];
 
-    ksm($this->options);
-
     $this->ensureMyTable();
 
     if (!empty($this->options['break_phrase'])) {

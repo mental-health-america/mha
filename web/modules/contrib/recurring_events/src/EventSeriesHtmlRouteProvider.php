@@ -62,7 +62,7 @@ class EventSeriesHtmlRouteProvider extends AdminHtmlRouteProvider {
           '_title' => "{$entity_type->getLabel()} revisions",
           '_controller' => '\Drupal\recurring_events\Controller\EventSeriesController::revisionOverview',
         ])
-        ->setRequirement('_permission', 'access eventseries revisions');
+        ->setRequirement('_permission', 'view all eventseries revisions');
 
       return $route;
     }
@@ -85,7 +85,7 @@ class EventSeriesHtmlRouteProvider extends AdminHtmlRouteProvider {
           '_controller' => '\Drupal\recurring_events\Controller\EventSeriesController::revisionShow',
           '_title_callback' => '\Drupal\recurring_events\Controller\EventSeriesController::revisionPageTitle',
         ])
-        ->setRequirement('_permission', 'access eventseries revisions');
+        ->setRequirement('_permission', 'view all eventseries revisions');
 
       return $route;
     }

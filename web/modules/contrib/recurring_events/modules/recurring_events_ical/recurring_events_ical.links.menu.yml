@@ -1,0 +1,7 @@
+# iCal property mapping configuration page.
+entity.event_ical_mapping.collection:
+  title: 'Event iCalendar Property Mapping'
+  description: 'Configure event instance tokens to populate iCalendar properties.'
+  route_name: entity.event_ical_mapping.collection
+  parent: events.admin.overview
+  weight: 4

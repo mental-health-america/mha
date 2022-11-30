@@ -20,7 +20,8 @@ use Drupal\recurring_events\Plugin\RecurringEventsFieldTrait;
  *   label = @Translation("Daily Event"),
  *   description = @Translation("Stores a daily recurring date configuration"),
  *   default_widget = "daily_recurring_date",
- *   default_formatter = "daily_recurring_date"
+ *   default_formatter = "",
+ *   no_ui = TRUE,
  * )
  */
 class DailyRecurringDate extends DateRangeItem implements RecurringEventsFieldTypeInterface {
