@@ -76,7 +76,8 @@ function recurring_events_registration_entity_base_field_info_alter(&$fields, En
       ->setDescription('The availability for this event.')
       ->setReadOnly(TRUE)
       ->setComputed(TRUE)
-      ->setClass(AvailabilityCount::class);
+      ->setClass(AvailabilityCount::class)
+      ->setTargetEntityTypeId($entity_type->id());
 
     $fields['registration_count'] = BaseFieldDefinition::create('integer')
       ->setName('registration_count')
@@ -84,7 +85,8 @@ function recurring_events_registration_entity_base_field_info_alter(&$fields, En
       ->setDescription('The number of registrants for this event.')
       ->setReadOnly(TRUE)
       ->setComputed(TRUE)
-      ->setClass(RegistrationCount::class);
+      ->setClass(RegistrationCount::class)
+      ->setTargetEntityTypeId($entity_type->id());
 
     $fields['waitlist_count'] = BaseFieldDefinition::create('integer')
       ->setName('waitlist_count')
@@ -92,7 +94,8 @@ function recurring_events_registration_entity_base_field_info_alter(&$fields, En
       ->setDescription('The number of waitlisted registrants for this event.')
       ->setReadOnly(TRUE)
       ->setComputed(TRUE)
-      ->setClass(WaitlistCount::class);
+      ->setClass(WaitlistCount::class)
+      ->setTargetEntityTypeId($entity_type->id());
   }
 }
 
@@ -311,6 +314,10 @@ function recurring_events_registration_send_notification($key, RegistrantInterfa
   $config = \Drupal::config('recurring_events_registration.registrant.config');
   $send_email = $config->get('email_notifications');
   $send_email_key = $config->get('notifications' . '.' . $key . '.enabled');
+
+  // Modify $send_email if necessary.
+  \Drupal::moduleHandler()->alter('recurring_events_registration_send_notification', $send_email, $registrant);
+
   if ($send_email && $send_email_key) {
     $params = [
       'registrant' => $registrant,

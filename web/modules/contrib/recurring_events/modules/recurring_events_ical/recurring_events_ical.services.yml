@@ -1,0 +1,4 @@
+services:
+  recurring_events_ical.event_ical:
+    class: Drupal\recurring_events_ical\EventICal
+    arguments: ['@entity_type.manager', '@request_stack', '@token']

@@ -1,0 +1,58 @@
+# iCal property mapping configuration
+entity.event_ical_mapping.collection:
+  path: '/admin/structure/events/ical'
+  defaults:
+    _entity_list: 'event_ical_mapping'
+    _title: 'iCalendar'
+  requirements:
+    _permission: 'administer eventinstance types'
+
+entity.event_ical_mapping.add_form:
+  path: '/admin/structure/events/ical/add'
+  defaults:
+    _entity_form: 'event_ical_mapping.add'
+    _title: 'Add iCalendar property mapping'
+  requirements:
+    _permission: 'administer eventinstance types'
+
+entity.event_ical_mapping.edit_form:
+  path: '/admin/structure/events/ical/{event_ical_mapping}'
+  defaults:
+    _entity_form: 'event_ical_mapping.edit'
+    _title: 'Edit iCalendar property mapping'
+  requirements:
+    _permission: 'administer eventinstance types'
+
+entity.event_ical_mapping.delete_form:
+  path: '/admin/structure/events/ical/{event_ical_mapping}/delete'
+  defaults:
+    _entity_form: 'event_ical_mapping.delete'
+    _title: 'Delete iCalendar property mapping'
+  requirements:
+    _permission: 'administer eventinstance types'
+
+# iCalendar download on EventSeries
+entity.eventseries.ical:
+  path: '/events/series/{eventseries}/ical'
+  defaults:
+    _controller: '\Drupal\recurring_events_ical\Controller\EventExportController::series'
+  requirements:
+    _entity_access: 'eventseries.view'
+    eventseries: \d+
+  options:
+    parameters:
+      eventseries:
+        type: entity:eventseries
+
+# iCalendar download on EventInstance
+entity.eventinstance.ical:
+  path: '/events/{eventinstance}/ical'
+  defaults:
+    _controller: '\Drupal\recurring_events_ical\Controller\EventExportController::instance'
+  requirements:
+    _entity_access: 'eventinstance.view'
+    eventinstance: \d+
+  options:
+    parameters:
+      eventinstance:
+        type: entity:eventinstance

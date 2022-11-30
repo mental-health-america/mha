@@ -95,6 +95,7 @@ class EventSeriesSettingsForm extends ConfigFormBase {
       ->set('threshold_count', $form_state->getValue('threshold_count'))
       ->set('threshold_message', $form_state->getValue('threshold_message'))
       ->set('threshold_prevent_save', $form_state->getValue('threshold_prevent_save'))
+      ->set('creator_plugin', $form_state->getValue('creator_plugin'))
       ->save();
 
     parent::submitForm($form, $form_state);

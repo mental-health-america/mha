@@ -500,3 +500,17 @@ function recurring_events_registration_update_8009() {
     }
   }
 }
+
+/**
+ * Set a default value for the new 'use_admin_theme' setting.
+ */
+function recurring_events_registration_update_8010() {
+  $config = \Drupal::configFactory()->getEditable('recurring_events_registration.registrant.config');
+
+  if ($config->get('use_admin_theme') !== NULL) {
+    return;
+  }
+
+  $config->set('use_admin_theme', FALSE);
+  $config->save();
+}

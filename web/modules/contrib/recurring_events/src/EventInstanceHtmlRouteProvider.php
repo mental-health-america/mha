@@ -62,7 +62,7 @@ class EventInstanceHtmlRouteProvider extends AdminHtmlRouteProvider {
           '_title' => "{$entity_type->getLabel()} revisions",
           '_controller' => '\Drupal\recurring_events\Controller\EventInstanceController::revisionOverview',
         ])
-        ->setRequirement('_permission', 'access eventinstance revisions');
+        ->setRequirement('_permission', 'view all eventinstance revisions');
 
       return $route;
     }
@@ -85,7 +85,7 @@ class EventInstanceHtmlRouteProvider extends AdminHtmlRouteProvider {
           '_controller' => '\Drupal\recurring_events\Controller\EventInstanceController::revisionShow',
           '_title_callback' => '\Drupal\recurring_events\Controller\EventInstanceController::revisionPageTitle',
         ])
-        ->setRequirement('_permission', 'access eventinstance revisions');
+        ->setRequirement('_permission', 'view all eventinstance revisions');
 
       return $route;
     }

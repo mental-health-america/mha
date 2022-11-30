@@ -22,35 +22,35 @@ class EncryptionProfileTest extends UnitTestCase {
   /**
    * A mocked Key entity.
    *
-   * @var \Drupal\key\Entity\Key|\PHPUnit_Framework_MockObject_MockObject
+   * @var \Drupal\key\Entity\Key|\PHPUnit\Framework\MockObject\MockObject
    */
   protected $key;
 
   /**
    * A mocked EncryptionMethod.
    *
-   * @var \Drupal\encrypt\EncryptionMethodInterface|\PHPUnit_Framework_MockObject_MockObject
+   * @var \Drupal\encrypt\EncryptionMethodInterface|\PHPUnit\Framework\MockObject\MockObject
    */
   protected $encryptionMethod;
 
   /**
    * A mocked KeyRepository.
    *
-   * @var \Drupal\key\KeyRepository|\PHPUnit_Framework_MockObject_MockObject
+   * @var \Drupal\key\KeyRepository|\PHPUnit\Framework\MockObject\MockObject
    */
   protected $keyRepository;
 
   /**
    * A mocked plugin collection.
    *
-   * @var \Drupal\Core\Plugin\DefaultLazyPluginCollection|\PHPUnit_Framework_MockObject_MockObject
+   * @var \Drupal\Core\Plugin\DefaultLazyPluginCollection|\PHPUnit\Framework\MockObject\MockObject
    */
   protected $pluginCollection;
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $container = new ContainerBuilder();
@@ -58,14 +58,10 @@ class EncryptionProfileTest extends UnitTestCase {
     \Drupal::setContainer($container);
 
     // Mock a Key entity.
-    $this->key = $this->getMockBuilder('\Drupal\key\Entity\Key')
-      ->disableOriginalConstructor()
-      ->getMock();
+    $this->key = $this->createMock('\Drupal\key\Entity\Key');
 
     // Set up expectations for key.
-    $key_type = $this->getMockBuilder('\Drupal\key\Plugin\KeyType\EncryptionKeyType')
-      ->disableOriginalConstructor()
-      ->getMock();
+    $key_type = $this->createMock('\Drupal\key\Plugin\KeyType\EncryptionKeyType');
     $key_type->expects($this->any())
       ->method('getPluginId')
       ->will($this->returnValue('encryption'));
@@ -77,9 +73,7 @@ class EncryptionProfileTest extends UnitTestCase {
       ->will($this->returnValue("key_value"));
 
     // Mock an EncryptionMethod.
-    $this->encryptionMethod = $this->getMockBuilder('\Drupal\encrypt\EncryptionMethodInterface')
-      ->disableOriginalConstructor()
-      ->getMock();
+    $this->encryptionMethod = $this->createMock('\Drupal\encrypt\EncryptionMethodInterface');
 
     // Set up expectations for encryption method.
     $this->encryptionMethod->expects($this->any())
@@ -87,9 +81,7 @@ class EncryptionProfileTest extends UnitTestCase {
       ->will($this->returnValue([]));
 
     // Mock a KeyRepository.
-    $this->keyRepository = $this->getMockBuilder('\Drupal\key\KeyRepository')
-      ->disableOriginalConstructor()
-      ->getMock();
+    $this->keyRepository = $this->createMock('\Drupal\key\KeyRepository');
 
     // Mock a plugin collection.
     $this->pluginCollection = $this->getMockBuilder('\Drupal\Core\Plugin\DefaultLazyPluginCollection')

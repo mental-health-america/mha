@@ -19,7 +19,8 @@ use Drupal\recurring_events\Plugin\RecurringEventsFieldTrait;
  *   label = @Translation("Weekly Event"),
  *   description = @Translation("Stores a weekly recurring date configuration"),
  *   default_widget = "weekly_recurring_date",
- *   default_formatter = "weekly_recurring_date"
+ *   default_formatter = "",
+ *   no_ui = TRUE,
  * )
  */
 class WeeklyRecurringDate extends DailyRecurringDate implements RecurringEventsFieldTypeInterface {

@@ -59,6 +59,14 @@ function recurring_events_entity_operation(EntityInterface $entity) {
     ];
   }
 
+  if ($entity->getEntityTypeId() == 'eventseries') {
+    $operations['add_instance'] = [
+      'title' => t('Add Instance'),
+      'weight' => 50,
+      'url' => $entity->toUrl('add-instance-form'),
+    ];
+  }
+
   return $operations;
 }
 
@@ -150,20 +158,17 @@ function recurring_events_eventseries_insert(EntityInterface $entity) {
   if (\Drupal::isConfigSyncing()) {
     return;
   }
+  /** @var \Drupal\recurring_events\EventCreationService $creation_service */
   $creation_service = \Drupal::service('recurring_events.event_creation_service');
-  $creation_service->createInstances($entity);
+  $instances = $creation_service->createInstances($entity);
+  foreach ($instances as $instance) {
+    $instance->set('eventseries_id', $entity->id());
+    $instance->setNewRevision(FALSE);
 
-  $instances = $entity->event_instances->referencedEntities();
-  if (!empty($instances)) {
-    foreach ($instances as $instance) {
-      $instance->set('eventseries_id', $entity->id());
-      $instance->setNewRevision(FALSE);
+    $creation_service->configureDefaultInheritances($instance, $entity->id());
+    $creation_service->updateInstanceStatus($instance, $entity);
 
-      $creation_service->configureDefaultInheritances($instance, $entity->id());
-      $creation_service->updateInstanceStatus($instance, $entity);
-
-      $instance->save();
-    }
+    $instance->save();
   }
 }
 

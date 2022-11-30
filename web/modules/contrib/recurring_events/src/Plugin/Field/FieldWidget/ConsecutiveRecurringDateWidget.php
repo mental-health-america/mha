@@ -2,14 +2,13 @@
 
 namespace Drupal\recurring_events\Plugin\Field\FieldWidget;
 
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\datetime_range\Plugin\Field\FieldWidget\DateRangeDefaultWidget;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\recurring_events\Plugin\RecurringEventsFieldTrait;
-use Drupal\Core\Ajax\AjaxResponse;
-use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\recurring_events\Plugin\Field\FieldType\ConsecutiveRecurringDate;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
@@ -35,6 +34,12 @@ class ConsecutiveRecurringDateWidget extends DateRangeDefaultWidget {
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
     $element = parent::formElement($items, $delta, $element, $form, $form_state);
 
+    $field_name = $this->fieldDefinition->getName();
+    $id_prefix = implode('-', array_merge($form['#parents'], [$field_name]));
+    $wrapper_id = Html::getUniqueId($id_prefix . '-wrapper');
+    $element['#prefix'] = '<div id="' . $wrapper_id . '">';
+    $element['#suffix'] = '</div>';
+
     $config = \Drupal::config('recurring_events.eventseries.config');
 
     $element['#type'] = 'container';
@@ -55,7 +60,7 @@ class ConsecutiveRecurringDateWidget extends DateRangeDefaultWidget {
     $element['value']['#ajax'] = [
       'callback' => [$this, 'changeDuration'],
       'event' => 'change',
-      'wrapper' => 'eventseries-edit-form',
+      'wrapper' => $wrapper_id,
     ];
 
     $element['end_value']['#title'] = $this->t('And');
@@ -67,7 +72,7 @@ class ConsecutiveRecurringDateWidget extends DateRangeDefaultWidget {
     $element['end_value']['#ajax'] = [
       'callback' => [$this, 'changeDuration'],
       'event' => 'change',
-      'wrapper' => 'eventseries-edit-form',
+      'wrapper' => $wrapper_id,
     ];
 
     $times = $this->getTimeOptions();
@@ -84,7 +89,7 @@ class ConsecutiveRecurringDateWidget extends DateRangeDefaultWidget {
         '#ajax' => [
           'callback' => [$this, 'changeDuration'],
           'event' => 'change',
-          'wrapper' => 'eventseries-edit-form',
+          'wrapper' => $wrapper_id,
         ],
       ];
 
@@ -97,7 +102,7 @@ class ConsecutiveRecurringDateWidget extends DateRangeDefaultWidget {
         '#ajax' => [
           'callback' => [$this, 'changeDuration'],
           'event' => 'change',
-          'wrapper' => 'eventseries-edit-form',
+          'wrapper' => $wrapper_id,
         ],
       ];
     }
@@ -122,7 +127,7 @@ class ConsecutiveRecurringDateWidget extends DateRangeDefaultWidget {
         '#ajax' => [
           'callback' => [$this, 'changeDuration'],
           'event' => 'change',
-          'wrapper' => 'eventseries-edit-form',
+          'wrapper' => $wrapper_id,
         ],
       ];
 
@@ -136,7 +141,7 @@ class ConsecutiveRecurringDateWidget extends DateRangeDefaultWidget {
         '#ajax' => [
           'callback' => [$this, 'changeDuration'],
           'event' => 'change',
-          'wrapper' => 'eventseries-edit-form',
+          'wrapper' => $wrapper_id,
         ],
       ];
     }
@@ -151,7 +156,7 @@ class ConsecutiveRecurringDateWidget extends DateRangeDefaultWidget {
       '#ajax' => [
         'callback' => [$this, 'changeDuration'],
         'event' => 'change',
-        'wrapper' => 'eventseries-edit-form',
+        'wrapper' => $wrapper_id,
       ],
     ];
 
@@ -164,7 +169,7 @@ class ConsecutiveRecurringDateWidget extends DateRangeDefaultWidget {
       '#ajax' => [
         'callback' => [$this, 'changeDuration'],
         'event' => 'change',
-        'wrapper' => 'eventseries-edit-form',
+        'wrapper' => $wrapper_id,
       ],
     ];
 
@@ -248,12 +253,7 @@ class ConsecutiveRecurringDateWidget extends DateRangeDefaultWidget {
    * Perform an AJAX reload of the form.
    */
   public function changeDuration(array $form, FormStateInterface $form_state) {
-    $response = new AjaxResponse();
-    /** @var \Drupal\recurring_events\Entity\EventSeries $entity */
-    $entity = $form_state->getformObject()->getEntity();
-    $form_id = $form_state->getBuildInfo()['form_id'] == 'eventseries_' . $entity->bundle() . '_edit_form' ? 'eventseries-' . $entity->bundle() . '-edit-form' : 'eventseries-' . $entity->bundle() . '-add-form';
-    $response->addCommand(new HtmlCommand('#' . $form_id, $form));
-    return $response;
+    return $form[$this->fieldDefinition->getName()];
   }
 
   /**

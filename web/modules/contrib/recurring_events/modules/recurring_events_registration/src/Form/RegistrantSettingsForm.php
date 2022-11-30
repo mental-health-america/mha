@@ -4,6 +4,7 @@ namespace Drupal\recurring_events_registration\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Routing\RouteBuilderInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Link;
@@ -40,6 +41,13 @@ class RegistrantSettingsForm extends ConfigFormBase {
   protected $moduleHandler;
 
   /**
+   * The route builder.
+   *
+   * @var \Drupal\Core\Routing\RouteBuilderInterface
+   */
+  protected $routeBuilder;
+
+  /**
    * Constructs a RegistrantSettingsForm object.
    *
    * @param \Drupal\recurring_events_registration\NotificationService $notification_service
@@ -48,11 +56,19 @@ class RegistrantSettingsForm extends ConfigFormBase {
    *   The registration creation service.
    * @param \Drupal\Core\Extension\ModuleHandler $module_handler
    *   The module handler service.
+   * @param \Drupal\Core\Routing\RouteBuilderInterface $route_builder
+   *   The route builder.
    */
-  public function __construct(NotificationService $notification_service, RegistrationCreationService $creation_service, ModuleHandler $module_handler) {
+  public function __construct(
+    NotificationService $notification_service,
+    RegistrationCreationService $creation_service,
+    ModuleHandler $module_handler,
+    RouteBuilderInterface $route_builder
+  ) {
     $this->notificationService = $notification_service;
     $this->creationService = $creation_service;
     $this->moduleHandler = $module_handler;
+    $this->routeBuilder = $route_builder;
   }
 
   /**
@@ -62,7 +78,8 @@ class RegistrantSettingsForm extends ConfigFormBase {
     return new static(
       $container->get('recurring_events_registration.notification_service'),
       $container->get('recurring_events_registration.creation_service'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('router.builder')
     );
   }
 
@@ -94,6 +111,7 @@ class RegistrantSettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('recurring_events_registration.registrant.config')
       ->set('show_capacity', $form_state->getValue('show_capacity'))
+      ->set('use_admin_theme', $form_state->getValue('use_admin_theme'))
       ->set('limit', $form_state->getValue('limit'))
       ->set('date_format', $form_state->getValue('date_format'))
       ->set('title', $form_state->getValue('title'))
@@ -104,6 +122,10 @@ class RegistrantSettingsForm extends ConfigFormBase {
       ->set('already_registered', $form_state->getValue('already_registered'))
       ->set('registration_closed', $form_state->getValue('registration_closed'))
       ->set('email_notifications', $form_state->getValue('email_notifications'));
+
+    if ($config->getOriginal('use_admin_theme') != $config->get('use_admin_theme')) {
+      $this->routeBuilder->setRebuildNeeded();
+    }
 
     $notification_types = [];
     $this->moduleHandler->alter('recurring_events_registration_notification_types', $notification_types);
@@ -154,6 +176,15 @@ class RegistrantSettingsForm extends ConfigFormBase {
       '#type' => 'details',
       '#title' => $this->t('Registrant Display'),
       '#open' => TRUE,
+    ];
+
+    $form['display']['use_admin_theme'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Use the administration theme when managing registrations'),
+      '#description' => $this->t('Control which roles can "View the administration theme" on the <a href=":permissions">Permissions page</a>.', [
+        ':permissions' => Url::fromRoute('user.admin_permissions')->toString(),
+      ]),
+      '#default_value' => $config->get('use_admin_theme'),
     ];
 
     $form['display']['limit'] = [

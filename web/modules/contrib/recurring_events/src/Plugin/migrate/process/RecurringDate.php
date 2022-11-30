@@ -176,7 +176,7 @@ class RecurringDate extends ProcessPluginBase {
       // Use the UNTIL value as the last event in the series.
       $end_series = new DrupalDateTime($rrule['UNTIL'], $source_timezone);
     }
-    // Adjust the timezone before storing values into the database.\
+    // Adjust the timezone before storing values into the database.
     $start_event->setTimezone($storage_timezone);
     $end_event->setTimezone($storage_timezone);
     $end_series->setTimezone($storage_timezone);

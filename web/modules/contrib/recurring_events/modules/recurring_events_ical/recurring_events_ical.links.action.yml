@@ -1,0 +1,5 @@
+entity.event_ical_mapping.add_form:
+  route_name: 'entity.event_ical_mapping.add_form'
+  title: 'Add iCalendar property mapping'
+  appears_on:
+    - entity.event_ical_mapping.collection

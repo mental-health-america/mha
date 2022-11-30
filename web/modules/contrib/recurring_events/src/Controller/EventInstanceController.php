@@ -97,16 +97,21 @@ class EventInstanceController extends ControllerBase implements ContainerInjecti
    */
   public function getTitle(EventInterface $eventinstance) {
     $title = '';
-    $value = $eventinstance->get('title')->getValue();
-    if (!empty($value[0]['value'])) {
-      $title = $value[0]['value'];
-    }
-
-    if ($eventinstance->hasTranslation($this->langCode)) {
-      $value = $eventinstance->getTranslation($this->langCode)->get('title')->getValue();
+    try {
+      $value = $eventinstance->get('title')->getValue();
       if (!empty($value[0]['value'])) {
         $title = $value[0]['value'];
       }
+
+      if ($eventinstance->hasTranslation($this->langCode)) {
+        $value = $eventinstance->getTranslation($this->langCode)->get('title')->getValue();
+        if (!empty($value[0]['value'])) {
+          $title = $value[0]['value'];
+        }
+      }
+    }
+    catch (\InvalidArgumentException $e) {
+      $title = $eventinstance->getEventSeries()->label();
     }
     return $title;
   }

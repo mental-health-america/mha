@@ -115,6 +115,7 @@ use Drupal\user\UserInterface;
  *     "canonical" = "/events/series/{eventseries}",
  *     "add-page" = "/events/add",
  *     "add-form" = "/events/add/{eventseries_type}",
+ *     "add-instance-form" = "/events/series/{eventseries}/add",
  *     "edit-form" = "/events/series/{eventseries}/edit",
  *     "delete-form" = "/events/series/{eventseries}/delete",
  *     "collection" = "/events/series",

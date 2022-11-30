@@ -39,6 +39,12 @@ entity.eventseries.collection:
   route_name: entity.eventseries.admin_collection
   base_route: system.admin_content
 
+# Event Series add instance link
+entity.eventseries.add_instance_form:
+  title: 'Add Instance'
+  route_name: entity.eventseries.add_instance_form
+  base_route: entity.eventseries.canonical
+
 # Event Series type edit link
 entity.eventseries_type.edit_form:
   title: 'Edit'

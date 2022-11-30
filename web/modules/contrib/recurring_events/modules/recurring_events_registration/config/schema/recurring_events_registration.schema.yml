@@ -5,6 +5,9 @@ recurring_events_registration.registrant.config:
     show_capacity:
       type: boolean
       label: 'Whether to display the remaining capacity for an event during registration'
+    use_admin_theme:
+      type: boolean
+      label: 'Use the administration theme when managing registrations'
     limit:
       type: integer
       label: 'The items per page to show on registrant listing'

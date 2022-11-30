@@ -12,5 +12,8 @@
   },
   "require": {
     "drupal/field_inheritance": "^2"
+  },
+  "require-dev": {
+    "drupal/token": "^1.11"
   }
 }
