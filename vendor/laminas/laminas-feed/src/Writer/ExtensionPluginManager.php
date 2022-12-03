@@ -9,6 +9,7 @@ use Laminas\ServiceManager\ConfigInterface;
 use Laminas\ServiceManager\Exception\InvalidServiceException;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 
+use function get_class;
 use function gettype;
 use function is_object;
 use function sprintf;
@@ -247,12 +248,12 @@ class ExtensionPluginManager extends AbstractPluginManager implements ExtensionM
             return;
         }
 
-        if (is_object($instance) && 'Feed' === substr($instance::class, -4)) {
+        if (is_object($instance) && 'Feed' === substr(get_class($instance), -4)) {
             // we're okay
             return;
         }
 
-        if (is_object($instance) && 'Entry' === substr($instance::class, -5)) {
+        if (is_object($instance) && 'Entry' === substr(get_class($instance), -5)) {
             // we're okay
             return;
         }
@@ -260,7 +261,7 @@ class ExtensionPluginManager extends AbstractPluginManager implements ExtensionM
         throw new InvalidServiceException(sprintf(
             'Plugin of type %s is invalid; must implement %s\Extension\RendererInterface '
             . 'or the classname must end in "Feed" or "Entry"',
-            is_object($instance) ? $instance::class : gettype($instance),
+            is_object($instance) ? get_class($instance) : gettype($instance),
             __NAMESPACE__
         ));
     }
@@ -280,7 +281,7 @@ class ExtensionPluginManager extends AbstractPluginManager implements ExtensionM
             throw new Exception\InvalidArgumentException(sprintf(
                 'Plugin of type %s is invalid; must implement %s\Extension\RendererInterface '
                 . 'or the classname must end in "Feed" or "Entry"',
-                is_object($plugin) ? $plugin::class : gettype($plugin),
+                is_object($plugin) ? get_class($plugin) : gettype($plugin),
                 __NAMESPACE__
             ));
         }
