@@ -22,8 +22,8 @@ class form_donate extends BlockBase {
   public function build() {
     return array(
       '#markup' => $this->t('
-<div id="RDaZcgrJCp">
-    <script type="text/javascript" src="https://default.salsalabs.org/api/widget/template/5b26eb37-505d-436a-90c0-8e5276379511/?tId=RDaZcgrJCp" ></script>
+<div id="fuVfPxKqlm">
+    <script type="text/javascript" src="https://default.salsalabs.org/api/widget/template/5b26eb37-505d-436a-90c0-8e5276379511/?tId=fuVfPxKqlm" ></script>
 </div>
       '),
     );
