@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "10981bcb426da3308d060b89046a71a0",
+    "content-hash": "148fad26b8a17f8d62748bc0e6504798",
     "packages": [
         {
             "name": "alchemy/zippy",
@@ -4898,20 +4898,20 @@
         },
         {
             "name": "drupal/facebook_pixel",
-            "version": "2.0.0-rc3",
+            "version": "2.0.0-rc4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/facebook_pixel.git",
-                "reference": "2.0.0-rc3"
+                "reference": "2.0.0-rc4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/facebook_pixel-2.0.0-rc3.zip",
-                "reference": "2.0.0-rc3",
-                "shasum": "e88925ab8635ec10577dae400c0fafb451af3238"
+                "url": "https://ftp.drupal.org/files/projects/facebook_pixel-2.0.0-rc4.zip",
+                "reference": "2.0.0-rc4",
+                "shasum": "4da148b194a30c16c37465fc0cb64b54447365a0"
             },
             "require": {
-                "drupal/core": "^8 || ^9"
+                "drupal/core": "^8.9 || ^9 || ^10"
             },
             "require-dev": {
                 "drupal/commerce_checkout": "*"
@@ -4919,8 +4919,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.0-rc3",
-                    "datestamp": "1660300947",
+                    "version": "2.0.0-rc4",
+                    "datestamp": "1670258483",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "RC releases are not covered by Drupal security advisories."
@@ -5097,30 +5097,31 @@
         },
         {
             "name": "drupal/feeds",
-            "version": "3.0.0-beta2",
+            "version": "3.0.0-beta3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/feeds.git",
-                "reference": "8.x-3.0-beta2"
+                "reference": "8.x-3.0-beta3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/feeds-8.x-3.0-beta2.zip",
-                "reference": "8.x-3.0-beta2",
-                "shasum": "7b18b24bfebdce90a62606b36dd8975d6eb862c8"
+                "url": "https://ftp.drupal.org/files/projects/feeds-8.x-3.0-beta3.zip",
+                "reference": "8.x-3.0-beta3",
+                "shasum": "60e840f47b4cd13cc1f72381f64e81c1d7e60217"
             },
             "require": {
-                "drupal/core": "^8.9 || ^9"
+                "drupal/core": "^9.3 || ^10",
+                "laminas/laminas-feed": "^2.13"
             },
             "require-dev": {
                 "drupal/pathauto": "^1.8",
-                "drush/drush": "^9 || ^10"
+                "drush/drush": "^9 || ^10 || ^11"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-3.0-beta2",
-                    "datestamp": "1657972705",
+                    "version": "8.x-3.0-beta3",
+                    "datestamp": "1670512823",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -5382,26 +5383,26 @@
         },
         {
             "name": "drupal/flag",
-            "version": "4.0.0-beta3",
+            "version": "4.0.0-beta4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/flag.git",
-                "reference": "8.x-4.0-beta3"
+                "reference": "8.x-4.0-beta4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/flag-8.x-4.0-beta3.zip",
-                "reference": "8.x-4.0-beta3",
-                "shasum": "856a4871034955406e111aee2227e716cc8064d6"
+                "url": "https://ftp.drupal.org/files/projects/flag-8.x-4.0-beta4.zip",
+                "reference": "8.x-4.0-beta4",
+                "shasum": "2779804f23685e1bb68a2a7b9517932dde3b1d4e"
             },
             "require": {
-                "drupal/core": "^8.8 || ^9"
+                "drupal/core": "^9.1 || ^10"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-4.0-beta3",
-                    "datestamp": "1638201553",
+                    "version": "8.x-4.0-beta4",
+                    "datestamp": "1670487892",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
@@ -5568,26 +5569,26 @@
         },
         {
             "name": "drupal/fullcalendar_view",
-            "version": "5.1.7",
+            "version": "5.1.8",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/fullcalendar_view.git",
-                "reference": "5.1.7"
+                "reference": "5.1.8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/fullcalendar_view-5.1.7.zip",
-                "reference": "5.1.7",
-                "shasum": "9f7647f64235682a23fa3fd58738fcb2786d8b4f"
+                "url": "https://ftp.drupal.org/files/projects/fullcalendar_view-5.1.8.zip",
+                "reference": "5.1.8",
+                "shasum": "70a290c549743be8b7644c4029ba0dafc63ff3ce"
             },
             "require": {
-                "drupal/core": "^8 || ^9"
+                "drupal/core": "^8 || ^9 || ^10"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "5.1.7",
-                    "datestamp": "1660091558",
+                    "version": "5.1.8",
+                    "datestamp": "1671066570",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -5621,17 +5622,17 @@
         },
         {
             "name": "drupal/geofield",
-            "version": "1.47.0",
+            "version": "1.48.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/geofield.git",
-                "reference": "8.x-1.47"
+                "reference": "8.x-1.48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/geofield-8.x-1.47.zip",
-                "reference": "8.x-1.47",
-                "shasum": "6eb52dcf82e242beac46655df8ee8f4075d06cef"
+                "url": "https://ftp.drupal.org/files/projects/geofield-8.x-1.48.zip",
+                "reference": "8.x-1.48",
+                "shasum": "1dbbf8aa3f55fe2e1814a96d1025a0ff83ec1969"
             },
             "require": {
                 "drupal/core": "^8.8 || ^9 || ^10",
@@ -5640,8 +5641,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.47",
-                    "datestamp": "1668167741",
+                    "version": "8.x-1.48",
+                    "datestamp": "1672684493",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -5734,20 +5735,22 @@
         },
         {
             "name": "drupal/geolocation",
-            "version": "3.10.0",
+            "version": "3.11.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/geolocation.git",
-                "reference": "8.x-3.10"
+                "reference": "8.x-3.11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/geolocation-8.x-3.10.zip",
-                "reference": "8.x-3.10",
-                "shasum": "686868c7a1bbccc24662e71a69efc9b6c90b18cf"
+                "url": "https://ftp.drupal.org/files/projects/geolocation-8.x-3.11.zip",
+                "reference": "8.x-3.11",
+                "shasum": "7a563ba6ba18380b636c10d936a28837100a4e02"
             },
             "require": {
-                "drupal/core": "^9.2",
+                "drupal/core": "^9.3 || ^10",
+                "drupal/jquery_ui": "*",
+                "drupal/jquery_ui_autocomplete": "*",
                 "php": "^7.3 || ^8.0"
             },
             "require-dev": {
@@ -5767,8 +5770,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-3.10",
-                    "datestamp": "1652946354",
+                    "version": "8.x-3.11",
+                    "datestamp": "1671546967",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -6136,6 +6139,72 @@
             }
         },
         {
+            "name": "drupal/jquery_ui_autocomplete",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/jquery_ui_autocomplete.git",
+                "reference": "2.0.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/jquery_ui_autocomplete-2.0.0.zip",
+                "reference": "2.0.0",
+                "shasum": "927d312a74002f99e1c971d3d268be1b0a532fc7"
+            },
+            "require": {
+                "drupal/core": "^9.2 || ^10",
+                "drupal/jquery_ui": "^1.6",
+                "drupal/jquery_ui_menu": "^2"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.0",
+                    "datestamp": "1670871461",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "bnjmnm",
+                    "homepage": "https://www.drupal.org/user/2369194"
+                },
+                {
+                    "name": "lauriii",
+                    "homepage": "https://www.drupal.org/user/1078742"
+                },
+                {
+                    "name": "nod_",
+                    "homepage": "https://www.drupal.org/user/598310"
+                },
+                {
+                    "name": "phenaproxima",
+                    "homepage": "https://www.drupal.org/user/205645"
+                },
+                {
+                    "name": "Wim Leers",
+                    "homepage": "https://www.drupal.org/user/99777"
+                },
+                {
+                    "name": "zrpnr",
+                    "homepage": "https://www.drupal.org/user/1448368"
+                }
+            ],
+            "description": "Provides jQuery UI Autocomplete library.",
+            "homepage": "https://www.drupal.org/project/jquery_ui_autocomplete",
+            "support": {
+                "source": "https://git.drupalcode.org/project/jquery_ui_autocomplete"
+            }
+        },
+        {
             "name": "drupal/jquery_ui_datepicker",
             "version": "1.4.0",
             "source": {
@@ -6204,6 +6273,71 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/jquery_ui_datepicker",
                 "issues": "https://www.drupal.org/project/issues/jquery_ui_datepicker"
+            }
+        },
+        {
+            "name": "drupal/jquery_ui_menu",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/jquery_ui_menu.git",
+                "reference": "2.0.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/jquery_ui_menu-2.0.0.zip",
+                "reference": "2.0.0",
+                "shasum": "5e1b56bf457669c7779a81784f49da63e3956854"
+            },
+            "require": {
+                "drupal/core": "^9.2 || ^10",
+                "drupal/jquery_ui": "^1.6"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.0",
+                    "datestamp": "1670871546",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "bnjmnm",
+                    "homepage": "https://www.drupal.org/user/2369194"
+                },
+                {
+                    "name": "lauriii",
+                    "homepage": "https://www.drupal.org/user/1078742"
+                },
+                {
+                    "name": "nod_",
+                    "homepage": "https://www.drupal.org/user/598310"
+                },
+                {
+                    "name": "phenaproxima",
+                    "homepage": "https://www.drupal.org/user/205645"
+                },
+                {
+                    "name": "Wim Leers",
+                    "homepage": "https://www.drupal.org/user/99777"
+                },
+                {
+                    "name": "zrpnr",
+                    "homepage": "https://www.drupal.org/user/1448368"
+                }
+            ],
+            "description": "Provides jQuery UI Menu library.",
+            "homepage": "https://www.drupal.org/project/jquery_ui_menu",
+            "support": {
+                "source": "https://git.drupalcode.org/project/jquery_ui_menu"
             }
         },
         {
@@ -6731,20 +6865,20 @@
         },
         {
             "name": "drupal/menu_item_extras",
-            "version": "2.17.0",
+            "version": "2.19.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/menu_item_extras.git",
-                "reference": "8.x-2.17"
+                "reference": "8.x-2.19"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/menu_item_extras-8.x-2.17.zip",
-                "reference": "8.x-2.17",
-                "shasum": "1bb89c6cad458ba9140684fd0e02bccb238023c8"
+                "url": "https://ftp.drupal.org/files/projects/menu_item_extras-8.x-2.19.zip",
+                "reference": "8.x-2.19",
+                "shasum": "4b3f6c1db6f6678438aebddea42f6101ae43bccb"
             },
             "require": {
-                "drupal/core": "^8 || ^9"
+                "drupal/core": "^9.4 || ^10.0"
             },
             "require-dev": {
                 "drupal/ckeditor": "*"
@@ -6752,8 +6886,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-2.17",
-                    "datestamp": "1655020997",
+                    "version": "8.x-2.19",
+                    "datestamp": "1671971153",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -6761,7 +6895,7 @@
                 },
                 "drush": {
                     "services": {
-                        "drush.services.yml": "^9"
+                        "drush.services.yml": "^9 || ^10 || ^11"
                     }
                 }
             },
@@ -6804,26 +6938,26 @@
         },
         {
             "name": "drupal/menu_link_attributes",
-            "version": "1.2.0",
+            "version": "1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/menu_link_attributes.git",
-                "reference": "8.x-1.2"
+                "reference": "8.x-1.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/menu_link_attributes-8.x-1.2.zip",
-                "reference": "8.x-1.2",
-                "shasum": "a332eca9d63eed14df01af759882627512ba6448"
+                "url": "https://ftp.drupal.org/files/projects/menu_link_attributes-8.x-1.3.zip",
+                "reference": "8.x-1.3",
+                "shasum": "431c7954cc614a1b9677173f0209f1df15592503"
             },
             "require": {
-                "drupal/core": "^8 || ^9"
+                "drupal/core": "^8 || ^9 || ^10"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.2",
-                    "datestamp": "1616337149",
+                    "version": "8.x-1.3",
+                    "datestamp": "1671026425",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -6832,7 +6966,7 @@
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
@@ -6971,17 +7105,17 @@
         },
         {
             "name": "drupal/module_filter",
-            "version": "3.2.0",
+            "version": "3.4.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/module_filter.git",
-                "reference": "8.x-3.2"
+                "reference": "8.x-3.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/module_filter-8.x-3.2.zip",
-                "reference": "8.x-3.2",
-                "shasum": "b5c1a5141da392340232a1ad0934b921b862e1f4"
+                "url": "https://ftp.drupal.org/files/projects/module_filter-8.x-3.4.zip",
+                "reference": "8.x-3.4",
+                "shasum": "eb506728a4156837bd2d18918563d92853f149a4"
             },
             "require": {
                 "drupal/core": "^8 || ^9"
@@ -6989,8 +7123,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-3.2",
-                    "datestamp": "1614918371",
+                    "version": "8.x-3.4",
+                    "datestamp": "1671484800",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -6999,7 +7133,7 @@
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
@@ -7009,6 +7143,10 @@
                 {
                     "name": "greenSkin",
                     "homepage": "https://www.drupal.org/user/173855"
+                },
+                {
+                    "name": "smustgrave",
+                    "homepage": "https://www.drupal.org/user/3252890"
                 }
             ],
             "description": "Filter the modules list.",
@@ -8286,26 +8424,26 @@
         },
         {
             "name": "drupal/seckit",
-            "version": "2.0.0",
+            "version": "2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/seckit.git",
-                "reference": "2.0.0"
+                "reference": "2.0.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/seckit-2.0.0.zip",
-                "reference": "2.0.0",
-                "shasum": "d5356230b2de7d1e8a2e68eb81e70619a2e36c1e"
+                "url": "https://ftp.drupal.org/files/projects/seckit-2.0.1.zip",
+                "reference": "2.0.1",
+                "shasum": "2eee3b9719bdd5951c2b78f419c86f4765010439"
             },
             "require": {
-                "drupal/core": "^8.8 || ^9"
+                "drupal/core": "^9.3 || ^10"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.0",
-                    "datestamp": "1598609351",
+                    "version": "2.0.1",
+                    "datestamp": "1671195208",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -10060,27 +10198,27 @@
         },
         {
             "name": "drupal/yoast_seo",
-            "version": "1.7.0",
+            "version": "1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/yoast_seo.git",
-                "reference": "8.x-1.7"
+                "reference": "8.x-1.8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/yoast_seo-8.x-1.7.zip",
-                "reference": "8.x-1.7",
-                "shasum": "7df2a7d70fd204f3503ffa17423bfd86a0ae5269"
+                "url": "https://ftp.drupal.org/files/projects/yoast_seo-8.x-1.8.zip",
+                "reference": "8.x-1.8",
+                "shasum": "83eef12e887824bf51db07bcf844e0ef70f4eb9c"
             },
             "require": {
-                "drupal/core": "^8 || ^9",
+                "drupal/core": "^8 || ^9 || ^10",
                 "drupal/metatag": "*"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.7",
-                    "datestamp": "1604304795",
+                    "version": "8.x-1.8",
+                    "datestamp": "1671186804",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -10093,16 +10231,16 @@
             ],
             "authors": [
                 {
+                    "name": "bramtenhove",
+                    "homepage": "https://www.drupal.org/user/1549848"
+                },
+                {
                     "name": "Kingdutch",
                     "homepage": "https://www.drupal.org/user/1868952"
                 },
                 {
                     "name": "Open Social",
                     "homepage": "https://www.drupal.org/user/272162"
-                },
-                {
-                    "name": "bramtenhove",
-                    "homepage": "https://www.drupal.org/user/1549848"
                 },
                 {
                     "name": "robertragas",
@@ -16725,8 +16863,8 @@
         "drupal/content_sync": 10,
         "drupal/entity_clone": 10,
         "drupal/facebook_pixel": 5,
-        "drupal/feeds": 15,
-        "drupal/flag": 15,
+        "drupal/feeds": 10,
+        "drupal/flag": 10,
         "drupal/linkit": 10,
         "drupal/mimemail": 15,
         "drupal/quicktabs": 15,
