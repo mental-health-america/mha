@@ -3,7 +3,7 @@
   "type": "drupal-module",
   "description": "Allows you to add attributes to menu links.",
   "keywords": ["Drupal"],
-  "license": "GPL-2.0+",
+  "license": "GPL-2.0-or-later",
   "homepage": "http://drupal.org/project/menu_link_attributes",
   "minimum-stability": "dev",
   "support": {
