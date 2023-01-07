@@ -2,7 +2,7 @@
 
 /*
  * This file is a part of dflydev/dot-access-configuration.
- *
+ * 
  * (c) Dragonfly Development Inc.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -11,31 +11,24 @@
 
 namespace Dflydev\DotAccessConfiguration;
 
-use PHPUnit\Framework\TestCase;
-
-class YamlConfigurationBuilderTest extends TestCase
+class YamlConfigurationBuilderTest extends \PHPUnit_Framework_TestCase
 {
-    public function testBuild()
+    public function setUp()
     {
         if (!class_exists('Symfony\Component\Yaml\Yaml')) {
             $this->markTestSkipped('The Symfony2 YAML library is not available');
         }
+    }
 
-        $configurationBuilder = new YamlConfigurationBuilder();
+    public function testBuild()
+    {
+        $configurationBuilder = new YamlConfigurationBuilder;
         $configuration = $configurationBuilder->build();
-
-        $this->assertNotNull($configuration);
     }
 
     public function testBuildWithData()
     {
-        if (!class_exists('Symfony\Component\Yaml\Yaml')) {
-            $this->markTestSkipped('The Symfony2 YAML library is not available');
-        }
-
         $configurationBuilder = new YamlConfigurationBuilder('foo: bar');
         $configuration = $configurationBuilder->build();
-
-        $this->assertNotNull($configuration);
     }
 }
