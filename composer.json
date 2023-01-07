@@ -57,7 +57,7 @@
         "drupal/addtoany": "^1.12",
         "drupal/admin_toolbar": "^3.0",
         "drupal/anchor_link": "^2.0",
-        "drupal/back_to_top": "^1.0",
+        "drupal/back_to_top": "^2.0",
         "drupal/better_exposed_filters": "^5.0@beta",
         "drupal/blazy": "^2.14",
         "drupal/block_visibility_groups": "^1.3",
