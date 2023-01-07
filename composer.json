@@ -66,7 +66,7 @@
         "drupal/checklistapi": "^2.0",
         "drupal/color": "^1.0",
         "drupal/color-color": "^1.0",
-        "drupal/colorbox": "^1.4",
+        "drupal/colorbox": "^2.0",
         "drupal/colorbox_inline": "^1.1",
         "drupal/config_update": "^1.6",
         "drupal/console": "^1.0.2",
