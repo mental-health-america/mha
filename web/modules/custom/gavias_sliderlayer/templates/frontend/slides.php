@@ -1,4 +1,4 @@
-<?php
+<?php 
   $_id=gavias_sliderlayer_makeid();
 ?>
 <div <?php print $attributes;?>>

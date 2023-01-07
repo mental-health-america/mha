@@ -20,3 +20,9 @@ if(!function_exists('file_default_scheme')){
     return \Drupal::config('system.file')->get('default_scheme');
   }
 }
+
+if(!function_exists('gva_file_default_scheme')){
+  function gva_file_default_scheme(){
+    return \Drupal::config('system.file')->get('default_scheme');
+  }
+}
