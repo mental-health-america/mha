@@ -150,7 +150,7 @@
         "drupal/upgrade_status": "^3.11",
         "drupal/video_embed_field": "^2.5",
         "drupal/views_accordion": "^2.0",
-        "drupal/views_infinite_scroll": "^1.9",
+        "drupal/views_infinite_scroll": "^2.0",
         "drupal/views_slideshow": "^4.8",
         "drupal/views_term_hierarchy_weight_field": "^1.1",
         "drupal/webform": "^6.1",
