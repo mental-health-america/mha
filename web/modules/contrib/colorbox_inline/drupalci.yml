@@ -11,8 +11,8 @@ build:
           - sudo -u www-data composer config extra.installer-types.1 "bower-asset"
           - sudo -u www-data composer config extra.installer-paths.libraries\/\{\$name\} "[type:bower-asset]"
           - sudo -u www-data sed -i 's/"\[type:bower-asset\]"/\["type:bower-asset"\]/' composer.json
-          - sudo -u www-data composer require "oomphinc/composer-installers-extender:^1.1"
-          - sudo -u www-data composer require "bower-asset/colorbox"
+          - sudo -u www-data composer config --no-plugins allow-plugins.oomphinc/composer-installers-extender true
+          - sudo -u www-data composer require "oomphinc/composer-installers-extender:^2.0" bower-asset/colorbox
           - dir libraries
       csslint:
         halt-on-fail: false

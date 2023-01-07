@@ -20,7 +20,7 @@ class ColorboxInlineJavascriptTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'colorbox_inline',
     'node',
     'text',
@@ -41,7 +41,12 @@ class ColorboxInlineJavascriptTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected $defaultTheme = 'stark';
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp(): void {
     parent::setUp();
     $this->createContentType(['type' => 'page']);
     FilterFormat::create([
@@ -51,8 +56,8 @@ class ColorboxInlineJavascriptTest extends WebDriverTestBase {
     $this->node = $this->createNode([
       'body' => [
         [
-          'value' => '<p><a data-colorbox-inline=".test-src">USS Voyager</a></p>
-                      <div class="test-src">NCC-74656</div>',
+          'value' => '<p><a data-colorbox-inline=".test-src" href="#">USS Voyager</a></p>
+                      <div class="test-src" style="display:none;">NCC-74656</div>',
           'format' => 'full_html',
         ],
       ],
@@ -62,9 +67,10 @@ class ColorboxInlineJavascriptTest extends WebDriverTestBase {
   /**
    * Test the inline colorbox launches when a link is clicked.
    */
-  public function testInlineColorbox() {
+  public function testInlineColorbox(): void {
+    $page = $this->getSession()->getPage();
     $this->drupalGet('node/' . $this->node->id());
-    $this->getSession()->getPage()->clickLink('USS Voyager');
+    $this->clickLink('USS Voyager');
     $this->getSession()->wait(static::COLORBOX_WAIT_TIMEOUT);
     $this->assertSession()->elementContains('css', '#colorbox', 'NCC-74656');
   }
