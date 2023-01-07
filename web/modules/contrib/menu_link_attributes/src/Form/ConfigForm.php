@@ -35,7 +35,7 @@ class ConfigForm extends ConfigFormBase {
    *   The handle of module objects.
    */
   public function __construct(ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler) {
-    $this->setConfigFactory($config_factory);
+    parent::__construct($config_factory);
     $this->moduleHandler = $module_handler;
   }
 
