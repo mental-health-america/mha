@@ -37,7 +37,7 @@ class FacebookEvent implements FacebookEventInterface {
   /**
    * The module handler.
    *
-   * @var Drupal\Core\Extension\ModuleHandlerInterface
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
   protected $moduleHandler;
 
@@ -48,7 +48,7 @@ class FacebookEvent implements FacebookEventInterface {
    *   The temp store factory service.
    * @param \Drupal\Core\Session\SessionManager $session
    *   The session manager service.
-   * @param Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
    *   The module handler.
    */
   public function __construct(PrivateTempStoreFactory $temp_store_factory, SessionManager $session, ModuleHandlerInterface $moduleHandler) {
