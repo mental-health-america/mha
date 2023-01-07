@@ -2,11 +2,16 @@
  * @file
  * Styles for Siteimprove settings page.
  */
-.prepublish-is-ready {
+fieldset#edit-api .prepublish-is-ready {
   background-color: #afa;
   padding: 5px 10px;
 }
-.prepublish-is-not-ready {
+fieldset#edit-api .prepublish-is-not-ready {
   background-color: #faa;
   padding: 5px 10px;
 }
+fieldset#edit-api .prepublish-is-error {
+  background-color: #f9c9bf;
+  padding: 5px 10px;
+}
+
