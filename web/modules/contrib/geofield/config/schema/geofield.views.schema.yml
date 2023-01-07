@@ -17,6 +17,8 @@ views.filter.geofield_proximity_filter:
           type: string
     units:
       type: string
+    exposed_units:
+      type: boolean
     source:
       type: string
     source_configuration:
