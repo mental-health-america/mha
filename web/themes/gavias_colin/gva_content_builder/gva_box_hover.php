@@ -1,8 +1,8 @@
-<?php 
+<?php
 
 if(!class_exists('element_gva_box_hover')):
    class element_gva_box_hover{
-      
+
       public function render_form(){
          $fields = array(
             'type'            => 'gsc_box_hover',
@@ -39,17 +39,17 @@ if(!class_exists('element_gva_box_hover')):
                   'id'        => 'style',
                   'type'      => 'select',
                   'title'     => t('Style'),
-                  'options'   => array( 
+                  'options'   => array(
                      'style-1' => t('Style 1'),
-                     'style-2' => t('Style 2') 
+                     'style-2' => t('Style 2')
                   ),
                ),
                array(
                   'id'        => 'text_style',
                   'type'      => 'select',
                   'title'     => t('Text Style'),
-                  'options'   => array( 
-                     'dark' => t('Dark'), 
+                  'options'   => array(
+                     'dark' => t('Dark'),
                      'white' => t('White')
                   ),
                ),
@@ -78,7 +78,7 @@ if(!class_exists('element_gva_box_hover')):
                   'desc'      => t('Entrance animation for element'),
                   'options'   => gavias_content_builder_animate(),
                   'class'     => 'width-1-2'
-               ), 
+               ),
                array(
                   'id'        => 'animate_delay',
                   'type'      => 'select',
@@ -86,8 +86,8 @@ if(!class_exists('element_gva_box_hover')):
                   'options'   => gavias_content_builder_delay_aos(),
                   'desc'      => '0 = default',
                   'class'     => 'width-1-2'
-               ), 
-            ),                                     
+               ),
+            ),
          );
          return $fields;
       }
@@ -123,7 +123,7 @@ if(!class_exists('element_gva_box_hover')):
             $css = "style=\"{$css}\"";
          }
 
-         if($animate) $el_class .= ' wow ' . $animate; 
+         if($animate) $el_class .= ' wow ' . $animate;
 
          ?>
          <?php ob_start() ?>
@@ -131,17 +131,17 @@ if(!class_exists('element_gva_box_hover')):
             <div class="box-content">
                <?php if($icon){ ?><div class="icon"><i class="<?php print $icon ?>"></i></div> <?php } ?>
                <div class="content-inner">
-                  <div class="box-title"><h4 class="title"><?php print $title ?></h3></div>
+                  <div class="box-title"><h3 class="title"><?php print $title ?></h3></div>
                   <?php if($content){ ?><div class="content-inner"><?php print $content ?></div><?php } ?>
                   <div class="action"><a class="btn-inline" <?php if($link) print 'href="'. $link .'"' ?> <?php print $target ?>><span class="text"><?php print $text_link ?></span></a></div>
                </div>
-            </div>   
+            </div>
          </div>
          <?php return ob_get_clean() ?>
          <?php
       }
    }
-endif;   
+endif;
 
 
 

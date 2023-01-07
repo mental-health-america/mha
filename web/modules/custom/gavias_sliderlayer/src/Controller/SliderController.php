@@ -222,10 +222,10 @@ class SliderController extends ControllerBase {
         echo '{"status":"error extension"}';
         exit;
       }  
-      $path_folder = \Drupal::service('file_system')->realpath(file_default_scheme(). "://gva-slider-upload");
+      $path_folder = \Drupal::service('file_system')->realpath(gva_file_default_scheme(). "://gva-slider-upload");
     
       $file_path = $path_folder . '/' . $_id . '-' . $_FILES['upl']['name'];
-      $file_url = str_replace($base_url, '',file_create_url(file_default_scheme(). "://gva-slider-upload") . '/' .  $_id .'-'. $_FILES['upl']['name']); 
+      $file_url = str_replace($base_url, '',file_create_url(gva_file_default_scheme(). "://gva-slider-upload") . '/' .  $_id .'-'. $_FILES['upl']['name']); 
       if (!is_dir($path_folder)) {
        @mkdir($path_folder); 
       }

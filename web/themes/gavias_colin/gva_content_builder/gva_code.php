@@ -1,21 +1,20 @@
-<?php 
+<?php
 if(!class_exists('element_gva_code')):
    class element_gva_code{
       public function render_form(){
-         $fields = array(
-            'type'      => 'gsc_code',
-            'title'  => t('Code'), 
-            'fields' => array(
-               array(
-                  'id'     => 'content',
-                  'type'      => 'textarea',
-                  'title'  => t('Content'),
-               ),
-            ),                                       
-         );
-         return $fields;
-      } 
-      
+        return array(
+           'type'      => 'gsc_code',
+           'title'  => t('Code'),
+           'fields' => array(
+              array(
+                 'id'     => 'content',
+                 'type'      => 'textarea',
+                 'title'  => t('Content'),
+              ),
+           ),
+        );
+      }
+
       public function render_content( $item ) {
          if( ! key_exists('content', $item['fields']) ) $item['fields']['content'] = '';
          print self::sc_code( $item['fields'], $item['fields']['content'] );
