@@ -2,7 +2,7 @@
 
 /*
  * This file is a part of dflydev/dot-access-configuration.
- *
+ * 
  * (c) Dragonfly Development Inc.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -11,16 +11,12 @@
 
 namespace Dflydev\DotAccessConfiguration;
 
-use PHPUnit\Framework\TestCase;
-
-class PlaceholderResolverFactoryTest extends TestCase
+class PlaceholderResolverFactoryTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreate()
     {
-        $configuration = $this->getMockBuilder(\Dflydev\DotAccessConfiguration\Configuration::class)->getMock();
-        $placeholderResolverFactory = new PlaceholderResolverFactory();
+        $configuration = $this->getMock('Dflydev\DotAccessConfiguration\Configuration');
+        $placeholderResolverFactory = new PlaceholderResolverFactory;
         $placeholderResolver = $placeholderResolverFactory->create($configuration);
-
-        $this->assertNotNull($placeholderResolver);
     }
 }

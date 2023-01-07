@@ -2,7 +2,7 @@
 
 /*
  * This file is a part of dflydev/dot-access-configuration.
- *
+ * 
  * (c) Dragonfly Development Inc.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -11,13 +11,11 @@
 
 namespace Dflydev\DotAccessConfiguration;
 
-use PHPUnit\Framework\TestCase;
-
-class ConfigurationDataSourceTest extends TestCase
+class ConfigurationDataSourceTest extends \PHPUnit_Framework_TestCase
 {
     public function test()
     {
-        $configuration = $this->getMockBuilder(\Dflydev\DotAccessConfiguration\Configuration::class)->getMock();
+        $configuration = $this->getMock('Dflydev\DotAccessConfiguration\Configuration');
 
         $configuration
             ->expects($this->any())
