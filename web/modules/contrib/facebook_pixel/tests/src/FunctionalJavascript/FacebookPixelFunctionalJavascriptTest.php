@@ -98,18 +98,20 @@ class FacebookPixelFunctionalJavascriptTest extends WebDriverTestBase {
     $this->assertSame('true', $cookie);
   }
 
-  public function testDisableNoScriptFallback() {
-    $session = $this->assertSession();
-    /**
-     * @var \Behat\Mink\Driver\Selenium2Driver $driver
-     */
-    $driver = $this->getSession()->getDriver();
+  // @codingStandardsIgnoreStart
+  //@todo Implement this test:
+  // public function testDisableNoScriptFallback() {
+  //   $session = $this->assertSession();
+  //   /**
+  //    * @var \Behat\Mink\Driver\Selenium2Driver $driver
+  //    */
+  //   $driver = $this->getSession()->getDriver();
 
-    // Set test settings:
-    $this->config('facebook_pixel.settings')->set('visibility.request_path_pages', '')->save();
-    $this->config('facebook_pixel.settings')->set('facebook_id', '0000000')->save();
-    $this->config('facebook_pixel.settings')->set('privacy.disable_noscript_img', 'true')->save();
-
-  }
+  //   // Set test settings:
+  //   $this->config('facebook_pixel.settings')->set('visibility.request_path_pages', '')->save();
+  //   $this->config('facebook_pixel.settings')->set('facebook_id', '0000000')->save();
+  //   $this->config('facebook_pixel.settings')->set('privacy.disable_noscript_img', 'true')->save();
+  // }
+  // @codingStandardsIgnoreEnd
 
 }

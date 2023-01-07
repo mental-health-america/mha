@@ -1,11 +1,11 @@
 name: Facebook Pixel
 type: module
-core_version_requirement: ^8 || ^9
+core_version_requirement: ^8.9 || ^9 || ^10
 description: Allows your site to be tracked by Facebook Pixel.
 package: Statistics
 configure: facebook_pixel.facebook_pixel_config_form
 
-# Information added by Drupal.org packaging script on 2022-08-12
-version: '2.0.0-rc3'
+# Information added by Drupal.org packaging script on 2022-12-05
+version: '2.0.0-rc4'
 project: 'facebook_pixel'
-datestamp: 1660300949
+datestamp: 1670258486
