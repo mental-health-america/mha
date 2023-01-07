@@ -24,7 +24,6 @@ global-styling:
       vendor/popup-gallery/css/lightgallery.min.css: {}
       vendor/popup-gallery/css/lg-transitions.min.css: {}
       css/datatables.css: {}
-
   js:
     vendor/jquery-migrate.min.js: {}
     js/bootstrap.js: {}
@@ -61,14 +60,119 @@ gavias_colin.skin.default:
       css/bootstrap.css: {}
       css/template.css: {}
 
-#Alerts
-mha-alerts:
-  version: "1.0.x"
+gavias_colin.skin.blue:
+  version: VERSION
   css:
     theme:
-      templates/block/alerts/css/mha-alerts.css: {}
+      css/skins/blue/bootstrap.css: {}
+      css/skins/blue/template.css: {}
+
+gavias_colin.skin.brown:
+  version: VERSION
+  css:
+    theme:
+      css/skins/brown/bootstrap.css: {}
+      css/skins/brown/template.css: {}
+
+gavias_colin.skin.green:
+  version: VERSION
+  css:
+    theme:
+      css/skins/green/bootstrap.css: {}
+      css/skins/green/template.css: {}
+
+gavias_colin.skin.lilac:
+  version: VERSION
+  css:
+    theme:
+      css/skins/lilac/bootstrap.css: {}
+      css/skins/lilac/template.css: {}
+
+gavias_colin.skin.lime_green:
+  version: VERSION
+  css:
+    theme:
+      css/skins/lime_green/bootstrap.css: {}
+      css/skins/lime_green/template.css: {}
+
+gavias_colin.skin.orange:
+  version: VERSION
+  css:
+    theme:
+      css/skins/orange/bootstrap.css: {}
+      css/skins/orange/template.css: {}
+
+gavias_colin.skin.pink:
+  version: VERSION
+  css:
+    theme:
+      css/skins/pink/bootstrap.css: {}
+      css/skins/pink/template.css: {}
+
+gavias_colin.skin.purple:
+  version: VERSION
+  css:
+    theme:
+      css/skins/purple/bootstrap.css: {}
+      css/skins/purple/template.css: {}
+
+gavias_colin.skin.red:
+  version: VERSION
+  css:
+    theme:
+      css/skins/red/bootstrap.css: {}
+      css/skins/red/template.css: {}
+
+gavias_colin.skin.turquoise:
+  version: VERSION
+  css:
+    theme:
+      css/skins/turquoise/bootstrap.css: {}
+      css/skins/turquoise/template.css: {}
+
+gavias_colin.skin.turquoise2:
+  version: VERSION
+  css:
+    theme:
+      css/skins/turquoise2/bootstrap.css: {}
+      css/skins/turquoise2/template.css: {}
+
+gavias_colin.skin.violet_red:
+  version: VERSION
+  css:
+    theme:
+      css/skins/violet_red/bootstrap.css: {}
+      css/skins/violet_red/template.css: {}
+
+gavias_colin.skin.violet_red2:
+  version: VERSION
+  css:
+    theme:
+      css/skins/violet_red2/bootstrap.css: {}
+      css/skins/violet_red2/template.css: {}
+
+gavias_colin.skin.yellow:
+  version: VERSION
+  css:
+    theme:
+      css/skins/yellow/bootstrap.css: {}
+      css/skins/yellow/template.css: {}
+
+
+gavias-colin-admin:
+  version: VERSION
+  css:
+    theme:
+      css/theme-settings.css: {}
+      vendor/colorpicker/css/colorpicker.css: {}
+      vendor/codemirror/lib/codemirror.css: {}
+      vendor/codemirror/addon/hint/show-hint.css: {}
   js:
-    templates/block/alerts/js/waypoint.js: {}
+      vendor/jquery-migrate.min.js: {}
+      vendor/colorpicker/js/colorpicker.js: {}
+      vendor/codemirror/lib/codemirror.js: {cope: footer}
+      vendor/codemirror/mode/css/css.js: {cope: footer}
+      js/customize.js: {}
 
 maintenance_page:
   version: VERSION
@@ -84,12 +188,3 @@ views-infinite-scroll:
     - core/jquery
     - core/drupal
     - core/drupal.debounce
-
-# MHA Feature.
-features:
-  version: "1.0.x"
-  css:
-    base:
-      templates/block/features/css/mha-features.css: { }
-  js:
-    templates/block/features/js/waypoint.js: {}
