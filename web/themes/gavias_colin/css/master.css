@@ -493,16 +493,21 @@ span.mailto {
 }
 
 #block-socialmedialinks .fa {
-  -webkit-border-radius: 50%;
-  -moz-border-radius: 50%;
-  border-radius: 50%;
-  border: 2px solid var(--mha-light-grey);
-  padding: 0.5em 0.6em;
+  border-radius: 0;
+  border: none;
+  padding: 0;
 }
 
-#block-socialmedialinks .fa.fa-tumblr.fa-2x,
 #block-socialmedialinks .fa.fa-facebook.fa-2x {
   padding: 0.5em 0.75em;
+}
+
+.fa-home::before {
+  content: ' ';
+  background: url('/themes/gavias_colin/images/inspire.png');
+  position:absolute;
+  top:0;
+  left:0;
 }
 
 /* Block Chime */
