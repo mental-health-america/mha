@@ -303,8 +303,8 @@
     trigger_geocode: function (mapid, position) {
       let self = this;
       self.setMarkerPosition(mapid, position);
-      self.mapSetCenter(mapid, position);
       self.setZoomToFocus(mapid);
+      self.mapSetCenter(mapid, position);
       self.setLatLngValues(mapid, position);
       self.setGeoaddressField(mapid, self.map_data[mapid].search.val());
     },

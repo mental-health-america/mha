@@ -55,7 +55,7 @@ class GeofieldMap extends GeofieldLatLon {
     // Geocode address textfield and functionality.
     $gmap_geocoder_enabled = \Drupal::moduleHandler()->moduleExists('geocoder') && $element['#gmap_geocoder'];
     $message_recipient = t("(Note: This message is only shown to the Geofield Map module administrator ('Configure Geofield Map' permission).");
-    if (strlen($element['#gmap_api_key']) > 0 || $gmap_geocoder_enabled) {
+    if (!empty($element['#gmap_api_key']) > 0 || $gmap_geocoder_enabled) {
       $element['map']['geocode'] = [
         '#title' => t("Geocode address"),
         '#type' => 'textfield',
@@ -153,8 +153,8 @@ class GeofieldMap extends GeofieldLatLon {
     // Define Lat and Lon sub-elements.
     $element['lat']['#weight'] = 10;
     $element['lon']['#weight'] = 20;
-    $element['lat']['#attributes']['id'] = 'lat-' . $element['#id'];
-    $element['lon']['#attributes']['id'] = 'lon-' . $element['#id'];
+    $element['lat']['#attributes']['id'] = $element['#id'] . '-lat';
+    $element['lon']['#attributes']['id'] = $element['#id'] . '-lon';
     if ($element['#hide_coordinates']) {
       $element['lat']['#attributes']['class'][] = 'visually-hidden';
       $element['lat']['#title_display'] = 'invisible';
@@ -188,7 +188,14 @@ class GeofieldMap extends GeofieldLatLon {
         }
 
         // Re-Generate the geoaddress_field #id.
-        $address_field['widget'][$element['#delta']]['value']['#id'] = $element['#geoaddress_field']['field'] . '-' . $element['#delta'];
+        // set unique id on multiple paragraph.
+        $parent = "";
+        if (!empty($element['#field_parents'])) {
+          foreach ($element['#field_parents'] as $value_parent) {
+            $parent .= $value_parent . '-';
+          }
+        }
+        $address_field['widget'][$element['#delta']]['value']['#id'] = $parent . $element['#geoaddress_field']['field'] . '-' . $element['#delta'];
         NestedArray::setValue($complete_form, $parents, $address_field);
       }
     }

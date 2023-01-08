@@ -97,7 +97,7 @@
         "drupal/fraction": "^2.1",
         "drupal/fullcalendar_view": "^5.1",
         "drupal/geofield": "^1.49",
-        "drupal/geofield_map": "^2.42",
+        "drupal/geofield_map": "^3.0",
         "drupal/geolocation": "^3.11",
         "drupal/google_analytics": "^4.0",
         "drupal/honeypot": "^2.0",
