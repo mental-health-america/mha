@@ -1546,6 +1546,148 @@ footer a:active {
     background: #fff !important;
 }
 
+.social-media-links--platforms {
+  padding-left: 0;
+}
+
+.path-issues header .gva-view .issues-2023 .view-content-wrap {
+  border-top: 5px solid #522d4621;
+}
+
+.map-bar.w-100.py-2 {
+  display: block;
+  background: #fff;
+  padding: 1rem 0.5rem 2rem !important;
+}
+#superfish-main li:nth-child(5) a.sf-depth-1 {
+  color: var(--mha-white) !important;
+}
+
+#mha-features .mha-features-position-absolute a,
+#mha-features .mha-features-position-absolute h4 a,
+#mha-features .mha-features-position-absolute h4 a:link {
+  text-shadow: 0 2px 2px rgba(0,0,05,0.0);
+}
+
+.recovery-button {
+  font-size:1em !important;
+  text-align: center;
+  text-transform: initial !important;
+  width:100% !important;
+}
+
+.small-accordion .panel .panel-heading .panel-title > a {
+  font-size:1em !important;
+}
+
+.small-accordion .panel {
+  padding: 0 15px 0 15px !important;
+}
+
+.miaw-button {
+  font-size:1em !important;
+  text-align: center;
+  text-transform: initial !important;
+  width:100% !important;
+}
+
+.miaw-nav-button {
+  font-size:1em !important;
+  text-align: center;
+  text-transform: initial !important;
+  width:100% !important;
+  padding: 20px 20px !important;
+}
+
+.resource-button {
+  text-transform: initial !important;
+  width:100% !important;
+  padding: 10px 20px !important;
+}
+
+.footnotes p {
+  font-size: .88rem !important;
+}
+
+.mha-features-attachment .mha-slide-teaser-wrapper p {
+  line-height: 1.5 !important;
+}
+
+.bell-seal-button {
+  margin-top: 40px;
+  padding: 20px !important;
+}
+
+.bell-seal-logo {
+  margin-bottom:30px !important;
+}
+
+.bell-seal-logo img {
+  height: 100%;
+}
+
+.seal-nav {
+  width: 100% !important;
+  text-align:center !important;
+  text-transform: none !important;
+  font-size: 1rem !important;
+  padding: 20px !important;
+}
+
+.past-bell-seal h2.block-title {
+  font-size:1.6rem;
+}
+
+.large-font-button {
+  font-size:1.3rem !important;
+  text-transform: initial !important;
+  border-radius: 30px !important;
+  text-align: center;
+}
+
+
+.spb-popup-main-wrapper {
+  max-width: 90% !important;
+  margin: 0 auto;
+}
+
+#spb-block-homepagepopupbox h1 {
+  font-size:3rem !important;
+  margin-left:10px !important;
+  margin-right:10px !important;
+  margin-bottom:50px !important;
+}
+
+#spb-block-homepagepopupbox p {
+  font-size: 1.3rem !important;
+}
+
+#spb-block-homepagepopupbox a {
+  font-size:2rem !important;
+}
+
+@media screen and (max-width:400px) {
+  #spb-block-homepagepopupbox h1 {
+    font-size:1.8rem !important;
+    margin-left:10px !important;
+    margin-right:10px !important;
+    margin-bottom:0 !important;
+  }
+
+  #spb-block-homepagepopupbox p {
+    font-size: 1rem !important;
+  }
+
+  #spb-block-homepagepopupbox a {
+    font-size:1.4rem !important;
+  }
+
+  #spb-block-homepagepopupbox img {
+    display:none;
+  }
+}
+
+
 @media (max-width: 575.98px) {
     .aqua-slider-wrapper .gavias_sliderlayer .text-left, .aqua-slider-wrapper #gavias_slider_single .text-left {
         margin: 10px !important;
