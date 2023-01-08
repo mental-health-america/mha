@@ -135,7 +135,7 @@
         "drupal/search_exclude": "^2.0@beta",
         "drupal/seckit": "^2.0",
         "drupal/simple_instagram_feed": "^3.11",
-        "drupal/simple_popup_blocks": "^2.8",
+        "drupal/simple_popup_blocks": "^3.1",
         "drupal/simple_sitemap": "^3.2",
         "drupal/simple_timeline": "^1.1",
         "drupal/simplenews": "^2.0@beta",

@@ -318,7 +318,7 @@
       'overflow': 'hidden',
     });
 
-    $('input:text').focus();
+    $('.simple-popup-blocks-global input:text').focus();
   }
 
   // Enable the scrolling while overlay inactive
