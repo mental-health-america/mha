@@ -5,7 +5,7 @@
    */
   Drupal.behaviors.colorboxInline = {
     attach: function (context, drupalSettings) {
-      $('[data-colorbox-inline]', context).once('colorbox-inline').each(function () {
+      $(once('colorbox-inline-processed', '[data-colorbox-inline]', context)).each(function () {
         var $link = $(this),
           data = $link.data(),
           settings = $.extend({}, drupalSettings.colorbox, {
@@ -22,7 +22,7 @@
 
 		// Hide the colorbox source after if it was hidden before use.
         if (!$(settings.href).filter(':visible')[0]) {
-          settings.onClosed = function($link) {
+          settings.onCleanup = function($link) {
             $($link.cache.href).hide();
           }
         }

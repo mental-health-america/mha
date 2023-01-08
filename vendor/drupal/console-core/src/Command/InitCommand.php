@@ -11,7 +11,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Process\Process;
+use Symfony\Component\Process\ProcessBuilder;
 use Symfony\Component\Finder\Finder;
 use Drupal\Console\Core\Utils\ConfigurationManager;
 use Drupal\Console\Core\Generator\InitGenerator;
@@ -24,7 +24,6 @@ use Drupal\Console\Core\Utils\ShowFile;
  */
 class InitCommand extends Command
 {
-
     /**
      * @var ShowFile
      */
@@ -50,32 +49,30 @@ class InitCommand extends Command
      */
     protected $generator;
 
-    private $configParameters
-        = [
-            'language'        => 'en',
-            'temp'            => '/tmp',
-            'chain'           => false,
-            'sites'           => false,
-            'learning'        => false,
-            'generate_inline' => false,
-            'generate_chain'  => false,
-            'statistics'      => true,
-        ];
+    private $configParameters = [
+        'language' => 'en',
+        'temp' => '/tmp',
+        'chain' => false,
+        'sites' => false,
+        'learning' => false,
+        'generate_inline' => false,
+        'generate_chain' => false,
+        'statistics' => true
+    ];
 
-    private $directories
-        = [
-            'chain',
-            'sites',
-        ];
+    private $directories = [
+      'chain',
+      'sites',
+    ];
 
     /**
      * InitCommand constructor.
      *
-     * @param  ShowFile              $showFile
-     * @param  ConfigurationManager  $configurationManager
-     * @param  InitGenerator         $generator
-     * @param  string                $appRoot
-     * @param  string                $consoleRoot
+     * @param ShowFile             $showFile
+     * @param ConfigurationManager $configurationManager
+     * @param InitGenerator        $generator
+     * @param string               $appRoot
+     * @param string               $consoleRoot
      */
     public function __construct(
         ShowFile $showFile,
@@ -84,11 +81,11 @@ class InitCommand extends Command
         $appRoot,
         $consoleRoot = null
     ) {
-        $this->showFile             = $showFile;
+        $this->showFile = $showFile;
         $this->configurationManager = $configurationManager;
-        $this->generator            = $generator;
-        $this->appRoot              = $appRoot;
-        $this->consoleRoot          = $consoleRoot;
+        $this->generator = $generator;
+        $this->appRoot = $appRoot;
+        $this->consoleRoot = $consoleRoot;
         parent::__construct();
     }
 
@@ -131,13 +128,13 @@ class InitCommand extends Command
      */
     protected function interact(InputInterface $input, OutputInterface $output)
     {
-        $destination   = $input->getOption('destination');
-        $site          = $input->getOption('site');
-        $autocomplete  = $input->getOption('autocomplete');
+        $destination = $input->getOption('destination');
+        $site = $input->getOption('site');
+        $autocomplete = $input->getOption('autocomplete');
         $configuration = $this->configurationManager->getConfiguration();
 
         if ($site && $this->appRoot && $this->consoleRoot) {
-            $destination = $this->consoleRoot.'/console/';
+            $destination = $this->consoleRoot . '/console/';
         }
 
         if (!$destination) {
@@ -224,14 +221,14 @@ class InitCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $copiedFiles  = [];
-        $destination  = $input->getOption('destination');
-        $site         = $input->getOption('site');
+        $copiedFiles = [];
+        $destination = $input->getOption('destination');
+        $site = $input->getOption('site');
         $autocomplete = $input->getOption('autocomplete');
-        $override     = $input->getOption('override');
+        $override = $input->getOption('override');
 
         if ($site && $this->appRoot && $this->consoleRoot) {
-            $destination = $this->consoleRoot.'/console/';
+            $destination = $this->consoleRoot . '/console/';
         }
 
         if (!$destination) {
@@ -285,37 +282,34 @@ class InitCommand extends Command
 
         $executableName = null;
         if ($autocomplete) {
-            $process = new Process(['bash']);
+            $processBuilder = new ProcessBuilder(['bash']);
+            $process = $processBuilder->getProcess();
             $process->setCommandLine('echo $_');
             $process->run();
             $fullPathExecutable = explode('/', $process->getOutput());
-            $executableName     = trim(end($fullPathExecutable));
+            $executableName = trim(end($fullPathExecutable));
             $process->stop();
         }
 
         $this->generator->generate(
             [
-                'user_home'         => $this->configurationManager->getConsoleDirectory(
-                ),
-                'executable_name'   => $executableName,
-                'override'          => $override,
-                'destination'       => $destination,
-                'config_parameters' => $this->configParameters,
+            'user_home' => $this->configurationManager->getConsoleDirectory(),
+            'executable_name' => $executableName,
+            'override' => $override,
+            'destination' => $destination,
+            'config_parameters' => $this->configParameters,
             ]
         );
 
-        $this->getIo()->writeln(
-            $this->trans('application.messages.autocomplete')
-        );
+        $this->getIo()->writeln($this->trans('application.messages.autocomplete'));
 
         return 0;
     }
 
     /**
-     * @param  string  $source
-     * @param  string  $destination
-     * @param  string  $override
-     *
+     * @param string $source
+     * @param string $destination
+     * @param string $override
      * @return bool
      */
     private function copyFile($source, $destination, $override)
@@ -324,7 +318,7 @@ class InitCommand extends Command
             if ($override) {
                 copy(
                     $destination,
-                    $destination.'.old'
+                    $destination . '.old'
                 );
             } else {
                 return false;
@@ -341,5 +335,4 @@ class InitCommand extends Command
             $destination
         );
     }
-
 }

@@ -3,7 +3,7 @@
  * Contains the Siteimprove Plugin methods.
  */
 
-(function ($, Drupal, drupalSettings) {
+ (function (Drupal, $, once, drupalSettings, cookies) {
   'use strict';
 
   // Add forEach function to NodeList if it doesn't exist.
@@ -116,8 +116,7 @@
 
   Drupal.behaviors.siteimprove = {
     attach: function (context, settings) {
-
-      $('body', context).once('siteimprove').each(function () {
+      $(once('siteimprove', 'body', context)).each(function () {
 
         // If exist recheck, call recheck Siteimprove method.
         if (typeof settings.siteimprove.recheck !== 'undefined') {
@@ -171,22 +170,24 @@
             siteimprove.recrawl();
           }
         }
-
       });
+
       // We check if the cookie is already set to collapse or open.
       // If it's not set, we check if the setting is set to collapsed or open
       // and set the cookie accordingly.
       var OVERLAY_COLLAPSED = '6';
       var OVERLAY_OPEN = '48';
-      if (!$.cookie('sicmsplugin')) {
+      var sicmsplugin = cookies.get('sicmsplugin');
+
+      if (!sicmsplugin) {
         let siOverlaySettings = drupalSettings?.siteimprove?.overlay_default_collapse ?? null;
         if (siOverlaySettings) {
-          $.cookie('sicmsplugin', OVERLAY_COLLAPSED, {
+          cookies.set('sicmsplugin', OVERLAY_COLLAPSED, {
             domain: document.domain,
             path: '/'
           });
         } else {
-          $.cookie('sicmsplugin', OVERLAY_OPEN, {
+          cookies.set('sicmsplugin', OVERLAY_OPEN, {
             domain: document.domain,
             path: '/'
           });
@@ -195,4 +196,4 @@
     }
   };
 
-})(jQuery, Drupal, drupalSettings);
+})(Drupal, jQuery, once, drupalSettings, window.Cookies);

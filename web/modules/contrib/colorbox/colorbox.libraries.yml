@@ -10,7 +10,7 @@ colorbox:
     - core/drupal
     - core/drupalSettings
     - core/jquery
-    - core/jquery.once
+    - core/once
 
 colorbox-dev:
   remote: https://github.com/jackmoore/colorbox
@@ -22,7 +22,7 @@ colorbox-dev:
     /libraries/colorbox/jquery.colorbox.js: { }
   dependencies:
     - core/jquery
-    - core/jquery.once
+    - core/once
 
 dompurify:
   remote: https://github.com/cure53/DOMPurify
@@ -31,7 +31,7 @@ dompurify:
     name: MPL
     gpl-compatible: false
   js:
-    /libraries/DOMPurify/dist/purify.min.js: { }
+    /libraries/dompurify/dist/purify.min.js: { }
 
 init:
   version: VERSION

@@ -125,7 +125,7 @@ class SimplePopupBlocksEditForm extends SimplePopupBlocksAddForm {
     $documentation = Url::fromUri('https://www.drupal.org/docs/8/modules/simple-popup-blocks');
     $documentation = Link::fromTextAndUrl($this->t('here'), $documentation);
     $documentation = $documentation->toRenderable();
-    $documentation = render($documentation);
+    $documentation = \Drupal::service('renderer')->render($documentation);
     $display_none = "<p><h3>Add this css code in your css file (Recommended)</h3><p>";
     $display_none .= "<code>
       " . $css_selector . $identifier . " {<br>
