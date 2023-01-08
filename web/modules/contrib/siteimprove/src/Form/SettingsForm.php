@@ -6,13 +6,14 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Form\FormStateInterface;
-use GuzzleHttp\Client;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Messenger\Messenger;
+use Drupal\Core\Cache\Cache;
+use Drupal\Component\Serialization\Json;
 use Drupal\siteimprove\Plugin\SiteimproveDomainManager;
 use Drupal\siteimprove\SiteimproveUtils;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Component\Serialization\Json;
-use Drupal\Core\Cache\Cache;
+use GuzzleHttp\Client;
 
 /**
  * Siteimprove settings.
@@ -227,6 +228,7 @@ class SettingsForm extends ConfigFormBase {
         'http_errors' => FALSE,
       ]);
 
+      $form['#attached']['library'][] = 'siteimprove/siteimprove.settings';
       $form['prepublish']['api'] = [
         '#type' => 'fieldset',
         '#title' => $this->t('Siteimprove API response'),
@@ -240,7 +242,6 @@ class SettingsForm extends ConfigFormBase {
       ];
       // Only treat http status code 200 as successful.
       if ($res->getStatusCode() == 200) {
-        $form['#attached']['library'][] = 'siteimprove/siteimprove.settings';
         $result = Json::decode($res->getBody());
         if (isset($result['is_ready']) && $result['is_ready']) {
           $form['prepublish']['api']['is_ready'] = [
@@ -257,13 +258,24 @@ class SettingsForm extends ConfigFormBase {
           // Enable republish feature in Siteimprove.
           $this->setRepublish($config->get('api_username'), $config->get('api_key'));
         }
+        $this->messenger->deleteByType('error');
       }
       else {
+        $error_message = new TranslatableMarkup('<p><span class="prepublish-is-error"><strong>@line1</strong></span></p><p>@line2</p><ul><li>@line3</li><li>@line4</li></ul></p>', [
+          '@line1' => 'Sorry, it looks like there is a problem',
+          '@line2' => 'It was caused by one of two issues:',
+          '@line3' => 'You do not have Prepublish as part of your subscription',
+          '@line4' => 'You do have Prepublish but you need to validate your API key and username in Settings',
+        ]);
+
         // Treat all other http status codes as errors.
+        // Output general error message.
         $form['prepublish']['api']['error'] = [
           '#type' => 'markup',
-          '#markup' => '<p><span>' . $this->t('There were problems contacting the API - see error below. Check your username and API key.') . '</span></p>' . '<p>HTTP status: <strong>' . $res->getStatusCode() . ' ' . $res->getReasonPhrase() . '</strong></p>',
+          '#markup' => $error_message,
         ];
+
+        $this->messenger->addError($error_message);
       }
     }
 
@@ -362,6 +374,8 @@ class SettingsForm extends ConfigFormBase {
    *   Token field with value filled.
    */
   public function requestToken(array &$form, FormStateInterface &$form_state) {
+    // Clear existing errors to avoid showing duplicate errors.
+    $this->messenger->deleteByType('error');
 
     // Request new token.
     if ($token = $this->siteimprove->requestToken()) {

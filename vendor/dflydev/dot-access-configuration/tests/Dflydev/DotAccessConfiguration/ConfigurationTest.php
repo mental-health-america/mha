@@ -2,7 +2,7 @@
 
 /*
  * This file is a part of dflydev/dot-access-configuration.
- *
+ * 
  * (c) Dragonfly Development Inc.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -11,21 +11,10 @@
 
 namespace Dflydev\DotAccessConfiguration;
 
-use PHPUnit\Framework\TestCase;
-
-class ConfigurationTest extends TestCase
+class ConfigurationTest extends \PHPUnit_Framework_TestCase
 {
     protected function getTestData()
     {
-
-        $configurationTestObjectClass = new class (null){
-            public $key;
-            public function __construct($key)
-            {
-                $this->key = $key;
-            }
-        };
-
         return array(
             'a' => array(
                 'b' => array(
@@ -35,12 +24,12 @@ class ConfigurationTest extends TestCase
             'abc' => '%a.b.c%',
             'abcd' => '%a.b.c.d%',
             'some' => array(
-                'object' => new $configurationTestObjectClass('some.object'),
+                'object' => new ConfigurationTestObject('some.object'),
                 'other' => array(
-                    'object' => new $configurationTestObjectClass('some.other.object'),
+                    'object' => new ConfigurationTestObject('some.other.object'),
                 ),
             ),
-            'object' => new $configurationTestObjectClass('object'),
+            'object' => new ConfigurationTestObject('object'),
             'an_array' => array('hello'),
         );
     }
@@ -159,7 +148,7 @@ class ConfigurationTest extends TestCase
 
     public function testSetPlaceholderResolver()
     {
-        $placeholderResolver = $this->getMockBuilder(\Dflydev\PlaceholderResolver\PlaceholderResolverInterface::class)->getMock();
+        $placeholderResolver = $this->getMock('Dflydev\PlaceholderResolver\PlaceholderResolverInterface');
 
         $placeholderResolver
             ->expects($this->once())
@@ -168,10 +157,19 @@ class ConfigurationTest extends TestCase
             ->will($this->returnValue('bar'))
         ;
 
-        $configuration = new Configuration();
+        $configuration = new Configuration;
 
         $configuration->setPlaceholderResolver($placeholderResolver);
 
         $this->assertEquals('bar', $configuration->resolve('foo'));
+    }
+}
+
+class ConfigurationTestObject
+{
+    public $key;
+    public function __construct($key)
+    {
+        $this->key = $key;
     }
 }

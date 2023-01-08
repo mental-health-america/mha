@@ -2,9 +2,10 @@ siteimprove:
   js:
     js/siteimprove.js: {}
   dependencies:
+    - core/drupal
     - core/jquery
-    - core/jquery.once
-    - core/jquery.cookie
+    - core/once
+    - core/js-cookie
 siteimprove.overlay:
   license:
     name: GPL-2.0+

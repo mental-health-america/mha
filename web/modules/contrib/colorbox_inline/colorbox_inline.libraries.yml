@@ -3,3 +3,4 @@ colorbox_inline:
     js/colorbox_inline.js: {}
   dependencies:
     - colorbox/colorbox
+    - core/once
