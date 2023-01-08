@@ -1,5 +1,10 @@
-redirect.import:
-  route_name: redirect.import
+redirect.migrate:
+  route_name: entity.redirect.migrate
   base_route: redirect.list
-  title: Import
-  weight: 50
+  title: Migrate
+  weight: 100
+redirect.export:
+  route_name: entity.redirect.export
+  base_route: redirect.list
+  title: Export
+  weight: 100
