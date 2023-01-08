@@ -465,6 +465,27 @@
         ['', '<form><input name="attributes"></form>', '<form><input></form>']
       );
     });
+    QUnit.test('Config-Flag tests: SANITIZE_NAMED_PROPS', function (assert) {
+      // SANITIZE_NAMED_PROPS
+      assert.equal(
+        DOMPurify.sanitize('<a id="x"></a>', {
+          SANITIZE_NAMED_PROPS: true,
+        }),
+        '<a id="user-content-x"></a>'
+      );
+      assert.equal(
+        DOMPurify.sanitize('<form id="x"><input id="y"></form>', {
+          SANITIZE_NAMED_PROPS: true,
+        }),
+        '<form id="user-content-x"><input id="user-content-y"></form>'
+      );
+      assert.equal(
+        DOMPurify.sanitize('<a id="x"></a><a id="x"></a>', {
+          SANITIZE_NAMED_PROPS: true,
+        }),
+        '<a id="user-content-x"></a><a id="user-content-x"></a>'
+      );
+    });
     QUnit.test('Config-Flag tests: WHOLE_DOCUMENT', function (assert) {
       //WHOLE_DOCUMENT
       assert.equal(DOMPurify.sanitize('123', { WHOLE_DOCUMENT: false }), '123');
@@ -849,23 +870,6 @@
         assert.equal(resultBody, '123<img>');
       }
     );
-    // Test to check against a hang in MSIE (#89)
-    QUnit.test(
-      'sanitize() should not hang on MSIE when hook changes textContent',
-      function (assert) {
-        DOMPurify.addHook('afterSanitizeElements', function (node) {
-          if (node.nodeType && node.nodeType === document.TEXT_NODE) {
-            node.textContent = 'foo';
-          }
-          return node;
-        });
-        var dirty =
-          '<div><p>This is a beatufiul text</p><p>This is too</p></div>';
-        var modified = '<div><p>foo</p><p>foo</p></div>';
-        assert.equal(DOMPurify.sanitize(dirty), modified);
-        DOMPurify.removeHooks('afterSanitizeElements');
-      }
-    );
     // Tests to ensure that a configuration can be set and cleared
     QUnit.test(
       'ensure that a persistent configuration can be set and cleared',
@@ -1154,17 +1158,6 @@
         ]);
       }
     );
-    // Test to make sure that empty HTML doesn't return null on MSIE11 (#198)
-    QUnit.test(
-      "Empty HTML shouldn't return null on MSIE11 in RETURN_DOM_FRAGMENT mode",
-      function (assert) {
-        var clean = DOMPurify.sanitize('', {
-          RETURN_DOM: true,
-          RETURN_DOM_FRAGMENT: true,
-        });
-        assert.equal(typeof clean, 'object');
-      }
-    );
     // Tests to make sure that FORCE_BODY pushes elements to document.body (#199)
     QUnit.test(
       'FORCE_BODY needs to push some elements to document.body',
@@ -1392,7 +1385,8 @@
           expected: '<img src="http://i.imgur.com/WScAnHr.jpg">',
         },
         {
-          test: '<img src="blob:https://localhost:3000/c4ea3ec6-9f22-4d08-af6f-d79e78a0a7a7">',
+          test:
+            '<img src="blob:https://localhost:3000/c4ea3ec6-9f22-4d08-af6f-d79e78a0a7a7">',
           expected: '<img>',
         },
         {
@@ -1402,8 +1396,7 @@
       ];
       tests.forEach(function (test) {
         var str = DOMPurify.sanitize(test.test, {
-          ALLOWED_URI_REGEXP:
-            /^(?:(?:(?:f|ht)tps?):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
+          ALLOWED_URI_REGEXP: /^(?:(?:(?:f|ht)tps?):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
         });
         assert.equal(str, test.expected);
       });
@@ -1665,25 +1658,11 @@
         ]);
       }
     );
-    QUnit.test(
-      'Test protection from prototype pollution attacks',
-      function (assert) {
-        const obj = JSON.parse(
-          '{"ALLOWED_ATTR":["onerror","src"], "documentMode":9}'
-        );
-        try {
-          for (let [k, v] of Object.entries(obj)) {
-            Object.prototype[k] = v;
-          }
-        } catch (e) {}
-        var clean = DOMPurify.sanitize('<img src=x onerror=alert(1)>');
-        assert.equal(clean, '<img src="x">');
-      }
-    );
     QUnit.test('Test if namespaces are properly enforced', function (assert) {
       var tests = [
         {
-          test: '<svg><desc><canvas></canvas><textarea></textarea></desc></svg>',
+          test:
+            '<svg><desc><canvas></canvas><textarea></textarea></desc></svg>',
           expected: [
             '<svg><desc><canvas></canvas><textarea></textarea></desc></svg>',
             '<svg xmlns="http://www.w3.org/2000/svg"><desc><canvas></canvas><textarea></textarea></desc></svg>',
@@ -1752,7 +1731,7 @@
         {
           test: '<polyline points="0 0"></polyline>',
           config: { NAMESPACE: 'http://www.w3.org/1999/xhtml' },
-          expected: ['', '<polyline points="0 0"></polyline>'], // IE10
+          expected: [''],
         },
         {
           test: '<mi></mi>',
@@ -1768,7 +1747,7 @@
         {
           test: '<polyline points="0 0"></polyline>',
           config: { NAMESPACE: 'http://www.w3.org/1998/Math/MathML' },
-          expected: ['', '<polyline points="0 0"></polyline>'], // IE10
+          expected: [''],
         },
         {
           test: '<mi></mi>',
@@ -1781,7 +1760,97 @@
         assert.contains(clean, test.expected);
       });
     });
-
+    QUnit.test('Config-Flag tests: ALLOWED_NAMESPACES', function (assert) {
+      const tests = [
+        // Test when ALLOWED_NAMESPACES is not set, result is empty for XML with custom namespace
+        {
+          test:
+            '<library xmlns="http://www.ibm.com/library"><name>Library 1</name></library>',
+          config: {
+            ALLOWED_TAGS: ['#text', 'library', 'name'],
+            KEEP_CONTENT: false,
+            PARSER_MEDIA_TYPE: 'application/xhtml+xml',
+          },
+          expected: '',
+        },
+        // Test with one custom namespace at the root (ie. all sub-nodes will inherit that namespace)
+        {
+          test:
+            '<library xmlns="http://www.ibm.com/library"><name>Library 1</name><dirty onload="alert()" /></library>',
+          config: {
+            ALLOWED_NAMESPACES: ['http://www.ibm.com/library'],
+            ALLOWED_TAGS: ['#text', 'library', 'name'],
+            KEEP_CONTENT: false,
+            PARSER_MEDIA_TYPE: 'application/xhtml+xml',
+          },
+          expected:
+            '<library xmlns="http://www.ibm.com/library"><name>Library 1</name></library>',
+        },
+        // Test with one custom namespace at sub-node (root will default to HTML_NAMESPACE and should be kept)
+        {
+          test:
+            '<city><library xmlns="http://www.ibm.com/library"><name>Library 1</name><dirty onload="alert()" /></library></city>',
+          config: {
+            ALLOWED_NAMESPACES: ['http://www.w3.org/1999/xhtml', 'http://www.ibm.com/library'],
+            ALLOWED_TAGS: ['#text', 'city', 'library', 'name'],
+            KEEP_CONTENT: false,
+            PARSER_MEDIA_TYPE: 'application/xhtml+xml',
+          },
+          expected:
+            '<city xmlns="http://www.w3.org/1999/xhtml"><library xmlns="http://www.ibm.com/library"><name>Library 1</name></library></city>',
+        },
+        // Test removal of namespaces not listed in ALLOWED_NAMESPACES when input has multiple namespaces
+        {
+          test:
+            '<library xmlns="http://www.ibm.com/library" xmlns:bk="urn:loc.gov:books"><bk:name>Library 1</bk:name><dirty onload="alert()" /></library>',
+          config: {
+            ALLOWED_NAMESPACES: ['http://www.ibm.com/library'],
+            ALLOWED_TAGS: ['library', 'bk:name'],
+            KEEP_CONTENT: false,
+            PARSER_MEDIA_TYPE: 'application/xhtml+xml',
+          },
+          expected: ['<library xmlns="http://www.ibm.com/library"/>', '<library xmlns="http://www.ibm.com/library" />']
+        },
+        // Test with multiple custom namespaces and prefixes in input
+        {
+          test:
+            '<library xmlns="http://www.ibm.com/library" xmlns:bk="urn:loc.gov:books" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"><bk:name>Library 1<m:properties>Other Properties</m:properties></bk:name><dirty onload="alert()" /></library>',
+          config: {
+            ALLOWED_NAMESPACES: [
+              'http://www.ibm.com/library',
+              'urn:loc.gov:books',
+              'http://schemas.microsoft.com/ado/2007/08/dataservices/metadata',
+            ],
+            ALLOWED_TAGS: ['#text', 'library', 'bk:name', 'm:properties'],
+            KEEP_CONTENT: false,
+            PARSER_MEDIA_TYPE: 'application/xhtml+xml',
+          },
+          expected:
+            '<library xmlns="http://www.ibm.com/library"><bk:name xmlns:bk="urn:loc.gov:books">Library 1<m:properties xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata">Other Properties</m:properties></bk:name></library>',
+        },
+        // Test removal of elements mentioned in FORBID_TAGS even if their namespaces are allow-listed
+        {
+          test:
+            '<library xmlns="http://www.ibm.com/library" xmlns:bk="urn:loc.gov:books" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"><bk:name>Library 1<m:properties>Other Properties</m:properties></bk:name><dirty onload="alert()" /></library>',
+          config: {
+            ADD_TAGS: ['library', 'bk:name'],
+            ALLOWED_NAMESPACES: [
+              'http://www.ibm.com/library',
+              'urn:loc.gov:books',
+              'http://schemas.microsoft.com/ado/2007/08/dataservices/metadata',
+            ],
+            FORBID_TAGS: ['m:properties'],
+            KEEP_CONTENT: false,
+            PARSER_MEDIA_TYPE: 'application/xhtml+xml',
+          },
+          expected:
+            '<library xmlns="http://www.ibm.com/library"><bk:name xmlns:bk="urn:loc.gov:books">Library 1</bk:name></library>',
+        },
+      ];
+      tests.forEach(function (test) {
+        assert.contains(DOMPurify.sanitize(test.test, test.config), test.expected);
+      });
+    });
     QUnit.test('Config-Flag tests: PARSER_MEDIA_TYPE', function (assert) {
       const tests = [
         {

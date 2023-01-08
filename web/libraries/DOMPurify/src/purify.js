@@ -11,6 +11,7 @@ import {
   stringMatch,
   stringReplace,
   stringToLowerCase,
+  stringToString,
   stringIndexOf,
   stringTrim,
   regExpTest,
@@ -54,6 +55,9 @@ const _createTrustedTypesPolicy = function (trustedTypes, document) {
     return trustedTypes.createPolicy(policyName, {
       createHTML(html) {
         return html;
+      },
+      createScriptURL(scriptUrl) {
+        return scriptUrl;
       },
     });
   } catch (_) {
@@ -139,11 +143,6 @@ function createDOMPurify(window = getGlobal()) {
   } = document;
   const { importNode } = originalDocument;
 
-  let documentMode = {};
-  try {
-    documentMode = clone(document).documentMode ? document.documentMode : {};
-  } catch (_) {}
-
   let hooks = {};
 
   /**
@@ -152,12 +151,12 @@ function createDOMPurify(window = getGlobal()) {
   DOMPurify.isSupported =
     typeof getParentNode === 'function' &&
     implementation &&
-    typeof implementation.createHTMLDocument !== 'undefined' &&
-    documentMode !== 9;
+    typeof implementation.createHTMLDocument !== 'undefined';
 
   const {
     MUSTACHE_EXPR,
     ERB_EXPR,
+    TMPLIT_EXPR,
     DATA_ATTR,
     ARIA_ATTR,
     IS_SCRIPT_OR_DATA,
@@ -263,8 +262,26 @@ function createDOMPurify(window = getGlobal()) {
    * case Trusted Types are not supported  */
   let RETURN_TRUSTED_TYPE = false;
 
-  /* Output should be free from DOM clobbering attacks? */
+  /* Output should be free from DOM clobbering attacks?
+   * This sanitizes markups named with colliding, clobberable built-in DOM APIs.
+   */
   let SANITIZE_DOM = true;
+
+  /* Achieve full DOM Clobbering protection by isolating the namespace of named
+   * properties and JS variables, mitigating attacks that abuse the HTML/DOM spec rules.
+   *
+   * HTML/DOM spec rules that enable DOM Clobbering:
+   *   - Named Access on Window (§7.3.3)
+   *   - DOM Tree Accessors (§3.1.5)
+   *   - Form Element Parent-Child Relations (§4.10.3)
+   *   - Iframe srcdoc / Nested WindowProxies (§4.8.5)
+   *   - HTMLCollection (§4.2.10.2)
+   *
+   * Namespace isolation is implemented by prefixing `id` and `name` attributes
+   * with a constant string, i.e., `user-content-`
+   */
+  let SANITIZE_NAMED_PROPS = false;
+  const SANITIZE_NAMED_PROPS_PREFIX = 'user-content-';
 
   /* Keep element content when removing element? */
   let KEEP_CONTENT = true;
@@ -343,6 +360,14 @@ function createDOMPurify(window = getGlobal()) {
   let NAMESPACE = HTML_NAMESPACE;
   let IS_EMPTY_INPUT = false;
 
+  /* Allowed XHTML+XML namespaces */
+  let ALLOWED_NAMESPACES = null;
+  const DEFAULT_ALLOWED_NAMESPACES = addToSet(
+    {},
+    [MATHML_NAMESPACE, SVG_NAMESPACE, HTML_NAMESPACE],
+    stringToString
+  );
+
   /* Parsing of strict XHTML documents */
   let PARSER_MEDIA_TYPE;
   const SUPPORTED_PARSER_MEDIA_TYPES = ['application/xhtml+xml', 'text/html'];
@@ -389,7 +414,7 @@ function createDOMPurify(window = getGlobal()) {
     // HTML tags and attributes are not case-sensitive, converting to lowercase. Keeping XHTML as is.
     transformCaseFunc =
       PARSER_MEDIA_TYPE === 'application/xhtml+xml'
-        ? (x) => x
+        ? stringToString
         : stringToLowerCase;
 
     /* Set configuration parameters */
@@ -401,6 +426,10 @@ function createDOMPurify(window = getGlobal()) {
       'ALLOWED_ATTR' in cfg
         ? addToSet({}, cfg.ALLOWED_ATTR, transformCaseFunc)
         : DEFAULT_ALLOWED_ATTR;
+    ALLOWED_NAMESPACES =
+      'ALLOWED_NAMESPACES' in cfg
+        ? addToSet({}, cfg.ALLOWED_NAMESPACES, stringToString)
+        : DEFAULT_ALLOWED_NAMESPACES;
     URI_SAFE_ATTRIBUTES =
       'ADD_URI_SAFE_ATTR' in cfg
         ? addToSet(
@@ -440,6 +469,7 @@ function createDOMPurify(window = getGlobal()) {
     RETURN_TRUSTED_TYPE = cfg.RETURN_TRUSTED_TYPE || false; // Default false
     FORCE_BODY = cfg.FORCE_BODY || false; // Default false
     SANITIZE_DOM = cfg.SANITIZE_DOM !== false; // Default true
+    SANITIZE_NAMED_PROPS = cfg.SANITIZE_NAMED_PROPS || false; // Default false
     KEEP_CONTENT = cfg.KEEP_CONTENT !== false; // Default true
     IN_PLACE = cfg.IN_PLACE || false; // Default false
     IS_ALLOWED_URI = cfg.ALLOWED_URI_REGEXP || IS_ALLOWED_URI;
@@ -611,13 +641,17 @@ function createDOMPurify(window = getGlobal()) {
     // can be null. We just simulate parent in this case.
     if (!parent || !parent.tagName) {
       parent = {
-        namespaceURI: HTML_NAMESPACE,
+        namespaceURI: NAMESPACE,
         tagName: 'template',
       };
     }
 
     const tagName = stringToLowerCase(element.tagName);
     const parentTagName = stringToLowerCase(parent.tagName);
+
+    if (!ALLOWED_NAMESPACES[element.namespaceURI]) {
+      return false;
+    }
 
     if (element.namespaceURI === SVG_NAMESPACE) {
       // The only way to switch from HTML namespace to SVG
@@ -627,7 +661,7 @@ function createDOMPurify(window = getGlobal()) {
         return tagName === 'svg';
       }
 
-      // The only way to switch from MathML to SVG is via
+      // The only way to switch from MathML to SVG is via`
       // svg if parent is either <annotation-xml> or MathML
       // text integration points.
       if (parent.namespaceURI === MATHML_NAMESPACE) {
@@ -688,9 +722,18 @@ function createDOMPurify(window = getGlobal()) {
       );
     }
 
+    // For XHTML and XML documents that support custom namespaces
+    if (
+      PARSER_MEDIA_TYPE === 'application/xhtml+xml' &&
+      ALLOWED_NAMESPACES[element.namespaceURI]
+    ) {
+      return true;
+    }
+
     // The code should never reach this place (this means
     // that the element somehow got namespace that is not
-    // HTML, SVG or MathML). Return false just in case.
+    // HTML, SVG, MathML or allowed via ALLOWED_NAMESPACES).
+    // Return false just in case.
     return false;
   };
 
@@ -705,11 +748,7 @@ function createDOMPurify(window = getGlobal()) {
       // eslint-disable-next-line unicorn/prefer-dom-node-remove
       node.parentNode.removeChild(node);
     } catch (_) {
-      try {
-        node.outerHTML = emptyHTML;
-      } catch (_) {
-        node.remove();
-      }
+      node.remove();
     }
   };
 
@@ -767,7 +806,10 @@ function createDOMPurify(window = getGlobal()) {
       leadingWhitespace = matches && matches[0];
     }
 
-    if (PARSER_MEDIA_TYPE === 'application/xhtml+xml') {
+    if (
+      PARSER_MEDIA_TYPE === 'application/xhtml+xml' &&
+      NAMESPACE === HTML_NAMESPACE
+    ) {
       // Root of XHTML doc must contain xmlns declaration (see https://www.w3.org/TR/xhtml1/normative.html#strict)
       dirty =
         '<html xmlns="http://www.w3.org/1999/xhtml"><head></head><body>' +
@@ -792,7 +834,9 @@ function createDOMPurify(window = getGlobal()) {
     if (!doc || !doc.documentElement) {
       doc = implementation.createDocument(NAMESPACE, 'template', null);
       try {
-        doc.documentElement.innerHTML = IS_EMPTY_INPUT ? '' : dirtyPayload;
+        doc.documentElement.innerHTML = IS_EMPTY_INPUT
+          ? emptyHTML
+          : dirtyPayload;
       } catch (_) {
         // Syntax error if dirtyPayload is invalid xml
       }
@@ -851,7 +895,8 @@ function createDOMPurify(window = getGlobal()) {
         typeof elm.removeAttribute !== 'function' ||
         typeof elm.setAttribute !== 'function' ||
         typeof elm.namespaceURI !== 'string' ||
-        typeof elm.insertBefore !== 'function')
+        typeof elm.insertBefore !== 'function' ||
+        typeof elm.hasChildNodes !== 'function')
     );
   };
 
@@ -1004,6 +1049,7 @@ function createDOMPurify(window = getGlobal()) {
       content = currentNode.textContent;
       content = stringReplace(content, MUSTACHE_EXPR, ' ');
       content = stringReplace(content, ERB_EXPR, ' ');
+      content = stringReplace(content, TMPLIT_EXPR, ' ');
       if (currentNode.textContent !== content) {
         arrayPush(DOMPurify.removed, { element: currentNode.cloneNode() });
         currentNode.textContent = content;
@@ -1194,12 +1240,46 @@ function createDOMPurify(window = getGlobal()) {
       if (SAFE_FOR_TEMPLATES) {
         value = stringReplace(value, MUSTACHE_EXPR, ' ');
         value = stringReplace(value, ERB_EXPR, ' ');
+        value = stringReplace(value, TMPLIT_EXPR, ' ');
       }
 
       /* Is `value` valid for this attribute? */
       const lcTag = transformCaseFunc(currentNode.nodeName);
       if (!_isValidAttribute(lcTag, lcName, value)) {
         continue;
+      }
+
+      /* Full DOM Clobbering protection via namespace isolation,
+       * Prefix id and name attributes with `user-content-`
+       */
+      if (SANITIZE_NAMED_PROPS && (lcName === 'id' || lcName === 'name')) {
+        // Remove the attribute with this value
+        _removeAttribute(name, currentNode);
+
+        // Prefix the value and later re-create the attribute with the sanitized value
+        value = SANITIZE_NAMED_PROPS_PREFIX + value;
+      }
+
+      /* Handle attributes that require Trusted Types */
+      if (
+        trustedTypesPolicy &&
+        typeof trustedTypes === 'object' &&
+        typeof trustedTypes.getAttributeType === 'function'
+      ) {
+        if (namespaceURI) {
+          /* Namespaces are not yet supported, see https://bugs.chromium.org/p/chromium/issues/detail?id=1305293 */
+        } else {
+          switch (trustedTypes.getAttributeType(lcTag, lcName)) {
+            case 'TrustedHTML':
+              value = trustedTypesPolicy.createHTML(value);
+              break;
+            case 'TrustedScriptURL':
+              value = trustedTypesPolicy.createScriptURL(value);
+              break;
+            default:
+              break;
+          }
+        }
       }
 
       /* Handle invalid data-* attribute set by try-catching it */
@@ -1261,11 +1341,10 @@ function createDOMPurify(window = getGlobal()) {
    * @param {Object} configuration object
    */
   // eslint-disable-next-line complexity
-  DOMPurify.sanitize = function (dirty, cfg) {
+  DOMPurify.sanitize = function (dirty, cfg = {}) {
     let body;
     let importedNode;
     let currentNode;
-    let oldNode;
     let returnNode;
     /* Make sure we have a string to sanitize.
       DO NOT return early, as this will return the wrong type if
@@ -1288,21 +1367,8 @@ function createDOMPurify(window = getGlobal()) {
       }
     }
 
-    /* Check we can run. Otherwise fall back or ignore */
+    /* Return dirty HTML if DOMPurify cannot run */
     if (!DOMPurify.isSupported) {
-      if (
-        typeof window.toStaticHTML === 'object' ||
-        typeof window.toStaticHTML === 'function'
-      ) {
-        if (typeof dirty === 'string') {
-          return window.toStaticHTML(dirty);
-        }
-
-        if (_isNode(dirty)) {
-          return window.toStaticHTML(dirty.outerHTML);
-        }
-      }
-
       return dirty;
     }
 
@@ -1376,11 +1442,6 @@ function createDOMPurify(window = getGlobal()) {
 
     /* Now start iterating over the created document */
     while ((currentNode = nodeIterator.nextNode())) {
-      /* Fix IE's strange behavior with manipulated textNodes #89 */
-      if (currentNode.nodeType === 3 && currentNode === oldNode) {
-        continue;
-      }
-
       /* Sanitize tags and elements */
       if (_sanitizeElements(currentNode)) {
         continue;
@@ -1393,11 +1454,7 @@ function createDOMPurify(window = getGlobal()) {
 
       /* Check attributes, sanitize if necessary */
       _sanitizeAttributes(currentNode);
-
-      oldNode = currentNode;
     }
-
-    oldNode = null;
 
     /* If we sanitized `dirty` in-place, return it. */
     if (IN_PLACE) {
@@ -1450,6 +1507,7 @@ function createDOMPurify(window = getGlobal()) {
     if (SAFE_FOR_TEMPLATES) {
       serializedHTML = stringReplace(serializedHTML, MUSTACHE_EXPR, ' ');
       serializedHTML = stringReplace(serializedHTML, ERB_EXPR, ' ');
+      serializedHTML = stringReplace(serializedHTML, TMPLIT_EXPR, ' ');
     }
 
     return trustedTypesPolicy && RETURN_TRUSTED_TYPE
