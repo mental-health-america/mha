@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0062b6b4528d2c4e9b3c5cb4e8207aa2",
+    "content-hash": "283ab5d20f961a18373ac63a90df8f1b",
     "packages": [
         {
             "name": "alchemy/zippy",
@@ -5698,17 +5698,17 @@
         },
         {
             "name": "drupal/geofield_map",
-            "version": "2.90.0",
+            "version": "3.0.5",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/geofield_map.git",
-                "reference": "8.x-2.90"
+                "reference": "3.0.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/geofield_map-8.x-2.90.zip",
-                "reference": "8.x-2.90",
-                "shasum": "ced6886eef54e20d5ad6694cf46681bc9e4c8d8c"
+                "url": "https://ftp.drupal.org/files/projects/geofield_map-3.0.5.zip",
+                "reference": "3.0.5",
+                "shasum": "161dc54112450b14c2fd16334338694ef65377b6"
             },
             "require": {
                 "drupal/core": "^9.3 || ^10",
@@ -5717,8 +5717,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-2.90",
-                    "datestamp": "1666656350",
+                    "version": "3.0.5",
+                    "datestamp": "1670454464",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
