@@ -32,6 +32,7 @@ regions:
   sidebar_left: 'Sidebar Left'
   sidebar_right: 'Sidebar Right'
   after_content: 'After Content'
+  after_content_fullwidth: 'After Content Fullwidth',
   highlighted: 'Highlighted'
   before_footer: 'Before Footer'
   footer_first: 'Footer First'
