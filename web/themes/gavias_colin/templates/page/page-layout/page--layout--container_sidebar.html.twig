@@ -6,7 +6,6 @@
 #}
 {% set has_breadcrumb = '' %}
 <div class="gva-body-wrapper">
-
 	<div class="body-page gva-body-page">
 	   {% include header_skin %}
 
@@ -76,17 +75,7 @@
 
 		</div>
 	</div>
-  <div class="container-fluid after-content-fullwidth">
-    {% if page.after_content_fullwidth %}
-      <div class="area after-content">
-        <div class="container">
-          <div class="content-inner">
-            {{ page.after_content }}
-          </div>
-        </div>
-      </div>
-    {% endif %}
-  </div>
+
 	{% include directory ~ '/templates/page/footer.html.twig' %}
 </div>
 

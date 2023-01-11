@@ -77,7 +77,11 @@
 
   </div>
 </div>
-
+{% if page.after_content_fullwidth %}
+  <div class="container-fluid after-content-fullwidth mx-0 px-0 my-5">
+    {{ page.after_content_fullwidth }}
+  </div>
+{% endif %}
 {% include directory ~ '/templates/page/footer.html.twig' %}
 </div>
 
