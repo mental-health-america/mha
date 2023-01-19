@@ -16,7 +16,7 @@
  */
 #}
 {# Remove whitespace between tags for even spacing between buttons. #}
-{% spaceless %}
+{% apply spaceless %}
 
   {% if button_setting != 'none' %}
     {% set universal_button %}
@@ -42,4 +42,4 @@
     {% endif %}
   </span>
 
-{% endspaceless %}
+{% endapply %}

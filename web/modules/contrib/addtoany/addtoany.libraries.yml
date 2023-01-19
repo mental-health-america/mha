@@ -1,21 +1,21 @@
-addtoany:
+addtoany.front:
   version: VERSION
   js:
     https://static.addtoany.com/menu/page.js: { attributes: { async: true }, type: external, minified: true }
-    js/addtoany.js: {}
+    js/addtoany.js: { }
   css:
     theme:
-      css/addtoany.css: {}
+      css/addtoany.css: { }
   dependencies:
     - core/drupal
 
 addtoany.admin:
   version: VERSION
   js:
-    js/addtoany.admin.js: {}
+    js/addtoany.admin.js: { }
   css:
     theme:
-      css/addtoany.admin.css: {}
+      css/addtoany.admin.css: { }
   dependencies:
     - core/jquery
     - core/drupal
