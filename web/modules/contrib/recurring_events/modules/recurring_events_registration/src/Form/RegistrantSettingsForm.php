@@ -111,6 +111,8 @@ class RegistrantSettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('recurring_events_registration.registrant.config')
       ->set('show_capacity', $form_state->getValue('show_capacity'))
+      ->set('insert_redirect_choice', $form_state->getValue('insert_redirect_choice'))
+      ->set('insert_redirect_other', $form_state->getValue('insert_redirect_other'))
       ->set('use_admin_theme', $form_state->getValue('use_admin_theme'))
       ->set('limit', $form_state->getValue('limit'))
       ->set('date_format', $form_state->getValue('date_format'))
@@ -170,6 +172,32 @@ class RegistrantSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Show Capacity?'),
       '#description' => $this->t('When users are registering for events, show the available capacity?'),
       '#default_value' => $config->get('show_capacity'),
+    ];
+
+    $form['process']['insert_redirect_choice'] = [
+      '#type' => 'radios',
+      '#title' => $this->t('Choose where registrant form redirects'),
+      '#default_value' => $config->get('insert_redirect_choice'),
+      '#options' => [
+        'current' => $this->t('Current page where form appears'),
+        'instance' => $this->t('Event instance page'),
+        'series' => $this->t('Event series page'),
+        'other' => $this->t('Custom URL'),
+      ],
+    ];
+
+    $form['process']['insert_redirect_other'] = [
+      '#type' => 'url',
+      '#title' => $this->t('Type custom URL here'),
+      '#default_value' => $config->get('insert_redirect_other'),
+      '#states' => [
+        'visible' => [
+          ':input[name="insert_redirect_choice"]' => ['value' => 'other'],
+        ],
+        'required' => [
+          ':input[name="insert_redirect_choice"]' => ['value' => 'other'],
+        ],
+      ],
     ];
 
     $form['display'] = [

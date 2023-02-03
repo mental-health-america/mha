@@ -21,3 +21,11 @@ entity.registrant_type.collection:
   route_name: entity.registrant_type.collection
   parent: events.admin.overview
   weight: 13
+
+  # Orphaned Event Registrants
+recurring_events_registration.orphaned_registrants:
+  title: 'Orphaned Event Registrants'
+  description: 'Delete orphaned event registrants'
+  route_name: recurring_events_registration.orphaned_registrants
+  parent: events.admin.overview
+  weight: 101
