@@ -90,3 +90,9 @@ administer eventinstance types:
   title: 'Administer eventinstance types'
   description: 'Manage types of eventinstance.'
   restrict access: true
+
+# Orphaned Content Cleanup
+administer orphaned events entities:
+  title: 'Cleanup orphaned events entities'
+  description: 'Delete orphaned instances or registrants'
+  restrict access: true

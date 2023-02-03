@@ -11,7 +11,7 @@ use Drupal\recurring_events\Entity\EventSeries;
 use Drupal\Core\Messenger\Messenger;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Extension\ModuleHandler;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Utility\Token;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -72,7 +72,7 @@ class RegistrationCreationService {
   /**
    * The module handler service.
    *
-   * @var \Drupal\Core\Extension\ModuleHandler
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
   protected $moduleHandler;
 
@@ -96,12 +96,12 @@ class RegistrationCreationService {
    *   The messenger service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager service.
-   * @param \Drupal\Core\Extension\ModuleHandler $module_handler
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler service.
    * @param \Drupal\Core\Utility\Token $token
    *   The token service.
    */
-  public function __construct(TranslationInterface $translation, Connection $database, LoggerChannelFactoryInterface $logger, Messenger $messenger, EntityTypeManagerInterface $entity_type_manager, ModuleHandler $module_handler, Token $token) {
+  public function __construct(TranslationInterface $translation, Connection $database, LoggerChannelFactoryInterface $logger, Messenger $messenger, EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler, Token $token) {
     $this->translation = $translation;
     $this->database = $database;
     $this->loggerFactory = $logger->get('recurring_events_registration');
@@ -276,6 +276,22 @@ class RegistrationCreationService {
    */
   public function eventInstanceIsInFuture() {
     return $this->eventInstance->date->end_date->getTimestamp() > time();
+  }
+
+  /**
+   * Checks if event instance has any availability.
+   *
+   * @return bool
+   *   Whether registration spaces exist.
+   */
+  public function hasAvailability() {
+    $availability = $this->retrieveAvailability();
+
+    if ($availability == -1 || $availability > 0) {
+      return TRUE;
+    }
+
+    return FALSE;
   }
 
   /**
@@ -539,18 +555,24 @@ class RegistrationCreationService {
    */
   public function registrationIsOpen() {
     $registration = FALSE;
-    if ($this->hasRegistration()) {
-      $now = new DrupalDateTime();
 
-      $reg_open_close_dates = $this->registrationOpeningClosingTime();
-
-      if (!empty($reg_open_close_dates)) {
-        $registration = (
-          $now->getTimestamp() >= $reg_open_close_dates['reg_open']->getTimestamp()
-          && $now->getTimestamp() < $reg_open_close_dates['reg_close']->getTimestamp()
-        );
-      }
+    if (!$this->hasRegistration()) {
+      return $registration;
     }
+
+    $now = new DrupalDateTime();
+
+    $reg_open_close_dates = $this->registrationOpeningClosingTime();
+
+    if (empty($reg_open_close_dates) || empty($reg_open_close_dates['reg_open']) || empty($reg_open_close_dates['reg_close'])) {
+      return $registration;
+    }
+
+    $registration = (
+      $now->getTimestamp() >= $reg_open_close_dates['reg_open']->getTimestamp()
+      && $now->getTimestamp() < $reg_open_close_dates['reg_close']->getTimestamp()
+    );
+
     return $registration;
   }
 
@@ -601,6 +623,9 @@ class RegistrationCreationService {
           // The two registration types are 'series' or 'instance'.
           switch ($reg_type) {
             case 'series':
+              $reg_start = NULL;
+              $reg_end = NULL;
+
               $reg_date_range = $this->getRegistrationDateRange();
 
               if (!empty($reg_date_range)) {
@@ -674,7 +699,7 @@ class RegistrationCreationService {
       return;
     }
 
-    if ($this->retrieveAvailability() > 0) {
+    if ($this->hasAvailability()) {
       $first_waitlist = $this->retrieveFirstWaitlistParty();
       if (!empty($first_waitlist)) {
         $first_waitlist->setWaitlist('0');

@@ -105,7 +105,7 @@ class EventInstanceForm extends ContentEntityForm {
         '#type' => 'markup',
         '#prefix' => '<p class="event-message">',
         '#markup' => $this->t('Some of the data for event instances is inherited from the event series that the instance belongs to. @link.', [
-          '@link' => $event->getEventSeries()->toLink($this->t('Edit the series'), 'edit-form')->toString(),
+          '@link' => $event->getEventSeries() ? $event->getEventSeries()->toLink($this->t('Edit the series'), 'edit-form')->toString() : '',
         ]),
         '#suffix' => '</p>',
       ],

@@ -75,3 +75,11 @@ entity.eventinstance_type.collection:
   route_name: entity.eventinstance_type.collection
   parent: events.admin.overview
   weight: 3
+
+# Orphaned Event Instances
+recurring_events.orphaned_instances:
+  title: 'Orphaned Event Instances'
+  description: 'Delete orphaned event instances'
+  route_name: recurring_events.orphaned_instances
+  parent: events.admin.overview
+  weight: 100

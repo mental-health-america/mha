@@ -284,20 +284,30 @@ function recurring_events_registration_recurring_events_pre_delete_instance(Even
  * Implements hook_recurring_events_pre_delete_instances().
  */
 function recurring_events_registration_recurring_events_pre_delete_instances(EventSeries $event_series) {
+  /** @var \Drupal\recurring_events_registration\RegistrationCreationService $registration_creation_service */
   $registration_creation_service = \Drupal::service('recurring_events_registration.creation_service');
   $registration_creation_service->setEventSeries($event_series);
 
-  // Get all the registrants who have registered for any event in this series.
-  $registrants = $registration_creation_service->retrieveAllSeriesRegisteredParties(TRUE);
+  // Get the registrants registered for a future event and email them about the
+  // series deletion.
+  $future_registrants = $registration_creation_service->retrieveAllSeriesRegisteredParties(TRUE);
+  if (!empty($future_registrants)) {
+    $key = 'series_deletion_notification';
+
+    // Send an email to the future registrants.
+    foreach ($future_registrants as $registrant) {
+      recurring_events_registration_send_notification($key, $registrant);
+    }
+  }
+
+  // Now get all the registrants for this series so we can remove them.
+  $registrants = $registration_creation_service->retrieveAllSeriesRegisteredParties();
   if (empty($registrants)) {
     return;
   }
 
-  $key = 'series_deletion_notification';
-
   // Send an email to all registrants.
   foreach ($registrants as $registrant) {
-    recurring_events_registration_send_notification($key, $registrant);
     $registrant->delete();
   }
 }
@@ -466,7 +476,7 @@ function recurring_events_registration_form_alter(array &$form, FormStateInterfa
   if ($form_object instanceof RegistrantForm) {
     /** @var \Drupal\recurring_events_registration\Entity\RegistrantInterface $entity */
     $entity = $form_object->getEntity();
-    if (!empty($entity) && $entity instanceof RegistrantInterface && $entity->getEntityTypeId() === 'registrant') {
+    if (!empty($entity) && $entity instanceof RegistrantInterface && $entity->getEntityTypeId() === 'registrant' && !empty($form['actions'])) {
       foreach ($form['actions']['submit']['#submit'] as $key => $submit) {
         if (is_array($submit) && $submit[0] === 'Drupal\content_moderation\EntityTypeInfo') {
           unset($form['actions']['submit']['#submit'][$key]);
