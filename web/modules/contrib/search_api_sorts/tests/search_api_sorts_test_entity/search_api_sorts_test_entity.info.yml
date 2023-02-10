@@ -1,0 +1,9 @@
+name: 'Search API sorts test entity'
+type: module
+description: 'Support module for search_api_sorts, tests that entity queries are efficient.'
+package: Testing
+
+# Information added by Drupal.org packaging script on 2022-08-19
+version: '8.x-1.1'
+project: 'search_api_sorts'
+datestamp: 1660915209

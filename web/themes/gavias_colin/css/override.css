@@ -1835,3 +1835,8 @@ h2#block-bellseal-menu::before {
     padding: 0.2rem;
     border-radius: 25px;
 }
+
+div#block-exposedformsearch-contentpage-1 h2.block-title {
+    margin: 0 0 .5rem !important;
+    padding: 0  !important;
+}
