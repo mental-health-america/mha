@@ -1704,9 +1704,14 @@ footer a:active {
 
 
 /* search api pages search box */
+
 #block-bwm-njord-system-main {
-    width: -webkit-fill-available !important;
+    float: left;
+    margin-top: 10px;
+    width: -webkit-fill-available;
+    width: -moz-available;
 }
+
 span.facet-item__value {
     margin: 0 0 0 0.5rem;
     font-weight: bold;
@@ -1736,11 +1741,6 @@ form#views-exposed-form-search-content-page-1 {
 
 #block-bwm-njord-system-main .js-form-item.form-item {
     padding: 0 !important;
-}
-
-#block-bwm-njord-system-main {
-  float: left;
-  margin-top: 10px;
 }
 
 #block-bwm-njord-system-main div.form-item {
@@ -1834,8 +1834,4 @@ h2#block-bellseal-menu::before {
     -webkit-text-stroke: 3px white !important;
     padding: 0.2rem;
     border-radius: 25px;
-}
-.views-exposed-form input[type="submit"] {
-    padding: 16.485px 20px;
-    font-weight: 600;
 }
