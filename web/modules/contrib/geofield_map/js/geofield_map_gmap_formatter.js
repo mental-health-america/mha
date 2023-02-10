@@ -448,12 +448,10 @@
             let content = $('[data-geofield-google-map-ajax-popup]', element);
             if (content.length) {
               let url = content.data('geofield-google-map-ajax-popup');
-              Drupal.ajax({url: url}).execute();
+              Drupal.ajax({url: url}).execute().done(function () {
+                Drupal.attachBehaviors(element, drupalSettings);
+              })
             }
-            // Attach drupal behaviors on new content.
-            $(element).each(function () {
-              Drupal.attachBehaviors(this, drupalSettings);
-            })
           });
 
           if (features.setMap) {
