@@ -1820,6 +1820,18 @@ h2#block-bellseal-menu::before {
   margin: 0 10px 0 0;
 }
 
+.js-form-item.form-item,
+div#edit-actions--3,
+div#edit-actions--2 {
+    display: inline-block;
+}
+
+.views-exposed-form input[type="submit"] {
+    padding: 17.5px 20px;
+}
+
+
+/*
 #block-topmenu .gva_menu > li:last-child > a {
     color: var(--mha-orange) !important;
     font-size: .0000000001rem !important;
@@ -1840,3 +1852,4 @@ div#block-exposedformsearch-contentpage-1 h2.block-title {
     margin: 0 0 .5rem !important;
     padding: 0  !important;
 }
+
