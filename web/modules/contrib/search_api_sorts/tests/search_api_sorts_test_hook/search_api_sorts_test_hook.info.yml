@@ -1,0 +1,9 @@
+name: 'Search API sorts hooks test'
+type: module
+description: 'Support module for Search API tests, tests all the hooks.'
+package: Testing
+
+# Information added by Drupal.org packaging script on 2022-08-19
+version: '8.x-1.1'
+project: 'search_api_sorts'
+datestamp: 1660915209
