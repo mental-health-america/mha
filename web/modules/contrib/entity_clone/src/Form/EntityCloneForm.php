@@ -10,10 +10,10 @@ use Drupal\Core\Messenger\Messenger;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\TranslationManager;
-use Drupal\entity_clone\Services\EntityCloneServiceProvider;
 use Drupal\entity_clone\EntityCloneSettingsManager;
 use Drupal\entity_clone\Event\EntityCloneEvent;
 use Drupal\entity_clone\Event\EntityCloneEvents;
+use Drupal\entity_clone\Services\EntityCloneServiceProvider;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -164,6 +164,13 @@ class EntityCloneForm extends FormBase {
           '#default_value' => $this->entityCloneSettingsManager->getTakeOwnershipSetting(),
           '#description' => $this->stringTranslationManager->translate('Take ownership of the newly created cloned entity.'),
         ];
+
+        $form['no_suffix'] = [
+          '#type' => 'checkbox',
+          '#title' => $this->t('Exclude Cloned'),
+          '#description' => $this->t('Exclude " - Cloned" from title of cloned entity.'),
+          '#default_value' => $this->entityCloneSettingsManager->getExcludeClonedSetting(),
+        ];
       }
 
       $form['actions'] = ['#type' => 'actions'];
@@ -205,9 +212,9 @@ class EntityCloneForm extends FormBase {
 
     $duplicate = $this->entity->createDuplicate();
 
-    $this->eventDispatcher->dispatch(EntityCloneEvents::PRE_CLONE, new EntityCloneEvent($this->entity, $duplicate, $properties));
+    $this->eventDispatcher->dispatch(new EntityCloneEvent($this->entity, $duplicate, $properties), EntityCloneEvents::PRE_CLONE);
     $cloned_entity = $entity_clone_handler->cloneEntity($this->entity, $duplicate, $properties);
-    $this->eventDispatcher->dispatch(EntityCloneEvents::POST_CLONE, new EntityCloneEvent($this->entity, $duplicate, $properties));
+    $this->eventDispatcher->dispatch(new EntityCloneEvent($this->entity, $duplicate, $properties), EntityCloneEvents::POST_CLONE);
 
     $this->messenger->addMessage($this->stringTranslationManager->translate('The entity <em>@entity (@entity_id)</em> of type <em>@type</em> was cloned.', [
       '@entity' => $this->entity->label(),

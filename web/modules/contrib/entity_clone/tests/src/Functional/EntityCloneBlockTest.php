@@ -3,6 +3,7 @@
 namespace Drupal\Tests\entity_clone\Functional;
 
 use Drupal\block\Entity\Block;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Tests\BrowserTestBase;
 
 /**
@@ -12,18 +13,21 @@ use Drupal\Tests\BrowserTestBase;
  */
 class EntityCloneBlockTest extends BrowserTestBase {
 
+  use StringTranslationTrait;
+
   /**
    * Modules to enable.
    *
    * @var array
    */
-  public static $modules = ['entity_clone', 'block'];
+  protected static $modules = ['entity_clone', 'block'];
 
   /**
-   * Theme to enable by default
+   * Theme to enable by default.
+   *
    * @var string
    */
-  protected $defaultTheme = 'classy';
+  protected $defaultTheme = 'claro';
 
   /**
    * Permissions to grant admin user.
@@ -71,7 +75,8 @@ class EntityCloneBlockTest extends BrowserTestBase {
     $edit = [
       'id' => 'test_block_cloned',
     ];
-    $this->drupalPostForm('entity_clone/block/' . $block->id(), $edit, t('Clone'));
+    $this->drupalGet('entity_clone/block/' . $block->id());
+    $this->submitForm($edit, $this->t('Clone'));
 
     $blocks = \Drupal::entityTypeManager()
       ->getStorage('block')

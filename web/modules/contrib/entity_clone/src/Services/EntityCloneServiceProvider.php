@@ -11,6 +11,13 @@ use Drupal\user\EntityOwnerTrait;
 class EntityCloneServiceProvider {
 
   /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeInterface
+   */
+  protected $entityType;
+
+  /**
    * Constructs a new ServiceProvider object.
    */
   public function __construct() {}
@@ -18,7 +25,7 @@ class EntityCloneServiceProvider {
   /**
    * Checks if the given entity implements has owner trait.
    *
-   * @param \Drupal\Core\Entity\EntityTypeInterface $entity
+   * @param \Drupal\Core\Entity\EntityTypeInterface $entityType
    *   Entity to be tested.
    *
    * @return bool
@@ -27,7 +34,8 @@ class EntityCloneServiceProvider {
   public function entityTypeHasOwnerTrait(EntityTypeInterface $entityType) {
     try {
       $reflectionClass = new \ReflectionClass($entityType->getOriginalClass());
-    } catch (\ReflectionException $e) {
+    }
+    catch (\ReflectionException $e) {
       return FALSE;
     }
     return in_array(

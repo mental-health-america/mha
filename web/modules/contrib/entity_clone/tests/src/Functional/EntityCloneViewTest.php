@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\entity_clone\Functional;
 
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\views\Entity\View;
 
@@ -12,18 +13,21 @@ use Drupal\views\Entity\View;
  */
 class EntityCloneViewTest extends BrowserTestBase {
 
+  use StringTranslationTrait;
+
   /**
    * Modules to enable.
    *
    * @var array
    */
-  public static $modules = ['entity_clone', 'views', 'views_ui'];
+  protected static $modules = ['entity_clone', 'views', 'views_ui'];
 
   /**
-   * Theme to enable by default
+   * Theme to enable by default.
+   *
    * @var string
    */
-  protected $defaultTheme = 'classy';
+  protected $defaultTheme = 'claro';
 
   /**
    * Permissions to grant admin user.
@@ -60,7 +64,8 @@ class EntityCloneViewTest extends BrowserTestBase {
       'id' => 'test_view_cloned',
       'label' => 'Test view cloned',
     ];
-    $this->drupalPostForm('entity_clone/view/who_s_new', $edit, t('Clone'));
+    $this->drupalGet('entity_clone/view/who_s_new');
+    $this->submitForm($edit, $this->t('Clone'));
 
     $views = \Drupal::entityTypeManager()
       ->getStorage('view')

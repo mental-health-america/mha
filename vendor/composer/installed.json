@@ -187,21 +187,21 @@
         },
         {
             "name": "commerceguys/addressing",
-            "version": "v1.4.1",
-            "version_normalized": "1.4.1.0",
+            "version": "v1.4.2",
+            "version_normalized": "1.4.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/commerceguys/addressing.git",
-                "reference": "8b1bcd45971733e8f4224e539cb92838f18c4d06"
+                "reference": "406c7b5f0fbe4f6a64155c0fe03b1adb34d01308"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/commerceguys/addressing/zipball/8b1bcd45971733e8f4224e539cb92838f18c4d06",
-                "reference": "8b1bcd45971733e8f4224e539cb92838f18c4d06",
+                "url": "https://api.github.com/repos/commerceguys/addressing/zipball/406c7b5f0fbe4f6a64155c0fe03b1adb34d01308",
+                "reference": "406c7b5f0fbe4f6a64155c0fe03b1adb34d01308",
                 "shasum": ""
             },
             "require": {
-                "doctrine/collections": "^1.2",
+                "doctrine/collections": "^1.2 || ^2.0",
                 "php": ">=7.3"
             },
             "require-dev": {
@@ -214,7 +214,7 @@
             "suggest": {
                 "symfony/validator": "to validate addresses"
             },
-            "time": "2022-08-09T11:42:51+00:00",
+            "time": "2023-02-15T10:11:14+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -248,7 +248,7 @@
             ],
             "support": {
                 "issues": "https://github.com/commerceguys/addressing/issues",
-                "source": "https://github.com/commerceguys/addressing/tree/v1.4.1"
+                "source": "https://github.com/commerceguys/addressing/tree/v1.4.2"
             },
             "install-path": "../commerceguys/addressing"
         },
@@ -931,17 +931,17 @@
         },
         {
             "name": "consolidation/self-update",
-            "version": "2.0.5",
-            "version_normalized": "2.0.5.0",
+            "version": "2.1.0",
+            "version_normalized": "2.1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/consolidation/self-update.git",
-                "reference": "8a64bdd8daf5faa8e85f56534dd99caf928164b3"
+                "reference": "714b09fdf0513f83292874bb12de0566066040c2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/consolidation/self-update/zipball/8a64bdd8daf5faa8e85f56534dd99caf928164b3",
-                "reference": "8a64bdd8daf5faa8e85f56534dd99caf928164b3",
+                "url": "https://api.github.com/repos/consolidation/self-update/zipball/714b09fdf0513f83292874bb12de0566066040c2",
+                "reference": "714b09fdf0513f83292874bb12de0566066040c2",
                 "shasum": ""
             },
             "require": {
@@ -950,7 +950,7 @@
                 "symfony/console": "^2.8 || ^3 || ^4 || ^5 || ^6",
                 "symfony/filesystem": "^2.5 || ^3 || ^4 || ^5 || ^6"
             },
-            "time": "2022-02-09T22:44:24+00:00",
+            "time": "2023-02-21T19:33:55+00:00",
             "bin": [
                 "scripts/release"
             ],
@@ -983,7 +983,7 @@
             "description": "Provides a self:update command for Symfony Console applications.",
             "support": {
                 "issues": "https://github.com/consolidation/self-update/issues",
-                "source": "https://github.com/consolidation/self-update/tree/2.0.5"
+                "source": "https://github.com/consolidation/self-update/tree/2.1.0"
             },
             "install-path": "../consolidation/self-update"
         },
@@ -4763,21 +4763,21 @@
         },
         {
             "name": "drupal/entity_clone",
-            "version": "1.0.0-beta7",
-            "version_normalized": "1.0.0.0-beta7",
+            "version": "2.0.0-beta2",
+            "version_normalized": "2.0.0.0-beta2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/entity_clone.git",
-                "reference": "8.x-1.0-beta7"
+                "reference": "2.0.0-beta2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/entity_clone-8.x-1.0-beta7.zip",
-                "reference": "8.x-1.0-beta7",
-                "shasum": "964b72b21a7e219cf337743ed5c8850235197594"
+                "url": "https://ftp.drupal.org/files/projects/entity_clone-2.0.0-beta2.zip",
+                "reference": "2.0.0-beta2",
+                "shasum": "4045512a62cd203a0f2113aab4ce62d1da983a18"
             },
             "require": {
-                "drupal/core": "^8 || ^9"
+                "drupal/core": "^8 || ^9 || ^10"
             },
             "require-dev": {
                 "drupal/entity_browser": "2.x-dev",
@@ -4788,8 +4788,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.0-beta7",
-                    "datestamp": "1663573486",
+                    "version": "2.0.0-beta2",
+                    "datestamp": "1676962618",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
@@ -4809,6 +4809,10 @@
                 {
                     "name": "NickDickinsonWilde",
                     "homepage": "https://www.drupal.org/user/3094661"
+                },
+                {
+                    "name": "Rajeshreeputra",
+                    "homepage": "https://www.drupal.org/user/3418561"
                 },
                 {
                     "name": "Upchuk",
@@ -5889,27 +5893,27 @@
         },
         {
             "name": "drupal/fullcalendar_view",
-            "version": "5.1.10",
-            "version_normalized": "5.1.10.0",
+            "version": "5.1.11",
+            "version_normalized": "5.1.11.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/fullcalendar_view.git",
-                "reference": "5.1.10"
+                "reference": "5.1.11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/fullcalendar_view-5.1.10.zip",
-                "reference": "5.1.10",
-                "shasum": "13c8fcfe0d66d1504b0cd9fcc09e50dc0183c93d"
+                "url": "https://ftp.drupal.org/files/projects/fullcalendar_view-5.1.11.zip",
+                "reference": "5.1.11",
+                "shasum": "966bdadb7213a03886050ac36efbf0613bbf4157"
             },
             "require": {
-                "drupal/core": "^8 || ^9 || ^10"
+                "drupal/core": "^9.2.0 || ^10"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "5.1.10",
-                    "datestamp": "1675318146",
+                    "version": "5.1.11",
+                    "datestamp": "1676726166",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -7061,18 +7065,18 @@
         },
         {
             "name": "drupal/link_attributes",
-            "version": "1.12.0",
-            "version_normalized": "1.12.0.0",
+            "version": "1.13.0",
+            "version_normalized": "1.13.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/link_attributes.git",
-                "reference": "8.x-1.12"
+                "reference": "8.x-1.13"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/link_attributes-8.x-1.12.zip",
-                "reference": "8.x-1.12",
-                "shasum": "02f166dcfe3277656e2a91f86ff36e8a18e55524"
+                "url": "https://ftp.drupal.org/files/projects/link_attributes-8.x-1.13.zip",
+                "reference": "8.x-1.13",
+                "shasum": "695821dfbde30c4e74c28455985fbc5d92dca8d1"
             },
             "require": {
                 "drupal/core": "^9 || ^10"
@@ -7080,8 +7084,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.12",
-                    "datestamp": "1668801560",
+                    "version": "8.x-1.13",
+                    "datestamp": "1677018560",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -11420,32 +11424,32 @@
         },
         {
             "name": "google/recaptcha",
-            "version": "1.2.4",
-            "version_normalized": "1.2.4.0",
+            "version": "1.3.0",
+            "version_normalized": "1.3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/google/recaptcha.git",
-                "reference": "614f25a9038be4f3f2da7cbfd778dc5b357d2419"
+                "reference": "d59a801e98a4e9174814a6d71bbc268dff1202df"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/recaptcha/zipball/614f25a9038be4f3f2da7cbfd778dc5b357d2419",
-                "reference": "614f25a9038be4f3f2da7cbfd778dc5b357d2419",
+                "url": "https://api.github.com/repos/google/recaptcha/zipball/d59a801e98a4e9174814a6d71bbc268dff1202df",
+                "reference": "d59a801e98a4e9174814a6d71bbc268dff1202df",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.5"
+                "php": ">=8"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^2.2.20|^2.15",
-                "php-coveralls/php-coveralls": "^2.1",
-                "phpunit/phpunit": "^4.8.36|^5.7.27|^6.59|^7.5.11"
+                "friendsofphp/php-cs-fixer": "^3.14",
+                "php-coveralls/php-coveralls": "^2.5",
+                "phpunit/phpunit": "^10"
             },
-            "time": "2020-03-31T17:50:54+00:00",
+            "time": "2023-02-18T17:41:46+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.2.x-dev"
+                    "dev-master": "1.3.x-dev"
                 }
             },
             "installation-source": "dist",
@@ -13481,17 +13485,17 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.9.17",
-            "version_normalized": "1.9.17.0",
+            "version": "1.10.2",
+            "version_normalized": "1.10.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "204e459e7822f2c586463029f5ecec31bb45a1f2"
+                "reference": "a2ffec7db373d8da4973d1d62add872db5cd22dd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/204e459e7822f2c586463029f5ecec31bb45a1f2",
-                "reference": "204e459e7822f2c586463029f5ecec31bb45a1f2",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/a2ffec7db373d8da4973d1d62add872db5cd22dd",
+                "reference": "a2ffec7db373d8da4973d1d62add872db5cd22dd",
                 "shasum": ""
             },
             "require": {
@@ -13500,7 +13504,7 @@
             "conflict": {
                 "phpstan/phpstan-shim": "*"
             },
-            "time": "2023-02-08T12:25:00+00:00",
+            "time": "2023-02-23T14:36:46+00:00",
             "bin": [
                 "phpstan",
                 "phpstan.phar"
@@ -13523,7 +13527,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/1.9.17"
+                "source": "https://github.com/phpstan/phpstan/tree/1.10.2"
             },
             "funding": [
                 {
@@ -13543,22 +13547,22 @@
         },
         {
             "name": "phpstan/phpstan-deprecation-rules",
-            "version": "1.1.1",
-            "version_normalized": "1.1.1.0",
+            "version": "1.1.2",
+            "version_normalized": "1.1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-deprecation-rules.git",
-                "reference": "2c6792eda026d9c474c14aa018aed312686714db"
+                "reference": "bcc1e8cdf81c3da1a2ba9188ee94cd7e2a62e865"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-deprecation-rules/zipball/2c6792eda026d9c474c14aa018aed312686714db",
-                "reference": "2c6792eda026d9c474c14aa018aed312686714db",
+                "url": "https://api.github.com/repos/phpstan/phpstan-deprecation-rules/zipball/bcc1e8cdf81c3da1a2ba9188ee94cd7e2a62e865",
+                "reference": "bcc1e8cdf81c3da1a2ba9188ee94cd7e2a62e865",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2 || ^8.0",
-                "phpstan/phpstan": "^1.9.3"
+                "phpstan/phpstan": "^1.10"
             },
             "require-dev": {
                 "php-parallel-lint/php-parallel-lint": "^1.2",
@@ -13566,7 +13570,7 @@
                 "phpstan/phpstan-phpunit": "^1.0",
                 "phpunit/phpunit": "^9.5"
             },
-            "time": "2022-12-13T14:26:20+00:00",
+            "time": "2023-01-17T16:14:21+00:00",
             "type": "phpstan-extension",
             "extra": {
                 "phpstan": {
@@ -13588,7 +13592,7 @@
             "description": "PHPStan rules for detecting usage of deprecated classes, methods, properties, constants and traits.",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan-deprecation-rules/issues",
-                "source": "https://github.com/phpstan/phpstan-deprecation-rules/tree/1.1.1"
+                "source": "https://github.com/phpstan/phpstan-deprecation-rules/tree/1.1.2"
             },
             "install-path": "../phpstan/phpstan-deprecation-rules"
         },

@@ -2,9 +2,10 @@
 
 namespace Drupal\Tests\entity_clone\Functional;
 
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\Entity\Node;
-use Drupal\Tests\node\Functional\NodeTestBase;
 use Drupal\taxonomy\Entity\Term;
+use Drupal\Tests\node\Functional\NodeTestBase;
 
 /**
  * Create a content and test a clone.
@@ -13,18 +14,20 @@ use Drupal\taxonomy\Entity\Term;
  */
 class EntityCloneContentRecursiveTest extends NodeTestBase {
 
+  use StringTranslationTrait;
   /**
    * Modules to enable.
    *
    * @var array
    */
-  public static $modules = ['entity_clone', 'block', 'node', 'datetime'];
+  protected static $modules = ['entity_clone', 'block', 'node', 'datetime'];
 
   /**
-   * Theme to enable by default
+   * Theme to enable by default.
+   *
    * @var string
    */
-  protected $defaultTheme = 'classy';
+  protected $defaultTheme = 'claro';
 
   /**
    * Profile to install.
@@ -91,10 +94,11 @@ class EntityCloneContentRecursiveTest extends NodeTestBase {
       ],
     ];
     \Drupal::service('config.factory')->getEditable('entity_clone.settings')->set('form_settings', $settings)->save();
+    $this->drupalGet('entity_clone/node/' . $node->id());
 
-    $this->drupalPostForm('entity_clone/node/' . $node->id(), [
+    $this->submitForm([
       'recursive[node.article.field_tags][references][' . $term->id() . '][clone]' => 1,
-    ], t('Clone'));
+    ], $this->t('Clone'));
 
     $nodes = \Drupal::entityTypeManager()
       ->getStorage('node')

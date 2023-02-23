@@ -163,4 +163,21 @@ class EntityCloneSettingsManager {
     return $this->config->get('take_ownership') ?? FALSE;
   }
 
+  /**
+   * Set the take ownership setting.
+   *
+   * @param int $setting
+   *   The settings from the form.
+   */
+  public function setExcludeClonedSetting(int $setting) {
+    $this->editableConfig->set('no_suffix', $setting)->save();
+  }
+
+  /**
+   * Get the take ownership settings.
+   */
+  public function getExcludeClonedSetting() {
+    return $this->config->get('no_suffix') ?? FALSE;
+  }
+
 }
