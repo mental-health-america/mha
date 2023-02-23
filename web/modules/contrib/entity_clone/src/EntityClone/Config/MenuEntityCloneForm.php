@@ -5,7 +5,7 @@ namespace Drupal\entity_clone\EntityClone\Config;
 use Drupal\Core\Entity\EntityInterface;
 
 /**
- * Class MenuEntityCloneForm.
+ * Class Menu Entity Clone Form.
  */
 class MenuEntityCloneForm extends ConfigEntityCloneFormBase {
 
@@ -21,6 +21,6 @@ class MenuEntityCloneForm extends ConfigEntityCloneFormBase {
       'replace' => '-',
     ];
     return $form;
- }
+  }
 
 }

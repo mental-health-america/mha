@@ -1706,7 +1706,6 @@ footer a:active {
 /* search api pages search box */
 
 #block-bwm-njord-system-main {
-    float: left;
     margin-top: 10px;
     width: -webkit-fill-available;
     width: -moz-available;
