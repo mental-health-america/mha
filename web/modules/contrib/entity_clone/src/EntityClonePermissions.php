@@ -5,8 +5,8 @@ namespace Drupal\entity_clone;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\TranslationManager;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\entity_clone\Services\EntityCloneServiceProvider;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides dynamic permissions of the entity_clone module.

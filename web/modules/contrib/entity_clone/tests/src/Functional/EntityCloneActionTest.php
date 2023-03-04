@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\entity_clone\Functional;
 
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\system\Entity\Action;
 use Drupal\Tests\BrowserTestBase;
 
@@ -12,18 +13,21 @@ use Drupal\Tests\BrowserTestBase;
  */
 class EntityCloneActionTest extends BrowserTestBase {
 
+  use StringTranslationTrait;
+
   /**
    * Modules to enable.
    *
    * @var array
    */
-  public static $modules = ['entity_clone', 'action'];
+  protected static $modules = ['entity_clone', 'action'];
 
   /**
-   * Theme to enable by default
+   * Theme to enable by default.
+   *
    * @var string
    */
-  protected $defaultTheme = 'classy';
+  protected $defaultTheme = 'claro';
 
   /**
    * Permissions to grant admin user.
@@ -70,7 +74,8 @@ class EntityCloneActionTest extends BrowserTestBase {
       'subject' => 'test subject',
       'message' => 'test message',
     ];
-    $this->drupalPostForm("admin/config/system/actions/add/$action_key", $edit, t('Save'));
+    $this->drupalGet("admin/config/system/actions/add/$action_key");
+    $this->submitForm($edit, $this->t('Save'));
 
     $actions = \Drupal::entityTypeManager()
       ->getStorage('action')
@@ -83,7 +88,8 @@ class EntityCloneActionTest extends BrowserTestBase {
       'label' => 'Test send email action cloned',
       'id' => 'test_send_email_cloned',
     ];
-    $this->drupalPostForm('entity_clone/action/' . $action->id(), $edit, t('Clone'));
+    $this->drupalGet('entity_clone/action/' . $action->id());
+    $this->submitForm($edit, $this->t('Clone'));
 
     $actions = \Drupal::entityTypeManager()
       ->getStorage('action')

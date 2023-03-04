@@ -52,19 +52,23 @@ function recurring_events_help($route_name, RouteMatchInterface $route_match) {
 function recurring_events_entity_operation(EntityInterface $entity) {
   $operations = [];
   if ($entity->getEntityTypeId() == 'eventseries' || $entity->getEntityTypeId() == 'eventinstance') {
-    $operations['clone'] = [
-      'title' => t('Clone'),
-      'weight' => 50,
-      'url' => $entity->toUrl('clone-form'),
-    ];
+    if ($entity->access('clone')) {
+      $operations['clone'] = [
+        'title' => t('Clone'),
+        'weight' => 50,
+        'url' => $entity->toUrl('clone-form'),
+      ];
+    }
   }
 
   if ($entity->getEntityTypeId() == 'eventseries') {
-    $operations['add_instance'] = [
-      'title' => t('Add Instance'),
-      'weight' => 50,
-      'url' => $entity->toUrl('add-instance-form'),
-    ];
+    if ($entity->access('update')) {
+      $operations['add_instance'] = [
+        'title' => t('Add Instance'),
+        'weight' => 50,
+        'url' => $entity->toUrl('add-instance-form'),
+      ];
+    }
   }
 
   return $operations;

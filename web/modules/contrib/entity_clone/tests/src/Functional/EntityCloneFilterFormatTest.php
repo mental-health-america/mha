@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\entity_clone\Functional;
 
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\filter\Entity\FilterFormat;
 use Drupal\Tests\BrowserTestBase;
 
@@ -12,18 +13,21 @@ use Drupal\Tests\BrowserTestBase;
  */
 class EntityCloneFilterFormatTest extends BrowserTestBase {
 
+  use StringTranslationTrait;
+
   /**
    * Modules to enable.
    *
    * @var array
    */
-  public static $modules = ['entity_clone', 'filter'];
+  protected static $modules = ['entity_clone', 'filter'];
 
   /**
-   * Theme to enable by default
+   * Theme to enable by default.
+   *
    * @var string
    */
-  protected $defaultTheme = 'classy';
+  protected $defaultTheme = 'claro';
 
   /**
    * Permissions to grant admin user.
@@ -62,7 +66,8 @@ class EntityCloneFilterFormatTest extends BrowserTestBase {
       'name' => 'Test filter format for clone',
       'format' => 'test_filter_format_for_clone',
     ];
-    $this->drupalPostForm("admin/config/content/formats/add", $edit, t('Save configuration'));
+    $this->drupalGet("admin/config/content/formats/add");
+    $this->submitForm($edit, $this->t('Save configuration'));
 
     $filter_formats = \Drupal::entityTypeManager()
       ->getStorage('filter_format')
@@ -75,7 +80,8 @@ class EntityCloneFilterFormatTest extends BrowserTestBase {
       'id' => 'test_filter_format_cloned',
       'label' => 'Test filter format cloned',
     ];
-    $this->drupalPostForm('entity_clone/filter_format/' . $filter_format->id(), $edit, t('Clone'));
+    $this->drupalGet('entity_clone/filter_format/' . $filter_format->id());
+    $this->submitForm($edit, $this->t('Clone'));
 
     $filter_formats = \Drupal::entityTypeManager()
       ->getStorage('filter_format')

@@ -1,4 +1,6 @@
 show_capacity: true
+insert_redirect_choice: current
+insert_redirect_other: ''
 use_admin_theme: false
 limit: 10
 date_format: 'F jS, Y h:iA'

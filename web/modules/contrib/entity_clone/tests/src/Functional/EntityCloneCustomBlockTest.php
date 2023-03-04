@@ -3,6 +3,7 @@
 namespace Drupal\Tests\entity_clone\Functional;
 
 use Drupal\block_content\Entity\BlockContent;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Tests\block_content\Functional\BlockContentTestBase;
 
 /**
@@ -12,6 +13,8 @@ use Drupal\Tests\block_content\Functional\BlockContentTestBase;
  */
 class EntityCloneCustomBlockTest extends BlockContentTestBase {
 
+  use StringTranslationTrait;
+
   /**
    * Modules to enable.
    *
@@ -20,13 +23,14 @@ class EntityCloneCustomBlockTest extends BlockContentTestBase {
    *
    * @var array
    */
-  public static $modules = ['entity_clone', 'block', 'block_content'];
+  protected static $modules = ['entity_clone', 'block', 'block_content'];
 
   /**
-   * Theme to enable by default
+   * Theme to enable by default.
+   *
    * @var string
    */
-  protected $defaultTheme = 'classy';
+  protected $defaultTheme = 'claro';
 
   /**
    * Permissions to grant admin user.
@@ -51,7 +55,8 @@ class EntityCloneCustomBlockTest extends BlockContentTestBase {
     $edit = [];
     $edit['info[0][value]'] = 'Test block ready to clone';
     $edit['body[0][value]'] = $this->randomMachineName(16);
-    $this->drupalPostForm('block/add/basic', $edit, t('Save'));
+    $this->drupalGet('block/add/basic');
+    $this->submitForm($edit, $this->t('Save'));
 
     $blocks = \Drupal::entityTypeManager()
       ->getStorage('block_content')
@@ -60,8 +65,9 @@ class EntityCloneCustomBlockTest extends BlockContentTestBase {
       ]);
     $block = reset($blocks);
     $this->assertInstanceOf(BlockContent::class, $block, 'Test Block for clone found in database.');
+    $this->drupalGet('entity_clone/block_content/' . $block->id());
 
-    $this->drupalPostForm('entity_clone/block_content/' . $block->id(), [], t('Clone'));
+    $this->submitForm([], $this->t('Clone'));
 
     $blocks = \Drupal::entityTypeManager()
       ->getStorage('block_content')

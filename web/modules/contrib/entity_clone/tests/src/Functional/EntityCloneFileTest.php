@@ -2,7 +2,9 @@
 
 namespace Drupal\Tests\entity_clone\Functional;
 
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\file\Entity\File;
+use Drupal\file\FileInterface;
 use Drupal\Tests\BrowserTestBase;
 
 /**
@@ -12,18 +14,21 @@ use Drupal\Tests\BrowserTestBase;
  */
 class EntityCloneFileTest extends BrowserTestBase {
 
+  use StringTranslationTrait;
+
   /**
    * Modules to enable.
    *
    * @var array
    */
-  public static $modules = ['entity_clone', 'file'];
+  protected static $modules = ['entity_clone', 'file'];
 
   /**
-   * Theme to enable by default
+   * Theme to enable by default.
+   *
    * @var string
    */
-  protected $defaultTheme = 'classy';
+  protected $defaultTheme = 'claro';
 
   /**
    * Permissions to grant admin user.
@@ -61,12 +66,13 @@ class EntityCloneFileTest extends BrowserTestBase {
       'filename' => 'druplicon.txt',
       'uri' => 'public://druplicon.txt',
       'filemime' => 'text/plain',
-      'status' => FILE_STATUS_PERMANENT,
+      'status' => FileInterface::STATUS_PERMANENT,
     ]);
     file_put_contents($file->getFileUri(), 'hello world');
     $file->save();
+    $this->drupalGet('entity_clone/file/' . $file->id());
 
-    $this->drupalPostForm('entity_clone/file/' . $file->id(), [], t('Clone'));
+    $this->submitForm([], $this->t('Clone'));
 
     $files = \Drupal::entityTypeManager()
       ->getStorage('file')
@@ -76,7 +82,7 @@ class EntityCloneFileTest extends BrowserTestBase {
     $file = reset($files);
     $this->assertInstanceOf(File::class, $file, 'Test file cloned found in database.');
 
-    $this->assertEqual($file->getFileUri(), 'public://druplicon_0.txt', 'The stored file is also cloned.');
+    $this->assertEquals($file->getFileUri(), 'public://druplicon_0.txt', 'The stored file is also cloned.');
   }
 
 }

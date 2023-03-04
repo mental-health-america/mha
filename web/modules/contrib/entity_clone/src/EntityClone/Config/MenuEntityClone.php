@@ -5,7 +5,7 @@ namespace Drupal\entity_clone\EntityClone\Config;
 use Drupal\Core\Entity\EntityInterface;
 
 /**
- * Class MenuEntityClone.
+ * Class Menu Entity Clone.
  */
 class MenuEntityClone extends ConfigEntityCloneBase {
 

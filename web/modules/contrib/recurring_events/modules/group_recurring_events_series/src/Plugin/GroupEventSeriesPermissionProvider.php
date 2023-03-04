@@ -20,21 +20,4 @@ class GroupEventSeriesPermissionProvider extends GroupContentPermissionProvider 
     return parent::getEntityViewUnpublishedPermission($scope);
   }
 
-  /**
-   * {@inheritdoc}
-   *
-   * Note:
-   * The recurring_events module uses "edit" as an operation while the group
-   * module expect "update" to be used. Because of this, we need to translate
-   * the value before checking the permission.
-   *
-   * @todo If recurring_events changes its operation string, this function can be removed.
-   */
-  public function getPermission($operation, $target, $scope = 'any') {
-    if ($operation == 'edit') {
-      $operation = 'update';
-    }
-    return parent::getPermission($operation, $target, $scope);
-  }
-
 }
