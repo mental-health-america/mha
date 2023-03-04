@@ -3,6 +3,7 @@
 namespace Drupal\Tests\entity_clone\Functional;
 
 use Drupal\Core\Datetime\Entity\DateFormat;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Tests\BrowserTestBase;
 
 /**
@@ -12,18 +13,21 @@ use Drupal\Tests\BrowserTestBase;
  */
 class EntityCloneDateFormatTest extends BrowserTestBase {
 
+  use StringTranslationTrait;
+
   /**
    * Modules to enable.
    *
    * @var array
    */
-  public static $modules = ['entity_clone'];
+  protected static $modules = ['entity_clone'];
 
   /**
-   * Theme to enable by default
+   * Theme to enable by default.
+   *
    * @var string
    */
-  protected $defaultTheme = 'classy';
+  protected $defaultTheme = 'claro';
 
   /**
    * Permissions to grant admin user.
@@ -61,7 +65,8 @@ class EntityCloneDateFormatTest extends BrowserTestBase {
       'id' => 'test_date_format_for_clone',
       'date_format_pattern' => 'Y m d',
     ];
-    $this->drupalPostForm("admin/config/regional/date-time/formats/add", $edit, t('Add format'));
+    $this->drupalGet("admin/config/regional/date-time/formats/add");
+    $this->submitForm($edit, $this->t('Add format'));
 
     $date_formats = \Drupal::entityTypeManager()
       ->getStorage('date_format')
@@ -74,7 +79,8 @@ class EntityCloneDateFormatTest extends BrowserTestBase {
       'id' => 'test_date_format_cloned',
       'label' => 'Test date format cloned',
     ];
-    $this->drupalPostForm('entity_clone/date_format/' . $date_format->id(), $edit, t('Clone'));
+    $this->drupalGet('entity_clone/date_format/' . $date_format->id());
+    $this->submitForm($edit, $this->t('Clone'));
 
     $date_formats = \Drupal::entityTypeManager()
       ->getStorage('date_format')

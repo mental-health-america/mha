@@ -8,8 +8,8 @@ use Drupal\Component\Uuid\UuidInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\layout_builder\SectionComponent;
 use Drupal\layout_builder\Section;
+use Drupal\layout_builder\SectionComponent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -47,8 +47,8 @@ class LayoutBuilderEntityClone extends ConfigEntityCloneBase {
    * {@inheritdoc}
    */
   public function cloneEntity(EntityInterface $entity, EntityInterface $cloned_entity, array $properties = []) {
-    /** @var $cloned_entity \Drupal\layout_builder\Entity\LayoutEntityDisplayInterface */
-    /** @var $entity \Drupal\layout_builder\Entity\LayoutEntityDisplayInterface */
+    /** @var \Drupal\layout_builder\Entity\LayoutEntityDisplayInterface $cloned_entity */
+    /** @var \Drupal\layout_builder\Entity\LayoutEntityDisplayInterface $entity */
     // We need to create an entity, save it, then adjust layout builder settings
     // and save it again, because for new entities layout_builder module stacks
     // all fields into display.

@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\entity_clone\Functional;
 
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\Tests\BrowserTestBase;
 
@@ -12,18 +13,21 @@ use Drupal\Tests\BrowserTestBase;
  */
 class EntityCloneImageStyleTest extends BrowserTestBase {
 
+  use StringTranslationTrait;
+
   /**
    * Modules to enable.
    *
    * @var array
    */
-  public static $modules = ['entity_clone', 'image'];
+  protected static $modules = ['entity_clone', 'image'];
 
   /**
-   * Theme to enable by default
+   * Theme to enable by default.
+   *
    * @var string
    */
-  protected $defaultTheme = 'classy';
+  protected $defaultTheme = 'claro';
 
   /**
    * Permissions to grant admin user.
@@ -60,7 +64,8 @@ class EntityCloneImageStyleTest extends BrowserTestBase {
       'label' => 'Test image style for clone',
       'name' => 'test_image_style_for_clone',
     ];
-    $this->drupalPostForm("admin/config/media/image-styles/add", $edit, t('Create new style'));
+    $this->drupalGet("admin/config/media/image-styles/add");
+    $this->submitForm($edit, $this->t('Create new style'));
 
     $image_styles = \Drupal::entityTypeManager()
       ->getStorage('image_style')
@@ -73,7 +78,8 @@ class EntityCloneImageStyleTest extends BrowserTestBase {
       'id' => 'test_iamge_style_cloned',
       'label' => 'Test image_style cloned',
     ];
-    $this->drupalPostForm('entity_clone/image_style/' . $image_style->id(), $edit, t('Clone'));
+    $this->drupalGet('entity_clone/image_style/' . $image_style->id());
+    $this->submitForm($edit, $this->t('Clone'));
 
     $image_styles = \Drupal::entityTypeManager()
       ->getStorage('image_style')
@@ -87,8 +93,10 @@ class EntityCloneImageStyleTest extends BrowserTestBase {
       'id' => 'test_image_style_clone_with_a_really_long_name_that_is_longer_than_the_max_length',
       'label' => 'Test image style clone with a really long name that is longer than the max length',
     ];
-    $this->drupalPostForm('entity_clone/image_style/' . $image_style->id(), $edit, t('Clone'));
-    $this->assertText('New Id cannot be longer than 64 characters');
+    $this->drupalGet('entity_clone/image_style/' . $image_style->id());
+    $this->submitForm($edit, $this->t('Clone'));
+
+    $this->assertSession()->pageTextContains('New Id cannot be longer than 64 characters');
   }
 
 }

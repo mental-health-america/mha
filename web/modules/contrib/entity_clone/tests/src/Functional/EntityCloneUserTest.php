@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\entity_clone\Functional;
 
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\user\Entity\User;
 
@@ -12,18 +13,21 @@ use Drupal\user\Entity\User;
  */
 class EntityCloneUserTest extends BrowserTestBase {
 
+  use StringTranslationTrait;
+
   /**
    * Modules to enable.
    *
    * @var array
    */
-  public static $modules = ['entity_clone', 'user'];
+  protected static $modules = ['entity_clone', 'user'];
 
   /**
-   * Theme to enable by default
+   * Theme to enable by default.
+   *
    * @var string
    */
-  protected $defaultTheme = 'classy';
+  protected $defaultTheme = 'claro';
 
   /**
    * Permissions to grant admin user.
@@ -56,7 +60,8 @@ class EntityCloneUserTest extends BrowserTestBase {
    * Test user entity clone.
    */
   public function testUserEntityClone() {
-    $this->drupalPostForm('entity_clone/user/' . $this->adminUser->id(), [], t('Clone'));
+    $this->drupalGet('entity_clone/user/' . $this->adminUser->id());
+    $this->submitForm([], $this->t('Clone'));
 
     $users = \Drupal::entityTypeManager()
       ->getStorage('user')

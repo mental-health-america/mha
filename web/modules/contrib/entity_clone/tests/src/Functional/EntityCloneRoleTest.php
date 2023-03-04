@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\entity_clone\Functional;
 
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\user\Entity\Role;
 
@@ -12,18 +13,21 @@ use Drupal\user\Entity\Role;
  */
 class EntityCloneRoleTest extends BrowserTestBase {
 
+  use StringTranslationTrait;
+
   /**
    * Modules to enable.
    *
    * @var array
    */
-  public static $modules = ['entity_clone', 'user'];
+  protected static $modules = ['entity_clone', 'user'];
 
   /**
-   * Theme to enable by default
+   * Theme to enable by default.
+   *
    * @var string
    */
-  protected $defaultTheme = 'classy';
+  protected $defaultTheme = 'claro';
 
   /**
    * Permissions to grant admin user.
@@ -60,7 +64,8 @@ class EntityCloneRoleTest extends BrowserTestBase {
       'label' => 'Test role for clone',
       'id' => 'test_role_for_clone',
     ];
-    $this->drupalPostForm("/admin/people/roles/add", $edit, t('Save'));
+    $this->drupalGet("/admin/people/roles/add");
+    $this->submitForm($edit, $this->t('Save'));
 
     $roles = \Drupal::entityTypeManager()
       ->getStorage('user_role')
@@ -73,7 +78,8 @@ class EntityCloneRoleTest extends BrowserTestBase {
       'id' => 'test_role_cloned',
       'label' => 'Test role cloned',
     ];
-    $this->drupalPostForm('entity_clone/user_role/' . $role->id(), $edit, t('Clone'));
+    $this->drupalGet('entity_clone/user_role/' . $role->id());
+    $this->submitForm($edit, $this->t('Clone'));
 
     $roles = \Drupal::entityTypeManager()
       ->getStorage('user_role')

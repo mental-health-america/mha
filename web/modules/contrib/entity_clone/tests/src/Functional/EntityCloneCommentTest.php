@@ -3,8 +3,9 @@
 namespace Drupal\Tests\entity_clone\Functional;
 
 use Drupal\comment\Entity\Comment;
-use Drupal\Tests\comment\Functional\CommentTestBase;
 use Drupal\comment\Tests\CommentTestTrait;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Tests\comment\Functional\CommentTestBase;
 
 /**
  * Create a comment and test a clone.
@@ -14,13 +15,14 @@ use Drupal\comment\Tests\CommentTestTrait;
 class EntityCloneCommentTest extends CommentTestBase {
 
   use CommentTestTrait;
+  use StringTranslationTrait;
 
   /**
    * Modules to enable.
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'entity_clone',
     'block',
     'comment',
@@ -31,10 +33,11 @@ class EntityCloneCommentTest extends CommentTestBase {
   ];
 
   /**
-   * Theme to enable by default
+   * Theme to enable by default.
+   *
    * @var string
    */
-  protected $defaultTheme = 'classy';
+  protected $defaultTheme = 'claro';
 
   /**
    * Permissions to grant admin user.
@@ -72,8 +75,9 @@ class EntityCloneCommentTest extends CommentTestBase {
     $subject = 'Test comment for clone';
     $body = $this->randomMachineName();
     $comment = $this->postComment($this->node, $body, $subject, TRUE);
+    $this->drupalGet('entity_clone/comment/' . $comment->id());
 
-    $this->drupalPostForm('entity_clone/comment/' . $comment->id(), [], t('Clone'));
+    $this->submitForm([], $this->t('Clone'));
 
     $comments = \Drupal::entityTypeManager()
       ->getStorage('comment')

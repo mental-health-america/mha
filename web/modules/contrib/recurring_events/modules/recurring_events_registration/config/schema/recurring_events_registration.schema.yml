@@ -5,6 +5,12 @@ recurring_events_registration.registrant.config:
     show_capacity:
       type: boolean
       label: 'Whether to display the remaining capacity for an event during registration'
+    insert_redirect_choice:
+      type: radios
+      label: 'Choose where registrant form redirects'
+    insert_redirect_other:
+      type: url
+      label: 'Type custom URL here'
     use_admin_theme:
       type: boolean
       label: 'Use the administration theme when managing registrations'

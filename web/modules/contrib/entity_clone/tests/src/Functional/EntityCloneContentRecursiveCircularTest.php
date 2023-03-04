@@ -2,9 +2,10 @@
 
 namespace Drupal\Tests\entity_clone\Functional;
 
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\Entity\Node;
-use Drupal\Tests\node\Functional\NodeTestBase;
 use Drupal\Tests\field\Traits\EntityReferenceTestTrait;
+use Drupal\Tests\node\Functional\NodeTestBase;
 
 /**
  * Create a content and test a clone.
@@ -14,19 +15,21 @@ use Drupal\Tests\field\Traits\EntityReferenceTestTrait;
 class EntityCloneContentRecursiveCircularTest extends NodeTestBase {
 
   use EntityReferenceTestTrait;
+  use StringTranslationTrait;
 
   /**
    * Modules to enable.
    *
    * @var array
    */
-  public static $modules = ['entity_clone', 'block', 'node', 'datetime'];
+  protected static $modules = ['entity_clone', 'block', 'node', 'datetime'];
 
   /**
-   * Theme to enable by default
+   * Theme to enable by default.
+   *
    * @var string
    */
-  protected $defaultTheme = 'classy';
+  protected $defaultTheme = 'claro';
 
   /**
    * Profile to install.
@@ -103,8 +106,9 @@ class EntityCloneContentRecursiveCircularTest extends NodeTestBase {
       ],
     ];
     \Drupal::service('config.factory')->getEditable('entity_clone.settings')->set('form_settings', $settings)->save();
+    $this->drupalGet('entity_clone/node/' . $node1->id());
 
-    $this->drupalPostForm('entity_clone/node/' . $node1->id(), [], t('Clone'));
+    $this->submitForm([], $this->t('Clone'));
 
     $nodes = \Drupal::entityTypeManager()
       ->getStorage('node')
@@ -147,6 +151,9 @@ class EntityCloneContentRecursiveCircularTest extends NodeTestBase {
     $this->assertInstanceOf(Node::class, $node, 'Test original node 2 found in database.');
   }
 
+  /**
+   * Test clone++ a content entity.
+   */
   public function testContentWithTwoSameEntityReference() {
     $child_node1_title = $this->randomMachineName(8);
     $child_node1 = Node::create([
@@ -172,8 +179,9 @@ class EntityCloneContentRecursiveCircularTest extends NodeTestBase {
       ],
     ];
     \Drupal::service('config.factory')->getEditable('entity_clone.settings')->set('form_settings', $settings)->save();
+    $this->drupalGet('entity_clone/node/' . $parent_node->id());
 
-    $this->drupalPostForm('entity_clone/node/' . $parent_node->id(), [], t('Clone'));
+    $this->submitForm([], $this->t('Clone'));
 
     $nodes = \Drupal::entityTypeManager()
       ->getStorage('node')

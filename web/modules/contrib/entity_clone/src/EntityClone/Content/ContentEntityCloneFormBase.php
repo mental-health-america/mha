@@ -18,7 +18,7 @@ use Drupal\entity_clone\EntityCloneSettingsManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class ContentEntityCloneFormBase.
+ * Class Content Entity Clone Form Base.
  */
 class ContentEntityCloneFormBase implements EntityHandlerInterface, EntityCloneFormInterface {
 
@@ -92,7 +92,11 @@ class ContentEntityCloneFormBase implements EntityHandlerInterface, EntityCloneF
     if ($entity instanceof FieldableEntityInterface) {
       $discovered_entities[$entity->getEntityTypeId()][$entity->id()] = $entity;
       foreach ($entity->getFieldDefinitions() as $field_id => $field_definition) {
-        if ($field_definition instanceof FieldConfigInterface && in_array($field_definition->getType(), ['entity_reference', 'entity_reference_revisions'], TRUE)) {
+        if ($field_definition instanceof FieldConfigInterface &&
+        in_array($field_definition->getType(), [
+          'entity_reference',
+          'entity_reference_revisions',
+        ], TRUE)) {
           $field = $entity->get($field_id);
           /** @var \Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItem $value */
           if ($field->count() > 0
@@ -178,9 +182,9 @@ class ContentEntityCloneFormBase implements EntityHandlerInterface, EntityCloneF
           '#access' => $referenced_entity->access('view label'),
         ];
 
-      if ($this->entityCloneSettingsManager->getDisableValue($referenced_entity->getEntityTypeId())) {
-        $form_element[$field_definition->id()]['references'][$referenced_entity->id()]['clone']['#attributes'] = [
-          'disabled' => TRUE,
+        if ($this->entityCloneSettingsManager->getDisableValue($referenced_entity->getEntityTypeId())) {
+          $form_element[$field_definition->id()]['references'][$referenced_entity->id()]['clone']['#attributes'] = [
+            'disabled' => TRUE,
           ];
           $form_element[$field_definition->id()]['references'][$referenced_entity->id()]['clone']['#value'] = $form_element[$field_definition->id()]['references'][$referenced_entity->id()]['clone']['#default_value'];
         }

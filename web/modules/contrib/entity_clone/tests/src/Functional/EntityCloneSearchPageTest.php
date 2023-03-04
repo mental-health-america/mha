@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\entity_clone\Functional;
 
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\search\Entity\SearchPage;
 use Drupal\Tests\BrowserTestBase;
 
@@ -12,18 +13,21 @@ use Drupal\Tests\BrowserTestBase;
  */
 class EntityCloneSearchPageTest extends BrowserTestBase {
 
+  use StringTranslationTrait;
+
   /**
    * Modules to enable.
    *
    * @var array
    */
-  public static $modules = ['entity_clone', 'search', 'node'];
+  protected static $modules = ['entity_clone', 'search', 'node'];
 
   /**
-   * Theme to enable by default
+   * Theme to enable by default.
+   *
    * @var string
    */
-  protected $defaultTheme = 'classy';
+  protected $defaultTheme = 'claro';
 
   /**
    * Permissions to grant admin user.
@@ -61,7 +65,8 @@ class EntityCloneSearchPageTest extends BrowserTestBase {
       'id' => 'test_search_page_for_clone',
       'path' => 'test_search_page_for_clone_url',
     ];
-    $this->drupalPostForm("/admin/config/search/pages/add/node_search", $edit, t('Save'));
+    $this->drupalGet("/admin/config/search/pages/add/node_search");
+    $this->submitForm($edit, $this->t('Save'));
 
     $search_pages = \Drupal::entityTypeManager()
       ->getStorage('search_page')
@@ -74,7 +79,8 @@ class EntityCloneSearchPageTest extends BrowserTestBase {
       'id' => 'test_search_page_cloned',
       'label' => 'Test search page cloned',
     ];
-    $this->drupalPostForm('entity_clone/search_page/' . $search_page->id(), $edit, t('Clone'));
+    $this->drupalGet('entity_clone/search_page/' . $search_page->id());
+    $this->submitForm($edit, $this->t('Clone'));
 
     $search_pages = \Drupal::entityTypeManager()
       ->getStorage('search_page')

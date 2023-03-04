@@ -21,6 +21,10 @@ class EventInstanceAccessControlHandler extends EntityAccessControlHandler {
    * $operation as defined in the routing.yml file.
    */
   protected function checkAccess(EntityInterface $entity, $operation, AccountInterface $account) {
+    if ($account->hasPermission('administer eventinstance entity')) {
+      return AccessResult::allowed()->cachePerPermissions();
+    }
+
     switch ($operation) {
       case 'view':
         $status = $entity->isPublished();
@@ -29,7 +33,7 @@ class EventInstanceAccessControlHandler extends EntityAccessControlHandler {
         }
         return AccessResult::allowedIfHasPermission($account, 'view eventinstance entity');
 
-      case 'edit':
+      case 'update':
         if ($account->id() !== $entity->getOwnerId()) {
           return AccessResult::allowedIfHasPermission($account, 'edit eventinstance entity');
         }
@@ -49,8 +53,10 @@ class EventInstanceAccessControlHandler extends EntityAccessControlHandler {
 
       case 'clone':
         return AccessResult::allowedIfHasPermission($account, 'clone eventinstance entity');
+
+      default:
+        return AccessResult::neutral();
     }
-    return AccessResult::allowed();
   }
 
 }

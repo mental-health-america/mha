@@ -44,7 +44,7 @@ entity.eventseries.edit_form:
     _entity_form: eventseries.edit
     _title_callback: '\Drupal\recurring_events\Controller\EventSeriesController::editPageTitle'
   requirements:
-    _entity_access: 'eventseries.edit'
+    _entity_access: 'eventseries.update'
     eventseries: \d+
   options:
     _recurring_events_operation_route: TRUE
@@ -89,7 +89,8 @@ entity.eventseries.add_instance_form:
     _controller: '\Drupal\recurring_events\Controller\EventSeriesController::addInstance'
     _title_callback: '\Drupal\recurring_events\Controller\EventSeriesController::addInstanceTitle'
   requirements:
-    _entity_create_access: 'eventinstance'
+    _entity_access: 'eventseries.update'
+    eventseries: \d+
   options:
     _recurring_events_operation_route: TRUE
     parameters:
@@ -128,7 +129,7 @@ entity.eventinstance.edit_form:
     _entity_form: eventinstance.edit
     _title: 'Edit Event Instance'
   requirements:
-    _entity_access: 'eventinstance.edit'
+    _entity_access: 'eventinstance.update'
     eventinstance: \d+
   options:
     _recurring_events_operation_route: TRUE
@@ -213,6 +214,15 @@ eventinstance.settings:
     _title: 'Event Instance Settings'
   requirements:
     _permission: 'administer eventinstance entity'
+
+# Orphaned content cleanup.
+recurring_events.orphaned_instances:
+  path: '/admin/structure/events/orphaned-instances'
+  defaults:
+    _form: '\Drupal\recurring_events\Form\OrphanedEventInstanceForm'
+    _title: 'Orphaned Event Instances'
+  requirements:
+    _permission: 'administer orphaned events entities'
 
 # Event Series admin table list route.
 entity.eventseries.admin_collection:

@@ -15,7 +15,7 @@ class FileEntityClone extends ContentEntityCloneBase {
    */
   public function cloneEntity(EntityInterface $entity, EntityInterface $cloned_entity, array $properties = [], array &$already_cloned = []) {
     /** @var \Drupal\file\FileInterface $cloned_entity */
-    $cloned_file = file_copy($cloned_entity, $cloned_entity->getFileUri(), FileSystemInterface::EXISTS_RENAME);
+    $cloned_file = \Drupal::service('file.repository')->copy($cloned_entity, $cloned_entity->getFileUri(), FileSystemInterface::EXISTS_RENAME);
     if (isset($properties['take_ownership']) && $properties['take_ownership'] === 1) {
       $cloned_file->setOwnerId(\Drupal::currentUser()->id());
     }

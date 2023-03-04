@@ -10,7 +10,7 @@ use Drupal\entity_clone\EntityClone\EntityCloneInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class ConfigEntityCloneBase.
+ * Class Config Entity CloneBase.
  */
 class ConfigEntityCloneBase implements EntityHandlerInterface, EntityCloneInterface {
 

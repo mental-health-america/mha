@@ -7,15 +7,16 @@
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Config\Entity\ConfigEntityTypeInterface;
 use Drupal\Core\Entity\ContentEntityTypeInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\Core\Config\Entity\ConfigEntityTypeInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\entity_clone\EntityClone\Config\ConfigEntityCloneBase;
 use Drupal\entity_clone\EntityClone\Config\ConfigEntityCloneFormBase;
 use Drupal\entity_clone\EntityClone\Config\ConfigWithFieldEntityClone;
 use Drupal\entity_clone\EntityClone\Config\FieldConfigEntityClone;
+use Drupal\entity_clone\EntityClone\Config\LayoutBuilderEntityClone;
 use Drupal\entity_clone\EntityClone\Config\MenuEntityClone;
 use Drupal\entity_clone\EntityClone\Config\MenuEntityCloneForm;
 use Drupal\entity_clone\EntityClone\Content\ContentEntityCloneBase;
@@ -23,7 +24,6 @@ use Drupal\entity_clone\EntityClone\Content\ContentEntityCloneFormBase;
 use Drupal\entity_clone\EntityClone\Content\FileEntityClone;
 use Drupal\entity_clone\EntityClone\Content\TaxonomyTermEntityClone;
 use Drupal\entity_clone\EntityClone\Content\UserEntityClone;
-use Drupal\entity_clone\EntityClone\Config\LayoutBuilderEntityClone;
 
 /**
  * Implements hook_help().
@@ -148,7 +148,11 @@ function entity_clone_entity_access(EntityInterface $entity, $operation, Account
   $cache->addCacheContexts(['user.permissions']);
 
   // Deny access if the user cannot clone the entity.
-  $access = AccessResult::forbiddenIf(!$account->hasPermission('clone ' . $entity->getEntityTypeId() . ' entity'));
+  $access = AccessResult::forbiddenIf(
+    !$account->hasPermission('clone ' . $entity->getEntityTypeId() . ' entity')
+    &&
+    !$account->hasPermission('clone ' . $entity->bundle() . ' '. $entity->getEntityTypeId() . ' entities')
+  );
   if ($access->isForbidden()) {
     return $access->addCacheableDependency($cache);
   }

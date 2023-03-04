@@ -514,3 +514,13 @@ function recurring_events_registration_update_8010() {
   $config->set('use_admin_theme', FALSE);
   $config->save();
 }
+
+/**
+ * Set the default redirection after registration.
+ */
+function recurring_events_registration_update_8011() {
+  $config = \Drupal::configFactory()->getEditable('recurring_events_registration.registrant.config');
+  $config->set('insert_redirect_choice', 'current');
+  $config->set('insert_redirect_other', '');
+  $config->save();
+}

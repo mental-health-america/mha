@@ -3,6 +3,7 @@
 namespace Drupal\Tests\entity_clone\Functional;
 
 use Drupal\Core\Entity\Entity\EntityFormMode;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Tests\BrowserTestBase;
 
 /**
@@ -12,18 +13,21 @@ use Drupal\Tests\BrowserTestBase;
  */
 class EntityCloneEntityFormModeTest extends BrowserTestBase {
 
+  use StringTranslationTrait;
+
   /**
    * Modules to enable.
    *
    * @var array
    */
-  public static $modules = ['entity_clone', 'field_ui'];
+  protected static $modules = ['entity_clone', 'field_ui'];
 
   /**
-   * Theme to enable by default
+   * Theme to enable by default.
+   *
    * @var string
    */
-  protected $defaultTheme = 'classy';
+  protected $defaultTheme = 'claro';
 
   /**
    * Permissions to grant admin user.
@@ -69,7 +73,8 @@ class EntityCloneEntityFormModeTest extends BrowserTestBase {
       'label' => 'User register cloned form mode',
       'id' => 'register_clone',
     ];
-    $this->drupalPostForm('entity_clone/entity_form_mode/' . $entity_form_mode->id(), $edit, t('Clone'));
+    $this->drupalGet('entity_clone/entity_form_mode/' . $entity_form_mode->id());
+    $this->submitForm($edit, $this->t('Clone'));
 
     $entity_form_modes = \Drupal::entityTypeManager()
       ->getStorage('entity_form_mode')
