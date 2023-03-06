@@ -2,7 +2,6 @@
 
 namespace Drupal\entity_clone\EntityClone\Config;
 
-use Drupal\Core\Config\Entity\ConfigEntityStorage;
 use Drupal\Core\Entity\EntityHandlerInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -13,7 +12,7 @@ use Drupal\entity_clone\EntityClone\EntityCloneFormInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class ConfigEntityCloneFormBase.
+ * Class Config Entity Clone FormBase.
  */
 class ConfigEntityCloneFormBase implements EntityHandlerInterface, EntityCloneFormInterface {
 

@@ -5,7 +5,7 @@ namespace Drupal\entity_clone\EntityClone\Config;
 use Drupal\Core\Entity\EntityInterface;
 
 /**
- * Class FieldConfigEntityClone.
+ * Class Field Config Entity Clone.
  */
 class FieldConfigEntityClone extends ConfigEntityCloneBase {
 

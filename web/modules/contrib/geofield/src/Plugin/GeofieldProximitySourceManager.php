@@ -43,14 +43,12 @@ class GeofieldProximitySourceManager extends DefaultPluginManager {
    *   - sort
    *   - field
    *   - NULL (all).
-   * @param bool $is_exposed
-   *   The check/differentiate if it is part of an exposed form.
    */
-  public function buildCommonFormElements(array &$form, FormStateInterface $form_state, $options, $context = NULL) {
+  public function buildCommonFormElements(array &$form, FormStateInterface $form_state, array $options, $context = NULL) {
     $user_input = $form_state->getUserInput();
 
-    // Attach Geofield Map Libraries.
-    $form['#attached']['library'][] = 'geofield/geofield_proximity';
+    // Attach Geofield Libraries.
+    $form['#attached']['library'][] = 'geofield/geofield_general';
 
     $form['units'] = [
       '#type' => 'select',

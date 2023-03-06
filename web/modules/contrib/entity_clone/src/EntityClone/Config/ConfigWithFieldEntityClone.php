@@ -6,7 +6,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Field\FieldConfigInterface;
 
 /**
- * Class ContentEntityCloneBase.
+ * Class Content Entity Clone Base.
  */
 class ConfigWithFieldEntityClone extends ConfigEntityCloneBase {
 

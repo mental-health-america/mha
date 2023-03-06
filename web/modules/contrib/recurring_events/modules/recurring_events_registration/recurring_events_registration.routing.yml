@@ -191,3 +191,12 @@ entity.registrant_type.collection:
     _permission: 'administer registrant types'
   options:
     _admin_route: TRUE
+
+# Orphaned registrant cleanup.
+recurring_events_registration.orphaned_registrants:
+  path: '/admin/structure/events/orphaned-registrants'
+  defaults:
+    _form: '\Drupal\recurring_events_registration\Form\OrphanedEventRegistrantsForm'
+    _title: 'Orphaned Event Registrants'
+  requirements:
+    _permission: 'administer orphaned events entities'

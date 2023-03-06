@@ -3,6 +3,7 @@
 namespace Drupal\Tests\entity_clone\Functional;
 
 use Drupal\contact\Entity\ContactForm;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Tests\BrowserTestBase;
 
 /**
@@ -12,18 +13,21 @@ use Drupal\Tests\BrowserTestBase;
  */
 class EntityCloneContactTest extends BrowserTestBase {
 
+  use StringTranslationTrait;
+
   /**
    * Modules to enable.
    *
    * @var array
    */
-  public static $modules = ['entity_clone', 'contact'];
+  protected static $modules = ['entity_clone', 'contact'];
 
   /**
-   * Theme to enable by default
+   * Theme to enable by default.
+   *
    * @var string
    */
-  protected $defaultTheme = 'classy';
+  protected $defaultTheme = 'claro';
 
   /**
    * Permissions to grant admin user.
@@ -62,7 +66,8 @@ class EntityCloneContactTest extends BrowserTestBase {
       'id' => 'test_contact_form_for_clone',
       'recipients' => 'test@recipient.com',
     ];
-    $this->drupalPostForm('admin/structure/contact/add', $edit, t('Save'));
+    $this->drupalGet('admin/structure/contact/add');
+    $this->submitForm($edit, $this->t('Save'));
 
     $contact_forms = \Drupal::entityTypeManager()
       ->getStorage('contact_form')
@@ -75,7 +80,8 @@ class EntityCloneContactTest extends BrowserTestBase {
       'label' => 'Test contact form cloned',
       'id' => 'test_contact_form_cloned',
     ];
-    $this->drupalPostForm('entity_clone/contact_form/' . $contact_form->id(), $edit, t('Clone'));
+    $this->drupalGet('entity_clone/contact_form/' . $contact_form->id());
+    $this->submitForm($edit, $this->t('Clone'));
 
     $contact_forms = \Drupal::entityTypeManager()
       ->getStorage('contact_form')
@@ -89,8 +95,10 @@ class EntityCloneContactTest extends BrowserTestBase {
       'id' => 'test_contact_form_clone_with_a_really_long_name_that_is_longer_than_the_bundle_max_length',
       'label' => 'Test contact form clone with a really long name that is longer than the bundle max length',
     ];
-    $this->drupalPostForm('entity_clone/contact_form/' . $contact_form->id(), $edit, t('Clone'));
-    $this->assertText('New Id cannot be longer than 32 characters');
+    $this->drupalGet('entity_clone/contact_form/' . $contact_form->id());
+    $this->submitForm($edit, $this->t('Clone'));
+
+    $this->assertSession()->pageTextContains('New Id cannot be longer than 32 characters');
   }
 
 }

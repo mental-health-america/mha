@@ -13,15 +13,15 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Entity\TranslatableInterface;
-use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldConfigInterface;
+use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\entity_clone\EntityClone\EntityCloneInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class ContentEntityCloneBase.
+ * Class Content Entity Clone Base.
  */
 class ContentEntityCloneBase implements EntityHandlerInterface, EntityCloneInterface {
 
@@ -64,10 +64,11 @@ class ContentEntityCloneBase implements EntityHandlerInterface, EntityCloneInter
    *   A service for obtaining the system's time.
    * @param \Drupal\Core\Session\AccountProxyInterface $current_user
    *   The current user.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   The module handler.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, $entity_type_id, TimeInterface $time_service, AccountProxyInterface $current_user) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager,
+  $entity_type_id,
+  TimeInterface $time_service,
+  AccountProxyInterface $current_user) {
     $this->entityTypeManager = $entity_type_manager;
     $this->entityTypeId = $entity_type_id;
     $this->timeService = $time_service;
@@ -77,7 +78,8 @@ class ContentEntityCloneBase implements EntityHandlerInterface, EntityCloneInter
   /**
    * {@inheritdoc}
    */
-  public static function createInstance(ContainerInterface $container, EntityTypeInterface $entity_type) {
+  public static function createInstance(ContainerInterface $container,
+  EntityTypeInterface $entity_type) {
     return new static(
       $container->get('entity_type.manager'),
       $entity_type->id(),
@@ -90,9 +92,6 @@ class ContentEntityCloneBase implements EntityHandlerInterface, EntityCloneInter
    * {@inheritdoc}
    */
   public function cloneEntity(EntityInterface $entity, EntityInterface $cloned_entity, array $properties = [], array &$already_cloned = []) {
-    if (isset($properties['take_ownership']) && $properties['take_ownership'] === 1) {
-      $cloned_entity->setOwnerId($this->currentUser->id());
-    }
     // Clone referenced entities.
     $already_cloned[$entity->getEntityTypeId()][$entity->id()] = $cloned_entity;
     if ($cloned_entity instanceof FieldableEntityInterface && $entity instanceof FieldableEntityInterface) {
@@ -107,7 +106,19 @@ class ContentEntityCloneBase implements EntityHandlerInterface, EntityCloneInter
       }
     }
 
-    $this->setClonedEntityLabel($entity, $cloned_entity);
+    if (isset($properties['take_ownership']) && $properties['take_ownership'] === 1) {
+      // Set owner on cloned entity:
+      $cloned_entity->setOwnerId($this->currentUser->id());
+
+      // Set owner on translations:
+      $languages = $cloned_entity->getTranslationLanguages();
+      foreach ($languages as $langcode => $language) {
+        $translation = $cloned_entity->getTranslation($langcode);
+        $translation->setOwnerId($this->currentUser->id());
+      }
+    }
+
+    $this->setClonedEntityLabel($entity, $cloned_entity, $properties);
     $this->setCreatedAndChangedDates($cloned_entity);
 
     if ($this->hasTranslatableModerationState($cloned_entity)) {
@@ -165,11 +176,24 @@ class ContentEntityCloneBase implements EntityHandlerInterface, EntityCloneInter
    *   The original entity.
    * @param \Drupal\Core\Entity\EntityInterface $cloned_entity
    *   The entity cloned from the original.
+   * @param array $properties
+   *   The properties array.
    */
-  protected function setClonedEntityLabel(EntityInterface $original_entity, EntityInterface $cloned_entity) {
+  protected function setClonedEntityLabel(EntityInterface $original_entity,
+  EntityInterface $cloned_entity,
+  array $properties) {
     $label_key = $this->entityTypeManager->getDefinition($this->entityTypeId)->getKey('label');
     if ($label_key && $cloned_entity->hasField($label_key)) {
-      $cloned_entity->set($label_key, $original_entity->label() . ' - Cloned');
+      if (isset($properties['no_suffix']) && $properties['no_suffix'] === 1) {
+        $cloned_entity->set($label_key, $original_entity->label());
+      }
+      else {
+        $languages = $cloned_entity->getTranslationLanguages();
+        foreach ($languages as $langcode => $language) {
+          $translation = $cloned_entity->getTranslation($langcode);
+          $translation->set($label_key, $translation->label() . ' - Cloned');
+        }
+      }
     }
   }
 
@@ -274,7 +298,7 @@ class ContentEntityCloneBase implements EntityHandlerInterface, EntityCloneInter
     $needs_save = FALSE;
     $moderation_state = ContentModerationState::loadFromModeratedEntity($cloned_entity);
     $original_translation = $cloned_entity->getUntranslated();
-    if ($moderation_state->language()->getId() !== $original_translation->language()->getId()) {
+    if ($moderation_state && ($moderation_state->language()->getId() !== $original_translation->language()->getId())) {
       // If we are cloning a node while not being in the original translation
       // language, Drupal core will set the default language of the moderation
       // state to that language whereas the node is simply duplicated and will
@@ -286,7 +310,7 @@ class ContentEntityCloneBase implements EntityHandlerInterface, EntityCloneInter
 
     foreach ($languages as $language) {
       $translation = $cloned_entity->getTranslation($language->getId());
-      if (!$moderation_state->hasTranslation($translation->language()->getId())) {
+      if ($moderation_state && !$moderation_state->hasTranslation($translation->language()->getId())) {
         // We make a 1 to 1 copy of the moderation state entity from the
         // original created already by the content_moderation module. This is ok
         // because even if translations can be in different moderation states,

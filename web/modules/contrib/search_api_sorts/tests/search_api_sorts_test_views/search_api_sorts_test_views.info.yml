@@ -1,0 +1,13 @@
+name: 'Search API sorts Views Test'
+type: module
+description: 'Support module for Search API sorts Views tests'
+package: Testing
+dependencies:
+  - search_api:search_api
+  - drupal:node
+  - drupal:views
+
+# Information added by Drupal.org packaging script on 2022-08-19
+version: '8.x-1.1'
+project: 'search_api_sorts'
+datestamp: 1660915209

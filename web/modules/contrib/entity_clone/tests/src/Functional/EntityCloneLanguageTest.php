@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\entity_clone\Functional;
 
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\Tests\BrowserTestBase;
 
@@ -12,18 +13,21 @@ use Drupal\Tests\BrowserTestBase;
  */
 class EntityCloneLanguageTest extends BrowserTestBase {
 
+  use StringTranslationTrait;
+
   /**
    * Modules to enable.
    *
    * @var array
    */
-  public static $modules = ['entity_clone', 'language'];
+  protected static $modules = ['entity_clone', 'language'];
 
   /**
-   * Theme to enable by default
+   * Theme to enable by default.
+   *
    * @var string
    */
-  protected $defaultTheme = 'classy';
+  protected $defaultTheme = 'claro';
 
   /**
    * Permissions to grant admin user.
@@ -59,7 +63,8 @@ class EntityCloneLanguageTest extends BrowserTestBase {
     $edit = [
       'predefined_langcode' => 'fr',
     ];
-    $this->drupalPostForm("/admin/config/regional/language/add", $edit, t('Add language'));
+    $this->drupalGet("/admin/config/regional/language/add");
+    $this->submitForm($edit, $this->t('Add language'));
 
     $languages = \Drupal::entityTypeManager()
       ->getStorage('configurable_language')
@@ -72,7 +77,8 @@ class EntityCloneLanguageTest extends BrowserTestBase {
       'id' => 'test_language_cloned',
       'label' => 'French language cloned',
     ];
-    $this->drupalPostForm('entity_clone/configurable_language/' . $language->id(), $edit, t('Clone'));
+    $this->drupalGet('entity_clone/configurable_language/' . $language->id());
+    $this->submitForm($edit, $this->t('Clone'));
 
     $languages = \Drupal::entityTypeManager()
       ->getStorage('configurable_language')

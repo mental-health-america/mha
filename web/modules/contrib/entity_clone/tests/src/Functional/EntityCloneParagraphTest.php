@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\entity_clone\Functional;
 
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Tests\node\Functional\NodeTestBase;
 
 /**
@@ -11,18 +12,30 @@ use Drupal\Tests\node\Functional\NodeTestBase;
  */
 class EntityCloneParagraphTest extends NodeTestBase {
 
+  use StringTranslationTrait;
+
   /**
    * Modules to enable.
    *
    * @var array
    */
-  public static $modules = ['entity_clone', 'paragraphs_demo'];
+  protected static $modules = ['entity_clone', 'paragraphs_demo'];
 
   /**
-   * Theme to enable by default
+   * Theme to enable by default.
+   *
    * @var string
    */
-  protected $defaultTheme = 'classy';
+  protected $defaultTheme = 'claro';
+
+  /**
+   * Disable strict config schema checks in this test.
+   *
+   * @var bool
+   */
+  // @codingStandardsIgnoreStart
+  protected $strictConfigSchema = FALSE;
+  // @codingStandardsIgnoreEnd
 
   /**
    * Profile to install.
@@ -79,8 +92,9 @@ class EntityCloneParagraphTest extends NodeTestBase {
       'recursive[node.paragraphed_content_demo.field_paragraphs_demo][references][5][clone]' => 1,
       'recursive[node.paragraphed_content_demo.field_paragraphs_demo][references][5][children][recursive][paragraph.nested_paragraph.field_paragraphs_demo][references][4][clone]' => 1,
     ];
+    $this->drupalGet('entity_clone/node/' . $node->id());
 
-    $this->drupalPostForm('entity_clone/node/' . $node->id(), $clone_options, t('Clone'));
+    $this->submitForm($clone_options, $this->t('Clone'));
 
     $clones = \Drupal::entityTypeManager()
       ->getStorage('node')
@@ -101,7 +115,7 @@ class EntityCloneParagraphTest extends NodeTestBase {
       ->getTarget()
       ->getValue();
 
-    $this->assertNotEqual($original_paragraph->getParentEntity()->id(), $cloned_paragraph->getParentEntity()->id());
+    $this->assertNotEquals($original_paragraph->getParentEntity()->id(), $cloned_paragraph->getParentEntity()->id());
   }
 
 }

@@ -1,8 +1,8 @@
 {
     "name": "drupal/entity_clone",
+    "type": "drupal-module",
     "description": "Add a clone action for all entities.",
     "homepage": "https://drupal.org/project/entity_clone",
-    "type": "drupal-module",
     "license": "GPL-2.0-or-later",
     "require-dev": {
         "drupal/entity_browser": "2.x-dev",

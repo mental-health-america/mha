@@ -158,6 +158,9 @@ class EventRegistrationWidget extends DateRangeDefaultWidget {
           ':input[name="event_registration[0][registration_dates]"]' => ['value' => 'scheduled'],
         ],
       ],
+      '#element_validate' => [
+        [static::class, 'validateSeriesRegistration'],
+      ],
     ];
 
     $element['series_registration']['value'] = $element['value'];
@@ -415,6 +418,32 @@ class EventRegistrationWidget extends DateRangeDefaultWidget {
     }
     $values = parent::massageFormValues($values, $form, $form_state);
     return $values;
+  }
+
+  /**
+   * Custom validation.
+   */
+  public static function validateSeriesRegistration($element, FormStateInterface $form_state, array $form) {
+    // check if Series Registration and Scheduled Registration dates are set
+    $registration = $form_state->getValue('event_registration');
+
+    if (
+      $registration[0]['registration'] == TRUE
+      && $registration[0]['registration_type'] == 'series'
+      && $registration[0]['registration_dates'] == 'scheduled'
+    ) {
+      if (empty($registration[0]['series_registration']['value']) || empty($registration[0]['series_registration']['end_value'])) {
+        $error = t('If Scheduled Registration is chosen, registration dates must be set.');
+
+        if (empty($registration[0]['series_registration']['value'])) {
+          $form_state->setError($element['value'], $error);
+        }
+
+        if (empty($registration[0]['series_registration']['end_value'])) {
+          $form_state->setError($element['end_value'], $error);
+        }
+      }
+    }
   }
 
   /**

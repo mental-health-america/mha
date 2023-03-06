@@ -377,7 +377,7 @@ class Registrant extends EditorialContentEntityBase implements RegistrantInterfa
    */
   protected function urlRouteParameters($rel) {
     $uri_route_parameters = parent::urlRouteParameters($rel);
-    $uri_route_parameters['eventinstance'] = $this->getEventInstance()->id();
+    $uri_route_parameters['eventinstance'] = $this->getEventInstance() ? $this->getEventInstance()->id() : 0;
     $uri_route_parameters['registrant'] = $this->id();
     if ($rel == 'anon-edit-form' || $rel == 'anon-delete-form') {
       $uri_route_parameters['uuid'] = $this->uuid->value;
