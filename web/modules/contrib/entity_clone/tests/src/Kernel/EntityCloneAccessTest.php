@@ -17,16 +17,16 @@ class EntityCloneAccessTest extends KernelTestBase {
   use UserCreationTrait;
 
   /**
-    * {@inheritdoc}
-    */
-   public static $modules = [
-     'node',
-     'field',
-     'text',
-     'user',
-     'entity_clone',
-     'system',
-   ];
+   * {@inheritdoc}
+   */
+  protected static $modules = [
+    'node',
+    'field',
+    'text',
+    'user',
+    'entity_clone',
+    'system',
+  ];
 
   /**
    * {@inheritdoc}
@@ -70,9 +70,19 @@ class EntityCloneAccessTest extends KernelTestBase {
     $node->save();
 
     $user_no_permissions = $this->createUser(['access content']);
-    $user_that_can_create = $this->createUser(['access content', 'create page content']);
-    $user_that_can_clone = $this->createUser(['access content', 'clone node entity']);
-    $user_that_can_do_both = $this->createUser(['access content', 'clone node entity', 'create page content']);
+    $user_that_can_create = $this->createUser([
+      'access content',
+      'create page content',
+    ]);
+    $user_that_can_clone = $this->createUser([
+      'access content',
+      'clone node entity',
+    ]);
+    $user_that_can_do_both = $this->createUser([
+      'access content',
+      'clone node entity',
+      'create page content',
+    ]);
 
     $url = $node->toUrl('clone-form');
 
@@ -99,4 +109,5 @@ class EntityCloneAccessTest extends KernelTestBase {
     $this->assertTrue($access_control_handler->access($node, 'clone', $user_that_can_do_both));
     $this->assertTrue($url->access($user_that_can_do_both));
   }
+
 }

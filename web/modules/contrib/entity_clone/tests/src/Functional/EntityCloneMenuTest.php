@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\entity_clone\Functional;
 
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\system\Entity\Menu;
 use Drupal\Tests\BrowserTestBase;
 
@@ -12,18 +13,21 @@ use Drupal\Tests\BrowserTestBase;
  */
 class EntityCloneMenuTest extends BrowserTestBase {
 
+  use StringTranslationTrait;
+
   /**
    * Modules to enable.
    *
    * @var array
    */
-  public static $modules = ['entity_clone', 'menu_ui'];
+  protected static $modules = ['entity_clone', 'menu_ui'];
 
   /**
-   * Theme to enable by default
+   * Theme to enable by default.
+   *
    * @var string
    */
-  protected $defaultTheme = 'classy';
+  protected $defaultTheme = 'claro';
 
   /**
    * Permissions to grant admin user.
@@ -68,7 +72,8 @@ class EntityCloneMenuTest extends BrowserTestBase {
       'label' => 'Test menu cloned',
       'id' => 'test-menu-cloned',
     ];
-    $this->drupalPostForm('entity_clone/menu/' . $menu->id(), $edit, t('Clone'));
+    $this->drupalGet('entity_clone/menu/' . $menu->id());
+    $this->submitForm($edit, $this->t('Clone'));
 
     $menus = \Drupal::entityTypeManager()
       ->getStorage('menu')

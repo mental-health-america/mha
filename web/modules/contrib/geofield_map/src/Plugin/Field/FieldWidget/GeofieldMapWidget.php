@@ -302,7 +302,7 @@ class GeofieldMapWidget extends GeofieldLatLonWidget implements ContainerFactory
       ],
     ]);
 
-    // Attach Geofield Map Library.
+    // Attach Geofield Map Libraries.
     $elements['#attached']['library'] = [
       'geofield_map/geofield_map_general',
       'geofield_map/geofield_map_widget',
@@ -775,8 +775,11 @@ class GeofieldMapWidget extends GeofieldLatLonWidget implements ContainerFactory
       ];
     }
     else {
+      $widget_label = $this->getPluginDefinition()['label']->render();
       $element += [
-        '#prefix' => '<div class="geofield-map-warning">' . $this->t('This Geofield Map cannot be applied because Polylines and Polygons are not supported at the moment') . '</div>',
+        '#prefix' => '<div class="geofield-map-warning">' . $this->t('The "@widget_label" widget cannot be applied because it doesn\'t support Geometries (Polylines, Polygons, etc.) at the moment.', [
+          '@widget_label' => $widget_label,
+        ]) . '</div>',
         '#type' => 'textarea',
         '#default_value' => $items[$delta]->value ?: NULL,
       ];

@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\entity_clone\Functional;
 
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\responsive_image\Entity\ResponsiveImageStyle;
 use Drupal\Tests\BrowserTestBase;
 
@@ -12,18 +13,21 @@ use Drupal\Tests\BrowserTestBase;
  */
 class EntityCloneResponsiveImageStyleTest extends BrowserTestBase {
 
+  use StringTranslationTrait;
+
   /**
    * Modules to enable.
    *
    * @var array
    */
-  public static $modules = ['entity_clone', 'responsive_image'];
+  protected static $modules = ['entity_clone', 'responsive_image'];
 
   /**
-   * Theme to enable by default
+   * Theme to enable by default.
+   *
    * @var string
    */
-  protected $defaultTheme = 'classy';
+  protected $defaultTheme = 'claro';
 
   /**
    * Permissions to grant admin user.
@@ -62,7 +66,8 @@ class EntityCloneResponsiveImageStyleTest extends BrowserTestBase {
       'breakpoint_group' => 'responsive_image',
       'fallback_image_style' => 'large',
     ];
-    $this->drupalPostForm("admin/config/media/responsive-image-style/add", $edit, t('Save'));
+    $this->drupalGet("admin/config/media/responsive-image-style/add");
+    $this->submitForm($edit, $this->t('Save'));
 
     $responsive_image_styles = \Drupal::entityTypeManager()
       ->getStorage('responsive_image_style')
@@ -75,7 +80,8 @@ class EntityCloneResponsiveImageStyleTest extends BrowserTestBase {
       'id' => 'test_responsive_image_style_cloned',
       'label' => 'Test responsive image style cloned',
     ];
-    $this->drupalPostForm('entity_clone/responsive_image_style/' . $responsive_image_style->id(), $edit, t('Clone'));
+    $this->drupalGet('entity_clone/responsive_image_style/' . $responsive_image_style->id());
+    $this->submitForm($edit, $this->t('Clone'));
 
     $responsive_image_styles = \Drupal::entityTypeManager()
       ->getStorage('responsive_image_style')

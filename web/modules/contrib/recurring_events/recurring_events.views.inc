@@ -27,7 +27,7 @@ function recurring_events_views_data_alter(array &$data) {
       'title' => t('Event series start date'),
       'help' => t('The date on which an event first occurs.'),
       'id' => 'eventseries_start_date',
-      'click sortable' => FALSE,
+      'click sortable' => TRUE,
     ],
   ];
 

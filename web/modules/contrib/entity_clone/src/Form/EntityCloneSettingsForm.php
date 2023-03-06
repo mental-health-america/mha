@@ -118,6 +118,13 @@ class EntityCloneSettingsForm extends ConfigFormBase implements ContainerInjecti
       '#default_value' => $this->entityCloneSettingsManager->getTakeOwnershipSetting(),
     ];
 
+    $form['no_suffix'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Exclude Cloned'),
+      '#description' => $this->t('Exclude " - Cloned" from title of cloned entity.'),
+      '#default_value' => $this->entityCloneSettingsManager->getExcludeClonedSetting(),
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -127,6 +134,7 @@ class EntityCloneSettingsForm extends ConfigFormBase implements ContainerInjecti
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->entityCloneSettingsManager->setFormSettings($form_state->getValue('form_settings'));
     $this->entityCloneSettingsManager->setTakeOwnershipSettings($form_state->getValue('take_ownership'));
+    $this->entityCloneSettingsManager->setExcludeClonedSetting($form_state->getValue('no_suffix'));
     parent::submitForm($form, $form_state);
   }
 

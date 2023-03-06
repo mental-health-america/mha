@@ -2,9 +2,17 @@
 
 /**
  * @file
- * Entity Clone hooks and events.
+ * Hooks provided by the entity_clone module.
  */
 
+use Drupal\entity_clone\Event\EntityCloneEvent;
+use Drupal\entity_clone\Event\EntityCloneEvents;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
+/**
+ * @file
+ * Entity Clone hooks and events.
+ */
 /**
  * Event subscribers for Entity Clone.
  *
@@ -25,7 +33,7 @@
  * ?>
  * </code>
  */
-class MyEntityCloneEventSubscriber implements \Symfony\Component\EventDispatcher\EventSubscriberInterface {
+class MyEntityCloneEventSubscriber implements EventSubscriberInterface {
 
   /**
    * An example event subscriber.
@@ -34,7 +42,7 @@ class MyEntityCloneEventSubscriber implements \Symfony\Component\EventDispatcher
    *
    * @see \Drupal\entity_clone\Event\EntityCloneEvents::PRE_CLONE
    */
-  public function myPreClone(\Drupal\entity_clone\Event\EntityCloneEvent $event): void {
+  public function myPreClone(EntityCloneEvent $event): void {
     $original = $event->getEntity();
     $newEntity = $event->getClonedEntity();
   }
@@ -46,7 +54,7 @@ class MyEntityCloneEventSubscriber implements \Symfony\Component\EventDispatcher
    *
    * @see \Drupal\entity_clone\Event\EntityCloneEvents::POST_CLONE
    */
-  public function myPostClone(\Drupal\entity_clone\Event\EntityCloneEvent $event): void {
+  public function myPostClone(EntityCloneEvent $event): void {
     $original = $event->getEntity();
     $newEntity = $event->getClonedEntity();
   }
@@ -55,8 +63,8 @@ class MyEntityCloneEventSubscriber implements \Symfony\Component\EventDispatcher
    * {@inheritdoc}
    */
   public static function getSubscribedEvents(): array {
-    $events[\Drupal\entity_clone\Event\EntityCloneEvents::PRE_CLONE][] = ['myPreClone'];
-    $events[\Drupal\entity_clone\Event\EntityCloneEvents::POST_CLONE][] = ['myPostClone'];
+    $events[EntityCloneEvents::PRE_CLONE][] = ['myPreClone'];
+    $events[EntityCloneEvents::POST_CLONE][] = ['myPostClone'];
     return $events;
   }
 

@@ -21,6 +21,10 @@ class EventSeriesAccessControlHandler extends EntityAccessControlHandler {
    * $operation as defined in the routing.yml file.
    */
   protected function checkAccess(EntityInterface $entity, $operation, AccountInterface $account) {
+    if ($account->hasPermission('administer eventseries entity')) {
+      return AccessResult::allowed()->cachePerPermissions();
+    }
+
     switch ($operation) {
       case 'view':
         $status = $entity->isPublished();
@@ -29,7 +33,7 @@ class EventSeriesAccessControlHandler extends EntityAccessControlHandler {
         }
         return AccessResult::allowedIfHasPermission($account, 'view eventseries entity');
 
-      case 'edit':
+      case 'update':
         if ($account->id() !== $entity->getOwnerId()) {
           return AccessResult::allowedIfHasPermission($account, 'edit eventseries entity');
         }
@@ -49,8 +53,10 @@ class EventSeriesAccessControlHandler extends EntityAccessControlHandler {
 
       case 'clone':
         return AccessResult::allowedIfHasPermission($account, 'clone eventseries entity');
+
+      default:
+        return AccessResult::neutral();
     }
-    return AccessResult::allowed();
   }
 
   /**
@@ -60,7 +66,10 @@ class EventSeriesAccessControlHandler extends EntityAccessControlHandler {
    * will be created during the 'add' process.
    */
   protected function checkCreateAccess(AccountInterface $account, array $context, $entity_bundle = NULL) {
-    return AccessResult::allowedIfHasPermission($account, 'add eventseries entity');
+    return AccessResult::allowedIfHasPermissions($account, [
+      'add eventseries entity',
+      'administer eventseries entity',
+    ], 'OR');
   }
 
 }

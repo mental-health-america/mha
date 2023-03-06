@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\entity_clone\Functional;
 
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\shortcut\Entity\ShortcutSet;
 use Drupal\Tests\BrowserTestBase;
 
@@ -12,18 +13,21 @@ use Drupal\Tests\BrowserTestBase;
  */
 class EntityCloneShortcutSetTest extends BrowserTestBase {
 
+  use StringTranslationTrait;
+
   /**
    * Modules to enable.
    *
    * @var array
    */
-  public static $modules = ['entity_clone', 'shortcut'];
+  protected static $modules = ['entity_clone', 'shortcut'];
 
   /**
-   * Theme to enable by default
+   * Theme to enable by default.
+   *
    * @var string
    */
-  protected $defaultTheme = 'classy';
+  protected $defaultTheme = 'claro';
 
   /**
    * Permissions to grant admin user.
@@ -60,7 +64,8 @@ class EntityCloneShortcutSetTest extends BrowserTestBase {
       'id' => 'test_shortcut_set_cloned',
       'label' => 'Test shortcut set cloned',
     ];
-    $this->drupalPostForm('entity_clone/shortcut_set/default', $edit, t('Clone'));
+    $this->drupalGet('entity_clone/shortcut_set/default');
+    $this->submitForm($edit, $this->t('Clone'));
 
     $shortcut_sets = \Drupal::entityTypeManager()
       ->getStorage('shortcut_set')

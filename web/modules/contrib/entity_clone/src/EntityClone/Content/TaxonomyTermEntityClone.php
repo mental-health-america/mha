@@ -5,7 +5,7 @@ namespace Drupal\entity_clone\EntityClone\Content;
 use Drupal\Core\Entity\EntityInterface;
 
 /**
- * Class TaxonomyTermEntityClone.
+ * Class Taxonomy Term Entity Clone.
  */
 class TaxonomyTermEntityClone extends ContentEntityCloneBase {
 

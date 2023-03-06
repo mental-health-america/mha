@@ -86,3 +86,7 @@ entity_clone.settings:
               type: boolean
             hidden:
               type: boolean
+    no_suffix:
+      type: boolean
+    take_ownership:
+      type: boolean

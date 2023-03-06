@@ -2,8 +2,8 @@
 
 namespace Drupal\entity_clone\Event;
 
+use Drupal\Component\EventDispatcher\Event;
 use Drupal\Core\Entity\EntityInterface;
-use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Represents entity selection as event.
