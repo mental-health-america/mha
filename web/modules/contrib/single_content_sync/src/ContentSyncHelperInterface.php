@@ -7,6 +7,9 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\file\FileInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
+/**
+ * Creates an interface for the content sync helper service.
+ */
 interface ContentSyncHelperInterface {
 
   /**

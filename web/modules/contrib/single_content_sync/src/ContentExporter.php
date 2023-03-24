@@ -22,6 +22,9 @@ use Drupal\node\NodeInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\user\UserInterface;
 
+/**
+ * Define a service to export content.
+ */
 class ContentExporter implements ContentExporterInterface {
 
   use StringTranslationTrait;
@@ -31,63 +34,63 @@ class ContentExporter implements ContentExporterInterface {
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $entityTypeManager;
+  protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
    * The module handler.
    *
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
-  protected $moduleHandler;
+  protected ModuleHandlerInterface $moduleHandler;
 
   /**
    * Whether to extract translations.
    *
    * @var bool
    */
-  protected $extractTranslationsMode;
+  protected bool $extractTranslationsMode = FALSE;
 
   /**
    * The messenger.
    *
    * @var \Drupal\Core\Messenger\MessengerInterface
    */
-  protected $messenger;
+  protected MessengerInterface $messenger;
 
   /**
    * The private temp store of the module.
    *
    * @var \Drupal\Core\TempStore\PrivateTempStore
    */
-  protected $privateTempStore;
+  protected PrivateTempStore $privateTempStore;
 
   /**
    * Local cache variable to store the reference info of entities.
    *
    * @var array
    */
-  private $entityReferenceCache = [];
+  private array $entityReferenceCache = [];
 
   /**
    * Local cache variable to store the exported output of entities.
    *
    * @var array
    */
-  private $entityOutputCache = [];
+  private array $entityOutputCache = [];
 
   /**
    * The language manager.
    *
    * @var \Drupal\Core\Language\LanguageManagerInterface
    */
-  protected $languageManager;
+  protected LanguageManagerInterface $languageManager;
 
   /**
    * The content sync helper.
    *
    * @var \Drupal\single_content_sync\ContentSyncHelperInterface
    */
-  protected $contentSyncHelper;
+  protected ContentSyncHelperInterface $contentSyncHelper;
 
   /**
    * The entity repository.
@@ -135,7 +138,12 @@ class ContentExporter implements ContentExporterInterface {
    */
   protected function generateCacheKey(FieldableEntityInterface $entity): string {
     $hasTranslations = $this->extractTranslationsMode ? 'has_trans' : 'no_trans';
-    return implode('-', [$entity->getEntityTypeId(), $entity->uuid(), $hasTranslations]);
+
+    return implode('-', [
+      $entity->getEntityTypeId(),
+      $entity->uuid(),
+      $hasTranslations,
+    ]);
   }
 
   /**
@@ -327,8 +335,8 @@ class ContentExporter implements ContentExporterInterface {
             'langcode' => $entity->language()->getId(),
             'description' => $entity->getDescription(),
             'parent' => $entity->get('parent')->target_id
-              ? $this->doExportToArray($entity->get('parent')->entity)
-              : 0,
+            ? $this->doExportToArray($entity->get('parent')->entity)
+            : 0,
           ];
         }
         break;
@@ -526,7 +534,9 @@ class ContentExporter implements ContentExporterInterface {
 
       case 'metatag':
         $field_value = $field->getValue();
-        $value = !empty($field_value[0]['value']) ? unserialize($field_value[0]['value']) : [];
+        $value = !empty($field_value[0]['value'])
+        ? unserialize($field_value[0]['value'], ['allowed_classes' => FALSE])
+        : [];
         break;
 
       case 'layout_section':

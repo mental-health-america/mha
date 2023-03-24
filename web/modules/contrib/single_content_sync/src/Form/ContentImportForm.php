@@ -20,14 +20,14 @@ class ContentImportForm extends FormBase {
    *
    * @var \Drupal\single_content_sync\ContentImporterInterface
    */
-  protected $contentImporter;
+  protected ContentImporterInterface $contentImporter;
 
   /**
    * The content sync helper.
    *
    * @var \Drupal\single_content_sync\ContentSyncHelperInterface
    */
-  protected $contentSyncHelper;
+  protected ContentSyncHelperInterface $contentSyncHelper;
 
   /**
    * ContentImportForm constructor.

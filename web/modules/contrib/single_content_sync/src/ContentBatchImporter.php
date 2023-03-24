@@ -2,6 +2,9 @@
 
 namespace Drupal\single_content_sync;
 
+/**
+ * Define a batch importer.
+ */
 class ContentBatchImporter {
 
   /**

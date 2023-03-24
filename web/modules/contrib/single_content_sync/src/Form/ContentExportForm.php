@@ -3,6 +3,7 @@
 namespace Drupal\single_content_sync\Form;
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
@@ -27,28 +28,28 @@ class ContentExportForm extends FormBase {
    *
    * @var \Drupal\single_content_sync\ContentExporterInterface
    */
-  protected $contentExporter;
+  protected ContentExporterInterface $contentExporter;
 
   /**
    * The entity type manager.
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $entityTypeManager;
+  protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
    * The content file generator.
    *
    * @var \Drupal\single_content_sync\ContentFileGeneratorInterface
    */
-  protected $fileGenerator;
+  protected ContentFileGeneratorInterface $fileGenerator;
 
   /**
    * The content sync helper.
    *
    * @var \Drupal\single_content_sync\ContentSyncHelperInterface
    */
-  protected $contentSyncHelper;
+  protected ContentSyncHelperInterface $contentSyncHelper;
 
   /**
    * ContentExportForm constructor.
@@ -94,7 +95,7 @@ class ContentExportForm extends FormBase {
    * @param array $form
    *   The form array.
    */
-  protected function handleAutoFileDownload(array &$form) {
+  protected function handleAutoFileDownload(array &$form): void {
     // Don't check for file downloads if this is a submit request.
     if ($this->getRequest()->getMethod() !== 'POST') {
       if ($uri = $this->getRequest()->query->get('file')) {
@@ -191,7 +192,7 @@ class ContentExportForm extends FormBase {
   /**
    * Ajax callback to refresh output field.
    */
-  public function refreshContent(array &$form, FormStateInterface $form_state) {
+  public function refreshContent(array &$form, FormStateInterface $form_state): array {
     // Clean up warning messages when refreshing field.
     $this->messenger()->deleteByType('warning');
 
@@ -239,8 +240,11 @@ class ContentExportForm extends FormBase {
 
   /**
    * Check if user has access to the export form.
+   *
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   The access result.
    */
-  public function access() {
+  public function access(): AccessResultInterface {
     $parameters = $this->getRouteMatch()->getParameters();
     $entity = $parameters->getIterator()->current();
 

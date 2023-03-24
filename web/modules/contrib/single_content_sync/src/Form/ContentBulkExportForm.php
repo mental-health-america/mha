@@ -7,11 +7,17 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
+use Drupal\Core\TempStore\PrivateTempStore;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\Core\Url;
 use Drupal\single_content_sync\ContentFileGeneratorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Defines a form to export a content.
+ *
+ * @package Drupal\single_content_sync\Form
+ */
 class ContentBulkExportForm extends ConfirmFormBase {
 
   /**
@@ -19,21 +25,14 @@ class ContentBulkExportForm extends ConfirmFormBase {
    *
    * @var \Drupal\Core\TempStore\PrivateTempStore
    */
-  protected $privateTempStore;
+  protected PrivateTempStore $privateTempStore;
 
   /**
    * The custom file generator to export content.
    *
    * @var \Drupal\single_content_sync\ContentFileGeneratorInterface
    */
-  protected $fileGenerator;
-
-  /**
-   * The config factory.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
+  protected ContentFileGeneratorInterface $fileGenerator;
 
   /**
    * Construct of ContentBulkExportForm.
@@ -42,6 +41,8 @@ class ContentBulkExportForm extends ConfirmFormBase {
    *   The private temp store of the module.
    * @param \Drupal\single_content_sync\ContentFileGeneratorInterface $file_generator
    *   The custom file generator to export content.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The config factory.
    */
   public function __construct(PrivateTempStoreFactory $temp_store_factory, ContentFileGeneratorInterface $file_generator, ConfigFactoryInterface $config_factory) {
     $this->privateTempStore = $temp_store_factory->get('single_content_sync');

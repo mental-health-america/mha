@@ -5,6 +5,9 @@ namespace Drupal\single_content_sync;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 
+/**
+ * Creates an interface for content exporter.
+ */
 interface ContentExporterInterface {
 
   /**

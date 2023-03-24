@@ -18,7 +18,7 @@ class ContentExportRoutes implements ContainerInjectionInterface {
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $entityTypeManager;
+  protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
    * Constructs a ContentExportRoutes object.

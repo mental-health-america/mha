@@ -10,6 +10,11 @@
             "role": "Maintainer"
         }
     ],
+    "require": {
+        "php": ">=7.4",
+        "ext-dom": "*",
+        "ext-zip": "*"
+    },
     "support": {
         "issues": "https://drupal.org/project/issues/single_content_sync",
         "source": "https://cgit.drupalcode.org/single_content_sync"

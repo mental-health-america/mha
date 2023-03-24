@@ -7,6 +7,9 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Provides dynamic permissions for exporting content.
+ */
 class ContentSyncPermissions implements ContainerInjectionInterface {
 
   use StringTranslationTrait;
@@ -16,7 +19,7 @@ class ContentSyncPermissions implements ContainerInjectionInterface {
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $entityTypeManager;
+  protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
    * Constructs a ContentExportRoutes object.
