@@ -17,7 +17,7 @@ class ContentExportLocalTasks extends DeriverBase implements ContainerDeriverInt
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $entityTypeManager;
+  protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
    * ContentExportLocalTasks constructor.

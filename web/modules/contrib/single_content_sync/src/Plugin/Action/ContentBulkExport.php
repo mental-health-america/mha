@@ -6,6 +6,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Action\ActionBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\TempStore\PrivateTempStore;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -26,14 +27,14 @@ class ContentBulkExport extends ActionBase implements ContainerFactoryPluginInte
    *
    * @var \Drupal\Core\Session\AccountInterface
    */
-  protected $currentUser;
+  protected AccountInterface $currentUser;
 
   /**
    * The private temp store of the module.
    *
    * @var \Drupal\Core\TempStore\PrivateTempStore
    */
-  protected $privateTempStore;
+  protected PrivateTempStore $privateTempStore;
 
   /**
    * Constructs a ContentBulkExport object.
