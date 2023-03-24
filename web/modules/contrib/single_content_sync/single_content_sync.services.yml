@@ -8,6 +8,7 @@ services:
       - '@single_content_sync.store'
       - '@language_manager'
       - '@single_content_sync.helper'
+      - '@entity.repository'
 
   single_content_sync.importer:
     class: Drupal\single_content_sync\ContentImporter

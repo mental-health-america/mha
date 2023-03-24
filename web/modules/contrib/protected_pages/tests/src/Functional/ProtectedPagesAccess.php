@@ -16,7 +16,7 @@ class ProtectedPagesAccess extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['node', 'protected_pages'];
+  protected static $modules = ['node', 'protected_pages'];
 
   /**
    * A user with permission to 'access protected page password screen'.
@@ -48,7 +48,7 @@ class ProtectedPagesAccess extends BrowserTestBase {
 
     // Protect created node.
     $page_data = [
-      'password' => 'test_pass',
+      'password' => bin2hex(random_bytes(9)),
       'path' => '/node/' . $node->id(),
     ];
     $storage = \Drupal::service('protected_pages.storage');
