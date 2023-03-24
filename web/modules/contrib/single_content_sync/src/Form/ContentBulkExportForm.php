@@ -164,14 +164,13 @@ class ContentBulkExportForm extends ConfirmFormBase {
 
       $extract_translations = $form_state->getValue('translation', FALSE);
       $extract_assets = $form_state->getValue('assets', FALSE);
-
       $file = $this->fileGenerator->generateBulkZipFile($entities, $extract_translations, $extract_assets);
-      $zip_file_name = $file->getFileName();
 
+      [$file_scheme, $file_target] = explode('://', $file->getFileUri(), 2);
       $this->messenger()->addStatus($this->t('We have successfully exported the chosen content. Follow the @link to download the generate zip file with the content', [
-        '@link' => Link::createFromRoute($this->t('link'), 'single_content_sync.file_download', [], [
+        '@link' => Link::createFromRoute($this->t('link'), 'single_content_sync.file_download', ['scheme' => $file_scheme], [
           'query' => [
-            'file' => $zip_file_name,
+            'file' => $file_target,
           ],
         ])->toString(),
       ]));

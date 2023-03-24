@@ -2,6 +2,7 @@
 
 namespace Drupal\protected_pages\EventSubscriber;
 
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Drupal\Core\PageCache\ResponsePolicy\KillSwitch;
 use Drupal\Core\Path\CurrentPathStack;
 use Drupal\Core\Routing\RedirectDestination;
@@ -12,7 +13,6 @@ use Drupal\protected_pages\ProtectedPagesStorage;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
@@ -100,10 +100,10 @@ class ProtectedPagesSubscriber implements EventSubscriberInterface {
   /**
    * Redirects user to protected page login screen.
    *
-   * @param \Symfony\Component\HttpKernel\Event\FilterResponseEvent $event
+   * @param \Symfony\Component\HttpKernel\Event\ResponseEvent $event
    *   The event to process.
    */
-  public function checkProtectedPage(FilterResponseEvent $event) {
+  public function checkProtectedPage(ResponseEvent $event) {
     if ($this->currentUser->hasPermission('bypass pages password protection')) {
       return;
     }

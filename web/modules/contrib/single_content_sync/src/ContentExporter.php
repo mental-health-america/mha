@@ -3,7 +3,9 @@
 namespace Drupal\single_content_sync;
 
 use Drupal\block_content\BlockContentInterface;
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -88,6 +90,13 @@ class ContentExporter implements ContentExporterInterface {
   protected $contentSyncHelper;
 
   /**
+   * The entity repository.
+   *
+   * @var \Drupal\Core\Entity\EntityRepositoryInterface
+   */
+  protected EntityRepositoryInterface $entityRepository;
+
+  /**
    * ContentExporter constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -98,16 +107,21 @@ class ContentExporter implements ContentExporterInterface {
    *   The messenger.
    * @param \Drupal\Core\TempStore\PrivateTempStore $store
    *   The private temp store of the module.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   The language manager.
    * @param \Drupal\single_content_sync\ContentSyncHelperInterface $content_sync_helper
    *   The configuration factory.
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
+   *   The entity repository.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler, MessengerInterface $messenger, PrivateTempStore $store, LanguageManagerInterface $language_manager, ContentSyncHelperInterface $content_sync_helper) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler, MessengerInterface $messenger, PrivateTempStore $store, LanguageManagerInterface $language_manager, ContentSyncHelperInterface $content_sync_helper, EntityRepositoryInterface $entity_repository) {
     $this->entityTypeManager = $entity_type_manager;
     $this->moduleHandler = $module_handler;
     $this->messenger = $messenger;
     $this->privateTempStore = $store;
     $this->languageManager = $language_manager;
     $this->contentSyncHelper = $content_sync_helper;
+    $this->entityRepository = $entity_repository;
   }
 
   /**
@@ -373,12 +387,40 @@ class ContentExporter implements ContentExporterInterface {
       case 'list_integer':
       case 'list_string':
       case 'text':
-      case 'text_long':
-      case 'text_with_summary':
       case 'string':
       case 'string_long':
       case 'yearonly':
         $value = $field->getValue();
+        break;
+
+      case 'text_long':
+      case 'text_with_summary':
+        $value = $field->getValue();
+
+        foreach ($value as &$item) {
+          $text = $item['value'];
+
+          if (stristr($text, '<drupal-media') === FALSE) {
+            continue;
+          }
+
+          $dom = Html::load($text);
+          $xpath = new \DOMXPath($dom);
+          $embed_entities = [];
+
+          foreach ($xpath->query('//drupal-media[@data-entity-type="media" and normalize-space(@data-entity-uuid)!=""]') as $node) {
+            /** @var \DOMElement $node */
+            $uuid = $node->getAttribute('data-entity-uuid');
+            $media = $this->entityRepository->loadEntityByUuid('media', $uuid);
+            assert($media === NULL || $media instanceof MediaInterface);
+
+            if ($media) {
+              $embed_entities[] = $this->doExportToArray($media);
+            }
+          }
+
+          $item['embed_entities'] = $embed_entities;
+        }
         break;
 
       case 'entity_reference':

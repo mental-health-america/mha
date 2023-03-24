@@ -3832,17 +3832,17 @@
         },
         {
             "name": "drupal/core",
-            "version": "9.5.5",
-            "version_normalized": "9.5.5.0",
+            "version": "9.5.6",
+            "version_normalized": "9.5.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core.git",
-                "reference": "eae5e76a8b403cbd42b3465f567313b52d78b0dc"
+                "reference": "c8c24075ce033335b0ddf55613bab5728d96db09"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drupal/core/zipball/eae5e76a8b403cbd42b3465f567313b52d78b0dc",
-                "reference": "eae5e76a8b403cbd42b3465f567313b52d78b0dc",
+                "url": "https://api.github.com/repos/drupal/core/zipball/c8c24075ce033335b0ddf55613bab5728d96db09",
+                "reference": "c8c24075ce033335b0ddf55613bab5728d96db09",
                 "shasum": ""
             },
             "require": {
@@ -3922,7 +3922,7 @@
                 "drupal/core-uuid": "self.version",
                 "drupal/core-version": "self.version"
             },
-            "time": "2023-03-15T14:30:25+00:00",
+            "time": "2023-03-24T13:02:42+00:00",
             "type": "drupal-core",
             "extra": {
                 "drupal-scaffold": {
@@ -3996,7 +3996,7 @@
             ],
             "description": "Drupal is an open source content management platform powering millions of websites and applications.",
             "support": {
-                "source": "https://github.com/drupal/core/tree/9.5.5"
+                "source": "https://github.com/drupal/core/tree/9.5.6"
             },
             "install-path": "../../web/core"
         },
@@ -6991,18 +6991,18 @@
         },
         {
             "name": "drupal/libraries",
-            "version": "4.0.0",
-            "version_normalized": "4.0.0.0",
+            "version": "4.0.1",
+            "version_normalized": "4.0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/libraries.git",
-                "reference": "4.0.0"
+                "reference": "4.0.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/libraries-4.0.0.zip",
-                "reference": "4.0.0",
-                "shasum": "52c0b4ecb0566d36afdeb5f8cf780d085a41fc64"
+                "url": "https://ftp.drupal.org/files/projects/libraries-4.0.1.zip",
+                "reference": "4.0.1",
+                "shasum": "5917e53f18ee69c8c9e074402f6593a5b00d70a8"
             },
             "require": {
                 "drupal/core": "^8.8 || ^9 || ^10"
@@ -7010,8 +7010,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "4.0.0",
-                    "datestamp": "1666346899",
+                    "version": "4.0.1",
+                    "datestamp": "1679503729",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -7052,7 +7052,7 @@
             "description": "Allows version-dependent and shared usage of external libraries in Drupal.",
             "homepage": "http://drupal.org/project/libraries",
             "support": {
-                "source": "http://cgit.drupalcode.org/libraries",
+                "source": "https://git.drupalcode.org/project/libraries",
                 "issues": "http://drupal.org/project/issues/libraries",
                 "irc": "irc://irc.freenode.org/drupal-contribute"
             },
@@ -7639,31 +7639,31 @@
         },
         {
             "name": "drupal/mimemail",
-            "version": "1.0.0-alpha4",
-            "version_normalized": "1.0.0.0-alpha4",
+            "version": "1.0.0-alpha5",
+            "version_normalized": "1.0.0.0-alpha5",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/mimemail.git",
-                "reference": "8.x-1.0-alpha4"
+                "reference": "8.x-1.0-alpha5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/mimemail-8.x-1.0-alpha4.zip",
-                "reference": "8.x-1.0-alpha4",
-                "shasum": "7e65bbcb616de898ecc7c01d280b8d69101f2dcc"
+                "url": "https://ftp.drupal.org/files/projects/mimemail-8.x-1.0-alpha5.zip",
+                "reference": "8.x-1.0-alpha5",
+                "shasum": "a3dd29ad5e137bcdeb1c6165654ed79e26553456"
             },
             "require": {
-                "drupal/core": "^8.8.2 || ^9",
-                "drupal/mailsystem": "*"
+                "drupal/core": "^9.3 || ^10",
+                "drupal/mailsystem": "^4"
             },
             "require-dev": {
-                "drupal/rules": "*"
+                "drupal/rules": "^3"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.0-alpha4",
-                    "datestamp": "1638738304",
+                    "version": "8.x-1.0-alpha5",
+                    "datestamp": "1679607103",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -7684,7 +7684,8 @@
             "description": "Sends MIME-encoded emails with embedded images and attachments.",
             "homepage": "https://www.drupal.org/project/mimemail",
             "support": {
-                "source": "https://git.drupalcode.org/project/mimemail"
+                "source": "https://git.drupalcode.org/project/mimemail",
+                "issues": "https://www.drupal.org/project/issues/mimemail"
             },
             "install-path": "../../web/modules/contrib/mimemail"
         },
@@ -8119,27 +8120,27 @@
         },
         {
             "name": "drupal/protected_pages",
-            "version": "1.4.0",
-            "version_normalized": "1.4.0.0",
+            "version": "1.5.0",
+            "version_normalized": "1.5.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/protected_pages.git",
-                "reference": "8.x-1.4"
+                "reference": "8.x-1.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/protected_pages-8.x-1.4.zip",
-                "reference": "8.x-1.4",
-                "shasum": "2b3ab34631721e8baa60c0cba818dd64a3ede557"
+                "url": "https://ftp.drupal.org/files/projects/protected_pages-8.x-1.5.zip",
+                "reference": "8.x-1.5",
+                "shasum": "e9815fa0394508442c2e9ae62b72ad99bf431de9"
             },
             "require": {
-                "drupal/core": "^8.8 || ^9"
+                "drupal/core": "^8.8 || ^9 || ^10"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.4",
-                    "datestamp": "1619731656",
+                    "version": "8.x-1.5",
+                    "datestamp": "1679358606",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -8153,8 +8154,8 @@
             ],
             "authors": [
                 {
-                    "name": "Unsupported Projects",
-                    "homepage": "https://www.drupal.org/user/291168"
+                    "name": "markdorison",
+                    "homepage": "https://www.drupal.org/user/346106"
                 },
                 {
                     "name": "oksana-c",
@@ -9547,18 +9548,18 @@
         },
         {
             "name": "drupal/single_content_sync",
-            "version": "1.3.8",
-            "version_normalized": "1.3.8.0",
+            "version": "1.3.9",
+            "version_normalized": "1.3.9.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/single_content_sync.git",
-                "reference": "1.3.8"
+                "reference": "1.3.9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/single_content_sync-1.3.8.zip",
-                "reference": "1.3.8",
-                "shasum": "a9ec40962f315854c5395229f8c3992002ca0d58"
+                "url": "https://ftp.drupal.org/files/projects/single_content_sync-1.3.9.zip",
+                "reference": "1.3.9",
+                "shasum": "1975bd88bbd0fd9ada8f53a9c4c3296445da0f85"
             },
             "require": {
                 "drupal/core": "^9.3 || ^10"
@@ -9566,8 +9567,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.3.8",
-                    "datestamp": "1675022501",
+                    "version": "1.3.9",
+                    "datestamp": "1679596906",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -10057,27 +10058,27 @@
         },
         {
             "name": "drupal/typed_data",
-            "version": "1.0.0-beta1",
-            "version_normalized": "1.0.0.0-beta1",
+            "version": "1.0.0-beta2",
+            "version_normalized": "1.0.0.0-beta2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/typed_data.git",
-                "reference": "8.x-1.0-beta1"
+                "reference": "8.x-1.0-beta2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/typed_data-8.x-1.0-beta1.zip",
-                "reference": "8.x-1.0-beta1",
-                "shasum": "73d079f29c7a5679e0db3e28ae888e8cce2f1335"
+                "url": "https://ftp.drupal.org/files/projects/typed_data-8.x-1.0-beta2.zip",
+                "reference": "8.x-1.0-beta2",
+                "shasum": "e0aa651b129d8dcd765ca49cba8682ebe09e6e73"
             },
             "require": {
-                "drupal/core": "^8.8.2 || ^9"
+                "drupal/core": "^9.1 || ^10"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.0-beta1",
-                    "datestamp": "1635839873",
+                    "version": "8.x-1.0-beta2",
+                    "datestamp": "1679429196",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
@@ -10085,7 +10086,7 @@
                 },
                 "drush": {
                     "services": {
-                        "drush.services.yml": "^9 || ^10"
+                        "drush.services.yml": ">=9"
                     }
                 }
             },
@@ -10096,12 +10097,12 @@
             ],
             "authors": [
                 {
-                    "name": "TR",
-                    "homepage": "https://www.drupal.org/user/202830"
-                },
-                {
                     "name": "fago",
                     "homepage": "https://www.drupal.org/user/16747"
+                },
+                {
+                    "name": "TR",
+                    "homepage": "https://www.drupal.org/user/202830"
                 }
             ],
             "description": "Extends the core Typed Data API with new APIs and features.",
@@ -12296,33 +12297,33 @@
         },
         {
             "name": "laminas/laminas-stdlib",
-            "version": "3.16.1",
-            "version_normalized": "3.16.1.0",
+            "version": "3.17.0",
+            "version_normalized": "3.17.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-stdlib.git",
-                "reference": "f4f773641807c7ccee59b758bfe4ac4ba33ecb17"
+                "reference": "dd35c868075bad80b6718959740913e178eb4274"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-stdlib/zipball/f4f773641807c7ccee59b758bfe4ac4ba33ecb17",
-                "reference": "f4f773641807c7ccee59b758bfe4ac4ba33ecb17",
+                "url": "https://api.github.com/repos/laminas/laminas-stdlib/zipball/dd35c868075bad80b6718959740913e178eb4274",
+                "reference": "dd35c868075bad80b6718959740913e178eb4274",
                 "shasum": ""
             },
             "require": {
-                "php": "~8.0.0 || ~8.1.0 || ~8.2.0"
+                "php": "~8.1.0 || ~8.2.0"
             },
             "conflict": {
                 "zendframework/zend-stdlib": "*"
             },
             "require-dev": {
-                "laminas/laminas-coding-standard": "^2.4.0",
-                "phpbench/phpbench": "^1.2.7",
-                "phpunit/phpunit": "^9.5.26",
-                "psalm/plugin-phpunit": "^0.18.0",
-                "vimeo/psalm": "^5.0.0"
+                "laminas/laminas-coding-standard": "^2.5",
+                "phpbench/phpbench": "^1.2.9",
+                "phpunit/phpunit": "^10.0.16",
+                "psalm/plugin-phpunit": "^0.18.4",
+                "vimeo/psalm": "^5.8"
             },
-            "time": "2022-12-03T18:48:01+00:00",
+            "time": "2023-03-20T13:51:37+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -13488,17 +13489,17 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.7",
-            "version_normalized": "1.10.7.0",
+            "version": "1.10.8",
+            "version_normalized": "1.10.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "b10ceb526d9607903c5b2673f1fc8775dbe48975"
+                "reference": "0166aef76e066f0dd2adc2799bdadfa1635711e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/b10ceb526d9607903c5b2673f1fc8775dbe48975",
-                "reference": "b10ceb526d9607903c5b2673f1fc8775dbe48975",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/0166aef76e066f0dd2adc2799bdadfa1635711e9",
+                "reference": "0166aef76e066f0dd2adc2799bdadfa1635711e9",
                 "shasum": ""
             },
             "require": {
@@ -13507,7 +13508,7 @@
             "conflict": {
                 "phpstan/phpstan-shim": "*"
             },
-            "time": "2023-03-16T15:24:20+00:00",
+            "time": "2023-03-24T10:28:16+00:00",
             "bin": [
                 "phpstan",
                 "phpstan.phar"
@@ -13553,17 +13554,17 @@
         },
         {
             "name": "phpstan/phpstan-deprecation-rules",
-            "version": "1.1.2",
-            "version_normalized": "1.1.2.0",
+            "version": "1.1.3",
+            "version_normalized": "1.1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-deprecation-rules.git",
-                "reference": "bcc1e8cdf81c3da1a2ba9188ee94cd7e2a62e865"
+                "reference": "a22b36b955a2e9a3d39fe533b6c1bb5359f9c319"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-deprecation-rules/zipball/bcc1e8cdf81c3da1a2ba9188ee94cd7e2a62e865",
-                "reference": "bcc1e8cdf81c3da1a2ba9188ee94cd7e2a62e865",
+                "url": "https://api.github.com/repos/phpstan/phpstan-deprecation-rules/zipball/a22b36b955a2e9a3d39fe533b6c1bb5359f9c319",
+                "reference": "a22b36b955a2e9a3d39fe533b6c1bb5359f9c319",
                 "shasum": ""
             },
             "require": {
@@ -13576,7 +13577,7 @@
                 "phpstan/phpstan-phpunit": "^1.0",
                 "phpunit/phpunit": "^9.5"
             },
-            "time": "2023-01-17T16:14:21+00:00",
+            "time": "2023-03-17T07:50:08+00:00",
             "type": "phpstan-extension",
             "extra": {
                 "phpstan": {
@@ -13598,7 +13599,7 @@
             "description": "PHPStan rules for detecting usage of deprecated classes, methods, properties, constants and traits.",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan-deprecation-rules/issues",
-                "source": "https://github.com/phpstan/phpstan-deprecation-rules/tree/1.1.2"
+                "source": "https://github.com/phpstan/phpstan-deprecation-rules/tree/1.1.3"
             },
             "install-path": "../phpstan/phpstan-deprecation-rules"
         },
