@@ -5,6 +5,9 @@ namespace Drupal\single_content_sync;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 
+/**
+ * Creates an interface for content importer.
+ */
 interface ContentImporterInterface {
 
   /**
@@ -28,7 +31,7 @@ interface ContentImporterInterface {
    * @param mixed $field_value
    *   Field value.
    */
-  public function setFieldValue(FieldableEntityInterface $entity, $field_name, $field_value);
+  public function setFieldValue(FieldableEntityInterface $entity, string $field_name, mixed $field_value): void;
 
   /**
    * Import content from the YAML file.
@@ -70,7 +73,7 @@ interface ContentImporterInterface {
    * @return array
    *   Correct field mapping with exported values.
    */
-  public function mapBaseFieldsValues($entity_type_id, array $values);
+  public function mapBaseFieldsValues(string $entity_type_id, array $values): array;
 
   /**
    * Handle import of values for custom fields.
@@ -80,7 +83,7 @@ interface ContentImporterInterface {
    * @param array $fields
    *   The custom fields with values.
    */
-  public function importCustomValues(FieldableEntityInterface $entity, array $fields);
+  public function importCustomValues(FieldableEntityInterface $entity, array $fields): void;
 
   /**
    * Handle import of values for base fields.
@@ -90,6 +93,6 @@ interface ContentImporterInterface {
    * @param array $fields
    *   The base fields with values.
    */
-  public function importBaseValues(FieldableEntityInterface $entity, array $fields);
+  public function importBaseValues(FieldableEntityInterface $entity, array $fields): void;
 
 }
