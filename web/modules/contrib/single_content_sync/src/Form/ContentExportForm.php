@@ -10,7 +10,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\file\FileInterface;
-use Drupal\node\Plugin\views\filter\Access;
 use Drupal\single_content_sync\ContentExporterInterface;
 use Drupal\single_content_sync\ContentFileGeneratorInterface;
 use Drupal\single_content_sync\ContentSyncHelperInterface;
@@ -98,14 +97,12 @@ class ContentExportForm extends FormBase {
   protected function handleAutoFileDownload(array &$form) {
     // Don't check for file downloads if this is a submit request.
     if ($this->getRequest()->getMethod() !== 'POST') {
-      if ($filename = $this->getRequest()->query->get('file')) {
-        $files = $this->entityTypeManager->getStorage('file')
-          ->loadByProperties(['filename' => $filename]);
-        /** @var \Drupal\file\FileInterface $file */
-        $file = array_pop($files);
-        if (file_exists($file->getFileUri())) {
-          $download_url = Url::fromRoute('single_content_sync.file_download', [], [
-            'query' => ['file' => $filename],
+      if ($uri = $this->getRequest()->query->get('file')) {
+        if (file_exists($uri)) {
+          [$file_scheme, $file_target] = explode('://', $uri, 2);
+
+          $download_url = Url::fromRoute('single_content_sync.file_download', ['scheme' => $file_scheme], [
+            'query' => ['file' => $file_target],
             'absolute' => TRUE,
           ])->toString();
 
@@ -222,20 +219,19 @@ class ContentExportForm extends FormBase {
 
     // Display message to download a file immediately.
     if (isset($file) && $file instanceof FileInterface) {
-      $file_name = $file->getFileName();
+      [$file_scheme, $file_target] = explode('://', $file->getFileUri(), 2);
 
-      $url = Url::fromRoute('single_content_sync.file_download', [], [
-        'query' => ['file' => $file_name],
-        'absolute' => TRUE,
-      ]);
-      $message = $this->t('Your download should begin now. If it does not start, download the file @link.', [
-        '@link' => Link::fromTextAndUrl($this->t('here'), $url)->toString(),
-      ]);
-      $this->messenger()->addStatus($message);
+      $this->messenger()->addStatus($this->t('Your download should begin now. If it does not start, download the file @link.', [
+        '@link' => Link::createFromRoute($this->t('here'), 'single_content_sync.file_download', ['scheme' => $file_scheme], [
+          'query' => [
+            'file' => $file_target,
+          ],
+        ])->toString(),
+      ]));
 
       $form_state->setRedirect($this->getRouteMatch()->getRouteName(), $this->getRouteMatch()->getRawParameters()->all(), [
         'query' => [
-          'file' => $file_name,
+          'file' => $file->getFileUri(),
         ],
       ]);
     }
