@@ -67,7 +67,7 @@ class ContentImportForm extends FormBase {
 
     $form['upload_fid'] = [
       '#type' => 'managed_file',
-      '#upload_loction' => "{$default_scheme}://import/zip",
+      '#upload_location' => "{$default_scheme}://import/zip",
       '#upload_validators' => [
         'file_validate_extensions' => ['zip yml'],
       ],

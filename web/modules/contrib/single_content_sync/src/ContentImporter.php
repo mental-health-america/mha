@@ -256,11 +256,24 @@ class ContentImporter implements ContentImporterInterface {
       case 'list_integer':
       case 'list_string':
       case 'text':
-      case 'text_long':
-      case 'text_with_summary':
       case 'string':
       case 'string_long':
       case 'yearonly':
+        $entity->set($field_name, $field_value);
+        break;
+
+      case 'text_long':
+      case 'text_with_summary':
+        if (is_array($field_value)) {
+          foreach ($field_value as $item) {
+            $embed_entities = $item['embed_entities'] ?? [];
+
+            foreach ($embed_entities as $embed_entity) {
+              $this->doImport($embed_entity);
+            }
+          }
+        }
+
         $entity->set($field_name, $field_value);
         break;
 
