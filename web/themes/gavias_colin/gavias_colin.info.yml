@@ -3,6 +3,7 @@ type: theme
 description: 'A flexible, recolorable theme with many regions and a responsive, mobile-first layout.'
 package: gaviasthemes
 base theme: false
+
 libraries:
   - gavias_colin/global-styling
   - gavias_colin/mha-alerts
@@ -44,5 +45,5 @@ regions:
   other: 'Other'
 
 version: '9.x'
-core_version_requirement: ^8.8 || ^9
+core_version_requirement: ^8 || ^9 || ^10
 project: 'drupal'
