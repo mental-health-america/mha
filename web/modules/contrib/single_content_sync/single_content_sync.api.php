@@ -17,12 +17,9 @@ use Drupal\Core\Field\FieldItemListInterface;
  * Perform alterations on the exporting field value.
  *
  * @param array|string|bool $value
- *   The original value after exporting.
+ *   The original value after exporting to modify/extend.
  * @param \Drupal\Core\Field\FieldItemListInterface $field
  *   The field item list.
- *
- * @return array|string|bool
- *   The formatted field value.
  */
 function hook_content_export_field_value_alter(&$value, FieldItemListInterface $field) {
   switch ($field->getFieldDefinition()->getType()) {

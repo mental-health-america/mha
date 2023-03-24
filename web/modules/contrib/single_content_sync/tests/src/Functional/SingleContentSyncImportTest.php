@@ -3,7 +3,7 @@
 namespace Drupal\Tests\single_content_sync\Functional;
 
 /**
- * Test different import functionalities
+ * Test different import functionalities.
  *
  * @group single_content_sync
  */

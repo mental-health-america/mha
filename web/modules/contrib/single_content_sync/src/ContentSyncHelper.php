@@ -13,69 +13,69 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\file\FileInterface;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\file\FileRepositoryInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
+/**
+ * Creates a helper service with useful methods during content sync.
+ */
 class ContentSyncHelper implements ContentSyncHelperInterface {
-
-  use StringTranslationTrait;
 
   /**
    * The file system.
    *
    * @var \Drupal\Core\File\FileSystemInterface
    */
-  protected $fileSystem;
+  protected FileSystemInterface $fileSystem;
 
   /**
    * The file system.
    *
    * @var \Drupal\file\FileRepositoryInterface
    */
-  protected $fileRepository;
+  protected FileRepositoryInterface $fileRepository;
 
   /**
    * The entity type manager.
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $entityTypeManager;
+  protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
    * The archiver manager.
    *
    * @var \Drupal\Core\Archiver\ArchiverManager
    */
-  protected $archiverManager;
+  protected ArchiverManager $archiverManager;
 
   /**
    * The uuid service.
    *
    * @var \Drupal\Component\Uuid\UuidInterface
    */
-  protected $uuid;
+  protected UuidInterface $uuid;
 
   /**
    * The config factory.
    *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
-  protected $configFactory;
+  protected ConfigFactoryInterface $configFactory;
 
   /**
    * The entity repository.
    *
    * @var \Drupal\Core\Entity\EntityRepositoryInterface
    */
-  protected $entityRepository;
+  protected EntityRepositoryInterface $entityRepository;
 
   /**
    * The entity type bundle info service.
    *
    * @var \Drupal\Core\Entity\EntityTypeBundleInfoInterface
    */
-  protected $entityTypeBundleInfo;
+  protected EntityTypeBundleInfoInterface $entityTypeBundleInfo;
 
   /**
    * ContentSyncHelper constructor.
@@ -177,31 +177,31 @@ class ContentSyncHelper implements ContentSyncHelperInterface {
     $content = Yaml::decode($content);
     // Validate YAML format structure.
     if (!is_array($content)) {
-      throw new \Exception($this->t('YAML is not valid.'));
+      throw new \Exception('YAML is not valid.');
     }
 
     // Validate required YAML properties.
     if (!isset($content['uuid']) || !isset($content['entity_type']) || !isset($content['bundle']) || !isset($content['base_fields']) || !isset($content['custom_fields'])) {
-      throw new \Exception($this->t('The content of the YAML file is not valid. Make sure there are uuid, entity_type, base_fields, and custom_fields properties.'));
+      throw new \Exception('The content of the YAML file is not valid. Make sure there are uuid, entity_type, base_fields, and custom_fields properties.');
     }
 
     // Validate Site UUID value to prevent import on different site.
     if ($this->siteUuidCheckEnabled()
       && !empty($content['site_uuid'])
       && $this->getSiteUuid() !== $content['site_uuid']) {
-      throw new \Exception($this->t('Content source site has another UUID than current one (destination). Make sure that content has been exported from the same instance of the site or disable Site UUID check.'));
+      throw new \Exception('Content source site has another UUID than current one (destination). Make sure that content has been exported from the same instance of the site or disable Site UUID check.');
     }
 
     // Validate that entity type and bundle exists.
     $definition = $this->entityTypeManager->getDefinition($content['entity_type']);
     if (!$definition) {
-      throw new \Exception($this->t('The content of the YAML file is not valid. Make sure that entity type of the imported content does exist on your site.'));
+      throw new \Exception('The content of the YAML file is not valid. Make sure that entity type of the imported content does exist on your site.');
     }
     else {
       // Validate that bundle exists.
       $available_bundles = $this->entityTypeBundleInfo->getBundleInfo($content['entity_type']);
       if (empty($available_bundles[$content['bundle']])) {
-        throw new \Exception($this->t('The content of the YAML file is not valid. Make sure that bundle of the imported content does exist on your site.'));
+        throw new \Exception('The content of the YAML file is not valid. Make sure that bundle of the imported content does exist on your site.');
       }
     }
 
@@ -218,7 +218,7 @@ class ContentSyncHelper implements ContentSyncHelperInterface {
     $file = $storage->load($fid);
 
     if (!$file) {
-      throw new \Exception($this->t('The requested file could not be found.'));
+      throw new \Exception('The requested file could not be found.');
     }
 
     return $this->fileSystem->realpath($file->getFileUri());

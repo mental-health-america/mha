@@ -5,6 +5,9 @@ namespace Drupal\single_content_sync;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\file\FileInterface;
 
+/**
+ * Creates an interface for content file generator.
+ */
 interface ContentFileGeneratorInterface {
 
   /**

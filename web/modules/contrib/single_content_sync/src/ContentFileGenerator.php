@@ -8,6 +8,9 @@ use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\TempStore\PrivateTempStore;
 use Drupal\file\FileInterface;
 
+/**
+ * Creates a helper service to generate files during content export.
+ */
 class ContentFileGenerator implements ContentFileGeneratorInterface {
 
   /**
@@ -15,28 +18,28 @@ class ContentFileGenerator implements ContentFileGeneratorInterface {
    *
    * @var \Drupal\Core\File\FileSystemInterface
    */
-  protected $fileSystem;
+  protected FileSystemInterface $fileSystem;
 
   /**
    * The content sync helper.
    *
    * @var \Drupal\single_content_sync\ContentSyncHelperInterface
    */
-  protected $contentSyncHelper;
+  protected ContentSyncHelperInterface $contentSyncHelper;
 
   /**
    * The content exporter.
    *
    * @var \Drupal\single_content_sync\ContentExporterInterface
    */
-  protected $contentExporter;
+  protected ContentExporterInterface $contentExporter;
 
   /**
    * The private temp store of the module.
    *
    * @var \Drupal\Core\TempStore\PrivateTempStore
    */
-  protected $privateTempStore;
+  protected PrivateTempStore $privateTempStore;
 
   /**
    * ContentFileGenerator constructor.
