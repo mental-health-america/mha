@@ -3,6 +3,7 @@
 namespace Drupal\Tests\single_content_sync\Functional;
 
 use Drupal\Tests\BrowserTestBase;
+use Drupal\user\UserInterface;
 
 /**
  * Browser test base class for Single content sync functional tests.
@@ -29,11 +30,11 @@ abstract class SingleContentSyncBrowserTestBase extends BrowserTestBase {
   protected static $modules = ['single_content_sync', 'node', 'path'];
 
   /**
-   * An user with permissions to view and create content.
+   * A user with permissions to view and create content.
    *
    * @var \Drupal\user\UserInterface
    */
-  protected $adminUser;
+  protected UserInterface $adminUser;
 
   /**
    * {@inheritdoc}
