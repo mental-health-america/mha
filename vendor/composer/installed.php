@@ -3,7 +3,7 @@
         'name' => 'drupal-composer/drupal-project',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '703d681c19b21ae5de228fd507cd9354dffc7a5d',
+        'reference' => 'd7f609ba4a32e81abfbec6dceff31ff40647e1bd',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -289,7 +289,7 @@
         'drupal-composer/drupal-project' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '703d681c19b21ae5de228fd507cd9354dffc7a5d',
+            'reference' => 'd7f609ba4a32e81abfbec6dceff31ff40647e1bd',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -923,9 +923,9 @@
             'dev_requirement' => false,
         ),
         'drupal/geofield_map' => array(
-            'pretty_version' => '3.0.7',
-            'version' => '3.0.7.0',
-            'reference' => '3.0.7',
+            'pretty_version' => '3.0.8',
+            'version' => '3.0.8.0',
+            'reference' => '3.0.8',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../web/modules/contrib/geofield_map',
             'aliases' => array(),
@@ -1964,19 +1964,13 @@
             'dev_requirement' => false,
         ),
         'psr/cache' => array(
-            'pretty_version' => '2.0.0',
-            'version' => '2.0.0.0',
-            'reference' => '213f9dbc5b9bfbc4f8db86d2838dc968752ce13b',
+            'pretty_version' => '3.0.0',
+            'version' => '3.0.0.0',
+            'reference' => 'aa5030cfa5405eccfdcb1083ce040c2cb8d253bf',
             'type' => 'library',
             'install_path' => __DIR__ . '/../psr/cache',
             'aliases' => array(),
             'dev_requirement' => false,
-        ),
-        'psr/cache-implementation' => array(
-            'dev_requirement' => false,
-            'provided' => array(
-                0 => '1.0|2.0',
-            ),
         ),
         'psr/container' => array(
             'pretty_version' => '1.1.2',
@@ -2040,12 +2034,6 @@
             'dev_requirement' => false,
         ),
         'psr/log-implementation' => array(
-            'dev_requirement' => false,
-            'provided' => array(
-                0 => '1.0|2.0',
-            ),
-        ),
-        'psr/simple-cache-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
                 0 => '1.0|2.0',
@@ -2122,30 +2110,6 @@
             'install_path' => __DIR__ . '/../symfony-cmf/routing',
             'aliases' => array(),
             'dev_requirement' => false,
-        ),
-        'symfony/cache' => array(
-            'pretty_version' => 'v5.4.21',
-            'version' => '5.4.21.0',
-            'reference' => '32cab695bf99c63aff7d27ac67919944c00530ed',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../symfony/cache',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'symfony/cache-contracts' => array(
-            'pretty_version' => 'v2.5.2',
-            'version' => '2.5.2.0',
-            'reference' => '64be4a7acb83b6f2bf6de9a02cee6dad41277ebc',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../symfony/cache-contracts',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'symfony/cache-implementation' => array(
-            'dev_requirement' => false,
-            'provided' => array(
-                0 => '1.0|2.0',
-            ),
         ),
         'symfony/config' => array(
             'pretty_version' => 'v4.4.44',
@@ -2244,9 +2208,9 @@
             ),
         ),
         'symfony/expression-language' => array(
-            'pretty_version' => 'v4.4.47',
-            'version' => '4.4.47.0',
-            'reference' => 'e4964c7636e19f6008660f450c09121c80c2a7b9',
+            'pretty_version' => 'v3.1.10',
+            'version' => '3.1.10.0',
+            'reference' => '581138880e70a99712c31be894af4b7a57198915',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/expression-language',
             'aliases' => array(),
@@ -2477,15 +2441,6 @@
             'reference' => '6c5ac3a1be8b849d59a1a77877ee110e1b55eb74',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/var-dumper',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'symfony/var-exporter' => array(
-            'pretty_version' => 'v6.2.7',
-            'version' => '6.2.7.0',
-            'reference' => '86062dd0103530e151588c8f60f5b85a139f1442',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../symfony/var-exporter',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
