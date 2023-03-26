@@ -5,6 +5,6 @@ description: Gavias Slider module.
 package: gavias
 
 version: '9.x'
-core_version_requirement: ^8.8 || ^9
+core_version_requirement: ^8 || ^9 || ^10
 project: 'gavias_slider'
 datestamp: 1439548441

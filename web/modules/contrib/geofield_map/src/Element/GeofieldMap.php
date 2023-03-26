@@ -55,7 +55,7 @@ class GeofieldMap extends GeofieldLatLon {
     // Geocode address textfield and functionality.
     $gmap_geocoder_enabled = \Drupal::moduleHandler()->moduleExists('geocoder') && $element['#gmap_geocoder'];
     $message_recipient = t("(Note: This message is only shown to the Geofield Map module administrator ('Configure Geofield Map' permission).");
-    if (!empty($element['#gmap_api_key']) > 0 || $gmap_geocoder_enabled) {
+    if (!empty($element['#gmap_api_key']) || $gmap_geocoder_enabled) {
       $element['map']['geocode'] = [
         '#title' => t("Geocode address"),
         '#type' => 'textfield',

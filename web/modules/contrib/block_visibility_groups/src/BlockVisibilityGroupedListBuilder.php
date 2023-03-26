@@ -277,7 +277,7 @@ class BlockVisibilityGroupedListBuilder extends BlockListBuilder {
    * @return string|null
    */
   protected function getBlockVisibilityGroup($groups_only = FALSE) {
-    $group = $this->request->query->get('block_visibility_group');
+    $group = $this->getCurrentBlockVisibilityGroup();
     if ($groups_only && in_array($group, [
       $this::ALL_GROUP,
       $this::UNSET_GROUP,
