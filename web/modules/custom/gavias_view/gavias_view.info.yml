@@ -1,7 +1,7 @@
 name: Gavias Custom View
 type: module
 description: Gavias Custom View
-core_version_requirement: ^8.8 || ^9
+core_version_requirement: ^8 || ^9 || ^10
 package: gavias
 dependencies:
   - image
