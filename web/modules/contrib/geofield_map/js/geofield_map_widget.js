@@ -159,7 +159,7 @@
     place_marker: function (mapid) {
       let self = this;
       if (self.map_data[mapid].click_to_place_marker) {
-        if (!window.confirm('Change marker position ?')) {
+        if (!window.confirm(Drupal.t('Change marker position ?'))) {
           return;
         }
       }
