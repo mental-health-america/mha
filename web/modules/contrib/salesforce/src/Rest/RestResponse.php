@@ -41,7 +41,13 @@ class RestResponse extends Response {
   public function __construct(ResponseInterface $response) {
     $this->response = $response;
     parent::__construct($response->getStatusCode(), $response->getHeaders(), $response->getBody(), $response->getProtocolVersion(), $response->getReasonPhrase());
-    $this->handleJsonResponse();
+
+    if (strpos($response->getHeaderLine('Content-Type'), 'application/json') === 0) {
+      $this->handleJsonResponse();
+    }
+    else {
+      $this->handleRawResponse();
+    }
   }
 
   /**
@@ -70,7 +76,7 @@ class RestResponse extends Response {
    *
    * @throws \Drupal\salesforce\Rest\RestException
    */
-  private function handleJsonResponse() {
+  protected function handleJsonResponse() {
     $this->data = '';
     $response_body = $this->getBody()->getContents();
     if (empty($response_body)) {
@@ -105,6 +111,18 @@ class RestResponse extends Response {
       throw new RestException($this, $data['errorCode']);
     }
     $this->data = $data;
+    return $this;
+  }
+
+  /**
+   * Helper function to set data to the raw response.
+   *
+   * @return $this
+   *
+   * @throws \Drupal\salesforce\Rest\RestException
+   */
+  protected function handleRawResponse() {
+    $this->data = $this->getBody()->getContents();
     return $this;
   }
 

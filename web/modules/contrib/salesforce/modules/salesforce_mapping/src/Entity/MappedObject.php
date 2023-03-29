@@ -150,6 +150,7 @@ class MappedObject extends RevisionableContentEntityBase implements MappedObject
     }
     $count = $storage
       ->getQuery()
+      ->accessCheck(false)
       ->allRevisions()
       ->condition('id', $this->id())
       ->count()
@@ -161,6 +162,7 @@ class MappedObject extends RevisionableContentEntityBase implements MappedObject
     }
     $vids_to_delete = $storage
       ->getQuery()
+      ->accessCheck(false)
       ->allRevisions()
       ->condition('id', $this->id())
       ->range($limit, $count)

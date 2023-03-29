@@ -611,6 +611,12 @@ class SalesforceMapping extends ConfigEntityBase implements SalesforceMappingInt
    * {@inheritdoc}
    */
   public function getNextPullTime() {
+    if (!isset($this->pull_info['last_pull_timestamp'])) {
+      // The last pull time is 'never'.
+      // In this case, we set next pull time to 0,
+      // which will not hold off any pull operation.
+      return 0;
+    }
     return $this->pull_info['last_pull_timestamp'] + $this->pull_frequency;
   }
 

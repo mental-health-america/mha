@@ -218,6 +218,8 @@ abstract class SalesforceMappingFieldPluginBase extends PluginBase implements Sa
         $value = (int) $value;
         break;
 
+      // Picklists are single-value, but can submit their values as arrays.
+      case 'picklist':
       case 'multipicklist':
         if (is_array($value)) {
           $value = implode(';', $value);
@@ -240,7 +242,7 @@ abstract class SalesforceMappingFieldPluginBase extends PluginBase implements Sa
         break;
     }
 
-    if ($field_definition['length'] > 0 && strlen($value) > $field_definition['length']) {
+    if (!empty($value) && $field_definition['length'] > 0 && strlen($value) > $field_definition['length']) {
       $value = substr($value, 0, $field_definition['length']);
     }
 
@@ -293,7 +295,10 @@ abstract class SalesforceMappingFieldPluginBase extends PluginBase implements Sa
         break;
 
       case 'multipicklist':
-        if (!is_array($value)) {
+        if (empty($value)) {
+          $value = [];
+        }
+        if (is_string($value)) {
           $value = explode(';', $value);
           $value = array_map('trim', $value);
         }

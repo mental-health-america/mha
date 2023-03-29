@@ -117,6 +117,13 @@ class RestClient implements RestClientInterface {
    */
   protected $httpClientOptions;
 
+  /**
+   * Default HTTP headers.
+   *
+   * @var array
+   */
+  protected $defaultHeaders;
+
   const CACHE_LIFETIME = 300;
   const LONGTERM_CACHE_LIFETIME = 86400;
 
@@ -151,6 +158,9 @@ class RestClient implements RestClientInterface {
     $this->authProvider = $authManager->getProvider();
     $this->authConfig = $authManager->getConfig();
     $this->authToken = $authManager->getToken();
+    $this->defaultHeaders = [
+      'Content-type' => 'application/json',
+    ];
     return $this;
   }
 
@@ -180,7 +190,7 @@ class RestClient implements RestClientInterface {
   /**
    * {@inheritdoc}
    */
-  public function apiCall($path, array $params = [], $method = 'GET', $returnObject = FALSE) {
+  public function apiCall($path, $params = [], $method = 'GET', $returnObject = FALSE, array $headers = []) {
     if (!$this->isInit()) {
       throw new RestException(NULL, $this->t('RestClient is not initialized.'));
     }
@@ -193,7 +203,7 @@ class RestClient implements RestClientInterface {
     }
 
     try {
-      $this->response = new RestResponse($this->apiHttpRequest($url, $params, $method));
+      $this->response = new RestResponse($this->apiHttpRequest($url, $params, $method, $headers));
     }
     catch (RequestException $e) {
       // RequestException gets thrown for any response status but 2XX.
@@ -211,7 +221,7 @@ class RestClient implements RestClientInterface {
       // throws anything but a RequestException, let it bubble up.
       $this->authToken = $this->authManager->refreshToken();
       try {
-        $this->response = new RestResponse($this->apiHttpRequest($url, $params, $method));
+        $this->response = new RestResponse($this->apiHttpRequest($url, $params, $method, $headers));
       }
       catch (RequestException $e) {
         $this->response = $e->getResponse();
@@ -243,10 +253,12 @@ class RestClient implements RestClientInterface {
    *
    * @param string $url
    *   Fully-qualified URL to resource.
-   * @param array $params
+   * @param array|string $params
    *   Parameters to provide.
    * @param string $method
    *   Method to initiate the call, such as GET or POST.  Defaults to GET.
+   * @param array $headers
+   *   The http headers to merge into the request.
    *
    * @return \GuzzleHttp\Psr7\Response
    *   Response object.
@@ -254,18 +266,17 @@ class RestClient implements RestClientInterface {
    * @throws \Exception
    * @throws \GuzzleHttp\Exception\RequestException
    */
-  protected function apiHttpRequest($url, array $params, $method) {
+  protected function apiHttpRequest($url, $params, $method, array $headers = []) {
     if (!$this->authToken) {
       throw new \Exception($this->t('Missing OAuth Token'));
     }
 
-    $headers = [
-      'Authorization' => 'OAuth ' . $this->authToken->getAccessToken(),
-      'Content-type' => 'application/json',
-    ];
+    $headers['Authorization'] = 'OAuth ' . $this->authToken->getAccessToken();
+    $headers = array_merge($this->defaultHeaders, $headers);
+
     $data = NULL;
     if (!empty($params)) {
-      $data = $this->json->encode($params);
+      $data = is_array($params) ? $this->json->encode($params) : $params;
     }
     return $this->httpRequest($url, $data, $headers, $method);
   }
