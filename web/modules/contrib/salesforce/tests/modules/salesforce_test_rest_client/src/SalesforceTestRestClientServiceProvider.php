@@ -8,6 +8,7 @@ use Drupal\salesforce\Tests\TestHttpClientWrapper;
 use Drupal\salesforce\Tests\TestRestClient;
 use Drupal\salesforce\Tests\TestHttpClientFactory;
 use Drupal\salesforce\Tests\TestSalesforceAuthProviderPluginManager;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Modifies the salesforce client service.
@@ -28,7 +29,8 @@ class SalesforceTestRestClientServiceProvider extends ServiceProviderBase {
     $container->getDefinition('plugin.manager.salesforce.auth_providers')
       ->setClass(TestSalesforceAuthProviderPluginManager::class);
     $container->getDefinition('salesforce.http_client_wrapper')
-      ->setClass(TestHttpClientWrapper::class);
+      ->setClass(TestHttpClientWrapper::class)
+      ->addArgument(new Reference('extension.path.resolver'));
   }
 
 }

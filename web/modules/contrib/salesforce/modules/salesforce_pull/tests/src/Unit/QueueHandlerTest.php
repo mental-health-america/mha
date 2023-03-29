@@ -118,7 +118,7 @@ class QueueHandlerTest extends UnitTestCase {
 
     // Mock event dispatcher.
     $prophecy = $this->prophesize(EventDispatcherInterface::CLASS);
-    $prophecy->dispatch(Argument::any(), Argument::any())->willReturn();
+    $prophecy->dispatch(Argument::any(), Argument::any())->willReturnArgument(0);
     $this->ed = $prophecy->reveal();
 
     $this->time = $this->getMockBuilder(TimeInterface::CLASS)->getMock();

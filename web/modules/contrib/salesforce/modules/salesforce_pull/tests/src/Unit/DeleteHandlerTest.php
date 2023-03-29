@@ -144,7 +144,7 @@ class DeleteHandlerTest extends UnitTestCase {
 
     // Mock event dispatcher.
     $prophecy = $this->prophesize(ContainerAwareEventDispatcher::CLASS);
-    $prophecy->dispatch(Argument::any(), Argument::any())->willReturn();
+    $prophecy->dispatch(Argument::any(), Argument::any())->willReturnArgument(0);
     $this->ed = $prophecy->reveal();
 
     $this->dh = new DeleteHandler(

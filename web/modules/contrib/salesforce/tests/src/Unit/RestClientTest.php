@@ -133,7 +133,31 @@ class RestClientTest extends UnitTestCase {
 
     // Test that an apiCall returns a json-decoded value.
     $body = ['foo' => 'bar'];
-    $response = new GuzzleResponse(200, [], json_encode($body));
+    $response = new GuzzleResponse(200, ['Content-Type' => 'application/json'], json_encode($body));
+
+    $this->client->expects($this->any())
+      ->method('httpRequest')
+      ->willReturn($response);
+
+    $result = $this->client->apiCall('');
+    $this->assertEquals($result, $body);
+  }
+
+  /**
+   * @covers ::apiCall
+   */
+  public function testNonJsonApiCall() {
+    $this->initClient();
+
+    // Test that an apiCall returns a CSV string value.
+    $body = <<<EOT
+    "Id","Name"
+    "005R0000000UyrWIAS","Johnny B. Goode"
+    "005R0000000GiwjIAC","Prince Rogers Nelson"
+    "005R0000000GiwoIAC","Robert Allen Zimmerman"
+    EOT;
+
+    $response = new GuzzleResponse(200, ['Content-Type' => 'text/csv'], $body);
 
     $this->client->expects($this->any())
       ->method('httpRequest')
@@ -171,12 +195,12 @@ class RestClientTest extends UnitTestCase {
     $response_200 = new GuzzleResponse(200);
 
     // @TODO this is extremely brittle, exposes complexity in underlying client. Refactor this.
-    $this->client->expects($this->at(0))
+    $this->client->expects($this->exactly(2))
       ->method('httpRequest')
-      ->willReturn($response_401);
-    $this->client->expects($this->at(1))
-      ->method('httpRequest')
-      ->willReturn($response_200);
+      ->willReturnOnConsecutiveCalls(
+        $response_401,
+        $response_200
+      );
 
     $this->client->apiCall('');
   }
@@ -184,7 +208,31 @@ class RestClientTest extends UnitTestCase {
   /**
    * @covers ::objects
    */
-  public function testObjects() {
+  public function testObjectsFromCache() {
+    $this->initClient(array_merge($this->methods, ['apiCall']));
+    $objects = [
+      'sobjects' => [
+        'Test' => [
+          'name' => 'Test',
+          'updateable' => TRUE,
+        ]
+      ],
+    ];
+    $cache = (object) [
+      'created' => time(),
+      'data' => $objects,
+    ];
+
+    $this->cache->expects($this->once())
+      ->method('get')
+      ->willReturn($cache);
+
+    // Get objects from cache:
+    $this->assertEquals($cache->data['sobjects'], $this->client->objects());
+
+  }
+
+  public function testObjectsFromApiCall() {
     $this->initClient(array_merge($this->methods, ['apiCall']));
     $objects = [
       'sobjects' => [
@@ -192,33 +240,17 @@ class RestClientTest extends UnitTestCase {
           'name' => 'Test',
           'updateable' => TRUE,
         ],
-        'NonUpdateable' => [
-          'name' => 'NonUpdateable',
-          'updateable' => FALSE,
-        ],
       ],
     ];
-    $cache = (object) [
-      'created' => time(),
-      'data' => $objects,
-    ];
-    unset($cache->data['sobjects']['NonUpdateable']);
-
-    $this->cache->expects($this->at(0))
-      ->method('get')
-      ->willReturn($cache);
-    $this->cache->expects($this->at(1))
+    $this->cache->expects($this->once())
       ->method('get')
       ->willReturn(FALSE);
     $this->client->expects($this->once())
       ->method('apiCall')
       ->willReturn($objects);
 
-    // First call, from cache:
-    $this->assertEquals($cache->data['sobjects'], $this->client->objects());
-
-    // Second call, from apiCall()
-    $this->assertEquals($cache->data['sobjects'], $this->client->objects());
+    // Get objects from apiCall()
+    $this->assertEquals($objects['sobjects'], $this->client->objects());
   }
 
   /**
@@ -256,7 +288,7 @@ class RestClientTest extends UnitTestCase {
     $name = $this->randomMachineName();
     // @TODO this is fugly, do we need a refactor on RestResponse?
     $restResponse = new RestResponse(
-      new GuzzleResponse('200', [], json_encode([
+      new GuzzleResponse('200', ['Content-Type' => 'application/json'], json_encode([
         'name' => $name,
         'fields' => [
           [
@@ -309,7 +341,7 @@ class RestClientTest extends UnitTestCase {
   public function testObjectCreate() {
     $this->initClient(array_merge($this->methods, ['apiCall']));
     $restResponse = new RestResponse(
-      new GuzzleResponse('200', [], json_encode([
+      new GuzzleResponse('200', ['Content-Type' => 'application/json'], json_encode([
         'id' => $this->salesforce_id,
       ]))
       );
@@ -333,7 +365,7 @@ class RestClientTest extends UnitTestCase {
       'objectReadbyExternalId',
     ]));
     $createResponse = new RestResponse(
-      new GuzzleResponse('200', [], json_encode([
+      new GuzzleResponse('200', ['Content-Type' => 'application/json'], json_encode([
         'id' => $this->salesforce_id,
       ])));
 
@@ -344,13 +376,12 @@ class RestClientTest extends UnitTestCase {
       'id' => $this->salesforce_id,
       'attributes' => ['type' => 'dummy'],
     ]);
-    $this->client->expects($this->at(0))
+    $this->client->expects($this->exactly(2))
       ->method('apiCall')
-      ->willReturn($createResponse);
-
-    $this->client->expects($this->at(1))
-      ->method('apiCall')
-      ->willReturn($updateResponse);
+      ->willReturnOnConsecutiveCalls(
+        $createResponse,
+        $updateResponse
+      );
 
     $this->client->expects($this->once())
       ->method('objectReadbyExternalId')
@@ -410,36 +441,53 @@ class RestClientTest extends UnitTestCase {
 
   /**
    * @covers ::objectDelete
+   *
+   * 3 tests for objectDelete:
+   *   1. test that a successful delete returns null
+   *   2. test that a 404 response gets eaten
+   *   3. test that any other error response percolates.
    */
-  public function testObjectDelete() {
+  public function testObjectDeleteSuccess() {
     $this->initClient(array_merge($this->methods, [
       'apiCall',
     ]));
 
-    // 3 tests for objectDelete:
-    // 1. test that a successful delete returns null
-    // 2. test that a 404 response gets eaten
-    // 3. test that any other error response percolates.
-    $this->client->expects($this->exactly(3))
-      ->method('apiCall');
-
-    $this->client->expects($this->at(0))
+    $this->client->expects($this->once())
       ->method('apiCall')
       ->willReturn(NULL);
 
+    $this->assertNull($this->client->objectDelete('', ''));
+  }
+
+  /**
+   * @covers ::objectDelete
+   */
+  public function testObjectDelete404() {
+    $this->initClient(array_merge($this->methods, [
+      'apiCall',
+    ]));
+
     $exception404 = new RequestException('', new GuzzleRequest('GET', ''), new GuzzleResponse(404, [], ''));
-    $this->client->expects($this->at(1))
+    $this->client->expects($this->once())
       ->method('apiCall')
       ->will($this->throwException($exception404));
 
+    $this->assertNull($this->client->objectDelete('', ''));
+  }
+
+  /**
+   * @covers ::objectDelete
+   */
+  public function testObjectDeleteException() {
+    $this->initClient(array_merge($this->methods, [
+      'apiCall',
+    ]));
+
     // Test the objectDelete throws any other exception.
     $exceptionOther = new RequestException('', new GuzzleRequest('GET', ''), new GuzzleResponse(456, [], ''));
-    $this->client->expects($this->at(2))
+    $this->client->expects($this->once())
       ->method('apiCall')
       ->will($this->throwException($exceptionOther));
-
-    $this->assertNull($this->client->objectDelete('', ''));
-    $this->assertNull($this->client->objectDelete('', ''));
     $this->expectException(RequestException::class);
     $this->client->objectDelete('', '');
   }
@@ -451,7 +499,7 @@ class RestClientTest extends UnitTestCase {
     $this->initClient(array_merge($this->methods, [
       'apiCall',
     ]));
-    $restResponse = new RestResponse(new GuzzleResponse('204', [], json_encode([
+    $restResponse = new RestResponse(new GuzzleResponse('204', ['Content-Type' => 'application/json'], json_encode([
       'foo' => 'bar',
       'zee' => 'bang',
     ])));
@@ -464,7 +512,7 @@ class RestClientTest extends UnitTestCase {
   /**
    * @covers ::getRecordTypes
    */
-  public function testGetRecordTypes() {
+  public function testGetRecordTypesAll() {
     $this->initClient(array_merge($this->methods, ['query']));
     $sObjectType = $this->randomMachineName();
     $developerName = $this->randomMachineName();
@@ -490,29 +538,98 @@ class RestClientTest extends UnitTestCase {
         new SObject($rawQueryResult['records'][0]),
       ],
     ];
-    $cache = (object) [
-      'created' => time(),
-      'data' => $recordTypes,
-    ];
 
-    $this->cache->expects($this->at(1))
+    $this->cache->expects($this->once())
       ->method('get')
       ->willReturn(FALSE);
-    $this->cache->expects($this->at(2))
-      ->method('get')
-      ->willReturn($cache);
-    $this->cache->expects($this->at(3))
-      ->method('get')
-      ->willReturn($cache);
     $this->client->expects($this->once())
       ->method('query')
       ->willReturn(new SelectQueryResult($rawQueryResult));
 
     $this->assertEquals($recordTypes, $this->client->getRecordTypes());
+  }
+
+  /**
+   * @covers ::getRecordTypes
+   */
+  public function testGetRecordTypesSingle() {
+    $this->initClient(array_merge($this->methods, ['query']));
+    $sObjectType = $this->randomMachineName();
+    $developerName = $this->randomMachineName();
+
+    $rawQueryResult = [
+      'totalSize' => 1,
+      'done' => TRUE,
+      'records' => [
+        0 => [
+          'attributes' => [
+            'type' => 'Foo',
+            'url' => 'Bar',
+          ],
+          'SobjectType' => $sObjectType,
+          'DeveloperName' => $developerName,
+          'Id' => $this->salesforce_id,
+        ],
+      ],
+    ];
+    $recordTypes = [
+      $sObjectType => [
+        $developerName =>
+          new SObject($rawQueryResult['records'][0]),
+      ],
+    ];
+    $cache = (object) [
+      'created' => time(),
+      'data' => $recordTypes,
+    ];
+
+    $this->cache->expects($this->once())
+      ->method('get')
+      ->willReturn($cache);
 
     $this->assertEquals($recordTypes[$sObjectType], $this->client->getRecordTypes($sObjectType));
+  }
+
+  /**
+   * @covers ::getRecordTypes
+   */
+  public function testGetRecordTypesNonexistent() {
+    $this->initClient(array_merge($this->methods, ['query']));
+    $sObjectType = $this->randomMachineName();
+    $developerName = $this->randomMachineName();
+
+    $rawQueryResult = [
+      'totalSize' => 1,
+      'done' => TRUE,
+      'records' => [
+        0 => [
+          'attributes' => [
+            'type' => 'Foo',
+            'url' => 'Bar',
+          ],
+          'SobjectType' => $sObjectType,
+          'DeveloperName' => $developerName,
+          'Id' => $this->salesforce_id,
+        ],
+      ],
+    ];
+    $recordTypes = [
+      $sObjectType => [
+        $developerName =>
+          new SObject($rawQueryResult['records'][0]),
+      ],
+    ];
+    $cache = (object) [
+      'created' => time(),
+      'data' => $recordTypes,
+    ];
+
+    $this->cache->expects($this->once())
+      ->method('get')
+      ->willReturn($cache);
 
     $this->assertFalse($this->client->getRecordTypes('fail'));
   }
+
 
 }
