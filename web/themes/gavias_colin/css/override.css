@@ -1666,6 +1666,41 @@ footer a:active {
   font-size:2rem !important;
 }
 
+.js-form-item.form-item, div#edit-actions--3, div#edit-actions--2 {
+  display: inline-block;
+}
+
+.mhm-button a.btn-inline {
+  font-size:1.2rem !important;
+  text-transform: none !important;
+  border: #ABCE3E !important;
+  background: #ABCE3E !important;
+  color: #000 !important;
+}
+
+.mhm-button a.btn-inline:hover {
+  background: #fff !important;
+  border: #ABCE3E !important;
+  color: #000 !important;
+}
+
+.gsc-image-content.mhm-button .box-content a,
+.gsc-image-content.mhm-button .box-content a:visited,
+.gsc-image-content.mhm-button .box-content a:hover,
+.gsc-image-content.mhm-button .box-content a:active {
+  color: #000 !important;
+}
+
+.rounded-corners {
+  border-radius: 15px;
+}
+
+.mhm-button .btn-inline:hover {
+  background: #fff !important;
+  border: #ABCE3E !important;
+  color: #000 !important;
+}
+
 @media screen and (max-width:400px) {
   #spb-block-homepagepopupbox h1 {
     font-size:1.8rem !important;
@@ -1710,4 +1745,13 @@ div#block-socialmediafooterblock {
 div#block-socialmediafooterblock i.fa {
   font-size: 30px;
   margin: 0 5px 0;
+}
+
+#footer i.fa:hover {
+  color: white !important;
+}
+
+.gsc-image-content.skin-v2:hover .box-content a:hover {
+  color: var(--mha-black) !important;
+  border: 2px solid #abce3e !important;
 }
