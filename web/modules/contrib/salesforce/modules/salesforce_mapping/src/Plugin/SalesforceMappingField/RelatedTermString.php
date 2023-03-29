@@ -42,7 +42,7 @@ class RelatedTermString extends SalesforceMappingFieldPluginBase {
         '#options' => $options,
         '#empty_option' => $this->t('- Select -'),
         '#default_value' => $this->config('drupal_field_value'),
-        '#description' => $this->t('Select a taxonomy reference field.<br />If more than one term is referenced, the term at delta zero will be used.<br />A taxonomy reference field will be used to sync to the term name.<br />If a term with the given string does not exist one will be created.'),
+        '#description' => $this->t('Select a taxonomy reference field.<br />A taxonomy reference field will be used to sync to the term name.<br />If a term with the given string does not exist one will be created.'),
       ];
     }
     return $pluginForm;
@@ -71,7 +71,10 @@ class RelatedTermString extends SalesforceMappingFieldPluginBase {
     }
 
     // Map the term name to the salesforce field.
-    return $field->entity->getName();
+    foreach ($field->referencedEntities() as $referencedEntity) {
+      $referencedEntities[] = $referencedEntity->getName();
+    }
+    return $referencedEntities;
   }
 
   /**
@@ -98,29 +101,38 @@ class RelatedTermString extends SalesforceMappingFieldPluginBase {
     // Get the appropriate vocab from the field settings.
     $vocabs = $instance->getSetting('handler_settings')['target_bundles'];
 
-    // Look for a term that matches the string in the salesforce field.
-    $query = \Drupal::entityQuery('taxonomy_term');
-    $query->condition('vid', $vocabs, 'IN');
-    $query->condition('name', $value);
-    $tids = $query->execute();
-
-    if (!empty($tids)) {
-      $term_id = reset($tids);
+    if (empty($vocabs)) {
+      return;
     }
 
-    // If we cant find an existing term, create a new one.
-    if (empty($term_id)) {
-      $vocab = reset($vocabs);
+    // If this is a multi-value field, split the value from Salesforce into parts.
+    $field_values = explode(";", $value);
 
-      $term = Term::create([
-        'name' => $value,
-        'vid' => $vocab,
-      ]);
-      $term->save();
-      $term_id = $term->id();
+    foreach ($field_values as $field_value) {
+      // Look for a term that matches the string in the salesforce field.
+      $query = \Drupal::entityQuery('taxonomy_term');
+      $query->condition('vid', $vocabs, 'IN');
+      $query->condition('name', $field_value);
+      $tids = $query->execute();
+
+      if (!empty($tids)) {
+        $term_ids[] = reset($tids);
+      }
+
+      // If we cant find an existing term, create a new one.
+      if (empty($tids)) {
+        $vocab = reset($vocabs);
+
+        $term = Term::create([
+          'name' => $field_value,
+          'vid' => $vocab,
+        ]);
+        $term->save();
+        $term_ids[] = $term->id();
+      }
     }
 
-    return $term_id;
+    return $term_ids;
   }
 
   /**

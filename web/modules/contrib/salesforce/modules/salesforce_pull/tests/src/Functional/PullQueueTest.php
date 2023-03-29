@@ -76,8 +76,18 @@ class PullQueueTest extends BrowserTestBase {
       $this->assertEquals('SALESFORCE TEST', $createdEntity->getTitle());
       $this->assertEquals($data->getSobject()
         ->field('Email'), $createdEntity->field_salesforce_test_email->value);
-      $this->assertEquals(date('Y-m-d', strtotime($data->getSobject()
-        ->field('Birthdate'))), date('Y-m-d', strtotime($createdEntity->field_salesforce_test_date->value)));
+
+      $birthdate = $data->getSobject()->field('Birthdate');
+      if ($birthdate === NULL) {
+        $this->assertNull($createdEntity->field_salesforce_test_date->value);
+      }
+      else {
+        $this->assertEquals(
+          date('Y-m-d', strtotime($birthdate)),
+          date('Y-m-d', strtotime($createdEntity->field_salesforce_test_date->value))
+        );
+      }
+
       $this->assertEquals((boolean) $data->getSobject()
         ->field('d5__Do_Not_Mail__c'), (boolean) $createdEntity->field_salesforce_test_bool->value);
       $this->assertEquals($data->getSobject()

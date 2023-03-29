@@ -9,6 +9,7 @@ use Drupal\node\Entity\Node;
 use Drupal\salesforce_mapping\Entity\MappedObject;
 use Drupal\salesforce_mapping\Entity\SalesforceMapping;
 use Drupal\salesforce_mapping\PushParams;
+use Drupal\taxonomy\Entity\Term;
 use Drupal\Tests\BrowserTestBase;
 use DateTime;
 
@@ -40,6 +41,7 @@ class PushParamsTest extends BrowserTestBase {
     'salesforce_push',
     'salesforce_pull',
     'salesforce_mapping_test',
+    'filter',
   ];
 
   /**
@@ -76,9 +78,12 @@ class PushParamsTest extends BrowserTestBase {
       'field_salesforce_test_link' => 'https://example.com',
       'field_salesforce_test_reference' => $entity1,
       'field_salesforce_test_multi' => [['value' => 'Value 1'], ['value' => 'Value 2'], ['value' => 'Value 3']],
+      'body' => [[
+        'value' => '<p>Sample formatted text</p>',
+        'summary' => '<p>Sample summary</p>',
+        'format' => 'restricted_html',
+      ]]
     ]);
-    $entity2->save();
-
     $expectedDate = new DrupalDateTime($storedDate, 'UTC');
 
     // Create a PushParams and assert it's created as we expect.
@@ -91,7 +96,10 @@ class PushParamsTest extends BrowserTestBase {
       'ReportsToId' => '0123456789ABCDEFGH',
       'RecordTypeId' => '012i0000001B15mAAC',
       'Description' => 'https://example.com',
-      'd5__Multipicklist_Test__c' => 'Value 1;Value 2;Value 3'
+      'd5__Multipicklist_Test__c' => 'Value 1;Value 2;Value 3',
+      'Department' => '<p>Sample formatted text</p>',
+      'd5__Test_Multipicklist__c' => NULL,
+      'LeadSource' => NULL,
     ];
     $actual = $pushParams->getParams();
     ksort($actual);
@@ -144,7 +152,10 @@ class PushParamsTest extends BrowserTestBase {
       'ReportsToId' => '0123456789ABCDEFGH',
       'RecordTypeId' => '012i0000001B15mAAC',
       'Description' => 'https://example.com',
-      'd5__Multipicklist_Test__c' => 'Value 1;Value 2;Value 3'
+      'd5__Multipicklist_Test__c' => 'Value 1;Value 2;Value 3',
+      'Department' => null,
+      'd5__Test_Multipicklist__c' => '',
+      'LeadSource' => '',
     ];
     $actual = $pushParams->getParams();
     ksort($actual);
@@ -152,4 +163,53 @@ class PushParamsTest extends BrowserTestBase {
     $this->assertEquals($expected, $actual);
   }
 
+  /**
+   * Test taxonomy reference values.
+   */
+  public function testTaxRef() {
+    /** @var SalesforceMapping $mapping */
+    $mapping = SalesforceMapping::load('test_mapping');
+    $vocab = 'salesforce_test_vocabulary';
+    /** @var Term $term1 */
+    $term1 = Term::create([
+      'name' => $this->randomMachineName(),
+      'vid' => $vocab,
+    ]);
+    $term1->save();
+    /** @var Term $term2 */
+    $term2 = Term::create([
+      'name' => $this->randomMachineName(),
+      'vid' => $vocab,
+    ]);
+    $term2->save();
+
+    // Entity 1 is the target reference.
+    $entity1 = Node::create([
+        'type' => 'salesforce_mapping_test_content',
+        'title' => 'Test Example',
+        'field_salesforce_test_tax_ref' => [$term1->id(), $term2->id()],
+        'field_salesforce_test_tax_singl' => [$term1->id()],
+    ]);
+    $entity1->save();
+
+    // Create a PushParams and assert it's created as we expect.
+    $pushParams = new PushParams($mapping, $entity1);
+    $expected = [
+      'Birthdate' => NULL,
+      'd5__Do_Not_Mail__c' => FALSE,
+      'd5__Multipicklist_Test__c' => "",
+      'd5__Test_Multipicklist__c' => $term1->getName() . ';' . $term2->getName(),
+      'Description' => NULL,
+      'Department' => NULL,
+      'Email' => '',
+      'FirstName' => 'SALESFORCE TEST',
+      'LeadSource' => $term1->getName(),
+      'RecordTypeId' => '012i0000001B15mAAC',
+      'ReportsToId' => NULL,
+    ];
+    $actual = $pushParams->getParams();
+    ksort($actual);
+    ksort($expected);
+    $this->assertEquals($expected, $actual);
+  }
 }
