@@ -59,7 +59,7 @@ class PushQueueTest extends UnitTestCase {
     $this->eventDispatcher = $this->getMockBuilder(EventDispatcherInterface::CLASS)->getMock();
     $this->eventDispatcher->expects($this->any())
       ->method('dispatch')
-      ->willReturn(NULL);
+      ->willReturnArgument(0);
     $this->string_translation = $this->getMockBuilder(TranslationInterface::class)->getMock();
     $this->time = $this->getMockBuilder(TimeInterface::class)->getMock();
 
@@ -71,15 +71,12 @@ class PushQueueTest extends UnitTestCase {
 
     $this->entityStorage = $this->getMockBuilder(SqlEntityStorageInterface::CLASS)->getMock();
 
-    $this->entityTypeManager->expects($this->at(0))
+    $this->entityTypeManager->expects($this->exactly(2))
       ->method('getStorage')
-      ->with($this->equalTo('salesforce_mapping'))
-      ->willReturn($this->mappingStorage);
-
-    $this->entityTypeManager->expects($this->at(1))
-      ->method('getStorage')
-      ->with($this->equalTo('salesforce_mapped_object'))
-      ->willReturn($this->mappedObjectStorage);
+      ->willReturnOnConsecutiveCalls(
+        $this->mappingStorage,
+        $this->mappedObjectStorage
+      );
 
     // Mock config.
     $prophecy = $this->prophesize(Config::CLASS);
@@ -150,7 +147,6 @@ class PushQueueTest extends UnitTestCase {
    * @covers ::processQueues
    */
   public function testProcessQueue() {
-    $items = [1, 2, 3];
     $mapping1 = $this->getMockBuilder(SalesforceMappingInterface::CLASS)->getMock();
     $mapping1->expects($this->any())
       ->method('getNextPushTime')
@@ -162,7 +158,7 @@ class PushQueueTest extends UnitTestCase {
     $mapping1->push_retries = 1;
 
     $this->worker = $this->getMockBuilder(PushQueueProcessorInterface::class)->getMock();
-    $this->worker->expects($this->once())
+    $this->worker->expects($this->any())
       ->method('process')
       ->willReturn(NULL);
     $this->push_queue_processor_plugin_manager->expects($this->once())
@@ -192,10 +188,11 @@ class PushQueueTest extends UnitTestCase {
     $this->queue->expects($this->any())
       ->method('garbageCollection')
       ->willReturn(NULL);
-    // I don't know why at(2) works.
-    $this->queue->expects($this->at(2))
+    $this->queue->expects($this->exactly(4))
       ->method('claimItems')
-      ->willReturn($items);
+      ->willReturnOnConsecutiveCalls(
+        [1], [2], [3], []
+      );
 
     $this->assertEquals(3, $this->queue->processQueue($mapping1));
 

@@ -33,7 +33,7 @@ interface RestClientInterface {
    *   example, to issue an API call to a custom Apex Rest endpoint.
    *   If $path does not begin with a slash, the resource will be considered
    *   relative and the Rest API Endpoint will be pre-pended.
-   * @param array $params
+   * @param array|string $params
    *   Parameters to provide.
    * @param string $method
    *   Method to initiate the call, such as GET or POST.  Defaults to GET.
@@ -41,13 +41,15 @@ interface RestClientInterface {
    *   If true, return a Drupal\salesforce\Rest\RestResponse;
    *   Otherwise, return json-decoded response body only.
    *   Defaults to FALSE for backwards compatibility.
+   * @param array $headers
+   *   The http headers to merge into the request.
    *
    * @return mixed
    *   Response object or response data.
    *
    * @throws \GuzzleHttp\Exception\RequestException
    */
-  public function apiCall($path, array $params = [], $method = 'GET', $returnObject = FALSE);
+  public function apiCall($path, $params = [], $method = 'GET', $returnObject = FALSE, array $headers = []);
 
   /**
    * Return raw response content from given URL.

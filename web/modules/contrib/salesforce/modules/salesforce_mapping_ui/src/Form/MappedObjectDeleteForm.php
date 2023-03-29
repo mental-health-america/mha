@@ -3,7 +3,9 @@
 namespace Drupal\salesforce_mapping_ui\Form;
 
 use Drupal\Core\Entity\ContentEntityConfirmFormBase;
+use Drupal\Core\Entity\Exception\UndefinedLinkTemplateException;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 use Drupal\salesforce\Event\SalesforceNoticeEvent;
 use Drupal\salesforce\Event\SalesforceEvents;
 
@@ -44,8 +46,17 @@ class MappedObjectDeleteForm extends ContentEntityConfirmFormBase {
    * Salesforce notvie level event which logs notice.
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    $form_state->setRedirectUrl(Url::fromRoute('entity.salesforce_mapped_object.list'));
+
     $mapped_object = $this->getEntity();
-    $form_state->setRedirectUrl($mapped_object->getMappedEntity()->toUrl());
+    try {
+      $mapped_entity = $mapped_object->getMappedEntity();
+      if ($mapped_entity) {
+        $form_state->setRedirectUrl($mapped_entity->toUrl());
+      }
+    }
+    catch (UndefinedLinkTemplateException $e) {}
+
     $message = 'MappedObject @sfid deleted.';
     $args = ['@sfid' => $mapped_object->salesforce_id->value];
     \Drupal::service('event_dispatcher')->dispatch(new SalesforceNoticeEvent(NULL, $message, $args), SalesforceEvents::NOTICE);

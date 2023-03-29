@@ -3,7 +3,6 @@ status: true
 dependencies:
   config:
     - field.field.node.salesforce_mapping_test_content.field_salesforce_test_bool
-    - field.field.node.salesforce_mapping_test_content.field_salesforce_test_date
     - field.field.node.salesforce_mapping_test_content.field_salesforce_test_email
     - field.field.node.salesforce_mapping_test_content.field_salesforce_test_link
     - field.field.node.salesforce_mapping_test_content.field_salesforce_test_multi
@@ -99,6 +98,26 @@ field_mappings:
     direction: sync
     description: ''
     id: 8
+  -
+    drupal_field_type: properties
+    drupal_field_value: body.processed
+    salesforce_field: Department
+    direction: sync
+    description: ''
+    id: 9
+  -
+    drupal_field_type: RelatedTermString
+    drupal_field_value: field_salesforce_test_tax_ref
+    salesforce_field: d5__Test_Multipicklist__c
+    direction: drupal_sf
+    id: 10
+  -
+    drupal_field_type: RelatedTermString
+    drupal_field_value: field_salesforce_test_tax_singl
+    salesforce_field: LeadSource
+    direction: drupal_sf
+    id: 11
+
 push_limit: 0
 push_retries: 3
 push_frequency: 0
