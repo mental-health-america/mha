@@ -2,6 +2,7 @@
 
 namespace Drupal\salesforce\Tests;
 
+use Drupal\Core\Extension\ExtensionPathResolver;
 use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 use OAuth\Common\Http\Client\ClientInterface;
 use OAuth\Common\Http\Uri\UriInterface;
@@ -19,13 +20,22 @@ class TestHttpClientWrapper implements ClientInterface {
   protected $httpClient;
 
   /**
+   * The extension path resolver.
+   *
+   * @var \Drupal\Core\Extension\ExtensionPathResolver
+   */
+  protected $extensionPathResolver;
+
+  /**
    * HttpClientWrapper constructor.
    *
    * @param \GuzzleHttp\ClientInterface $httpClient
    *   Guzzle HTTP client service, from core http_client.
+   * @param
    */
-  public function __construct(GuzzleClientInterface $httpClient) {
+  public function __construct(GuzzleClientInterface $httpClient, ExtensionPathResolver $extensionPathResolver) {
     $this->httpClient = $httpClient;
+    $this->extensionPathResolver = $extensionPathResolver;
   }
 
   /**
@@ -39,7 +49,7 @@ class TestHttpClientWrapper implements ClientInterface {
   ) {
     // This method is only used to Salesforce OAuth. Based on the given args,
     // return a hard-coded version of the expected response.
-    $dir = drupal_get_path('module', 'salesforce') . '/src/Tests/';
+    $dir = $this->extensionPathResolver->getPath('module', 'salesforce') . '/src/Tests/';
     if ($endpoint->getPath() == '/services/oauth2/token') {
       switch ($requestBody['grant_type']) {
         case 'authorization_code':

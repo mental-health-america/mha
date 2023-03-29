@@ -25,7 +25,7 @@
     "source": "http://cgit.drupalcode.org/salesforce"
   },
   "require": {
-    "messageagency/force.com-toolkit-for-php": "^1.0.1",
+    "messageagency/force.com-toolkit-for-php": "^1.0.2",
     "ext-soap": "*"
   }
 }

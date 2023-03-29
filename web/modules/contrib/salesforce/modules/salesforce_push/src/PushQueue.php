@@ -244,6 +244,9 @@ class PushQueue extends DatabaseQueue implements PushQueueInterface {
       'failures' => empty($data['failures'])
       ? 0
       : $data['failures'],
+      'last_failure_message' => empty($data['last_failure_message'])
+      ? ''
+      : $data['last_failure_message'],
       'mapped_object_id' => empty($data['mapped_object_id'])
       ? 0
       : $data['mapped_object_id'],
@@ -363,6 +366,12 @@ class PushQueue extends DatabaseQueue implements PushQueueInterface {
           'not null' => TRUE,
           'default' => 0,
           'description' => 'Number of failed push attempts for this queue item.',
+        ],
+        'last_failure_message' => [
+          'type' => 'text',
+          'not null' => FALSE,
+          'default' => NULL,
+          'description' => 'The last failure message for this queue item, if failed.',
         ],
         'expire' => [
           'type' => 'int',
@@ -525,10 +534,10 @@ class PushQueue extends DatabaseQueue implements PushQueueInterface {
 
     $message = $e->getMessage();
     if ($item->failures >= $this->maxFails) {
-      $message = 'Permanently failed queue item %item failed %fail times. Exception while pushing entity %type %id for salesforce mapping %mapping. ' . $message;
+      $item->last_failure_message = 'Permanently failed queue item %item failed %fail times. Exception while pushing entity %type %id for salesforce mapping %mapping. ' . $message;
     }
     else {
-      $message = 'Queue item %item failed %fail times. Exception while pushing entity %type %id for salesforce mapping %mapping. ' . $message;
+      $item->last_failure_message = 'Queue item %item failed %fail times. Exception while pushing entity %type %id for salesforce mapping %mapping. ' . $message;
     }
     $args = [
       '%type' => $mapping->get('drupal_entity_type'),
@@ -537,7 +546,7 @@ class PushQueue extends DatabaseQueue implements PushQueueInterface {
       '%item' => $item->item_id,
       '%fail' => $item->failures,
     ];
-    $this->eventDispatcher->dispatch(new SalesforceErrorEvent(NULL, $message, $args), SalesforceEvents::ERROR);
+    $this->eventDispatcher->dispatch(new SalesforceErrorEvent(NULL, $item->last_failure_message, $args), SalesforceEvents::ERROR);
 
     // Failed items will remain in queue, but not be released. They'll be
     // retried only when the current lease expires.
