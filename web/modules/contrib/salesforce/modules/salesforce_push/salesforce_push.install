@@ -62,3 +62,12 @@ function salesforce_push_update_8003() {
   }
   \Drupal::state()->delete('salesforce.global_push_limit');
 }
+
+/**
+ * Updates schema for push queue.
+ */
+function salesforce_push_update_8004() {
+  $schema_definition = \Drupal::service('queue.salesforce_push')->schemaDefinition();
+  // Adds the new fields to the table.
+  \Drupal::database()->schema()->addField('salesforce_push_queue', 'last_failure_message', $schema_definition['fields']['last_failure_message']);
+}

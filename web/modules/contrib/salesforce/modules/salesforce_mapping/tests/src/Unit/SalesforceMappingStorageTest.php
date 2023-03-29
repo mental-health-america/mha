@@ -120,25 +120,31 @@ class SalesforceMappingStorageTest extends UnitTestCase {
     $config_object = $this->prophesize(SalesforceMapping::class);
 
     $this->salesforceMappingStorage
-      ->expects($this->at(0))
+      ->expects($this->once())
       ->method('loadByProperties')
       ->with($this->equalTo(['drupal_entity_type' => $this->entityTypeId]))
       ->willReturn([$config_object->reveal()]);
 
+    // Good entity type id provided means config object should be returned.
+    $entities = $this->salesforceMappingStorage->loadByDrupal($this->entityTypeId);
+    $this->assertEquals([$config_object->reveal()], $entities);
+  }
+
+  /**
+   * @covers ::loadByDrupal
+   */
+  public function testLoadByDrupalEmpty() {
+    $config_object = $this->prophesize(SalesforceMapping::class);
+
     $this->salesforceMappingStorage
-      ->expects($this->at(1))
+      ->expects($this->once())
       ->method('loadByProperties')
       ->with($this->equalTo(['drupal_entity_type' => 'dummy']))
       ->willReturn([]);
 
-    // Good entity type id provided means config object should be returned.
-    $entities = $this->salesforceMappingStorage->loadByDrupal($this->entityTypeId);
-    $this->assertEquals([$config_object->reveal()], $entities);
-
     // Bad entity type provided means config should not be returned.
     $entities = $this->salesforceMappingStorage->loadByDrupal('dummy');
     $this->assertEquals([], $entities);
-
   }
 
   /**

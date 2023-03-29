@@ -80,7 +80,7 @@ class WebformElements extends SalesforceMappingFieldPluginBase {
       }
       else {
         $value = $entity->getElementData($main_element_name);
-        if (isset($element_parts[1])) {
+        if ($value && isset($element_parts[1])) {
           $value = $value[$element_parts[1]];
         }
         return $value;
@@ -134,7 +134,7 @@ class WebformElements extends SalesforceMappingFieldPluginBase {
 
     // Loop over every field on the webform.
     foreach ($webform_elements as $element_id => $element) {
-      if ($element['#type'] == 'webform_address') {
+      if (in_array($element['#type'], ['webform_address', 'webform_name'])) {
         $element = $webform->getElement($element_id, TRUE);
         foreach ($element['#webform_composite_elements'] as $sub_element) {
           $options[$sub_element['#webform_composite_key']] = $element['#title'] . ': ' . (string) $sub_element['#title'];

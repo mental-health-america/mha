@@ -25,7 +25,13 @@ class PropertiesExtended extends PropertiesBase {
    */
   public function getPluginDefinition() {
     $definition = parent::getPluginDefinition();
+
     $field_name = $this->config('drupal_field_value');
+    if ($field_name === NULL) {
+      // No need to load the field if the plugin isn't configured.
+      return $definition;
+    }
+
     if (strpos($field_name, '.')) {
       list($field_name, $dummy) = explode('.', $field_name, 2);
     }

@@ -132,7 +132,7 @@
         "drupal/salesforce_oauth": "^4.1",
         "drupal/scheduler": "^1.5",
         "drupal/schema_metatag": "^2.3",
-        "drupal/search_api": "^1.23",
+        "drupal/search_api": "^1.29",
         "drupal/search_api_autocomplete": "^1.7",
         "drupal/search_api_glossary": "^4.1",
         "drupal/search_api_sorts": "^1.1",

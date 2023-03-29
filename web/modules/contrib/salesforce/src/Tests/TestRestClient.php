@@ -47,7 +47,7 @@ class TestRestClient extends RestClient {
   /**
    * Short-circuit api calls.
    */
-  public function apiCall($path, array $params = [], $method = 'GET', $returnObject = FALSE) {
+  public function apiCall($path, $params = [], $method = 'GET', $returnObject = FALSE, array $headers = []) {
   }
 
   /**

@@ -214,14 +214,7 @@ abstract class SalesforceMappingFormCrudBase extends SalesforceMappingFormBase {
       $form['pull']['pull_where_clause'] = [
         '#title' => $this->t('Pull query SOQL "Where" clause'),
         '#type' => 'textarea',
-        '#description' => $this->t('Add a "where" SOQL condition clause to limit records pulled from Salesforce. e.g. Email != \'\' AND RecordType.DevelopName = \'ExampleRecordType\''),
-        '#default_value' => $mapping->pull_where_clause,
-      ];
-
-      $form['pull']['pull_where_clause'] = [
-        '#title' => $this->t('Pull query SOQL "Where" clause'),
-        '#type' => 'textarea',
-        '#description' => $this->t('Add a "where" SOQL condition clause to limit records pulled from Salesforce. e.g. Email != \'\' AND RecordType.DevelopName = \'ExampleRecordType\''),
+        '#description' => $this->t('Add a "where" SOQL condition clause to limit records pulled from Salesforce. e.g. Email != \'\' AND RecordType.DeveloperName = \'ExampleRecordType\''),
         '#default_value' => $mapping->pull_where_clause,
       ];
 

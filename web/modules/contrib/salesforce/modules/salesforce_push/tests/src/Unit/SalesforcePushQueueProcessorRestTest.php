@@ -7,6 +7,7 @@ use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\Sql\SqlEntityStorageInterface;
 use Drupal\Core\Queue\SuspendQueueException;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\salesforce\EntityNotFoundException;
 use Drupal\salesforce\SalesforceAuthProviderPluginManager;
 use Drupal\Tests\UnitTestCase;
@@ -48,10 +49,15 @@ class SalesforcePushQueueProcessorRestTest extends UnitTestCase {
     $this->eventDispatcher = $this->getMockBuilder(EventDispatcherInterface::CLASS)->getMock();
     $this->eventDispatcher->expects($this->any())
       ->method('dispatch')
-      ->willReturn(NULL);
+      ->willReturnArgument(0);
     $this->entity_manager = $this->getMockBuilder(EntityTypeManagerInterface::class)->getMock();
 
     $this->string_translation = $this->getMockBuilder(TranslationInterface::class)->getMock();
+    $this->string_translation->expects($this->any())
+      ->method('translateString')
+      ->willReturnCallback(function (TranslatableMarkup $markup) {
+        return $markup->getUntranslatedString();
+      });
 
     $this->mapping = $this->getMockBuilder(SalesforceMappingInterface::CLASS)->getMock();
 

@@ -23,7 +23,7 @@ class SalesforceOAuthTest extends WebDriverTestBase {
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'key',
     'typed_data',
     'dynamic_entity_reference',
@@ -42,7 +42,7 @@ class SalesforceOAuthTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->adminUser = $this->drupalCreateUser(['authorize salesforce']);
     $this->drupalLogin($this->adminUser);
