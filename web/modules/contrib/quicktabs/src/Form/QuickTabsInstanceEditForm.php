@@ -357,12 +357,13 @@ class QuickTabsInstanceEditForm extends EntityForm {
     // TableDrag: Mark the table row as draggable.
     $row['#attributes']['class'][] = 'draggable';
     // TableDrag: Sort the table row according to its configured weight.
-    $row['#weight'] = isset($tab['weight']) ? $tab['weight'] : 0;
+    $row['#weight'] = $tab['weight'] ?? 0;
 
     $row['title'] = [
       '#type' => 'textfield',
       '#size' => '10',
-      '#default_value' => isset($tab['title']) ? $tab['title'] : '',
+      '#default_value' => $tab['title'] ?? '',
+      '#description' => $this->t("Allowed html tags are <em>img</em>, <em>em</em>, <em>strong</em>, <em>h2</em>, <em>h3</em>, <em>h4</em>, <em>h5</em>, <em>h6</em>, <em>small</em>, <em>span</em>, <em>i</em>, and <em>br</em>."),
     ];
 
     // TableDrag: Weight column element.
@@ -370,7 +371,7 @@ class QuickTabsInstanceEditForm extends EntityForm {
       '#type' => 'weight',
       '#title' => $this->t('Weight'),
       '#title_display' => 'invisible',
-      '#default_value' => isset($tab['weight']) ? $tab['weight'] : 0,
+      '#default_value' => $tab['weight'] ?? 0,
       // Classify the weight element for #tabledrag.
       '#attributes' => ['class' => ['mytable-order-weight']],
     ];
@@ -378,7 +379,7 @@ class QuickTabsInstanceEditForm extends EntityForm {
     $row['type'] = [
       '#type' => 'select',
       '#options' => $types,
-      '#default_value' => isset($tab['type']) ? $tab['type'] : key($types),
+      '#default_value' => $tab['type'] ?? key($types),
     ];
 
     foreach ($plugin_definitions as $index => $def) {

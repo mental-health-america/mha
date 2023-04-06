@@ -103,10 +103,26 @@ class FractionTest extends UnitTestCase {
     $message = 'A fraction of 3/1 should return a decimal of 3 (with precision 0, auto_precision)';
     $this->assertEquals($result, '3', $message);
 
-    // Test automatic precision for non-base-10 denominator.
-    $result = $this->fraction(1, 2)->toDecimal(0, TRUE);
-    $message = 'A fraction of 1/2 should return a decimal of 0.5 (with precision 0, auto_precision)';
-    $this->assertEquals($result, '0.5', $message);
+    // Test automatic precision for terminating fractions.
+    $result = $this->fraction(1, 8)->toDecimal(0, TRUE);
+    $message = 'A fraction of 1/8 should return a decimal of 0.125 (with precision 0, auto_precision)';
+    $this->assertEquals($result, '0.125', $message);
+
+    // Test automatic precision for fractions with a denominator greater than
+    // 2147483647.
+    $result = $this->fraction(1, 2147483648)->toDecimal(0, TRUE);
+    $message = 'A fraction of 1/2147483648 should return a decimal of 0.0000000004656612873077392578125 (with precision 0, auto_precision)';
+    $this->assertEquals('0.0000000004656612873077392578125', $result, $message);
+
+    // Test automatic precision for non-terminating fractions: 1/6.
+    $result = $this->fraction(1, 6)->toDecimal(3, TRUE);
+    $message = 'A fraction of 1/6 should return a decimal of 0.167 (with precision 0, auto_precision)';
+    $this->assertEquals($result, '0.167', $message);
+
+    // Test automatic precision for non-terminating fractions: 1/3.
+    $result = $this->fraction(1, 3)->toDecimal(3, TRUE);
+    $message = 'A fraction of 1/3 should return a decimal of 0.333 (with precision 3, auto_precision)';
+    $this->assertEquals($result, '0.333', $message);
 
     // Test creation of a fraction from a decimal.
     $result = Fraction::createFromDecimal(0.5)->toString();

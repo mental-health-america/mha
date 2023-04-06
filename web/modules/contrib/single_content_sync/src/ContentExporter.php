@@ -3,6 +3,7 @@
 namespace Drupal\single_content_sync;
 
 use Drupal\block_content\BlockContentInterface;
+use Drupal\block_content\Entity\BlockContent;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
@@ -234,11 +235,13 @@ class ContentExporter implements ContentExporterInterface {
     if ($this->extractTranslationsMode && $entity->isTranslatable()) {
       $translations = $entity->getTranslationLanguages();
 
-      // Exclude the default language from the translations.
-      unset($translations[$this->languageManager->getDefaultLanguage()->getId()]);
-
       if (count($translations)) {
         foreach ($translations as $language) {
+          // Skip the default loaded translation.
+          if ($entity->language()->getId() === $language->getId()) {
+            continue;
+          }
+
           $translated_entity = $entity->getTranslation($language->getId());
 
           $output['translations'][$language->getId()]['base_fields'] = $this->exportBaseValues($translated_entity);
@@ -271,6 +274,7 @@ class ContentExporter implements ContentExporterInterface {
    * {@inheritdoc}
    */
   public function exportBaseValues(FieldableEntityInterface $entity): array {
+    $base_fields = [];
     $entity_type = $entity->getEntityTypeId();
 
     switch ($entity_type) {
@@ -278,7 +282,7 @@ class ContentExporter implements ContentExporterInterface {
         if ($entity instanceof NodeInterface) {
           $owner = $entity->getOwner();
 
-          return [
+          $base_fields = [
             'title' => $entity->getTitle(),
             'status' => $entity->isPublished(),
             'langcode' => $entity->language()->getId(),
@@ -293,7 +297,7 @@ class ContentExporter implements ContentExporterInterface {
 
       case 'block_content':
         if ($entity instanceof BlockContentInterface) {
-          return [
+          $base_fields = [
             'info' => $entity->label(),
             'reusable' => $entity->isReusable(),
             'langcode' => $entity->language()->getId(),
@@ -305,7 +309,7 @@ class ContentExporter implements ContentExporterInterface {
 
       case 'media':
         if ($entity instanceof MediaInterface) {
-          return [
+          $base_fields = [
             'name' => $entity->getName(),
             'created' => $entity->getCreatedTime(),
             'status' => $entity->isPublished(),
@@ -316,7 +320,7 @@ class ContentExporter implements ContentExporterInterface {
 
       case 'user':
         if ($entity instanceof UserInterface) {
-          return [
+          $base_fields = [
             'mail' => $entity->getEmail(),
             'init' => $entity->getInitialEmail(),
             'name' => $entity->getAccountName(),
@@ -329,7 +333,7 @@ class ContentExporter implements ContentExporterInterface {
 
       case 'taxonomy_term':
         if ($entity instanceof TermInterface) {
-          return [
+          $base_fields = [
             'name' => $entity->getName(),
             'weight' => $entity->getWeight(),
             'langcode' => $entity->language()->getId(),
@@ -342,15 +346,25 @@ class ContentExporter implements ContentExporterInterface {
         break;
 
       case 'paragraph':
-        return [
+        $base_fields = [
           'status' => $entity->isPublished(),
           'langcode' => $entity->language()->getId(),
           'created' => $entity->getCreatedTime(),
         ];
+        break;
+
+      default:
+        // This entity type is not supported out of the box. Return an empty
+        // array to check later if there is a custom implementation.
+        return [];
     }
 
-    // No base fields found for the entity.
-    return [];
+    // Support moderation state for multiple entity types.
+    if ($entity->hasField('moderation_state') && !$entity->get('moderation_state')->isEmpty()) {
+      $base_fields['moderation_state'] = $entity->get('moderation_state')->value;
+    }
+
+    return $base_fields;
   }
 
   /**
@@ -552,8 +566,18 @@ class ContentExporter implements ContentExporterInterface {
           foreach ($components as $component) {
             if ($component->getPlugin() instanceof InlineBlock) {
               $configuration = $component->toArray()['configuration'];
-              if (isset($configuration['block_revision_id'])) {
+              $block = NULL;
+
+              if (isset($configuration['block_serialized'])) {
+                $block = unserialize($configuration['block_serialized'], [
+                  'allowed_classes' => [BlockContent::class],
+                ]);
+              }
+              elseif (isset($configuration['block_revision_id'])) {
                 $block = $block_storage->loadRevision($configuration['block_revision_id']);
+              }
+
+              if ($block) {
                 $block_list[] = $this->doExportToArray($block);
               }
             }

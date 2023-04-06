@@ -1,0 +1,11 @@
+name: Google Programmable Search
+type: module
+description: Use Google Programmable Search to search your site and/or any other sites.
+core_version_requirement: ^9 || ^10
+dependencies:
+  - drupal:search
+
+# Information added by Drupal.org packaging script on 2022-11-18
+version: '4.0.0-alpha1'
+project: 'google_cse'
+datestamp: 1668788175
