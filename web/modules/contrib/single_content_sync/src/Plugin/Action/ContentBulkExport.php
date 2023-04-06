@@ -8,6 +8,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\TempStore\PrivateTempStore;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
+use Drupal\single_content_sync\ContentSyncHelperInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -37,6 +38,13 @@ class ContentBulkExport extends ActionBase implements ContainerFactoryPluginInte
   protected PrivateTempStore $privateTempStore;
 
   /**
+   * The Content sync helper.
+   *
+   * @var \Drupal\single_content_sync\ContentSyncHelperInterface
+   */
+  protected ContentSyncHelperInterface $contentSyncHelper;
+
+  /**
    * Constructs a ContentBulkExport object.
    *
    * @param array $configuration
@@ -49,12 +57,15 @@ class ContentBulkExport extends ActionBase implements ContainerFactoryPluginInte
    *   The tempstore factory.
    * @param \Drupal\Core\Session\AccountInterface $current_user
    *   Current user.
+   * @param \Drupal\single_content_sync\ContentSyncHelperInterface $content_sync_helper
+   *   The content sync helper.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, PrivateTempStoreFactory $temp_store_factory, AccountInterface $current_user) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, PrivateTempStoreFactory $temp_store_factory, AccountInterface $current_user, ContentSyncHelperInterface $content_sync_helper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->privateTempStore = $temp_store_factory->get('single_content_sync');
     $this->currentUser = $current_user;
+    $this->contentSyncHelper = $content_sync_helper;
   }
 
   /**
@@ -66,7 +77,8 @@ class ContentBulkExport extends ActionBase implements ContainerFactoryPluginInte
       $plugin_id,
       $plugin_definition,
       $container->get('tempstore.private'),
-      $container->get('current_user')
+      $container->get('current_user'),
+      $container->get('single_content_sync.helper'),
     );
   }
 
@@ -89,6 +101,10 @@ class ContentBulkExport extends ActionBase implements ContainerFactoryPluginInte
    */
   public function access($object, AccountInterface $account = NULL, $return_as_object = FALSE) {
     $result = AccessResult::allowedIfHasPermission($account, 'export single content');
+
+    if (!$this->contentSyncHelper->access($object)) {
+      $result = AccessResult::forbidden()->addCacheTags(['config:single_content_sync.settings']);
+    }
 
     return $return_as_object ? $result : $result->isAllowed();
   }

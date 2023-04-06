@@ -5,6 +5,6 @@ quicktabs.accordion:
   dependencies:
     - core/jquery
     - jquery_ui_accordion/accordion
-    - core/jquery.once
+    - core/once
     - core/drupal
     - core/drupalSettings

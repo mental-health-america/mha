@@ -11,6 +11,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Defines a form to configure Single Content Sync settings.
+ *
+ * @package Drupal\single_content_sync\Form
  */
 class ContentSyncConfigForm extends ConfigFormBase {
 

@@ -148,6 +148,12 @@ class Fraction implements FractionInterface {
         $max_precision = 0;
       }
 
+      // Or, if the denominator is a multiple of 2 or 5, the fraction is known
+      // to be terminating, and we can figure out the precision.
+      elseif ($this->isTerminating()) {
+        $max_precision = $this->terminatingPrecision($this->reduce()->getDenominator());
+      }
+
       // Otherwise, max precision is the denominator length.
       else {
         $max_precision = strlen($denominator);
@@ -359,6 +365,46 @@ class Fraction implements FractionInterface {
     $fraction = new Fraction($numerator, $denominator);
     $fraction = $fraction->reduce();
     return $fraction;
+  }
+
+  /**
+   * Test if the fraction is terminating.
+   *
+   * @return bool
+   *   Returns TRUE if the fraction is terminating, FALSE if it is repeating.
+   */
+  protected function isTerminating() {
+    $d = $this->getDenominator();
+    $d /= $this->gcd();
+    while ($d % 2 == 0) {
+      $d /= 2;
+    }
+    while ($d % 5 == 0) {
+      $d /= 5;
+    }
+    return $d == 1;
+  }
+
+  /**
+   * Given the denominator of a terminating fraction, calculate the precision.
+   *
+   * @param string $denominator
+   *   The denominator.
+   * @param int $exponent
+   *   An exponent that is incremented with each iteration.
+   *
+   * @return int
+   *   The number of decimal places required to represent the fraction as a
+   *   decimal.
+   */
+  protected function terminatingPrecision(string $denominator, int $exponent = 1) {
+    if (function_exists('bcpow')) {
+      $done = bcmod(bcpow(10, $exponent), $denominator) === '0';
+    }
+    else {
+      $done = pow(10, $exponent) % $denominator === 0;
+    }
+    return $done ? $exponent : $this->terminatingPrecision($denominator, $exponent + 1);
   }
 
   /**

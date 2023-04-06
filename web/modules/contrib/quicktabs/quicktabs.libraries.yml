@@ -7,11 +7,11 @@ quicktabs:
     js/quicktabs.js: {}
   dependencies:
     - core/jquery
-    - core/jquery.once
+    - core/once
     - core/drupal
     - core/drupal.ajax
     - core/drupalSettings
-    - core/jquery.cookie
+    - core/js-cookie
 
 quicktabs.form:
   version: VERSION
@@ -19,7 +19,7 @@ quicktabs.form:
     js/quicktabs_form.js: {}
   dependencies:
     - core/jquery
-    - core/jquery.once
+    - core/once
     - core/drupal
     - core/drupalSettings
 

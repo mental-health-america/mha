@@ -65,13 +65,13 @@ class FractionTarget extends FieldTargetBase implements ConfigurableTargetInterf
    * {@inheritdoc}
    */
   protected function prepareValue($delta, array &$values) {
-    $item = trim($values['value']);
+    $item = is_string($values['value']) ? trim($values['value']) : $values['value'];
     unset($values['value']);
 
     switch ($this->configuration['type']) {
       case 'fraction':
         // Pull out the numerator and denominator.
-        $parts = explode('/', $item);
+        $parts = is_string($item) ? explode('/', $item) : [];
 
         if (!empty($parts[0]) && is_numeric($parts[0]) && !empty($parts[1]) && is_numeric($parts[1]) && $parts[1] >= 0) {
           $values['numerator'] = $parts[0];
