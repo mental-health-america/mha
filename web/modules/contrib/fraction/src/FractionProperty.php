@@ -33,4 +33,15 @@ class FractionProperty extends TypedData {
     return $this->fraction;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function setValue($value, $notify = TRUE) {
+    $this->fraction = $value;
+    // Notify the parent of any changes.
+    if ($notify && isset($this->parent)) {
+      $this->parent->onChange($this->name);
+    }
+  }
+
 }

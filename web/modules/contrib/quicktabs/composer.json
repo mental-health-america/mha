@@ -21,9 +21,9 @@
     "source": "https://git.drupalcode.org/project/quicktabs"
   },
   "require": {
-    "drupal/core": "^8.8 || ^9",
-    "drupal/jquery_ui_accordion": "^1.1",
-    "drupal/jquery_ui_tabs": "^1.1"
+    "drupal/core": "^9 || ^10",
+    "drupal/jquery_ui_accordion": "^2.0",
+    "drupal/jquery_ui_tabs": "^2.0"
   },
   "require-dev": {},
   "minimum-stability": "dev"

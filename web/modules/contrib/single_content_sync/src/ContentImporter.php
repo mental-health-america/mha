@@ -225,6 +225,12 @@ class ContentImporter implements ContentImporterInterface {
   public function importBaseValues(FieldableEntityInterface $entity, array $fields): void {
     $values = $this->mapBaseFieldsValues($entity->getEntityTypeId(), $fields);
 
+    // It's possible to export a single translation of the entity. In this case,
+    // we need to load the translation of the entity to import the values.
+    if (isset($values['langcode']) && $entity instanceof TranslatableInterface && $entity->hasTranslation($values['langcode'])) {
+      $entity = $entity->getTranslation($values['langcode']);
+    }
+
     foreach ($values as $field_name => $value) {
       $entity->set($field_name, $value);
     }
@@ -552,27 +558,26 @@ class ContentImporter implements ContentImporterInterface {
    * {@inheritdoc}
    */
   public function mapBaseFieldsValues(string $entity_type_id, array $values): array {
-    $map_values = [];
-
     switch ($entity_type_id) {
       case 'node':
-        $node = [
+        $entity = [
           'title' => $values['title'],
           'langcode' => $values['langcode'],
           'created' => $values['created'],
           'status' => $values['status'],
         ];
+
         // We check if node url alias is filled in.
         if (isset($values['url'])) {
-          $node['path'] = [
+          $entity['path'] = [
             'alias' => $values['url'],
             'pathauto' => empty($values['url']),
           ];
         }
-        return $node;
+        break;
 
       case 'user':
-        return [
+        $entity = [
           'mail' => $values['mail'],
           'init' => $values['init'],
           'name' => $values['name'],
@@ -580,39 +585,52 @@ class ContentImporter implements ContentImporterInterface {
           'status' => $values['status'],
           'timezone' => $values['timezone'],
         ];
+        break;
 
       case 'block_content':
-        return [
+        $entity = [
           'langcode' => $values['langcode'],
           'info' => $values['info'],
           'reusable' => $values['reusable'],
         ];
+        break;
 
       case 'media':
-        return [
+        $entity = [
           'langcode' => $values['langcode'],
           'name' => $values['name'],
           'status' => $values['status'],
           'created' => $values['created'],
         ];
+        break;
 
       case 'taxonomy_term':
-        return [
+        $entity = [
           'name' => $values['name'],
           'weight' => $values['weight'],
           'langcode' => $values['langcode'],
           'description' => $values['description'],
         ];
+        break;
 
       case 'paragraph':
-        return [
+        $entity = [
           'langcode' => $values['langcode'],
           'created' => $values['created'],
           'status' => $values['status'],
         ];
+        break;
+
+      default:
+        return [];
     }
 
-    return $map_values;
+    // Set moderation state if it is supported for multiple entities.
+    if (isset($values['moderation_state'])) {
+      $entity['moderation_state'] = $values['moderation_state'];
+    }
+
+    return $entity;
   }
 
   /**

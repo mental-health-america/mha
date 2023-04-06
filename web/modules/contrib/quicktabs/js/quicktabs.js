@@ -1,4 +1,4 @@
-(function ($, Drupal, drupalSettings) {
+(function ($, Drupal, drupalSettings, once) {
 
 'use strict';
 
@@ -10,7 +10,7 @@ Drupal.quicktabs.getQTName = function (el) {
 
 Drupal.behaviors.quicktabs = {
   attach: function (context, settings) {
-    $(context).find('div.quicktabs-wrapper').once('quicktabs-wrapper').each(function() {
+    $(once('quicktabs-wrapper', 'div.quicktabs-wrapper', context)).each(function() {
       var el = $(this);
       Drupal.quicktabs.prepare(el);
     });
@@ -121,7 +121,7 @@ Drupal.quicktabs.tab = function (el) {
   Drupal.behaviors.quicktabsmemory = {
     attach: function (context, settings) {
       // The .each() is in case there is more than one quicktab on a page.
-      $(context).find('div.quicktabs-wrapper').once('form-group').each(function () {
+      $(once('form-group', 'div.quicktabs-wrapper', context)).each(function () {
         var el = $(this);
 
         // el.id format: "quicktabs-$name"
@@ -202,4 +202,4 @@ if (Drupal.Ajax) {
   };
 }
 
-})(jQuery, Drupal, drupalSettings);
+})(jQuery, Drupal, drupalSettings, once);
