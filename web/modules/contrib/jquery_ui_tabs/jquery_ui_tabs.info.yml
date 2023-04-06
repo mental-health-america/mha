@@ -2,13 +2,11 @@ name: jQuery UI Tabs
 type: module
 description: 'Provides jQuery UI Tabs library.'
 package: jQuery UI
-core: 8.x
-core_version_requirement: ^8 || ^9
+core_version_requirement: ^9.2 || ^10
 dependencies:
   - jquery_ui:jquery_ui
 
-
-# Information added by Drupal.org packaging script on 2020-05-21
-version: '8.x-1.1'
+# Information added by Drupal.org packaging script on 2022-12-13
+version: '2.0.0'
 project: 'jquery_ui_tabs'
-datestamp: 1590102800
+datestamp: 1670948530

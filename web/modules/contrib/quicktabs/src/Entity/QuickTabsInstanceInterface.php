@@ -31,7 +31,7 @@ interface QuickTabsInstanceInterface extends ConfigEntityInterface {
    * @return array
    *   Instance options array.
    */
-  public function getOptions();
+  public function getOptions(): array;
 
   /**
    * Returns boolean value of empty tabs setting.

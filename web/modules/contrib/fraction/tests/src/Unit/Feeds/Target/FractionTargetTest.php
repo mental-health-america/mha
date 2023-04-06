@@ -13,6 +13,13 @@ use Drupal\Tests\feeds\Unit\Feeds\Target\FieldTargetTestBase;
 class FractionTargetTest extends FieldTargetTestBase {
 
   /**
+   * The ID of the plugin.
+   *
+   * @var string
+   */
+  protected static $pluginId = 'fraction';
+
+  /**
    * {@inheritdoc}
    */
   protected function getTargetClass() {

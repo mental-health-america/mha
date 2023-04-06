@@ -18,14 +18,14 @@ class QuicktabsConfigSchemaTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'quicktabs',
   ];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->typedConfig = \Drupal::service('config.typed');
@@ -130,7 +130,7 @@ class QuicktabsConfigSchemaTest extends KernelTestBase {
       ]);
       $quicktabs->save();
       $config = $this->config("quicktabs.quicktabs_instance.$id");
-      $this->assertEqual($config->get('id'), $id);
+      $this->assertEquals($config->get('id'), $id);
       $this->assertConfigSchema($this->typedConfig, $config->getName(), $config->get());
     }
   }

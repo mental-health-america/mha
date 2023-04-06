@@ -103,7 +103,7 @@
         "drupal/google_analytics": "^4.0",
         "drupal/honeypot": "^2.0",
         "drupal/imce": "^3.0",
-        "drupal/jquery_ui_accordion": "^1.1",
+        "drupal/jquery_ui_accordion": "^2",
         "drupal/key": "^1.14",
         "drupal/libraries": "^4.0",
         "drupal/link_attributes": "^1.8",

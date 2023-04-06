@@ -97,33 +97,35 @@ class ContentExportForm extends FormBase {
    */
   protected function handleAutoFileDownload(array &$form): void {
     // Don't check for file downloads if this is a submit request.
-    if ($this->getRequest()->getMethod() !== 'POST') {
-      if ($uri = $this->getRequest()->query->get('file')) {
-        if (file_exists($uri)) {
-          [$file_scheme, $file_target] = explode('://', $uri, 2);
-
-          $download_url = Url::fromRoute('single_content_sync.file_download', ['scheme' => $file_scheme], [
-            'query' => ['file' => $file_target],
-            'absolute' => TRUE,
-          ])->toString();
-
-          $form['#attached']['html_head'][] = [
-            [
-              '#tag' => 'meta',
-              '#attributes' => [
-                'http-equiv' => 'refresh',
-                'content' => '0; url=' . $download_url,
-              ],
-            ],
-            'single_content_sync_export_download',
-          ];
-          return;
-        }
-
-        // If the file does not exist, something went wrong.
-        $this->messenger()->addError($this->t('The export file could not be found, please try again.'));
-      }
+    if ($this->getRequest()->getMethod() === 'POST' || !$this->getRequest()->query->has('file')) {
+      return;
     }
+
+    $uri = $this->getRequest()->query->get('file');
+
+    // If the file does not exist, something went wrong.
+    if (!file_exists($uri)) {
+      $this->messenger()->addError($this->t('The export file could not be found, please try again.'));
+      return;
+    }
+
+    [$file_scheme, $file_target] = explode('://', $uri, 2);
+
+    $download_url = Url::fromRoute('single_content_sync.file_download', ['scheme' => $file_scheme], [
+      'query' => ['file' => $file_target],
+      'absolute' => TRUE,
+    ])->toString();
+
+    $form['#attached']['html_head'][] = [
+      [
+        '#tag' => 'meta',
+        '#attributes' => [
+          'http-equiv' => 'refresh',
+          'content' => '0; url=' . $download_url,
+        ],
+      ],
+      'single_content_sync_export_download',
+    ];
   }
 
   /**
@@ -191,6 +193,14 @@ class ContentExportForm extends FormBase {
 
   /**
    * Ajax callback to refresh output field.
+   *
+   * @param array $form
+   *   The form array.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state.
+   *
+   * @return array
+   *   The refreshed form element.
    */
   public function refreshContent(array &$form, FormStateInterface $form_state): array {
     // Clean up warning messages when refreshing field.
@@ -208,14 +218,14 @@ class ContentExportForm extends FormBase {
     $parameters = $this->getRouteMatch()->getParameters();
     $entity = $this->contentSyncHelper->getDefaultLanguageEntity($parameters);
 
-    switch ($button['#name']) {
-      case 'download_file':
-        $file = $this->fileGenerator->generateYamlFile($entity, $extract_translations);
-        break;
+    // Generate a YML file without assets.
+    if ($button['#name'] === 'download_file') {
+      $file = $this->fileGenerator->generateYamlFile($entity, $extract_translations);
+    }
 
-      case 'download_zip':
-        $file = $this->fileGenerator->generateZipFile($entity, $extract_translations);
-        break;
+    // Generate a zip file with assets.
+    if ($button['#name'] === 'download_zip') {
+      $file = $this->fileGenerator->generateZipFile($entity, $extract_translations);
     }
 
     // Display message to download a file immediately.

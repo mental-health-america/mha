@@ -71,9 +71,9 @@ class QuickTabsInstance extends ConfigEntityBase implements QuickTabsInstanceInt
   protected $renderer;
 
   /**
-   * Options provided by rederer plugins.
+   * Options provided by renderer plugins.
    *
-   * @var bool
+   * @var array
    */
   protected $options;
 
@@ -115,7 +115,10 @@ class QuickTabsInstance extends ConfigEntityBase implements QuickTabsInstanceInt
   /**
    * {@inheritdoc}
    */
-  public function getOptions() {
+  public function getOptions(): array {
+    if (empty($this->options)) {
+      return [];
+    }
     return $this->options;
   }
 

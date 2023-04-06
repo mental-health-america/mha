@@ -2,6 +2,7 @@
 
 namespace Drupal\quicktabs\Plugin\TabRenderer;
 
+use Drupal\Component\Utility\Xss;
 use Drupal\quicktabs\TabRendererBase;
 use Drupal\quicktabs\Entity\QuickTabsInstance;
 use Drupal\Core\Link;
@@ -26,7 +27,8 @@ class QuickTabs extends TabRendererBase {
    * {@inheritdoc}
    */
   public function optionsForm(QuickTabsInstance $instance) {
-    $options = $instance->getOptions()['quick_tabs'];
+    $instance_options = $instance->getOptions();
+    $options = $instance_options['quick_tabs'] ?? [];
     $renderer = $instance->getRenderer();
     $form['class'] = [
       '#type' => 'textfield',
@@ -169,7 +171,10 @@ class QuickTabs extends TabRendererBase {
 
       $titles[] = [
         '0' => Link::fromTextAndUrl(
-          new TranslatableMarkup($tab['title']),
+          new TranslatableMarkup(Xss::filter(
+            $tab['title'],
+            ['img', 'em', 'strong', 'h2', 'h3', 'h4', 'h5', 'h6', 'small', 'span', 'i', 'br']
+          )),
           Url::fromRoute(
             'quicktabs.ajax_content',
             [
