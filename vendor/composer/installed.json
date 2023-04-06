@@ -8675,6 +8675,9 @@
                     "services": {
                         "drush.services.yml": "^9 || ^10 || ^11"
                     }
+                },
+                "patches_applied": {
+                    "Draggableviews": "https://www.drupal.org/files/issues/2023-03-28/salesforce-3350924-2.patch"
                 }
             },
             "installation-source": "dist",
