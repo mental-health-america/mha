@@ -27,11 +27,11 @@ pager_bullets:
 
 jquery_hoverIntent:
   remote: https://github.com/briancherne/jquery-hoverIntent
-  version: 1.9
+  version: 1.10.2
   license:
       name: MIT
       gpl-compatible: true
   js:
-    /libraries/jquery.hoverIntent/jquery.hoverIntent.js: {}
+    /libraries/jquery.hover-intent/jquery.hoverIntent.js: {}
   dependencies:
     - core/jquery
