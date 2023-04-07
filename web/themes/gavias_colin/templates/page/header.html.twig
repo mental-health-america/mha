@@ -30,11 +30,17 @@
               {{ page.branding }}
             {% endif %}
           </div>
-          <div class="col-md-9 col-sm-8 col-xs-8 right-header d-none d-lg-block ">
+          <div class="col-md-8 col-sm-7 col-xs-7 right-header d-none d-lg-block ">
             {% if page.header_right %}
               {{ page.header_right }}
             {% endif %}
           </div>
+
+          <div class="col-md-1 col-sm-1 col-xs-1 right-header d-none d-lg-block mha-search-region-btn">
+            <button class="fa fa-search" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            </button>
+          </div>
+
         </div>
       </div>
     </div>
@@ -78,11 +84,10 @@
               </div>
             </div>
           </div>
-          <div class="col">
+          <div class="col mt-4 pt-4">
             {% if page.search %}
-              <div class="gva-search-region search-region">
-                <span class="icon"><i class="fa fa-search"></i></span>
-                <div class="search-content w-100">
+              <div class="mha-search-region collapse" id="collapseExample">
+                <div class="mha-search-content w-100">
                   {{ page.search }}
                 </div>
               </div>
