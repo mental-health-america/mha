@@ -35,3 +35,23 @@
   background: transparent;
   border: transparent;
 }
+
+/* Small devices (landscape phones, 544px and up) */
+@media (max-width: 544px) {
+  .mha-search-region-btn button.fa.fa-search {
+    background: transparent;
+    border: transparent;
+    margin: .25rem 2.5rem 0 0 !important;
+  }
+
+  .mha-search-region #views-exposed-form-search-content-page-1 {
+    grid-template-columns: 80% 80%;
+    grid-template-rows: 80%;
+    grid-column-gap: 0;
+    display: grid;
+  }
+
+  .mha-search-region #edit-keys {
+    padding: 0.69rem !important;
+  }
+}
