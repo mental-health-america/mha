@@ -38,7 +38,7 @@
           </div>
 
           <div class="col-md-1 col-sm-1 col-xs-1 right-header mha-search-region-btn">
-            <button class="fa fa-search" id="mha-search-btn" type="button" data-toggle="collapse" data-target="#collapseMHA" aria-expanded="false" aria-controls="collapseMHA">
+            <button class="fa fa-search" id="focusButton2" type="button" data-toggle="collapse" data-target="#collapseMHA" aria-expanded="false" aria-controls="collapseMHA">
             </button>
           </div>
 
@@ -85,15 +85,27 @@
               </div>
             </div>
           </div>
+
           <div class="col mt-4 pt-4">
-            {% if page.search %}
-              <div class="mha-search-region collapse" id="collapseMHA">
-                <div class="mha-search-content w-100">
-                  {{ page.search }}
+            <div id="edit-keys2" class="mha-search-region" style="display:none;">
+              <form action="/search/content" method="get" accept-charset="UTF-8">
+                <div class="js-form-item form-item js-form-type-search-api-autocomplete form-item-keys js-form-item-keys">
+                  <input id="edit-keys3" data-drupal-selector="edit-keys" data-search-api-autocomplete-search="search_content" class="form-autocomplete form-text ui-autocomplete-input" data-autocomplete-path="/search_api_autocomplete/search_content?display=page_1&amp;&amp;filter=keys" type="text"  name="keys" value="" size="30" maxlength="128" data-once="autocomplete search-api-autocomplete" autocomplete="off">
                 </div>
+                <div data-drupal-selector="edit-actions" class="form-actions js-form-wrapper form-wrapper mha-search-region-submit" id="edit-actions">
+                  <input data-drupal-selector="edit-submit-search-content" type="submit" id="edit-submit-search-content" value="Search" class="button js-form-submit form-submit">
+                </div>
+              </form>
               </div>
-            {% endif %}
+            <script>
+              document.getElementById("focusButton2").addEventListener("click", () => {
+                document.getElementById("edit-keys2").style.display = "block";
+                document.getElementById("edit-keys3").focus();
+              });
+            </script>
           </div>
+
+
           <div class="col">
             {% if page.quick_side %}
               <div class="quick-side-icon hidden-xs hidden-sm">
