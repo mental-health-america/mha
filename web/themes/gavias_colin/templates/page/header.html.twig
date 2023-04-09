@@ -38,7 +38,7 @@
           </div>
 
           <div class="col-md-1 col-sm-1 col-xs-1 right-header mha-search-region-btn">
-            <button class="fa fa-search" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            <button class="fa fa-search" id="mha-search-btn" type="button" data-toggle="collapse" data-target="#collapseMHA" aria-expanded="false" aria-controls="collapseMHA">
             </button>
           </div>
 
@@ -87,7 +87,7 @@
           </div>
           <div class="col mt-4 pt-4">
             {% if page.search %}
-              <div class="mha-search-region collapse" id="collapseExample">
+              <div class="mha-search-region collapse" id="collapseMHA">
                 <div class="mha-search-content w-100">
                   {{ page.search }}
                 </div>
@@ -106,3 +106,4 @@
     </div>
   </div>
 </header>
+
