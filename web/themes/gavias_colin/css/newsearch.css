@@ -45,13 +45,13 @@
   }
 
   .mha-search-region #views-exposed-form-search-content-page-1 {
-    grid-template-columns: 80% 80%;
-    grid-template-rows: 80%;
+    grid-template-columns: 77% 77%;
+    grid-template-rows: 77%;
     grid-column-gap: 0;
     display: grid;
   }
 
   .mha-search-region #edit-keys {
-    padding: 0.69rem !important;
+    padding: 0.76rem !important;
   }
 }
