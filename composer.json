@@ -256,7 +256,8 @@
             },
             "excludes": [
                 ".htaccess",
-                "robots.txt"
+                "robots.txt",
+                "cpanel.yml"
             ]
         }
     },
