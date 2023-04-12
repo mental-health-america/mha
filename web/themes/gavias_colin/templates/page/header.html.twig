@@ -40,6 +40,8 @@
           <div class="col-md-1 col-sm-1 col-xs-1 right-header mha-search-region-btn">
             <button class="fa fa-search" id="focusButton2" type="button" data-toggle="collapse" data-target="#collapseMHA" aria-expanded="false" aria-controls="collapseMHA">
             </button>
+            <button class="fa fa-close" id="closeButton2" type="button" data-toggle="collapse" data-target="#collapseMHA" aria-expanded="false" aria-controls="collapseMHA">
+            </button>
           </div>
 
         </div>
@@ -97,15 +99,7 @@
                 </div>
               </form>
               </div>
-            <script>
-              document.getElementById("focusButton2").addEventListener("click", () => {
-                document.getElementById("edit-keys2").style.display = "block";
-                document.getElementById("edit-keys3").focus();
-              });
-            </script>
           </div>
-
-
           <div class="col">
             {% if page.quick_side %}
               <div class="quick-side-icon hidden-xs hidden-sm">
