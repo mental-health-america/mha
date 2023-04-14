@@ -13,6 +13,7 @@ use Drupal\protected_pages\ProtectedPagesStorage;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
@@ -124,7 +125,11 @@ class ProtectedPagesSubscriber implements EventSubscriberInterface {
           $this->sendAccessDenied($pid);
         }
       }
+        return;
     }
+    $response = new Response();
+    $response->setStatusCode(Response::HTTP_NO_CONTENT);
+    $event->setResponse($response);
   }
 
   /**
