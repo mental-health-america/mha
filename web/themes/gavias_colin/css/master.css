@@ -5205,12 +5205,6 @@ ul.sf-menu.sf-navbar ul ul {
     text-align: left !important;
   }
 
-  header.header-default .right-header {
-    width: 100%;
-    text-align: right !important;
-    position: absolute;
-  }
-
   .lime.gbb-row.bg-size-cover {
     padding-left: 10px !important;
     text-align: center;
@@ -5253,13 +5247,8 @@ ul.sf-menu.sf-navbar ul ul {
 /* 458px */
 @media (max-width: 458px) {
   header.header-default .branding {
-    width: 48%;
+    width: 70%;
     text-align: left;
-  }
-
-  header.header-default .right-header {
-    width: 48%;
-    text-align: right;
   }
 
   #email-us .gsc-column {

@@ -732,11 +732,6 @@ header.header-default .stuck {
     text-align: center;
   }
 
-  header.header-default .right-header {
-    width: 100%;
-    text-align: center;
-  }
-
   header.header-default .right-header .header-info {
     display: inline-block;
   }
