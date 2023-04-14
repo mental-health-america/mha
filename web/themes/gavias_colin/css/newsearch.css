@@ -75,21 +75,7 @@ input#edit-reset--2 {
 
   .mha-search-region #edit-keys3 {
     padding: 0.45rem !important;
-  }
-
-  div#edit-actions {
-    float: right;
-  }
-  header.header-default .right-header {
-    width: 30%;
-    text-align: left;
-    position: absolute;
-    left: 70%;
-    margin-top: 5px;
-  }
-
-  .mha-search-region #edit-keys3 {
-    width: 70%;
+    width: inherit;
   }
 
   .mha-search-region .js-form-item.form-item {
@@ -99,10 +85,4 @@ input#edit-reset--2 {
   .header-main-inner .pt-4 {
     padding-top: 0 !important;
   }
-  .mha-search-region {
-    display: grid!important;
-    grid-template-columns: 1fr 1fr!important;
-    grid-gap: 5px!important;
-  }
-
 }
