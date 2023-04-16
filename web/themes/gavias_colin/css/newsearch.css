@@ -16,10 +16,12 @@
 }
 
 .mha-search-region #edit-keys3 {
-  border: 1px solid var(--mha-light-grey) !important;
+  background: #ff9e361a;
+  border: 1px solid #37588882 !important;
   padding: 0.45rem !important;
   margin: 0;
   font-size: 1rem;
+  color: #375888;
 }
 
 .mha-search-region-btn button.fa.fa-search.collapsed {
@@ -43,7 +45,7 @@ input#edit-reset--2 {
 #closeButton2 {
   background: transparent;
   border: none;
-  margin: 0.3rem 0 0 0.6rem;
+  margin: 0.2rem 0 0 0.5rem;
   color: #375888;
   font-size: 1.5rem;
   font-weight: normal;
@@ -105,6 +107,6 @@ input#edit-reset--2 {
 @media (max-width: 480px) {
   .col-md-1.col-sm-1.col-xs-1.right-header.mha-search-region-btn {
     top: 16px;
-    right: 79px;
+    right: 85px;
   }
 }

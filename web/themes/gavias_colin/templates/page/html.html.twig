@@ -88,25 +88,3 @@
     <div id="gva-overlay"></div>
   </body>
 </html>
-<script>
-  (function () {
-    "use strict";
-// Hide the close button on initial load
-    document.getElementById("closeButton2").style.display = "none";
-
-// Add event listener to open the div and hide the first button
-    document.getElementById("focusButton2").addEventListener("click", () => {
-      document.getElementById("edit-keys2").style.display = "block";
-      document.getElementById("edit-keys3").focus();
-      document.getElementById("focusButton2").style.display = "none";
-      document.getElementById("closeButton2").style.display = "block";
-    });
-
-// Add event listener to close the div and show the first button
-    document.getElementById("closeButton2").addEventListener("click", () => {
-      document.getElementById("edit-keys2").style.display = "none";
-      document.getElementById("focusButton2").style.display = "block";
-      document.getElementById("closeButton2").style.display = "none";
-    });
-  })(jQuery);
-</script>
