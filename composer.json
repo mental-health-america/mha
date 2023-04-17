@@ -107,7 +107,7 @@
         "drupal/key": "^1.14",
         "drupal/libraries": "^4.0",
         "drupal/link_attributes": "^1.8",
-        "drupal/linkit": "^6.0@beta",
+        "drupal/linkit": "^6.0@RC",
         "drupal/mailsystem": "^4.1",
         "drupal/menu_breadcrumb": "^1.9",
         "drupal/menu_item_extras": "^2.19",
