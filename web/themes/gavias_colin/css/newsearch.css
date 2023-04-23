@@ -57,6 +57,61 @@ input#edit-reset--2 {
   font-weight: bolder;
 }
 
+
+/* Header 3 */
+.header-v3 .flex-container {
+  display: flex;
+}
+
+.header-v3 .flex-child {
+  flex: 1;
+}
+
+.header-v3 .flex-child:first-child {
+  margin-right: 20px;
+}
+
+.header-v3 .flex-container-2 {
+  display: flex;
+}
+
+.header-v3 .flex-child-2 {
+  flex: 1;
+  margin: 0 0 0 -10px;
+}
+
+.header-v3 .flex-child-2:first-child {
+  margin-right: 5px;
+}
+
+header.header-v3 {
+  position: relative;
+}
+
+header.header-v3 .container-fluid {
+  margin-right: auto;
+  margin-left: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+  background: white;
+  margin-top: 10px;
+  padding-bottom: 20px;
+  padding-top: 20px;
+}
+
+header.header-v3 {
+  background: white !important;
+}
+
+header button.btn.btn-default {
+  background: none!important;
+  box-shadow: none !important;
+}
+
+.header-v3 .main.main-page {
+  margin: 0 !important;
+}
+
 @media (max-width: 991px) {
   #mha-features h4 a, #mha-features h4 a:link {
     font-size: 1rem !important;

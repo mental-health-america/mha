@@ -4,18 +4,18 @@
  * @file
  */
 
-namespace Drupal\form_general_email\Plugin\Block;
+namespace Drupal\mha_tableau\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 
 /**
  * Provides a Custom Block
  * @Block(
- * id = "block_form_general_email",
+ * id = "block_mha_tableau",
  * admin_label = @Translation("Form General Email Sign up"),
  * )
  */
-class form_general_email extends BlockBase {
+class mha_tableau extends BlockBase {
 
   /**
    * {@inheritdoc}
