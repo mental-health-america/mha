@@ -1,52 +1,76 @@
 <header id="header" class="header-v3 mt-3">
-
-  {% if page.topbar %}
-    <div class="topbar">
-      <div class="topbar-inner">
-        <div class="container">
-          <div class="content">{{ page.topbar }}</div>
-        </div>
-      </div>
+  <div class="flex-container container">
+    <div class="col-sm-11 flex-child branding">
+      {% if page.branding %}
+        {{ page.branding }}
+      {% endif %}
     </div>
-  {% endif %}
-  <div class="header-main">
-    <div class="container">
-      <div class="header-inner clearfix">
-        <div class="row">
-          <div class="col-md-3 col-sm-4 col-xs-4 branding">
-            {% if page.branding %}
-              {{ page.branding }}
-            {% endif %}
+    <div class="col-sm-1 flex-child">
+      <div class="flex-container-2">
+        <div class="flex-child-2 mt-1">
+           <span class="mha-search-region-btn">
+                 <button class="fa fa-search" id="focusButton2" type="button" data-toggle="collapse"
+                         data-target="#collapseMHA" aria-expanded="false" aria-controls="collapseMHA">
+                 </button>
+                 <button class="fa fa-close" id="closeButton2" type="button" data-toggle="collapse"
+                         data-target="#collapseMHA" aria-expanded="false" aria-controls="collapseMHA">
+                 </button>
+           </span>
+        </div>
+        <div class="flex-child-2 hamit right-header quick-side-icon">
+          <div class="icon mt-4">
+            <a href="#">
+              <span class="icon fa fa-bars"></span>
+            </a>
           </div>
-          <div class="col-md-8 col-sm-7 col-xs-7 hamit right-header">
-            {% if page.quick_side %}
-              <div class="quick-side-icon">
-                <div class="icon">
-                  <a href="#">
-                    <span class="qicon fa fa-bars"></span>
-                  </a>
-                </div>
-              </div>
-            {% endif %}
-            {% if page.header_right %}
-              {{ page.header_right }}
-            {% endif %}
-          </div>
-
-          <div class="col-md-1 col-sm-8 col-xs-8 mt-4 right-header">
-            {% if page.search %}
-              <div class="gva-search-region search-region">
-                <span class="icon"><i class="fa fa-search"></i></span>
-                <div class="search-content">
-                  {{ page.search }}
-                </div>
-              </div>
-            {% endif %}
-          </div>
-
         </div>
       </div>
     </div>
   </div>
-
+  <div class="container-fluid">
+    <div class="container">
+      <div class="row">
+        <div id="edit-keys2" class="col" style="display:none;">
+          <form action="/search/content" method="get" accept-charset="UTF-8">
+            <div class='input-group'>
+              <input id="edit-keys3" data-drupal-selector="edit-keys"
+                     data-search-api-autocomplete-search="search_content"
+                     class="form-control form-autocomplete form-text ui-autocomplete-input"
+                     data-autocomplete-path="/search_api_autocomplete/search_content?display=page_1&amp;&amp;filter=keys"
+                     type="text" name="keys" value="" size="30" maxlength="128"
+                     data-once="autocomplete search-api-autocomplete" autocomplete="on" placeholder='Search'>
+              <span class="input-group-btn">
+                   <button type='submit' class='btn btn-default'>
+                     <span class='fa fa-search'></span>
+                   </button>
+                 </span>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </header>
+
+<script>
+  (function () {
+    "use strict";
+// Hide the close button on initial load
+    document.getElementById("closeButton2").style.display = "none";
+
+// Add event listener to open the div and hide the first button
+    document.getElementById("focusButton2").addEventListener("click", () => {
+      document.getElementById("edit-keys2").style.display = "block";
+      document.getElementById("edit-keys3").focus();
+      document.getElementById("focusButton2").style.display = "none";
+      document.getElementById("closeButton2").style.display = "block";
+    });
+
+// Add event listener to close the div and show the first button
+    document.getElementById("closeButton2").addEventListener("click", () => {
+      document.getElementById("edit-keys2").style.display = "none";
+      document.getElementById("focusButton2").style.display = "block";
+      document.getElementById("closeButton2").style.display = "none";
+    });
+  })(jQuery);
+</script>

@@ -4,7 +4,7 @@ status: true
 dependencies:
   module:
     - block_visibility_groups
-    - form_footer_email
+    - mhatableau
     - gaviasthemer
   theme:
     - gavias_colin
@@ -21,7 +21,7 @@ settings:
   id: block_form_footer_email
   label: 'Form Email Sign up'
   label_display: '0'
-  provider: form_footer_email
+  provider: mhatableau
 visibility:
   condition_group:
     id: condition_group
