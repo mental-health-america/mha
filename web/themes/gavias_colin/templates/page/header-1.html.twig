@@ -5,29 +5,7 @@
   {% endblock %}
 {% endif %}
 
-<header id="header" class="header-v1">
-  {#
-  {% if page.topbar %}
-    <div class="topbar">
-      <div class="topbar-inner">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-4 col-sm-5">
-              <span class="tele float-left">
-                <a href="tel:800.969.6642"><i class="fa fa-phone mr-2" aria-hidden="true"></i>Toll Free (800) 969.6642</a>
-                <a href="/get-involved/contact-us"><i class="fa fa-comments-o ml-3 mr-2" aria-hidden="true"></i>Contact Us</a>
-              </span>
-            </div>
-            <div class="col-md-8 col-sm-7">
-              {{ page.topbar }}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  {% endif %}
-  #}
-
+<header id="header" class="header-v1 border-bottom border-light shadow-sm">
   <div class="header-main">
     <div class="container">
       <div class="header-inner clearfix">
@@ -37,18 +15,28 @@
               {{ page.branding }}
             {% endif %}
           </div>
-          <div class="col-md-9 col-sm-8 col-xs-8 right-header d-none d-lg-block mt-3">
+
+          <div class="col-md-8 col-sm-7 col-xs-7 right-header d-none d-lg-block ">
             {% if page.header_right %}
               {{ page.header_right }}
             {% endif %}
           </div>
+
+          <div class="col-md-1 col-sm-1 col-xs-1 right-header mha-search-region-btn">
+            <button class="fa fa-search" id="focusButton2" type="button" data-toggle="collapse"
+                    data-target="#collapseMHA" aria-expanded="false" aria-controls="collapseMHA">
+            </button>
+            <button class="fa fa-close" id="closeButton2" type="button" data-toggle="collapse"
+                    data-target="#collapseMHA" aria-expanded="false" aria-controls="collapseMHA">
+            </button>
+          </div>
+
         </div>
       </div>
     </div>
   </div>
-
   <div class="main-menu">
-    <div class="container header-content-layout">
+    <div class="container header-content-layout gv-sticky-menu">
       <div class="header-main-inner p-relative ">
         <div class="row">
           <div class="col">
@@ -69,8 +57,15 @@
                       {{ page.header_right }}
                     {% endif %}
                   </div>
+                  <div class="sub-menu-2 d-lg-none">
+                    {% if page.topbar_left %}
+                      {{ page.topbar_left }}
+                    {% endif %}
+                    {% if page.topbar %}
+                      {{ page.topbar }}
+                    {% endif %}
+                  </div>
                 </div>
-
                 <div id="menu-bar" class="menu-bar hidden-lg hidden-md">
                   <span class="one"></span>
                   <span class="two"></span>
@@ -80,17 +75,48 @@
             </div>
           </div>
 
-          <div class="col">
-            {% if page.search %}
-              <div class="gva-search-region search-region">
-                <span class="icon"><i class="fa fa-search"></i></span>
-                <div class="search-content w-100">
-                  {{ page.search }}
+          <div class="col-md-12">
+            <div id="edit-keys2" class="mha-search-region" style="display:none;">
+              <form action="/search/content" method="get" accept-charset="UTF-8">
+                <div class='input-group'>
+                  <input id="edit-keys3" data-drupal-selector="edit-keys"
+                         data-search-api-autocomplete-search="search_content"
+                         class="form-control form-autocomplete form-text ui-autocomplete-input"
+                         data-autocomplete-path="/search_api_autocomplete/search_content?display=page_1&amp;&amp;filter=keys"
+                         type="text" name="keys" value="" size="30" maxlength="128"
+                         data-once="autocomplete search-api-autocomplete" autocomplete="on" placeholder='Search'>
+                  <span class="input-group-btn">
+              <button type='submit' class='btn btn-default'>
+                <span class='fa fa-search'></span>
+              </button>
+            </span>
                 </div>
-              </div>
-
-            {% endif %}
+              </form>
+            </div>
           </div>
+          <script>
+            (function () {
+              "use strict";
+// Hide the close button on initial load
+              document.getElementById("closeButton2").style.display = "none";
+
+// Add event listener to open the div and hide the first button
+              document.getElementById("focusButton2").addEventListener("click", () => {
+                document.getElementById("edit-keys2").style.display = "block";
+                document.getElementById("edit-keys3").focus();
+                document.getElementById("focusButton2").style.display = "none";
+                document.getElementById("closeButton2").style.display = "block";
+              });
+
+// Add event listener to close the div and show the first button
+              document.getElementById("closeButton2").addEventListener("click", () => {
+                document.getElementById("edit-keys2").style.display = "none";
+                document.getElementById("focusButton2").style.display = "block";
+                document.getElementById("closeButton2").style.display = "none";
+              });
+            })(jQuery);
+          </script>
+
           <div class="col">
             {% if page.quick_side %}
               <div class="quick-side-icon hidden-xs hidden-sm">
@@ -102,5 +128,4 @@
       </div>
     </div>
   </div>
-
 </header>
