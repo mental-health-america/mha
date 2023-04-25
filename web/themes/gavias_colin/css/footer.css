@@ -1,0 +1,93 @@
+
+/* Small devices (landscape phones, 544px and up) */
+@media (max-width: 544px) {
+  div#block-socialmediafooterblock {
+    display: none;
+  }
+
+  .mha-fixed-bottom .content {
+    min-height: calc(100% - 60px); /* height of the footer */
+  }
+
+  .mha-fixed-bottom {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 0 !important;
+  }
+
+  .mha-fixed-bottom .grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* two columns with equal width */
+    gap: 0; /* spacing between the columns */
+  }
+
+  .mha-fixed-bottom .left-column,
+  .mha-fixed-bottom .right-column {
+    padding: 10px;
+  }
+
+  .mha-fixed-bottom .left-column {
+    background: darkgreen;
+  }
+
+  .mha-fixed-bottom .btn-donate {
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 0;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .mha-fixed-bottom .mha-black {
+    background: #262626 !important;
+  }
+
+  .mha-fixed-bottom .fa-facebook:before,
+  .mha-fixed-bottom .fa-twitter:before  {
+    font-size: 20px;
+  }
+
+  .mha-fixed-bottom .btn-donate i {
+    margin-left: 10px;
+  }
+
+  .mha-fixed-bottom .btn-transparent {
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px 20px;
+    transition: all 0.3s ease-in-out;
+  }
+
+  button.btn-donate.heart::after {
+    content: '\f004';
+    display: inline-block;
+    font-size: inherit;
+    font-family: 'FontAwesome';
+    margin: 0 7px 0 0;
+    text-rendering: auto;
+  }
+
+  .mha-fixed-bottom .btn-transparent:hover {
+    color: #fff;
+  }
+
+  .mha-fixed-bottom .btn-group {
+    display: flex;
+    justify-content: center;
+  }
+
+  .mha-fixed-bottom .btn-group button:first-child {
+    margin-right: 10px;
+  }
+
+  .d-block.d-sm-none.mha-fixed-bottom.mha-black {
+    background: black;
+  }
+
+}

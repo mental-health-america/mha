@@ -12,6 +12,7 @@ global-styling:
       css/override.css: {}
       css/sliderlayer.css: {}
       css/newheader.css: {}
+      css/footer.css: {}
       css/font-awesome/css/all.min.css: {}
       //stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css: { type: external }
       css/ionicon/css/ionicons.min.css: {}
