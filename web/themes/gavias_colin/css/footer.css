@@ -28,7 +28,7 @@
   }
 
   .mha-fixed-bottom .left-column {
-    background: darkgreen;
+    background: var(--mha-blue);
   }
 
   .mha-fixed-bottom .btn-donate {
