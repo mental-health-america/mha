@@ -18,13 +18,18 @@
 
   .mha-fixed-bottom .grid-container {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* two columns with equal width */
-    gap: 0; /* spacing between the columns */
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    z-index: 99999999999;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
   }
 
   .mha-fixed-bottom .left-column,
   .mha-fixed-bottom .right-column {
     padding: 10px;
+    background: black;
   }
 
   .mha-fixed-bottom .left-column {
@@ -84,6 +89,7 @@
 
   .mha-fixed-bottom .btn-group button:first-child {
     margin-right: 10px;
+    margin-left: 20px;
   }
 
   .d-block.d-sm-none.mha-fixed-bottom.mha-black {
