@@ -101,6 +101,7 @@
         "drupal/geofield_map": "^3.0",
         "drupal/geolocation": "^3.11",
         "drupal/google_analytics": "^4.0",
+        "drupal/google_tag": "^2.0",
         "drupal/honeypot": "^2.0",
         "drupal/imce": "^3.0",
         "drupal/jquery_ui_accordion": "^2",
