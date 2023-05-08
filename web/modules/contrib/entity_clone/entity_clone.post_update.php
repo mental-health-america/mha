@@ -25,3 +25,11 @@ function entity_clone_post_update_populate_form_settings3() {
     \Drupal::configFactory()->getEditable('entity_clone.settings')->set('form_settings', $form_settings)->save();
   }
 }
+
+/**
+ * Populates new "entity_clone cloneable entities" config.
+ */
+function entity_clone_post_update_populate_cloneable_entities() {
+  $entity_types = array_keys(\Drupal::entityTypeManager()->getDefinitions());
+  \Drupal::configFactory()->getEditable('entity_clone.cloneable_entities')->set('cloneable_entities', $entity_types)->save();
+}

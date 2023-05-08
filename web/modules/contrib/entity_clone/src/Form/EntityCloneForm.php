@@ -2,11 +2,14 @@
 
 namespace Drupal\entity_clone\Form;
 
+use Drupal\Core\Entity\EntityDefinitionUpdateManagerInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Messenger\Messenger;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\TranslationManager;
@@ -60,9 +63,23 @@ class EntityCloneForm extends FormBase {
   /**
    * The messenger service.
    *
-   * @var \Drupal\Core\Messenger\Messenger
+   * @var \Drupal\Core\Messenger\MessengerInterface
    */
   protected $messenger;
+
+  /**
+   * The module handler service.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
+   * The entity definition update manager.
+   *
+   * @var \Drupal\Core\Entity\EntityDefinitionUpdateManagerInterface
+   */
+  protected $entityDefinitionUpdateManager;
 
   /**
    * The current user.
@@ -96,7 +113,7 @@ class EntityCloneForm extends FormBase {
    *   The string translation manager.
    * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
    *   The event dispatcher service.
-   * @param \Drupal\Core\Messenger\Messenger $messenger
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger service.
    * @param \Drupal\Core\Session\AccountProxyInterface $currentUser
    *   The current user.
@@ -104,10 +121,24 @@ class EntityCloneForm extends FormBase {
    *   The entity clone settings manager.
    * @param \Drupal\entity_clone\Services\EntityCloneServiceProvider $service_provider
    *   The Service Provider that verifies if entity has ownership.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler service.
+   * @param \Drupal\Core\Entity\EntityDefinitionUpdateManagerInterface $entity_definition_update_manager
+   *   The entity definition update manager.
    *
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, RouteMatchInterface $route_match, TranslationManager $string_translation, EventDispatcherInterface $eventDispatcher, Messenger $messenger, AccountProxyInterface $currentUser, EntityCloneSettingsManager $entity_clone_settings_manager, EntityCloneServiceProvider $service_provider) {
+  public function __construct(
+    EntityTypeManagerInterface $entity_type_manager,
+    RouteMatchInterface $route_match,
+    TranslationManager $string_translation,
+    EventDispatcherInterface $eventDispatcher,
+    MessengerInterface $messenger,
+    AccountProxyInterface $currentUser,
+    EntityCloneSettingsManager $entity_clone_settings_manager,
+    EntityCloneServiceProvider $service_provider,
+    ModuleHandlerInterface $module_handler,
+    EntityDefinitionUpdateManagerInterface $entity_definition_update_manager) {
     $this->entityTypeManager = $entity_type_manager;
     $this->stringTranslationManager = $string_translation;
     $this->eventDispatcher = $eventDispatcher;
@@ -120,6 +151,8 @@ class EntityCloneForm extends FormBase {
     $this->currentUser = $currentUser;
     $this->entityCloneSettingsManager = $entity_clone_settings_manager;
     $this->serviceProvider = $service_provider;
+    $this->moduleHandler = $module_handler;
+    $this->entityDefinitionUpdateManager = $entity_definition_update_manager;
   }
 
   /**
@@ -134,7 +167,9 @@ class EntityCloneForm extends FormBase {
       $container->get('messenger'),
       $container->get('current_user'),
       $container->get('entity_clone.settings.manager'),
-      $container->get('entity_clone.service_provider')
+      $container->get('entity_clone.service_provider'),
+      $container->get('module_handler'),
+      $container->get('entity.definition_update_manager')
     );
   }
 
@@ -170,6 +205,16 @@ class EntityCloneForm extends FormBase {
           '#title' => $this->t('Exclude Cloned'),
           '#description' => $this->t('Exclude " - Cloned" from title of cloned entity.'),
           '#default_value' => $this->entityCloneSettingsManager->getExcludeClonedSetting(),
+        ];
+      }
+
+      $has_content_translation_status_field = $this->moduleHandler->moduleExists('content_translation') && $this->entityDefinitionUpdateManager->getFieldStorageDefinition('content_translation_status', $this->entityTypeDefinition->id());
+      if ($this->entity instanceof EntityPublishedInterface || $has_content_translation_status_field) {
+        $form['status'] =[
+          '#type' => 'checkbox',
+          '#title' => $this->stringTranslationManager->translate('Save cloned @entity_type as published', ['@entity_type' => $this->entityTypeDefinition->getLabel()]),
+          '#description' => $this->stringTranslationManager->translate('If the cloned entity should be save as a published entity.'),
+          '#default_value' => FALSE,
         ];
       }
 
@@ -211,6 +256,24 @@ class EntityCloneForm extends FormBase {
     }
 
     $duplicate = $this->entity->createDuplicate();
+
+    $has_content_translation_status_field = $this->moduleHandler->moduleExists('content_translation') && $this->entityDefinitionUpdateManager->getFieldStorageDefinition('content_translation_status', $this->entityTypeDefinition->id());
+    if ($duplicate instanceof EntityPublishedInterface || $has_content_translation_status_field) {
+      if ($duplicate instanceof EntityPublishedInterface) {
+        $status_field = 'status';
+      }
+      else {
+       $status_field = 'content_translation_status';
+      }
+      foreach ($duplicate->getTranslationLanguages() as $translation_language) {
+        $translation = $duplicate->getTranslation($translation_language->getId());
+        $translation->set($status_field, $form_state->getValue('status'));
+      }
+    }
+
+    if ($this->moduleHandler->moduleExists('content_moderation') && $properties['status']) {
+      $duplicate->set('moderation_state', 'published');
+    }
 
     $this->eventDispatcher->dispatch(new EntityCloneEvent($this->entity, $duplicate, $properties), EntityCloneEvents::PRE_CLONE);
     $cloned_entity = $entity_clone_handler->cloneEntity($this->entity, $duplicate, $properties);
