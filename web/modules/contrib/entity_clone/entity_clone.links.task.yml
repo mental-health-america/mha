@@ -6,3 +6,8 @@ entity_clone.settings:
   route_name: entity_clone.settings
   base_route: entity_clone.settings
   weight: 0
+entity_clone.cloneable_entities:
+  title: 'Cloneable entities'
+  route_name: entity_clone.cloneable_entities
+  base_route: entity_clone.settings
+  weight: 1

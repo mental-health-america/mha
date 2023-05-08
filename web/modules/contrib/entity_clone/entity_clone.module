@@ -145,6 +145,16 @@ function entity_clone_entity_access(EntityInterface $entity, $operation, Account
   }
 
   $cache = new CacheableMetadata();
+
+  // Check the cloneable entities config and deny access if the entity is not
+  // enabled.
+  $cloneable_entities = \Drupal::configFactory()->get('entity_clone.cloneable_entities');
+  $cache->addCacheTags($cloneable_entities->getCacheTags());
+  $cloneable_entities = $cloneable_entities->get('cloneable_entities') ?? [];
+  if (!in_array($entity->getEntityTypeId(), $cloneable_entities)) {
+    return AccessResult::forbidden()->addCacheableDependency($cache);
+  }
+
   $cache->addCacheContexts(['user.permissions']);
 
   // Deny access if the user cannot clone the entity.

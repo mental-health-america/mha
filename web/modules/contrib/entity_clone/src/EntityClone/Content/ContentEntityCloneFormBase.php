@@ -2,6 +2,7 @@
 
 namespace Drupal\entity_clone\EntityClone\Content;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\ContentEntityStorageInterface;
 use Drupal\Core\Entity\EntityHandlerInterface;
@@ -51,6 +52,13 @@ class ContentEntityCloneFormBase implements EntityHandlerInterface, EntityCloneF
   protected $discoveredEntities = [];
 
   /**
+   * The config factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * Constructs a new ContentEntityCloneFormBase.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -59,15 +67,19 @@ class ContentEntityCloneFormBase implements EntityHandlerInterface, EntityCloneF
    *   The string translation manager.
    * @param \Drupal\entity_clone\EntityCloneSettingsManager $entity_clone_settings_manager
    *   The entity clone settings manager.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The config factory.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
     TranslationManager $translation_manager,
-    EntityCloneSettingsManager $entity_clone_settings_manager
+    EntityCloneSettingsManager $entity_clone_settings_manager,
+    ConfigFactoryInterface $config_factory
   ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->translationManager = $translation_manager;
     $this->entityCloneSettingsManager = $entity_clone_settings_manager;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -77,7 +89,8 @@ class ContentEntityCloneFormBase implements EntityHandlerInterface, EntityCloneF
     return new static(
       $container->get('entity_type.manager'),
       $container->get('string_translation'),
-      $container->get('entity_clone.settings.manager')
+      $container->get('entity_clone.settings.manager'),
+      $container->get('config.factory')
     );
   }
 
@@ -139,7 +152,10 @@ class ContentEntityCloneFormBase implements EntityHandlerInterface, EntityCloneF
       '#tree' => TRUE,
     ];
 
-    $fieldset_access = !$this->entityCloneSettingsManager->getHiddenValue($field_definition->getFieldStorageDefinition()->getSetting('target_type'));
+    $cloneable_entities = $this->configFactory->get('entity_clone.cloneable_entities')->get('cloneable_entities') ?? [];
+    $is_cloneable = in_array($field_definition->getFieldStorageDefinition()->getSetting('target_type'), $cloneable_entities);
+
+    $fieldset_access = !$this->entityCloneSettingsManager->getHiddenValue($field_definition->getFieldStorageDefinition()->getSetting('target_type')) && $is_cloneable;
     $form_element[$field_definition->id()] = [
       '#type' => 'fieldset',
       '#title' => $this->translationManager->translate('Entities referenced by field <em>@label (@field_id)</em>.', [
@@ -178,7 +194,7 @@ class ContentEntityCloneFormBase implements EntityHandlerInterface, EntityCloneF
             '@bundle' => $referenced_entity->bundle(),
             '@entity_label' => $referenced_entity->label(),
           ]),
-          '#default_value' => $this->entityCloneSettingsManager->getDefaultValue($referenced_entity->getEntityTypeId()),
+          '#default_value' => $is_cloneable && $this->entityCloneSettingsManager->getDefaultValue($referenced_entity->getEntityTypeId()),
           '#access' => $referenced_entity->access('view label'),
         ];
 

@@ -31,7 +31,7 @@ interface ContentImporterInterface {
    * @param mixed $field_value
    *   Field value.
    */
-  public function setFieldValue(FieldableEntityInterface $entity, string $field_name, mixed $field_value): void;
+  public function setFieldValue(FieldableEntityInterface $entity, string $field_name, $field_value): void;
 
   /**
    * Import content from the YAML file.

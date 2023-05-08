@@ -140,7 +140,8 @@ class ContentSyncConfigForm extends ConfigFormBase {
     $allowed_types = [];
     foreach ($source as $entity_type_id => $info) {
       if ($info['enabled']) {
-        $allowed_types[$entity_type_id] = array_filter($info['bundles']);
+        $bundles = $info['bundles'] ?? [];
+        $allowed_types[$entity_type_id] = array_filter($bundles);
       }
     }
 

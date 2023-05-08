@@ -239,7 +239,7 @@ class ContentImporter implements ContentImporterInterface {
   /**
    * {@inheritdoc}
    */
-  public function setFieldValue(FieldableEntityInterface $entity, string $field_name, mixed $field_value): void {
+  public function setFieldValue(FieldableEntityInterface $entity, string $field_name, $field_value): void {
     if (!$entity->hasField($field_name)) {
       return;
     }
