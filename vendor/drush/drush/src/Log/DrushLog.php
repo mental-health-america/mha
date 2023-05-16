@@ -68,7 +68,7 @@ class DrushLog implements LoggerInterface, LoggerAwareInterface
         // Translate the RFC logging levels into their Drush counterparts, more or
         // less.
         // @todo ALERT, CRITICAL and EMERGENCY are considered show-stopping errors,
-        // and they should cause Drush to exit or panic. Not sure how to handle this,
+        // and they should cause Drush to form_exit or panic. Not sure how to handle this,
         // though.
         switch ($level) {
             case RfcLogLevel::ALERT:

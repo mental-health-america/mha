@@ -8,7 +8,7 @@ use Egulias\EmailValidator\Result\Result;
 interface CommentStrategy
 {
     /**
-     * Return "true" to continue, "false" to exit
+     * Return "true" to continue, "false" to form_exit
      */
     public function exitCondition(EmailLexer $lexer, int $openedParenthesis) : bool;
 

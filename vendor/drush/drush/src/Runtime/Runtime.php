@@ -51,7 +51,7 @@ class Runtime
             $status = $e->getCode() ?: DrushCommands::EXIT_FAILURE;
             $message = $e->getMessage();
             // Uncaught exceptions could happen early, before our logger
-            // and other classes are initialized. Print them and exit.
+            // and other classes are initialized. Print them and form_exit.
             $this->preflight->logger()->setDebug(true)->log($message);
         }
         return $status;
@@ -65,7 +65,7 @@ class Runtime
         // Do the preflight steps
         $status = $this->preflight->preflight($argv);
 
-        // If preflight signals that we are done, then exit early.
+        // If preflight signals that we are done, then form_exit early.
         if ($status !== false) {
             return $status;
         }
@@ -136,7 +136,7 @@ class Runtime
      * @deprecated
      *   Used by backend.inc
      *
-     * Mark the exit code for current request.
+     * Mark the form_exit code for current request.
      * @param int $code
      */
     public static function setExitCode($code)
@@ -148,7 +148,7 @@ class Runtime
      * @deprecated
      *   Used by backend.inc
      *
-     * Get the exit code for current request.
+     * Get the form_exit code for current request.
      */
     public static function exitCode()
     {

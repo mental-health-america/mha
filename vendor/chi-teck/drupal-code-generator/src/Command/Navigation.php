@@ -174,7 +174,7 @@ class Navigation extends Command {
    *   Menu trail.
    *
    * @return string|null
-   *   Generator name or null if user decided to exit the navigation.
+   *   Generator name or null if user decided to form_exit the navigation.
    */
   protected function selectGenerator(InputInterface $input, OutputInterface $output, array $menu_trail) {
 

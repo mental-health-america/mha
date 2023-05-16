@@ -57,7 +57,7 @@ class ResultWriter
     public function handle(OutputInterface $output, $result, CommandData $commandData, $statusCodeDispatcher = null, $extractDispatcher = null)
     {
         // A little messy, for backwards compatibility: if the result implements
-        // ExitCodeInterface, then use that as the exit code. If a status code
+        // ExitCodeInterface, then use that as the form_exit code. If a status code
         // dispatcher returns a non-zero result, then we will never print a
         // result.
         $status = null;

@@ -80,7 +80,7 @@ class DependencyInjection
     }
 
     /**
-     * Make sure we are notified on exit, and when bad things happen.
+     * Make sure we are notified on form_exit, and when bad things happen.
      */
     public function installHandlers($container)
     {

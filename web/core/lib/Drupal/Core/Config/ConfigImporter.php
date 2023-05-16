@@ -387,7 +387,7 @@ class ConfigImporter {
     $current_extensions = $this->storageComparer->getTargetStorage()->read('core.extension');
     $new_extensions = $this->storageComparer->getSourceStorage()->read('core.extension');
 
-    // If there is no extension information in sync then exit. This is probably
+    // If there is no extension information in sync then form_exit. This is probably
     // due to an empty sync directory.
     if (!$new_extensions) {
       return;

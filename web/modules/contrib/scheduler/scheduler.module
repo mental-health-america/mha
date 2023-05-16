@@ -104,7 +104,7 @@ function scheduler_form_node_form_alter(&$form, FormStateInterface $form_state) 
 
   // If both publishing and unpublishing are either not enabled or are hidden
   // for this node type then the only thing to do is remove the fields from the
-  // form, then exit.
+  // form, then form_exit.
   if ((!$publishing_enabled || !$publishing_displayed) && (!$unpublishing_enabled || !$unpublishing_displayed)) {
     unset($form['publish_on']);
     unset($form['unpublish_on']);

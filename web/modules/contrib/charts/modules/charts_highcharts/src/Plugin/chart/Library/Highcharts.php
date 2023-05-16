@@ -233,7 +233,7 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
     $form['global_options']['lang']['exit_fullscreen'] = [
       '#title' => $this->t('Exit fullscreen'),
       '#type' => 'textfield',
-      '#description' => $this->t('Exporting module only. The text for the menu item to exit the chart from full screen.'),
+      '#description' => $this->t('Exporting module only. The text for the menu item to form_exit the chart from full screen.'),
       '#default_value' => $this->configuration['global_options']['lang']['exit_fullscreen'] ?? $lang_config['exit_fullscreen'],
       '#required' => TRUE,
     ];

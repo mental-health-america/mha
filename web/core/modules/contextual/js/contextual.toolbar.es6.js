@@ -11,7 +11,7 @@
     tabbingConstrained: Drupal.t(
       'Tabbing is constrained to a set of @contextualsCount and the edit mode toggle.',
     ),
-    pressEsc: Drupal.t('Press the esc key to exit.'),
+    pressEsc: Drupal.t('Press the esc key to form_exit.'),
   };
 
   /**

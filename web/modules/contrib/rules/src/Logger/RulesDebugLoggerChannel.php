@@ -51,7 +51,7 @@ class RulesDebugLoggerChannel extends LoggerChannel {
    */
   public function log($level, $message, array $context = []) {
     // Log debugging information only if the debug_log.enabled setting is
-    // enabled. Otherwise exit immediately.
+    // enabled. Otherwise form_exit immediately.
     $config = $this->config->get('rules.settings');
     if (!$config->get('debug_log.enabled')) {
       return;

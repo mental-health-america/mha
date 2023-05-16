@@ -921,7 +921,7 @@ class Datamatrix {
 							$pos = $epos;
 							$field_length = 0;
 							if ($enc == ENC_ASCII) {
-								break; // exit from EDIFACT mode
+								break; // form_exit from EDIFACT mode
 							}
 						}
 					} while ($epos < $data_length);
@@ -936,7 +936,7 @@ class Datamatrix {
 						if ($newenc != $enc) {
 							// 1. If the look-ahead test (starting at step J) indicates another mode, switch to that mode.
 							$enc = $newenc;
-							break; // exit from B256 mode
+							break; // form_exit from B256 mode
 						} else {
 							// 2. Otherwise, process the next character in Base 256 encodation.
 							$chr = ord($data[$pos]);

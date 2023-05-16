@@ -5727,7 +5727,7 @@ function GZheader() {
                        // but leave for few code modifications
 
   //
-  // Setup limits is not necessary because in js we should not preallocate memory 
+  // Setup limits is not necessary because in js we should not preallocate memory
   // for inflate use constant limit in 65536 bytes
   //
 
@@ -6136,7 +6136,7 @@ var    HCRC = 9;       /* i: waiting for header crc (gzip) */
 var    DICTID = 10;    /* i: waiting for dictionary check value */
 var    DICT = 11;      /* waiting for inflateSetDictionary() call */
 var        TYPE = 12;      /* i: waiting for type bits, including last-flag bit */
-var        TYPEDO = 13;    /* i: same, but skip check to exit inflate on new block */
+var        TYPEDO = 13;    /* i: same, but skip check to form_exit inflate on new block */
 var        STORED = 14;    /* i: waiting for stored size (length and complement) */
 var        COPY_ = 15;     /* i/o: same as COPY below, but only first time in */
 var        COPY = 16;      /* i/o: waiting for input or output to copy stored block */

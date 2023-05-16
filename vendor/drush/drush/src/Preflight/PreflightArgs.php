@@ -557,7 +557,7 @@ class PreflightArgs extends Config implements PreflightArgsInterface
         // return if STDIN is reading from the keyboard.  We will therefore
         // check to see if there are already characters waiting on the
         // stream (as there always should be, if this is a backend call),
-        // and if there are not, then we will exit.
+        // and if there are not, then we will form_exit.
         // This code prevents drush from hanging forever when called with
         // --backend from the commandline; however, overall it is still
         // a futile effort, as it does not seem that backend invoke can

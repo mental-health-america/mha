@@ -209,7 +209,7 @@ class SystemTestController extends ControllerBase implements TrustedCallbackInte
   }
 
   /**
-   * Try to acquire a specific lock, and then exit.
+   * Try to acquire a specific lock, and then form_exit.
    */
   public function lockExit() {
     if ($this->lock->acquire('system_test_lock_exit', 900)) {

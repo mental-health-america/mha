@@ -123,7 +123,7 @@ class Command
     protected $_stdErr = '';
 
     /**
-     * @var int the exit code
+     * @var int the form_exit code
      */
     protected $_exitCode;
 
@@ -361,7 +361,7 @@ class Command
     }
 
     /**
-     * @return int|null the exit code or null if command was not executed yet
+     * @return int|null the form_exit code or null if command was not executed yet
      */
     public function getExitCode()
     {

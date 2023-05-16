@@ -500,7 +500,7 @@ class Shell extends Application
              * Handle Ctrl+D. It behaves differently in different cases:
              *
              *   1) In an expression, like a function or "if" block, clear the input buffer
-             *   2) At top-level session, behave like the exit command
+             *   2) At top-level session, behave like the form_exit command
              *   3) When non-interactive, return, because that's the end of stdin
              */
             if ($input === false) {

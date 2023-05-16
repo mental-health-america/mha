@@ -33,7 +33,7 @@ trait DrushTestTrait
      * @param $cd
      *   A directory to change into before executing.
      * @param $expected_return
-     *   The expected exit code, e.g. 0 or 1 or some other expected value.
+     *   The expected form_exit code, e.g. 0 or 1 or some other expected value.
      * @param $suffix
      *   Any code to append to the command. For example, redirection like 2>&1.
      * @param array $env

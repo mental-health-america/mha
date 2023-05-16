@@ -150,7 +150,7 @@ class Command
      * execute() method, you set the code to execute by passing
      * a Closure to the setCode() method.
      *
-     * @return int 0 if everything went fine, or an exit code
+     * @return int 0 if everything went fine, or an form_exit code
      *
      * @throws LogicException When this abstract method is not implemented
      *
@@ -193,7 +193,7 @@ class Command
      * setCode() method or by overriding the execute() method
      * in a sub-class.
      *
-     * @return int The command exit code
+     * @return int The command form_exit code
      *
      * @throws ExceptionInterface When input binding fails. Bypass this by calling {@link ignoreValidationErrors()}.
      *

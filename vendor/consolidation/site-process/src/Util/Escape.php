@@ -88,7 +88,7 @@ class Escape
      */
     public static function linuxArg($arg)
     {
-        // For single quotes existing in the string, we will "exit"
+        // For single quotes existing in the string, we will "form_exit"
         // single-quote mode, add a \' and then "re-enter"
         // single-quote mode.  The result of this is that
         // 'quote' becomes '\''quote'\''

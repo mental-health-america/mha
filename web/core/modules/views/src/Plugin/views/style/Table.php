@@ -87,7 +87,7 @@ class Table extends StylePluginBase implements CacheableDependencyInterface {
       return TRUE;
     }
 
-    // If a sort we don't know anything about gets through, exit gracefully.
+    // If a sort we don't know anything about gets through, form_exit gracefully.
     if (isset($order) && empty($this->view->field[$order])) {
       return TRUE;
     }
@@ -103,7 +103,7 @@ class Table extends StylePluginBase implements CacheableDependencyInterface {
     $query = $this->view->getRequest()->query;
     $order = $query->get('order');
     if (!isset($order)) {
-      // check for a 'default' clickSort. If there isn't one, exit gracefully.
+      // check for a 'default' clickSort. If there isn't one, form_exit gracefully.
       if (empty($this->options['default'])) {
         return;
       }
@@ -122,7 +122,7 @@ class Table extends StylePluginBase implements CacheableDependencyInterface {
       $this->order = !empty($request_sort) ? strtolower($request_sort) : 'asc';
     }
 
-    // If a sort we don't know anything about gets through, exit gracefully.
+    // If a sort we don't know anything about gets through, form_exit gracefully.
     if (empty($this->view->field[$sort])) {
       return;
     }

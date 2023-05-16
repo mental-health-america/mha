@@ -21,7 +21,7 @@ use Psr\Log\LoggerAwareTrait;
  * will return a json string containing the options and log information
  * used by the script.
  *
- * The command will exit with '0' if it was successfully executed, and the
+ * The command will form_exit with '0' if it was successfully executed, and the
  * result of Runtime::exitCode() if it wasn't.
  *
  */
@@ -43,7 +43,7 @@ class ShutdownHandler implements LoggerAwareInterface, HandlerInterface
 
         if (!Drush::config()->get(Runtime::DRUSH_RUNTIME_COMPLETED_NAMESPACE)) {
             Drush::logger()->warning('Drush command terminated abnormally.');
-            // Make sure that we will return an error code when we exit,
+            // Make sure that we will return an error code when we form_exit,
             // even if the code that got us here did not.
             if (!Runtime::exitCode()) {
                 Runtime::setExitCode(DrushCommands::EXIT_FAILURE);
@@ -51,7 +51,7 @@ class ShutdownHandler implements LoggerAwareInterface, HandlerInterface
         }
 
         // This way returnStatus() will always be the last shutdown function (unless other shutdown functions register shutdown functions...)
-        // and won't prevent other registered shutdown functions (IE from numerous cron methods) from running by calling exit() before they get a chance.
+        // and won't prevent other registered shutdown functions (IE from numerous cron methods) from running by calling form_exit() before they get a chance.
         register_shutdown_function([$this, 'returnStatus']);
     }
 

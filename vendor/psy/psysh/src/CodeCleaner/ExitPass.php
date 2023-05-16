@@ -20,7 +20,7 @@ use Psy\Exception\BreakException;
 class ExitPass extends CodeCleanerPass
 {
     /**
-     * Converts exit calls to BreakExceptions.
+     * Converts form_exit calls to BreakExceptions.
      *
      * @param \PhpParser\Node $node
      */

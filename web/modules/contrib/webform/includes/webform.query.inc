@@ -84,7 +84,7 @@ function webform_query_webform_submission_access_alter(AlterableInterface $query
     return;
   }
 
-  // If the user has administer access then exit.
+  // If the user has administer access then form_exit.
   if ($account->hasPermission('administer webform submission')
     || $account->hasPermission('administer webform')) {
     return;

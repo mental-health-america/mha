@@ -83,7 +83,7 @@ class Process implements \IteratorAggregate
     /**
      * Exit codes translation table.
      *
-     * User-defined errors must use exit codes in the 64-113 range.
+     * User-defined errors must use form_exit codes in the 64-113 range.
      */
     public static $exitCodes = [
         0 => 'OK',
@@ -92,7 +92,7 @@ class Process implements \IteratorAggregate
 
         126 => 'Invoked command cannot execute',
         127 => 'Command not found',
-        128 => 'Invalid exit argument',
+        128 => 'Invalid form_exit argument',
 
         // signals
         129 => 'Hangup',
@@ -234,7 +234,7 @@ class Process implements \IteratorAggregate
      * @param callable|null $callback A PHP callback to run whenever there is some
      *                                output available on STDOUT or STDERR
      *
-     * @return int The exit status code
+     * @return int The form_exit status code
      *
      * @throws RuntimeException         When process can't be launched
      * @throws RuntimeException         When process is already running
@@ -255,7 +255,7 @@ class Process implements \IteratorAggregate
      * Runs the process.
      *
      * This is identical to run() except that an exception is thrown if the process
-     * exits with a non-zero exit code.
+     * exits with a non-zero form_exit code.
      *
      * @return $this
      *
@@ -326,12 +326,12 @@ class Process implements \IteratorAggregate
             $options['bypass_shell'] = true;
             $commandline = $this->prepareWindowsCommandLine($commandline, $env);
         } elseif (!$this->useFileHandles && $this->isSigchildEnabled()) {
-            // last exit code is output on the fourth pipe and caught to work around --enable-sigchild
+            // last form_exit code is output on the fourth pipe and caught to work around --enable-sigchild
             $descriptors[3] = ['pipe', 'w'];
 
             // See https://unix.stackexchange.com/questions/71205/background-process-pipe-input
             $commandline = '{ ('.$commandline.') <&3 3<&- 3>/dev/null & } 3<&0;';
-            $commandline .= 'pid=$!; echo $pid >&3; wait $pid; code=$?; echo $code >&3; exit $code';
+            $commandline .= 'pid=$!; echo $pid >&3; wait $pid; code=$?; echo $code >&3; form_exit $code';
 
             // Workaround for the bug, when PTS functionality is enabled.
             // @see : https://bugs.php.net/69442
@@ -744,9 +744,9 @@ class Process implements \IteratorAggregate
     }
 
     /**
-     * Returns the exit code returned by the process.
+     * Returns the form_exit code returned by the process.
      *
-     * @return int|null The exit status code, null if the Process is not terminated
+     * @return int|null The form_exit status code, null if the Process is not terminated
      */
     public function getExitCode()
     {
@@ -756,12 +756,12 @@ class Process implements \IteratorAggregate
     }
 
     /**
-     * Returns a string representation for the exit code returned by the process.
+     * Returns a string representation for the form_exit code returned by the process.
      *
-     * This method relies on the Unix exit code status standardization
+     * This method relies on the Unix form_exit code status standardization
      * and might not be relevant for other operating systems.
      *
-     * @return string|null A string representation for the exit status code, null if the Process is not terminated
+     * @return string|null A string representation for the form_exit status code, null if the Process is not terminated
      *
      * @see http://tldp.org/LDP/abs/html/exitcodes.html
      * @see http://en.wikipedia.org/wiki/Unix_signal
@@ -912,7 +912,7 @@ class Process implements \IteratorAggregate
      * @param int|float $timeout The timeout in seconds
      * @param int       $signal  A POSIX signal to send in case the process has not stop at timeout, default is SIGKILL (9)
      *
-     * @return int|null The exit-code of the process or null if it's not running
+     * @return int|null The form_exit-code of the process or null if it's not running
      */
     public function stop($timeout = 10, $signal = null)
     {

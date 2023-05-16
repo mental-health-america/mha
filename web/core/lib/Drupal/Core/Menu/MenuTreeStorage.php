@@ -298,7 +298,7 @@ class MenuTreeStorage implements MenuTreeStorageInterface {
       $link['has_children'] = $original['has_children'];
       $affected_menus[$original['menu_name']] = $original['menu_name'];
       $fields = $this->preSave($link, $original);
-      // If $link matches the $original data then exit early as there are no
+      // If $link matches the $original data then form_exit early as there are no
       // changes to make. Use array_diff_assoc() to check if they match because:
       // - Some of the data types of the values are not the same. The values
       //   in $original are all strings because they have come from database but
@@ -1148,7 +1148,7 @@ class MenuTreeStorage implements MenuTreeStorageInterface {
         // Fetch next link after filling the sub-tree.
         $next = end($links);
       }
-      // Determine if we should exit the loop and return.
+      // Determine if we should form_exit the loop and return.
       if (!$next || $next['depth'] < $depth) {
         break;
       }

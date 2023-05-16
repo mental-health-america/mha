@@ -125,7 +125,7 @@ class GeneratorTester {
    * Executes the command.
    *
    * @return int
-   *   The command exit code
+   *   The command form_exit code
    */
   public function execute() {
     return $this->commandTester

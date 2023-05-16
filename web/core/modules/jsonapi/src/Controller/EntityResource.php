@@ -640,7 +640,7 @@ class EntityResource {
       [ResourceIdentifier::class, 'compare']
     );
 
-    // There are no relationships that need to be added so we can exit early.
+    // There are no relationships that need to be added so we can form_exit early.
     if (empty($new_resource_identifiers)) {
       $status = static::relationshipResponseRequiresBody($resource_identifiers, $original_resource_identifiers) ? 200 : 204;
       return $this->getRelationship($resource_type, $entity, $related, $request, $status);

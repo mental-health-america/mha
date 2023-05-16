@@ -61,7 +61,7 @@ class ReflectionLanguageConstruct extends \ReflectionFunctionAbstract
             ],
         ],
 
-        'exit' => [
+        'form_exit' => [
             'status' => [
                 'isOptional'   => true,
                 'defaultValue' => 0,

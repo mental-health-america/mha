@@ -241,7 +241,7 @@ class Codecept extends BaseTask implements CommandInterface, PrintedInterface
      */
     public function noExit()
     {
-        $this->option("no-exit");
+        $this->option("no-form_exit");
         return $this;
     }
 

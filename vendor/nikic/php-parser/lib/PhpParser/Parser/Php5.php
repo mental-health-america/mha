@@ -2094,7 +2094,7 @@ class Php5 extends \PhpParser\ParserAbstract
             },
             376 => function ($stackPos) {
                  $attrs = $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes;
-            $attrs['kind'] = strtolower($this->semStack[$stackPos-(2-1)]) === 'exit' ? Expr\Exit_::KIND_EXIT : Expr\Exit_::KIND_DIE;
+            $attrs['kind'] = strtolower($this->semStack[$stackPos-(2-1)]) === 'form_exit' ? Expr\Exit_::KIND_EXIT : Expr\Exit_::KIND_DIE;
             $this->semValue = new Expr\Exit_($this->semStack[$stackPos-(2-2)], $attrs);
             },
             377 => function ($stackPos) {

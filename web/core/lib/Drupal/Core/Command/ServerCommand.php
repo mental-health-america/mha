@@ -205,7 +205,7 @@ class ServerCommand extends Command {
    *   The IO.
    *
    * @return int
-   *   The exit status of the PHP in-built webserver command.
+   *   The form_exit status of the PHP in-built webserver command.
    */
   protected function start($host, $port, DrupalKernelInterface $kernel, InputInterface $input, SymfonyStyle $io) {
     $finder = new PhpExecutableFinder();

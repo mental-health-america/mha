@@ -236,7 +236,7 @@ class ProcessForker extends AbstractListener
                 \posix_kill(\posix_getpid(), \SIGKILL);
             }
 
-            // worker didn't exit cleanly, we'll need to have another go
+            // worker didn't form_exit cleanly, we'll need to have another go
             $this->createSavegame();
         }
     }

@@ -491,7 +491,7 @@ class ModulesListForm extends FormBase {
       // Redirect to the confirmation form.
       $form_state->setRedirect($route_name);
 
-      // We can exit here because at least one modules has dependencies
+      // We can form_exit here because at least one modules has dependencies
       // which we have to prompt the user for in a confirmation form.
       return;
     }

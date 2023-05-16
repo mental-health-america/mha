@@ -242,7 +242,7 @@ class ConfigCommands extends DrushCommands implements StdinAwareInterface, SiteA
         $process->setTty(true);
         $process->mustRun();
 
-        // Perform import operation if user did not immediately exit editor.
+        // Perform import operation if user did not immediately form_exit editor.
         if (!$options['bg']) {
             $redispatch_options = Drush::redispatchOptions() + ['strict' => 0, 'partial' => true, 'source' => $temp_dir];
             $self = $this->siteAliasManager()->getSelf();
