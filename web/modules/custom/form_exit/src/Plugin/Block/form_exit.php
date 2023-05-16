@@ -23,23 +23,22 @@ class form_exit extends BlockBase {
     return array(
       '#markup' => $this->t('
 <style>
-#form_exit a.btn.btn-danger.ext {
+a.exit.red {
     background: red !important;
     color: white !important;
     text-decoration: none !important;
     font-size: 1.25rem;
-    position: absolute;
+    font-weight: bold !important;
+    position: fixed;
     top: 100px;
     right: 0;
     border-radius: 0;
     padding: 0.5rem 1rem;
     text-transform: capitalize;
+    z-index: 9999999999999!important;
 }
 </style>
-<div id="form_exit">
-<a href="https://www.google.com" class="btn btn-danger" target="_self">Exit X</a>
-</div>
-
+<a href="https://www.google.com" class="exit red" target="_self">Exit X</a>
       '),
     );
 
