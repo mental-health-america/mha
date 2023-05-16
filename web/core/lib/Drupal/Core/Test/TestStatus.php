@@ -24,7 +24,7 @@ class TestStatus {
   /**
    * Signify that the test result was an exception or code error.
    *
-   * This means that the test runner was able to exit and report an error.
+   * This means that the test runner was able to form_exit and report an error.
    */
   const EXCEPTION = 2;
 

@@ -684,7 +684,7 @@ class Standard extends PrettyPrinterAbstract
 
     protected function pExpr_Exit(Expr\Exit_ $node) {
         $kind = $node->getAttribute('kind', Expr\Exit_::KIND_DIE);
-        return ($kind === Expr\Exit_::KIND_EXIT ? 'exit' : 'die')
+        return ($kind === Expr\Exit_::KIND_EXIT ? 'form_exit' : 'die')
              . (null !== $node->expr ? '(' . $this->p($node->expr) . ')' : '');
     }
 

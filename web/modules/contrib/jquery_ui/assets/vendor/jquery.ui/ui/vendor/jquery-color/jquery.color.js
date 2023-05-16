@@ -234,7 +234,7 @@ function stringParse( string ) {
 			inst[ spaces[ spaceName ].cache ] = parsed[ spaces[ spaceName ].cache ];
 			rgba = inst._rgba = parsed._rgba;
 
-			// exit each( stringParsers ) here because we matched
+			// form_exit each( stringParsers ) here because we matched
 			return false;
 		}
 	} );

@@ -206,7 +206,7 @@ EOT;
     mkdir($unavailableGitPath);
     $bash = <<<SH
 #!/bin/bash
-exit 127
+form_exit 127
 
 SH;
     file_put_contents($unavailableGitPath . '/git', $bash);

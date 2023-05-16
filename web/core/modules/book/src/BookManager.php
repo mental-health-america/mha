@@ -1147,7 +1147,7 @@ class BookManager implements BookManagerInterface {
         // Fetch next link after filling the sub-tree.
         $next = end($links);
       }
-      // Determine if we should exit the loop and $request = return.
+      // Determine if we should form_exit the loop and $request = return.
       if (!$next || $next['depth'] < $depth) {
         break;
       }

@@ -154,7 +154,7 @@ trait CliTestTrait
             }
             $return = $this->process->run();
             if ($expected_return !== $return) {
-                $message = 'Unexpected exit code ' . $return . ' (expected ' . $expected_return . ") for command:\n" .  $command;
+                $message = 'Unexpected form_exit code ' . $return . ' (expected ' . $expected_return . ") for command:\n" .  $command;
                 throw new \Exception($message . $this->buildProcessMessage());
             }
             // Reset timeouts to default.

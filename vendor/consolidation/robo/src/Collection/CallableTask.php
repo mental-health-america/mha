@@ -44,7 +44,7 @@ class CallableTask implements TaskInterface
             $result = Result::success($this->reference);
         }
         // If the function returns a result, it must either return
-        // a \Robo\Result or an exit code.  In the later case, we
+        // a \Robo\Result or an form_exit code.  In the later case, we
         // convert it to a \Robo\Result.
         if (!$result instanceof Result) {
             $result = new Result($this->reference, $result);

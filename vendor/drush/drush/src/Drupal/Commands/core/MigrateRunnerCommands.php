@@ -454,7 +454,7 @@ class MigrateRunnerCommands extends DrushCommands
         // drush_op() provides --simulate support.
         drush_op([$executable, 'import']);
         if ($count = $executable->getFailedCount()) {
-            // Nudge Drush to use a non-zero exit code.
+            // Nudge Drush to use a non-zero form_exit code.
             throw new \Exception(dt('!name migration: !count failed.', ['!name' => $migrationId, '!count' => $count]));
         }
 

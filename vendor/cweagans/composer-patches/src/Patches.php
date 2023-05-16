@@ -285,9 +285,9 @@ class Patches implements PluginInterface, EventSubscriberInterface {
    */
   public function postInstall(PackageEvent $event) {
 
-    // Check if we should exit in failure.
+    // Check if we should form_exit in failure.
     $extra = $this->composer->getPackage()->getExtra();
-    $exitOnFailure = getenv('COMPOSER_EXIT_ON_PATCH_FAILURE') || !empty($extra['composer-exit-on-patch-failure']);
+    $exitOnFailure = getenv('COMPOSER_EXIT_ON_PATCH_FAILURE') || !empty($extra['composer-form_exit-on-patch-failure']);
     $skipReporting = getenv('COMPOSER_PATCHES_SKIP_REPORTING') || !empty($extra['composer-patches-skip-reporting']);
 
     // Get the package object for the current operation.

@@ -17,7 +17,7 @@ use Symfony\Component\Console\Input\ArrayInput;
 /**
  * Eases the testing of console applications.
  *
- * When testing an application, don't forget to disable the auto exit flag:
+ * When testing an application, don't forget to disable the auto form_exit flag:
  *
  *     $application = new Application();
  *     $application->setAutoExit(false);
@@ -50,7 +50,7 @@ class ApplicationTester
      * @param array $input   An array of arguments and options
      * @param array $options An array of options
      *
-     * @return int The command exit code
+     * @return int The command form_exit code
      */
     public function run(array $input, $options = [])
     {

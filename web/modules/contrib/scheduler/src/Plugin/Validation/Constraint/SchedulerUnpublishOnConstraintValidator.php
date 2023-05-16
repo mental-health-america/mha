@@ -15,7 +15,7 @@ class SchedulerUnpublishOnConstraintValidator extends ConstraintValidator {
    */
   public function validate($entity, Constraint $constraint) {
 
-    // If the content type is not enabled for unpublishing then exit early.
+    // If the content type is not enabled for unpublishing then form_exit early.
     if (!$entity->getEntity()->type->entity->getThirdPartySetting('scheduler', 'unpublish_enable', FALSE)) {
       return;
     }

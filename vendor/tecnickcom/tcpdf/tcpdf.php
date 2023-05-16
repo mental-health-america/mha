@@ -5963,7 +5963,7 @@ class TCPDF {
 						--$maxit;
 					}
 					if ($maxit < 0) {
-						// premature exit, we get the minimum font value to fit the cell
+						// premature form_exit, we get the minimum font value to fit the cell
 						$this->setFontSize($fmin);
 						$this->resetLastH();
 						$text_height = $this->getStringHeight($w, $txt, $reseth, $autopadding, $mc_padding, $border);

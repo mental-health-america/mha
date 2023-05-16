@@ -13,7 +13,7 @@ use Symfony\Component\Process\PhpProcess;
 class DrupalLogErrorTest extends UnitTestCase {
 
   /**
-   * Tests that fatal errors return a non-zero exit code.
+   * Tests that fatal errors return a non-zero form_exit code.
    */
   public function testFatalExitCode() {
     $script = <<<'EOT'
@@ -45,7 +45,7 @@ EOT;
     $process = new PhpProcess($script, $this->root);
     $process->run();
 
-    // Assert the output strings as unrelated errors (like the log-exit.php
+    // Assert the output strings as unrelated errors (like the log-form_exit.php
     // script throwing a PHP error) would still pass the final assertion.
     $this->assertEquals("kernel test: This is a test message in test_function (line 456 of test.module).\n", $process->getOutput());
     $this->assertEquals("kernel test: This is a test message in test.module on line 456 backtrace\n", $process->getErrorOutput());

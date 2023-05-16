@@ -16,8 +16,8 @@ define('DRUSH_SUCCESS', 0);
 /** The command could not be completed because the framework has specified errors that have occured. */
 define('DRUSH_FRAMEWORK_ERROR', 1);
 /** The command was aborted because the user chose to cancel it at some prompt.
-This exit code is arbitrarily the same as EX_TEMPFAIL in sysexits.h, although
-note that shell error codes are distinct from C exit codes, so this alignment
+This form_exit code is arbitrarily the same as EX_TEMPFAIL in sysexits.h, although
+note that shell error codes are distinct from C form_exit codes, so this alignment
 not meaningful. */
 define('DRUSH_EXITCODE_USER_ABORT', 75);
 /** The command that was executed resulted in an application error,

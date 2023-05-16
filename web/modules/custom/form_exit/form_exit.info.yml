@@ -1,0 +1,7 @@
+name: Exit Button
+type: module
+description: 'Exit Button.'
+package: Custom
+version: 8.x
+core_version_requirement: ^8 || ^9 || ^10
+

@@ -17,7 +17,7 @@
  *
  * When operating in 'non progressive' mode, Drush would experience the problems
  * that the API was written to solve in the first place, specifically that processes
- * would exceed the available memory and exit with an error.
+ * would exceed the available memory and form_exit with an error.
  *
  * Each major release of Drupal has also had slightly different implementations
  * of the batch API, and this provides a uniform interface to all of these

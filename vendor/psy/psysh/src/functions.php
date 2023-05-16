@@ -439,10 +439,10 @@ EOL;
                 \fwrite(\STDERR, $e->getMessage().\PHP_EOL);
 
                 // @todo this triggers the "exited unexpectedly" logic in the
-                // ForkingLoop, so we can't exit(1) after starting the shell...
+                // ForkingLoop, so we can't form_exit(1) after starting the shell...
                 // fix this :)
 
-                // exit(1);
+                // form_exit(1);
             }
         };
     }

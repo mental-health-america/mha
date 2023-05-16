@@ -894,7 +894,7 @@ abstract class WebformManagedFileBase extends WebformElementBase implements Webf
    * @see \Drupal\webform\WebformSubmissionForm::validateForm
    */
   public static function validateManagedFileLimit(array &$element, FormStateInterface $form_state, &$complete_form) {
-    // Set empty files to NULL and exit.
+    // Set empty files to NULL and form_exit.
     if (empty($element['#files'])) {
       return;
     }

@@ -152,7 +152,7 @@ class CommandData
         // --no-foo will be ignored.
         if ($value === true) {
             // Check if the --no-* option exists. Note that none of the other
-            // alteration apply in the $value == true case, so we can exit early here.
+            // alteration apply in the $value == true case, so we can form_exit early here.
             $negation_key = 'no-' . $option;
             return array_key_exists($negation_key, $options) && $options[$negation_key];
         }

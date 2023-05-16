@@ -507,14 +507,14 @@ class MigrateToolsCommands extends DrushCommands {
       }
     }
 
-    // If any rollbacks failed, throw an exception to generate exit status.
+    // If any rollbacks failed, throw an exception to generate form_exit status.
     if ($has_failure) {
       $error_message = \dt('!name migration failed.', ['!name' => $errored_migration_id]);
       if ($options['continue-on-failure']) {
         $this->logger()->error($error_message);
       }
       else {
-        // Nudge Drush to use a non-zero exit code.
+        // Nudge Drush to use a non-zero form_exit code.
         throw new \Exception($error_message);
       }
     }
@@ -969,7 +969,7 @@ class MigrateToolsCommands extends DrushCommands {
         $this->logger()->error($error_message);
       }
       else {
-        // Nudge Drush to use a non-zero exit code.
+        // Nudge Drush to use a non-zero form_exit code.
         throw new \Exception($error_message);
       }
     }

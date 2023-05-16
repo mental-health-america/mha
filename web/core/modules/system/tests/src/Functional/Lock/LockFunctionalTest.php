@@ -55,7 +55,7 @@ class LockFunctionalTest extends BrowserTestBase {
 
     // Check the shut-down function.
     $lock_acquired_exit = 'TRUE: Lock successfully acquired in \Drupal\system_test\Controller\SystemTestController::lockExit()';
-    $this->drupalGet('system-test/lock-exit');
+    $this->drupalGet('system-test/lock-form_exit');
     $this->assertSession()->pageTextContains($lock_acquired_exit);
     $this->assertTrue($lock->acquire('system_test_lock_exit'), 'Lock acquired by this request after the other request exits.', 'Lock');
   }

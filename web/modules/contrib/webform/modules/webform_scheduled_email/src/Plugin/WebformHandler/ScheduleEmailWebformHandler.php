@@ -425,7 +425,7 @@ class ScheduleEmailWebformHandler extends EmailWebformHandler {
     $send_iso_date = $this->scheduledEmailManager->getSendDate($webform_submission, $this->handler_id);
     $t_args['%date'] = $send_iso_date;
 
-    // Log and exit when we are unable to schedule an email due to an invalid
+    // Log and form_exit when we are unable to schedule an email due to an invalid
     // date.
     if (!$send_iso_date) {
       if ($this->configuration['debug']) {

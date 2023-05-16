@@ -36,7 +36,7 @@ class FeaturesAssignerTest extends KernelTestBase {
     // Install the feature.
     $installer = $this->container->get('module_installer');
     // Have to do these separately so features_modules_installed() doesn't
-    // just exit.
+    // just form_exit.
     $installer->install(['features']);
     $installer->install(['test_feature']);
 

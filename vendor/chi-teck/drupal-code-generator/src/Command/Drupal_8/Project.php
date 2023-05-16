@@ -264,7 +264,7 @@ class Project extends BaseGenerator {
     ];
 
     if ($vars['composer_patches']) {
-      $composer_json['extra']['composer-exit-on-patch-failure'] = TRUE;
+      $composer_json['extra']['composer-form_exit-on-patch-failure'] = TRUE;
     }
 
     $composer_json['extra']['drupal-scaffold']['locations']['web-root'] = $vars['document_root_path'];

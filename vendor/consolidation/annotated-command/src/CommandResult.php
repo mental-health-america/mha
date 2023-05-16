@@ -2,7 +2,7 @@
 namespace Consolidation\AnnotatedCommand;
 
 /**
- * Return a CommandResult as the result of a command to pass both an exit
+ * Return a CommandResult as the result of a command to pass both an form_exit
  * code and result data from a command.
  *
  * Usage:
@@ -10,7 +10,7 @@ namespace Consolidation\AnnotatedCommand;
  *      return CommandResult::dataWithExitCode(new RowsOfFields($rows), 1);
  *
  * The CommandResult can also be used to unambiguously return just
- * an exit code or just output data.
+ * an form_exit code or just output data.
  *
  * Exit code only:
  *
@@ -21,8 +21,8 @@ namespace Consolidation\AnnotatedCommand;
  *      return CommandResult::data(new RowsOfFields($rows));
  *
  * Historically, it has always been possible to return an integer to indicate
- * that the result is an exit code, and other return types (typically array
- * / ArrayObjects) indicating actual data with an implicit exit code of 0.
+ * that the result is an form_exit code, and other return types (typically array
+ * / ArrayObjects) indicating actual data with an implicit form_exit code of 0.
  * Using a CommandResult is preferred, though, as it allows the result of the
  * function to be unambiguously specified without type-based interpretation.
  *

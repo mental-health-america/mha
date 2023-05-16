@@ -247,7 +247,7 @@ class CliCommands extends DrushCommands
         'endswitch',
         'endwhile',
         'eval',
-        'exit',
+        'form_exit',
         'extends',
         'final',
         'for',

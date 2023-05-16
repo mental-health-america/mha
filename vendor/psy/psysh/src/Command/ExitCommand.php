@@ -28,7 +28,7 @@ class ExitCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('exit')
+            ->setName('form_exit')
             ->setAliases(['quit', 'q'])
             ->setDefinition([])
             ->setDescription('End the current session and return to caller.')
@@ -37,7 +37,7 @@ class ExitCommand extends Command
 End the current session and return to caller.
 
 e.g.
-<return>>>> exit</return>
+<return>>>> form_exit</return>
 HELP
             );
     }

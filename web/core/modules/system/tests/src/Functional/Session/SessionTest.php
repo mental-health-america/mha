@@ -54,7 +54,7 @@ class SessionTest extends BrowserTestBase {
     // Verify that the session cookie is set as HttpOnly.
     $this->assertSession()->responseHeaderMatches('Set-Cookie', '/HttpOnly/i');
 
-    // Verify that the session is regenerated if a module calls exit
+    // Verify that the session is regenerated if a module calls form_exit
     // in hook_user_login().
     $user->name = 'session_test_user';
     $user->save();
@@ -64,7 +64,7 @@ class SessionTest extends BrowserTestBase {
     $this->assertNotEmpty($matches[1], 'Found session ID before logging in.');
     $original_session = $matches[1];
 
-    // We cannot use $this->drupalLogin($user); because we exit in
+    // We cannot use $this->drupalLogin($user); because we form_exit in
     // session_test_user_login() which breaks a normal assertion.
     $edit = [
       'name' => $user->getAccountName(),

@@ -166,7 +166,7 @@ class GlossaryAZWidget extends WidgetPluginBase implements WidgetPluginInterface
     $index = $facet->getFacetSource()->getIndex();
     $processors = $index->getProcessors();
 
-    // If the glossary field is not enabled for this index, just exit here.
+    // If the glossary field is not enabled for this index, just form_exit here.
     if (!isset($processors['glossary'])) {
       return FALSE;
     }
