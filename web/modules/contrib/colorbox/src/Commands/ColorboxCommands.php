@@ -91,7 +91,7 @@ class ColorboxCommands extends DrushCommands {
         $zip->close();
       }
       else {
-        // Remove the directory if unzip fails and form_exit.
+        // Remove the directory if unzip fails and exit.
         $fs->remove($path);
         $this->logger()->error(dt('Error: unable to unzip colorbox file.', []));
         return;
@@ -171,7 +171,7 @@ class ColorboxCommands extends DrushCommands {
         $zip->close();
       }
       else {
-        // Remove the directory if unzip fails and form_exit.
+        // Remove the directory if unzip fails and exit.
         $fs->remove($path);
         $this->logger()->error(dt('Error: unable to unzip DOMPurify file.', []));
         return;
