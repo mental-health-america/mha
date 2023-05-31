@@ -15,7 +15,7 @@ class CommandError implements ExitCodeInterface, OutputDataInterface
     public function __construct($message = null, $exitCode = 1)
     {
         $this->message = $message;
-        // Ensure the form_exit code is non-zero. The form_exit code may have
+        // Ensure the exit code is non-zero. The exit code may have
         // come from an exception, and those often default to zero if
         // a specific value is not provided.
         $this->exitCode = $exitCode == 0 ? 1 : $exitCode;

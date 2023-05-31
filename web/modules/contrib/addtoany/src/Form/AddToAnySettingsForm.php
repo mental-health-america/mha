@@ -5,7 +5,6 @@ namespace Drupal\addtoany\Form;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\ContentEntityType;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
-use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Extension\ExtensionList;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\ConfigFormBase;
@@ -49,7 +48,7 @@ class AddToAnySettingsForm extends ConfigFormBase {
    * @param \Drupal\Core\Extension\ExtensionList $module_extension_list
    *   The module extension list service.
    * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $entity_type_bundle_info
-   *  The entity type bundle info service.
+   *   The entity type bundle info service.
    */
   public function __construct(ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, ExtensionList $module_extension_list, EntityTypeBundleInfoInterface $entity_type_bundle_info) {
     parent::__construct($config_factory);
@@ -248,7 +247,7 @@ class AddToAnySettingsForm extends ConfigFormBase {
       $bundles = $this->entityTypeBundleInfo->getBundleInfo($entityId);
       $links = [];
 
-      foreach($bundles as $machine_name => $bundle) {
+      foreach ($bundles as $machine_name => $bundle) {
         $label = $bundle['label'];
 
         // Some labels are TranslatableMarkup objects (such as the File entity).
@@ -274,7 +273,7 @@ class AddToAnySettingsForm extends ConfigFormBase {
         '#title' => $this->t('@entity', ['@entity' => $entity->getLabel()]),
         '#default_value' => $addtoany_settings->get("entities.{$entityId}"),
         '#description' => $description,
-        '#attributes' => ['class' => ['addtoany-entity-checkbox']]
+        '#attributes' => ['class' => ['addtoany-entity-checkbox']],
       ];
     }
 
@@ -301,7 +300,7 @@ class AddToAnySettingsForm extends ConfigFormBase {
       ->set('universal_button', $values['addtoany_universal_button'])
       ->set('universal_button_placement', $values['addtoany_universal_button_placement']);
 
-    foreach(self::getContentEntities() as $entity) {
+    foreach (self::getContentEntities() as $entity) {
       $entityId = $entity->id();
       $this->config('addtoany.settings')
         ->set("entities.{$entityId}", $values[$entityId]);
@@ -319,7 +318,7 @@ class AddToAnySettingsForm extends ConfigFormBase {
   public static function getContentEntities() {
     $content_entity_types = [];
     $entity_type_definitions = \Drupal::entityTypeManager()->getDefinitions();
-    /* @var $definition EntityTypeInterface */
+    /** @var EntityTypeInterface $definition */
     foreach ($entity_type_definitions as $definition) {
       if ($definition instanceof ContentEntityType) {
         $content_entity_types[] = $definition;
