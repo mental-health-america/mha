@@ -13,6 +13,9 @@ use Drupal\node\NodeInterface;
  * @Block(
  *   id = "addtoany_block",
  *   admin_label = @Translation("AddToAny share buttons"),
+ *   context_definitions = {
+ *     "node" = @ContextDefinition("entity:node", required = FALSE, label = @Translation("Node"))
+ *   }
  * )
  */
 class AddToAnyBlock extends BlockBase {
@@ -20,7 +23,7 @@ class AddToAnyBlock extends BlockBase {
   /**
    * The AddToAny option keys used in this block.
    */
-  private $addtoany_option_keys = [
+  private $addtoanyOptionKeys = [
     'link_url',
     'link_title',
     'buttons_size',
@@ -32,16 +35,13 @@ class AddToAnyBlock extends BlockBase {
    */
   public function build() {
     $build = [];
-    $node_id = \Drupal::routeMatch()->getParameter('node');
-    if (is_numeric($node_id)) {
-      $node = Node::load($node_id);
-    }
+    $node = $this->getContextValue('node');
 
-    $is_node = isset($node) && $node instanceof NodeInterface ? true : false;
+    $is_node = ($node instanceof NodeInterface);
     $data = $is_node ? addtoany_create_entity_data($node) : addtoany_create_data();
 
     $block_options = [];
-    foreach ($this->addtoany_option_keys as $key) {
+    foreach ($this->addtoanyOptionKeys as $key) {
       $block_options[$key] = $this->configuration[$key] ?: $data[$key];
     }
 
@@ -71,7 +71,7 @@ class AddToAnyBlock extends BlockBase {
    */
   public function defaultConfiguration() {
     $configs = [];
-    foreach ($this->addtoany_option_keys as $key) {
+    foreach ($this->addtoanyOptionKeys as $key) {
       $configs[$key] = '';
     }
     return $configs;
@@ -82,11 +82,11 @@ class AddToAnyBlock extends BlockBase {
    */
   public function blockForm($form, FormStateInterface $form_state) {
     $form_in_use = FALSE;
-    foreach ($this->addtoany_option_keys as $key) {
+    foreach ($this->addtoanyOptionKeys as $key) {
       $option = $this->configuration[$key];
       if (isset($option) && $option !== '') {
-         $form_in_use = TRUE;
-         break;
+        $form_in_use = TRUE;
+        break;
       }
     }
 
@@ -149,7 +149,7 @@ class AddToAnyBlock extends BlockBase {
   public function blockSubmit($form, FormStateInterface $form_state) {
     $options = $form_state->getValue('addtoany_options');
 
-    foreach ($this->addtoany_option_keys as $key) {
+    foreach ($this->addtoanyOptionKeys as $key) {
       $this->configuration[$key] = $options[$key];
     }
   }
