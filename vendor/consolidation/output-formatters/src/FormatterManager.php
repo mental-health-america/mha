@@ -106,7 +106,7 @@ class FormatterManager
         $automaticOptions = [];
 
         // At the moment, we only support automatic options for --format
-        // and --fields, so form_exit if the command returns no data.
+        // and --fields, so exit if the command returns no data.
         if (!isset($dataType)) {
             return [];
         }
