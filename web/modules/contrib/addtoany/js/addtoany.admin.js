@@ -3,7 +3,6 @@
   Drupal.behaviors.addtoany = {
     attach: function (context, settings) {
 
-
       // Initial page setup
 
       var addtoany_icon = $('input[name="addtoany_universal_button"]').next('label').find('img:first');
@@ -11,7 +10,6 @@
 
       // Set the A2A icon's size to match selected Icon Size
       addtoany_icon.height(initial_icon_size_int).width(initial_icon_size_int);
-
 
       // Bring attention to large A2A icon option
       // because the universal button will likely be changed to match the other icons
@@ -25,7 +23,6 @@
         addtoany_icon.height(icon_size_int).width(icon_size_int);
 
       });
-
 
     }
   };

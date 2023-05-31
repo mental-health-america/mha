@@ -11,7 +11,7 @@
  * @param array $types
  *   The entity types.
  */
-function hook_addtoany_entity_types_alter(&$types) {
+function hook_addtoany_entity_types_alter(array &$types) {
   // Add the "taxonomy_term" entity type.
   $types[] = 'taxonomy_term';
 }

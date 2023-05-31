@@ -14,7 +14,7 @@ class Exit_ extends Expr
     public $expr;
 
     /**
-     * Constructs an form_exit() node.
+     * Constructs an exit() node.
      *
      * @param null|Expr $expr       Expression
      * @param array                    $attributes Additional attributes
@@ -27,7 +27,7 @@ class Exit_ extends Expr
     public function getSubNodeNames() : array {
         return ['expr'];
     }
-
+    
     public function getType() : string {
         return 'Expr_Exit';
     }
