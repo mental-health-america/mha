@@ -7,7 +7,7 @@ dependencies:
   - drupal:node
 configure: addtoany.admin_settings
 
-# Information added by Drupal.org packaging script on 2023-05-25
-version: '2.0.3'
+# Information added by Drupal.org packaging script on 2023-05-31
+version: '2.0.4'
 project: 'addtoany'
-datestamp: 1685000130
+datestamp: 1685530354
