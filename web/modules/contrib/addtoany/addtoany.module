@@ -249,7 +249,7 @@ function addtoany_page_attachments(&$page) {
  */
 function addtoany_create_entity_data($node, $config = NULL) {
   $url = isset($node) ? $node->toUrl('canonical', ['absolute' => TRUE])->toString() : NULL;
-  $title = isset($node) ? $node->label() : NULL;
+  $title = isset($node) && $node->access('view label') ? $node->label() : NULL;
   return addtoany_create_data($url, $title, $config);
 }
 
