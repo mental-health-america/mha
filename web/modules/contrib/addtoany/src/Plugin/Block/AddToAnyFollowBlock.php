@@ -82,6 +82,7 @@ class AddToAnyFollowBlock extends BlockBase {
       '#title'         => $this->t('Service Buttons HTML code'),
       '#default_value' => $this->configuration['addtoany_html'],
       '#description'   => $this->t('Add HTML code to display <a href="https://www.addtoany.com/buttons/customize/drupal/follow_buttons" target="_blank">follow buttons</a> that link to your social media profiles. For example:') . $example_html,
+      '#disabled'      => !\Drupal::currentUser()->hasPermission('administer addtoany'),
       '#attributes' => $attributes_for_code,
     ];
 
