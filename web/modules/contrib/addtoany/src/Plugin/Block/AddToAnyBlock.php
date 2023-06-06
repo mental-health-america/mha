@@ -137,6 +137,7 @@ class AddToAnyBlock extends BlockBase {
       '#default_value' => $this->configuration['addtoany_html'],
       '#description'   => $this->t('You can add HTML code to display customized <a href="https://www.addtoany.com/buttons/customize/drupal/standalone_services" target="_blank">standalone service buttons</a> next to each universal share button. For example: <br /> <code>&lt;a class=&quot;a2a_button_facebook&quot;&gt;&lt;/a&gt;<br />&lt;a class=&quot;a2a_button_twitter&quot;&gt;&lt;/a&gt;<br />&lt;a class=&quot;a2a_button_pinterest&quot;&gt;&lt;/a&gt;</code>
       '),
+      '#disabled'      => !\Drupal::currentUser()->hasPermission('administer addtoany'),
       '#attributes' => $attributes_for_code,
     ];
 
