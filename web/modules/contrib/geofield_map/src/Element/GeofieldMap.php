@@ -138,6 +138,18 @@ class GeofieldMap extends GeofieldLatLon {
       $element['#attributes']['class'] = ['geofield-map-marker'];
     }
 
+    if (!empty($element['#click_to_remove_marker']) && $element['#click_to_remove_marker'] == TRUE) {
+      $element['map']['actions']['click_to_remove_marker'] = [
+        '#type' => 'button',
+        '#value' => t('Remove marker'),
+        '#name' => 'geofield-map-remove-marker',
+        '#attributes' => [
+          'id' => $element['#id'] . '-click-to-remove-marker',
+        ],
+      ];
+      $element['#attributes']['class'] = ['geofield-map-remove-marker'];
+    }
+
     // Add the HTML5 User Geolocation button functionality.
     if (!empty($element['#geolocation']) && $element['#geolocation'] == TRUE) {
       $element['#attached']['library'][] = 'geofield_map/geolocation';
@@ -242,6 +254,8 @@ class GeofieldMap extends GeofieldLatLon {
       'click_to_find_marker' => $element['#click_to_find_marker'] ? TRUE : FALSE,
       'click_to_place_marker_id' => $element['#click_to_place_marker'] ? $element['map']['actions']['click_to_place_marker']['#attributes']['id'] : NULL,
       'click_to_place_marker' => $element['#click_to_place_marker'] ? TRUE : FALSE,
+      'click_to_remove_marker_id' => $element['#click_to_remove_marker'] ? $element['map']['actions']['click_to_remove_marker']['#attributes']['id'] : NULL,
+      'click_to_remove_marker' => $element['#click_to_remove_marker'] ? TRUE : FALSE,
       'geolocation' => $element['#geolocation'],
       // Geofield Map Google Maps and Geocoder Settings.
       'gmap_api_localization' => $google_maps_service->getGmapApiLocalization($geofield_map_settings->get('gmap_api_localization')),

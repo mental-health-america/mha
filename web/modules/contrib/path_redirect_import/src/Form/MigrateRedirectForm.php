@@ -171,13 +171,20 @@ my-source-path,https://example.com,und,302',
 
       foreach ($reader as $key => $record) {
         $csvLine = $key + 1;
+        // Validate if the headers in the CSV file have the correct label.
+        if (!isset($record['source']) || !isset($record['destination'])
+         || !isset($record['language']) || !isset($record['status_code'])) {
+          $form_state->setErrorByName($key, 'Header line should follow the following labels: source,destination,language,status_code');
+          $file->delete();
+          return;
+        }
         // Validate character encoding.
         if (mb_check_encoding($record['source'], 'UTF-8') === FALSE
           || mb_check_encoding($record['destination'], 'UTF-8') === FALSE
           || mb_check_encoding($record['language'], 'UTF-8') === FALSE
           || mb_check_encoding($record['status_code'], 'UTF-8') === FALSE) {
           $removeFile = TRUE;
-          $csvHtml = t('Line @line in @label contains wrong character(s)', [
+          $csvHtml = $this->t('Line @line in @label contains wrong character(s)', [
             '@line' => $csvLine,
             '@name' => $file->label(),
           ]);
@@ -187,7 +194,7 @@ my-source-path,https://example.com,und,302',
 
         if (in_array(NULL, $record, TRUE) || in_array('', $record, TRUE)) {
           $removeFile = TRUE;
-          $csvHtml = t('Line @line in @label contains empty/null value(s)', [
+          $csvHtml = $this->t('Line @line in @label contains empty/null value(s)', [
             '@line' => $csvLine,
             '@name' => $file->label(),
           ]);
@@ -198,7 +205,7 @@ my-source-path,https://example.com,und,302',
         // Use ltrim to compare url with /url.
         if (trim($record['source']) === ltrim(trim($record['destination']), '/')) {
           $removeFile = TRUE;
-          $csvHtml = t('Line @line in @label contains the same URL destination as source', [
+          $csvHtml = $this->t('Line @line in @label contains the same URL destination as source', [
             '@line' => $csvLine,
             '@name' => $file->label(),
           ]);
@@ -311,7 +318,7 @@ my-source-path,https://example.com,und,302',
     $records = $this->getReader()->getRecords($header);
 
     foreach ($records as $record) {
-      $parsed_url = UrlHelper::parse($record['source']);
+      $parsed_url = UrlHelper::parse(urldecode($record['source']));
       $path = $parsed_url['path'] ?? NULL;
       $query = $parsed_url['query'] ?? NULL;
       $hash = Redirect::generateHash($path, $query, $record['language']);

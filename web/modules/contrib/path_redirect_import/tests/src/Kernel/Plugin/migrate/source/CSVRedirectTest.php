@@ -57,6 +57,10 @@ class CSVRedirectTest extends MigrateTestBase {
       'query' => [],
       'path' => 'my-source-path',
     ], 'https://example.com', '304');
+    $this->assertRedirect(4, 'und', [
+      'query' => [],
+      'path' => 'path with spaces',
+    ], 'base:new space path', '301');
   }
 
   /**
@@ -94,7 +98,7 @@ class CSVRedirectTest extends MigrateTestBase {
   public function providerTestRedirectDeleteCount(): array {
     return [
       ['/artifacts/redirect_2.csv', 2],
-      ['/artifacts/redirect.csv', 3],
+      ['/artifacts/redirect.csv', 4],
     ];
   }
 

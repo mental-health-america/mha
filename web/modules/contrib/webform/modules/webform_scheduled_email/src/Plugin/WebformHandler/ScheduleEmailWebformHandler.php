@@ -3,6 +3,7 @@
 namespace Drupal\webform_scheduled_email\Plugin\WebformHandler;
 
 use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\webform\Element\WebformMessage;
@@ -331,7 +332,9 @@ class ScheduleEmailWebformHandler extends EmailWebformHandler {
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
     parent::submitConfigurationForm($form, $form_state);
     if ($form_state->getValue('queue')) {
-      $this->scheduledEmailManager->schedule($this->getWebform(), $this->getHandlerId());
+      // If this is a new handler, we need to get the $handler_id from the $form.
+      $handler_id = $this->getHandlerId() ?: NestedArray::getValue($form, ['general', 'handler_id', '#value']);
+      $this->scheduledEmailManager->schedule($this->getWebform(), $handler_id);
     }
   }
 
@@ -425,7 +428,7 @@ class ScheduleEmailWebformHandler extends EmailWebformHandler {
     $send_iso_date = $this->scheduledEmailManager->getSendDate($webform_submission, $this->handler_id);
     $t_args['%date'] = $send_iso_date;
 
-    // Log and form_exit when we are unable to schedule an email due to an invalid
+    // Log and exit when we are unable to schedule an email due to an invalid
     // date.
     if (!$send_iso_date) {
       if ($this->configuration['debug']) {

@@ -132,6 +132,7 @@ class ComposerStaticInit6a304bd6fcf54197feff320618fdafbc
             'Psr\\Cache\\' => 10,
             'PhpParser\\' => 10,
             'PHPStan\\' => 8,
+            'PHPMailer\\PHPMailer\\' => 20,
         ),
         'M' => 
         array (
@@ -446,6 +447,10 @@ class ComposerStaticInit6a304bd6fcf54197feff320618fdafbc
         'PHPStan\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpstan/phpstan-deprecation-rules/src',
+        ),
+        'PHPMailer\\PHPMailer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
         ),
         'MathieuViossat\\Util\\' => 
         array (

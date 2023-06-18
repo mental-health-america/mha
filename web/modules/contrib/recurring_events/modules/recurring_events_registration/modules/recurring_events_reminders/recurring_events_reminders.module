@@ -137,6 +137,7 @@ function recurring_events_reminders_cron() {
     ->condition('reminder_date', NULL, 'IS NOT NULL')
     ->condition('reminder_sent', NULL, 'IS NULL')
     ->condition('reminder_date', time(), '<=')
+    ->accessCheck(FALSE)
     ->execute();
 
   if (!empty($event_instances)) {
@@ -153,6 +154,7 @@ function recurring_events_reminders_cron() {
       $registration_creation_service->setEventInstance($instance);
 
       $registrants = $registration_creation_service->retrieveRegisteredParties();
+
       if (empty($registrants)) {
         return;
       }
@@ -161,7 +163,8 @@ function recurring_events_reminders_cron() {
 
       // Send an email to all registrants.
       foreach ($registrants as $registrant) {
-        recurring_events_registration_send_notification($key, $registrant);
+        // Add each notification to be sent to the queue.
+        \Drupal::service('recurring_events_registration.notification_service')->addEmailNotificationToQueue($key, $registrant);
       }
     }
   }

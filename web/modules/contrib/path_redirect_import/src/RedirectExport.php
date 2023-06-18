@@ -151,6 +151,7 @@ class RedirectExport {
     $ids = $this->entityTypeManager
       ->getStorage('redirect')
       ->getQuery()
+      ->accessCheck(TRUE)
       ->execute();
 
     // Breakdown process into small batches.

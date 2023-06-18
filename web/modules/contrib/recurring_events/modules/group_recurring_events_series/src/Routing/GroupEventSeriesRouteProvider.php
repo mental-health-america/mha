@@ -25,7 +25,7 @@ class GroupEventSeriesRouteProvider {
     }
 
     // If there are no event series types yet, we cannot have any plugin IDs
-    // and should therefore form_exit early because we cannot have any routes for
+    // and should therefore exit early because we cannot have any routes for
     // them either.
     if (empty($plugin_ids)) {
       return $routes;

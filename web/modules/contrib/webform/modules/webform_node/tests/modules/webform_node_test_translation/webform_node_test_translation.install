@@ -23,7 +23,7 @@ function webform_node_test_translation_install() {
   //
   // Below $values are from…
   // $values = $form_state->getValues();
-  // var_export($values['settings']['node']['webform']); form_exit;
+  // var_export($values['settings']['node']['webform']); exit;
   //
   // within content_translation_form_language_content_settings_submit().
   //

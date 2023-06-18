@@ -6,7 +6,9 @@ use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Entity\EditorialContentEntityBase;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Entity\RevisionableInterface;
 use Drupal\recurring_events\EventInterface;
+use Drupal\recurring_events\EventUserTrait;
 use Drupal\user\UserInterface;
 
 /**
@@ -104,6 +106,7 @@ use Drupal\user\UserInterface;
  *     "langcode" = "langcode",
  *     "label" = "title",
  *     "uuid" = "uuid",
+ *     "uid" = "uid",
  *     "bundle" = "type",
  *   },
  *   revision_metadata_keys = {
@@ -155,6 +158,8 @@ use Drupal\user\UserInterface;
  * field.
  */
 class EventSeries extends EditorialContentEntityBase implements EventInterface {
+
+  use EventUserTrait;
 
   /**
    * {@inheritdoc}
@@ -239,36 +244,6 @@ class EventSeries extends EditorialContentEntityBase implements EventInterface {
   /**
    * {@inheritdoc}
    */
-  public function getOwner() {
-    return $this->get('uid')->entity;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getOwnerId() {
-    return $this->get('uid')->target_id;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setOwnerId($uid) {
-    $this->set('uid', $uid);
-    return $this;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setOwner(UserInterface $account) {
-    $this->setOwnerId($account->id());
-    return $this;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getRevisionCreationTime() {
     return $this->revision_timestamp->value;
   }
@@ -293,30 +268,12 @@ class EventSeries extends EditorialContentEntityBase implements EventInterface {
    */
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
     $fields = parent::baseFieldDefinitions($entity_type);
+    $fields += static::ownerBaseFieldDefinitions($entity_type);
 
     $fields['id'] = BaseFieldDefinition::create('integer')
       ->setLabel(t('ID'))
       ->setDescription(t('The ID of the eventseries entity.'))
       ->setReadOnly(TRUE);
-
-    $fields['uid'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('Authored by'))
-      ->setDescription(t('The username of the content author.'))
-      ->setRevisionable(TRUE)
-      ->setSetting('target_type', 'user')
-      ->setDefaultValueCallback('Drupal\recurring_events\Entity\Event::getCurrentUserId')
-      ->setTranslatable(TRUE)
-      ->setDisplayOptions('form', [
-        'type' => 'entity_reference_autocomplete',
-        'weight' => 11,
-        'settings' => [
-          'match_operator' => 'CONTAINS',
-          'size' => '60',
-          'placeholder' => '',
-          'match_limit' => 10,
-        ],
-      ])
-      ->setDisplayConfigurable('form', TRUE);
 
     $fields['uuid'] = BaseFieldDefinition::create('uuid')
       ->setLabel(t('UUID'))

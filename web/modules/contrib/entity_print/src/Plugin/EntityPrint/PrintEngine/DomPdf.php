@@ -91,8 +91,6 @@ class DomPdf extends PdfEngineBase implements ContainerFactoryPluginInterface {
     $this->dompdf
       ->setBaseHost($request->getHttpHost())
       ->setProtocol($request->getScheme() . '://');
-
-    $this->setupHttpContext();
   }
 
   /**
@@ -240,6 +238,8 @@ class DomPdf extends PdfEngineBase implements ContainerFactoryPluginInterface {
    * Tell Dompdf to render the HTML into a PDF.
    */
   protected function doRender() {
+    $this->setupHttpContext();
+
     if (!$this->hasRendered) {
       $this->dompdf->render();
       $this->hasRendered = TRUE;

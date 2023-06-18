@@ -145,6 +145,7 @@
         "drupal/simplenews": "^2.0@beta",
         "drupal/single_content_sync": "^1.1@RC",
         "drupal/siteimprove": "^2.0",
+        "drupal/smtp": "^1.2",
         "drupal/social_media_links": "^2.6",
         "drupal/superfish": "^1.4",
         "drupal/token_filter": "^2.0",

@@ -29,6 +29,12 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *     "label" = "label",
  *     "uuid" = "uuid"
  *   },
+ *   config_export = {
+ *     "id",
+ *     "label",
+ *     "start",
+ *     "end",
+ *   },
  *   links = {
  *     "canonical" = "/admin/structure/events/series/excluded_dates/{excluded_dates}",
  *     "add-form" = "/admin/structure/events/series/excluded_dates/add",

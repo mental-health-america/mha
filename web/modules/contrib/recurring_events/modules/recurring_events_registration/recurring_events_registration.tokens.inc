@@ -50,6 +50,17 @@ function recurring_events_registration_token_info() {
     'description' => t('The URL to delete a registrant.'),
   ];
 
+  $registrant['eventinstance'] = [
+    'name' => t('Registrant event instance'),
+    'description' => t('The eventinstance associated with a registrant'),
+    'type' => 'eventinstance',
+  ];
+  $registrant['eventseries'] = [
+    'name' => t('Registrant event series'),
+    'description' => t('The eventseries associated with a registrant'),
+    'type' => 'eventseries',
+  ];
+
   return [
     'types' => [
       'eventinstance' => $eventinstance_type,
@@ -67,6 +78,7 @@ function recurring_events_registration_token_info() {
  * Implements hook_tokens().
  */
 function recurring_events_registration_tokens($type, $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata) {
+  $token_service = \Drupal::token();
   $replacements = [];
   if ($type == 'eventinstance' && !empty($data['eventinstance'])) {
     $event_instance = $data['eventinstance'];
@@ -108,7 +120,29 @@ function recurring_events_registration_tokens($type, $tokens, array $data, array
           }
           $replacements[$original] = $url;
           break;
+
+        case 'eventinstance':
+          $instance = $registrant->getEventInstance();
+          $bubbleable_metadata->addCacheableDependency($instance);
+          $replacements[$original] = $instance->label();
+          break;
+
+        case 'eventseries':
+          $series = $registrant->getEventSeries();
+          $bubbleable_metadata->addCacheableDependency($series);
+          $replacements[$original] = $series->label();
+          break;
       }
+    }
+
+    if ($instance_tokens = $token_service->findWithPrefix($tokens, 'eventinstance')) {
+      $instance = $registrant->getEventInstance();
+      $replacements += $token_service->generate('eventinstance', $instance_tokens, ['eventinstance' => $instance], $options, $bubbleable_metadata);
+    }
+
+    if ($series_tokens = $token_service->findWithPrefix($tokens, 'eventseries')) {
+      $series = $registrant->getEventSeries();
+      $replacements += $token_service->generate('eventseries', $series_tokens, ['eventseries' => $series], $options, $bubbleable_metadata);
     }
   }
   return $replacements;
