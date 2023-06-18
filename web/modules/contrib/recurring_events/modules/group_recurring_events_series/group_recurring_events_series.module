@@ -42,3 +42,12 @@ function group_recurring_events_series_entity_operation(EntityInterface $entity)
 
   return $operations;
 }
+
+/*
+ * hook_entity_type_build
+ */
+function group_recurring_events_series_entity_type_build(array &$entity_types) {
+    if(isset($entity_types['eventinstance'])) {
+        $entity_types['eventinstance']->setHandlerClass('access', 'Drupal\group_recurring_events_series\Access\GroupEventInstanceHandler');
+    }
+}

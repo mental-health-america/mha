@@ -168,6 +168,30 @@
       self.geofields_update(mapid, position);
     },
 
+    // Remove marker from the map.
+    remove_marker: function (mapid) {
+      let self = this;
+      let position;
+      if (self.map_data[mapid].click_to_remove_marker) {
+        if (!window.confirm(Drupal.t('Remove marker from map ?'))) {
+          return;
+        }
+      }
+      switch (self.map_data[mapid].map_library) {
+
+        case 'leaflet':
+          position = {lat: 0, lon: 0};
+          break;
+
+        case 'gmap':
+          position = new google.maps.LatLng(0, 0);
+      break;
+      }
+      self.setMarkerPosition(mapid, position);
+      $('#' + self.map_data[mapid].latid).val(null);
+      $('#' + self.map_data[mapid].lngid).val(null);
+    },
+
     // Geofields update.
     geofields_update: function (mapid, position) {
       let self = this;
@@ -556,6 +580,12 @@
       $('#' + self.map_data[params.mapid].click_to_place_marker_id).click(function (e) {
         e.preventDefault();
         self.place_marker(self.map_data[params.mapid].mapid);
+      });
+
+      // Bind click to remove_marker functionality.
+      $('#' + self.map_data[params.mapid].click_to_remove_marker_id).click(function (e) {
+        e.preventDefault();
+        self.remove_marker(self.map_data[params.mapid].mapid);
       });
 
       // Define Lat & Lng input selectors and all related functionalities and Geofield Map Listeners.

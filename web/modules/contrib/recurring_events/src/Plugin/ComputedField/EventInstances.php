@@ -29,7 +29,7 @@ class EventInstances extends EntityReferenceFieldItemList {
       });
 
       foreach ($instances as $key => $instance) {
-        $this->list[$key] = $this->createItem($key, $instance);
+        $this->list[$key] = $this->createItem($key, $instance->getTranslation($this->getLangcode()));
       }
     }
   }

@@ -143,26 +143,47 @@ function template_preprocess_registrant(array &$variables) {
  * Implements hook_mail().
  */
 function recurring_events_registration_mail($key, &$message, $params) {
-  /** @var \Drupal\recurring_events_registration\NotificationService */
-  $service = \Drupal::service('recurring_events_registration.notification_service');
-  $service->setKey($key)->setEntity($params['registrant']);
+  // Only if a value for 'subject', 'body' or 'from' has not been received in
+  // the `$params`, then use the notification service which is able to get
+  // those values from the `$key` and the `$registrant`.
+  // Some pieces of code can call the `mail()` function with already proccessed
+  // values for 'subject', 'body' and 'from', meaning that it is not necessary
+  // that those values are calculated here by the notification service.
+  // @see \Drupal\recurring_events_registration\Plugin\QueueWorker\EmailNotificationsQueueWorker
+  if ((empty($params['subject']) || empty($params['body']) || empty($params['from']))
+    && !empty($params['registrant'])
+    && $params['registrant'] instanceof Registrant) {
+    /** @var \Drupal\recurring_events_registration\NotificationService $service */
+    $service = \Drupal::service('recurring_events_registration.notification_service');
+    $service->setKey($key)->setEntity($params['registrant']);
+  }
 
-  if ($service->isEnabled()) {
-    if (!empty($params['subject'])) {
-      $service->setSubject($params['subject']);
-    }
-    if (!empty($params['body'])) {
-      $service->setMessage($params['body']);
-    }
-    if (!empty($params['from'])) {
-      $service->setFrom($params['from']);
-    }
-
+  // If other pieces of code that have called the `mail()` function have
+  // already defined those params, give them precedence. Else, let the
+  // notification service to calculate those values.
+  // Set the `$message['from']`.
+  if (!empty($params['from'])) {
+    $message['from'] = $params['from'];
+  }
+  elseif (isset($service)) {
     $message['from'] = $service->getFrom();
+  }
+
+  // Set the `$message['subject']`.
+  if (!empty($params['subject'])) {
+    $message['subject'] = $params['subject'];
+  }
+  elseif (isset($service)) {
     $message['subject'] = $service->getSubject();
+  }
+
+  // Set the `$message['body']`.
+  if (!empty($params['body'])) {
+    $message['body'][] = $params['body'];
+  }
+  elseif (isset($service)) {
     $message['body'][] = $service->getMessage();
   }
-  return FALSE;
 }
 
 /**
@@ -218,7 +239,8 @@ function recurring_events_registration_recurring_events_save_pre_instances_delet
 
   // Send an email to all registrants.
   foreach ($registrants as $registrant) {
-    recurring_events_registration_send_notification($key, $registrant);
+    // Add each notification to be sent to the queue.
+    \Drupal::service('recurring_events_registration.notification_service')->addEmailNotificationToQueue($key, $registrant);
     $registrant->delete();
   }
 }
@@ -250,7 +272,8 @@ function recurring_events_registration_entity_update(EntityInterface $entity) {
 
       // Send an email to all registrants.
       foreach ($registrants as $registrant) {
-        recurring_events_registration_send_notification($key, $registrant);
+        // Add each notification to be sent to the queue.
+        \Drupal::service('recurring_events_registration.notification_service')->addEmailNotificationToQueue($key, $registrant);
       }
     }
   }
@@ -274,7 +297,8 @@ function recurring_events_registration_recurring_events_pre_delete_instance(Even
   foreach ($registrants as $registrant) {
     // Only send email notifications if this event instance is in the future.
     if ($registration_creation_service->eventInstanceIsInFuture()) {
-      recurring_events_registration_send_notification($key, $registrant);
+      // Add each notification to be sent to the queue.
+      \Drupal::service('recurring_events_registration.notification_service')->addEmailNotificationToQueue($key, $registrant);
     }
     $registrant->delete();
   }
@@ -296,7 +320,8 @@ function recurring_events_registration_recurring_events_pre_delete_instances(Eve
 
     // Send an email to the future registrants.
     foreach ($future_registrants as $registrant) {
-      recurring_events_registration_send_notification($key, $registrant);
+      // Add each notification to be sent to the queue.
+      \Drupal::service('recurring_events_registration.notification_service')->addEmailNotificationToQueue($key, $registrant);
     }
   }
 
@@ -428,6 +453,7 @@ function recurring_events_registration_registrant_insert(EntityInterface $entity
     ->condition('sourceEntityType', ['eventseries', 'eventinstance'], 'IN')
     ->condition('destinationEntityType', $entity_type)
     ->condition('destinationEntityBundle', $bundle)
+    ->accessCheck(FALSE)
     ->execute();
 
   if (!empty($inherited_field_ids)) {

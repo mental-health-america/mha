@@ -4,7 +4,7 @@
  * @file
  * Installation and update functionality for the recurring_events module.
  */
-
+use Drupal\views\Views;
 use Drupal\Core\Config\Entity\ConfigEntityType;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Field\BaseFieldDefinition;
@@ -307,6 +307,7 @@ function recurring_events_update_8007() {
   $inherited_fields = $database->select('config', 'c')
     ->fields('c', ['name'])
     ->condition('name', 'recurring_events.field_inheritance.%', 'LIKE')
+    ->accessCheck(FALSE)
     ->execute()
     ->fetchCol();
   $bundles = \Drupal::service('entity_type.bundle.info')->getBundleInfo('eventseries');
@@ -339,6 +340,7 @@ function recurring_events_update_8007() {
     }
     $database->delete('config')
       ->condition('name', 'recurring_events.field_inheritance.%', 'LIKE')
+      ->accessCheck(FALSE)
       ->execute();
   }
 
@@ -378,7 +380,7 @@ function recurring_events_update_8008() {
 function recurring_events_update_8009(&$sandbox) {
   // This is a multipass update.
   if (empty($sandbox['events'])) {
-    $events = \Drupal::entityQuery('eventinstance')->execute();
+    $events = \Drupal::entityQuery('eventinstance')->accessCheck(FALSE)->execute();
     $sandbox['events'] = $events;
     $sandbox['max'] = count($events);
     $sandbox['limit'] = 50;
@@ -402,6 +404,7 @@ function recurring_events_update_8009(&$sandbox) {
           ->condition('sourceEntityType', 'eventseries')
           ->condition('destinationEntityType', $entity_type)
           ->condition('destinationEntityBundle', $bundle)
+          ->accessCheck(FALSE)
           ->execute();
 
         if (!empty($inherited_field_ids)) {
@@ -444,7 +447,8 @@ function recurring_events_update_8010() {
   ];
 
   foreach ($configs as $config) {
-    $path = drupal_get_path('module', 'recurring_events') . '/config/install';
+    $path_resolver = \Drupal::service('extension.path.resolver');
+    $path = $path_resolver->getPath('module', 'recurring_events') . '/config/install';
     $source = new FileStorage($path);
     /** @var \Drupal\Core\Config\StorageInterface $active_storage */
     $active_storage = \Drupal::service('config.storage');
@@ -508,6 +512,7 @@ function recurring_events_update_8011() {
       $database->update($table)
         ->fields([$field => ''])
         ->isNull($field)
+        ->accessCheck(FALSE)
         ->execute();
     }
   }
@@ -525,6 +530,7 @@ function recurring_events_update_8011() {
 
     $database_values = $database->select($table_name)
       ->fields($table_name, array_merge([$id_key, $revision_key], $field_fields))
+      ->accessCheck(FALSE)
       ->execute()
       ->fetchAll();
 
@@ -575,12 +581,14 @@ function recurring_events_update_8011() {
         $database->update($table_name)
           ->fields($values_to_restore)
           ->condition($id_key, $value->{$id_key})
+          ->accessCheck(FALSE)
           ->execute();
 
         $database->update($revision_table_name)
           ->fields($values_to_restore)
           ->condition($id_key, $value->{$id_key})
           ->condition($revision_key, $value->{$revision_key})
+          ->accessCheck(FALSE)
           ->execute();
       }
     }
@@ -603,7 +611,7 @@ function recurring_events_update_8013() {
 
   $config_factory = \Drupal::configFactory();
 
-  if (!$views = \Drupal\views\Views::getAllViews()) {
+  if (!$views = Views::getAllViews()) {
     return [];
   }
 

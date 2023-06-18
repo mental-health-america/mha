@@ -156,6 +156,7 @@ class OrphanedEventInstanceForm extends FormBase {
       ->fields('efd', ['id']);
     $query->leftJoin('eventseries', 'es', 'efd.eventseries_id = es.id');
     $instances = $query->condition('es.id', NULL, 'IS NULL')
+      ->accessCheck(FALSE)
       ->execute()
       ->fetchCol();
 

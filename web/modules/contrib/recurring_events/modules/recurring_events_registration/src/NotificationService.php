@@ -10,6 +10,7 @@ use Drupal\Core\Utility\Token;
 use Drupal\recurring_events_registration\Entity\RegistrantInterface;
 use Drupal\Core\Extension\ModuleHandler;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Queue\QueueFactory;
 
 /**
  * Provides a service with helper functions to facilitate notifications.
@@ -115,6 +116,13 @@ class NotificationService {
   protected $custom = FALSE;
 
   /**
+   * The update fetch queue.
+   *
+   * @var \Drupal\Core\Queue\QueueFactory
+   */
+  protected $queueFactory;
+
+  /**
    * Class constructor.
    *
    * @param \Drupal\Core\StringTranslation\TranslationInterface $translation
@@ -131,8 +139,10 @@ class NotificationService {
    *   The module handler service.
    * @param \Drupal\recurring_events_registration\RegistrationCreationService $creation_service
    *   The registration creation service.
+   * @param \Drupal\Core\Queue\QueueFactory $queue_factory
+   *   The queue factory.
    */
-  public function __construct(TranslationInterface $translation, ConfigFactory $config_factory, LoggerChannelFactoryInterface $logger, Messenger $messenger, Token $token, ModuleHandler $module_handler, RegistrationCreationService $creation_service) {
+  public function __construct(TranslationInterface $translation, ConfigFactory $config_factory, LoggerChannelFactoryInterface $logger, Messenger $messenger, Token $token, ModuleHandler $module_handler, RegistrationCreationService $creation_service, QueueFactory $queue_factory) {
     $this->translation = $translation;
     $this->configFactory = $config_factory;
     $this->loggerFactory = $logger->get('recurring_events_registration');
@@ -141,6 +151,7 @@ class NotificationService {
     $this->moduleHandler = $module_handler;
     $this->creationService = $creation_service;
     $this->configName = 'recurring_events_registration.registrant.config';
+    $this->queueFactory = $queue_factory;
   }
 
   /**
@@ -154,7 +165,8 @@ class NotificationService {
       $container->get('messenger'),
       $container->get('token'),
       $container->get('module_handler'),
-      $container->get('recurring_events_registration.creation_service')
+      $container->get('recurring_events_registration.creation_service'),
+      $container->get('queue')
     );
   }
 
@@ -246,7 +258,7 @@ class NotificationService {
    * @return string|bool
    *   The key, or FALSE if not set.
    */
-  protected function getKey() {
+  public function getKey() {
     if (empty($this->key)) {
       $this->messenger->addError($this->translation->translate('No key defined for @module notifications.', [
         '@module' => 'recurring_events_registration',
@@ -352,11 +364,7 @@ class NotificationService {
   public function getSubject($parse_tokens = TRUE) {
     $key = $this->getKey();
     if ($key) {
-      $subject = $this->subject;
-      if (empty($subject)) {
-        $subject = $this->getConfigValue('subject');
-        $this->setSubject($subject);
-      }
+      $subject = $this->getConfigValue('subject');
 
       if (empty($subject)) {
         $this->messenger->addError($this->translation->translate('No default subject configured for @key emails in @config_name.', [
@@ -386,11 +394,7 @@ class NotificationService {
   public function getMessage($parse_tokens = TRUE) {
     $key = $this->getKey();
     if ($key) {
-      $message = $this->message;
-      if (empty($message)) {
-        $message = $this->getConfigValue('body');
-        $this->setMessage($message);
-      }
+      $message = $this->getConfigValue('body');
 
       if (empty($message)) {
         $this->messenger->addError($this->translation->translate('No default body configured for @key emails in @config_name.', [
@@ -448,6 +452,58 @@ class NotificationService {
     ];
 
     return $this->creationService->getAvailableTokens($relevant_tokens);
+  }
+
+  /**
+   * Adds an email notification to be sent later by the Queue Worker.
+   */
+  public function addEmailNotificationToQueue($key, RegistrantInterface $registrant) {
+    $config = $this->configFactory->get('recurring_events_registration.registrant.config');
+    $send_email = $config->get('email_notifications');
+    $send_email_key = $config->get('notifications' . '.' . $key . '.enabled');
+
+    // Modify $send_email if necessary.
+    if ($registrant instanceof RegistrantInterface) {
+      $this->moduleHandler->alter('recurring_events_registration_send_notification', $send_email, $registrant);
+    }
+
+    if ($send_email && $send_email_key) {
+      // We need to get the parsed email subject and message (after token
+      // replacement) to add them to the `$item` that will be queued. We are
+      // not adding the `$registrant` to the `$item`, since in the queue worker
+      // we cannot rely on operations over the `$registrant` or its parent
+      // instance or series, since at that point those entities might have been
+      // deleted. There are some operations and notification types that require
+      // the `$registrant`to be deleted, for example: the notifications
+      // corresponding to the keys 'series_modification_notification' and
+      // 'instance_deletion_notification'.
+      // @see recurring_events_registration_recurring_events_save_pre_instances_deletion()
+      // @see recurring_events_registration_recurring_events_pre_delete_instance()
+      $this->setKey($key)->setEntity($registrant);
+      $subject = $this->getSubject();
+      $message = $this->getMessage();
+      $from = $this->getFrom();
+
+      // Create the item to be added to the queue.
+      $item = new \stdClass();
+      $item->key = $key;
+      $item->to = $registrant->email->value;
+
+      $params = [
+        'subject' => $subject,
+        'body' => $message,
+        'from' => $from,
+      ];
+      // Allow modules to add data to the `$params`. They can get the data from
+      // `$registrant`. Those `$params` are used later as the
+      // `$message['params']` in mail hooks.
+      $this->moduleHandler->alter('recurring_events_registration_message_params', $params, $registrant);
+      $item->params = $params;
+
+      // Add the item to the queue.
+      $queue = $this->queueFactory->get('recurring_events_registration_email_notifications_queue_worker');
+      $queue->createItem($item);
+    }
   }
 
 }

@@ -629,7 +629,7 @@ function _webform_page_attachments(array &$attachments) {
   // Add 'info' message style to all webform pages.
   $attachments['#attached']['library'][] = 'webform/webform.element.message';
 
-  // Get current webform, if it does not exist form_exit.
+  // Get current webform, if it does not exist exit.
   /** @var \Drupal\webform\WebformRequestInterface $request_handler */
   $request_handler = \Drupal::service('webform.request');
   $webform = $request_handler->getCurrentWebform();

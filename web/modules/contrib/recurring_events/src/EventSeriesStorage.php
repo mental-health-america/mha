@@ -51,6 +51,7 @@ class EventSeriesStorage extends SqlContentEntityStorage implements EventSeriesS
     return $this->database->update('eventseries_revision')
       ->fields(['langcode' => LanguageInterface::LANGCODE_NOT_SPECIFIED])
       ->condition('langcode', $language->getId())
+      ->accessCheck(FALSE)
       ->execute();
   }
 

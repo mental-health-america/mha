@@ -44,9 +44,9 @@ class EventCreationService {
   /**
    * Logger Factory.
    *
-   * @var \Drupal\Core\Logger\LoggerChannelFactoryInterface
+   * @var \Drupal\Core\Logger\LoggerChannel
    */
-  protected $loggerFactory;
+  protected $loggerChannel;
 
   /**
    * The messenger service.
@@ -115,7 +115,7 @@ class EventCreationService {
   public function __construct(TranslationInterface $translation, Connection $database, LoggerChannelFactoryInterface $logger, Messenger $messenger, FieldTypePluginManager $field_type_plugin_manager, EntityFieldManager $entity_field_manager, ModuleHandler $module_handler, EntityTypeManagerInterface $entity_type_manager, KeyValueFactoryInterface $key_value) {
     $this->translation = $translation;
     $this->database = $database;
-    $this->loggerFactory = $logger->get('recurring_events');
+    $this->loggerChannel = $logger->get('recurring_events');
     $this->messenger = $messenger;
     $this->fieldTypePluginManager = $field_type_plugin_manager;
     $this->entityFieldManager = $entity_field_manager;
@@ -528,8 +528,42 @@ class EventCreationService {
 
     $this->moduleHandler->alter('recurring_events_event_instance', $data);
 
-    $entity = $this->entityTypeManager->getStorage('eventinstance')->create($data);
-    $entity->save();
+    $storage = $this->entityTypeManager->getStorage('eventinstance');
+    if ($event->isDefaultTranslation()) {
+      $entity = $storage->create($data);
+    }
+    else {
+      // Grab the untranslated event series.
+      $original = $event->getUntranslated();
+      // Find the corresponding default language event instance that matches
+      // the date and time of the version we wish to translate, so that we are
+      // mapping the translations from default language to translated language
+      // appropriately.
+      $entity_ids = $storage->getQuery()
+        ->condition('date__value', $data['date']['value'])
+        ->condition('date__end_value', $data['date']['end_value'])
+        ->condition('eventseries_id', $data['eventseries_id'])
+        ->condition('type', $data['type'])
+        ->condition('langcode', $original->language()->getId())
+        ->accessCheck(FALSE)
+        ->execute();
+
+      if (!empty($entity_ids)) {
+        // Load the default language version of the event instance.
+        $entity = $storage->load(reset($entity_ids));
+        // Only add a translation if we do not already have one.
+        if (!$entity->hasTranslation($event->language()->getId())) {
+          $entity->addTranslation($event->language()->getId(), $data);
+        }
+      }
+    }
+
+    if ($entity) {
+      $entity->save();
+    }
+    else {
+      $this->loggerChannel->warning('Missing event instance in default language. Translation could not be created');
+    }
 
     return $entity;
   }
@@ -705,15 +739,15 @@ class EventCreationService {
 
     if ($this->moduleHandler->moduleExists('workflows')) {
       if ($event->hasField('moderation_state') && $instance->hasField('moderation_state')) {
-        $series_query = $this->entityTypeManager->getStorage('workflow')->getQuery();
+        $series_query = $this->entityTypeManager->getStorage('workflow')->getQuery()->accessCheck(FALSE);
         $series_query->condition('type_settings.entity_types.eventseries.*', $event->bundle());
-        $series_workflows = $series_query->execute();
+        $series_workflows = $series_query->accessCheck(FALSE)->execute();
         $series_workflows = array_keys($series_workflows);
         $series_workflow = reset($series_workflows);
 
-        $instance_query = $this->entityTypeManager->getStorage('workflow')->getQuery();
+        $instance_query = $this->entityTypeManager->getStorage('workflow')->getQuery()->accessCheck(FALSE);
         $instance_query->condition('type_settings.entity_types.eventinstance.*', $instance->bundle());
-        $instance_workflows = $instance_query->execute();
+        $instance_workflows = $instance_query->accessCheck(FALSE)->execute();
         $instance_workflows = array_keys($instance_workflows);
         $instance_workflow = reset($instance_workflows);
 

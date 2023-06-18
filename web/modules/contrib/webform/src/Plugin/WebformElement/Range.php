@@ -62,7 +62,7 @@ class Range extends NumericBase {
       '#max' => $this->getDefaultProperty('max'),
     ];
 
-    // If no custom range output is defined then form_exit.
+    // If no custom range output is defined then exit.
     if (empty($element['#output'])) {
       return;
     }

@@ -160,6 +160,7 @@ class OrphanedEventRegistrantsForm extends FormBase {
       ->condition('es.id', NULL, 'IS NULL')
       ->condition('ei.id', NULL, 'IS NULL');
     $registrants = $query->condition($or_group)
+      ->accessCheck(FALSE)
       ->execute()
       ->fetchCol();
 
