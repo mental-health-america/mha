@@ -1,9 +1,10 @@
-name: 'Link attributes alterInfo Test'
-description: 'Implements hook_link_attributes_plugin_alter'
+name: 'Link attributes: Menu Link Content integration'
 type: module
+description: Allows setting link attributes on menu links contents.
 core_version_requirement: ^9 || ^10
 dependencies:
-  - link_attributes:link_attributes
+  - drupal:link
+  - drupal:link_attributes
 
 # Information added by Drupal.org packaging script on 2023-06-22
 version: '2.0.0'
