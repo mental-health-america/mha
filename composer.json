@@ -256,12 +256,13 @@
             "file-mapping": {
                 "docroot/.htaccess": false,
                 "docroot/web/robots.txt": false,
-                "docroot/robots.txt": false
+                "docroot/robots.txt": false,
+                "docroot/.cpanel.yml": false
             },
             "excludes": [
                 ".htaccess",
                 "robots.txt",
-                "cpanel.yml"
+                ".cpanel.yml"
             ]
         }
     },
