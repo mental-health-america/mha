@@ -103,7 +103,7 @@ class PhpMail implements MailInterface {
     $mail_body = preg_replace('@\r?\n@', $line_endings, $message['body']);
     // For headers, PHP's API suggests that we use CRLF normally,
     // but some MTAs incorrectly replace LF with CRLF. See #234403.
-    $mail_headers = str_replace("\r\n", "\n", $headers->toString());
+    $mail_headers = str_replace("\r\n ", "\n", $headers->toString());
     $mail_subject = str_replace("\r\n", "\n", $mail_subject);
 
     if (substr(PHP_OS, 0, 3) != 'WIN') {
