@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\link_attributes\Functional;
+namespace Drupal\Tests\link_attributes_menu_link_content\Functional;
 
 use Drupal\menu_link_content\Entity\MenuLinkContent;
 use Drupal\Tests\block\Traits\BlockCreationTrait;
@@ -11,7 +11,7 @@ use Drupal\Tests\BrowserTestBase;
  *
  * @group link_attributes
  */
-class LinkAttributesMenuTest extends BrowserTestBase {
+class LinkAttributesMenuLinkContentMenuTest extends BrowserTestBase {
 
   use BlockCreationTrait;
 
@@ -20,6 +20,7 @@ class LinkAttributesMenuTest extends BrowserTestBase {
    */
   protected static $modules = [
     'link_attributes',
+    'link_attributes_menu_link_content',
     'menu_ui',
     'menu_link_content',
     'block',
