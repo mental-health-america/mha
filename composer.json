@@ -63,7 +63,7 @@
         "drupal/block_visibility_groups": "^2.0",
         "drupal/captcha": "^1.9",
         "drupal/charts": "^5.0",
-        "drupal/checklistapi": "^2.0",
+        "drupal/checklistapi": "^2.1",
         "drupal/color": "^1.0",
         "drupal/color-color": "^1.0",
         "drupal/colorbox": "^2.0",
