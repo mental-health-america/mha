@@ -9,7 +9,7 @@ test_dependencies:
   - paragraphs:paragraphs
   - search_api:search_api
 
-# Information added by Drupal.org packaging script on 2023-04-24
-version: '2.0.0-beta3'
+# Information added by Drupal.org packaging script on 2023-06-20
+version: '2.0.0-beta4'
 project: 'entity_clone'
-datestamp: 1682322783
+datestamp: 1687250712

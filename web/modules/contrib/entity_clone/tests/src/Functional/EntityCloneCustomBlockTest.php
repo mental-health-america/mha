@@ -5,6 +5,7 @@ namespace Drupal\Tests\entity_clone\Functional;
 use Drupal\block_content\Entity\BlockContent;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Tests\block_content\Functional\BlockContentTestBase;
+use Drupal\user\Entity\Role;
 
 /**
  * Creat ea block and test a clone.
@@ -33,18 +34,20 @@ class EntityCloneCustomBlockTest extends BlockContentTestBase {
   protected $defaultTheme = 'claro';
 
   /**
-   * Permissions to grant admin user.
-   *
-   * @var array
-   */
-  protected $permissions = ['administer blocks', 'clone block_content entity'];
-
-  /**
    * Sets the test up.
    */
   protected function setUp(): void {
     parent::setUp();
     $this->drupalLogin($this->adminUser);
+    /** @var \Drupal\user\RoleInterface $role */
+    $role = Role::create([
+      'id' => 'entity_clone',
+      'label' => 'entity clone',
+    ]);
+    $role->grantPermission('clone block_content entity');
+    $role->save();
+    $this->adminUser->addRole($role->id());
+    $this->adminUser->save();
   }
 
   /**

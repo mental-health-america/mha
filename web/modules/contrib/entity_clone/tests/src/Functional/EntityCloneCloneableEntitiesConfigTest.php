@@ -19,7 +19,8 @@ class EntityCloneCloneableEntitiesConfigTest extends NodeTestBase {
   protected static $modules = ['entity_clone', 'paragraphs_demo'];
 
   /**
-   * Theme to enable by default
+   * Theme to enable by default.
+   *
    * @var string
    */
   protected $defaultTheme = 'stark';
@@ -49,7 +50,7 @@ class EntityCloneCloneableEntitiesConfigTest extends NodeTestBase {
     'clone node entity',
     'clone paragraph entity',
     'create paragraphed_content_demo content',
-    'view unpublished paragraphs'
+    'view unpublished paragraphs',
   ];
 
   /**
@@ -94,8 +95,8 @@ class EntityCloneCloneableEntitiesConfigTest extends NodeTestBase {
     $node_storage = \Drupal::entityTypeManager()->getStorage('node');
     $node_title = 'Welcome to the Paragraphs Demo module!';
     $nodes = $node_storage->loadByProperties([
-        'title' => $node_title,
-      ]);
+      'title' => $node_title,
+    ]);
     $node = reset($nodes);
 
     // Visit the node and assert the local task is not in place.

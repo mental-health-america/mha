@@ -15,3 +15,11 @@ services:
   entity_clone.service_provider:
     class: Drupal\entity_clone\Services\EntityCloneServiceProvider
     arguments: [ ]
+  entity_clone.event_subscriber:
+    class: Drupal\entity_clone\EventSubscriber\EntityCloneSubscriber
+    arguments: ['@messenger']
+    tags:
+      - { name: event_subscriber }
+  entity_clone.clonable_field:
+    class: Drupal\entity_clone\EntityCloneClonableField
+    arguments: ['@entity_type.manager']
