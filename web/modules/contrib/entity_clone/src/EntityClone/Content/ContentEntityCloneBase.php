@@ -14,16 +14,23 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Entity\TranslatableInterface;
 use Drupal\Core\Field\FieldConfigInterface;
-use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\entity_clone\EntityClone\EntityCloneInterface;
+use Drupal\entity_clone\EntityCloneClonableFieldInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class Content Entity Clone Base.
  */
 class ContentEntityCloneBase implements EntityHandlerInterface, EntityCloneInterface {
+
+  /**
+   * The entity clone clonable field service.
+   *
+   * @var \Drupal\entity_clone\EntityCloneClonableFieldInterface
+   */
+  protected $entityCloneClonableField;
 
   /**
    * The entity type manager.
@@ -64,15 +71,19 @@ class ContentEntityCloneBase implements EntityHandlerInterface, EntityCloneInter
    *   A service for obtaining the system's time.
    * @param \Drupal\Core\Session\AccountProxyInterface $current_user
    *   The current user.
+   * @param \Drupal\entity_clone\EntityCloneClonableFieldInterface $entity_clone_clonable_field
+   *   The entity clone clonable field service.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
   $entity_type_id,
   TimeInterface $time_service,
-  AccountProxyInterface $current_user) {
+  AccountProxyInterface $current_user,
+  EntityCloneClonableFieldInterface $entity_clone_clonable_field) {
     $this->entityTypeManager = $entity_type_manager;
     $this->entityTypeId = $entity_type_id;
     $this->timeService = $time_service;
     $this->currentUser = $current_user;
+    $this->entityCloneClonableField = $entity_clone_clonable_field;
   }
 
   /**
@@ -84,7 +95,8 @@ class ContentEntityCloneBase implements EntityHandlerInterface, EntityCloneInter
       $container->get('entity_type.manager'),
       $entity_type->id(),
       $container->get('datetime.time'),
-      $container->get('current_user')
+      $container->get('current_user'),
+      $container->get('entity_clone.clonable_field')
     );
   }
 
@@ -96,12 +108,9 @@ class ContentEntityCloneBase implements EntityHandlerInterface, EntityCloneInter
     $already_cloned[$entity->getEntityTypeId()][$entity->id()] = $cloned_entity;
     if ($cloned_entity instanceof FieldableEntityInterface && $entity instanceof FieldableEntityInterface) {
       foreach ($cloned_entity->getFieldDefinitions() as $field_id => $field_definition) {
-        if ($this->fieldIsClonable($field_definition)) {
-          $field = $entity->get($field_id);
-          /** @var \Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItem $value */
-          if ($field->count() > 0) {
-            $cloned_entity->set($field_id, $this->cloneReferencedEntities($field, $field_definition, $properties, $already_cloned));
-          }
+        $field = $entity->get($field_id);
+        if ($this->entityCloneClonableField->isClonable($field_definition, $field)) {
+          $cloned_entity->set($field_id, $this->cloneReferencedEntities($field, $field_definition, $properties, $already_cloned));
         }
       }
     }
@@ -144,29 +153,6 @@ class ContentEntityCloneBase implements EntityHandlerInterface, EntityCloneInter
     }
 
     return $cloned_entity;
-  }
-
-  /**
-   * Determines if a field is clonable.
-   *
-   * @param \Drupal\Core\Field\FieldDefinitionInterface $field_definition
-   *   The field definition.
-   *
-   * @return bool
-   *   TRUE if the field is clonable; FALSE otherwise.
-   */
-  protected function fieldIsClonable(FieldDefinitionInterface $field_definition) {
-    $clonable_field_types = [
-      'entity_reference',
-      'entity_reference_revisions',
-    ];
-
-    $type_is_clonable = in_array($field_definition->getType(), $clonable_field_types, TRUE);
-    if (($field_definition instanceof FieldConfigInterface) && $type_is_clonable) {
-      return TRUE;
-    }
-
-    return FALSE;
   }
 
   /**

@@ -271,6 +271,35 @@ class EntityCloneContentModerationTest extends NodeTestBase {
     $this->assertFalse($clone->getTranslation('en')->isPublished());
     $this->assertFalse($clone->getTranslation('fr')->isPublished());
 
+    // Create another node, published, translated and assert that upon cloning
+    // just the current translation, we only have a single translation which is
+    // the current one, and it's a draft.
+    $node = Node::create([
+      'type' => 'page',
+      'title' => 'My sixth node',
+      'moderation_state' => 'published',
+    ]);
+    $node->save();
+    $translation = $node->addTranslation('fr', $node->toArray());
+    $translation->save();
+    $node = Node::load($node->id());
+    $this->assertCount(2, $node->getTranslationLanguages());
+    $this->assertTrue($node->getTranslation('en')->isPublished());
+    $this->assertTrue($node->getTranslation('fr')->isPublished());
+    $this->drupalGet(Url::fromUserInput('/fr/entity_clone/node/' . $node->id()));
+    $this->submitForm(['edit-current-translation' => TRUE], $this->t('Clone'));
+
+    $nodes = \Drupal::entityTypeManager()
+      ->getStorage('node')
+      ->loadByProperties([
+        'title' => 'My sixth node - Cloned',
+      ]);
+    $clone = reset($nodes);
+    $this->assertInstanceOf(Node::class, $clone, 'Test node cloned found in database.');
+    // There should also be a new node in French.
+    $this->assertCount(1, $clone->getTranslationLanguages());
+    $this->assertTrue($clone->getTranslation('fr')->isDefaultTranslation());
+    $this->assertFalse($clone->getTranslation('fr')->isPublished());
   }
 
 }

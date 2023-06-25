@@ -161,7 +161,7 @@ function entity_clone_entity_access(EntityInterface $entity, $operation, Account
   $access = AccessResult::forbiddenIf(
     !$account->hasPermission('clone ' . $entity->getEntityTypeId() . ' entity')
     &&
-    !$account->hasPermission('clone ' . $entity->bundle() . ' '. $entity->getEntityTypeId() . ' entities')
+    !$account->hasPermission('clone ' . $entity->bundle() . ' ' . $entity->getEntityTypeId() . ' entities')
   );
   if ($access->isForbidden()) {
     return $access->addCacheableDependency($cache);

@@ -9,10 +9,12 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\TranslationManager;
+use Drupal\Core\TypedData\TranslatableInterface;
 use Drupal\entity_clone\EntityCloneSettingsManager;
 use Drupal\entity_clone\Event\EntityCloneEvent;
 use Drupal\entity_clone\Event\EntityCloneEvents;
@@ -185,13 +187,14 @@ class EntityCloneForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     if ($this->entity && $this->entityTypeDefinition->hasHandlerClass('entity_clone')) {
+      $entity = $this->getEntity();
 
       /** @var \Drupal\entity_clone\EntityClone\EntityCloneFormInterface $entity_clone_handler */
       if ($this->entityTypeManager->hasHandler($this->entityTypeDefinition->id(), 'entity_clone_form')) {
         $entity_clone_form_handler = $this->entityTypeManager->getHandler($this->entityTypeDefinition->id(), 'entity_clone_form');
-        $form = array_merge($form, $entity_clone_form_handler->formElement($this->entity));
+        $form = array_merge($form, $entity_clone_form_handler->formElement($entity));
       }
-      $entityType = $this->getEntity()->getEntityTypeId();
+      $entityType = $entity->getEntityTypeId();
       if ($this->serviceProvider->entityTypeHasOwnerTrait($this->getEntity()->getEntityType()) && $this->currentUser->hasPermission('take_ownership_on_clone ' . $entityType . ' entity')) {
         $form['take_ownership'] = [
           '#type' => 'checkbox',
@@ -210,12 +213,68 @@ class EntityCloneForm extends FormBase {
 
       $has_content_translation_status_field = $this->moduleHandler->moduleExists('content_translation') && $this->entityDefinitionUpdateManager->getFieldStorageDefinition('content_translation_status', $this->entityTypeDefinition->id());
       if ($this->entity instanceof EntityPublishedInterface || $has_content_translation_status_field) {
-        $form['status'] =[
+        $form['status'] = [
           '#type' => 'checkbox',
           '#title' => $this->stringTranslationManager->translate('Save cloned @entity_type as published', ['@entity_type' => $this->entityTypeDefinition->getLabel()]),
           '#description' => $this->stringTranslationManager->translate('If the cloned entity should be save as a published entity.'),
           '#default_value' => FALSE,
         ];
+      }
+
+      if ($entity instanceof TranslatableInterface) {
+        $translation_languages = $entity->getTranslationLanguages();
+        if (count($translation_languages) > 1) {
+
+          if (!$entity->isDefaultTranslation()) {
+            $form['current_translation'] = [
+              '#type' => 'checkbox',
+              '#title' => $this->t('Save cloned @language translation as a new entity', ['@language' => $entity->language()->getName()]),
+              '#description' => $this->t('If it is checked translation will be cloned without original entity and without other translations'),
+              '#default_value' => FALSE,
+            ];
+          }
+
+          $form['all_translations'] = [
+            '#type' => 'checkbox',
+            '#title' => $this->t('Save cloned @entity_type with all translations', ['@entity_type' => $this->entityTypeDefinition->getLabel()]),
+            '#description' => $this->t('If the cloned entity should be saved with all translations.'),
+            '#default_value' => TRUE,
+            '#states' => [
+              'invisible' => [
+                ':input[name="current_translation"]' => ['checked' => TRUE],
+              ],
+            ],
+          ];
+
+          $form['translations'] = [
+            '#type' => 'fieldset',
+            '#title' => $this->t('Available translations'),
+            '#states' => [
+              'visible' => [
+                ':input[name="all_translations"]' => ['checked' => FALSE],
+              ],
+            ],
+          ];
+
+          $entity_original_language = $entity->getTranslation('x-default')->language()->getId();
+          foreach ($translation_languages as $translation_language) {
+            if ($entity_original_language === $translation_language->getId()) {
+              $form['translations'][$translation_language->getId()] = [
+                '#type' => 'checkbox',
+                '#title' => $this->t($translation_language->getName() . ' (Original language)'),
+                '#default_value' => TRUE,
+                '#disabled' => TRUE,
+              ];
+            }
+            else {
+              $form['translations'][$translation_language->getId()] = [
+                '#type' => 'checkbox',
+                '#title' => $this->t($translation_language->getName()),
+                '#default_value' => FALSE,
+              ];
+            }
+          }
+        }
       }
 
       $form['actions'] = ['#type' => 'actions'];
@@ -257,13 +316,18 @@ class EntityCloneForm extends FormBase {
 
     $duplicate = $this->entity->createDuplicate();
 
+    // Get the default translation before dispatching events and clone.
+    if ($duplicate instanceof TranslatableInterface && $this->entity instanceof TranslatableInterface && !$this->entity->isDefaultTranslation()) {
+      $duplicate = $duplicate->getTranslation(LanguageInterface::LANGCODE_DEFAULT);
+    }
+
     $has_content_translation_status_field = $this->moduleHandler->moduleExists('content_translation') && $this->entityDefinitionUpdateManager->getFieldStorageDefinition('content_translation_status', $this->entityTypeDefinition->id());
     if ($duplicate instanceof EntityPublishedInterface || $has_content_translation_status_field) {
       if ($duplicate instanceof EntityPublishedInterface) {
         $status_field = 'status';
       }
       else {
-       $status_field = 'content_translation_status';
+        $status_field = 'content_translation_status';
       }
       foreach ($duplicate->getTranslationLanguages() as $translation_language) {
         $translation = $duplicate->getTranslation($translation_language->getId());
@@ -271,7 +335,7 @@ class EntityCloneForm extends FormBase {
       }
     }
 
-    if ($this->moduleHandler->moduleExists('content_moderation') && $properties['status']) {
+    if ($this->moduleHandler->moduleExists('content_moderation') && $properties['status'] && $duplicate->hasField('moderation_state')) {
       $duplicate->set('moderation_state', 'published');
     }
 

@@ -4,7 +4,6 @@ namespace Drupal\entity_clone\EntityClone\Content;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\Core\Entity\ContentEntityStorageInterface;
 use Drupal\Core\Entity\EntityHandlerInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -15,6 +14,7 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\TranslationManager;
 use Drupal\entity_clone\EntityClone\EntityCloneFormInterface;
+use Drupal\entity_clone\EntityCloneClonableFieldInterface;
 use Drupal\entity_clone\EntityCloneSettingsManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -59,6 +59,14 @@ class ContentEntityCloneFormBase implements EntityHandlerInterface, EntityCloneF
   protected $configFactory;
 
   /**
+   * The entity clone clonable field service.
+   *
+   * @var \Drupal\entity_clone\EntityCloneClonableFieldInterface
+   */
+
+  protected $entityCloneClonableField;
+
+  /**
    * Constructs a new ContentEntityCloneFormBase.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -69,17 +77,20 @@ class ContentEntityCloneFormBase implements EntityHandlerInterface, EntityCloneF
    *   The entity clone settings manager.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory.
+   * @param \Drupal\entity_clone\EntityCloneClonableFieldInterface $entity_clone_clonable_field
+   *   The entity clone clonable field service.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
     TranslationManager $translation_manager,
     EntityCloneSettingsManager $entity_clone_settings_manager,
-    ConfigFactoryInterface $config_factory
-  ) {
+    ConfigFactoryInterface $config_factory,
+    EntityCloneClonableFieldInterface $entity_clone_clonable_field) {
     $this->entityTypeManager = $entity_type_manager;
     $this->translationManager = $translation_manager;
     $this->entityCloneSettingsManager = $entity_clone_settings_manager;
     $this->configFactory = $config_factory;
+    $this->entityCloneClonableField = $entity_clone_clonable_field;
   }
 
   /**
@@ -90,7 +101,8 @@ class ContentEntityCloneFormBase implements EntityHandlerInterface, EntityCloneF
       $container->get('entity_type.manager'),
       $container->get('string_translation'),
       $container->get('entity_clone.settings.manager'),
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('entity_clone.clonable_field')
     );
   }
 
@@ -105,17 +117,9 @@ class ContentEntityCloneFormBase implements EntityHandlerInterface, EntityCloneF
     if ($entity instanceof FieldableEntityInterface) {
       $discovered_entities[$entity->getEntityTypeId()][$entity->id()] = $entity;
       foreach ($entity->getFieldDefinitions() as $field_id => $field_definition) {
-        if ($field_definition instanceof FieldConfigInterface &&
-        in_array($field_definition->getType(), [
-          'entity_reference',
-          'entity_reference_revisions',
-        ], TRUE)) {
-          $field = $entity->get($field_id);
-          /** @var \Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItem $value */
-          if ($field->count() > 0
-            && $this->entityTypeManager->getStorage($field->getSetting('target_type')) instanceof ContentEntityStorageInterface) {
-            $form['recursive'] = array_merge($form['recursive'], $this->getRecursiveFormElement($field_definition, $field_id, $field, $discovered_entities));
-          }
+        $field = $entity->get($field_id);
+        if ($this->entityCloneClonableField->isClonable($field_definition, $field)) {
+          $form['recursive'] = array_merge($form['recursive'], $this->getRecursiveFormElement($field_definition, $field_id, $field, $discovered_entities));
         }
       }
 
