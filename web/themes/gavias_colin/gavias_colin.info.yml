@@ -42,6 +42,8 @@ regions:
   footer_four: 'Footer Four'
   after_footer: 'After Footer'
   copyright: 'Copyright'
+  contact_one: 'Contact One'
+  contact_two: 'Contact Two'
   other: 'Other'
 
 version: '9.x'
