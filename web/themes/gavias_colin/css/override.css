@@ -1755,3 +1755,17 @@ div#block-socialmediafooterblock i.fa {
   color: var(--mha-black) !important;
   border: 2px solid #abce3e !important;
 }
+
+#footer-2 h4 {
+  color: white !important;
+}
+#footer-2 .fa.fa-facebook-official::before,
+#footer-2 .fa.fa-instagram::before,
+#footer-2 .fa.fa-pinterest-square::before,
+#footer-2 .fa.fa-pinterest-square::before,
+#footer-2 .fa.fa-twitter-square::before,
+#footer-2 .fa.fa-facebook-official::before,
+#footer-2 .fa.fa-youtube-square::before {
+  font-size: 2rem;
+  margin: 0 .5rem 0 0;
+}
