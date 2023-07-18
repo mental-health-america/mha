@@ -1,0 +1,260 @@
+
+.topbar .navigation .gva_menu {
+  display: flex;
+}
+.topbar .navigation .gva_menu > li > a {
+  float: right;
+}
+
+#superfish-main li:nth-child(5) a.sf-depth-1::before,
+#block-mhatopbarmenu .gva_menu > li:last-child > a:before {
+  display: none !important;
+}
+
+@media (max-width: 544px) {
+  .tp-caption.text p {
+    max-width: 100% !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px !important;
+  }
+  .tp-mask-wrap .slider-aqua {
+    padding: 0 !important;
+    border-radius: 0;
+  }
+  .tp-mask-wrap h1, .tp-mask-wrap h2, .tp-mask-wrap h3 {
+    font-size: 25px !important;
+  }
+  .tp-mask-wrap {
+    position: absolute !important;
+    top: 50px;
+    max-width: 370px;
+  }
+}
+
+.column-inner.bg-size-cover.red-background.rounded-corners .sli-element p {
+  color: white !important;
+  font-size: 1.5rem !important;
+}
+
+body, p, .node_content p, html, .gsc-column ul li {
+  font-size: 1rem !important;
+}
+
+h4.mb-3.white-text.connect {
+  color: white !important;
+  font-size: 2rem;
+}
+.gsc-image-content.skin-v2:hover .box-content a:hover {
+  color: var(--mha-black) !important;
+  border: 2px solid #abce3e !important;
+}
+
+#footer i.fa:hover {
+  color: white !important;
+}
+
+.js-form-item.form-item, div#edit-actions--3, div#edit-actions--2 {
+  display: inline-block;
+}
+
+.mhm-button a.btn-inline {
+  font-size:1.2rem !important;
+  text-transform: none !important;
+  border: #ABCE3E !important;
+  background: #ABCE3E !important;
+  color: #000 !important;
+}
+
+.pride-button a.btn-inline {
+  font-size:1.2rem !important;
+  text-transform: none !important;
+  border: #CBA8C0 !important;
+  background: #CBA8C0 !important;
+  color: #000 !important;
+}
+
+.mhm-button a.btn-inline:hover {
+  background: #fff !important;
+  border: #ABCE3E !important;
+  color: #000 !important;
+}
+
+.pride-button a.btn-inline:hover {
+  background: #fff !important;
+  border: #CBA8C0 !important;
+  color: #000 !important;
+}
+
+.gsc-image-content.mhm-button .box-content a, .gsc-image-content.mhm-button .box-content a:visited, .gsc-image-content.mhm-button .box-content a:hover, .gsc-image-content.mhm-button .box-content a:active {
+  color: #000 !important;
+  font-size:1rem !important;
+}
+
+.rounded-corners {
+  border-radius: 15px;
+}
+
+.rounded-corners img {
+  border-radius: 15px;
+}
+
+.mhm-button .btn-inline:hover {
+  background: #fff !important;
+  border: #ABCE3E !important;
+  color: #000 !important;
+}
+
+.btn-theme:hover {
+  background: #fff !important;
+  border: 2px #9aac2d solid;
+  color: #000 !important;
+}
+
+.mhm .button-action > a {
+  font-size: 1rem !important;
+  padding: 10px !important;
+  color: #000 !important;
+}
+
+.small-headings h4 {
+  font-size: 1.1rem !important;
+  margin-top:18px !important;
+}
+
+#blue-accordian .panel-group .panel, .blue-accordian .panel-group .panel {
+  border-color: #97A926 !important;
+}
+
+.organization {
+  padding-right: 40px !important;
+}
+
+.event-full .extra.btn.btn-primary  {
+  background-color: #385988 !important;
+  font-size: 0.8rem !important;
+  text-transform: none !important;
+  padding: 10px !important;
+  border-radius: 0px !important;
+}
+
+.event-full .extra.btn.btn-primary:hover {
+  background-color:#fff !important;
+  color: #385988 !important;
+  border: #385988 1px solid !important;
+}
+
+.mhm .gsc-image-content.skin-v2 img {
+  border-radius: 5% !important;
+}
+
+.borders img {
+  border: 5px #ABCE3E solid;
+}
+
+.social-graphics {
+  padding-right: 20px !important;
+}
+
+#blue-accordian .gray-accordion  .panel-group .panel {
+  background-color: #eee !important;
+}
+
+#blue-accordian .gray-accordion .panel .panel-heading .panel-title > a {
+  background-color: #eee !important;
+}
+
+.team-single-page-2 .team-contact, .team-single-page-2 .team-education {
+  display:none;
+}
+
+.gsc-image-content.skin-v2 img {
+  border-radius: 1.5rem;
+}
+
+.gsc-image-content.skin-v2 .box-content {
+  padding: 0 !important;
+}
+
+.btn-info {
+  font-size: 1rem;
+}
+
+.gray-accordion h4 {
+  text-transform:none !important;
+}
+
+.margin-bottom {
+  margin-bottom: 20px;
+}
+
+.gsc-button.medium.miaw-button {
+  border: #385988 1px solid !important;
+  color: #385988 !important;
+}
+
+.gsc-button.medium.miaw-button:hover {
+  color: #fff !important;
+}
+
+.gsc-button.large.know-us:hover {
+  border: 1px solid #bfe8ea !important;
+}
+
+.gsc-button.large.know-us {
+  font-size: 1rem !important;
+  width:100% !important;
+  text-align:center !important;
+}
+
+.staff-image img {
+  border-radius: 50% !important;
+}
+
+.full-size img {
+  width: 100% !important;
+}
+
+.no-caps {
+  text-transform:none !important;
+}
+
+.sign-up-button {
+  color:#000 !important;
+}
+
+#youth-form .sli-button.sli-small {
+  background:#fff !important;
+  border: 1px solid #66C7CB !important;
+}
+
+#youth-form .sli-button.sli-small:hover {
+  background:#BFE8EA !important;
+  border: 1px solid #66C7CB !important;
+}
+
+#youth-form .sli-label {
+  color:#000 !important;
+}
+
+.gsc-button {
+  letter-spacing:1px !important;
+}
+
+#superfish-main li:nth-child(5) a.sf-depth-1 {
+  color:#000 !important;
+  font-size:.8rem !important;
+  background: #7eb420 !important;
+}
+
+#superfish-main li:nth-child(5) a.sf-depth-1:hover {
+  border-radius:15px !important;
+}
+
+.fa {
+  font-size: 1.8rem !important;
+}
+.topbar .navigation .gva_menu {
+  float: inherit !important;
+}
