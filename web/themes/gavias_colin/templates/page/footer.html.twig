@@ -89,6 +89,23 @@
         <div class="container">
           <div class="row">
             <div class="col-md-8 col-sm-12">
+              <h4>
+                {{ 'Mental Health America'|t }}
+              </h4>
+              <p>
+                {{ '500 Montgomery Street,'|t }}
+                <br>
+                {{ 'Suite 820'|t }}
+                <br>
+                {{ 'Alexandria, VA. 22314'|t }}
+                <br>
+                <br>
+                {{ 'Phone (703) 684.7722'|t }}
+                <br>
+                {{ 'Toll Free (800) 969.6642'|t }}
+                <br>
+                {{ 'Fax (703) 684.5968'|t }}
+              </p>
               {% if page.contact_one %}
                 <div>
                   {{ page.contact_one }}
@@ -97,10 +114,13 @@
             </div>
 
             <div class="col-md-4 col-sm-12">
-              <div>
+              <div class="col mha-logo-footer mt-4">
+                <img style="margin-bottom:16px !important;" src="/sites/default/files/inline-images/mha-white-logo.png" data-entity-uuid="2bf28669-d1f7-4831-9bec-e755a796e27c" data-entity-type="file" alt="Mental Health America logo" width="70.77%">
+              </div>
+
+
                 <div class="col list-inline mt-3 ml-2 pb-3">
-                  <a class="list-inline-item" href="https://www.inspire.com/groups/mental-health-america/">
-                    <img src="/sites/default/files/2023-03/Inspire_Icon_Reverse_RGB.png" alt="Inspire Icon" width="25px" height="25px">&nbsp;&nbsp;&nbsp;</a>
+
                   <a class="list-inline-item" href="https://www.facebook.com/mentalhealthamerica" aria-label="Facebook"><em>
                       <i class="fa fa-facebook-official" aria-hidden="true" width="25" height="25"></i></em></a>
                   <a class="list-inline-item" href=" https://www.instagram.com" aria-label="Instagram"><em>
@@ -111,14 +131,10 @@
                       <i class="fa fa-twitter-square" aria-hidden="true" width="25" height="25"> </i></em></a>
                   <a class="list-inline-item" href="https://www.youtube.com/user/mentalhealthamerica" aria-label="YouTube"><em>
                       <i class="fa fa-youtube-square" aria-hidden="true" width="25" height="25"></i></em></a>
-                </div>
-                <div class="col mha-logo-footer mt-5">
-                  <img style="margin-bottom:16px !important;" src="/sites/default/files/inline-images/mha-white-logo.png" data-entity-uuid="2bf28669-d1f7-4831-9bec-e755a796e27c" data-entity-type="file" alt="Mental Health America logo" width="70.77%">
-                </div>
 
               </div>
-              <div class="col footer-copyright">
-              © Copyright {{ "now"|date('Y') }} Mental Health America, Inc.
+              <div class="col footer-copyright mt-5">
+                {{ '© Copyright'|t }} {{ "now"|date('Y') }} {{ 'Mental Health America, Inc.'|t }}
               </div>
             </div>
           </div>
@@ -132,7 +148,7 @@
           <a href="/donate-now">
             <div class="left-column p-4">
             <button class="btn-donate heart">
-              DONATE
+               {{'DONATE'|t}}
             </button>
           </div>
           </a>

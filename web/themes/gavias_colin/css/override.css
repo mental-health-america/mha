@@ -1759,6 +1759,7 @@ div#block-socialmediafooterblock i.fa {
 #footer-2 h4 {
   color: white !important;
 }
+
 #footer-2 .fa.fa-facebook-official::before,
 #footer-2 .fa.fa-instagram::before,
 #footer-2 .fa.fa-pinterest-square::before,
@@ -1768,4 +1769,140 @@ div#block-socialmediafooterblock i.fa {
 #footer-2 .fa.fa-youtube-square::before {
   font-size: 2rem;
   margin: 0 .5rem 0 0;
+}
+
+nav#block-getactive {
+  margin: 45px 0 0;
+}
+
+.navigation .gva_menu > li {
+  display: xinline-block;
+  width: 100%;
+}
+
+.column-inner.bg-size-cover.red-background.rounded-corners .sli-element p {
+  color: white !important;
+  font-size: 1.5rem !important;
+}
+
+body, p, .node_content p, html, .gsc-column ul li {
+  font-size: 1rem !important;
+}
+
+h4.mb-3.white-text.connect {
+  color: white !important;
+  font-size: 2rem;
+}
+.gsc-image-content.skin-v2:hover .box-content a:hover {
+  color: var(--mha-black) !important;
+  border: 2px solid #abce3e !important;
+}
+
+#footer i.fa:hover {
+  color: white !important;
+}
+
+.js-form-item.form-item, div#edit-actions--3, div#edit-actions--2 {
+  display: xinline-block;
+}
+
+.mhm-button a.btn-inline {
+  font-size:1.2rem !important;
+  text-transform: none !important;
+  border: #ABCE3E !important;
+  background: #ABCE3E !important;
+  color: #000 !important;
+}
+
+.mhm-button a.btn-inline:hover {
+  background: #fff !important;
+  border: #ABCE3E !important;
+  color: #000 !important;
+}
+
+.gsc-image-content.mhm-button .box-content a, .gsc-image-content.mhm-button .box-content a:visited, .gsc-image-content.mhm-button .box-content a:hover, .gsc-image-content.mhm-button .box-content a:active {
+  color: #000 !important;
+  font-size:1rem !important;
+}
+
+.rounded-corners, .rounded-corners img {
+  border-radius: 15px;
+}
+
+.mhm-button .btn-inline:hover {
+  background: #fff !important;
+  border: #ABCE3E !important;
+  color: #000 !important;
+}
+
+.btn-theme:hover {
+  background: #fff !important;
+  border: 2px #9aac2d solid;
+  color: #000 !important;
+}
+
+.mhm .button-action > a {
+  font-size: 1rem !important;
+  padding: 10px !important;
+  color: #000 !important;
+}
+
+.small-headings h4 {
+  font-size: 1.1rem !important;
+  margin-top:18px !important;
+}
+
+#blue-accordian .panel-group .panel, .blue-accordian .panel-group .panel {
+  border-color: #97A926 !important;
+}
+
+.organization {
+  padding-right: 40px !important;
+}
+
+.event-full .extra.btn.btn-primary  {
+  background-color: #385988 !important;
+  font-size: 0.8rem !important;
+  text-transform: none !important;
+  padding: 10px !important;
+  border-radius: 0 !important;
+}
+
+.event-full .extra.btn.btn-primary:hover {
+  background-color:#fff !important;
+  color: #385988 !important;
+  border: #385988 1px solid !important;
+}
+
+.mhm .gsc-image-content.skin-v2 img {
+  border-radius: 5% !important;
+}
+
+.borders img {
+  border: 5px #ABCE3E solid;
+}
+
+.social-graphics {
+  padding-right: 20px !important;
+}
+
+#blue-accordian .gray-accordion  .panel-group .panel,
+#blue-accordian .gray-accordion .panel .panel-heading .panel-title > a{
+  background-color: #eee !important;
+}
+
+.team-single-page-2 .team-contact, .team-single-page-2 .team-education {
+  display:none;
+}
+
+.gsc-image-content.skin-v2 img {
+  border-radius: 1.5rem;
+}
+
+.gsc-image-content.skin-v2 .box-content {
+  padding: 0 !important;
+}
+
+.btn-info {
+  font-size: 1rem;
 }
