@@ -61,7 +61,7 @@
         "drupal/better_exposed_filters": "^6.0.3",
         "drupal/blazy": "^2.14",
         "drupal/block_visibility_groups": "^2.0",
-        "drupal/captcha": "^1.9",
+        "drupal/captcha": "^2.0",
         "drupal/charts": "^5.0",
         "drupal/checklistapi": "^2.1",
         "drupal/color": "^1.0",
