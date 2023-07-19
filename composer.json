@@ -72,7 +72,7 @@
         "drupal/console": "^1.0.2",
         "drupal/content_access": "^1.0@alpha",
         "drupal/content_sync": "^3.0@beta",
-        "drupal/core": "9.5.9.",
+        "drupal/core": "^9.5.9.",
         "drupal/ctools": "^4.0",
         "drupal/date_popup": "^1.0",
         "drupal/devel": "^4.1",

@@ -8,7 +8,7 @@
   var strings = {
     tabbingReleased: Drupal.t('Tabbing is no longer constrained by the Contextual module.'),
     tabbingConstrained: Drupal.t('Tabbing is constrained to a set of @contextualsCount and the edit mode toggle.'),
-    pressEsc: Drupal.t('Press the esc key to form_exit.')
+    pressEsc: Drupal.t('Press the esc key to exit.')
   };
   function initContextualToolbar(context) {
     if (!Drupal.contextual || !Drupal.contextual.collection) {

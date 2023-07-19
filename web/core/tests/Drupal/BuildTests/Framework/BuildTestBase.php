@@ -295,9 +295,9 @@ abstract class BuildTestBase extends TestCase {
   /**
    * Asserts that the last command ran without error.
    *
-   * This assertion checks whether the last command returned an form_exit code of 0.
+   * This assertion checks whether the last command returned an exit code of 0.
    *
-   * If you need to assert a different form_exit code, then you can use
+   * If you need to assert a different exit code, then you can use
    * executeCommand() and perform a different assertion on the process object.
    */
   public function assertCommandSuccessful() {
@@ -305,10 +305,10 @@ abstract class BuildTestBase extends TestCase {
   }
 
   /**
-   * Asserts that the last command returned the specified form_exit code.
+   * Asserts that the last command returned the specified exit code.
    *
    * @param int $expected_code
-   *   The expected process form_exit code.
+   *   The expected process exit code.
    */
   public function assertCommandExitCode($expected_code) {
     $this->assertEquals($expected_code, $this->commandProcess->getExitCode(),

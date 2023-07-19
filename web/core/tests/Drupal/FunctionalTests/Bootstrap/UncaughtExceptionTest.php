@@ -156,7 +156,7 @@ class UncaughtExceptionTest extends BrowserTestBase {
     $settings_php .= "set_error_handler(function() {\n";
     $settings_php .= "  header('HTTP/1.1 418 I\'m a teapot');\n";
     $settings_php .= "  print('Oh oh, flying teapots');\n";
-    $settings_php .= "  form_exit();\n";
+    $settings_php .= "  exit();\n";
     $settings_php .= "});\n";
     $settings_php .= "\$settings['teapots'] = TRUE;\n";
     file_put_contents($settings_filename, $settings_php);
