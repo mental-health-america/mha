@@ -128,7 +128,7 @@ class InstallCommand extends Command {
    *   Thrown when failing to create the $site_path directory or settings.php.
    *
    * @return int
-   *   The command form_exit status.
+   *   The command exit status.
    */
   protected function install($class_loader, SymfonyStyle $io, $profile, $langcode, $site_path, $site_name) {
     $password = Crypt::randomBytesBase64(12);

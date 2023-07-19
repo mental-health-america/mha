@@ -48,9 +48,9 @@ system_test.lock_acquire:
     _access: 'TRUE'
 
 system_test.lock_exit:
-  path: '/system-test/lock-form_exit'
+  path: '/system-test/lock-exit'
   defaults:
-    _title: 'Lock acquire then form_exit'
+    _title: 'Lock acquire then exit'
     _controller: '\Drupal\system_test\Controller\SystemTestController::lockExit'
   options:
     no_cache: TRUE

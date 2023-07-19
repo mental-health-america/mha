@@ -16806,7 +16806,7 @@ $connection->insert('locales_source')
   'lid' => '802',
   'location' => '/?q=fr/admin/settings/performance',
   'textgroup' => 'default',
-  'source' => 'The normal cache mode is suitable for most sites and does not cause any side effects. The aggressive cache mode causes Drupal to skip the loading (boot) and unloading (form_exit) of enabled modules when serving a cached page. This results in an additional performance boost but can cause unwanted side effects.',
+  'source' => 'The normal cache mode is suitable for most sites and does not cause any side effects. The aggressive cache mode causes Drupal to skip the loading (boot) and unloading (exit) of enabled modules when serving a cached page. This results in an additional performance boost but can cause unwanted side effects.',
   'version' => '6.38-dev',
 ))
 ->values(array(

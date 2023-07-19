@@ -13,7 +13,7 @@ interface FormBuilderInterface {
    * This constant is distinct from a "drupal_ajax" value for
    * \Drupal\Core\EventSubscriber\MainContentViewSubscriber::WRAPPER_FORMAT,
    * because that one is set for all AJAX submissions, including ones with
-   * dedicated routes for which self::buildForm() should not form_exit early via a
+   * dedicated routes for which self::buildForm() should not exit early via a
    * \Drupal\Core\Form\FormAjaxException.
    *
    * @todo Re-evaluate the need for this constant after

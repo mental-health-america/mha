@@ -114,7 +114,7 @@ class PhpUnitTestRunner implements ContainerInjectionInterface {
    * @param string $phpunit_file
    *   A filepath to use for PHPUnit's --log-junit option.
    * @param int $status
-   *   (optional) The form_exit status code of the PHPUnit process will be assigned
+   *   (optional) The exit status code of the PHPUnit process will be assigned
    *   to this variable.
    * @param string[] $output
    *   (optional) The output by running the phpunit command. If provided, this
@@ -194,7 +194,7 @@ class PhpUnitTestRunner implements ContainerInjectionInterface {
    *   An array of test class names, including full namespaces, to be passed as
    *   a regular expression to PHPUnit's --filter option.
    * @param int $status
-   *   (optional) The form_exit status code of the PHPUnit process will be assigned
+   *   (optional) The exit status code of the PHPUnit process will be assigned
    *   to this variable.
    *
    * @return array

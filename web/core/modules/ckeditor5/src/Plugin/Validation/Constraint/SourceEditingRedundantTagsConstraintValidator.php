@@ -93,7 +93,7 @@ class SourceEditingRedundantTagsConstraintValidator extends ConstraintValidator 
         // or some attribute value is still not yet supported, do not generate a
         // violation message.
         // If there is overlap, but some attribute/attribute value is still not
-        // supported, form_exit this iteration without generating a violation
+        // supported, exit this iteration without generating a violation
         // message. Essentially: when assessing a particular value
         // (for example `<foo bar baz>`), only CKEditor 5 plugins providing an
         // exact match (`<foo bar baz>`) or a superset (`<foo bar baz qux>`) can
@@ -102,7 +102,7 @@ class SourceEditingRedundantTagsConstraintValidator extends ConstraintValidator 
           continue;
         }
         // If there is overlap, but the plain tag is not supported in the
-        // overlap, form_exit this iteration without generating a violation message.
+        // overlap, exit this iteration without generating a violation message.
         // Essentially when assessing a particular value (for example `<span>`),
         // CKEditor 5 plugins supporting only the creation of attributes on this
         // tag (`<span lang>`) and not supporting the creation of this plain tag

@@ -202,7 +202,7 @@ class InstallUninstallTest extends ModuleTestBase {
           }
         }
 
-        // If we were not able to find a module to uninstall, fail and form_exit the
+        // If we were not able to find a module to uninstall, fail and exit the
         // loop.
         $final_count = count($added_modules);
         if ($initial_count == $final_count) {

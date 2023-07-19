@@ -257,7 +257,7 @@ class GenerateThemeTest extends QuickStartTestBase {
     mkdir($unavailableGitPath);
     $bash = <<<SH
 #!/bin/bash
-form_exit 127
+exit 127
 
 SH;
     file_put_contents($unavailableGitPath . '/git', $bash);
