@@ -23,6 +23,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class LinkWithAttributesWidget extends LinkWidget implements ContainerFactoryPluginInterface {
 
+  public const WIDGET_OPEN_EXPAND_IF_VALUES_SET = 'expandIfValuesSet';
+  public const WIDGET_OPEN_COLLAPSED = 'collapsed';
+  public const WIDGET_OPEN_EXPANDED = 'expanded';
+
   /**
    * The link attributes manager.
    *
@@ -80,6 +84,7 @@ class LinkWithAttributesWidget extends LinkWidget implements ContainerFactoryPlu
         'class' => TRUE,
         'accesskey' => FALSE,
       ],
+      'widget_default_open' => self::WIDGET_OPEN_EXPAND_IF_VALUES_SET,
     ] + parent::defaultSettings();
   }
 
@@ -98,11 +103,22 @@ class LinkWithAttributesWidget extends LinkWidget implements ContainerFactoryPlu
     if (empty(array_filter($this->getSetting('enabled_attributes')))) {
       return $element;
     }
+
+    $widgetDefaultOpenSetting = $this->getSetting('widget_default_open');
+    $open = NULL;
+
+    match ($widgetDefaultOpenSetting) {
+      self::WIDGET_OPEN_EXPAND_IF_VALUES_SET => $open = count($attributes),
+      self::WIDGET_OPEN_EXPANDED => $open = TRUE,
+      self::WIDGET_OPEN_COLLAPSED => $open = FALSE,
+      default => $open = count($attributes),
+    };
+
     $element['options']['attributes'] = [
       '#type' => 'details',
       '#title' => $this->t('Attributes'),
       '#tree' => TRUE,
-      '#open' => count($attributes),
+      '#open' => $open,
     ];
     $plugin_definitions = $this->linkAttributesManager->getDefinitions();
     foreach (array_keys(array_filter($this->getSetting('enabled_attributes'))) as $attribute) {
@@ -145,6 +161,17 @@ class LinkWithAttributesWidget extends LinkWidget implements ContainerFactoryPlu
       '#default_value' => array_combine($selected, $selected),
       '#description' => $this->t('Select the attributes to allow the user to edit.'),
     ];
+    $element['widget_default_open'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Widget default open behavior'),
+      '#options' => [
+        self::WIDGET_OPEN_EXPAND_IF_VALUES_SET => $this->t('Expand if values set (Default)'),
+        self::WIDGET_OPEN_EXPANDED => $this->t('Expand'),
+        self::WIDGET_OPEN_COLLAPSED => $this->t('Collapse'),
+      ],
+      '#default_value' => $this->getSetting('default_open') ?? self::WIDGET_OPEN_EXPAND_IF_VALUES_SET,
+      '#description' => $this->t('Set the widget default open behavior.'),
+    ];
     return $element;
   }
 
@@ -178,6 +205,13 @@ class LinkWithAttributesWidget extends LinkWidget implements ContainerFactoryPlu
     if ($enabled_attributes) {
       $summary[] = $this->t('With attributes: @attributes', ['@attributes' => implode(', ', array_keys($enabled_attributes))]);
     }
+    $widgetDefaultOpenSetting = $this->getSetting('widget_default_open');
+
+    match ($widgetDefaultOpenSetting) {
+      self::WIDGET_OPEN_EXPAND_IF_VALUES_SET => $summary[] = $this->t('Widget open if values set'),
+      self::WIDGET_OPEN_EXPANDED => $summary[] = $this->t('Widget open by default.'),
+      self::WIDGET_OPEN_COLLAPSED => $summary[] = $this->t('Widget closed by default.'),
+    };
     return $summary;
   }
 
