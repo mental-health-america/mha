@@ -12,5 +12,7 @@
     "issues": "https://www.drupal.org/project/issues/link_attributes",
     "source": "https://git.drupalcode.org/project/link_attributes"
   },
-  "require": {}
+  "require": {
+    "php": ">=8.0"
+  }
 }
