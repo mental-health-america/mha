@@ -18,7 +18,10 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\TempStore\PrivateTempStore;
 use Drupal\field\FieldConfigInterface;
 use Drupal\layout_builder\Plugin\Block\InlineBlock;
+use Drupal\link\Plugin\Field\FieldType\LinkItem;
 use Drupal\media\MediaInterface;
+use Drupal\menu_link_content\Entity\MenuLinkContent;
+use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\node\NodeInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\user\UserInterface;
@@ -292,6 +295,21 @@ class ContentExporter implements ContentExporterInterface {
             'revision_log_message' => $entity->getRevisionLogMessage(),
             'revision_uid' => $entity->getRevisionUserId(),
           ];
+
+          if ($this->moduleHandler->moduleExists('menu_ui')) {
+            $menu_link = menu_ui_get_menu_link_defaults($entity);
+            $storage = $this->entityTypeManager->getStorage('menu_link_content');
+
+            // Export content menu link item if available.
+            if (!empty($menu_link['entity_id']) && ($menu_link_entity = $storage->load($menu_link['entity_id']))) {
+              assert($menu_link_entity instanceof MenuLinkContentInterface);
+
+              // Avoid infinitive loop, export menu link only once.
+              if (!$this->isReferenceCached($menu_link_entity)) {
+                $base_fields['menu_link'] = $this->doExportToArray($menu_link_entity);
+              }
+            }
+          }
         }
         break;
 
@@ -351,6 +369,67 @@ class ContentExporter implements ContentExporterInterface {
           'langcode' => $entity->language()->getId(),
           'created' => $entity->getCreatedTime(),
         ];
+        break;
+
+      case 'menu_link_content':
+        if ($entity instanceof MenuLinkContent) {
+          $base_fields = [
+            'title' => $entity->getTitle(),
+            'enabled' => $entity->isPublished(),
+            'expanded' => $entity->isExpanded(),
+            'langcode' => $entity->language()->getId(),
+            'menu_name' => $entity->get('menu_name')->value,
+            'description' => $entity->getDescription(),
+            'link' => $entity->get('link')->getValue(),
+            'weight' => $entity->getWeight(),
+            'parent' => '',
+          ];
+
+          // Export parent menu link.
+          if ($entity->getParentId()) {
+            [, $parent_uuid] = explode(':', $entity->getParentId());
+            $parent = $this->entityRepository->loadEntityByUuid($entity_type, $parent_uuid);
+
+            if ($parent instanceof MenuLinkContentInterface) {
+              $base_fields['parent'] = $this->doExportToArray($parent);
+            }
+          }
+
+          // Export linked entity.
+          foreach ($entity->get('link') as $index => $item) {
+            if (!$item instanceof LinkItem || !$item->getUrl()->isRouted()) {
+              continue;
+            }
+
+            if (preg_match('/^entity.(.+).canonical$/', $item->getUrl()->getRouteName(), $matches)) {
+              $linked_entity_type_id = $matches[1];
+              $linked_entity_id = $item->getUrl()->getRouteParameters()[$linked_entity_type_id] ?? NULL;
+
+              if (!$linked_entity_id) {
+                continue;
+              }
+
+              $linked_entity = $this->entityTypeManager->getStorage($linked_entity_type_id)
+                ->load($linked_entity_id);
+
+              if ($linked_entity instanceof FieldableEntityInterface) {
+                if (!$this->isReferenceCached($linked_entity)) {
+                  $base_fields['link'][$index]['entity'] = $this->doExportToArray($linked_entity);
+                }
+                else {
+                  $base_fields['link'][$index]['entity'] = [
+                    'uuid' => $linked_entity->uuid(),
+                    'entity_type' => $linked_entity->getEntityTypeId(),
+                    'base_fields' => $this->exportBaseValues($linked_entity),
+                    'bundle' => $linked_entity->bundle(),
+                  ];
+                }
+
+                $base_fields['link'][$index]['uri'] = "entity:{$linked_entity_type_id}/{$linked_entity->uuid()}";
+              }
+            }
+          }
+        }
         break;
 
       default:

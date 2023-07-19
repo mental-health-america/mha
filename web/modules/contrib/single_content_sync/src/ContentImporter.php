@@ -169,6 +169,11 @@ class ContentImporter implements ContentImporterInterface {
     $this->importCustomValues($entity, $content['custom_fields']);
     $this->createOrUpdate($entity);
 
+    // Import menu link when entity is created.
+    if (isset($content['base_fields']['menu_link'])) {
+      $this->doImport($content['base_fields']['menu_link']);
+    }
+
     // Sync translations of the entity.
     if (isset($content['translations']) && $entity instanceof TranslatableInterface) {
       foreach ($content['translations'] as $langcode => $translation_content) {
@@ -313,16 +318,7 @@ class ContentImporter implements ContentImporterInterface {
 
           // Create a stub entity without custom field values.
           if (!$reference_entity) {
-            $reference_entity_values = [
-              'uuid' => $child_entity['uuid'],
-            ];
-            $definition = $this->entityTypeManager->getDefinition($child_entity['entity_type']);
-            if ($bundle_key = $definition->getKey('bundle')) {
-              $reference_entity_values[$bundle_key] = $child_entity['bundle'];
-            }
-            $reference_entity = $this->entityTypeManager->getStorage($child_entity['entity_type'])->create($reference_entity_values);
-            $this->importBaseValues($reference_entity, $child_entity['base_fields']);
-            $reference_entity->save();
+            $reference_entity = $this->createStubEntity($child_entity);
           }
 
           $values[] = $reference_entity;
@@ -488,6 +484,36 @@ class ContentImporter implements ContentImporterInterface {
   }
 
   /**
+   * Validate zip file before we run batch.
+   *
+   * @param string $path
+   *   The local file path of the extracted zip file.
+   *
+   * @return bool
+   *   TRUE if the valid YML file is found.
+   */
+  protected function isZipFileValid(string $path): bool {
+    $info = pathinfo($path);
+
+    if (is_file($path) && $info['extension'] === 'yml') {
+      // Extra directory found, let's skip the operation and trigger
+      // an error later.
+      if (strpos($info['dirname'], $info['filename']) !== FALSE) {
+        return FALSE;
+      }
+
+      // File name can't start with dot.
+      if (strpos($info['filename'], '.') === 0) {
+        return FALSE;
+      }
+
+      return TRUE;
+    }
+
+    return FALSE;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function importFromZip(string $file_real_path): void {
@@ -519,14 +545,17 @@ class ContentImporter implements ContentImporterInterface {
     foreach ($zip->listContents() as $zip_file) {
       $original_file_path = "{$import_directory}/{$zip_file}";
 
-      if (strpos($zip_file, 'assets') === FALSE) {
+      if ($this->isZipFileValid($original_file_path)) {
         $content_file_path = $original_file_path;
-
         $batch['operations'][] = [
           '\Drupal\single_content_sync\ContentBatchImporter::batchImportFile',
           [$original_file_path],
         ];
       }
+    }
+
+    if (!$batch['operations']) {
+      throw new \Exception(' Please check the structure of the zip file and ensure you do not have an extra parent directory.');
     }
 
     $batch['operations'][] = [
@@ -621,6 +650,46 @@ class ContentImporter implements ContentImporterInterface {
         ];
         break;
 
+      case 'menu_link_content':
+        $entity = [
+          'title' => $values['title'],
+          'enabled' => $values['enabled'],
+          'expanded' => $values['expanded'],
+          'langcode' => $values['langcode'],
+          'menu_name' => $values['menu_name'],
+          'description' => $values['description'],
+          'weight' => $values['weight'],
+          'link' => $values['link'],
+          'parent' => '',
+        ];
+
+        // Import parent menu link first.
+        if (!empty($values['parent'])) {
+          $parent = $this->doImport($values['parent']);
+          $entity['parent'] = implode(':', [$entity_type_id, $parent->uuid()]);
+        }
+
+        // Import linked entity.
+        foreach ($entity['link'] as &$item) {
+          if (!isset($item['entity'])) {
+            continue;
+          }
+
+          // If the entity was fully exported we do the full import.
+          if ($this->isFullEntity($item['entity'])) {
+            $this->doImport($item['entity']);
+          }
+
+          $linked_entity = $this->entityRepository->loadEntityByUuid($item['entity']['entity_type'], $item['entity']['uuid']);
+
+          if (!$linked_entity) {
+            $linked_entity = $this->createStubEntity($item['entity']);
+          }
+
+          $item['uri'] = "entity:{$linked_entity->getEntityTypeId()}/{$linked_entity->id()}";
+        }
+        break;
+
       default:
         return [];
     }
@@ -631,6 +700,30 @@ class ContentImporter implements ContentImporterInterface {
     }
 
     return $entity;
+  }
+
+  /**
+   * Create a stub entity (import only base fields).
+   *
+   * @param array $entity
+   *   The exported stub entity (does not contain custom_fields).
+   *
+   * @return \Drupal\Core\Entity\EntityInterface
+   *   The stub entity object.
+   */
+  protected function createStubEntity(array $entity) {
+    $stub_entity_values = [
+      'uuid' => $entity['uuid'],
+    ];
+    $definition = $this->entityTypeManager->getDefinition($entity['entity_type']);
+    if ($bundle_key = $definition->getKey('bundle')) {
+      $stub_entity_values[$bundle_key] = $entity['bundle'];
+    }
+    $stub_entity = $this->entityTypeManager->getStorage($entity['entity_type'])->create($stub_entity_values);
+    $this->importBaseValues($stub_entity, $entity['base_fields']);
+    $stub_entity->save();
+
+    return $stub_entity;
   }
 
   /**

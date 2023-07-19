@@ -6,6 +6,8 @@
  */
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Template\Attribute;
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\ContentEntityTypeInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
@@ -96,17 +98,24 @@ function single_content_sync_entity_operation(EntityInterface $entity) {
  * Implements hook_preprocess_HOOK() for links__dropbutton__operations.
  */
 function single_content_sync_preprocess_links__dropbutton__operations(&$variables) {
-  foreach ($variables['links'] as &$link_data) {
+  $entity = NULL;
+
+  foreach ($variables['links'] as $type => &$link_data) {
     if (!isset($link_data['link']['#url'])) {
       continue;
+    }
+
+    /** @var \Drupal\Core\Url $url */
+    $url = $link_data['link']['#url'];
+
+    if ($type === 'edit') {
+      $entity = $url->getOption('entity');
     }
 
     if (empty($link_data['link']['#options']['query']['destination'])) {
       continue;
     }
 
-    /** @var \Drupal\Core\Url $url */
-    $url = $link_data['link']['#url'];
     $entity_type_id = $url->getOption('entity_type');
 
     if (!$entity_type_id) {
@@ -120,6 +129,20 @@ function single_content_sync_preprocess_links__dropbutton__operations(&$variable
       unset($link_data['link']['#options']['query']['destination']);
     }
   }
+
+  // Add custom export operation here if it was not added in the
+  // hook_entity_operation.
+  if ($entity instanceof ContentEntityInterface && !isset($variables['links']['export']) && \Drupal::service('single_content_sync.helper')->access($entity)) {
+    $variables['links']['export'] = [
+      'text' => t('Export'),
+      'link' => $entity->toLink(t('Export'), 'single-content:export')->toRenderable(),
+      'attributes' => new Attribute([
+        'class' => ['export', 'dropbutton__item'],
+      ]),
+    ];
+    $variables['attributes']['class'][] = 'dropbutton--multiple';
+  }
+
 }
 
 /**

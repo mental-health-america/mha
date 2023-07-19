@@ -3,11 +3,12 @@
 namespace Drupal\single_content_sync\Plugin\Action;
 
 use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Action\ActionBase;
+use Drupal\Core\Action\ConfigurableActionBase;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Link;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\TempStore\PrivateTempStore;
-use Drupal\Core\TempStore\PrivateTempStoreFactory;
+use Drupal\single_content_sync\ContentFileGeneratorInterface;
 use Drupal\single_content_sync\ContentSyncHelperInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -18,10 +19,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *  id = "content_bulk_export",
  *  label = @Translation("Export content"),
  *  type = "node",
- *  confirm_form_route_name = "single_content_sync.bulk_export",
  * )
  */
-class ContentBulkExport extends ActionBase implements ContainerFactoryPluginInterface {
+class ContentBulkExport extends ConfigurableActionBase implements ContainerFactoryPluginInterface {
 
   /**
    * The current user.
@@ -31,18 +31,18 @@ class ContentBulkExport extends ActionBase implements ContainerFactoryPluginInte
   protected AccountInterface $currentUser;
 
   /**
-   * The private temp store of the module.
-   *
-   * @var \Drupal\Core\TempStore\PrivateTempStore
-   */
-  protected PrivateTempStore $privateTempStore;
-
-  /**
    * The Content sync helper.
    *
    * @var \Drupal\single_content_sync\ContentSyncHelperInterface
    */
   protected ContentSyncHelperInterface $contentSyncHelper;
+
+  /**
+   * The custom file generator to export content.
+   *
+   * @var \Drupal\single_content_sync\ContentFileGeneratorInterface
+   */
+  protected ContentFileGeneratorInterface $fileGenerator;
 
   /**
    * Constructs a ContentBulkExport object.
@@ -53,18 +53,15 @@ class ContentBulkExport extends ActionBase implements ContainerFactoryPluginInte
    *   The plugin ID for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $temp_store_factory
-   *   The tempstore factory.
-   * @param \Drupal\Core\Session\AccountInterface $current_user
-   *   Current user.
+   * @param \Drupal\single_content_sync\ContentFileGeneratorInterface $file_generator
+   *   The custom file generator to export content.
    * @param \Drupal\single_content_sync\ContentSyncHelperInterface $content_sync_helper
    *   The content sync helper.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, PrivateTempStoreFactory $temp_store_factory, AccountInterface $current_user, ContentSyncHelperInterface $content_sync_helper) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ContentFileGeneratorInterface $file_generator, ContentSyncHelperInterface $content_sync_helper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
-    $this->privateTempStore = $temp_store_factory->get('single_content_sync');
-    $this->currentUser = $current_user;
+    $this->fileGenerator = $file_generator;
     $this->contentSyncHelper = $content_sync_helper;
   }
 
@@ -76,8 +73,7 @@ class ContentBulkExport extends ActionBase implements ContainerFactoryPluginInte
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('tempstore.private'),
-      $container->get('current_user'),
+      $container->get('single_content_sync.file_generator'),
       $container->get('single_content_sync.helper'),
     );
   }
@@ -85,15 +81,26 @@ class ContentBulkExport extends ActionBase implements ContainerFactoryPluginInte
   /**
    * {@inheritdoc}
    */
-  public function executeMultiple(array $entities) {
-    $this->privateTempStore->set($this->currentUser->id(), $entities);
+  public function execute($object = NULL) {
+    // Moved the logic to ::executeMultiple();
   }
 
   /**
    * {@inheritdoc}
    */
-  public function execute($object = NULL) {
-    $this->executeMultiple([$object]);
+  public function executeMultiple(array $entities) {
+    $extract_translations = $this->configuration['translation'];
+    $extract_assets = $this->configuration['assets'];
+    $file = $this->fileGenerator->generateBulkZipFile($entities, $extract_translations, $extract_assets);
+    [$file_scheme, $file_target] = explode('://', $file->getFileUri(), 2);
+
+    $this->messenger()->addStatus($this->t('We have successfully exported the selected content. Follow the @link to download the generate zip file with the content', [
+      '@link' => Link::createFromRoute($this->t('link'), 'single_content_sync.file_download', ['scheme' => $file_scheme], [
+        'query' => [
+          'file' => $file_target,
+        ],
+      ])->toString(),
+    ]));
   }
 
   /**
@@ -107,6 +114,45 @@ class ContentBulkExport extends ActionBase implements ContainerFactoryPluginInte
     }
 
     return $return_as_object ? $result : $result->isAllowed();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function defaultConfiguration() {
+    return [
+      'assets' => TRUE,
+      'translation' => TRUE,
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
+    $form['assets'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Include all assets'),
+      '#description' => $this->t('Whether to export all file assets such as images, documents, videos and etc.'),
+      '#default_value' => $this->configuration['assets'],
+    ];
+
+    $form['translation'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Include all translations'),
+      '#description' => $this->t('Whether to export available translations of the content.'),
+      '#default_value' => $this->configuration['translation'],
+    ];
+
+    return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
+    $this->configuration['assets'] = $form_state->getValue('assets');
+    $this->configuration['translation'] = $form_state->getValue('translation');
   }
 
 }
