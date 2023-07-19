@@ -8,7 +8,7 @@ dependencies:
   - recurring_events:recurring_events
   - token:token
 
-# Information added by Drupal.org packaging script on 2023-06-15
-version: '2.0.0-rc8'
+# Information added by Drupal.org packaging script on 2023-07-03
+version: '2.0.0-rc11'
 project: 'recurring_events'
-datestamp: 1686844632
+datestamp: 1688375153

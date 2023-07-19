@@ -491,7 +491,9 @@ class RegistrantForm extends ContentEntityForm {
     $reg_type = $this->creationService->getRegistrationType();
     $registration = $this->creationService->hasRegistration();
 
-    $this->notificationService->setEntity($this->entity);
+    if (isset($this->notificationService) && isset($this->entity)) {
+      $this->notificationService->setEntity($this->entity);
+    }
     if ($registration && $registration_open && ($availability > 0 || $availability == -1 || $waitlist)) {
       $add_to_waitlist = (int) $form_state->getValue('add_to_waitlist');
       $this->entity->setEventSeries($event_series);

@@ -6,7 +6,7 @@ namespace Drupal\Tests\migrate_tools\Kernel {
 
   use Drupal\migrate\Plugin\MigrationInterface;
   use Drupal\migrate\Plugin\MigrationPluginManagerInterface;
-  use Drupal\migrate_tools\Commands\MigrateToolsCommands;
+  use Drupal\migrate_tools\Drush\MigrateToolsCommands;
   use Drupal\migrate_tools\MigrateTools;
   use Drupal\Tests\migrate\Kernel\MigrateTestBase;
   use Drush\Log\DrushLoggerManager;
@@ -108,7 +108,7 @@ namespace Drupal\Tests\migrate_tools\Kernel {
     }
 
     /**
-     * Tests that a failing status throws an exception (i.e. form_exit code).
+     * Tests that a failing status throws an exception (i.e. exit code).
      */
     public function testFailingStatusThrowsException(): void {
       $this->expectException(\Exception::class);
@@ -137,7 +137,7 @@ namespace Drupal\Tests\migrate_tools\Kernel {
     }
 
     /**
-     * Tests that a failing import throws an exception (i.e. form_exit code).
+     * Tests that a failing import throws an exception (i.e. exit code).
      */
     public function testFailingImportThrowsException(): void {
       $this->expectException(\Exception::class);
@@ -168,7 +168,7 @@ namespace Drupal\Tests\migrate_tools\Kernel {
     }
 
     /**
-     * Tests that a failing messages throws an exception (i.e. form_exit code).
+     * Tests that a failing messages throws an exception (i.e. exit code).
      */
     public function testFailingMessagesThrowsException(): void {
       $this->expectException(\Exception::class);
@@ -194,7 +194,7 @@ namespace Drupal\Tests\migrate_tools\Kernel {
     }
 
     /**
-     * Tests that a failing rollback throws an exception (i.e. form_exit code).
+     * Tests that a failing rollback throws an exception (i.e. exit code).
      */
     public function testFailingRollbackThrowsException(): void {
       $this->expectException(\Exception::class);
@@ -226,7 +226,7 @@ namespace Drupal\Tests\migrate_tools\Kernel {
     }
 
     /**
-     * Tests that a failing reset status throws an exception (i.e. form_exit code).
+     * Tests that a failing reset status throws an exception (i.e. exit code).
      */
     public function testFailingResetStatusThrowsException(): void {
       $this->expectException(\Exception::class);
@@ -248,7 +248,7 @@ namespace Drupal\Tests\migrate_tools\Kernel {
     }
 
     /**
-     * Tests that a failing stop throws an exception (i.e. form_exit code).
+     * Tests that a failing stop throws an exception (i.e. exit code).
      */
     public function testFailingStopThrowsException(): void {
       $this->expectException(\Exception::class);
@@ -269,7 +269,7 @@ namespace Drupal\Tests\migrate_tools\Kernel {
     }
 
     /**
-     * Tests that a failing fields source throws an exception (i.e. form_exit code).
+     * Tests that a failing fields source throws an exception (i.e. exit code).
      */
     public function testFailingFieldsSourceThrowsException(): void {
       $this->expectException(\Exception::class);

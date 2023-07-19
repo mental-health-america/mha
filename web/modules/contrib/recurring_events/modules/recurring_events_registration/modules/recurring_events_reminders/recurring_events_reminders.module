@@ -161,10 +161,19 @@ function recurring_events_reminders_cron() {
 
       $key = 'registration_reminder';
 
+      $config = \Drupal::config('recurring_events_registration.registrant.config');
+      $queue_is_enabled = $config->get('email_notifications_queue');
+
       // Send an email to all registrants.
       foreach ($registrants as $registrant) {
-        // Add each notification to be sent to the queue.
-        \Drupal::service('recurring_events_registration.notification_service')->addEmailNotificationToQueue($key, $registrant);
+        if ($queue_is_enabled) {
+          // Add each notification to be sent to the queue.
+          \Drupal::service('recurring_events_registration.notification_service')->addEmailNotificationToQueue($key, $registrant);
+        }
+        else {
+          // If the queue is not enabled, send this notification immediately.
+          recurring_events_registration_send_notification($key, $registrant);
+        }
       }
     }
   }

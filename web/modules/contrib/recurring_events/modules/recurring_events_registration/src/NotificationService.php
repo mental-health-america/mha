@@ -494,9 +494,35 @@ class NotificationService {
         'body' => $message,
         'from' => $from,
       ];
-      // Allow modules to add data to the `$params`. They can get the data from
-      // `$registrant`. Those `$params` are used later as the
-      // `$message['params']` in mail hooks.
+      // Allow modules to add data to the `$params`. Developers can get data 
+      // from `$registrant`. Those `$params` can be used later as the
+      // `$params` in `hook_mail()` and `$message['params']` in
+      // `hook_mail_alter()`.
+      // In queued messages, we are not passing the `$registrant` entity as a
+      // param (unlike it is being done in non-queued messages
+      // `recurring_events_registration_send_notification`), because the entity
+      // could no longer exist when the queue worker takes action and sends the
+      // email. For example, as mentioned above in another comment, there are
+      // some notification types that require the `$registrant` to be deleted
+      // as part of the same operation that generates the notification, for
+      // example: the notifications corresponding to the keys
+      // 'series_modification_notification' and
+      // 'instance_deletion_notification'.
+      // Therefore, those entities won't be available in the queue worker.
+      // It would be unsafe to try to access a registrant for a queued message
+      // via `$params['registrant']` in `hook_mail()` or
+      // `$message['params']['registrant']` in `hook_mail_alter()`.
+      // We encourage developers to make use of the
+      // `hook_recurring_events_registration_message_params_alter()` to define
+      // any value in the params that could be necessary to perform any logic
+      // in the mail hooks (ideally scalar values, custom arrays or custom
+      // objects. No loaded entities and no configuration objects, since those
+      // could have changed or been deleted by the moment the queue worker is
+      // called), those values will be added to the queued item and will be
+      // available in the queue worker when it processes the item and in the
+      // mail hooks later.
+      // @see recurring_events_registration_recurring_events_save_pre_instances_deletion()
+      // @see recurring_events_registration_recurring_events_pre_delete_instance
       $this->moduleHandler->alter('recurring_events_registration_message_params', $params, $registrant);
       $item->params = $params;
 

@@ -52,9 +52,9 @@ final class DrushCommandsTest extends BrowserTestBase {
    */
   public function testLimit(): void {
     $this->drush('mim', ['fruit_terms'], ['limit' => 2]);
-    $this->assertStringContainsString('1/2', $this->getErrorOutput());
-    $this->assertStringContainsString('[notice] Processed 2 items (2 created, 0 updated, 0 failed, 0 ignored) - done with \'fruit_terms\'', $this->getErrorOutput());
-    $this->assertStringNotContainsString('3/3', $this->getErrorOutput());
+    $this->assertStringContainsString('[notice] Processed 2 items (2 created, 0 updated, 0 failed, 0 ignored)', $this->getErrorOutput());
+    $this->assertStringContainsString('done with \'fruit_terms\'', $this->getErrorOutput());
+    $this->assertStringNotContainsString('Processed 3 items', $this->getErrorOutput());
   }
 
   /**
@@ -103,6 +103,7 @@ final class DrushCommandsTest extends BrowserTestBase {
         'status' => 'Idle',
         'total' => 3,
         'unprocessed' => 3,
+        'message_count' => 0,
         'last_imported' => '',
       ],
       [
@@ -112,6 +113,7 @@ final class DrushCommandsTest extends BrowserTestBase {
         'status' => 'Idle',
         'total' => 0,
         'unprocessed' => 0,
+        'message_count' => 0,
         'last_imported' => '',
       ],
     ];
