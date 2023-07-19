@@ -42,10 +42,19 @@ function siteimprove_update_8101() {
  */
 function siteimprove_update_8102() {
   $settings = \Drupal::configFactory()->getEditable('siteimprove.settings');
-  $settings->set('prepublish_enabled', false);
+  $settings->set('prepublish_enabled', FALSE);
   $settings->set('api_username', '');
   $settings->set('api_key', '');
   $settings->set('enabled_content_types', []);
   $settings->set('enabled_taxonomies', []);
+  $settings->save();
+}
+
+/**
+ * Update latest experience settings.
+ */
+function siteimprove_update_8103() {
+  $settings = \Drupal::configFactory()->getEditable('siteimprove.settings');
+  $settings->set('use_latest_experience', TRUE);
   $settings->save();
 }

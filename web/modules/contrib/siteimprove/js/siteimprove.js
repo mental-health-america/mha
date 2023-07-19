@@ -21,6 +21,11 @@
       this.method = 'domain';
       this.common();
     },
+    clear: function () {
+      this.method = 'clear';
+      var _si = window._si || [];
+      _si.push([this.method, function() { }, drupalSettings.siteimprove.token]);
+    },
     recheck: function () {
       this.url = drupalSettings.siteimprove.recheck.url;
       this.method = 'recheck';
@@ -36,11 +41,12 @@
       if (!Array.isArray(this.urls)) {
         this.urls = [this.urls];
       }
-      this.method = 'contentcheck';
+      this.method = 'contentcheck-flat-dom';
       var _si = window._si || [];
       var self = this;
       this.urls.forEach(function (url) {
-        _si.push([self.method, self.cleanHtml(document.getElementsByTagName('body')[0], document.title ? document.title : ""), url, drupalSettings.siteimprove.token]);
+        let document_ = document.cloneNode(true);
+        _si.push([self.method, self.cleanHtml(document_), url, drupalSettings.siteimprove.token, function () { console.log('Pre-publish check ordered (flat dom version)'); }]);
       });
     },
     onhighlight: function () {
@@ -77,25 +83,14 @@
       });
     },
     // Clean html for contextual links, toolbar, etc.
-    cleanHtml: function (origHtml, origTitle) {
-      let html = document.createElement('html');
-      let head = document.createElement('head');
-      let title = document.createElement('title');
-      let body = document.createElement('body');
+    cleanHtml: function (origHtml) {
+      origHtml.querySelector('#toolbar-administration').innerHTML = '';
+      origHtml.querySelectorAll('iframe').forEach(function (item) { item.innerHTML = ''; item.src = ''; });
+      origHtml.querySelectorAll('.contextual').forEach(function (item) { item.innerHTML = ''; });
+      origHtml.querySelectorAll('.contextual-links').forEach(function (item) { item.innerHTML = ''; });
+      origHtml.querySelectorAll('.node-preview-container').forEach(function (item) { item.innerHTML = ''; });
 
-      body.innerHTML = origHtml.innerHTML;
-      body.querySelector('#toolbar-administration').innerHTML = '';
-      body.querySelectorAll('iframe').forEach(function (item) { item.innerHTML = ''; item.src = ''; });
-      body.querySelectorAll('.contextual').forEach(function (item) { item.innerHTML = ''; });
-      body.querySelectorAll('.contextual-links').forEach(function (item) { item.innerHTML = ''; });
-      body.querySelectorAll('.node-preview-container').forEach(function (item) { item.innerHTML = ''; });
-
-      title.innerText = origTitle;
-      head.appendChild(title);
-      html.appendChild(head);
-      html.appendChild(body);
-
-      return html.innerHTML;
+      return origHtml;
     },
     events: {
       recheck: function () {
@@ -157,10 +152,17 @@
           }
         }
 
-        // If exist domain, call input Siteimprove method.
+        // If exist domain, call domain Siteimprove method.
         if (typeof settings.siteimprove.domain !== 'undefined') {
           if (settings.siteimprove.domain.auto) {
             siteimprove.domain();
+          }
+        }
+
+        // If exist clear, call clear Siteimprove method.
+        if (typeof settings.siteimprove.clear !== 'undefined') {
+          if (settings.siteimprove.clear.auto) {
+            siteimprove.clear();
           }
         }
 
@@ -180,7 +182,7 @@
       var sicmsplugin = cookies.get('sicmsplugin');
 
       if (!sicmsplugin) {
-        let siOverlaySettings = drupalSettings?.siteimprove?.overlay_default_collapse ?? null;
+        let siOverlaySettings = drupalSettings?.siteimprove?.overlay_default_collapse ?? NULL;
         if (siOverlaySettings) {
           cookies.set('sicmsplugin', OVERLAY_COLLAPSED, {
             domain: document.domain,

@@ -87,7 +87,10 @@ abstract class SiteimproveDomainBase extends PluginBase implements ContainerFact
   public function submitForm(array &$form, FormStateInterface $form_state) {}
 
   /**
-   * Return urls for active domains for this entity.
+   * Return urls for active domains.
+   * 
+   * If an entity is included as argument will that entity be used when finding
+   * the active domain / URL.
    *
    * If http/https isn't specified in domain name, use the backend's scheme.
    *
@@ -97,7 +100,7 @@ abstract class SiteimproveDomainBase extends PluginBase implements ContainerFact
    * @return array
    *   Array of domain names without trailing slash.
    */
-  public function getUrls(EntityInterface $entity) {
+  public function getUrls(?EntityInterface $entity = NULL) {
     return [];
   }
 

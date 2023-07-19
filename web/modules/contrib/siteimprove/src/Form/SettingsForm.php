@@ -9,6 +9,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Messenger\Messenger;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Extension\ModuleHandler;
 use Drupal\Component\Serialization\Json;
 use Drupal\siteimprove\Plugin\SiteimproveDomainManager;
 use Drupal\siteimprove\SiteimproveUtils;
@@ -58,9 +59,23 @@ class SettingsForm extends ConfigFormBase {
   protected $vocabularyStorage;
 
   /**
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandler
+   */
+  protected $moduleHandler;
+
+  /**
+   * The group type storage.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected $groupTypeStorage;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(ConfigFactoryInterface $config_factory, SiteimproveUtils $siteimprove, SiteimproveDomainManager $pluginManagerSiteimproveDomain, Messenger $messenger, Client $httpClient, EntityStorageInterface $vocabulary_storage) {
+  public function __construct(ConfigFactoryInterface $config_factory, SiteimproveUtils $siteimprove, SiteimproveDomainManager $pluginManagerSiteimproveDomain, Messenger $messenger, Client $httpClient, EntityStorageInterface $vocabulary_storage, ModuleHandler $moduleHandler, ?EntityStorageInterface $groupTypeStorage) {
     parent::__construct($config_factory);
 
     $this->siteimprove = $siteimprove;
@@ -68,6 +83,8 @@ class SettingsForm extends ConfigFormBase {
     $this->messenger = $messenger;
     $this->httpClient = $httpClient;
     $this->vocabularyStorage = $vocabulary_storage;
+    $this->moduleHandler = $moduleHandler;
+    $this->groupTypeStorage = $groupTypeStorage;
   }
 
   /**
@@ -81,7 +98,9 @@ class SettingsForm extends ConfigFormBase {
       $container->get('plugin.manager.siteimprove_domain'),
       $container->get('messenger'),
       $container->get('http_client'),
-      $container->get('entity_type.manager')->getStorage('taxonomy_vocabulary')
+      $container->get('module_handler')->moduleExists('taxonomy') ? $container->get('entity_type.manager')->getStorage('taxonomy_vocabulary') : NULL,
+      $container->get('module_handler'),
+      $container->get('module_handler')->moduleExists('group') ? $container->get('entity_type.manager')->getStorage('group_type') : NULL
     );
   }
 
@@ -105,7 +124,7 @@ class SettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $config = $this->config('siteimprove.settings');
+    $config = $this->configFactory->get('siteimprove.settings');
 
     $form['container'] = [
       '#title' => $this->t('Token'),
@@ -132,6 +151,18 @@ class SettingsForm extends ConfigFormBase {
       '#limit_validation_errors' => [],
       '#type' => 'button',
       '#value' => $this->t('Request new token'),
+    ];
+
+    $form['plugin_experience'] = [
+      '#title' => $this->t('Plugin experience'),
+      '#type' => 'fieldset',
+    ];
+
+    $form['plugin_experience']['use_latest_experience'] = [
+      '#default_value' => $config->get('use_latest_experience'),
+      '#description' => $this->t('A new version of the plugin is now available. Please note it is a work in progress and may update over time.'),
+      '#title' => $this->t('Use latest experience'),
+      '#type' => 'checkbox',
     ];
 
     $plugins = $this->pluginManagerSiteimproveDomain->getDefinitions();
@@ -322,6 +353,32 @@ class SettingsForm extends ConfigFormBase {
       '#title' => $this->t('Select prepublish check enabled taxonomies'),
       '#description' => $this->t('Select which taxonomies Siteimprove Prepublish check is enabled for'),
     ];
+
+    if ($this->moduleHandler->moduleExists('group')) {
+      $form['prepublish']['group_types'] = [
+        '#type' => 'fieldset',
+        '#title' => 'Enabled group types',
+        '#states' => [
+          'visible' => [
+            ':input[name="prepublish_enabled"]' => [
+              'checked' => TRUE,
+            ],
+          ],
+        ],
+      ];
+      $group_options = [];
+      foreach ($this->groupTypeStorage->loadMultiple() as $groupType) {
+        $group_options[$groupType->id()] = $groupType->label();
+      }
+      $form['prepublish']['group_types']['enabled_group_types'] = [
+        '#type' => 'checkboxes',
+        '#options' => $group_options,
+        '#default_value' => $config->get('enabled_group_types'),
+        '#title' => $this->t('Select prepublish check enabled group types'),
+        '#description' => $this->t('Select which group types Siteimprove Prepublish check is enabled for'),
+      ];
+    }
+
     $form['overlay'] = [
       '#title' => $this->t('Siteimprove Overlay'),
       '#type' => 'fieldset',
@@ -353,7 +410,7 @@ class SettingsForm extends ConfigFormBase {
    */
   protected function setRepublish($username, $key) {
     $url = 'https://api.siteimprove.com/v2/settings/content_checking';
-    $res = $this->httpClient->request('POST', $url, [
+    $this->httpClient->request('POST', $url, [
       'auth' => [$username, $key],
       'headers' => [
         'Accept' => 'application/json',
@@ -409,6 +466,7 @@ class SettingsForm extends ConfigFormBase {
     $domain_plugin = $form_state->getValue('domain_plugin');
     $this->config('siteimprove.settings')
       ->set('token', $form_state->getValue('token'))
+      ->set('use_latest_experience', $form_state->getValue('use_latest_experience'))
       ->set('domain_plugin_id', $domain_plugin)
       ->set('prepublish_enabled', $form_state->getValue('prepublish_enabled'))
       ->set('overlay_default_collapse', $form_state->getValue('overlay_default_collapse'))
@@ -416,6 +474,7 @@ class SettingsForm extends ConfigFormBase {
       ->set('api_key', $form_state->getValue('api_key'))
       ->set('enabled_content_types', $form_state->getValue('enabled_content_types'))
       ->set('enabled_taxonomies', $form_state->getValue('enabled_taxonomies'))
+      ->set('enabled_group_types', $form_state->getValue('enabled_group_types'))
       ->save();
 
     $plugin = $this->pluginManagerSiteimproveDomain->createInstance($domain_plugin);

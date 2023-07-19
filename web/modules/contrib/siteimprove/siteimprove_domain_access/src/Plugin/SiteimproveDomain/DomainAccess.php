@@ -33,11 +33,46 @@ class DomainAccess extends SiteimproveDomainBase implements SiteimproveDomainInt
   }
 
   /**
+   * Get the base url from a full url string.
+   *
+   * @param string $url
+   *   A string containing a full url.
+   *
+   * @return string
+   */
+  private function getBaseUrl(string $url) {
+    $url_parts = parse_url($url);
+    $base_url = $url_parts['scheme'] . '://' . $url_parts['host'];
+
+    if (isset($url_parts['port']) && $url_parts['port'] != 80 && $url_parts['port'] != 443) {
+      $base_url .= ':' . $url_parts['port'];
+    }
+
+    return $base_url;
+  }
+
+  /**
    * {@inheritdoc}
    */
-  public function getUrls(EntityInterface $entity) {
-    $domain = \Drupal::service('domain_access.manager');
-    return $domain->getContentUrls($entity);
+  public function getUrls(?EntityInterface $entity = NULL) {
+    $base_urls = [];
+
+    if ($entity) {
+      $domain_access = \Drupal::service('domain_access.manager');
+      $urls = $domain_access->getContentUrls($entity);
+
+      foreach ($urls as $url) {
+        $base_urls[] = $this->getBaseUrl($url);
+      }
+    }
+
+    if (empty($base_urls)) {
+      $domain_negotiator = \Drupal::service('domain.negotiator');
+      $active_hostname = $domain_negotiator->negotiateActiveHostname();
+      $base_urls = is_array($active_hostname) ? $active_hostname : [$active_hostname];
+    }
+
+    return $base_urls;
   }
 
 }
