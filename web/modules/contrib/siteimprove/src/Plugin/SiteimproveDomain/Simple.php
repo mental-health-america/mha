@@ -71,7 +71,7 @@ class Simple extends SiteimproveDomainBase {
    * @return array
    *   Array of domains.
    */
-  public function getUrls(EntityInterface $entity) {
+  public function getUrls(?EntityInterface $entity = NULL) {
     $domain = $this->request->getScheme() . '://' . $this->request->getHttpHost();
     return [$domain];
   }

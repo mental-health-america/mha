@@ -10,7 +10,13 @@ siteimprove.overlay:
   license:
     name: GPL-2.0+
   js:
-    https://cdn.siteimprove.net/cms/overlay.js:
+    https://cdn.siteimprove.net/cms/overlay-v1.js:
+      type: external
+siteimprove.overlay_latest:
+  license:
+    name: GPL-2.0+
+  js:
+    https://cdn.siteimprove.net/cms/overlay-latest.js:
       type: external
 siteimprove.prepublish:
   version: VERSION

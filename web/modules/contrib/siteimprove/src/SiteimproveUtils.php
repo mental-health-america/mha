@@ -147,11 +147,19 @@ class SiteimproveUtils {
   /**
    * Return Siteimprove js library.
    *
+   * @param bool $use_latest_experience
+   *   Use latest version of overlay when set to true.
+   *
    * @return string
    *   Siteimprove js library.
    */
-  public function getSiteimproveOverlayLibrary() {
-    return 'siteimprove/siteimprove.overlay';
+  public function getSiteimproveOverlayLibrary($use_latest_experience) {
+    if ($use_latest_experience) {
+      return 'siteimprove/siteimprove.overlay_latest';
+    }
+    else {
+      return 'siteimprove/siteimprove.overlay';
+    }
   }
 
   /**
@@ -266,6 +274,34 @@ class SiteimproveUtils {
   }
 
   /**
+   * Return frontend urls for the current route.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface|null $entity
+   *   Entity to get frontend urls for.
+   *
+   * @return array
+   *   Returns an array of frontend urls.
+   */
+  public function getUrls(?EntityInterface $entity = NULL) {
+    $urls = [];
+
+    if (is_object($entity) && $entity->hasLinkTemplate('canonical')) {
+      $urls = $this->getEntityUrls($entity);
+    }
+    else {
+      $domains = $this->getEntityDomains();
+      $current_url = Url::fromRoute('<current>');
+
+      // Create urls for active frontend domains.
+      foreach ($domains as $domain) {
+        $urls[] = $domain . $current_url->toString();
+      }
+    }
+
+    return $urls;
+  }
+
+  /**
    * Get active domain names for entity.
    *
    * @param \Drupal\Core\Entity\EntityInterface $entity
@@ -274,7 +310,7 @@ class SiteimproveUtils {
    * @return array
    *   Array of domain names without trailing slash.
    */
-  public function getEntityDomains(EntityInterface $entity) {
+  public function getEntityDomains(?EntityInterface $entity = NULL) {
     // Get the active frontend domain plugin.
     $config = $this->configFactory->get('siteimprove.settings');
     /** @var \Drupal\siteimprove\Plugin\SiteimproveDomainBase $plugin */

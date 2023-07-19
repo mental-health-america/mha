@@ -8,6 +8,10 @@
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
 use Drupal\Component\Utility\NestedArray;
+use Drupal\node\Entity\Node;
+use Drupal\taxonomy\Entity\Term;
+use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\group\Entity\Group;
 
 /**
  * Implements hook_toolbar().
@@ -19,53 +23,89 @@ function siteimprove_toolbar() {
   if (!$user->hasPermission('use siteimprove')) {
     return [];
   }
+
+  $config = \Drupal::service('config.factory')->get('siteimprove.settings');
+  $moduleHandler = \Drupal::service('module_handler');
+
+  // Get entity from route parameter.
   $node = \Drupal::routeMatch()->getParameter('node');
-  $taxonomy = \Drupal::routeMatch()->getParameter('taxonomy_term');
-  $bundle = '';
+  $taxonomy = $moduleHandler->moduleExists('taxonomy') ? \Drupal::routeMatch()->getParameter('taxonomy_term') : NULL;
 
-  //In event node parameter is not a node object.
-  if (is_string($node)) {
-    $node = \Drupal::entityTypeManager()->getStorage('node')->load($node);
-  }
+  $entity = NULL;
+  $bundle = NULL;
+  $bundle_config_key = NULL;
+  $urls = NULL;
 
-  // In event taxonomy parameter is not an Term object.
-  if (is_string($taxonomy)) {
-    $taxonomy = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($taxonomy);
-  }
+  if (!empty($node)) {
+    // In the event that node parameter is not a node object.
+    if (is_string($node)) {
+      $node = \Drupal::entityTypeManager()->getStorage('node')->load($node);
+    }
 
-  $urls = \Drupal::service('siteimprove.utils')->getEntityUrls($node ? $node : $taxonomy);
-  $toolbar_items = [];
-  $toolbar = [];
-
-  // Get bundle from either node or taxonomy.
-  if (is_object($node) && $node instanceof \Drupal\node\Entity\Node) {
+    // Get bundle from either node.
+    if (is_object($node) && $node instanceof Node) {
       $bundle = $node->bundle();
+      $entity = $node;
+      $bundle_config_key = 'enabled_content_types';
+    }
   }
-  elseif (is_object($taxonomy) && $taxonomy instanceof \Drupal\taxonomy\Entity\Term) {
-    $bundle = $taxonomy->bundle();
+  elseif (!empty($taxonomy)) {
+    // In the event that taxonomy parameter is not a term object.
+    if (is_string($taxonomy)) {
+      $taxonomy = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($taxonomy);
+    }
+
+    // Get bundle from either taxonomy.
+    if (is_object($taxonomy) && $taxonomy instanceof Term) {
+      $bundle = $taxonomy->bundle();
+      $entity = $taxonomy;
+      $bundle_config_key = 'enabled_taxonomies';
+    }
+  }
+  elseif ($moduleHandler->moduleExists('group') && $group = \Drupal::routeMatch()->getParameter('group')) {
+    // In the event that group parameter is not a group object.
+    if (is_string($group)) {
+      $group = \Drupal::entityTypeManager()->getStorage('group')->load($group);
+    }
+
+    // Get bundle from group object.
+    if (is_object($group) && $group instanceof Group) {
+      $bundle = $group->bundle();
+      $entity = $group;
+      $bundle_config_key = 'enabled_group_types';
+    }
   }
 
-  /**
-   * Prepublish toolbar item.
-   */
+  // Check if prepublish is enabled on the bundle in request + get URLs.
+  $bundle_with_prepublish = FALSE;
+  if ($entity && $bundle && $bundle_config_key) {
+    $enabled_bundles = $config->get($bundle_config_key);
+    $bundle_with_prepublish = !empty($enabled_bundles[$bundle]);
+    $urls = \Drupal::service('siteimprove.utils')->getEntityUrls($entity);
+  }
+
+  // Prepublish toolbar item.
   $prepublish_access = $user->hasPermission('use siteimprove prepublish');
   $prepublish_available = FALSE;
-  $config = \Drupal::service('config.factory')->get('siteimprove.settings');
   $prepublish_enabled = $config->get('prepublish_enabled');
-  $enabled_content_types = $config->get('enabled_content_types');
-  $enabled_taxonomies = $config->get('enabled_taxonomies');
   $enabled_route_names = [
     'entity.node.canonical',
     'entity.node.latest_version',
     'entity.taxonomy_term.canonical',
     'entity.taxonomy_term.latest_version',
+    'entity.group.canonical',
+    'entity.group.latest_version',
+    'entity.group.edit_form',
+    'entity.group_relationship.canonical',
   ];
   $current_route_name = \Drupal::routeMatch()->getRouteName();
   // Set overlay collapse value for js.
+  $toolbar_items = [];
   $toolbar_items['siteimprove_toolbar']['tray']['#attached']['drupalSettings']['siteimprove']['overlay_default_collapse'] = $config->get('overlay_default_collapse');
 
-  // Prepublish should be available for an enabled taxonomy or content type.
-  if ($prepublish_enabled && in_array($current_route_name, $enabled_route_names) && (($node && $enabled_content_types[$bundle]) || ($taxonomy && $enabled_taxonomies[$bundle]))) {
+  // Prepublish should be available for an enabled taxonomy, content type or
+  // group type.
+  if ($prepublish_enabled && in_array($current_route_name, $enabled_route_names) && $bundle_with_prepublish) {
     $prepublish_available = TRUE;
   }
 
@@ -84,17 +124,19 @@ function siteimprove_toolbar() {
     ];
   }
 
-  /**
-   * Recheck toolbar item.
-   */
+  // Recheck toolbar item.
   $recheck_access = $user->hasPermission('use siteimprove');
   $enabled_route_names = [
     'entity.node.canonical',
     'entity.node.edit_form',
     'entity.taxonomy_term.canonical',
-    'entity.taxonomy_term.edit_form'
+    'entity.taxonomy_term.edit_form',
+    'entity.group.canonical',
+    'entity.group.edit_form',
+    'entity.group_relationship.canonical',
   ];
   $current_route_name = \Drupal::routeMatch()->getRouteName();
+
   if ($recheck_access && in_array($current_route_name, $enabled_route_names)) {
     $toolbar_items['siteimprove_toolbar']['tray']['actions']['#items']['recheck'] = [
       '#type' => 'link',
@@ -110,9 +152,7 @@ function siteimprove_toolbar() {
     $toolbar_items['siteimprove_toolbar']['tray']['#attached']['drupalSettings']['siteimprove']['recheck'] = \Drupal::service('siteimprove.utils')->getSiteimproveSettings($urls, 'recheck', FALSE);
   }
 
-  /**
-   * Settings page toolbar item.
-   */
+  // Settings page toolbar item.
   if ($user->hasPermission('administer siteimprove')) {
     $toolbar_items['siteimprove_toolbar']['tray']['actions']['#items']['settings'] = [
       '#type' => 'link',
@@ -125,13 +165,14 @@ function siteimprove_toolbar() {
   }
 
   // Add Siteimprove toolbar items.
+  $toolbar = [];
   if (!empty($toolbar_items)) {
     $toolbar_basic = _siteimprove_toolbar_basic();
     $toolbar = NestedArray::mergeDeep($toolbar_basic, $toolbar_items);
   }
 
   // Current entity or null.
-  $current_entity = $node ? $node : ($taxonomy ? $taxonomy : null);
+  $current_entity = $node ? $node : ($taxonomy ? $taxonomy : NULL);
 
   // Add current viewed entity as cacheable dependency.
   $renderer = \Drupal::service('renderer');
@@ -145,6 +186,7 @@ function siteimprove_toolbar() {
  * Basic toolbar array.
  *
  * @return array[]
+ *   An array representing the basic toolbar.
  */
 function _siteimprove_toolbar_basic() {
   return [
@@ -164,7 +206,7 @@ function _siteimprove_toolbar_basic() {
         '#url' => Url::fromUserInput('#'),
         '#attributes' => [
           'class' => ['siteimprove-link'],
-        ]
+        ],
       ],
       '#wrapper_attributes' => [
         'class' => ['siteimprove-toolbar'],
@@ -178,10 +220,8 @@ function _siteimprove_toolbar_basic() {
             'class' => ['toolbar-menu'],
           ],
         ],
-        'urls' => [
-        ],
-        'empty' => [
-        ]
+        'urls' => [],
+        'empty' => [],
       ],
     ],
   ];
@@ -229,24 +269,31 @@ function _siteimprove_entity_save(EntityInterface $entity) {
 function siteimprove_page_attachments(array &$attachments) {
   // Check if user has access.
   if (\Drupal::currentUser()->hasPermission('use siteimprove')) {
+    // Get siteimprove settings.
+    $config = \Drupal::service('config.factory')->get('siteimprove.settings');
+
+    // Get configuration settings for use_latest_experience.
+    $use_latest_experience = $config->get('use_latest_experience');
 
     // Add Siteimprove js.
     $siteimprove = \Drupal::service('siteimprove.utils');
     $attachments['#attached']['drupalSettings']['siteimprove']['token'] = $siteimprove->getSiteimproveToken();
-    $attachments['#attached']['library'][] = $siteimprove->getSiteimproveOverlayLibrary();
+    $attachments['#attached']['library'][] = $siteimprove->getSiteimproveOverlayLibrary($use_latest_experience);
     $attachments['#attached']['library'][] = $siteimprove->getSiteimproveLibrary();
 
-    // Get the active frontend domain plugin.
-    $config = \Drupal::service('config.factory')->get('siteimprove.settings');
-
-    // If node pages or taxonomy term pages, add input method, else domain method.
+    // If node pages or taxonomy term pages, add input method, else domain
+    // or clear method depending on the overlay version.
     $enabled_route_names = [
       'entity.node.canonical',
       'entity.node.latest_version',
       'entity.node.edit_form',
       'entity.taxonomy_term.canonical',
       'entity.taxonomy_term.latest_version',
-      'entity.taxonomy_term.edit_form'
+      'entity.taxonomy_term.edit_form',
+      'entity.group.canonical',
+      'entity.group.latest_version',
+      'entity.group.edit_form',
+      'entity.group_relationship.canonical',
     ];
     $route_match = \Drupal::routeMatch();
     $current_route_name = $route_match->getRouteName();
@@ -254,18 +301,18 @@ function siteimprove_page_attachments(array &$attachments) {
       $method = 'input';
     }
     else {
-      $method = 'domain';
+      $method = $use_latest_experience ? 'clear' : 'domain';
     }
 
     $type = '';
     $bundle = '';
     $parameters = $route_match->getParameters();
     foreach ($parameters as $parameter) {
-      if (is_object($parameter) && $parameter instanceof \Drupal\node\Entity\Node) {
+      if (is_object($parameter) && $parameter instanceof Node) {
         $type = 'enabled_content_types';
         $bundle = $parameter->bundle();
       }
-      elseif (is_object($parameter) && $parameter instanceof \Drupal\taxonomy\Entity\Term) {
+      elseif (is_object($parameter) && $parameter instanceof Term) {
         $type = 'enabled_taxonomies';
         $bundle = $parameter->bundle();
       }
@@ -278,16 +325,22 @@ function siteimprove_page_attachments(array &$attachments) {
     if (!empty($method)) {
       $parameters = \Drupal::routeMatch()->getParameters();
       foreach ($parameters as $param) {
-        if (is_object($param) && $param instanceof \Drupal\Core\Entity\ContentEntityInterface) {
+        if (is_object($param) && $param instanceof ContentEntityInterface) {
           if ($param->in_preview !== TRUE) {
             /** @var \Drupal\Core\Entity\ContentEntityType $type */
             $entity_type = $param->getEntityType()->id();
             $id = $param->id();
             $entity = \drupal::entityTypeManager()->getStorage($entity_type)->load($id);
-            $urls = \drupal::service('siteimprove.utils')->getEntityUrls($entity);
+            $urls = \drupal::service('siteimprove.utils')->getUrls($entity);
             $attachments['#attached']['drupalSettings']['siteimprove'][$method] = $siteimprove->getSiteimproveSettings($urls, $method);
           }
         }
+      }
+
+      // Fallback to non-entity route
+      if (empty($attachments['#attached']['drupalSettings']['siteimprove'][$method])) {
+        $urls = \drupal::service('siteimprove.utils')->getUrls();
+        $attachments['#attached']['drupalSettings']['siteimprove'][$method] = $siteimprove->getSiteimproveSettings($urls, $method);
       }
     }
 

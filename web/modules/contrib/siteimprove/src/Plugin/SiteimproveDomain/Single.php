@@ -88,7 +88,7 @@ class Single extends SiteimproveDomainBase {
   /**
    * {@inheritdoc}
    */
-  public function getUrls(EntityInterface $entity) {
+  public function getUrls(?EntityInterface $entity = NULL) {
     $config = $this->config('siteimprove.domain.single.settings');
     $domain = $config->get('domain');
     $scheme = preg_match('/^https?:\/\//', $domain) ? '' : $this->request->getScheme() . '://';
