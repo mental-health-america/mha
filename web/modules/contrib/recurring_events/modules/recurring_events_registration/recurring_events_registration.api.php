@@ -31,10 +31,10 @@ function hook_recurring_events_registration_first_waitlist_alter(Registrant $reg
 }
 
 /**
- * Alter whether a notification will be sent based on properties of the Registrant
+ * Alter whether a notification will be sent based on properties of the Registrant.
  *
  * @param bool $send_email
- *   Whether the notification email is sent
+ *   Whether the notification email is sent.
  * @param Drupal\recurring_events_registration\Entity\RegistrantInterface $registrant
  */
 function hook_recurring_events_registration_send_notification_alter(bool &$send_email, RegistrantInterface $registrant) {
@@ -62,4 +62,33 @@ function hook_recurring_events_registration_notification_types_alter(array &$not
     'name' => t('Event Rename Notification'),
     'description' => t('Send an email to registrants when the event name changes?'),
   ];
+}
+
+/**
+ * Alter the `$params` passed to email functions when sending notifications.
+ *
+ * Developers can get the data from `$registrant` entity. The `$params` array
+ * is used later as `$params` in `hook_mail()` and `$message['params']` in
+ * `hook_mail_alter()`.
+ *
+ * We encourage developers to make use of this hook to define any value in the
+ * params that could be necessary to perform any logic in the mail hooks
+ * (ideally scalar values, custom arrays or custom objects. No loaded entities
+ * and no configuration objects (since for queued messages, those could have
+ * changed or been deleted by the moment the queue worker is called).
+ *
+ * @param array $params
+ *   The params array.
+ * @param \Drupal\recurring_events_registration\Entity\RegistrantInterface $registrant
+ *   The Registrant entity. Based on it, developers can perform the logic to
+ *   alter the params array.
+ */
+function hook_recurring_events_registration_message_params_alter(array &$params, RegistrantInterface $registrant) {
+  // Add a new parameter to the params based on some logic over a registrant
+  // field.
+  if ($registrant->hasField('some_field') && !$registrant->get('some_field')->isEmpty()) {
+    $some_field_value = $registrant->get('some_field')->first()->getString();
+    $value = do_something($some_field_value);
+    $params['custom_param'] = $value;
+  }
 }

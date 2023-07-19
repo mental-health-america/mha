@@ -123,7 +123,8 @@ class RegistrantSettingsForm extends ConfigFormBase {
       ->set('successfully_updated_waitlist', $form_state->getValue('successfully_updated_waitlist'))
       ->set('already_registered', $form_state->getValue('already_registered'))
       ->set('registration_closed', $form_state->getValue('registration_closed'))
-      ->set('email_notifications', $form_state->getValue('email_notifications'));
+      ->set('email_notifications', $form_state->getValue('email_notifications'))
+      ->set('email_notifications_queue', $form_state->getValue('email_notifications_queue'));
 
     if ($config->getOriginal('use_admin_theme') != $config->get('use_admin_theme')) {
       $this->routeBuilder->setRebuildNeeded();
@@ -311,6 +312,44 @@ class RegistrantSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Send Email Notifications?'),
       '#description' => $this->t('Send email notifications during registration or event updates?'),
       '#default_value' => $config->get('email_notifications'),
+    ];
+
+    $form['notifications']['email_notifications_queue'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Send Email Notifications using a queue?'),
+      '#description' => $this->t('Email notifications can be added to a queue to be processed on each cron run. This could be beneficial if you have a large number of registrants to your series and/or instances, to prevent the system from crashing when sending notifications to all of those recipients at once. Depending on your PHP configuration, your system may hit time and memory limits when sending notifications to a massive list of registered people. In particular, the notification types below are designed to send an email to all registrants of a specific series or instance, so those might be the problematic ones:<br>
+        <ul>
+          <li>Instance Deletion Notification</li>
+          <li>Series Deletion Notification</li>
+          <li>Instance Modification Notification</li>
+          <li>Series Modification Notification</li>
+          <li>Registration Reminder</li>
+        </ul>
+        <br>If you check this option, emails corresponding to those notification types will be queued and a queue worker will process as many items as it can in 30 seconds on each cron run.<br><br>
+        How long it takes for the queued notification list to be fully processed depends on three factors:
+        <ol>
+          <li>The number of notifications in the queue</li>
+          <li>How often Drupal cron runs</li>
+          <li>The number of seconds used by the queue worker on each cron run to process the items (it was set to 30)</li>
+        </ol>
+        <br>Notification types that are sent to only one recipient continue to be sent immediately as soon as the trigger action occurs, regardless of this setting, namely:<br>
+        <ul>
+          <li>Registration Notification</li>
+          <li>Waitlist Notification</li>
+          <li>Promotion Notification</li>
+        </ul>
+        <br><b>Important note for developers:</b><br>
+          When the notification types that are not queued (this is always the case for the above-mentioned notification types, which are sent to a single recipient. It will also be the case for all notification types if you uncheck this option) the registrant entity will be passed in the params to <b><em>hook_mail()</em></b> and <b><em>hook_mail_alter()</em></b>. It will be accessible through <b><em>$params[\'registrant\']</em></b> in the first case and <b><em>$message[\'params\'][\'registrant\']</em></b> in the second.<br>
+          However, when notifications are queued it is not possible to pass the registrant entity to mail hooks, since it is likely that the entity no longer exists by the moment the queue worker takes action and sends the email.<br>
+          <b>That is why we highly discourage the use of the registrant entity in mail hooks</b>. To maintain consistency between the two models (queued and non-queued messages), we encourage developers to make use of the <b><em>hook_recurring_events_registration_message_params_alter()</em></b> to define any value in the params that might be needed to perform any logic on the mail hooks.<br>
+          See more detail about that hook in <em>recurring_events_registration.api.php</em>.
+      '),
+      '#default_value' => $config->get('email_notifications_queue'),
+      '#states' => [
+        'visible' => [
+          'input[name="email_notifications"]' => ['checked' => TRUE],
+        ],
+      ],
     ];
 
     $form['notifications']['emails'] = [

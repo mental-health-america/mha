@@ -26,6 +26,9 @@ recurring_events_registration.registrant.config:
     email_notifications:
       type: boolean
       label: 'Whether to enable email notifications'
+    email_notifications_queue:
+      type: boolean
+      label: 'Whether to use the email notifications queue'
     notifications:
       type: sequence
       sequence:
