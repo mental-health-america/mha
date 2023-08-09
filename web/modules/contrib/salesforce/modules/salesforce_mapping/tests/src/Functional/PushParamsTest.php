@@ -4,14 +4,11 @@ namespace Drupal\Tests\salesforce_mapping\Functional;
 
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
-use Drupal\KernelTests\KernelTestBase;
 use Drupal\node\Entity\Node;
-use Drupal\salesforce_mapping\Entity\MappedObject;
 use Drupal\salesforce_mapping\Entity\SalesforceMapping;
 use Drupal\salesforce_mapping\PushParams;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\Tests\BrowserTestBase;
-use DateTime;
 
 /**
  * Test that PushParams correctly creates data structures for Salesforce.
@@ -25,7 +22,7 @@ class PushParamsTest extends BrowserTestBase {
    *
    * @var string
    */
-  protected $defaultTheme  = 'stark';
+  protected $defaultTheme = 'stark';
 
   /**
    * Required modules.
@@ -82,7 +79,8 @@ class PushParamsTest extends BrowserTestBase {
         'value' => '<p>Sample formatted text</p>',
         'summary' => '<p>Sample summary</p>',
         'format' => 'restricted_html',
-      ]]
+      ],
+      ],
     ]);
     $expectedDate = new DrupalDateTime($storedDate, 'UTC');
 
@@ -147,13 +145,13 @@ class PushParamsTest extends BrowserTestBase {
     $expected = [
       'FirstName' => 'SALESFORCE TEST',
       'Email' => 'test2@example.com',
-      'Birthdate' => null,
+      'Birthdate' => NULL,
       'd5__Do_Not_Mail__c' => TRUE,
       'ReportsToId' => '0123456789ABCDEFGH',
       'RecordTypeId' => '012i0000001B15mAAC',
       'Description' => 'https://example.com',
       'd5__Multipicklist_Test__c' => 'Value 1;Value 2;Value 3',
-      'Department' => null,
+      'Department' => NULL,
       'd5__Test_Multipicklist__c' => '',
       'LeadSource' => '',
     ];
@@ -167,16 +165,16 @@ class PushParamsTest extends BrowserTestBase {
    * Test taxonomy reference values.
    */
   public function testTaxRef() {
-    /** @var SalesforceMapping $mapping */
+    /** @var \Drupal\salesforce_mapping\Entity\SalesforceMapping $mapping */
     $mapping = SalesforceMapping::load('test_mapping');
     $vocab = 'salesforce_test_vocabulary';
-    /** @var Term $term1 */
+    /** @var \Drupal\taxonomy\Entity\Term $term1 */
     $term1 = Term::create([
       'name' => $this->randomMachineName(),
       'vid' => $vocab,
     ]);
     $term1->save();
-    /** @var Term $term2 */
+    /** @var \Drupal\taxonomy\Entity\Term $term2 */
     $term2 = Term::create([
       'name' => $this->randomMachineName(),
       'vid' => $vocab,
@@ -185,10 +183,10 @@ class PushParamsTest extends BrowserTestBase {
 
     // Entity 1 is the target reference.
     $entity1 = Node::create([
-        'type' => 'salesforce_mapping_test_content',
-        'title' => 'Test Example',
-        'field_salesforce_test_tax_ref' => [$term1->id(), $term2->id()],
-        'field_salesforce_test_tax_singl' => [$term1->id()],
+      'type' => 'salesforce_mapping_test_content',
+      'title' => 'Test Example',
+      'field_salesforce_test_tax_ref' => [$term1->id(), $term2->id()],
+      'field_salesforce_test_tax_singl' => [$term1->id()],
     ]);
     $entity1->save();
 
@@ -212,4 +210,5 @@ class PushParamsTest extends BrowserTestBase {
     ksort($expected);
     $this->assertEquals($expected, $actual);
   }
+
 }

@@ -2,11 +2,11 @@
 
 namespace Drupal\salesforce_mapping_ui\Controller;
 
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Access\AccessResult;
 
 /**
  * Returns responses for devel module routes.
@@ -50,7 +50,7 @@ class MappedObjectController extends ControllerBase {
    * @throws \Exception
    *   If an EntityInterface is not found at the given route.
    *
-   * @TODO find a more specific exception class
+   * @todo find a more specific exception class
    */
   private function getEntity(RouteMatchInterface $route_match) {
     $parameter_name = $route_match->getRouteObject()->getOption('_salesforce_entity_type_id');
@@ -79,7 +79,7 @@ class MappedObjectController extends ControllerBase {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   private function getMappedObjects(EntityInterface $entity) {
-    // @TODO this probably belongs in a service
+    // @todo this probably belongs in a service
     return $this
       ->entityTypeManager()
       ->getStorage('salesforce_mapped_object')

@@ -4,16 +4,16 @@ namespace Drupal\salesforce\Commands;
 
 use Consolidation\OutputFormatters\StructuredData\PropertyList;
 use Consolidation\OutputFormatters\StructuredData\RowsOfFields;
-use Drupal\salesforce\Rest\RestException;
 use Drupal\salesforce\Entity\SalesforceAuthConfig;
+use Drupal\salesforce\Rest\RestException;
 use Drupal\salesforce\SelectQuery;
 use Drupal\salesforce\SelectQueryRaw;
 use Drupal\salesforce\SFID;
 use Drush\Exceptions\UserAbortException;
+use OAuth\OAuth2\Token\StdOAuth2Token;
 use Symfony\Component\Console\Helper\TableCell;
 use Symfony\Component\Console\Input\Input;
 use Symfony\Component\Console\Output\Output;
-use OAuth\OAuth2\Token\StdOAuth2Token;
 
 /**
  * A Drush commandfile.
@@ -647,7 +647,7 @@ class SalesforceCommands extends SalesforceCommandsBase {
       $query->order = [];
       $orders = explode(',', $options['order']);
       foreach ($orders as $order) {
-        list($field, $dir) = preg_split('/\s+/', $order, 2);
+        [$field, $dir] = preg_split('/\s+/', $order, 2);
         $query->order[$field] = $dir;
       }
     }

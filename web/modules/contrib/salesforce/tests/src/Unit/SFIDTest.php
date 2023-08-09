@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\salesforce\Unit;
 
-use Drupal\Tests\UnitTestCase;
 use Drupal\salesforce\SFID;
+use Drupal\Tests\UnitTestCase;
 
 /**
  * Test Object instantitation.

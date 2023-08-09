@@ -6,12 +6,12 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\key\KeyRepositoryInterface;
 use Drupal\salesforce\SalesforceAuthProviderPluginBase;
-use OAuth\Common\Http\Uri\Uri;
 use Drupal\salesforce\Storage\SalesforceAuthTokenStorageInterface;
+use Firebase\JWT\JWT;
 use OAuth\Common\Http\Client\ClientInterface;
+use OAuth\Common\Http\Uri\Uri;
 use OAuth\Common\Token\TokenInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Firebase\JWT\JWT;
 
 /**
  * JWT Oauth plugin.

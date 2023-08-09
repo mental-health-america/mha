@@ -2,7 +2,6 @@
 
 namespace Drupal\salesforce_mapping\Plugin\SalesforceMappingField;
 
-use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\TypedData\ComplexDataDefinitionInterface;
@@ -29,6 +28,9 @@ abstract class PropertiesBase extends SalesforceMappingFieldPluginBase {
    */
   protected $dataFetcher;
 
+  /**
+   *
+   */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     $plugin = parent::create($container, $configuration, $plugin_id, $plugin_definition);
     $plugin->dataFetcher = $container->get('typed_data.data_fetcher');
@@ -61,7 +63,7 @@ abstract class PropertiesBase extends SalesforceMappingFieldPluginBase {
     if (empty($config['drupal_field_value'])) {
       $form_state->setError($form['config']['drupal_field_value'], $this->t('Drupal field is required.'));
     }
-    // @TODO: Should we validate the $config['drupal_field_value']['setting'] property?
+    // @todo Should we validate the $config['drupal_field_value']['setting'] property?
   }
 
   /**
@@ -76,7 +78,7 @@ abstract class PropertiesBase extends SalesforceMappingFieldPluginBase {
         }
       }
     }
-    // @TODO: Should we validate the $config['drupal_field_value']['setting'] property?
+    // @todo Should we validate the $config['drupal_field_value']['setting'] property?
   }
 
   /**
@@ -104,7 +106,6 @@ abstract class PropertiesBase extends SalesforceMappingFieldPluginBase {
       return $this->getStringValue($entity, $this->config('drupal_field_value'));
     }
   }
-
 
   /**
    * {@inheritdoc}
@@ -233,7 +234,7 @@ abstract class PropertiesBase extends SalesforceMappingFieldPluginBase {
    * @param string $drupal_field_value
    *   The Typed Data property to get.
    *
-   * @return \Drupal\Core\TypedData\TypedDataInterface|NULL
+   * @return \Drupal\Core\TypedData\TypedDataInterface|null
    *   The array representation of the Typed Data property value.
    */
   protected function getDataValue(EntityInterface $entity, $drupal_field_value) {

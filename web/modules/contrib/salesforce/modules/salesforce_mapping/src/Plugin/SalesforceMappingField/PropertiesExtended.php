@@ -2,13 +2,10 @@
 
 namespace Drupal\salesforce_mapping\Plugin\SalesforceMappingField;
 
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\TypedData\ComplexDataDefinitionInterface;
 use Drupal\Core\TypedData\DataDefinitionInterface;
-use Drupal\Core\TypedData\ListDataDefinitionInterface;
 use Drupal\field\Entity\FieldConfig;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Adapter for entity properties and fields.
@@ -33,7 +30,7 @@ class PropertiesExtended extends PropertiesBase {
     }
 
     if (strpos($field_name, '.')) {
-      list($field_name, $dummy) = explode('.', $field_name, 2);
+      [$field_name, $dummy] = explode('.', $field_name, 2);
     }
     // Add reference field.
     if ($field = FieldConfig::loadByName($this->mapping->getDrupalEntityType(), $this->mapping->getDrupalBundle(), $field_name)) {

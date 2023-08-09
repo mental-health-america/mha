@@ -151,6 +151,18 @@ final class SalesforceEvents {
   const PULL_ENTITY_VALUE = 'salesforce.pull_entity_value';
 
   /**
+   * Dispatched immediately prior to queueing a Drupal entity to be pulled.
+   *
+   * Subscribers receive a
+   * Drupal\salesforce_mapping\Event\SalesforcePullEnqueueEvent instance.
+   *
+   * @Event
+   *
+   * @var string
+   */
+  const PULL_ENQUEUE = 'salesforce.pull_enqueue';
+
+  /**
    * Dispatched immediately prior to saving the pulled Drupal entity.
    *
    * After all fields have been mapped and values assigned, can be used, for

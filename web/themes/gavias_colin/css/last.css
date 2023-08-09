@@ -1,3 +1,8 @@
+@media (max-width: 744px) {
+  #email-us .column-inner.bg-size-cover.rounded-corners {
+    background-color: rgba(180,46,50,0.9) !important;
+  }
+}
 
 .topbar .navigation .gva_menu {
   display: flex;

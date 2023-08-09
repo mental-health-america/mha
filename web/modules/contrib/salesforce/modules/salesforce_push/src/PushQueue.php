@@ -226,7 +226,7 @@ class PushQueue extends DatabaseQueue implements PushQueueInterface {
    * @throws \Exception
    *   If the required indexes are not provided.
    *
-   * @TODO convert $data to a proper class and make sure that's what we get for this argument.
+   * @todo convert $data to a proper class and make sure that's what we get for this argument.
    */
   protected function doCreateItem($data) { // @codingStandardsIgnoreLine
     if (empty($data['name'])
@@ -242,14 +242,14 @@ class PushQueue extends DatabaseQueue implements PushQueueInterface {
       'op' => $data['op'],
       'updated' => $time,
       'failures' => empty($data['failures'])
-      ? 0
-      : $data['failures'],
+        ? 0
+        : $data['failures'],
       'last_failure_message' => empty($data['last_failure_message'])
-      ? ''
-      : $data['last_failure_message'],
+        ? ''
+        : $data['last_failure_message'],
       'mapped_object_id' => empty($data['mapped_object_id'])
-      ? 0
-      : $data['mapped_object_id'],
+        ? 0
+        : $data['mapped_object_id'],
     ];
 
     $query = $this->connection->merge(static::TABLE_NAME)
@@ -280,7 +280,7 @@ class PushQueue extends DatabaseQueue implements PushQueueInterface {
           // If $n is zero, process as many items as possible.
           $n = $this->globalLimit;
         }
-        // @TODO: convert items to content entities.
+        // @todo convert items to content entities.
         // @see \Drupal::entityQuery()
         $items = $this->connection->queryRange('SELECT * FROM {' . static::TABLE_NAME . '} q WHERE expire = 0 AND name = :name AND failures < :fail_limit ORDER BY created, item_id ASC', 0, $n, [':name' => $this->name, ':fail_limit' => $fail_limit])->fetchAllAssoc('item_id');
       }
@@ -451,7 +451,7 @@ class PushQueue extends DatabaseQueue implements PushQueueInterface {
     }
 
     if (!$queue_processor) {
-      // @TODO push queue processor could be set globally, or per-mapping. Exposing some UI setting would probably be better than this:
+      // @todo push queue processor could be set globally, or per-mapping. Exposing some UI setting would probably be better than this:
       $plugin_name = $this->state->get('salesforce.push_queue_processor', static::DEFAULT_QUEUE_PROCESSOR);
       $queue_processor = $this->queueManager->createInstance($plugin_name);
     }
@@ -495,7 +495,7 @@ class PushQueue extends DatabaseQueue implements PushQueueInterface {
       catch (\Exception $e) {
         // In case of any other kind of exception, log it and leave the item
         // in the queue to be processed again later.
-        // @TODO: this is how Cron.php queue works, but I don't really understand why it doesn't get re-queued.
+        // @todo this is how Cron.php queue works, but I don't really understand why it doesn't get re-queued.
         $this->eventDispatcher->dispatch(new SalesforceErrorEvent($e), SalesforceEvents::ERROR);
       }
       finally {

@@ -3,19 +3,19 @@
 namespace Drupal\Tests\salesforce_pull\Unit;
 
 use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\Config\Config;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Queue\QueueDatabaseFactory;
 use Drupal\Core\Queue\QueueInterface;
 use Drupal\Core\State\StateInterface;
-use Drupal\Core\Config\Config;
-use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Tests\UnitTestCase;
 use Drupal\salesforce\Rest\RestClientInterface;
 use Drupal\salesforce\SelectQuery;
 use Drupal\salesforce\SelectQueryResult;
 use Drupal\salesforce_mapping\Entity\SalesforceMappingInterface;
 use Drupal\salesforce_mapping\SalesforceMappingStorage;
 use Drupal\salesforce_pull\QueueHandler;
+use Drupal\Tests\UnitTestCase;
 use Prophecy\Argument;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 

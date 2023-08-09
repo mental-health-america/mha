@@ -2,11 +2,11 @@
 
 namespace Drupal\salesforce_mapping\Entity;
 
-use Drupal\Core\Entity\EntityChangedInterface;
-use Drupal\Core\Entity\RevisionLogInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\EntityChangedInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Entity\RevisionLogInterface;
 use Drupal\salesforce\SObject;
 
 /**

@@ -2,10 +2,10 @@
 
 namespace Drupal\salesforce_mapping;
 
+use Drupal\Component\Plugin\FallbackPluginManagerInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
-use Drupal\Component\Plugin\FallbackPluginManagerInterface;
 
 /**
  * Plugin type manager for all views plugins.

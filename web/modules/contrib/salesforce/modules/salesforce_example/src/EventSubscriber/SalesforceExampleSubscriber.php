@@ -6,11 +6,11 @@ use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\salesforce\Event\SalesforceEvents;
 use Drupal\salesforce_mapping\Event\SalesforcePullEvent;
-use Drupal\salesforce_mapping\Event\SalesforcePushOpEvent;
 use Drupal\salesforce_mapping\Event\SalesforcePushAllowedEvent;
+use Drupal\salesforce_mapping\Event\SalesforcePushOpEvent;
 use Drupal\salesforce_mapping\Event\SalesforcePushParamsEvent;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\salesforce_mapping\Event\SalesforceQueryEvent;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Class SalesforceExampleSubscriber.
@@ -104,7 +104,7 @@ class SalesforceExampleSubscriber implements EventSubscriberInterface {
       case 'contact':
         // Add attachments to the Contact pull mapping so that we can save
         // profile pics. See also ::pullPresave.
-        $query = $event->getQuery()->accessCheck(false);
+        $query = $event->getQuery()->accessCheck(FALSE);
         // Add a subquery:
         $query->fields[] = "(SELECT Id FROM Attachments WHERE Name = 'example.jpg' LIMIT 1)";
         // Add a field from lookup:

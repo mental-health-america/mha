@@ -3,6 +3,7 @@
 namespace Drupal\Tests\salesforce_jwt\FunctionalJavascript;
 
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
+use Drupal\key\Entity\Key;
 
 /**
  * Test JWT Auth.
@@ -16,7 +17,7 @@ class SalesforceJwtTest extends WebDriverTestBase {
    *
    * @var string
    */
-  protected $defaultTheme  = 'stark';
+  protected $defaultTheme = 'stark';
 
   /**
    * A key entity to use for testing.
@@ -59,7 +60,7 @@ class SalesforceJwtTest extends WebDriverTestBase {
     $this->adminUser = $this->drupalCreateUser(['authorize salesforce']);
     $this->drupalLogin($this->adminUser);
     $this->createTestKey(self::KEY_ID, 'authentication', 'file');
-    \Drupal\key\Entity\Key::load(self::KEY_ID)
+    Key::load(self::KEY_ID)
       ->set('key_provider_settings', [
         'file_location' => __DIR__ . '/testKey.pem',
         'strip_line_breaks' => FALSE,
@@ -121,7 +122,7 @@ class SalesforceJwtTest extends WebDriverTestBase {
     if ($provider != NULL) {
       $keyArgs['key_provider'] = $provider;
     }
-    $this->testKey = \Drupal\key\Entity\Key::create($keyArgs);
+    $this->testKey = Key::create($keyArgs);
     $this->testKey->save();
     return $this->testKey;
   }

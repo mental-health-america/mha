@@ -49,6 +49,9 @@ salesforce_mapping.salesforce_mapping.*:
     pull_where_clause:
       type: string
       label: 'Pull query SOQL "WHERE" clause'
+    pull_record_type_filter:
+      type: mapping
+      label: 'Pull query record type filter'
     sync_triggers:
       type: mapping
       label: 'Sync triggers'
