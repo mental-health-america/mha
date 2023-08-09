@@ -206,9 +206,10 @@ function menu_item_extras_theme_suggestions_menu_levels(array $variables) {
 }
 
 /**
- * Implements hook_theme_suggestions_HOOK_alter().
+ * Implements hook_theme_suggestions_HOOK().
  */
-function menu_item_extras_theme_suggestions_menu_alter(array &$suggestions, array $variables) {
+function menu_item_extras_theme_suggestions_menu(array $variables): array {
+  $suggestions = [];
   if (isset($variables['menu_name'])) {
     $menu_name = $variables['menu_name'];
     /** @var \Drupal\menu_item_extras\Utility\Utility $utility */
@@ -229,6 +230,8 @@ function menu_item_extras_theme_suggestions_menu_alter(array &$suggestions, arra
       }
     }
   }
+
+  return $suggestions;
 }
 
 /**
