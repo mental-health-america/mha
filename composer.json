@@ -97,7 +97,7 @@
         "drupal/focal_point": "^1.0",
         "drupal/fraction": "^2.1",
         "drupal/fullcalendar_view": "^5.1",
-        "drupal/geofield": "^1.49",
+        "drupal/geofield": "^1.54",
         "drupal/geofield_map": "^3.0",
         "drupal/geolocation": "^3.11",
         "drupal/google_analytics": "^4.0",
@@ -234,9 +234,6 @@
             },
             "drupal/draggableviews": {
                 "Draggableviews": "https://www.drupal.org/files/issues/2021-10-11/not_working_with_group_by-draggableviews-2867348-48.patch"
-            },
-            "drupal/salesforce": {
-                "Draggableviews": "https://www.drupal.org/files/issues/2023-03-28/salesforce-3350924-2.patch"
             }
         },
         "installer-paths": {
