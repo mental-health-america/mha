@@ -70,7 +70,7 @@ class SelectQueryResult {
     $results = [
       'totalSize' => 1,
       'done' => TRUE,
-      'records' => []
+      'records' => [],
     ];
     $result = new static($results);
     $result->records[(string) $record->id()] = $record;
@@ -127,7 +127,7 @@ class SelectQueryResult {
    *   The record, or FALSE if no record exists for given id.
    */
   public function record(SFID $id) {
-    return isset($this->records[(string) $id]) ? $this->records[(string) $id] : FALSE;
+    return $this->records[(string) $id] ?? FALSE;
   }
 
 }

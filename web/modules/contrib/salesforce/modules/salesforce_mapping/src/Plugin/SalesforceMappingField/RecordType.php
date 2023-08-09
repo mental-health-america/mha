@@ -4,8 +4,8 @@ namespace Drupal\salesforce_mapping\Plugin\SalesforceMappingField;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\salesforce_mapping\SalesforceMappingFieldPluginBase;
 use Drupal\salesforce_mapping\Entity\SalesforceMappingInterface;
+use Drupal\salesforce_mapping\SalesforceMappingFieldPluginBase;
 
 /**
  * Adapter for entity properties and fields.
@@ -97,7 +97,7 @@ class RecordType extends SalesforceMappingFieldPluginBase {
   /**
    * {@inheritdoc}
    *
-   * @TODO figure out what it means to pull Record Type
+   * @todo figure out what it means to pull Record Type
    */
   public function pull() {
     return FALSE;

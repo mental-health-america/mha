@@ -34,17 +34,14 @@
   "require": {
     "consolidation/output-formatters": "^3.2.0 || ^4.1",
     "lusitanian/oauth": "^0.8.11",
-    "ext-json": "*"
-  },
-  "require-dev": {
+    "firebase/php-jwt": "^5.0 || ^6.0",
     "drupal/address": "^1.8",
     "drupal/key": "^1.14",
-    "firebase/php-jwt": "^5.0 || ^6.0",
-    "lusitanian/oauth": "^0.8.11",
     "drupal/dynamic_entity_reference": "^1.9 || ^2.0 || ^3 || ^4",
     "drupal/typed_data": "^1.0-beta2",
     "messageagency/force.com-toolkit-for-php": "^1.0.2",
-    "ext-soap": "*"
+    "ext-soap": "*",
+    "ext-json": "*"
   },
   "suggest": {
     "drupal/address": "Required for salesforce_address",

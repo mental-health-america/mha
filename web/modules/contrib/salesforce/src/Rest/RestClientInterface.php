@@ -3,8 +3,8 @@
 namespace Drupal\salesforce\Rest;
 
 use Drupal\salesforce\SelectQueryInterface;
-use Drupal\salesforce\SFID;
 use Drupal\salesforce\SelectQueryResult;
+use Drupal\salesforce\SFID;
 
 /**
  * Objects, properties, and methods to communicate with the Salesforce REST API.

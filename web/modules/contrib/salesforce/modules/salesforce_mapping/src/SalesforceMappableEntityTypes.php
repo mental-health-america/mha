@@ -2,8 +2,8 @@
 
 namespace Drupal\salesforce_mapping;
 
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
  * Mappable entity types constructor.

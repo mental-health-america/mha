@@ -40,6 +40,7 @@ use Drupal\salesforce_mapping\MappingConstants;
  *    "pull_standalone",
  *    "pull_trigger_date",
  *    "pull_where_clause",
+ *    "pull_record_type_filter",
  *    "sync_triggers",
  *    "salesforce_object_type",
  *    "drupal_entity_type",
@@ -139,6 +140,13 @@ class SalesforceMapping extends ConfigEntityBase implements SalesforceMappingInt
    * @var string
    */
   protected $pull_where_clause = '';
+
+  /**
+   * Pull query record type filter.
+   *
+   * @var array
+   */
+  protected $pull_record_type_filter = [];
 
   /**
    * The drupal entity type to which this mapping points.
@@ -286,7 +294,7 @@ class SalesforceMapping extends ConfigEntityBase implements SalesforceMappingInt
     // Schema API complains during save() if field_mappings' mapping property
     // exists as a reference to the parent mapping. It's redundant anyway, so
     // we can delete it safely.
-    // @TODO there's probably a way to do this with schema.yml, but I can't find it.
+    // @todo there's probably a way to do this with schema.yml, but I can't find it.
     $entity_array = parent::toArray();
     foreach ($entity_array['field_mappings'] as $i => &$value) {
       unset($value['mapping']);
@@ -400,7 +408,7 @@ class SalesforceMapping extends ConfigEntityBase implements SalesforceMappingInt
    * {@inheritdoc}
    */
   public function getPullFields() {
-    // @TODO This should probably be delegated to a field plugin bag?
+    // @todo This should probably be delegated to a field plugin bag?
     $fields = [];
     foreach ($this->getFieldMappings() as $i => $field_plugin) {
       // Skip fields that aren't being pulled from Salesforce.
@@ -441,7 +449,7 @@ class SalesforceMapping extends ConfigEntityBase implements SalesforceMappingInt
       throw new \Exception('No key defined for this mapping.');
     }
 
-    // @TODO #fieldMappingField
+    // @todo #fieldMappingField
     foreach ($this->getFieldMappings() as $i => $field_plugin) {
       if ($field_plugin->get('salesforce_field') == $this->getKeyField()) {
         return $field_plugin->value($entity, $this);
@@ -475,7 +483,7 @@ class SalesforceMapping extends ConfigEntityBase implements SalesforceMappingInt
    * {@inheritdoc}
    */
   public function getFieldMappings() {
-    // @TODO #fieldMappingField
+    // @todo #fieldMappingField
     $fields = [];
     foreach ($this->field_mappings as $i => $field) {
       $fields[$i] = $this->fieldManager()->createInstance(
@@ -691,6 +699,18 @@ class SalesforceMapping extends ConfigEntityBase implements SalesforceMappingInt
 
     if (!empty($this->pull_where_clause)) {
       $soql->conditions[] = [$this->pull_where_clause];
+    }
+    if (!empty($this->pull_record_type_filter)) {
+      $record_types = [];
+      foreach ($this->pull_record_type_filter as $enabled) {
+        if ($enabled) {
+          $record_types[] = $enabled;
+        }
+      }
+      if (!empty($record_types)) {
+        $record_types_list = implode("', '", $record_types);
+        $soql->conditions[] = ["RecordType.DeveloperName IN ('" . $record_types_list . "')"];
+      }
     }
     $soql->order[$this->getPullTriggerDate()] = 'ASC';
     return $soql;

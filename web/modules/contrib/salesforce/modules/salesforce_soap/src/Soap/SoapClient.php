@@ -3,12 +3,11 @@
 namespace Drupal\salesforce_soap\Soap;
 
 use Drupal\salesforce\SalesforceAuthProviderPluginManagerInterface;
-use SforcePartnerClient;
 
 /**
  * A client for communicating with the Salesforce SOAP API.
  */
-class SoapClient extends SforcePartnerClient implements SoapClientInterface {
+class SoapClient extends \SforcePartnerClient implements SoapClientInterface {
 
   /**
    * Indicates whether or not a successfull connection was made to the SOAP API.

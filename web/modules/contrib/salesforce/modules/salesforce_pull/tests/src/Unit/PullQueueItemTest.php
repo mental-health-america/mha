@@ -2,10 +2,10 @@
 
 namespace Drupal\Tests\salesforce_pull\Unit;
 
-use Drupal\Tests\UnitTestCase;
 use Drupal\salesforce\SObject;
 use Drupal\salesforce_mapping\Entity\SalesforceMappingInterface;
 use Drupal\salesforce_pull\PullQueueItem;
+use Drupal\Tests\UnitTestCase;
 
 /**
  * Test Object instantitation.

@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\salesforce\Functional;
 
-use Drupal\Core\Url;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Url;
 use Drupal\Tests\BrowserTestBase;
 
 /**
@@ -20,7 +20,7 @@ class StatusPageTest extends BrowserTestBase {
    *
    * @var string
    */
-  protected $defaultTheme  = 'stark';
+  protected $defaultTheme = 'stark';
 
   /**
    * Required modules.
@@ -125,14 +125,14 @@ class StatusPageTest extends BrowserTestBase {
    * Need to do.
    */
   public function testTlsRequirements() {
-    // @TODO write me.
+    // @todo write me.
   }
 
   /**
    * Need to do.
    */
   public function testUsageRequirements() {
-    // @TODO write me.
+    // @todo write me.
   }
 
 }

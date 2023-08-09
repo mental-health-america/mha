@@ -19,7 +19,7 @@ class SalesforceMappingCrudFormTest extends BrowserTestBase {
    *
    * @var string
    */
-  protected $defaultTheme  = 'stark';
+  protected $defaultTheme = 'stark';
 
   /**
    * Modules to enable.
@@ -111,7 +111,7 @@ class SalesforceMappingCrudFormTest extends BrowserTestBase {
         // Confirm that the new field shows up:
         $this->assertSession()->pageTextContains($definition['label']);
 
-        // @TODO need an interface for field plugins that will tell us which config values are applicable.
+        // @todo need an interface for field plugins that will tell us which config values are applicable.
         // Add all components of this field plugin to our post array to build up the mapping.
         $this->assertSession()->elementExists('css', "[name='field_mappings[$i][config][drupal_field_value]'], [name='field_mappings[$i][config][drupal_field_value][setting]']");
         $this->assertSession()->elementExists('css', "[name='field_mappings[$i][config][salesforce_field]'], [name='field_mappings[$i][config][drupal_constant]']");

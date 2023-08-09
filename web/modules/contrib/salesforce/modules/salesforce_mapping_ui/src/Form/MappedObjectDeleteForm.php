@@ -6,8 +6,8 @@ use Drupal\Core\Entity\ContentEntityConfirmFormBase;
 use Drupal\Core\Entity\Exception\UndefinedLinkTemplateException;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\salesforce\Event\SalesforceNoticeEvent;
 use Drupal\salesforce\Event\SalesforceEvents;
+use Drupal\salesforce\Event\SalesforceNoticeEvent;
 
 /**
  * Provides a form for deleting a salesforce_mapped_oject entity.
@@ -55,7 +55,8 @@ class MappedObjectDeleteForm extends ContentEntityConfirmFormBase {
         $form_state->setRedirectUrl($mapped_entity->toUrl());
       }
     }
-    catch (UndefinedLinkTemplateException $e) {}
+    catch (UndefinedLinkTemplateException $e) {
+    }
 
     $message = 'MappedObject @sfid deleted.';
     $args = ['@sfid' => $mapped_object->salesforce_id->value];

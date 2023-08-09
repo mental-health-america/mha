@@ -3,8 +3,8 @@
 namespace Drupal\salesforce_mapping;
 
 use Drupal\Core\Entity\ContentEntityTypeInterface;
-use Drupal\Core\Entity\Sql\SqlContentEntityStorageSchema;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Entity\Sql\SqlContentEntityStorageSchema;
 
 /**
  * Defines the mapped object schema handler in order to add some unique keys.

@@ -19,7 +19,7 @@ class PullQueueTest extends BrowserTestBase {
    *
    * @var string
    */
-  protected $defaultTheme  = 'stark';
+  protected $defaultTheme = 'stark';
 
   /**
    * Required modules.
