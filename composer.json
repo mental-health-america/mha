@@ -234,6 +234,9 @@
             },
             "drupal/draggableviews": {
                 "Draggableviews": "https://www.drupal.org/files/issues/2021-10-11/not_working_with_group_by-draggableviews-2867348-48.patch"
+            },
+            "drupal/salesforce": {
+                "Salesforce": "https://www.drupal.org/files/issues/2023-03-28/salesforce-3350924-2.patch"
             }
         },
         "installer-paths": {
