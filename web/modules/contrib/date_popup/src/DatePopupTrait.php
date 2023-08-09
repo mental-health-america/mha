@@ -19,7 +19,7 @@ trait DatePopupTrait {
    * @return string
    *   The formatted value.
    */
-  protected function setDefaultValue(string $default_value): string {
+  protected static function setDefaultValue(string $default_value): string {
     if (!empty($default_value)) {
       $date = new DrupalDateTime($default_value);
       if (!$date->hasErrors()) {
@@ -34,10 +34,12 @@ trait DatePopupTrait {
    *
    * @param array &$form
    *   The form to apply it to.
+   * @param array $options
+   *   Plugin options.
    */
-  protected function applyDatePopupToForm(array &$form): void {
-    if (!empty($this->options['expose']['identifier'])) {
-      $identifier = $this->options['expose']['identifier'];
+  protected static function applyDatePopupToForm(array &$form, array $options): void {
+    if (!empty($options['expose']['identifier'])) {
+      $identifier = $options['expose']['identifier'];
       // Identify wrapper.
       $wrapper_key = $identifier . '_wrapper';
       if (isset($form[$wrapper_key])) {
@@ -50,9 +52,9 @@ trait DatePopupTrait {
       if (isset($element['min'])) {
         $element['min']['#type'] = 'date';
         $element['max']['#type'] = 'date';
-        if ($this->options['value']['type'] == 'offset') {
-          $element['min']['#default_value'] = $this->setDefaultValue($element['min']['#default_value']);
-          $element['max']['#default_value'] = $this->setDefaultValue($element['max']['#default_value']);
+        if ($options['value']['type'] == 'offset') {
+          $element['min']['#default_value'] = static::setDefaultValue($element['min']['#default_value']);
+          $element['max']['#default_value'] = static::setDefaultValue($element['max']['#default_value']);
         }
 
         if (isset($element['value'])) {
@@ -61,7 +63,7 @@ trait DatePopupTrait {
       }
       else {
         $element['#type'] = 'date';
-        $element['#default_value'] = $this->setDefaultValue($element['#default_value']);
+        $element['#default_value'] = static::setDefaultValue($element['#default_value']);
       }
     }
   }
