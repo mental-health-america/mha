@@ -16,7 +16,7 @@ class SalesforceMappedObjectAddLocalAction extends LocalActionDefault {
    * {@inheritdoc}
    */
   public function getTitle(Request $request = NULL) {
-    // @TODO unclear how to translate this, but needs to be translated:
+    // @todo unclear how to translate this, but needs to be translated:
     return 'Create Mapped Object';
   }
 

@@ -2,13 +2,13 @@
 
 namespace Drupal\salesforce_mapping_ui\Form;
 
-use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
-use Drupal\Core\Url;
-use Drupal\salesforce_mapping\SalesforceMappingFieldPluginManager;
-use Drupal\salesforce_mapping\SalesforceMappableEntityTypesInterface;
 use Drupal\Core\Entity\EntityForm;
+use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 use Drupal\salesforce\Rest\RestClientInterface;
+use Drupal\salesforce_mapping\SalesforceMappableEntityTypesInterface;
+use Drupal\salesforce_mapping\SalesforceMappingFieldPluginManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -133,7 +133,7 @@ abstract class SalesforceMappingFormBase extends EntityForm {
    * @param string $salesforce_object_type
    *   The object type of whose records you want to retreive.
    *
-   * @TODO this should move to the Salesforce service
+   * @todo this should move to the Salesforce service
    *
    * @return \Drupal\salesforce\Rest\RestResponseDescribe
    *   Information about the Salesforce object as provided by Salesforce.

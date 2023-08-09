@@ -4,16 +4,16 @@ namespace Drupal\salesforce_pull\Commands;
 
 use Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\salesforce_mapping\Commands\SalesforceMappingCommandsBase;
 use Drupal\salesforce\Event\SalesforceEvents;
 use Drupal\salesforce\Rest\RestClient;
+use Drupal\salesforce\SalesforceAuthProviderPluginManagerInterface;
 use Drupal\salesforce\SFID;
+use Drupal\salesforce\Storage\SalesforceAuthTokenStorageInterface;
+use Drupal\salesforce_mapping\Commands\SalesforceMappingCommandsBase;
 use Drupal\salesforce_mapping\Event\SalesforceQueryEvent;
 use Drupal\salesforce_pull\QueueHandler;
 use Symfony\Component\Console\Input\Input;
 use Symfony\Component\Console\Output\Output;
-use Drupal\salesforce\SalesforceAuthProviderPluginManagerInterface;
-use Drupal\salesforce\Storage\SalesforceAuthTokenStorageInterface;
 
 /**
  * A Drush commandfile.

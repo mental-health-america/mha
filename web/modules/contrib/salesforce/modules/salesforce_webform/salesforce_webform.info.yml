@@ -8,7 +8,7 @@ dependencies:
   - salesforce:salesforce_mapping
   - webform:webform
 
-# Information added by Drupal.org packaging script on 2023-03-27
-version: '5.0.2'
+# Information added by Drupal.org packaging script on 2023-08-03
+version: '5.0.3'
 project: 'salesforce'
-datestamp: 1679940936
+datestamp: 1691095609

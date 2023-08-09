@@ -16,7 +16,7 @@ class SalesforceOAuthTest extends WebDriverTestBase {
    *
    * @var string
    */
-  protected $defaultTheme  = 'stark';
+  protected $defaultTheme = 'stark';
 
   /**
    * Required modules.
@@ -29,7 +29,7 @@ class SalesforceOAuthTest extends WebDriverTestBase {
     'dynamic_entity_reference',
     'salesforce',
     'salesforce_test_rest_client',
-    'salesforce_oauth'
+    'salesforce_oauth',
   ];
 
   /**

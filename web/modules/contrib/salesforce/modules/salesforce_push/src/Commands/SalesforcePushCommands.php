@@ -4,14 +4,14 @@ namespace Drupal\salesforce_push\Commands;
 
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\salesforce_mapping\Commands\SalesforceMappingCommandsBase;
 use Drupal\salesforce\Rest\RestClient;
+use Drupal\salesforce\SalesforceAuthProviderPluginManagerInterface;
+use Drupal\salesforce\Storage\SalesforceAuthTokenStorageInterface;
+use Drupal\salesforce_mapping\Commands\SalesforceMappingCommandsBase;
 use Drupal\salesforce_mapping\MappingConstants;
 use Drupal\salesforce_push\PushQueue;
 use Symfony\Component\Console\Input\Input;
 use Symfony\Component\Console\Output\Output;
-use Drupal\salesforce\SalesforceAuthProviderPluginManagerInterface;
-use Drupal\salesforce\Storage\SalesforceAuthTokenStorageInterface;
 
 /**
  * A Drush commandfile.

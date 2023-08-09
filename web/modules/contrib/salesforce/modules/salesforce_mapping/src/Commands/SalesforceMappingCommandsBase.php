@@ -3,16 +3,16 @@
 namespace Drupal\salesforce_mapping\Commands;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\salesforce\Commands\QueryResult;
+use Drupal\salesforce\Commands\QueryResultTableFormatter;
+use Drupal\salesforce\Commands\SalesforceCommandsBase;
 use Drupal\salesforce\Rest\RestClient;
+use Drupal\salesforce\SalesforceAuthProviderPluginManagerInterface;
+use Drupal\salesforce\Storage\SalesforceAuthTokenStorageInterface;
 use Drush\Drush;
 use Drush\Exceptions\UserAbortException;
 use Symfony\Component\Console\Input\Input;
 use Symfony\Component\Console\Output\Output;
-use Drupal\salesforce\Commands\SalesforceCommandsBase;
-use Drupal\salesforce\Commands\QueryResult;
-use Drupal\salesforce\Commands\QueryResultTableFormatter;
-use Drupal\salesforce\SalesforceAuthProviderPluginManagerInterface;
-use Drupal\salesforce\Storage\SalesforceAuthTokenStorageInterface;
 
 /**
  * Shared command base for Salesforce Drush commands.

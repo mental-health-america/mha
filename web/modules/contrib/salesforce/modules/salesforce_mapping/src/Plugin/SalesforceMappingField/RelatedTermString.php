@@ -4,12 +4,11 @@ namespace Drupal\salesforce_mapping\Plugin\SalesforceMappingField;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
-
 use Drupal\field\Entity\FieldConfig;
+use Drupal\salesforce\Exception as SalesforceException;
 use Drupal\salesforce\SObject;
 use Drupal\salesforce_mapping\Entity\SalesforceMappingInterface;
 use Drupal\salesforce_mapping\SalesforceMappingFieldPluginBase;
-use Drupal\salesforce\Exception as SalesforceException;
 use Drupal\taxonomy\Entity\Term;
 
 /**
@@ -28,7 +27,7 @@ class RelatedTermString extends SalesforceMappingFieldPluginBase {
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $pluginForm = parent::buildConfigurationForm($form, $form_state);
 
-    // @TODO inspecting the form and form_state feels wrong, but haven't found a good way to get the entity from config before the config is saved.
+    // @todo inspecting the form and form_state feels wrong, but haven't found a good way to get the entity from config before the config is saved.
     $options = $this->getConfigurationOptions($form['#entity']);
 
     if (empty($options)) {
@@ -111,6 +110,7 @@ class RelatedTermString extends SalesforceMappingFieldPluginBase {
     foreach ($field_values as $field_value) {
       // Look for a term that matches the string in the salesforce field.
       $query = \Drupal::entityQuery('taxonomy_term');
+      $query->accessCheck(FALSE);
       $query->condition('vid', $vocabs, 'IN');
       $query->condition('name', $field_value);
       $tids = $query->execute();
