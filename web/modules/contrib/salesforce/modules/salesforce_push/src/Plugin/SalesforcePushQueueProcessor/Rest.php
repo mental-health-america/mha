@@ -2,13 +2,12 @@
 
 namespace Drupal\salesforce_push\Plugin\SalesforcePushQueueProcessor;
 
-use Drupal\salesforce\SalesforceAuthProviderPluginManagerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Queue\SuspendQueueException;
 use Drupal\salesforce\EntityNotFoundException;
 use Drupal\salesforce\Event\SalesforceEvents;
+use Drupal\salesforce\SalesforceAuthProviderPluginManagerInterface;
 use Drupal\salesforce_mapping\Entity\MappedObject;
 use Drupal\salesforce_mapping\Entity\SalesforceMappingInterface;
 use Drupal\salesforce_mapping\Event\SalesforcePushOpEvent;
@@ -16,6 +15,7 @@ use Drupal\salesforce_mapping\MappingConstants;
 use Drupal\salesforce_push\PushQueueInterface;
 use Drupal\salesforce_push\PushQueueProcessorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Rest queue processor plugin.
@@ -150,7 +150,7 @@ class Rest extends PluginBase implements PushQueueProcessorInterface {
       return;
     }
 
-    // @TODO: the following is nearly identical to the end of salesforce_push_entity_crud(). Can we DRY it? Do we care?
+    // @todo the following is nearly identical to the end of salesforce_push_entity_crud(). Can we DRY it? Do we care?
     try {
       $this->eventDispatcher->dispatch(
         new SalesforcePushOpEvent($mapped_object, $item->op),

@@ -2,6 +2,7 @@
 
 namespace Drupal\salesforce\Rest;
 
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Cache\CacheBackendInterface;
@@ -10,14 +11,13 @@ use Drupal\Core\State\StateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\salesforce\IdentityNotFoundException;
 use Drupal\salesforce\SalesforceAuthProviderPluginManagerInterface;
+use Drupal\salesforce\SelectQuery;
 use Drupal\salesforce\SelectQueryInterface;
+use Drupal\salesforce\SelectQueryResult;
 use Drupal\salesforce\SFID;
 use Drupal\salesforce\SObject;
-use Drupal\salesforce\SelectQuery;
-use Drupal\salesforce\SelectQueryResult;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
-use Drupal\Component\Datetime\TimeInterface;
 
 /**
  * Objects, properties, and methods to communicate with the Salesforce REST API.
@@ -164,10 +164,16 @@ class RestClient implements RestClientInterface {
     return $this;
   }
 
+  /**
+   *
+   */
   public function getShortTermCacheLifetime() {
     return $this->immutableConfig->get('short_term_cache_lifetime') ?? static::CACHE_LIFETIME;
   }
 
+  /**
+   *
+   */
   public function getLongTermCacheLifetime() {
     return $this->immutableConfig->get('long_term_cache_lifetime') ?? static::LONGTERM_CACHE_LIFETIME;
   }

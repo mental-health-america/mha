@@ -14,14 +14,14 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\Sql\SqlEntityStorageInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\StringTranslation\TranslationInterface;
-use Drupal\Tests\UnitTestCase;
 use Drupal\salesforce_mapping\Entity\SalesforceMappingInterface;
 use Drupal\salesforce_mapping\SalesforceMappingStorage;
 use Drupal\salesforce_push\PushQueue;
 use Drupal\salesforce_push\PushQueueProcessorInterface;
 use Drupal\salesforce_push\PushQueueProcessorPluginManager;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Drupal\Tests\UnitTestCase;
 use Prophecy\Argument;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Test Object instantitation.

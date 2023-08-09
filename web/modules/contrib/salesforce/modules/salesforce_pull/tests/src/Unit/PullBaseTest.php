@@ -8,18 +8,17 @@ use Drupal\Core\Entity\EntityStorageBase;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\Plugin\Field\FieldType\StringItem;
-use Drupal\salesforce_mapping\Event\SalesforcePullEvent;
-use Drupal\Tests\UnitTestCase;
 use Drupal\salesforce\Rest\RestClientInterface;
+use Drupal\salesforce\SelectQueryResult;
 use Drupal\salesforce\SFID;
 use Drupal\salesforce\SObject;
-use Drupal\salesforce\SelectQueryResult;
-
 use Drupal\salesforce_mapping\Entity\MappedObjectInterface;
 use Drupal\salesforce_mapping\Entity\SalesforceMappingInterface;
+use Drupal\salesforce_mapping\Event\SalesforcePullEvent;
 use Drupal\salesforce_mapping\MappingConstants;
 use Drupal\salesforce_pull\Plugin\QueueWorker\PullBase;
 use Drupal\salesforce_pull\PullQueueItem;
+use Drupal\Tests\UnitTestCase;
 use Prophecy\Argument;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -97,7 +96,7 @@ class PullBaseTest extends UnitTestCase {
       ->willReturn('test');
     $this->mapping->method('getSalesforceObjectType')
       ->willReturn('test');
-    // @TODO testing a mapping with no fields is of questionable value:
+    // @todo testing a mapping with no fields is of questionable value:
     $this->mapping->method('getFieldMappings')
       ->willReturn([]);
 
@@ -220,6 +219,9 @@ class PullBaseTest extends UnitTestCase {
         $this->etm,
         $this->sfapi,
         $this->ed,
+        [],
+        'cron_salesforce_pull',
+        ['cron' => ['time' => 180]],
       ])
       ->getMock();
     $this->pullWorker->expects($this->any())
@@ -279,7 +281,14 @@ class PullBaseTest extends UnitTestCase {
     $this->etm = $prophecy->reveal();
 
     $this->pullWorker = $this->getMockBuilder(PullBase::CLASS)
-      ->setConstructorArgs([$this->etm, $this->sfapi, $this->ed])
+      ->setConstructorArgs([
+        $this->etm,
+        $this->sfapi,
+        $this->ed,
+        [],
+        'cron_salesforce_pull',
+        ['cron' => ['time' => 180]],
+      ])
       ->setMethods(['salesforcePullEvent'])
       ->getMockForAbstractClass();
     $this->pullWorker->method('salesforcePullEvent')

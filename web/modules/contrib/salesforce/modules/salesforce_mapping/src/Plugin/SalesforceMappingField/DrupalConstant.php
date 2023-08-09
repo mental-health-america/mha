@@ -4,10 +4,10 @@ namespace Drupal\salesforce_mapping\Plugin\SalesforceMappingField;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\salesforce_mapping\SalesforceMappingFieldPluginBase;
+use Drupal\salesforce\SObject;
 use Drupal\salesforce_mapping\Entity\SalesforceMappingInterface;
 use Drupal\salesforce_mapping\MappingConstants;
-use Drupal\salesforce\SObject;
+use Drupal\salesforce_mapping\SalesforceMappingFieldPluginBase;
 
 /**
  * Adapter for entity Constant and fields.
@@ -25,7 +25,7 @@ class DrupalConstant extends SalesforceMappingFieldPluginBase {
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $pluginForm = parent::buildConfigurationForm($form, $form_state);
 
-    // @TODO inspecting the form and form_state feels wrong, but haven't found a good way to get the entity from config before the config is saved.
+    // @todo inspecting the form and form_state feels wrong, but haven't found a good way to get the entity from config before the config is saved.
     $options = $this->getConfigurationOptions($form['#entity']);
 
     // Display the plugin config form here:

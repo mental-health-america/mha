@@ -13,6 +13,9 @@
     "source": "https://git.drupalcode.org/project/link_attributes"
   },
   "require": {
-    "php": ">=8.0"
+      "php": ">=8.0"
+  },
+  "require-dev": {
+    "drupal/linkit": "6.x-dev"
   }
 }

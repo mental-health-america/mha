@@ -24,6 +24,7 @@ push_standalone: false
 pull_standalone: false
 pull_trigger_date: LastModifiedDate
 pull_where_clause: ''
+pull_record_type_filter: []
 sync_triggers:
   push_create: true
   push_update: true

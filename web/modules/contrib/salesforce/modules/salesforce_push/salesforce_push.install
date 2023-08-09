@@ -67,17 +67,7 @@ function salesforce_push_update_8003() {
  * Updates schema for push queue.
  */
 function salesforce_push_update_8004() {
-  $schema = \Drupal::database()->schema();
-  $table_name = 'salesforce_push_queue';
-
-  if (!$schema->tableExists($table_name)) {
-    return;
-  }
-
-  $schema->addField($table_name, 'last_failure_message', [
-    'type' => 'text',
-    'not null' => FALSE,
-    'default' => NULL,
-    'description' => 'The last failure message for this queue item, if failed.',
-  ]);
+  $schema_definition = \Drupal::service('queue.salesforce_push')->schemaDefinition();
+  // Adds the new fields to the table.
+  \Drupal::database()->schema()->addField('salesforce_push_queue', 'last_failure_message', $schema_definition['fields']['last_failure_message']);
 }

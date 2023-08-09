@@ -7,11 +7,11 @@ use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\salesforce\SelectQuery;
-use Drupal\Tests\UnitTestCase;
 use Drupal\salesforce_mapping\Entity\SalesforceMapping;
 use Drupal\salesforce_mapping\MappingConstants;
 use Drupal\salesforce_mapping\Plugin\SalesforceMappingField\Properties;
 use Drupal\salesforce_mapping\SalesforceMappingFieldPluginManager;
+use Drupal\Tests\UnitTestCase;
 use Prophecy\Argument;
 
 /**
