@@ -18,7 +18,7 @@ class PushQueueTest extends BrowserTestBase {
    *
    * @var string
    */
-  protected $defaultTheme  = 'stark';
+  protected $defaultTheme = 'stark';
 
   /**
    * Required modules.

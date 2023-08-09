@@ -7,15 +7,15 @@
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\salesforce_mapping_ui\Form\MappedObjectDeleteForm;
-use Drupal\salesforce_mapping_ui\SalesforceMappingList;
+use Drupal\salesforce_mapping_ui\Form\MappedObjectForm;
 use Drupal\salesforce_mapping_ui\Form\SalesforceMappingAddForm;
-use Drupal\salesforce_mapping_ui\Form\SalesforceMappingEditForm;
-use Drupal\salesforce_mapping_ui\Form\SalesforceMappingDisableForm;
 use Drupal\salesforce_mapping_ui\Form\SalesforceMappingDeleteForm;
+use Drupal\salesforce_mapping_ui\Form\SalesforceMappingDisableForm;
+use Drupal\salesforce_mapping_ui\Form\SalesforceMappingEditForm;
 use Drupal\salesforce_mapping_ui\Form\SalesforceMappingEnableForm;
 use Drupal\salesforce_mapping_ui\Form\SalesforceMappingFieldsForm;
 use Drupal\salesforce_mapping_ui\MappedObjectList;
-use Drupal\salesforce_mapping_ui\Form\MappedObjectForm;
+use Drupal\salesforce_mapping_ui\SalesforceMappingList;
 
 /**
  * Implements hook_entity_type_alter().
@@ -96,7 +96,7 @@ function salesforce_mapping_ui_entity_operation(EntityInterface $entity) {
  */
 function salesforce_mapping_ui_entity_extra_field_info() {
   // Include Salesforce data for mapped entities.
-  // @TODO: these don't actually show up on the entity view. Have to implement hook_entity_view as well?
+  // @todo these don't actually show up on the entity view. Have to implement hook_entity_view as well?
   $extra = [];
   $mappings = \Drupal::service('entity_type.manager')
     ->getStorage('salesforce_mapping')

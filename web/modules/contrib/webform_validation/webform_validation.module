@@ -1,0 +1,225 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\webform_validation\Validate\WebformValidateConstraint;
+
+/**
+ * Implements hook_webform_element_default_properties_alter().
+ */
+function webform_validation_webform_element_default_properties_alter(array &$properties, array &$definition): void {
+  // Add webform_validation properties only if this component is supported.
+  if (in_array($definition['id'], WebformValidateConstraint::ALLOWED_TYPES)) {
+    $properties += [
+      'equal__enabled' => 0,
+      'equal__components' => [],
+
+      'some_of_several__enabled' => 0,
+      'some_of_several__components' => [],
+      'some_of_several__completed' => '',
+      'some_of_several__final_validation' => 0,
+    ];
+  }
+
+  // Add compare properties only if this component supports comparison.
+  if (in_array($definition['id'], WebformValidateConstraint::ALLOWED_TYPES_COMPARE)) {
+    $properties += [
+      'compare__enabled' => 0,
+      'compare__component' => '',
+      'compare__operator' => '',
+      'compare__custom_error' => '',
+    ];
+  }
+}
+
+/**
+ * Implements hook_webform_element_configuration_form_alter().
+ */
+function webform_validation_webform_element_configuration_form_alter(array &$form, FormStateInterface $form_state): void {
+  // Retrieve the values from the custom properties element's default value.
+  // @see \Drupal\webform\Plugin\WebformElementBase::buildConfigurationForm
+  $customProperties = $form_state->get('element_properties');
+  $formObject = $form_state->getFormObject();
+  $webform = $formObject->getWebform();
+
+  // Generate arrays of all elements the current one could validate against.
+  // These are used as #options when selecting the components to compare.
+  //
+  // Array of components that can be included in validation.
+  $components = [];
+  // Array of components that can be included in comparison validation.
+  $compareComponents = [];
+  // The title of the current element. This is used to remove the current
+  // element from the list of elements to validate relative to. This ought
+  // to be done using the element key, but that is not available.
+  $this_element_title = ($customProperties['admin_title'] ?? NULL) ?: $customProperties['title'];
+  // Array of all elements in the form.
+  $elements = $webform->getElementsInitializedAndFlattened();
+  foreach ($elements as $elementKey => $element) {
+    // Generate a list of all elements the current one could validate against.
+    if (in_array($element['#type'], WebformValidateConstraint::ALLOWED_TYPES)) {
+      if ($element['#admin_title'] !== $this_element_title) {
+        $components[$elementKey] = $element['#admin_title'];
+      }
+    }
+    // Generate a list of all elements the current one could compare against.
+    if (in_array($element['#type'], WebformValidateConstraint::ALLOWED_TYPES_COMPARE)) {
+      if ($element['#admin_title'] !== $this_element_title && $element['#type'] === $customProperties['type']) {
+        $compareComponents[$elementKey] = $element['#admin_title'];
+      }
+    }
+  }
+
+  // The overall details element.
+  $form['custom_properties']['webform_validation'] = [
+    '#type' => 'details',
+    '#title' => t('Form extra validation'),
+    '#description' => t('Form validation rules that span more than one element.'),
+    '#open' => TRUE,
+  ];
+
+  // The 'equal' validator.
+  $form['custom_properties']['webform_validation']['equal__enabled'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Equal values'),
+    '#description' => t('Verifies that all specified components contain equal values. If all components are of type email, they will get case-insensitive comparison. Works with: date, datetime, email, hidden, number, select, textarea, textfield, time, boolean.'),
+  ];
+  $form['custom_properties']['webform_validation']['equal__components'] = [
+    '#type' => 'checkboxes',
+    '#options' => $components,
+    '#title' => t('Equal Components'),
+    '#description' => t('Select the components to be validated by this validation rule'),
+    '#states' => [
+      'visible' => [
+        ':input[name="properties[equal__enabled]"]' => ['checked' => TRUE],
+      ],
+      'required' => [
+        ':input[name="properties[equal__enabled]"]' => ['checked' => TRUE],
+      ],
+    ],
+  ];
+
+  // The 'compare' validator.
+  $form['custom_properties']['webform_validation']['compare__enabled'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Compare two values'),
+    '#description' => t('Compare two values for greater than (>), less than (<), greater than or equal to (>=), or less than or equal to (<=). Works with: date, datetime, email, hidden, number, select, textarea, textfield, time.'),
+  ];
+  $form['custom_properties']['webform_validation']['compare__component'] = [
+    '#type' => 'select',
+    '#title' => t('Compare with'),
+    '#options' => $compareComponents,
+    '#empty_value' => 0,
+    '#description' => t('Select the components to be validated by this validation rule'),
+    '#states' => [
+      'visible' => [
+        ':input[name="properties[compare__enabled]"]' => ['checked' => TRUE],
+      ],
+      'required' => [
+        ':input[name="properties[compare__enabled]"]' => ['checked' => TRUE],
+      ],
+    ],
+  ];
+  $form['custom_properties']['webform_validation']['compare__operator'] = [
+    '#type' => 'select',
+    '#title' => t('Comparison operator'),
+    '#options' => ['>' => '>', '>=' => '>=', '<' => '<', '<=' => '<='],
+    '#description' => t('Specify the comparison operator you want to use. Must be one of: >, >=, <, <=. The validator will compare the first component with the second using this operator. If the components are of type email, they will get case-insensitive comparison.'),
+    '#states' => [
+      'visible' => [
+        ':input[name="properties[compare__enabled]"]' => ['checked' => TRUE],
+      ],
+      'required' => [
+        ':input[name="properties[compare__enabled]"]' => ['checked' => TRUE],
+      ],
+    ],
+  ];
+  $form['custom_properties']['webform_validation']['compare__custom_error'] = [
+    '#type' => 'textfield',
+    '#title' => t('Custom error message'),
+    '#description' => t("Specify an error message that should be displayed when user input doesn't pass validation"),
+    '#states' => [
+      'visible' => [
+        ':input[name="properties[compare__enabled]"]' => ['checked' => TRUE],
+      ],
+    ],
+  ];
+
+  // The 'some_of_several' validator.
+  $form['custom_properties']['webform_validation']['some_of_several__enabled'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Some of several'),
+    '#description' => t('Requires the user to complete some number of components out of a group of components. For example, complete at least 2 out of 3, complete at most 4 out of 6, or complete exactly 3 our of 4. Works with: date, datetime, email, file, number, select, textarea, textfield, time, boolean.'),
+  ];
+  $form['custom_properties']['webform_validation']['some_of_several__components'] = [
+    '#type' => 'checkboxes',
+    '#options' => $components,
+    '#title' => t('Several Components'),
+    '#description' => t('Select the components to be validated by this validation rule'),
+    '#states' => [
+      'visible' => [
+        ':input[name="properties[some_of_several__enabled]"]' => ['checked' => TRUE],
+      ],
+      'required' => [
+        ':input[name="properties[some_of_several__enabled]"]' => ['checked' => TRUE],
+      ],
+    ],
+  ];
+  $form['custom_properties']['webform_validation']['some_of_several__completed'] = [
+    '#type' => 'textfield',
+    '#title' => t('Number to be completed'),
+    '#description' => t('Specify the number that must be completed and the type of comparison. For example:
+			Enter ">=1" if the user must complete at least 1 of the selected components.
+			Enter "=3" if the user must complete exactly 3 of the selected components.
+			Enter "<=2" if the user must complete at most 2 of the selected components.'),
+    '#states' => [
+      'visible' => [
+        ':input[name="properties[some_of_several__enabled]"]' => ['checked' => TRUE],
+      ],
+      'required' => [
+        ':input[name="properties[some_of_several__enabled]"]' => ['checked' => TRUE],
+      ],
+    ],
+  ];
+  $form['custom_properties']['webform_validation']['some_of_several__final_validation'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Validation on final confirmation page'),
+    '#description' => t('Do the validation on final confirmation page'),
+    '#states' => [
+      'visible' => [
+        ':input[name="properties[some_of_several__enabled]"]' => ['checked' => TRUE],
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function webform_validation_form_webform_ui_element_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  $form['#validate'][] = [
+    WebformValidateConstraint::class,
+    'validateBackendComponents',
+  ];
+}
+
+/**
+ * Implements hook_webform_submission_form_alter().
+ */
+function webform_validation_webform_submission_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  $form['elements']['page1']['mark1']['#access'] = FALSE;
+  $form['#validate'][] = [
+    WebformValidateConstraint::class,
+    'validate',
+  ];
+  if (!empty($form['actions']['wizard_prev']['#submit'])) {
+    $form['actions']['wizard_prev']['#submit'][] = [
+      WebformValidateConstraint::class,
+      'formSubmitPrevious',
+    ];
+  }
+}

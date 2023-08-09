@@ -26,7 +26,7 @@ class RelatedProperties extends SalesforceMappingFieldPluginBase {
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $pluginForm = parent::buildConfigurationForm($form, $form_state);
 
-    // @TODO inspecting the form and form_state feels wrong, but haven't found a good way to get the entity from config before the config is saved.
+    // @todo inspecting the form and form_state feels wrong, but haven't found a good way to get the entity from config before the config is saved.
     $options = $this->getConfigurationOptions($form['#entity']);
 
     if (empty($options)) {
@@ -165,7 +165,7 @@ class RelatedProperties extends SalesforceMappingFieldPluginBase {
 
       $entity_type = $this->entityTypeManager->getDefinition($entity_type_id);
 
-      // exclude non-fieldables
+      // Exclude non-fieldables.
       if ($entity_type->entityClassImplements(FieldableEntityInterface::class)) {
         foreach ($this->entityTypeBundleInfo->getBundleInfo($entity_type_id) as $bundle => $bundle_info) {
           // If target bundles is specified, limit which bundles are visible.

@@ -6,12 +6,12 @@ use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\salesforce\Rest\RestClient;
+use Drupal\salesforce\SalesforceAuthProviderPluginManagerInterface;
 use Drupal\salesforce\SelectQuery;
+use Drupal\salesforce\Storage\SalesforceAuthTokenStorageInterface;
 use Drush\Exceptions\UserAbortException;
 use Symfony\Component\Console\Input\Input;
 use Symfony\Component\Console\Output\Output;
-use Drupal\salesforce\SalesforceAuthProviderPluginManagerInterface;
-use Drupal\salesforce\Storage\SalesforceAuthTokenStorageInterface;
 
 /**
  * A Drush commandfile.

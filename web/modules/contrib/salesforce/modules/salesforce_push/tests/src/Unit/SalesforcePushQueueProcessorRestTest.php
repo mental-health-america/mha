@@ -4,23 +4,23 @@ namespace Drupal\Tests\salesforce_push\Unit;
 
 use Drupal\Core\Config\Entity\ConfigEntityStorageInterface;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\Sql\SqlEntityStorageInterface;
 use Drupal\Core\Queue\SuspendQueueException;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\salesforce\EntityNotFoundException;
-use Drupal\salesforce\SalesforceAuthProviderPluginManager;
-use Drupal\Tests\UnitTestCase;
 use Drupal\salesforce\Rest\RestClientInterface;
+use Drupal\salesforce\SalesforceAuthProviderPluginManager;
 use Drupal\salesforce_mapping\Entity\MappedObjectInterface;
 use Drupal\salesforce_mapping\Entity\SalesforceMappingInterface;
 use Drupal\salesforce_mapping\MappingConstants;
 use Drupal\salesforce_push\Plugin\SalesforcePushQueueProcessor\Rest;
 use Drupal\salesforce_push\PushQueueInterface;
+use Drupal\Tests\UnitTestCase;
 use OAuth\Common\Token\TokenInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\StringTranslation\TranslationInterface;
 
 /**
  * Test SalesforcePushQueueProcessor plugin Rest.

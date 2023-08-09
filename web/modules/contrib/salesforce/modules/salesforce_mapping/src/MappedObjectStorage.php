@@ -3,9 +3,9 @@
 namespace Drupal\salesforce_mapping;
 
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Sql\SqlContentEntityStorage;
 use Drupal\salesforce\SFID;
 use Drupal\salesforce_mapping\Entity\SalesforceMappingInterface;
-use Drupal\Core\Entity\Sql\SqlContentEntityStorage;
 
 /**
  * Class MappedObjectStorage.

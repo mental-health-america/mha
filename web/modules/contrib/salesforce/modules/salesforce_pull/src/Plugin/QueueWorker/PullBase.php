@@ -74,12 +74,13 @@ abstract class PullBase extends QueueWorkerBase implements ContainerFactoryPlugi
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, RestClientInterface $client, EventDispatcherInterface $event_dispatcher) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, RestClientInterface $client, EventDispatcherInterface $event_dispatcher, array $configuration, $plugin_id, $plugin_definition) {
     $this->etm = $entity_type_manager;
     $this->client = $client;
     $this->eventDispatcher = $event_dispatcher;
     $this->mappingStorage = $this->etm->getStorage('salesforce_mapping');
     $this->mappedObjectStorage = $this->etm->getStorage('salesforce_mapped_object');
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
   /**
@@ -89,7 +90,10 @@ abstract class PullBase extends QueueWorkerBase implements ContainerFactoryPlugi
     return new static(
       $container->get('entity_type.manager'),
       $container->get('salesforce.client'),
-      $container->get('event_dispatcher')
+      $container->get('event_dispatcher'),
+      $configuration,
+      $plugin_id,
+      $plugin_definition
     );
   }
 
@@ -120,7 +124,7 @@ abstract class PullBase extends QueueWorkerBase implements ContainerFactoryPlugi
       'salesforce_id' => (string) $sf_object->id(),
       'salesforce_mapping' => $mapping->id,
     ]);
-    // @TODO one-to-many: this is a blocker for OTM support:
+    // @todo one-to-many: this is a blocker for OTM support:
     $mapped_object = current($mapped_object);
     if (!empty($mapped_object)) {
       return $this->updateEntity($mapping, $mapped_object, $sf_object, $item->getForcePull());
