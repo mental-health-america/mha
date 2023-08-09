@@ -65,7 +65,7 @@ class PullQueueItem {
    */
   public function getMappingId() {
     // Legacy backwards compatibility.
-    // @TODO remove for 8.x-3.3
+    // @todo remove for 8.x-3.3
     if (property_exists($this, 'mapping_id')) {
       return $this->mapping_id;
     }
@@ -80,7 +80,7 @@ class PullQueueItem {
    */
   public function getForcePull() {
     // Legacy backwards compatibility.
-    // @TODO remove for 8.x-3.3
+    // @todo remove for 8.x-3.3
     if (property_exists($this, 'force_pull')) {
       return $this->force_pull;
     }

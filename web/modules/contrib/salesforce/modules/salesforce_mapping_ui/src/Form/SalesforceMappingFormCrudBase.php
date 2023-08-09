@@ -4,10 +4,10 @@ namespace Drupal\salesforce_mapping_ui\Form;
 
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\salesforce_mapping\MappingConstants;
 use Drupal\Core\Url;
-use Drupal\salesforce\Event\SalesforceEvents;
 use Drupal\salesforce\Event\SalesforceErrorEvent;
+use Drupal\salesforce\Event\SalesforceEvents;
+use Drupal\salesforce_mapping\MappingConstants;
 
 /**
  * Salesforce Mapping Form base.
@@ -116,11 +116,15 @@ abstract class SalesforceMappingFormCrudBase extends SalesforceMappingFormBase {
     ];
 
     $salesforce_object_type = '';
+    $salesforce_object = NULL;
     if (!empty($form_state->getValues()) && !empty($form_state->getValue('salesforce_object_type'))) {
       $salesforce_object_type = $form_state->getValue('salesforce_object_type');
     }
     elseif ($mapping->salesforce_object_type) {
       $salesforce_object_type = $mapping->salesforce_object_type;
+    }
+    if (!empty($salesforce_object_type)) {
+      $salesforce_object = $this->client->objectDescribe($salesforce_object_type);
     }
     $form['salesforce_object']['salesforce_object_type'] = [
       '#title' => $this->t('Salesforce Object'),
@@ -133,7 +137,7 @@ abstract class SalesforceMappingFormCrudBase extends SalesforceMappingFormBase {
       '#empty_option' => $this->t('- Select -'),
     ];
 
-    // @TODO either change sync_triggers to human readable values, or make them work as hex flags again.
+    // @todo either change sync_triggers to human readable values, or make them work as hex flags again.
     $trigger_options = $this->getSyncTriggerOptions();
     $form['sync_triggers'] = [
       '#title' => $this->t('Action triggers'),
@@ -158,7 +162,7 @@ abstract class SalesforceMappingFormCrudBase extends SalesforceMappingFormBase {
     }
 
     if ($this->moduleHandler->moduleExists('salesforce_pull')) {
-      // @TODO should push and pull settings get moved into push and pull modules?
+      // @todo should push and pull settings get moved into push and pull modules?
       $form['pull'] = [
         '#title' => $this->t('Pull Settings'),
         '#type' => 'details',
@@ -200,7 +204,7 @@ abstract class SalesforceMappingFormCrudBase extends SalesforceMappingFormBase {
         ];
 
         // This doesn't work until after mapping gets saved.
-        // @TODO figure out best way to alert admins about this, or AJAX-ify it.
+        // @todo figure out best way to alert admins about this, or AJAX-ify it.
         $form['pull']['pull_trigger_date'] = [
           '#type' => 'select',
           '#title' => $this->t('Date field to trigger pull'),
@@ -216,6 +220,20 @@ abstract class SalesforceMappingFormCrudBase extends SalesforceMappingFormBase {
         '#type' => 'textarea',
         '#description' => $this->t('Add a "where" SOQL condition clause to limit records pulled from Salesforce. e.g. Email != \'\' AND RecordType.DeveloperName = \'ExampleRecordType\''),
         '#default_value' => $mapping->pull_where_clause,
+      ];
+
+      $record_type_options = [];
+      if ($salesforce_object && !empty($salesforce_object->recordTypeInfos)) {
+        foreach ($salesforce_object->recordTypeInfos as $record_type_info) {
+          $record_type_options[$record_type_info['developerName']] = $record_type_info['name'];
+        }
+      }
+      $form['pull']['pull_record_type_filter'] = [
+        '#title' => $this->t('Record Types to Request'),
+        '#type' => 'checkboxes',
+        '#options' => $record_type_options,
+        '#description' => $this->t('Restrict the record types to pull from Salesforce. If you set no values, all types will be requested.'),
+        '#default_value' => $mapping->pull_record_type_filter ?: [],
       ];
 
       $form['pull']['pull_frequency'] = [

@@ -2,21 +2,22 @@
 
 namespace Drupal\salesforce_pull;
 
+use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Queue\QueueDatabaseFactory;
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Utility\Error;
 use Drupal\salesforce\Event\SalesforceErrorEvent;
 use Drupal\salesforce\Event\SalesforceEvents;
 use Drupal\salesforce\Event\SalesforceNoticeEvent;
 use Drupal\salesforce\Rest\RestClientInterface;
+use Drupal\salesforce\SelectQueryResult;
 use Drupal\salesforce\SFID;
 use Drupal\salesforce\SObject;
-use Drupal\salesforce\SelectQueryResult;
 use Drupal\salesforce_mapping\Entity\SalesforceMappingInterface;
+use Drupal\salesforce_mapping\Event\SalesforcePullEnqueueEvent;
 use Drupal\salesforce_mapping\Event\SalesforceQueryEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Drupal\Component\Datetime\TimeInterface;
 
 /**
  * Handles pull cron queue set up.
@@ -224,7 +225,7 @@ class QueueHandler {
    * @see SalesforceMappingInterface
    */
   public function doSfoQuery(SalesforceMappingInterface $mapping, array $mapped_fields = [], $start = 0, $stop = 0) {
-    // @TODO figure out the new way to build the query.
+    // @todo figure out the new way to build the query.
     // Execute query.
     try {
       $soql = $mapping->getPullQuery($mapped_fields, $start, $stop);
@@ -260,7 +261,7 @@ class QueueHandler {
         $message = '%type: @message in %function (line %line of %file).';
         $args = Error::decodeException($e);
         $this->eventDispatcher->dispatch(new SalesforceErrorEvent($e, $message, $args), SalesforceEvents::ERROR);
-        // @TODO do we really want to eat this exception here?
+        // @todo do we really want to eat this exception here?
         return;
       }
     }
@@ -285,8 +286,10 @@ class QueueHandler {
     $triggerField = $mapping->getPullTriggerDate();
     try {
       foreach ($results->records() as $record) {
-        // @TODO? Pull Queue Enqueue Event
-        $this->enqueueRecord($mapping, $record, $force_pull);
+        $event = $this->eventDispatcher->dispatch(new SalesforcePullEnqueueEvent($mapping, $results, $record, $force_pull), SalesforceEvents::PULL_ENQUEUE);
+        if ($force_pull || $event->isEnqueueAllowed()) {
+          $this->enqueueRecord($mapping, $record, $force_pull);
+        }
         $record_time = strtotime($record->field($triggerField));
         if ($max_time < $record_time) {
           $max_time = $record_time;

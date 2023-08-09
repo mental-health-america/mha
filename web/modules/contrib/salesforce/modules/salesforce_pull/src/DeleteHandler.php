@@ -4,10 +4,10 @@ namespace Drupal\salesforce_pull;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\State\StateInterface;
-use Drupal\salesforce\Event\SalesforceEvents;
-use Drupal\salesforce\Event\SalesforceWarningEvent;
 use Drupal\salesforce\Event\SalesforceErrorEvent;
+use Drupal\salesforce\Event\SalesforceEvents;
 use Drupal\salesforce\Event\SalesforceNoticeEvent;
+use Drupal\salesforce\Event\SalesforceWarningEvent;
 use Drupal\salesforce\Rest\RestClientInterface;
 use Drupal\salesforce\SFID;
 use Drupal\salesforce_mapping\Event\SalesforceDeleteAllowedEvent;
@@ -101,13 +101,13 @@ class DeleteHandler {
    *   TRUE.
    */
   public function processDeletedRecords() {
-    // @TODO Add back in SOAP, and use autoloading techniques
+    // @todo Add back in SOAP, and use autoloading techniques
     $pull_info = $this->state->get('salesforce.mapping_pull_info', []);
     foreach ($this->mappingStorage->loadMultiple() as $mapping) {
       if (!$mapping->checkTriggers([MappingConstants::SALESFORCE_MAPPING_SYNC_SF_DELETE])) {
         continue;
       }
-      // @TODO add some accommodation to handle deleted records per-mapping.
+      // @todo add some accommodation to handle deleted records per-mapping.
       $last_delete_sync = !empty($pull_info[$mapping->id()]['last_delete_timestamp'])
         ? $pull_info[$mapping->id()]['last_delete_timestamp']
         : strtotime('-29 days');
@@ -195,7 +195,7 @@ class DeleteHandler {
           '%sfid' => $record['id'],
         ];
         $this->eventDispatcher->dispatch(new SalesforceWarningEvent(NULL, $message, $args), SalesforceEvents::WARNING);
-        // @TODO should we delete a mapped object whose parent mapping no longer exists? Feels like someone else's job.
+        // @todo should we delete a mapped object whose parent mapping no longer exists? Feels like someone else's job.
         // $mapped_object->delete();
         return;
       }

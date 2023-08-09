@@ -6,9 +6,9 @@ use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityReferenceSelection\SelectionInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Entity\EntityReferenceSelection\SelectionInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\PluginBase;
@@ -22,7 +22,6 @@ use Drupal\salesforce\SObject;
 use Drupal\salesforce_mapping\Entity\SalesforceMappingInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use DateTime;
 
 /**
  * Defines a base Salesforce Mapping Field Plugin implementation.
@@ -170,8 +169,7 @@ abstract class SalesforceMappingFieldPluginBase extends PluginBase implements Sa
    * {@inheritdoc}
    */
   public function pushValue(EntityInterface $entity, SalesforceMappingInterface $mapping) {
-    // @TODO to provide for better extensibility, this would be better implemented as some kind of constraint or plugin system. That would also open new possibilities for injecting business logic into the mapping layer.
-
+    // @todo to provide for better extensibility, this would be better implemented as some kind of constraint or plugin system. That would also open new possibilities for injecting business logic into the mapping layer.
     // If this field plugin doesn't support salesforce_field config type, or
     // doesn't do push, then return the raw value from the mapped entity.
     $value = $this->value($entity, $mapping);
@@ -206,7 +204,7 @@ abstract class SalesforceMappingFieldPluginBase extends PluginBase implements Sa
       case 'datetime':
         if (!empty($value)) {
           $date = new DrupalDateTime($value, 'UTC');
-          $value = $date->format(DateTime::ISO8601);
+          $value = $date->format(\DateTime::ISO8601);
         }
         break;
 
@@ -253,8 +251,7 @@ abstract class SalesforceMappingFieldPluginBase extends PluginBase implements Sa
    * {@inheritdoc}
    */
   public function pullValue(SObject $sf_object, EntityInterface $entity, SalesforceMappingInterface $mapping) {
-    // @TODO to provide for better extensibility, this would be better implemented as some kind of constraint or plugin system. That would also open new possibilities for injecting business logic into the mapping layer.
-
+    // @todo to provide for better extensibility, this would be better implemented as some kind of constraint or plugin system. That would also open new possibilities for injecting business logic into the mapping layer.
     if (!$this->pull() || empty($this->config('salesforce_field'))) {
       throw new SalesforceException('No data to pull. Salesforce field mapping is not defined.');
     }
@@ -281,7 +278,7 @@ abstract class SalesforceMappingFieldPluginBase extends PluginBase implements Sa
         break;
 
       case 'datetime':
-        if ($drupal_field_type === 'datetime_iso8601') {
+        if ($drupal_field_type === 'datetime_iso8601' && is_string($value)) {
           $value = substr($value, 0, 19);
         }
         break;

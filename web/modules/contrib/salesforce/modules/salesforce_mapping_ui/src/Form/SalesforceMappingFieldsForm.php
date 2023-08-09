@@ -3,9 +3,9 @@
 namespace Drupal\salesforce_mapping_ui\Form;
 
 use Drupal\Component\Utility\NestedArray;
-use \Drupal\Core\Render\Element;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\SubformState;
+use Drupal\Core\Render\Element;
 use Drupal\salesforce_mapping\SalesforceMappingFieldPluginInterface as FieldPluginInterface;
 
 /**
@@ -22,8 +22,7 @@ class SalesforceMappingFieldsForm extends SalesforceMappingFormBase {
     }
     $form = parent::buildForm($form, $form_state);
     // Previously "Field Mapping" table on the map edit form.
-    // @TODO add a header with Fieldmap Property information.
-
+    // @todo add a header with Fieldmap Property information.
     // Add #entity property to expose it to our field plugin forms.
     $form['#entity'] = $this->entity;
 
@@ -78,7 +77,7 @@ class SalesforceMappingFieldsForm extends SalesforceMappingFormBase {
     $field_mappings_wrapper['field_mappings'] = [
       '#tree' => TRUE,
       '#type' => 'container',
-      // @TODO there's probably a better way to tie ajax callbacks to this element than by hard-coding an HTML DOM ID here.
+      // @todo there's probably a better way to tie ajax callbacks to this element than by hard-coding an HTML DOM ID here.
       '#prefix' => '<div id="edit-field-mappings">',
       '#suffix' => '</div>',
       '#attributes' => ['class' => ['container-striped']],
@@ -96,7 +95,7 @@ class SalesforceMappingFieldsForm extends SalesforceMappingFormBase {
 
     $form['buttons'] = [
       '#type' => 'container',
-      '#tree' => true
+      '#tree' => TRUE,
     ];
     $form['buttons']['field_type'] = [
       '#title' => $this->t('Field Type'),
@@ -191,8 +190,8 @@ class SalesforceMappingFieldsForm extends SalesforceMappingFormBase {
 
     $row['config'] = $field_plugin->buildConfigurationForm($form, $form_state);
     $row['config']['id'] = ['#type' => 'value', '#value' => $field_plugin->config('id')];
-    // @TODO implement "lock/unlock" logic here:
-    // @TODO convert these to AJAX operations
+    // @todo implement "lock/unlock" logic here:
+    // @todo convert these to AJAX operations
     $operations = [
       'delete' => $this->t('Delete'),
     ];
@@ -210,7 +209,7 @@ class SalesforceMappingFieldsForm extends SalesforceMappingFormBase {
     ];
     $row['#type'] = 'container';
     $row['#attributes'] = [
-      'class' => ['field_mapping_field', 'row', $field_plugin->config('id') % 2 ? 'odd' : 'even']
+      'class' => ['field_mapping_field', 'row', $field_plugin->config('id') % 2 ? 'odd' : 'even'],
     ];
     return $row;
   }
@@ -289,6 +288,9 @@ class SalesforceMappingFieldsForm extends SalesforceMappingFormBase {
     return $form['field_mappings_wrapper']['field_mappings'];
   }
 
+  /**
+   *
+   */
   public function addField(&$form, FormStateInterface $form_state) {
     $trigger = $form_state->getTriggeringElement();
     $values = &$form_state->getValues();

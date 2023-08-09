@@ -2,8 +2,8 @@
 
 namespace Drupal\salesforce_mapping\Event;
 
-use Drupal\salesforce_mapping\Entity\MappedObjectInterface;
 use Drupal\salesforce\Event\SalesforceBaseEvent;
+use Drupal\salesforce_mapping\Entity\MappedObjectInterface;
 
 /**
  * Push event.

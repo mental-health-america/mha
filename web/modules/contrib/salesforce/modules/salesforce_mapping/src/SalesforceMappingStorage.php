@@ -157,7 +157,7 @@ class SalesforceMappingStorage extends ConfigEntityStorage {
    */
   public function loadByProperties(array $values = []) {
     // Build a query to fetch the entity IDs.
-    $entity_query = $this->getQuery()->accessCheck(false);
+    $entity_query = $this->getQuery()->accessCheck(FALSE);
     $this->buildPropertyQuery($entity_query, $values);
     // Sort by the mapping weight to ensure entities/objects are processed in
     // the correct order.
