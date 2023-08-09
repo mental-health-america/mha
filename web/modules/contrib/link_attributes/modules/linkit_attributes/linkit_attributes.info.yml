@@ -1,8 +1,9 @@
-name: 'Link attributes alterInfo Test'
-description: 'Implements hook_link_attributes_plugin_alter'
+name: Linkit attributes
 type: module
+description: Provides a linkit widget with attributes settings.
 core_version_requirement: ^9 || ^10
 dependencies:
+  - linkit:linkit (>= 6)
   - link_attributes:link_attributes
 
 # Information added by Drupal.org packaging script on 2023-07-26
