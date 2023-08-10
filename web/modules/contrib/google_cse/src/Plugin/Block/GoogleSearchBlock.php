@@ -97,6 +97,7 @@ class GoogleSearchBlock extends BlockBase implements ContainerFactoryPluginInter
     return [
       'label' => $this->t('Search'),
       'search_id' => '',
+      'search_type' => 'drupal',
     ];
   }
 
@@ -134,7 +135,19 @@ class GoogleSearchBlock extends BlockBase implements ContainerFactoryPluginInter
         '#default_value' => reset($value),
       ];
     }
-
+    // Allow the user to select whether they want the Drupal search input
+    // or the Google PSE one (e.g., for autocomplete).
+    $search_types = [
+      'drupal' => 'Drupal',
+      'google' => 'Google',
+    ];
+    $form['search_type'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Search input type'),
+      '#description' => $this->t('Use the Google search input if you want Google-provided features such as search autocomplete.'),
+      '#options' => $search_types,
+      '#default_value' => $this->configuration['search_type'],
+    ];
     return $form;
   }
 
@@ -147,6 +160,8 @@ class GoogleSearchBlock extends BlockBase implements ContainerFactoryPluginInter
     if (!$form_state->getErrors()) {
       $this->configuration['search_id'] = $form_state
         ->getValue('search_id');
+      $this->configuration['search_type'] = $form_state
+        ->getValue('search_type');
       $this->blockSubmit($form, $form_state);
     }
   }
@@ -156,6 +171,7 @@ class GoogleSearchBlock extends BlockBase implements ContainerFactoryPluginInter
    */
   public function build() {
     $search_id = $this->configuration['search_id'];
+    $search_type = $this->configuration['search_type'];
     $entity = $this->entityTypeManager->getStorage('search_page')->load($search_id);
     if ($entity === NULL) {
       // This conditional handles search configurations that were deleted.
@@ -165,7 +181,22 @@ class GoogleSearchBlock extends BlockBase implements ContainerFactoryPluginInter
     $google_markup = $plugin->buildResults();
     $config = $this->configFactory->get('search.page.' . $search_id);
     $settings = $config->get('configuration');
-
+    if ($search_type === 'google') {
+      $form['search'] = ['#markup' => '<div class="gcse-searchbox-only" data-resultsUrl="/search/' . $entity->get('path') . '" data-queryParameterName="keys"></div>'];
+      // Add the Google Programmable Search library itself, with ID as a param.
+      $form['#attached']['html_head'][] = [
+        [
+          '#type' => 'html_tag',
+          '#tag' => 'script',
+          '#attributes' => [
+            'async' => '',
+            'src' => 'https://cse.google.com/cse.js?cx=' . $settings['cx'],
+          ],
+        ],
+        'google_cse_' . $settings['cx'],
+      ];
+      return $form;
+    }
     if (isset($settings['display_drupal_search']) && $settings['display_drupal_search'] === 0) {
       // The configuration indicates the Drupal search input shouldn't display.
       // This usually means the configuration is set to display the
