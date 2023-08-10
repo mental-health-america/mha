@@ -266,3 +266,32 @@ h4.mb-3.white-text.connect {
 input.gsc-input, .gsc-input-box, .gsc-input-box-hover, .gsc-input-box-focus {
   border-color: transparent !important;
 }
+
+#block-googleprogrammablesearch table > tbody > tr > td,
+#block-googleprogrammablesearch  table{
+  border-color: transparent !important;
+  border-width: 0 !important;
+  border-style: none !important;
+  padding: 0;
+}
+#block-googleprogrammablesearch  table{
+  border: 0 solid transparent !important;
+}
+
+#block-googleprogrammablesearch tbody tr:nth-child(2n+1) {
+  background: transparent !important;
+}
+.gsc-search-button-v2 {
+  padding: 10px 27px !important;
+}
+.gsib_b {
+  display: none;
+}
+
+.gsib_a {
+  padding: 0;
+}
+
+table.gsc-search-box td.gsc-input {
+  padding-right: 0;
+}
