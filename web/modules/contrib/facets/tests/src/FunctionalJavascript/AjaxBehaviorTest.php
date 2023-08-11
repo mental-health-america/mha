@@ -47,8 +47,9 @@ class AjaxBehaviorTest extends JsBase {
     $links = $this->xpath('//a//span[normalize-space(text())=:label]', [':label' => 'article']);
     $this->assertNotEmpty($links);
 
-    // Click the item facet.
-    $this->clickLink('item');
+    // Click the item facets.
+    $owl_link = $this->assertSession()->elementExists("xpath", "//label[@for='owl-item']/span[1]");
+    $owl_link->click();
 
     $this->assertSession()->assertWaitOnAjaxRequest();
     $this->assertSession()->pageTextContains('Displaying 3 search results');
@@ -58,7 +59,7 @@ class AjaxBehaviorTest extends JsBase {
     $this->assertEmpty($links);
 
     // Click the item facet again, and check that the article facet is back.
-    $this->clickLink('item');
+    $owl_link->click();
     $this->assertSession()->assertWaitOnAjaxRequest();
     $this->assertSession()->pageTextContains('Displaying 5 search results');
     $links = $this->xpath('//a//span[normalize-space(text())=:label]', [':label' => 'article']);
@@ -67,7 +68,8 @@ class AjaxBehaviorTest extends JsBase {
     // Check that the strawberry link disappears when filtering on items.
     $links = $this->xpath('//a//span[normalize-space(text())=:label]', [':label' => 'strawberry']);
     $this->assertNotEmpty($links);
-    $this->clickLink('item');
+
+    $owl_link->click();
     $this->assertSession()->assertWaitOnAjaxRequest();
     $links = $this->xpath('//a//span[normalize-space(text())=:label]', [':label' => 'strawberry']);
     $this->assertEmpty($links);
@@ -95,13 +97,14 @@ class AjaxBehaviorTest extends JsBase {
     // Check that the article_category option disappears when filtering on item.
     $dropdown_entry = $this->xpath('//*[@id="block-duck-block"]/div/select/option[normalize-space(text())=:label]', [':label' => 'article_category']);
     $this->assertNotEmpty($dropdown_entry);
-    $block_owl->clickLink('item');
+    $owl_link = $this->assertSession()->elementExists("xpath", "//label[@for='owl-item']/span[1]");
+    $owl_link->click();
     $this->assertSession()->assertWaitOnAjaxRequest();
     $dropdown_entry = $this->xpath('//*[@id="block-duck-block"]/div/select/option[normalize-space(text())=:label]', [':label' => 'article_category']);
     $this->assertEmpty($dropdown_entry);
 
     // Click the item facet again.
-    $block_owl->clickLink('item');
+    $owl_link->click();
     $this->assertSession()->assertWaitOnAjaxRequest();
 
     // Select the article_category in the dropdown.
@@ -143,7 +146,8 @@ class AjaxBehaviorTest extends JsBase {
     $this->assertNotEmpty($links);
 
     // Click the item facet.
-    $this->clickLink('item');
+    $owl_link = $this->assertSession()->elementExists("xpath", "//label[@for='owl-item']/span[1]");
+    $owl_link->click();
 
     $this->assertSession()->assertWaitOnAjaxRequest();
     $this->assertSession()->pageTextContains('Displaying 3 search results');
@@ -153,7 +157,7 @@ class AjaxBehaviorTest extends JsBase {
     $this->assertEmpty($links);
 
     // Click the item facet again, and check that the article facet is back.
-    $this->clickLink('item');
+    $owl_link->click();
     $this->assertSession()->assertWaitOnAjaxRequest();
     $this->assertSession()->pageTextContains('Displaying 5 search results');
     $links = $this->xpath('//a//span[normalize-space(text())=:label]', [':label' => 'article']);
@@ -162,11 +166,11 @@ class AjaxBehaviorTest extends JsBase {
     // Check that the strawberry link disappears when filtering on items.
     $links = $this->xpath('//a//span[normalize-space(text())=:label]', [':label' => 'strawberry']);
     $this->assertNotEmpty($links);
-    $this->clickLink('item');
+    $owl_link->click();
     $this->assertSession()->assertWaitOnAjaxRequest();
     $links = $this->xpath('//a//span[normalize-space(text())=:label]', [':label' => 'strawberry']);
     $this->assertEmpty($links);
-    $this->clickLink('item');
+    $owl_link->click();
 
     $this->getSession()->getPage()->checkField('strawberry');
     // Check that the article link exists (and is formatted like a facet) link.
@@ -198,7 +202,8 @@ class AjaxBehaviorTest extends JsBase {
     $this->assertSession()->assertWaitOnAjaxRequest();
     $this->assertSession()->pageTextContains('Displaying 3 search results');
 
-    $this->clickLink('item');
+    $owl_link = $this->assertSession()->elementExists("xpath", "//label[@for='owl-item']/span[1]");
+    $owl_link->click();
     $this->assertSession()->assertWaitOnAjaxRequest();
     $this->assertSession()->pageTextContains('Displaying 1 search results');
   }

@@ -353,21 +353,18 @@ class WidgetJSTest extends JsBase {
         '',
         TRUE,
       ],
-      // The second option should have the expected option text, have the URI
-      // that points to the updated search result as the value, and is not
-      // selected.
       [
         'item (3)',
-        base_path() . 'search-api-test-fulltext?f%5B0%5D=llama%3Aitem',
+        'llama:item',
         FALSE,
       ],
-      // The third option is similar.
       [
         'article (2)',
-        base_path() . 'search-api-test-fulltext?f%5B0%5D=llama%3Aarticle',
+        'llama:article',
         FALSE,
       ],
     ];
+
     $this->assertSelectOptions($expected, $options);
 
     // Selecting one of the options should cause a redirect to a page with
@@ -391,18 +388,14 @@ class WidgetJSTest extends JsBase {
         base_path() . 'search-api-test-fulltext',
         FALSE,
       ],
-      // The second option should now be selected, and since clicking it again
-      // would negate it, it should also link to the search page without any
-      // chosen facets.
       [
         'item (3)',
-        base_path() . 'search-api-test-fulltext',
+        'llama:item',
         TRUE,
       ],
-      // The third option remains unchanged.
       [
         'article (2)',
-        base_path() . 'search-api-test-fulltext?f%5B0%5D=llama%3Aarticle',
+        'llama:article',
         FALSE,
       ],
     ];

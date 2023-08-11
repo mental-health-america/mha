@@ -171,6 +171,7 @@ class DefaultFacetManagerTest extends EntityKernelTestBase {
       $query->getCacheContexts(),
       $facet_mars->getFacetSource()->getCacheContexts(),
       [
+        'facets_filter:f',
         'fpc_query_type_plugin',
         'dummy_query_pre_query',
       ]
@@ -318,6 +319,7 @@ class DefaultFacetManagerTest extends EntityKernelTestBase {
         // Added by views view source plugin.
         'url',
         'languages:language_interface',
+        'facets_filter:f',
       ],
       'tags' => [
         // Facet controls query and look & feel of the facet results, so it's
