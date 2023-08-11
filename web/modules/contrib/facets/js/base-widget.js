@@ -23,7 +23,7 @@
    *   $(once('my-custom-widget-on-change', '.my-custom-widget.js-facets-widget'))
    *     .on('change', function () {
    *       // In this example $(this).val() will provide needed URL.
-   *       $(this).trigger('facets_filter', [ $(this).val() ]);
+   *       $(this).trigger('facets_filter', [ $(this).val(), false ]);
    *     });
    *
    * The facets module will trigger "facets_filtering" before filter is
