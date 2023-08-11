@@ -8,7 +8,6 @@
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Url;
-use Drupal\user\Entity\User;
 
 /**
  * Implements hook_token_info().
@@ -38,8 +37,8 @@ function simplenews_token_info() {
     'name' => t('Manage URL'),
     'description' => t('The URL of the page where the subscribers can manage their newsletter subscriptions.'),
   ];
-  $subscriber['combined-url'] = [
-    'name' => t('Combined confirmation URL'),
+  $subscriber['confirm-url'] = [
+    'name' => t('Subscribe confirmation URL'),
     'description' => t('The URL of the page where subscribers can confirm their subscription changes.'),
   ];
   $subscriber['mail'] = [
@@ -86,15 +85,18 @@ function simplenews_tokens($type, $tokens, $data, $options, BubbleableMetadata $
       }
       /** @var \Drupal\simplenews\Entity\Subscriber $subscriber */
       $subscriber = $data['simplenews_subscriber'];
-      $newsletter = isset($data['newsletter']) ? $data['newsletter'] : NULL;
+      $newsletter = $data['newsletter'] ?? NULL;
       $language = $subscriber->getLangcode();
 
       $url_arguments = ['absolute' => TRUE, 'langcode' => $language];
 
       foreach ($tokens as $name => $original) {
-        $route_parameters = ['snid' => $subscriber->id(), 'timestamp' => REQUEST_TIME];
+        $route_parameters = ['snid' => $subscriber->id(), 'timestamp' => \Drupal::time()->getRequestTime()];
         switch ($name) {
           case 'subscribe-url':
+            if (!$newsletter) {
+              break;
+            }
             $hash = simplenews_generate_hash($subscriber->getMail(), 'add');
             $bubbleable_metadata->setCacheMaxAge(0);
             $route_parameters += [
@@ -102,10 +104,13 @@ function simplenews_tokens($type, $tokens, $data, $options, BubbleableMetadata $
               'newsletter_id' => $newsletter->id(),
               'hash' => $hash,
             ];
-            $replacements[$original] = Url::fromRoute('simplenews.newsletter_confirm_subscription', $route_parameters, $url_arguments)->toString();
+            $replacements[$original] = Url::fromRoute('simplenews.newsletter_subscription', $route_parameters, $url_arguments)->toString();
             break;
 
           case 'unsubscribe-url':
+            if (!$newsletter) {
+              break;
+            }
             if (!$subscriber->id()) {
               // Temporary test subscriber.
               $replacements[$original] = t('No unsubscribe link for test subscribers.');
@@ -118,14 +123,16 @@ function simplenews_tokens($type, $tokens, $data, $options, BubbleableMetadata $
               'newsletter_id' => $newsletter->id(),
               'hash' => $hash,
             ];
-            $replacements[$original] = Url::fromRoute('simplenews.newsletter_confirm_subscription', $route_parameters, $url_arguments)->toString();
+            $replacements[$original] = Url::fromRoute('simplenews.newsletter_subscription', $route_parameters, $url_arguments)->toString();
             break;
 
           case 'combined-url':
-            $hash = simplenews_generate_hash($subscriber->getMail(), 'combined' . serialize($subscriber->getChanges()));
+            @trigger_error("Token 'combined-url' is deprecated in simplenews:4.0.0 and is removed from symfony_mailer:5.0.0. Instead you should use 'confirm-url'. See https://www.drupal.org/node/3356308", E_USER_DEPRECATED);
+          case 'confirm-url':
+            $hash = simplenews_generate_hash($subscriber->getMail(), 'confirm');
             $bubbleable_metadata->setCacheMaxAge(0);
             $route_parameters += ['hash' => $hash];
-            $replacements[$original] = Url::fromRoute('simplenews.newsletter_confirm_combined', $route_parameters, $url_arguments)->toString();
+            $replacements[$original] = Url::fromRoute('simplenews.newsletter_confirm', $route_parameters, $url_arguments)->toString();
             break;
 
           case 'manage-url':
@@ -142,7 +149,7 @@ function simplenews_tokens($type, $tokens, $data, $options, BubbleableMetadata $
       }
 
       if (($user_tokens = \Drupal::token()->findWithPrefix($tokens, 'user')) && !empty($subscriber->uid)) {
-        $replacements += \Drupal::token()->generate('user', $user_tokens, ['user' => User::load($subscriber->uid)], $options, $bubbleable_metadata);
+        $replacements += \Drupal::token()->generate('user', $user_tokens, ['user' => $subscriber->getUser()], $options, $bubbleable_metadata);
       }
 
       break;

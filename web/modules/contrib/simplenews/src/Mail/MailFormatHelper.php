@@ -2,42 +2,26 @@
 
 namespace Drupal\simplenews\Mail;
 
-use Drupal\Core\Mail\MailFormatHelper as CoreMailFormatHelper;
-
 /**
- * Extended mail formatter helpers.
- *
- * @see \Drupal\Core\Mail\MailFormatHelper
+ * Mail formatter helper.
  */
 class MailFormatHelper {
 
   /**
-   * HTML to text conversion for HTML and special characters.
-   *
-   * Converts some special HTML characters in addition to
-   * \Drupal\Core\Mail\MailFormatHelper\MailFormatHelper::htmlToText().
+   * Converts links to inline absolute URLs.
    *
    * @param string $text
    *   The mail text with HTML and special characters.
-   * @param bool $inline_hyperlinks
-   *   TRUE: URLs will be placed inline.
-   *   FALSE: URLs will be converted to numbered reference list.
    *
    * @return string
    *   The target text with HTML and special characters replaced.
    */
-  public static function htmlToText($text, $inline_hyperlinks = TRUE) {
+  public static function inlineHyperlinks($text) {
     // By replacing <a> tag by only its URL the URLs will be placed inline
     // in the email body and are not converted to a numbered reference list
     // by MailFormatHelper::htmlToText().
-    // URL are converted to absolute URL as drupal_html_to_text() would have.
-    if ($inline_hyperlinks) {
-      $pattern = '@<a[^>]+?href="([^"]*)"[^>]*?>(.+?)</a>@is';
-      $text = preg_replace_callback($pattern, '\Drupal\simplenews\Mail\MailFormatHelper::absoluteMailUrls', $text);
-    }
-
-    // Perform standard drupal html to text conversion.
-    return CoreMailFormatHelper::htmlToText($text);
+    $pattern = '@<a[^>]+?href="([^"]*)"[^>]*?>(.+?)</a>@is';
+    return preg_replace_callback($pattern, '\Drupal\simplenews\Mail\MailFormatHelper::absoluteMailUrls', $text);
   }
 
   /**
@@ -52,7 +36,7 @@ class MailFormatHelper {
       if (empty($regexp)) {
         $regexp = '@^' . preg_quote($base_path, '@') . '@';
       }
-      list(, $url, $label) = $match;
+      [, $url, $label] = $match;
       $url = strpos($url, '://') ? $url : preg_replace($regexp, $base_url . '/', $url);
 
       // If the link is formed by Drupal's URL filter, we only return the URL.

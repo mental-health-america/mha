@@ -12,17 +12,17 @@ class SimplenewsRecipientHandlerTest extends SimplenewsTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['simplenews_demo'];
+  protected static $modules = ['simplenews_demo'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     // We install the demo module to get the recipient handlers. It creates
     // users and sends some mails so clear those first.
-    $ids = \Drupal::entityQuery('user')->condition('uid', 0, '>')->execute();
+    $ids = \Drupal::entityQuery('user')->condition('uid', 0, '>')->accessCheck(FALSE)->execute();
     $storage = \Drupal::entityTypeManager()->getStorage('user');
     $entities = $storage->loadMultiple($ids);
     $storage->delete($entities);
@@ -43,19 +43,19 @@ class SimplenewsRecipientHandlerTest extends SimplenewsTestBase {
   public function testSiteMail() {
     // Verify that the recipient handler settings are shown.
     $this->drupalGet('node/add/simplenews_issue');
-    $this->assertText(t('Recipients'));
-    $this->assertText(t('How recipients should be selected.'));
+    $this->assertSession()->pageTextContains('Recipients');
+    $this->assertSession()->pageTextContains('How recipients should be selected.');
 
     $edit = [
       'title[0][value]' => $this->randomString(10),
       'simplenews_issue[target_id]' => 'default',
       'simplenews_issue[handler]' => 'simplenews_site_mail',
     ];
-    $this->drupalPostForm(NULL, $edit, t('Save'));
+    $this->submitForm($edit, 'Save');
 
     $this->clickLink(t('Newsletter'));
-    $this->assertText(t('Send newsletter issue to 1 subscribers.'));
-    $this->drupalPostForm(NULL, [], t('Send now'));
+    $this->assertSession()->pageTextContains('Send newsletter issue to 1 subscribers.');
+    $this->submitForm([], 'Send now');
     $this->checkRecipients(['simpletest@example.com' => 1]);
   }
 
@@ -75,11 +75,11 @@ class SimplenewsRecipientHandlerTest extends SimplenewsTestBase {
       'simplenews_issue[target_id]' => 'default',
       'simplenews_issue[handler]' => 'simplenews_new_users',
     ];
-    $this->drupalPostForm(NULL, $edit, t('Save'));
+    $this->submitForm($edit, 'Save');
 
     $this->clickLink(t('Newsletter'));
-    $this->assertText(t('Send newsletter issue to 3 subscribers.'));
-    $this->drupalPostForm(NULL, [], t('Send now'));
+    $this->assertSession()->pageTextContains('Send newsletter issue to 3 subscribers.');
+    $this->submitForm([], 'Send now');
     $this->checkRecipients(array_slice($users, 0, 3));
   }
 
@@ -102,19 +102,19 @@ class SimplenewsRecipientHandlerTest extends SimplenewsTestBase {
       'simplenews_issue[target_id]' => 'default',
       'simplenews_issue[handler]' => 'simplenews_subscribers_by_role',
     ];
-    $this->drupalPostForm(NULL, $edit, t('Save'));
+    $this->submitForm($edit, 'Save');
 
     // Edit and set the role.
     $this->clickLink(t('Edit'));
-    $this->assertText(t('Role'));
+    $this->assertSession()->pageTextContains('Role');
     $edit = [
       'simplenews_issue[handler_settings][role]' => $rid,
     ];
-    $this->drupalPostForm(NULL, $edit, t('Save'));
+    $this->submitForm($edit, 'Save');
 
     $this->clickLink(t('Newsletter'));
-    $this->assertText(t('Send newsletter issue to 2 subscribers.'));
-    $this->drupalPostForm(NULL, [], t('Send now'));
+    $this->assertSession()->pageTextContains('Send newsletter issue to 2 subscribers.');
+    $this->submitForm([], 'Send now');
     $this->checkRecipients($recipients);
   }
 
@@ -140,9 +140,9 @@ class SimplenewsRecipientHandlerTest extends SimplenewsTestBase {
   protected function checkRecipients(array $expected) {
     simplenews_cron();
     $mails = $this->getMails();
-    $this->assertEqual(count($expected), count($mails), t('All mails were sent.'));
+    $this->assertEquals(count($expected), count($mails), t('All mails were sent.'));
     foreach ($mails as $mail) {
-      $this->assertTrue(isset($expected[$mail['to']]), t('Found valid recipient @recip', ['@recip' => $mail['to']]));
+      $this->assertArrayHasKey($mail['to'], $expected, t('Found valid recipient @recip', ['@recip' => $mail['to']]));
       unset($expected[$mail['to']]);
     }
   }

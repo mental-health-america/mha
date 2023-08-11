@@ -12,7 +12,7 @@ class SimplenewsUninstallTest extends SimplenewsTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     \Drupal::service('module_installer')->uninstall(['simplenews_test']);
@@ -39,18 +39,21 @@ class SimplenewsUninstallTest extends SimplenewsTestBase {
     $this->drupalCreateNode(['type' => 'simplenews_issue', 'label' => $this->randomMachineName()])->save();
 
     // Delete Simplenews data.
-    $this->drupalPostForm('admin/config/services/simplenews/settings/uninstall', [], t('Delete Simplenews data'));
-    $this->assertText(t('Simplenews data has been deleted.'));
+    $this->drupalGet('admin/config/services/simplenews/settings/uninstall');
+    $this->submitForm([], 'Delete Simplenews data');
+    $this->assertSession()->pageTextContains('Simplenews data has been deleted.');
 
     // Uninstall the module.
-    $this->drupalPostForm('admin/modules/uninstall', ['uninstall[simplenews]' => TRUE], t('Uninstall'));
-    $this->drupalPostForm(NULL, [], t('Uninstall'));
-    $this->assertText(t('The selected modules have been uninstalled.'));
-    $this->assertNoText(t('Simplenews'));
+    $this->drupalGet('admin/modules/uninstall');
+    $this->submitForm(['uninstall[simplenews]' => TRUE], 'Uninstall');
+    $this->submitForm([], t('Uninstall'));
+    $this->assertSession()->pageTextContains('The selected modules have been uninstalled.');
+    $this->assertSession()->pageTextNotContains('Simplenews');
 
     // Make sure that the module can be installed again.
-    $this->drupalPostForm('admin/modules', ['modules[simplenews][enable]' => TRUE], t('Install'));
-    $this->assertText('Module Simplenews has been enabled.');
+    $this->drupalGet('admin/modules');
+    $this->submitForm(['modules[simplenews][enable]' => TRUE], 'Install');
+    $this->assertSession()->pageTextContains('Module Simplenews has been enabled.');
   }
 
 }

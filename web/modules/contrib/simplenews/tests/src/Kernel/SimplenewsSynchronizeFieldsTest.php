@@ -20,12 +20,12 @@ class SimplenewsSynchronizeFieldsTest extends KernelTestBase {
    *
    * @var array
    */
-  public static $modules = ['simplenews', 'user', 'field', 'system', 'language'];
+  protected static $modules = ['simplenews', 'user', 'field', 'system', 'language'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->installEntitySchema('user');
     $this->installEntitySchema('simplenews_subscriber');
@@ -59,9 +59,9 @@ class SimplenewsSynchronizeFieldsTest extends KernelTestBase {
 
     // Assert that subscriber's fields are updated.
     $subscriber = Subscriber::load($subscriber->id());
-    $this->assertEqual($subscriber->getUserId(), $user->id());
-    $this->assertEqual($subscriber->getLangcode(), 'fr');
-    $this->assertFalse($subscriber->getStatus());
+    $this->assertEquals($user->id(), $subscriber->getUserId());
+    $this->assertEquals('fr', $subscriber->getLangcode());
+    $this->assertFalse($subscriber->isActive());
 
     // Update user fields.
     $user->setEmail('user2@example.com');
@@ -71,16 +71,16 @@ class SimplenewsSynchronizeFieldsTest extends KernelTestBase {
 
     // Assert that subscriber's fields are updated again.
     $subscriber = Subscriber::load($subscriber->id());
-    $this->assertEqual($subscriber->getMail(), 'user2@example.com');
-    $this->assertEqual($subscriber->getLangcode(), 'en');
-    $this->assertTrue($subscriber->getStatus());
+    $this->assertEquals('user2@example.com', $subscriber->getMail());
+    $this->assertEquals('en', $subscriber->getLangcode());
+    $this->assertTrue($subscriber->isActive());
 
     // Status is still synced even if sync_fields is not set.
     $this->config('simplenews.settings')->set('subscriber.sync_fields', FALSE)->save();
     $user->block();
     $user->save();
     $subscriber = Subscriber::load($subscriber->id());
-    $this->assertFalse($subscriber->getStatus());
+    $this->assertFalse($subscriber->isActive());
   }
 
   /**
@@ -116,8 +116,8 @@ class SimplenewsSynchronizeFieldsTest extends KernelTestBase {
 
     // Assert that (only) the shared field is also updated on the user.
     $user = User::load($user->id());
-    $this->assertEqual($user->get('field_on_both')->value, 'bar');
-    $this->assertEqual($user->get('created')->value, 1000);
+    $this->assertEquals('bar', $user->get('field_on_both')->value);
+    $this->assertEquals(1000, $user->get('created')->value);
 
     // Update the fields on the user.
     $user->set('field_on_both', 'baz');
@@ -126,8 +126,8 @@ class SimplenewsSynchronizeFieldsTest extends KernelTestBase {
 
     // Assert that (only) the shared field is also updated on the subscriber.
     $subscriber = Subscriber::load($subscriber->id());
-    $this->assertEqual($subscriber->get('field_on_both')->value, 'baz');
-    $this->assertEqual($subscriber->get('created')->value, 3000);
+    $this->assertEquals('baz', $subscriber->get('field_on_both')->value);
+    $this->assertEquals(3000, $subscriber->get('created')->value);
   }
 
   /**
@@ -154,7 +154,7 @@ class SimplenewsSynchronizeFieldsTest extends KernelTestBase {
     ]);
 
     // Assert that the shared field already has a value.
-    $this->assertEqual($subscriber->get('field_on_both')->value, $user->get('field_on_both')->value);
+    $this->assertEquals($user->get('field_on_both')->value, $subscriber->get('field_on_both')->value);
 
     // Create a subscriber with values for the fields.
     $subscriber = Subscriber::create([
@@ -170,7 +170,7 @@ class SimplenewsSynchronizeFieldsTest extends KernelTestBase {
     ]);
 
     // Assert that the shared field already has a value.
-    $this->assertEqual($user->get('field_on_both')->value, $subscriber->get('field_on_both')->value);
+    $this->assertEquals($user->get('field_on_both')->value, $subscriber->get('field_on_both')->value);
   }
 
   /**
@@ -204,7 +204,7 @@ class SimplenewsSynchronizeFieldsTest extends KernelTestBase {
     $subscriber->set('field_on_both', 'bar');
     $subscriber->save();
     $user = User::load($user->id());
-    $this->assertEqual($user->get('field_on_both')->value, 'foo');
+    $this->assertEquals('foo', $user->get('field_on_both')->value);
 
     // Create a subscriber with a value for the field.
     $subscriber = Subscriber::create([
@@ -226,7 +226,7 @@ class SimplenewsSynchronizeFieldsTest extends KernelTestBase {
     $user->set('field_on_both', 'bar');
     $user->save();
     $subscriber = Subscriber::load($subscriber->id());
-    $this->assertEqual($subscriber->get('field_on_both')->value, 'foo');
+    $this->assertEquals('foo', $subscriber->get('field_on_both')->value);
   }
 
   /**
