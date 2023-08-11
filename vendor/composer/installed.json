@@ -9523,33 +9523,33 @@
         },
         {
             "name": "drupal/simplenews",
-            "version": "2.0.0-beta2",
-            "version_normalized": "2.0.0.0-beta2",
+            "version": "4.0.0-alpha2",
+            "version_normalized": "4.0.0.0-alpha2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/simplenews.git",
-                "reference": "8.x-2.0-beta2"
+                "reference": "4.0.0-alpha2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/simplenews-8.x-2.0-beta2.zip",
-                "reference": "8.x-2.0-beta2",
-                "shasum": "e33699acad01501ff6a8fc474a53e7ca45244f83"
+                "url": "https://ftp.drupal.org/files/projects/simplenews-4.0.0-alpha2.zip",
+                "reference": "4.0.0-alpha2",
+                "shasum": "935e6b356fce1e7c6dd2ba5aff0e657082d04a84"
             },
             "require": {
-                "drupal/core": "^8.8 || ^9"
+                "drupal/core": "^9.3 || ^10"
             },
             "require-dev": {
-                "drupal/monitoring": "*"
+                "drupal/monitoring": "^1.10"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-2.0-beta2",
-                    "datestamp": "1592298547",
+                    "version": "4.0.0-alpha2",
+                    "datestamp": "1691346264",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Beta releases are not covered by Drupal security advisories."
+                        "message": "Alpha releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -9572,19 +9572,19 @@
                     "homepage": "https://www.drupal.org/user/214652"
                 },
                 {
+                    "name": "miro_dietiker",
+                    "homepage": "https://www.drupal.org/user/227761"
+                },
+                {
                     "name": "Simon Georges",
                     "homepage": "https://www.drupal.org/user/172312"
                 },
                 {
                     "name": "Sutharsan",
                     "homepage": "https://www.drupal.org/user/73854"
-                },
-                {
-                    "name": "miro_dietiker",
-                    "homepage": "https://www.drupal.org/user/227761"
                 }
             ],
-            "description": "Send newsletters to subscribed email addresses. For uninstall go to Configuration > Web services > Simplenews > Settings and hit \"Prepare uninstall\".",
+            "description": "Simplenews publishes and sends newsletters to lists of subscribers",
             "homepage": "https://www.drupal.org/project/simplenews",
             "support": {
                 "source": "https://git.drupalcode.org/project/simplenews"
@@ -10974,18 +10974,18 @@
         },
         {
             "name": "drupal/webform_views",
-            "version": "5.1.0",
-            "version_normalized": "5.1.0.0",
+            "version": "5.2.0",
+            "version_normalized": "5.2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/webform_views.git",
-                "reference": "8.x-5.1"
+                "reference": "8.x-5.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/webform_views-8.x-5.1.zip",
-                "reference": "8.x-5.1",
-                "shasum": "ae23d95c1a30c9eb6540d01eb22af5765cc1eb1a"
+                "url": "https://ftp.drupal.org/files/projects/webform_views-8.x-5.2.zip",
+                "reference": "8.x-5.2",
+                "shasum": "4baf154754ac4708dd6d8d17085037a722db88d9"
             },
             "require": {
                 "drupal/core": "^9.3 || ^10.0",
@@ -10994,8 +10994,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-5.1",
-                    "datestamp": "1671551356",
+                    "version": "8.x-5.2",
+                    "datestamp": "1691641824",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"

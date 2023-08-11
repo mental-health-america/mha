@@ -2,12 +2,13 @@
 
 namespace Drupal\Tests\simplenews\Functional;
 
-use Drupal\Component\Utility\Unicode;
 use Drupal\Component\Utility\Html;
 use Drupal\node\Entity\Node;
 use Drupal\simplenews\Entity\Subscriber;
 use Drupal\simplenews\Mail\MailTest;
 use Drupal\simplenews\Spool\SpoolStorageInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Header\MailboxHeader;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -20,7 +21,7 @@ class SimplenewsSourceTest extends SimplenewsTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     // Create the filtered_html text format.
@@ -81,43 +82,47 @@ class SimplenewsSourceTest extends SimplenewsTestBase {
     $mail = $mails[0];
 
     // Assert resulting mail.
-    $this->assertEqual('simplenews_node', $mail['id']);
-    $this->assertEqual('simplenews', $mail['module']);
-    $this->assertEqual('node', $mail['key']);
-    $this->assertEqual($plain_mail->getRecipient(), $mail['to']);
-    $this->assertEqual($plain_mail->getFromAddress(), $mail['from']);
-    $this->assertEqual($plain_mail->getFromFormatted(), $mail['reply-to']);
-    $this->assertEqual($plain_mail->getLanguage(), $mail['langcode']);
+    $this->assertEquals('simplenews_node', $mail['id']);
+    $this->assertEquals('simplenews', $mail['module']);
+    $this->assertEquals('node', $mail['key']);
+    $this->assertEquals($plain_mail->getRecipient(), $mail['to']);
+    $this->assertEquals($plain_mail->getFromAddress(), $mail['from']);
+    $this->assertEquals($plain_mail->getFromFormatted(), $mail['reply-to']);
+    $this->assertEquals($plain_mail->getLanguage(), $mail['langcode']);
     $this->assertTrue($mail['params']['plain']);
 
-    $this->assertFalse(isset($mail['params']['plaintext']));
-    $this->assertFalse(isset($mail['params']['attachments']));
+    $this->assertArrayNotHasKey('plaintext', $mail['params']);
+    $this->assertArrayNotHasKey('attachments', $mail['params']);
 
-    $this->assertEqual($plain_mail->getSubject(), $mail['subject']);
-    $this->assertTrue(strpos($mail['body'], 'the plain body') !== FALSE);
+    $this->assertEquals($plain_mail->getSubject(), $mail['subject']);
+    $this->assertStringContainsString('the plain body', $mail['body']);
 
+    // Now send an HTML message.
+    $config = $this->config('simplenews.settings');
+    $config->set('mail.textalt', TRUE);
+    $config->save();
     $html_mail = new MailTest('html');
     \Drupal::service('simplenews.mailer')->sendMail($html_mail);
     $mails = $this->getMails();
     $mail = $mails[1];
 
     // Assert resulting mail.
-    $this->assertEqual('simplenews_node', $mail['id']);
-    $this->assertEqual('simplenews', $mail['module']);
-    $this->assertEqual('node', $mail['key']);
-    $this->assertEqual($plain_mail->getRecipient(), $mail['to']);
-    $this->assertEqual($plain_mail->getFromAddress(), $mail['from']);
-    $this->assertEqual($plain_mail->getFromFormatted(), $mail['reply-to']);
-    $this->assertEqual($plain_mail->getLanguage(), $mail['langcode']);
-    $this->assertEqual(NULL, $mail['params']['plain']);
+    $this->assertEquals('simplenews_node', $mail['id']);
+    $this->assertEquals('simplenews', $mail['module']);
+    $this->assertEquals('node', $mail['key']);
+    $this->assertEquals($plain_mail->getRecipient(), $mail['to']);
+    $this->assertEquals($plain_mail->getFromAddress(), $mail['from']);
+    $this->assertEquals($plain_mail->getFromFormatted(), $mail['reply-to']);
+    $this->assertEquals($plain_mail->getLanguage(), $mail['langcode']);
+    $this->assertEquals(NULL, $mail['params']['plain']);
 
-    $this->assertTrue(isset($mail['params']['plaintext']));
-    $this->assertTrue(strpos($mail['params']['plaintext'], 'the plain body') !== FALSE);
-    $this->assertTrue(isset($mail['params']['attachments']));
-    $this->assertEqual('example://test.png', $mail['params']['attachments'][0]['uri']);
+    $this->assertArrayHasKey('plaintext', $mail['params']);
+    $this->assertStringContainsString('the plain body', $mail['params']['plaintext']);
+    $this->assertArrayHasKey('attachments', $mail['params']);
+    $this->assertEquals('example://test.png', $mail['params']['attachments'][0]['uri']);
 
-    $this->assertEqual($plain_mail->getSubject(), $mail['subject']);
-    $this->assertTrue(strpos($mail['body'], 'the body') !== FALSE);
+    $this->assertEquals($plain_mail->getSubject(), $mail['subject']);
+    $this->assertStringContainsString('the body', $mail['body']);
   }
 
   /**
@@ -132,8 +137,9 @@ class SimplenewsSourceTest extends SimplenewsTestBase {
       'body[0][value]' => "Mail token: <strong>[simplenews-subscriber:mail]</strong>",
       'simplenews_issue[target_id]' => 'default',
     ];
-    $this->drupalPostForm('node/add/simplenews_issue', $edit, ('Save'));
-    $this->assertEqual(1, preg_match('|node/(\d+)$|', $this->getUrl(), $matches), 'Node created');
+    $this->drupalGet('node/add/simplenews_issue');
+    $this->submitForm($edit, 'Save');
+    $this->assertEquals(1, preg_match('|node/(\d+)$|', $this->getUrl(), $matches), 'Node created');
     $node = Node::load($matches[1]);
 
     // Add node to spool.
@@ -147,26 +153,23 @@ class SimplenewsSourceTest extends SimplenewsTestBase {
     $after = microtime(TRUE);
 
     // Make sure that 99 mails have been sent.
-    $this->assertEqual(99, count($this->getMails()));
+    $this->assertCount(99, $this->getMails());
 
     // Test that tokens are correctly replaced.
     foreach (array_slice($this->getMails(), 0, 3) as $mail) {
       // Make sure that the same mail was used in the body token as it has been
       // sent to. Also verify that the mail is plaintext.
-      $this->assertTrue(strpos($mail['body'], '*' . $mail['to'] . '*') !== FALSE);
-      $this->assertFalse(strpos($mail['body'], '<strong>'));
+      $this->assertStringContainsString('*' . $mail['to'] . '*', $mail['body']);
+      $this->assertStringNotContainsString('<strong>', $mail['body']);
       // Make sure the body is only attached once.
-      $this->assertEqual(1, preg_match_all('/Mail token/', $mail['body'], $matches));
+      $this->assertEquals(1, preg_match_all('/Mail token/', $mail['body'], $matches));
 
-      $this->assertTrue(strpos($mail['body'], (string) t('Unsubscribe from this newsletter')) !== FALSE);
+      $this->assertStringContainsString((string) t('Unsubscribe from this newsletter'), $mail['body']);
       // Make sure the mail has the correct unsubscribe hash.
       $hash = simplenews_generate_hash($mail['to'], 'remove');
-      $this->assertTrue(strpos($mail['body'], $hash) !== FALSE, 'Correct hash is used');
-      $this->assertTrue(strpos($mail['headers']['List-Unsubscribe'], $hash) !== FALSE, 'Correct hash is used in header');
+      $this->assertStringContainsString($hash, $mail['body'], 'Correct hash is used');
+      $this->assertStringContainsString($hash, $mail['headers']['List-Unsubscribe'], 'Correct hash is used in header');
     }
-
-    // Report time. @todo: Find a way to actually do some assertions here.
-    $this->pass(t('Mails have been sent in @sec seconds with build caching enabled.', ['@sec' => round($after - $before, 3)]));
   }
 
   /**
@@ -180,6 +183,11 @@ class SimplenewsSourceTest extends SimplenewsTestBase {
     $mail_config->set('interface.default', 'test_simplenews_html_mail');
     $mail_config->save();
 
+    // Test plain text alternative.
+    $config = $this->config('simplenews.settings');
+    $config->set('mail.textalt', TRUE);
+    $config->save();
+
     // Set the format to HTML.
     $this->drupalGet('admin/config/services/simplenews');
     $this->clickLink(t('Edit'));
@@ -187,13 +195,13 @@ class SimplenewsSourceTest extends SimplenewsTestBase {
       'format' => 'html',
       // Use umlaut to provoke mime encoding.
       'from_name' => 'Drupäl',
-      // @todo: This shouldn't be necessary, default value is missing. Probably
+      // @todo This shouldn't be necessary, default value is missing. Probably
       // should not be required.
       'from_address' => $this->randomEmail(),
       // Request a confirmation receipt.
       'receipt' => TRUE,
     ];
-    $this->drupalPostForm(NULL, $edit_newsletter, t('Save'));
+    $this->submitForm($edit_newsletter, 'Save');
     $this->clickLink(t('Edit'));
 
     $edit = [
@@ -202,8 +210,9 @@ class SimplenewsSourceTest extends SimplenewsTestBase {
       'body[0][value]' => "Mail token: <strong>[simplenews-subscriber:mail]</strong>",
       'simplenews_issue[target_id]' => 'default',
     ];
-    $this->drupalPostForm('node/add/simplenews_issue', $edit, ('Save'));
-    $this->assertEqual(1, preg_match('|node/(\d+)$|', $this->getUrl(), $matches), 'Node created');
+    $this->drupalGet('node/add/simplenews_issue');
+    $this->submitForm($edit, 'Save');
+    $this->assertEquals(1, preg_match('|node/(\d+)$|', $this->getUrl(), $matches), 'Node created');
     $node = Node::load($matches[1]);
 
     // Add node to spool.
@@ -212,51 +221,50 @@ class SimplenewsSourceTest extends SimplenewsTestBase {
     \Drupal::service('simplenews.mailer')->sendSpool();
 
     // Make sure that 5 mails have been sent.
-    $this->assertEqual(5, count($this->getMails()));
+    $this->assertCount(5, $this->getMails());
 
     // Test that tokens are correctly replaced.
     foreach (array_slice($this->getMails(), 0, 3) as $mail) {
       // Verify title.
       preg_match('|<h2>(.*)</h2>|', $mail['body'], $matches);
-      $this->assertEqual(Html::decodeEntities($matches[1]), $node->getTitle());
+      $this->assertEquals(Html::decodeEntities($matches[1]), $node->getTitle());
 
       // Verify the format/content type.
-      $this->assertEqual($mail['params']['format'], 'text/html');
-      $this->assertEqual($mail['params']['plain'], NULL);
-      $this->assertEqual($mail['headers']['Content-Type'], 'text/html; charset=UTF-8');
+      $this->assertEquals('text/html', $mail['params']['format']);
+      $this->assertEquals(NULL, $mail['params']['plain']);
+      $this->assertEquals('text/html; charset=UTF-8', $mail['headers']['Content-Type']);
 
       // Make sure that the same mail was used in the body token as it has been
       // sent to.
-      $this->assertTrue(strpos($mail['body'], '<strong>' . $mail['to'] . '</strong>') !== FALSE);
+      $this->assertStringContainsString('<strong>' . $mail['to'] . '</strong>', $mail['body']);
 
       // Make sure the body is only attached once.
-      $this->assertEqual(1, preg_match_all('/Mail token/', $mail['body'], $matches));
+      $this->assertEquals(1, preg_match_all('/Mail token/', $mail['body'], $matches));
 
       // Check the plaintext version, both params][plaintext (Mime Mail) and
       // plain (Swiftmailer).
-      $this->assertTrue(strpos($mail['params']['plaintext'], $mail['to']) !== FALSE);
-      $this->assertFalse(strpos($mail['params']['plaintext'], '<strong>'));
-      $this->assertEqual($mail['params']['plaintext'], $mail['plain']);
+      $this->assertStringContainsString($mail['to'], $mail['params']['plaintext']);
+      $this->assertStringNotContainsString('<strong>', $mail['params']['plaintext']);
+      $this->assertEquals($mail['params']['plaintext'], $mail['plain']);
       // Make sure the body is only attached once.
-      $this->assertEqual(1, preg_match_all('/Mail token/', $mail['params']['plaintext'], $matches));
+      $this->assertEquals(1, preg_match_all('/Mail token/', $mail['params']['plaintext'], $matches));
 
       // Check the attachments and files arrays.
       $this->assertTrue(is_array($mail['params']['attachments']));
-      $this->assertEqual($mail['params']['attachments'], $mail['params']['files']);
+      $this->assertEquals($mail['params']['attachments'], $mail['params']['files']);
 
       // Make sure formatted address is properly encoded.
-      $from = '"' . addslashes(Unicode::mimeHeaderEncode($edit_newsletter['from_name'])) . '" <' . $edit_newsletter['from_address'] . '>';
-      $this->assertEqual($from, $mail['reply-to']);
-      // And make sure it won't get encoded twice.
-      $this->assertEqual($from, Unicode::mimeHeaderEncode($mail['reply-to']));
+      $mailbox = new MailboxHeader('From', new Address($edit_newsletter['from_address'], $edit_newsletter['from_name']));
+      $from = $mailbox->getBodyAsString();
+      $this->assertEquals($from, $mail['reply-to']);
 
-      // @todo: Improve this check, there are currently two spaces, not sure
+      // @todo Improve this check, there are currently two spaces, not sure
       // where they are coming from.
-      $this->assertTrue(strpos($mail['body'], 'class="newsletter-footer"') !== FALSE);
+      $this->assertStringContainsString('class="newsletter-footer"', $mail['body']);
 
       // Verify receipt headers.
-      $this->assertEqual($mail['headers']['Disposition-Notification-To'], $edit_newsletter['from_address']);
-      $this->assertEqual($mail['headers']['X-Confirm-Reading-To'], $edit_newsletter['from_address']);
+      $this->assertEquals($edit_newsletter['from_address'], $mail['headers']['X-Confirm-Reading-To']);
+      $this->assertEquals($edit_newsletter['from_address'], $mail['headers']['Disposition-Notification-To']);
     }
   }
 
@@ -270,19 +278,20 @@ class SimplenewsSourceTest extends SimplenewsTestBase {
     $this->drupalGet('admin/config/services/simplenews');
     $this->clickLink(t('Edit'));
     $edit = [
-      'opt_inout' => 'hidden',
-      // @todo: This shouldn't be necessary.
+      'access' => 'hidden',
+      // @todo This shouldn't be necessary.
       'from_address' => $this->randomEmail(),
     ];
-    $this->drupalPostForm(NULL, $edit, t('Save'));
+    $this->submitForm($edit, 'Save');
 
     $edit = [
       'title[0][value]' => $this->randomString(10),
       'body[0][value]' => "Mail token: <strong>[simplenews-subscriber:mail]</strong>",
       'simplenews_issue[target_id]' => 'default',
     ];
-    $this->drupalPostForm('node/add/simplenews_issue', $edit, ('Save'));
-    $this->assertEqual(1, preg_match('|node/(\d+)$|', $this->getUrl(), $matches), 'Node created');
+    $this->drupalGet('node/add/simplenews_issue');
+    $this->submitForm($edit, 'Save');
+    $this->assertEquals(1, preg_match('|node/(\d+)$|', $this->getUrl(), $matches), 'Node created');
     $node = Node::load($matches[1]);
 
     // Add node to spool.
@@ -291,12 +300,12 @@ class SimplenewsSourceTest extends SimplenewsTestBase {
     \Drupal::service('simplenews.mailer')->sendSpool();
 
     // Make sure that 5 mails have been sent.
-    $this->assertEqual(5, count($this->getMails()));
+    $this->assertCount(5, $this->getMails());
 
     // Test that tokens are correctly replaced.
     foreach (array_slice($this->getMails(), 0, 3) as $mail) {
       // Verify the unsubscribe link is not displayed for hidden newsletters.
-      $this->assertFalse(strpos($mail['body'], (string) t('Unsubscribe from this newsletter')));
+      $this->assertStringNotContainsString((string) t('Unsubscribe from this newsletter'), $mail['body']);
     }
   }
 
@@ -323,8 +332,9 @@ class SimplenewsSourceTest extends SimplenewsTestBase {
       'body[0][value]' => "Mail token: <strong>[simplenews-subscriber:mail]</strong>",
       'simplenews_issue[target_id]' => 'default',
     ];
-    $this->drupalPostForm('node/add/simplenews_issue', $edit, ('Save'));
-    $this->assertEqual(1, preg_match('|node/(\d+)$|', $this->getUrl(), $matches), 'Node created');
+    $this->drupalGet('node/add/simplenews_issue');
+    $this->submitForm($edit, 'Save');
+    $this->assertEquals(1, preg_match('|node/(\d+)$|', $this->getUrl(), $matches), 'Node created');
     $node = Node::load($matches[1]);
 
     // Add node to spool.
@@ -335,20 +345,18 @@ class SimplenewsSourceTest extends SimplenewsTestBase {
     $after = microtime(TRUE);
 
     // Make sure that 100 mails have been sent.
-    $this->assertEqual(100, count($this->getMails()));
+    $this->assertCount(100, $this->getMails());
 
     // Test that tokens are correctly replaced.
     foreach (array_slice($this->getMails(), 0, 3) as $mail) {
+      $this->assertStringContainsString($node->getTitle(), $mail['body']);
       // Make sure that the same mail was used in the body token as it has been
       // sent to. Also verify that the mail is plaintext.
-      $this->assertTrue(strpos($mail['body'], '*' . $mail['to'] . '*') !== FALSE);
-      $this->assertFalse(strpos($mail['body'], '<strong>'));
+      $this->assertStringContainsString('*' . $mail['to'] . '*', $mail['body']);
+      $this->assertStringNotContainsString('<strong>', $mail['body']);
       // Make sure the body is only attached once.
-      $this->assertEqual(1, preg_match_all('/Mail token/', $mail['body'], $matches));
+      $this->assertEquals(1, preg_match_all('/Mail token/', $mail['body'], $matches));
     }
-
-    // Report time. @todo: Find a way to actually do some assertions here.
-    $this->pass(t('Mails have been sent in @sec seconds with caching disabled.', ['@sec' => round($after - $before, 3)]));
   }
 
   /**
@@ -362,8 +370,9 @@ class SimplenewsSourceTest extends SimplenewsTestBase {
       'body[0][value]' => "Mail token: <strong>[simplenews-subscriber:mail]</strong>",
       'simplenews_issue[target_id]' => 'default',
     ];
-    $this->drupalPostForm('node/add/simplenews_issue', $edit, ('Save'));
-    $this->assertEqual(1, preg_match('|node/(\d+)$|', $this->getUrl(), $matches), 'Node created');
+    $this->drupalGet('node/add/simplenews_issue');
+    $this->submitForm($edit, 'Save');
+    $this->assertEquals(1, preg_match('|node/(\d+)$|', $this->getUrl(), $matches), 'Node created');
     $node = Node::load($matches[1]);
 
     // Add node to spool.
@@ -381,10 +390,10 @@ class SimplenewsSourceTest extends SimplenewsTestBase {
     \Drupal::service('simplenews.mailer')->sendSpool();
 
     // Make sure that no mails have been sent.
-    $this->assertEqual(0, count($this->getMails()));
+    $this->assertCount(0, $this->getMails());
 
     $spool_row = \Drupal::database()->query('SELECT * FROM {simplenews_mail_spool}')->fetchObject();
-    $this->assertEqual(SpoolStorageInterface::STATUS_SKIPPED, $spool_row->status);
+    $this->assertEquals(SpoolStorageInterface::STATUS_SKIPPED, $spool_row->status);
   }
 
   /**
@@ -398,8 +407,9 @@ class SimplenewsSourceTest extends SimplenewsTestBase {
       'body[0][value]' => "Mail token: <strong>[simplenews-subscriber:mail]</strong>",
       'simplenews_issue[target_id]' => 'default',
     ];
-    $this->drupalPostForm('node/add/simplenews_issue', $edit, ('Save'));
-    $this->assertEqual(1, preg_match('|node/(\d+)$|', $this->getUrl(), $matches), 'Node created');
+    $this->drupalGet('node/add/simplenews_issue');
+    $this->submitForm($edit, 'Save');
+    $this->assertEquals(1, preg_match('|node/(\d+)$|', $this->getUrl(), $matches), 'Node created');
     $node = Node::load($matches[1]);
 
     // Add node to spool.
@@ -412,10 +422,10 @@ class SimplenewsSourceTest extends SimplenewsTestBase {
     \Drupal::service('simplenews.mailer')->sendSpool();
 
     // Make sure that no mails have been sent.
-    $this->assertEqual(0, count($this->getMails()));
+    $this->assertCount(0, $this->getMails());
 
     $spool_row = \Drupal::database()->query('SELECT * FROM {simplenews_mail_spool}')->fetchObject();
-    $this->assertEqual(SpoolStorageInterface::STATUS_SKIPPED, $spool_row->status);
+    $this->assertEquals(SpoolStorageInterface::STATUS_SKIPPED, $spool_row->status);
   }
 
   /**
@@ -432,12 +442,12 @@ class SimplenewsSourceTest extends SimplenewsTestBase {
     ]);
     \Drupal::service('simplenews.spool_storage')->addIssue($node);
     \Drupal::service('simplenews.mailer')->sendSpool();
-    $this->assertEqual(0, count($this->getMails()));
+    $this->assertCount(0, $this->getMails());
     $spool_row = \Drupal::database()->select('simplenews_mail_spool', 'ms')
       ->fields('ms', ['status'])
       ->execute()
       ->fetchAssoc();
-    $this->assertEqual(SpoolStorageInterface::STATUS_SKIPPED, $spool_row['status']);
+    $this->assertEquals(SpoolStorageInterface::STATUS_SKIPPED, $spool_row['status']);
   }
 
 }

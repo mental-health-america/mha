@@ -2,7 +2,6 @@
 
 namespace Drupal\simplenews\Mail;
 
-use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -15,16 +14,16 @@ use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
-use Drupal\simplenews\Entity\Newsletter;
 use Drupal\simplenews\Entity\Subscriber;
 use Drupal\simplenews\AbortSendingException;
 use Drupal\simplenews\SkipMailException;
 use Drupal\simplenews\Spool\SpoolStorageInterface;
 use Drupal\simplenews\SubscriberInterface;
 use Drupal\Core\Messenger\MessengerTrait;
-use Drupal\Core\Link;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Header\MailboxHeader;
 
 /**
  * Default Mailer.
@@ -49,7 +48,7 @@ class Mailer implements MailerInterface {
    */
   const TRACK_RESULTS = [
     SpoolStorageInterface::STATUS_DONE => TRUE,
-    SpoolStorageInterface::STATUS_FAILED =>TRUE
+    SpoolStorageInterface::STATUS_FAILED => TRUE,
   ];
 
   /**
@@ -250,8 +249,8 @@ class Mailer implements MailerInterface {
             // Stop sending if a percentage of max execution time was exceeded.
             $elapsed = $this->getCurrentExecutionTime();
             if ($elapsed > static::SEND_TIME_LIMIT * ini_get('max_execution_time')) {
-              $this->logger->warning('Sending interrupted: PHP maximum execution time almost exceeded. Remaining newsletters will be sent during the next cron run. If this warning occurs regularly you should reduce the !cron_throttle_setting.', [
-                '!cron_throttle_setting' => Link::fromTextAndUrl($this->t('Cron throttle setting'), Url::fromRoute('simplenews.settings_mail')),
+              $this->logger->warning('Sending interrupted: PHP maximum execution time almost exceeded. Remaining newsletters will be sent during the next cron run. If this warning occurs regularly you should reduce the <a href=":cron_throttle_setting">Cron throttle setting</a>.', [
+                ':cron_throttle_setting' => Url::fromRoute('simplenews.settings_mail')->toString(),
               ]);
               break;
             }
@@ -268,8 +267,9 @@ class Mailer implements MailerInterface {
       foreach ($spool->getResults() as $row) {
         $freq[$row->result]++;
         if (isset(static::TRACK_RESULTS[$row->result])) {
-          $item = &$results_table[$row->entity_type][$row->entity_id][$row->langcode][$row->result];
-          $item = ($item ?? 0) + 1;;
+          $item = &$results_table[$row->entity_type][$row->entity_id][$row->result];
+          $item = ($item ?? 0) + 1;
+          ;
         }
       }
 
@@ -278,14 +278,11 @@ class Mailer implements MailerInterface {
         foreach ($results_table as $entity_type => $ids) {
           $storage = $this->entityTypeManager->getStorage($entity_type);
 
-          foreach ($ids as $entity_id => $languages) {
+          foreach ($ids as $entity_id => $counts) {
             $storage->resetCache([$entity_id]);
             $entity = $storage->load($entity_id);
-            foreach ($languages as $langcode => $counts) {
-              $translation = $entity->getTranslation($langcode);
-              $translation->simplenews_issue->sent_count += $counts[SpoolStorageInterface::STATUS_DONE] ?? 0;
-              $translation->simplenews_issue->error_count += $counts[SpoolStorageInterface::STATUS_FAILED] ?? 0;
-            }
+            $entity->simplenews_issue->sent_count += $counts[SpoolStorageInterface::STATUS_DONE] ?? 0;
+            $entity->simplenews_issue->error_count += $counts[SpoolStorageInterface::STATUS_FAILED] ?? 0;
             $entity->save();
           }
         }
@@ -309,7 +306,7 @@ class Mailer implements MailerInterface {
         $this->logger->notice('%success emails sent, %skipped skipped, %fail failed permanently, %retry failed retrying.', $log_array);
       }
 
-      $this->state->set('simplenews.last_cron', REQUEST_TIME);
+      $this->state->set('simplenews.last_cron', \Drupal::time()->getRequestTime());
       $this->state->set('simplenews.last_sent', $freq[SpoolStorageInterface::STATUS_DONE]);
 
       $this->accountSwitcher->switchBack();
@@ -350,7 +347,7 @@ class Mailer implements MailerInterface {
       }
 
       // By default, failures are left in PENDING state to retry.
-      $result = $message['result'] ? SpoolStorageInterface::STATUS_DONE : SpoolStorageInterface::STATUS_PENDING;
+      $result = ($message['result'] === FALSE) ? SpoolStorageInterface::STATUS_PENDING : SpoolStorageInterface::STATUS_DONE;
       $this->moduleHandler->alter('simplenews_mail_result', $result, $message);
     }
     catch (SkipMailException $e) {
@@ -403,69 +400,28 @@ class Mailer implements MailerInterface {
   /**
    * {@inheritdoc}
    */
-  public function sendCombinedConfirmation(SubscriberInterface $subscriber) {
+  public function sendSubscribeConfirmation(SubscriberInterface $subscriber) {
     $params['from'] = $this->getFrom();
     $params['context']['simplenews_subscriber'] = $subscriber;
-    // Send multiple if there is more than one change for this subscriber
-    // single otherwise.
-    $use_combined = $this->config->get('subscription.use_combined');
-    $changes = $subscriber->getChanges();
-    if ((count($changes) > 1 && $use_combined != 'never') || $use_combined == 'always') {
-      $key = 'subscribe_combined';
-      $this->mailManager->mail('simplenews', $key, $subscriber->getMail(), $subscriber->getLangcode(), $params, $params['from']['address']);
-    }
-    else {
-      foreach ($changes as $newsletter_id => $key) {
-        $params['context']['newsletter'] = Newsletter::load($newsletter_id);
-        $this->mailManager->mail('simplenews', $key, $subscriber->getMail(), $subscriber->getLangcode(), $params, $params['from']['address']);
-      }
-    }
+    $key = 'subscribe_combined';
+    $this->mailManager->mail('simplenews', $key, $subscriber->getMail(), $subscriber->getLangcode(), $params, $params['from']['address']);
   }
 
   /**
    * {@inheritdoc}
    */
   public function updateSendStatus() {
-    // Number of pending emails in the spool.
-    $counts = [];
-    // Sum of emails in the spool per tnid (translation id)
-    $sum = [];
-    // Nodes with the status 'send'.
-    $send = [];
-
     // For each pending newsletter count pending emails in the spool.
+    // If 0, update status to send-ready.
     $query = \Drupal::entityQuery('node');
     $nids = $query
       ->condition('simplenews_issue.status', SIMPLENEWS_STATUS_SEND_PENDING)
+      ->accessCheck(FALSE)
       ->execute();
     $nodes = Node::loadMultiple($nids);
-    if ($nodes) {
-      foreach ($nodes as $nid => $node) {
-        $counts[$node->simplenews_issue->target_id][$nid] = $this->spoolStorage->countMails(['entity_id' => $nid, 'entity_type' => 'node']);
-      }
-    }
-    // Determine which nodes are sent per translation group and individual node.
-    foreach ($counts as $newsletter_id => $node_count) {
-      // The sum of emails per tnid is the combined status result for the group
-      // of translated nodes. Untranslated nodes have tnid == 0 which will be
-      // ignored later.
-      $sum[$newsletter_id] = array_sum($node_count);
-      foreach ($node_count as $nid => $count) {
-        // Translated nodes (tnid != 0)
-        if ($newsletter_id != '0' && $sum[$newsletter_id] == '0') {
-          $send[] = $nid;
-        }
-        // Untranslated nodes (tnid == 0)
-        elseif ($newsletter_id == '0' && $count == '0') {
-          $send[] = $nid;
-        }
-      }
-    }
-
-    // Update overall newsletter status.
-    if (!empty($send)) {
-      foreach ($send as $nid) {
-        $node = Node::load($nid);
+    foreach ($nodes as $nid => $node) {
+      $count = $this->spoolStorage->countMails(['entity_id' => $nid, 'entity_type' => 'node']);
+      if ($count == 0) {
         $node->simplenews_issue->status = SIMPLENEWS_STATUS_SEND_READY;
         $node->save();
       }
@@ -479,8 +435,10 @@ class Mailer implements MailerInterface {
     $address = $this->config->get('newsletter.from_address');
     $name = $this->config->get('newsletter.from_name');
 
+    $mailbox = new MailboxHeader('From', new Address($address, $name));
+
     // Windows based PHP systems don't accept formatted email addresses.
-    $formatted_address = (mb_substr(PHP_OS, 0, 3) == 'WIN') ? $address : '"' . addslashes(Unicode::mimeHeaderEncode($name)) . '" <' . $address . '>';
+    $formatted_address = (mb_substr(PHP_OS, 0, 3) == 'WIN') ? $address : $mailbox->getBodyAsString();
 
     return [
       'address' => $address,

@@ -28,23 +28,13 @@ interface MailBuilderInterface {
   public function buildSubscribeMail(array &$message, array $params);
 
   /**
-   * Build subject and body of the subscribe confirmation email.
+   * Build subject and body of the validate email.
    *
    * @param array $message
    *   Message array as used by hook_mail().
    * @param array $params
    *   Parameter array as used by hook_mail().
    */
-  public function buildCombinedMail(array &$message, array $params);
-
-  /**
-   * Build subject and body of the unsubscribe confirmation email.
-   *
-   * @param array $message
-   *   Message array as used by hook_mail().
-   * @param array $params
-   *   Parameter array as used by hook_mail().
-   */
-  public function buildUnsubscribeMail(array &$message, array $params);
+  public function buildValidateMail(array &$message, array $params);
 
 }

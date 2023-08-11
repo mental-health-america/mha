@@ -19,16 +19,23 @@ class SubscriptionsAccountForm extends SubscriptionsFormBase {
     if (isset($user)) {
       $form_state->set('user', $user);
       // Load/create a subscriber from the user.
-      $this->setEntity(Subscriber::loadByUid($user->id(), 'create'));
+      $this->setEntity(Subscriber::loadByUid($user->id(), 'create', FALSE));
     }
 
-    return parent::buildForm($form, $form_state);
+    $form = parent::buildForm($form, $form_state);
+    if (!$this->entity->isConfirmed()) {
+      $form['unconfirmed'] = [
+        '#markup' => t('Subscriptions are unconfirmed'),
+        '#weight' => -1,
+      ];
+    }
+    return $form;
   }
 
   /**
    * {@inheritdoc}
    */
-  protected function getSubmitMessage(FormStateInterface $form_state, $op, $confirm) {
+  protected function getSubmitMessage(FormStateInterface $form_state, $confirm) {
     $user = $form_state->get('user');
     if (\Drupal::currentUser()->id() == $user->id()) {
       return $this->t('Your newsletter subscriptions have been updated.');

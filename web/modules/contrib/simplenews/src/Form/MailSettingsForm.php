@@ -37,6 +37,13 @@ class MailSettingsForm extends ConfigFormBase {
       '#description' => $this->t('When checked cron will be used to send newsletters (recommended). Test newsletters and confirmation emails will be sent immediately. Leave unchecked for testing purposes.'),
     ];
 
+    $form['simplenews_mail_backend']['simplenews_textalt'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Generate plain-text alternative'),
+      '#default_value' => $config->get('mail.textalt'),
+      '#description' => $this->t('Generate plain-text alternative for HTML mails (less recommended). If you are using the recommended Swift Mailer module then disable this option and allow that module to generate them. If you enable this option then you need to configure both "Email: HTML" and "Email: Plain" view modes.'),
+    ];
+
     $throttle_val = [
       1, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000,
     ];
@@ -60,9 +67,9 @@ class MailSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Mail spool expiration'),
       '#options' => [
         0 => $this->t('Immediate'),
-        1 => \Drupal::translation()->formatPlural(1, '1 day', '@count days'),
-        7 => \Drupal::translation()->formatPlural(1, '1 week', '@count weeks'),
-        14 => \Drupal::translation()->formatPlural(2, '1 week', '@count weeks'),
+        1 => $this->formatPlural(1, '1 day', '@count days'),
+        7 => $this->formatPlural(1, '1 week', '@count weeks'),
+        14 => $this->formatPlural(2, '1 week', '@count weeks'),
       ],
       '#default_value' => $config->get('mail.spool_expire'),
       '#description' => $this->t('Controls the duration that messages are retained in the spool after processing. Keeping messages in the spool can be useful for statistics or analysing errors.'),
@@ -82,6 +89,7 @@ class MailSettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->config('simplenews.settings')
       ->set('mail.use_cron', $form_state->getValue('simplenews_use_cron'))
+      ->set('mail.textalt', $form_state->getValue('simplenews_textalt'))
       ->set('mail.source_cache', $form_state->getValue('simplenews_source_cache'))
       ->set('mail.throttle', $form_state->getValue('simplenews_throttle'))
       ->set('mail.spool_expire', $form_state->getValue('simplenews_spool_expire'))
