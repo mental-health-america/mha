@@ -9361,57 +9361,6 @@
             "install-path": "../../web/modules/contrib/seckit"
         },
         {
-            "name": "drupal/simple_instagram_feed",
-            "version": "3.11.0",
-            "version_normalized": "3.11.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/simple_instagram_feed.git",
-                "reference": "8.x-3.11"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/simple_instagram_feed-8.x-3.11.zip",
-                "reference": "8.x-3.11",
-                "shasum": "3a6eecf7607c9db4016ad24b44431f658b962170"
-            },
-            "require": {
-                "drupal/core": "^8 || ^9"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "8.x-3.11",
-                    "datestamp": "1615580267",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "installation-source": "dist",
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "awasson",
-                    "homepage": "https://www.drupal.org/user/127091"
-                },
-                {
-                    "name": "paulocs",
-                    "homepage": "https://www.drupal.org/user/3640109"
-                }
-            ],
-            "description": "Creates a block with a dynamic Instagram Feed using https://github.com/jsanahuja/jquery.instagramFeed.",
-            "homepage": "https://www.drupal.org/project/simple_instagram_feed",
-            "support": {
-                "source": "https://git.drupalcode.org/project/simple_instagram_feed"
-            },
-            "install-path": "../../web/modules/contrib/simple_instagram_feed"
-        },
-        {
             "name": "drupal/simple_popup_blocks",
             "version": "3.1.0",
             "version_normalized": "3.1.0.0",
