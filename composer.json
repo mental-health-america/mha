@@ -139,7 +139,6 @@
         "drupal/search_api_sorts": "^1.1",
         "drupal/search_exclude": "^2.0@beta",
         "drupal/seckit": "^2.0",
-        "drupal/simple_instagram_feed": "^3.11",
         "drupal/simple_popup_blocks": "^3.1",
         "drupal/simple_timeline": "^1.1",
         "drupal/simplenews": "^4.0@alpha",
