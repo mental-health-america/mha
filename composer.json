@@ -164,7 +164,7 @@
         "drupal/webform_ui": "^5.0",
         "drupal/webform_validation": "^2.0@RC",
         "drupal/webform_views": "^5.2",
-        "drupal/webp": "^1.0@beta",
+        "drupal/webp": "^1.0@RC",
         "drupal/yaml_editor": "^1.1",
         "drupal/yoast_seo": "^1.8",
         "drush/drush": "*",
@@ -232,9 +232,6 @@
             },
             "drupal/draggableviews": {
                 "Draggableviews": "https://www.drupal.org/files/issues/2021-10-11/not_working_with_group_by-draggableviews-2867348-48.patch"
-            },
-            "drupal/salesforce": {
-                "Salesforce": "https://www.drupal.org/files/issues/2023-03-28/salesforce-3350924-2.patch"
             }
         },
         "installer-paths": {
