@@ -34,6 +34,7 @@ use Drupal\facets_summary\FacetsSummaryInterface;
  *     "name",
  *     "facets",
  *     "facet_source_id",
+ *     "only_visible_when_facet_source_is_visible",
  *     "processor_configs",
  *   },
  *   links = {
@@ -106,6 +107,16 @@ class FacetsSummary extends ConfigEntityBase implements FacetsSummaryInterface {
    *   The weight of the facet.
    */
   protected $weight;
+
+  /**
+   * Is the facet only visible when the facet source is only visible.
+   *
+   * A boolean that defines if the facet summary is only visible when the facet
+   * source is visible.
+   *
+   * @var bool
+   */
+  protected $only_visible_when_facet_source_is_visible = FALSE;
 
   /**
    * {@inheritdoc}
@@ -254,6 +265,20 @@ class FacetsSummary extends ConfigEntityBase implements FacetsSummaryInterface {
       $return_processors[$name] = $processors[$name];
     }
     return $return_processors;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setOnlyVisibleWhenFacetSourceIsVisible($only_visible_when_facet_source_is_visible) {
+    $this->only_visible_when_facet_source_is_visible = $only_visible_when_facet_source_is_visible;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getOnlyVisibleWhenFacetSourceIsVisible() {
+    return $this->only_visible_when_facet_source_is_visible;
   }
 
   /**

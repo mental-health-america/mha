@@ -11,6 +11,6 @@ test_dependencies:
   - drupal:views
 
 # Information added by Drupal.org packaging script on 2022-12-16
-version: '2.0.6'
+version: '3.0.0-beta1'
 project: 'facets'
-datestamp: 1671207900
+datestamp: 1671208550

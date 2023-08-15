@@ -6,7 +6,7 @@ package: 'Recurring Events'
 dependencies:
   - recurring_events:recurring_events
 
-# Information added by Drupal.org packaging script on 2023-07-03
-version: '2.0.0-rc11'
+# Information added by Drupal.org packaging script on 2023-07-25
+version: '2.0.0-rc12'
 project: 'recurring_events'
-datestamp: 1688375153
+datestamp: 1690263699

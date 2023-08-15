@@ -4,7 +4,6 @@ namespace Drupal\simplenews\Spool;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Connection;
-use Drupal\Core\Database\Query\Condition;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Lock\LockBackendInterface;
@@ -97,11 +96,11 @@ class SpoolStorage implements SpoolStorageInterface {
     // Special case for the status condition, the in progress actually only
     // includes spool items whose locking time has expired. So this needs to
     // build an OR condition for them.
-    $status_or = new Condition('OR');
+    $status_or = $this->connection->condition('OR');
     $statuses = is_array($conditions['status']) ? $conditions['status'] : [$conditions['status']];
     foreach ($statuses as $status) {
       if ($status == SpoolStorageInterface::STATUS_IN_PROGRESS) {
-        $status_or->condition((new Condition('AND'))
+        $status_or->condition($this->connection->condition('AND')
           ->condition('status', $status)
           ->condition('s.timestamp', $this->getExpirationTime(), '<')
         );
@@ -154,7 +153,7 @@ class SpoolStorage implements SpoolStorageInterface {
       ->condition('msid', (array) $msids, 'IN')
       ->fields([
         'status' => $status,
-        'timestamp' => REQUEST_TIME,
+        'timestamp' => \Drupal::time()->getRequestTime(),
       ])
       ->execute();
   }
@@ -183,7 +182,7 @@ class SpoolStorage implements SpoolStorageInterface {
         if (!is_array($value)) {
           $value = [$value];
         }
-        $status_or = new Condition('OR');
+        $status_or = $this->connection->condition('OR');
         foreach ($value as $status) {
           $status_or->condition('status', $status);
         }
@@ -206,7 +205,7 @@ class SpoolStorage implements SpoolStorageInterface {
    */
   public function clear() {
 
-    $expiration_time = REQUEST_TIME - $this->config->get('mail.spool_expire') * 86400;
+    $expiration_time = \Drupal::time()->getRequestTime() - $this->config->get('mail.spool_expire') * 86400;
     return $this->connection->delete('simplenews_mail_spool')
       ->condition('status', [SpoolStorageInterface::STATUS_DONE, SpoolStorageInterface::STATUS_SKIPPED], 'IN')
       ->condition('timestamp', $expiration_time, '<=')
@@ -267,7 +266,7 @@ class SpoolStorage implements SpoolStorageInterface {
    * {@inheritdoc}
    */
   public function deleteIssue(ContentEntityInterface $issue) {
-    if ($issue->simplenews_issue->status != SIMPLENEWS_STATUS_SEND_PENDING) {
+    if (!in_array($issue->simplenews_issue->status, [SIMPLENEWS_STATUS_SEND_PENDING, SIMPLENEWS_STATUS_SEND_PUBLISH])) {
       return;
     }
 
@@ -289,7 +288,7 @@ class SpoolStorage implements SpoolStorageInterface {
       $spool['status'] = SpoolStorageInterface::STATUS_PENDING;
     }
     if (!isset($spool['timestamp'])) {
-      $spool['timestamp'] = REQUEST_TIME;
+      $spool['timestamp'] = \Drupal::time()->getRequestTime();
     }
     if (isset($spool['data'])) {
       $spool['data'] = serialize($spool['data']);
@@ -320,7 +319,6 @@ class SpoolStorage implements SpoolStorageInterface {
 
     $handler_settings = $edited_values['handler_settings'] ?? $field->handler_settings;
     $handler_settings['_issue'] = $issue;
-    $handler_settings['_connection'] = $this->connection;
     $handler_settings['_newsletter_ids'] = $newsletter_ids;
     $recipient_handler = $this->recipientHandlerManager->createInstance($handler, $handler_settings);
 
@@ -371,7 +369,7 @@ class SpoolStorage implements SpoolStorageInterface {
    */
   protected function getExpirationTime() {
     $timeout = $this->config->get('mail.spool_progress_expiration');
-    $expiration_time = REQUEST_TIME - $timeout;
+    $expiration_time = \Drupal::time()->getRequestTime() - $timeout;
     return $expiration_time;
   }
 

@@ -170,6 +170,46 @@ class SearchApiDisplay extends FacetSourcePluginBase implements SearchApiFacetSo
   }
 
   /**
+   * Helper function to get arguments for views contextual filters.
+   *
+   * @return array
+   *   Values of contextual filters.
+   */
+  private function extractArgumentsForViewDisplay(): array {
+    $argumentValues = [];
+    // For AJAX requests we cannot take the value the same way as for non-AJAX
+    // requests because route is identified as Drupal AJAX and views arguments
+    // are removed by Views.
+    // @todo ajax review
+    if ($this->request->isXmlHttpRequest()) {
+      $argumentValues = explode('/', ($_REQUEST['view_args'] ?? ''));
+    }
+    else {
+      $display = $this->getViewsDisplay()->getDisplay();
+
+      // Display plugin which have a path, i.e. pages.
+      // @see \Drupal\views\Plugin\views\display\PathPluginBase
+      if ($display->hasPath()) {
+        $viewUrlParameters = $display->getUrl()->getRouteParameters();
+        if (!empty($viewUrlParameters)) {
+          $parameters = [];
+          foreach ($viewUrlParameters as $viewUrlParameter => $validator) {
+            $parameters[] = $this->request->attributes->has($viewUrlParameter) ? $this->request->attributes->get($viewUrlParameter) : NULL;
+          }
+
+          // Add view parameters as arguments only if at least one of them
+          // resolved to a value, otherwise let views handle the defaults.
+          if (!empty(array_filter($parameters))) {
+            $argumentValues = array_merge($argumentValues, $parameters);
+          }
+        }
+      }
+      // @todo Support other plugin types.
+    }
+    return $argumentValues;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function fillFacetsWithResults(array $facets) {
@@ -192,6 +232,7 @@ class SearchApiDisplay extends FacetSourcePluginBase implements SearchApiFacetSo
         $view = Views::getView($display_definition['view_id']);
         $view->setDisplay($display_definition['view_display']);
         $view->preExecute();
+        $view->setArguments($this->extractArgumentsForViewDisplay());
         $view->execute();
         $results = $this->searchApiQueryHelper->getResults($search_id);
       }
@@ -417,33 +458,6 @@ class SearchApiDisplay extends FacetSourcePluginBase implements SearchApiFacetSo
       return $field->getDataDefinition();
     }
     throw new Exception("Field with name {$field_name} does not have a definition");
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function buildFacet() {
-    $build = parent::buildFacet();
-    $view = $this->getViewsDisplay();
-    if ($view === NULL) {
-      return $build;
-    }
-
-    // Add JS for Views with Ajax Enabled.
-    if ($view->display_handler->ajaxEnabled()) {
-      $js_settings = [
-        'view_id' => $view->id(),
-        'current_display_id' => $view->current_display,
-        'view_base_path' => ltrim($view->getPath() ?? '', '/'),
-        'ajax_path' => Url::fromRoute('views.ajax')->toString(),
-      ];
-      $build['#attached']['library'][] = 'facets/drupal.facets.views-ajax';
-      $build['#attached']['drupalSettings']['facets_views_ajax'] = [
-        $this->facet->id() => $js_settings,
-      ];
-      $build['#use_ajax'] = TRUE;
-    }
-    return $build;
   }
 
   /**

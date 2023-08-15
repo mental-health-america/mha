@@ -14,12 +14,12 @@ class SimplenewsFieldUiTest extends SimplenewsTestBase {
    *
    * @var array
    */
-  public static $modules = ['field_ui', 'help'];
+  protected static $modules = ['field_ui', 'help'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->drupalPlaceBlock('help_block');
   }
@@ -53,14 +53,14 @@ class SimplenewsFieldUiTest extends SimplenewsTestBase {
       'type' => $type,
       'simplenews_content_type' => TRUE,
     ];
-    $this->drupalPostForm(NULL, $edit, t('Save and manage fields'));
+    $this->submitForm($edit, 'Save and manage fields');
     $this->drupalGet('admin/structure/types/manage/' . $type . '/fields');
-    $this->assertText('simplenews_issue');
+    $this->assertSession()->pageTextContains('simplenews_issue');
     // Check if the help text is displayed.
     $this->drupalGet('admin/structure/types/manage/' . $type . '/display');
-    $this->assertText("'Plain' display settings apply to the content of emails");
+    $this->assertSession()->pageTextContains("'Email:HTML' display settings apply to the HTML content of emails");
     $this->drupalGet('admin/config/services/simplenews/settings/newsletter');
-    $this->assertText('These settings are default to all newsletters. Newsletter specific settings');
+    $this->assertSession()->pageTextContains('These settings are default to all newsletters. Newsletter specific settings');
   }
 
 }

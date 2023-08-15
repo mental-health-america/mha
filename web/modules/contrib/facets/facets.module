@@ -16,6 +16,7 @@ use Drupal\facets\Entity\Facet;
 use Drupal\facets\Entity\FacetSource;
 use Drupal\facets\FacetInterface;
 use Drupal\facets\FacetSource\SearchApiFacetSourceInterface;
+use Drupal\search_api\Entity\Index;
 use Drupal\views\Entity\View;
 use Drupal\Core\Entity\EntityInterface;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
@@ -66,6 +67,11 @@ function facets_theme($existing, $type, $theme, $path) {
         'attributes' => [],
         'empty' => NULL,
         'context' => [],
+      ],
+    ],
+    'facets_views_plugin' => [
+      'variables' => [
+        'content' => [],
       ],
     ],
   ];
@@ -376,4 +382,24 @@ function facets_theme_suggestions_facets_result_item(array $variables) {
     $suggestions[] = 'facets_result_item__' . $facet->getWidget()['type'] . '__' . $facet->id();
   }
   return $suggestions;
+}
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function facets_views_data_alter(array &$data) {
+
+  /** @var \Drupal\search_api\IndexInterface $index */
+  foreach (Index::loadMultiple() as $index) {
+    $data['search_api_index_' . $index->id()]['facets'] = [
+      'title' => t('Facets'),
+      'help' => t('Displays facets in a filter or area.'),
+      'filter' => [
+        'id' => 'facets_filter',
+      ],
+      'area' => [
+        'id' => 'facets_area',
+      ],
+    ];
+  }
 }

@@ -46,6 +46,10 @@ class GlossaryAZWidget extends WidgetPluginBase implements WidgetPluginInterface
       ],
     ];
 
+    if ($facet->get('show_title') === TRUE) {
+      $build['#title'] = $facet->label();
+    }
+
     $configuration = $facet->getWidget()['config'];
     $enable_default_theme = empty($configuration['enable_default_theme']) ? FALSE : (bool) $configuration['enable_default_theme'];
 
@@ -105,7 +109,7 @@ class GlossaryAZWidget extends WidgetPluginBase implements WidgetPluginInterface
 
     $text = $result->getDisplayValue();
 
-    // TODO revise this logic based on progress with
+    // @todo revise this logic based on progress with
     // All items count is not correct when narrowing the results.
     // https://www.drupal.org/project/facets/issues/2692027
     // see https://git.drupalcode.org/project/facets/commit/21343a6
@@ -166,7 +170,7 @@ class GlossaryAZWidget extends WidgetPluginBase implements WidgetPluginInterface
     $index = $facet->getFacetSource()->getIndex();
     $processors = $index->getProcessors();
 
-    // If the glossary field is not enabled for this index, just form_exit here.
+    // If the glossary field is not enabled for this index, just exit here.
     if (!isset($processors['glossary'])) {
       return FALSE;
     }

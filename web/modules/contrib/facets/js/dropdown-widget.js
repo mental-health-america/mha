@@ -40,6 +40,7 @@
       $dropdown.addClass('facets-dropdown');
       $dropdown.addClass('js-facets-widget');
       $dropdown.addClass('js-facets-dropdown');
+      $dropdown.attr('name', $ul.data('drupal-facet-filter-key') + '[]')
 
       var id = $(this).data('drupal-facet-id');
       // Add aria-labelledby attribute to reference label.
@@ -52,15 +53,18 @@
         .text(default_option_label);
       $dropdown.append($default_option);
 
-      $ul.prepend('<li class="default-option"><a href="' + window.location.href.split('?')[0] + '">' + Drupal.checkPlain(default_option_label) + '</a></li>');
+      $ul.prepend('<li class="default-option"><a href="' + window.location.href.split('?')[0] + '" data-drupal-facet-ajax="' + $ul.data('drupal-facet-ajax') +'">' + Drupal.checkPlain(default_option_label) + '</a></li>');
 
       var has_active = false;
       $links.each(function () {
         var $link = $(this);
         var active = $link.hasClass('is-active');
+        var type = $link.data('drupal-facet-widget-element-class');
         var $option = $('<option></option>')
           .attr('value', $link.attr('href'))
-          .data($link.data());
+          .data($link.data())
+          .addClass(type)
+          .val($link.data('drupal-facet-filter-value'));
         if (active) {
           has_active = true;
           // Set empty text value to this link to unselect facet.
@@ -85,9 +89,10 @@
       $dropdown.on('change.facets', function () {
         var anchor = $($ul).find("[data-drupal-facet-item-id='" + $(this).find(':selected').data('drupalFacetItemId') + "']");
         var $linkElement = (anchor.length > 0) ? $(anchor) : $ul.find('.default-option a');
-        var url = $linkElement.attr('href');
-
-        $(this).trigger('facets_filter', [ url ]);
+        if ($linkElement.data('drupal-facet-ajax') == 0) {
+          var url = $linkElement.attr('href');
+          $(this).trigger('facets_filter', [ url ]);
+        }
       });
 
       // Append empty text option.

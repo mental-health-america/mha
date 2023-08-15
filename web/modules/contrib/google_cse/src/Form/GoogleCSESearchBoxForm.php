@@ -66,10 +66,12 @@ class GoogleCSESearchBoxForm extends FormBase {
     }
     $form[$query] = [
       '#type' => 'textfield',
+      '#id' => 'google-cse-query',
       '#default_value' => $this->requestStack->getCurrentRequest()->query->has('query') ? $this->requestStack->getCurrentRequest()->query->get('query') : '',
     ];
     $form['sa'] = [
       '#type' => 'submit',
+      '#id' => 'google-cse-submit',
       '#value' => $this->t('Search'),
     ];
     $form['keys']['#size'] = intval($settings['results_searchbox_width']);

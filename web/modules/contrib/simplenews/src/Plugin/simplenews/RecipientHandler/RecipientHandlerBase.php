@@ -45,14 +45,14 @@ abstract class RecipientHandlerBase extends PluginBase implements RecipientHandl
   public function __construct(array $configuration, $plugin_id, $plugin_definition) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->issue = $configuration['_issue'];
-    $this->connection = $configuration['_connection'];
     $this->newsletterIds = $configuration['_newsletter_ids'];
+    $this->connection = \Drupal::database();
   }
 
   /**
    * {@inheritdoc}
    */
-  public function count() {
+  public function count(): int {
     $cache = &drupal_static(__METHOD__, []);
     $cid = $this->pluginId . ':' . implode(':', $this->newsletterIds);
     if (isset($cache[$cid])) {
@@ -135,7 +135,7 @@ abstract class RecipientHandlerBase extends PluginBase implements RecipientHandl
       'entity_type' => $this->issue->getEntityTypeId(),
       'entity_id' => $this->issue->id(),
       'status' => SpoolStorageInterface::STATUS_PENDING,
-      'timestamp' => REQUEST_TIME,
+      'timestamp' => \Drupal::time()->getRequestTime(),
       'newsletter_id' => $this->getNewsletterId(),
     ];
 
