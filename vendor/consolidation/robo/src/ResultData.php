@@ -21,8 +21,8 @@ class ResultData extends Data implements ExitCodeInterface, OutputDataInterface
     const EXITCODE_COMMAND_NOT_FOUND = 127;
 
     /** The command was aborted because the user chose to cancel it at some prompt.
-    This form_exit code is arbitrarily the same as EX_TEMPFAIL in sysexits.h, although
-    note that shell error codes are distinct from C form_exit codes, so this alignment
+    This exit code is arbitrarily the same as EX_TEMPFAIL in sysexits.h, although
+    note that shell error codes are distinct from C exit codes, so this alignment
     not particularly meaningful. */
     const EXITCODE_USER_CANCEL = 75;
 

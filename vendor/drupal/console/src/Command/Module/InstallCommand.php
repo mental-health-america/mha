@@ -244,7 +244,7 @@ class InstallCommand extends Command
             }
         }
 
-        // If no modules need to be installed, warn and form_exit.
+        // If no modules need to be installed, warn and exit.
         if (!$unInstalledModules) {
             $this->getIo()->warning(
                 $this->trans('commands.module.install.messages.nothing')

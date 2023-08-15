@@ -307,7 +307,6 @@ function recurring_events_update_8007() {
   $inherited_fields = $database->select('config', 'c')
     ->fields('c', ['name'])
     ->condition('name', 'recurring_events.field_inheritance.%', 'LIKE')
-    ->accessCheck(FALSE)
     ->execute()
     ->fetchCol();
   $bundles = \Drupal::service('entity_type.bundle.info')->getBundleInfo('eventseries');
@@ -340,7 +339,6 @@ function recurring_events_update_8007() {
     }
     $database->delete('config')
       ->condition('name', 'recurring_events.field_inheritance.%', 'LIKE')
-      ->accessCheck(FALSE)
       ->execute();
   }
 
@@ -512,7 +510,6 @@ function recurring_events_update_8011() {
       $database->update($table)
         ->fields([$field => ''])
         ->isNull($field)
-        ->accessCheck(FALSE)
         ->execute();
     }
   }
@@ -530,7 +527,6 @@ function recurring_events_update_8011() {
 
     $database_values = $database->select($table_name)
       ->fields($table_name, array_merge([$id_key, $revision_key], $field_fields))
-      ->accessCheck(FALSE)
       ->execute()
       ->fetchAll();
 
@@ -581,14 +577,12 @@ function recurring_events_update_8011() {
         $database->update($table_name)
           ->fields($values_to_restore)
           ->condition($id_key, $value->{$id_key})
-          ->accessCheck(FALSE)
           ->execute();
 
         $database->update($revision_table_name)
           ->fields($values_to_restore)
           ->condition($id_key, $value->{$id_key})
           ->condition($revision_key, $value->{$revision_key})
-          ->accessCheck(FALSE)
           ->execute();
       }
     }

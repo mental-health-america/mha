@@ -51,7 +51,6 @@ class EventInstanceStorage extends SqlContentEntityStorage implements EventInsta
     return $this->database->update('eventinstance_revision')
       ->fields(['langcode' => LanguageInterface::LANGCODE_NOT_SPECIFIED])
       ->condition('langcode', $language->getId())
-      ->accessCheck(FALSE)
       ->execute();
   }
 

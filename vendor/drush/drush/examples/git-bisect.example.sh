@@ -15,7 +15,7 @@
 #   $ git bisect run mytestscript.sh
 #
 # 'git bisect run' will continue to call 'git bisect good' and 'git bisect bad',
-# based on whether the script's form_exit code was 0 or 1, respectively.
+# based on whether the script's exit code was 0 or 1, respectively.
 #
 # Replace 'mytestscript.sh' in the example above with a custom script that you
 # write yourself.  Use the example script at the end of this document as a
