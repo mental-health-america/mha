@@ -3,6 +3,7 @@
 namespace Drupal\simplenews\Mail;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Mail\MailFormatHelper;
 use Drupal\Core\Utility\Token;
 use Drupal\simplenews\Subscription\SubscriptionManagerInterface;
 
@@ -65,10 +66,12 @@ class MailBuilder implements MailBuilderInterface {
       $message['params']['format'] = 'text/html';
       $message['params']['plain'] = NULL;
 
-      // Provide a plain text version, both in params][plaintext (Mime Mail) and
-      // plain (Swiftmailer).
-      $message['params']['plaintext'] = $mail->getPlainBody();
-      $message['plain'] = $message['params']['plaintext'];
+      if ($this->config->get('mail.textalt')) {
+        // Provide a plain text version, both in params][plaintext (Mime Mail)
+        // and plain (Swiftmailer).
+        $message['params']['plaintext'] = MailFormatHelper::htmlToText($mail->getPlainBody());
+        $message['plain'] = $message['params']['plaintext'];
+      }
 
       // Add attachments, again, both for the attachments key (Mime Mail) and
       // files (Swiftmailer).
@@ -89,78 +92,32 @@ class MailBuilder implements MailBuilderInterface {
    */
   public function buildSubscribeMail(array &$message, array $params) {
     $context = $params['context'];
-
-    // Use formatted from address "name" <mail_address>.
-    $message['headers']['From'] = $params['from']['formatted'];
-
-    $message['subject'] = $this->config->get('subscription.confirm_subscribe_subject');
-    $message['subject'] = $this->token->replace($message['subject'], $context, ['sanitize' => FALSE]);
-    if ($context['simplenews_subscriber']->isSubscribed($context['newsletter']->id())) {
-      $body = $this->config->get('subscription.confirm_subscribe_subscribed');
-    }
-    else {
-      $body = $this->config->get('subscription.confirm_subscribe_unsubscribed');
-    }
-    $message['body'][] = $this->token->replace($body, $context, ['sanitize' => FALSE]);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function buildCombinedMail(array &$message, array $params) {
-    $context = $params['context'];
     $subscriber = $context['simplenews_subscriber'];
     $langcode = $message['langcode'];
 
     // Use formatted from address "name" <mail_address>.
     $message['headers']['From'] = $params['from']['formatted'];
 
-    $message['subject'] = $this->config->get('subscription.confirm_combined_subject');
-    $message['subject'] = $this->token->replace($message['subject'], $context, ['sanitize' => FALSE]);
-
-    $changes_list = '';
-    $actual_changes = 0;
-    foreach ($this->subscriptionManager->getChangesList($context['simplenews_subscriber'], $subscriber->getChanges(), $langcode) as $newsletter_id => $change) {
-      $changes_list .= ' - ' . $change . "\n";
-
-      // Count the actual changes.
-      $subscribed = $context['simplenews_subscriber']->isSubscribed($newsletter_id);
-      $changes = $subscriber->getChanges();
-      if ($changes[$newsletter_id] == 'subscribe' && !$subscribed || $changes[$newsletter_id] == 'unsubscribe' && $subscribed) {
-        $actual_changes++;
-      }
-    }
-
-    // If there are actual changes, use the combined_body key otherwise use the
-    // one without a confirmation link.
-    $body_key = $actual_changes ? 'combined_body' : 'combined_body_unchanged';
-
-    $body = $this->config->get('subscription.confirm_' . $body_key);
-    // The changes list is not an actual token.
-    $body = str_replace('[changes-list]', $changes_list, $body);
-    $message['body'][] = $this->token->replace($body, $context, ['sanitize' => FALSE]);
+    $message['subject'] = $this->config->get('subscription.confirm_subject');
+    $message['subject'] = simplenews_token_replace_subject($message['subject'], $context);
+    $body = $this->config->get('subscription.confirm_body');
+    $message['body'][] = simplenews_token_replace_body($body, $context);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function buildUnsubscribeMail(array &$message, array $params) {
+  public function buildValidateMail(array &$message, array $params) {
     $context = $params['context'];
 
     // Use formatted from address "name" <mail_address>.
     $message['headers']['From'] = $params['from']['formatted'];
 
-    $message['subject'] = $this->config->get('subscription.confirm_subscribe_subject');
-    $message['subject'] = $this->token->replace($message['subject'], $context, ['sanitize' => FALSE]);
+    $message['subject'] = $this->config->get('subscription.validate_subject');
+    $message['subject'] = simplenews_token_replace_subject($message['subject'], $context);
 
-    if ($context['simplenews_subscriber']->isSubscribed($context['newsletter']->id())) {
-      $body = $this->config->get('subscription.confirm_unsubscribe_subscribed');
-      $message['body'][] = $this->token->replace($body, $context, ['sanitize' => FALSE]);
-    }
-    else {
-      $body = $this->config->get('subscription.confirm_unsubscribe_unsubscribed');
-      $message['body'][] = $this->token->replace($body, $context, ['sanitize' => FALSE]);
-    }
+    $body = $this->config->get('subscription.validate_body');
+    $message['body'][] = simplenews_token_replace_body($body, $context);
   }
 
 }

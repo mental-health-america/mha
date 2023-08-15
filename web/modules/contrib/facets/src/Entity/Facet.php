@@ -1174,9 +1174,12 @@ class Facet extends ConfigEntityBase implements FacetInterface {
     $eventDispatcher = \Drupal::service('event_dispatcher');
     $event = new GetFacetCacheContexts(parent::getCacheContexts(), $this);
     $eventDispatcher->dispatch($event);
-    $this->cacheContexts = $event->getCacheContexts() ?? $this->cacheContexts;
+    $contexts = $event->getCacheContexts() ?? $this->cacheContexts;
+    $contexts[] = 'facets_filter:' . ($this->getFacetSourceConfig()->getFilterKey() ?: 'f');
 
-    return array_values($this->cacheContexts);
+    $this->cacheContexts = array_unique(array_values($contexts));
+
+    return $this->cacheContexts;
   }
 
   /**

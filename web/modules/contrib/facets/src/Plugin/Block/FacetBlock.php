@@ -97,7 +97,6 @@ class FacetBlock extends BlockBase implements ContainerFactoryPluginInterface {
       // @see Drupal\facets\Plugin\facets\facet_source\SearchApiDisplay
       /** @var \Drupal\facets\FacetSource\FacetSourcePluginInterface $facet_source */
       $facet_source = $facet->getFacetSource();
-      $build += $facet_source->buildFacet();
 
       // Add contextual links only when we have results.
       $build['#contextual_links']['facets_facet'] = [
@@ -109,18 +108,6 @@ class FacetBlock extends BlockBase implements ContainerFactoryPluginInterface {
       }
       else {
         $build['#attributes']['class'][] = 'facet-inactive';
-      }
-
-      // Add classes needed for ajax.
-      if (!empty($build['#use_ajax'])) {
-        $build['#attributes']['class'][] = 'block-facets-ajax';
-        // The configuration block id isn't always set in the configuration.
-        if (isset($this->configuration['block_id'])) {
-          $build['#attributes']['class'][] = 'js-facet-block-id-' . $this->configuration['block_id'];
-        }
-        else {
-          $build['#attributes']['class'][] = 'js-facet-block-id-' . $this->pluginId;
-        }
       }
     }
 

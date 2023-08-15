@@ -21,6 +21,7 @@
     "drupal/jquery_ui_touch_punch": "~1.1"
   },
   "suggest": {
+    "drupal/better_exposed_filters": "Required for AJAX support for facets rendered as views exposed filters",
     "drupal/jquery_ui_slider": "Required for the 'Facets Range Widget' module to work",
     "drupal/jquery_ui_touch_punch": "Required for the 'Facets Range Widget' module to work"
   },

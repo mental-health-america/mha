@@ -10,6 +10,9 @@ simplenews.settings:
       type: mapping
       label: Newsletter settings
       mapping:
+        issue_tokens:
+          type: boolean
+          label: Show token browser on the node edit page
         format:
           type: string
           label: Default format for new newsletters
@@ -37,54 +40,30 @@ simplenews.settings:
       type: mapping
       label: Subscription settings
       mapping:
+        skip_verification:
+          type: boolean
+          label: Skip verification for anonymous users
         tidy_unconfirmed:
           type: integer
           label: Tidy unconfirmed subscriptions after a number of days
-        use_combined:
-          type: string
-          label: Combined setting
-        confirm_subscribe_subject:
+        confirm_subject:
           type: label
           label: Subscribe confirmation subject
-        confirm_subscribe_unsubscribed:
+        confirm_body:
           type: text
           label: Subscribe confirmation message
-        confirm_subscribe_subscribed:
-          type: text
-          label: Already subscribed message
-        confirm_unsubscribe_subscribed:
-          type: text
-          label: Unsubscribe message
-        confirm_unsubscribe_unsubscribed:
-          type: text
-          label: Already Unsubscribe message
-        confirm_combined_subject:
-          type: label
-          label: Combined subscribe subject
-        confirm_combined_body:
-          type: text
-          label: Combined subscribe message
-        confirm_combined_body_unchanged:
-          type: text
-          label: Combined subscribe unchanged message
-        confirm_combined_line_subscribe_unsubscribed:
-          type: label
-          label: Combined subscribe message
-        confirm_combined_line_subscribe_subscribed:
-          type: label
-          label: Combined already subscribed message
-        confirm_combined_line_unsubscribe_subscribed:
-          type: label
-          label: Combined unsubscribe message
-        confirm_combined_line_unsubscribe_unsubscribed:
-          type: label
-          label: Combined already unsubscribed message
         confirm_subscribe_page:
           type: string
           label: Confirmation subscribe redirect page
         confirm_unsubscribe_page:
           type: string
           label: Confirmation unsubscribe redirect page
+        validate_subject:
+          type: label
+          label: Validate subject
+        validate_body:
+          type: text
+          label: Validate message
 
     mail:
       type: mapping
@@ -93,6 +72,9 @@ simplenews.settings:
         use_cron:
           type: boolean
           label: Use cron
+        textalt:
+          type: boolean
+          label: Generate plain-text alternative
         throttle:
           type: integer
           label: Mails to send per cron run
@@ -150,9 +132,9 @@ simplenews.newsletter.*:
     new_account:
       type: string
       label: 'Indicates how to integrate with the register form.'
-    opt_inout:
+    access:
       type: string
-      label: 'Defines the Opt-In/out options.'
+      label: 'Controls access to subscribe and unsubscribe.'
     weight:
       type: integer
       label: 'Weight of this newsletter (used for sorting).'
@@ -240,9 +222,18 @@ block.settings.simplenews_subscription_block:
       sequence:
         type: string
         label: Newsletter ID
+    default_newsletters:
+      type: sequence
+      label: Default newsletters
+      sequence:
+        type: string
+        label: Newsletter ID
     message:
       type: label
       label: Message
+    show_manage:
+      type: boolean
+      label: Show manage link
     unique_id:
       type: string
       label: Unique ID

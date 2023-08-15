@@ -76,7 +76,12 @@ class GlossaryAZAllItemsProcessor extends ProcessorPluginBase implements BuildPr
 
     // Deal with the ALL Items path.
     // See QueryString::buildUrls.
-    $path = Request::create($facet->getFacetSource()->getPath());
+    if ($facet_path = $facet->getFacetSource()->getPath()) {
+      $path = Request::create($facet_path);
+    }
+    else {
+      $path = Request::create(\Drupal::service('path.current')->getPath());
+    }
     $url = Url::createFromRequest($path);
 
     // First get the current list of get parameters without pager.
@@ -87,7 +92,7 @@ class GlossaryAZAllItemsProcessor extends ProcessorPluginBase implements BuildPr
     $filterKey = $facet_source_config->getFilterKey() ?: 'f';
 
     // See QueryString::buildUrls.
-    $filter_params = $get_params->get($filterKey, [], TRUE);
+    $filter_params = $get_params->get($filterKey, []);
 
     // Remove the filter string from the parameters.
     foreach ($filter_params as $key => $filter_param) {
