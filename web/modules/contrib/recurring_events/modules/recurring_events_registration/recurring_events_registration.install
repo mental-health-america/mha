@@ -116,7 +116,6 @@ function recurring_events_registration_update_8003() {
 
   $registration_values = $database->select($table_name)
     ->fields($table_name, [$id_key, $revision_key] + $reg_fields)
-    ->accessCheck(FALSE)
     ->execute()
     ->fetchAll();
 
@@ -124,7 +123,6 @@ function recurring_events_registration_update_8003() {
 
   $database->update($table_name)
     ->fields($update_fields)
-    ->accessCheck(FALSE)
     ->execute();
 
   $field_storage_definition = $definition_manager->getFieldStorageDefinition('event_registration', 'eventseries');
@@ -168,13 +166,11 @@ function recurring_events_registration_update_8003() {
       $database->update($table_name)
         ->fields($values_to_restore)
         ->condition($id_key, $value->{$id_key})
-        ->accessCheck(FALSE)
         ->execute();
 
       $database->update($revision_table_name)
         ->fields($values_to_restore)
         ->condition($id_key, $value->{$id_key})
-        ->accessCheck(FALSE)
         ->execute();
     }
   }
@@ -307,7 +303,6 @@ function recurring_events_registration_update_8007() {
   $registration_values = $database->select($table_name)
     ->fields($table_name, [$id_key, $revision_key] + $reg_fields)
     ->condition('event_registration__registration', 1)
-    ->accessCheck(FALSE)
     ->execute()
     ->fetchAll();
 
@@ -316,7 +311,6 @@ function recurring_events_registration_update_8007() {
   $update_fields = array_fill_keys($reg_fields, NULL);
   $database->update($table_name)
     ->fields($update_fields)
-    ->accessCheck(FALSE)
     ->execute();
 
   // Remove the existing registration field.
@@ -356,14 +350,12 @@ function recurring_events_registration_update_8007() {
       $database->update($table_name)
         ->fields($values_to_restore)
         ->condition($id_key, $value->{$id_key})
-        ->accessCheck(FALSE)
         ->execute();
 
       $database->update($revision_table_name)
         ->fields($values_to_restore)
         ->condition($id_key, $value->{$id_key})
         ->condition($revision_key, $value->{$revision_key})
-        ->accessCheck(FALSE)
         ->execute();
     }
   }
@@ -452,7 +444,6 @@ function recurring_events_registration_update_8009() {
   $registration_values = $database->select($table_name)
     ->fields($table_name, [$id_key, $revision_key] + $reg_fields)
     ->condition('event_registration__registration', 1)
-    ->accessCheck(FALSE)
     ->execute()
     ->fetchAll();
 
@@ -461,7 +452,6 @@ function recurring_events_registration_update_8009() {
   $update_fields = array_fill_keys($reg_fields, NULL);
   $database->update($table_name)
     ->fields($update_fields)
-    ->accessCheck(FALSE)
     ->execute();
 
   // Remove the existing registration field.
@@ -501,14 +491,12 @@ function recurring_events_registration_update_8009() {
       $database->update($table_name)
         ->fields($values_to_restore)
         ->condition($id_key, $value->{$id_key})
-        ->accessCheck(FALSE)
         ->execute();
 
       $database->update($revision_table_name)
         ->fields($values_to_restore)
         ->condition($id_key, $value->{$id_key})
         ->condition($revision_key, $value->{$revision_key})
-        ->accessCheck(FALSE)
         ->execute();
     }
   }
