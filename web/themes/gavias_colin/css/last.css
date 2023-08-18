@@ -295,3 +295,7 @@ input.gsc-input, .gsc-input-box, .gsc-input-box-hover, .gsc-input-box-focus {
 table.gsc-search-box td.gsc-input {
   padding-right: 0;
 }
+
+#footer-2 a:focus, #footer-2 a:active, #footer-2 a:visited {
+  color: white !important;
+}
