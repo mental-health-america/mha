@@ -8,7 +8,7 @@ dependencies:
   - drupal:user
   - fraction:fraction
 
-# Information added by Drupal.org packaging script on 2023-04-05
-version: '2.3.0'
+# Information added by Drupal.org packaging script on 2023-08-21
+version: '2.3.1'
 project: 'fraction'
-datestamp: 1680722988
+datestamp: 1692651922
