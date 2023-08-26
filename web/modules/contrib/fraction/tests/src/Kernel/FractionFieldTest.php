@@ -87,6 +87,13 @@ class FractionFieldTest extends FieldKernelTestBase {
     $node->save();
     $fraction_field = $node->get(self::FIELD_NAME);
 
+    // Confirm that an empty field returns a null values.
+    $fraction_field->set(0, NULL);
+    $this->assertEquals(NULL, $fraction_field->first()->numerator);
+    $this->assertEquals(NULL, $fraction_field->first()->denominator);
+    $this->assertEquals(NULL, $fraction_field->first()->get('fraction')->getValue());
+    $this->assertEquals(NULL, $fraction_field->first()->get('decimal')->getValue());
+
     // Set value with a decimal.
     $fraction_field->set(0, 1.2);
     $this->assertEquals(12, $fraction_field->first()->numerator);

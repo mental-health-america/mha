@@ -27,8 +27,16 @@ class FractionProperty extends TypedData {
 
     // Load the parent item.
     $item = $this->getParent();
-    // Otherwise, create a Fraction object.
-    $this->fraction = new Fraction($item->numerator, $item->denominator);
+
+    // If numerator or denominator are null, the fraction is also null.
+    if (is_null($item->numerator) || is_null($item->denominator)) {
+      $this->fraction = NULL;
+    }
+
+    // Otherwise, create a Fraction object with the numerator and denominator.
+    else {
+      $this->fraction = new Fraction($item->numerator, $item->denominator);
+    }
 
     return $this->fraction;
   }

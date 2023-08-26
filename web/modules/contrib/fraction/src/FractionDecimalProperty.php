@@ -29,11 +29,17 @@ class FractionDecimalProperty extends TypedData {
     // Load the parent item.
     $item = $this->getParent();
 
-    // Otherwise, create a Fraction object.
-    $fraction = new Fraction($item->numerator, $item->denominator);
+    // If numerator or denominator are null, the decimal is also null.
+    if (is_null($item->numerator) || is_null($item->denominator)) {
+      $this->decimal = NULL;
+    }
 
-    // Generate decimal value with automatic precision.
-    $this->decimal = $fraction->toDecimal(0, TRUE);
+    // Otherwise, create a Fraction object and generate decimal value with
+    // automatic precision.
+    else {
+      $fraction = new Fraction($item->numerator, $item->denominator);
+      $this->decimal = $fraction->toDecimal(0, TRUE);
+    }
 
     return $this->decimal;
   }
