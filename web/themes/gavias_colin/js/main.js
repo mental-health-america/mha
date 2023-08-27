@@ -57,7 +57,7 @@
             autoplayHoverPause: auto_play_hover,
             navText: [ '<i class="fa fa-angle-left"></i>', '<i class="fa fa-angle-right"></i>' ],
             autoHeight: false,
-            loop: loop, 
+            loop: loop,
             dots: pagination,
             rewind: rewind_nav,
             smartSpeed: speed,
@@ -87,8 +87,8 @@
                 }
             }
         });
-     }); 
-    }  
+     });
+    }
 
     init_carousel_owl();
 
@@ -100,7 +100,7 @@
       smartSpeed: 1000,
       autoplayTimeout: 6000,
       autoplaySpeed: 1000,
-      autoplay: true, 
+      autoplay: true,
       autoplayHoverPause: true,
       responsive : {
         0 : {
@@ -135,7 +135,7 @@
       smartSpeed: 1000,
       autoplayTimeout: 6000,
       autoplaySpeed: 1000,
-      autoplay: true, 
+      autoplay: true,
       autoplayHoverPause: true,
       nav: false,
       responsive : {
@@ -168,10 +168,10 @@
       smartSpeed: 1000,
       autoplayTimeout: 6000,
       autoplaySpeed: 1000,
-      autoplay: true, 
+      autoplay: true,
       autoplayHoverPause: true,
       nav: false,
-      dots: false, 
+      dots: false,
       responsive : {
         0 : {
           items: 1,
@@ -210,10 +210,10 @@
 
   //===== AOS ============
   var wow = new WOW({
-    boxClass:     'wow',     
-    animateClass: 'animated', 
-    offset:       0,          
-    mobile:       false,      
+    boxClass:     'wow',
+    animateClass: 'animated',
+    offset:       0,
+    mobile:       false,
   });
   wow.init();
 
@@ -239,7 +239,7 @@
         itemSelector : '.item-masory',
         gutterWidth: 0,
         columnWidth: 1,
-      }); 
+      });
     });
 
     $('.gva-search-region .icon').on('click',function(e){
@@ -258,7 +258,7 @@
         $('.gva-offcanvas-mobile').removeClass('show-view');
       }else{
         $(this).addClass('show-view');
-        $('.gva-offcanvas-mobile').addClass('show-view'); 
+        $('.gva-offcanvas-mobile').addClass('show-view');
       }
       e.stopPropagation();
     })
@@ -324,7 +324,7 @@
                 itemSelector : '.item-masory',
                 gutterWidth: 0,
                 columnWidth: 1,
-            }); 
+            });
         });
     });
 
@@ -359,7 +359,7 @@
     /*------------Pie Charts---------------------------*/
     var pieChartClass = 'pieChart',
       pieChartLoadedClass = 'pie-chart-loaded';
-    
+
     function initPieCharts() {
       var chart = $('.' + pieChartClass);
       chart.each(function() {
@@ -436,7 +436,7 @@
   });
 
   $(document).ready(function(){
-  
+
     $('.quick-side-icon a').click(function(e){
       e.preventDefault();
       if($(this).parents('.quick-side-icon').hasClass('open')){
@@ -490,7 +490,7 @@
         if(o.offset().top <= e + 10 && o.offset().top + o.outerHeight() > e){
           //$('.gsc-links .box-content a[href*="#"]:not([href="#"])').removeClass("o_active");
           t.addClass("o_active");
-        }else{ 
+        }else{
           t.removeClass("o_active");
         }
       })

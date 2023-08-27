@@ -34,13 +34,12 @@
             </div>
 
             {% if page.search %}
-              <div class="gva-search-region search-region">
-                <span class="icon"><i class="fa fa-search"></i></span>
-                <div class="search-content">
-                  {{ page.search }}
-                </div>
+              <div id="edit-keys2" class="col-md-12 mt-1 pt-1 mha-search-region" style="display:none;">
+                {{ page.search }}
               </div>
+              <script src="../themes/gavias_colin/js/search.js"></script>
             {% endif %}
+
           </div>
 
         </div>
