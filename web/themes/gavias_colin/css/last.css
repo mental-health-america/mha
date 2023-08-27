@@ -303,3 +303,11 @@ table.gsc-search-box td.gsc-input {
 #footer-2 a:focus, #footer-2 a:active, #footer-2 a:visited {
   color: white !important;
 }
+
+.header-2-search .gsc-search-button-v2 {
+  padding: 10px !important;
+}
+
+.header-2-search #gsc-i-id1 {
+  width: 100% !important;
+}

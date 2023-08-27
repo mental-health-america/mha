@@ -14,18 +14,13 @@
     <div class="container">
       <div class="header-inner clearfix">
         <div class="row">
-          <div class="col-md-3 col-sm-4 col-xs-4 branding">
+          <div class="col-md-6 branding">
             {% if page.branding %}
               {{ page.branding }}
             {% endif %}
           </div>
-          <div class="col-md-8 col-sm-7 col-xs-7 right-header hidden-sm hidden-xs">
-            {% if page.header_right %}
-              {{ page.header_right }}
-            {% endif %}
-          </div>
 
-          <div class="col-md-1 col-sm-8 col-xs-8 right-header">
+          <div class="col-md-6 right-header">
 
             <div id="menu-bar" class="menu-bar hidden-lg hidden-md">
               <span class="one"></span>
@@ -33,12 +28,11 @@
               <span class="three"></span>
             </div>
 
-            {% if page.search %}
-              <div id="edit-keys2" class="col-md-12 mt-1 pt-1 mha-search-region" style="display:none;">
+              <div id="edit-keys3" class="col-md-12 header-2-search mt-1 pt-1">
                 {{ page.search }}
               </div>
               <script src="../themes/gavias_colin/js/search.js"></script>
-            {% endif %}
+
 
           </div>
 
