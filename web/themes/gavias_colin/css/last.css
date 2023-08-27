@@ -267,6 +267,8 @@ input.gsc-input, .gsc-input-box, .gsc-input-box-hover, .gsc-input-box-focus {
   border-color: transparent !important;
 }
 
+#block-googleprogrammablesearch-2 table > tbody > tr > td,
+#block-googleprogrammablesearch-2  table,
 #block-googleprogrammablesearch table > tbody > tr > td,
 #block-googleprogrammablesearch  table{
   border-color: transparent !important;
@@ -274,10 +276,12 @@ input.gsc-input, .gsc-input-box, .gsc-input-box-hover, .gsc-input-box-focus {
   border-style: none !important;
   padding: 0;
 }
-#block-googleprogrammablesearch  table{
+#block-googleprogrammablesearch table
+#block-googleprogrammablesearch-2  table {
   border: 0 solid transparent !important;
 }
 
+#block-googleprogrammablesearch-2 tbody tr:nth-child(2n+1),
 #block-googleprogrammablesearch tbody tr:nth-child(2n+1) {
   background: transparent !important;
 }

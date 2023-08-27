@@ -90,56 +90,9 @@
               </div>
             </div>
           </div>
-{#
-            <div id="edit-keys2" class="col-md-12 mt-1 pt-1 mha-search-region" style="display:none;">
-                    {{ page.search }}
-            </div>
-
-          #}
-          <div class="col-md-12 mt-4 pt-4">
-            <div id="edit-keys2" class="mha-search-region" style="display:none;">
-              <form action="/search/content" method="get" accept-charset="UTF-8">
-                <div class='input-group'>
-                  <input id="edit-keys3" data-drupal-selector="edit-keys"
-                         data-search-api-autocomplete-search="search_content"
-                         class="form-control form-autocomplete form-text ui-autocomplete-input"
-                         data-autocomplete-path="/search_api_autocomplete/search_content?display=page_1&amp;&amp;filter=keys"
-                         type="text" name="keys" value="" size="30" maxlength="128"
-                         data-once="autocomplete search-api-autocomplete" autocomplete="on" placeholder='Search'>
-                  <span class="input-group-btn">
-              <button type='submit' class='btn btn-default'>
-                <span class='fa fa-search'></span>
-              </button>
-            </span>
-                </div>
-              </form>
-
-            </div>
+          <div id="edit-keys2" class="col-md-12 mt-1 pt-1 mha-search-region" style="display:none;">
+            {{ page.search }}
           </div>
-
-          <script>
-            (function () {
-              "use strict";
-// Hide the close button on initial load
-              document.getElementById("closeButton2").style.display = "none";
-
-// Add event listener to open the div and hide the first button
-              document.getElementById("focusButton2").addEventListener("click", () => {
-                document.getElementById("edit-keys2").style.display = "block";
-                document.getElementById("edit-keys3").focus();
-                document.getElementById("focusButton2").style.display = "none";
-                document.getElementById("closeButton2").style.display = "block";
-              });
-
-// Add event listener to close the div and show the first button
-              document.getElementById("closeButton2").addEventListener("click", () => {
-                document.getElementById("edit-keys2").style.display = "none";
-                document.getElementById("focusButton2").style.display = "block";
-                document.getElementById("closeButton2").style.display = "none";
-              });
-            })(jQuery);
-          </script>
-
           <div class="col">
             {% if page.quick_side %}
               <div class="quick-side-icon hidden-xs hidden-sm">
@@ -152,27 +105,35 @@
     </div>
   </div>
 </header>
-{#
+
 <script>
   (function () {
     "use strict";
-// Hide the close button on initial load
+    // Hide the close button on initial load
     document.getElementById("closeButton2").style.display = "none";
 
-// Add event listener to open the div and hide the first button
+    // Add event listener to open the div and hide the first button
     document.getElementById("focusButton2").addEventListener("click", () => {
-      document.getElementById("edit-keys2").style.display = "block";
-      document.getElementById("gsc-i-id1").focus();
-      document.getElementById("focusButton2").style.display = "none";
-      document.getElementById("closeButton2").style.display = "block";
+      const editKeys2 = document.getElementById("edit-keys2");
+      const gscIID1 = document.getElementById("gsc-i-id1");
+      const focusButton2 = document.getElementById("focusButton2");
+      const closeButton2 = document.getElementById("closeButton2");
+      editKeys2.style.display = "block";
+      gscIID1.focus();
+      focusButton2.style.display = "none";
+      closeButton2.style.display = "block";
     });
 
-// Add event listener to close the div and show the first button
+    // Add event listener to close the div and show the first button
     document.getElementById("closeButton2").addEventListener("click", () => {
-      document.getElementById("edit-keys2").style.display = "none";
-      document.getElementById("focusButton2").style.display = "block";
-      document.getElementById("closeButton2").style.display = "none";
+      const editKeys2 = document.getElementById("edit-keys2");
+      const focusButton2 = document.getElementById("focusButton2");
+      const closeButton2 = document.getElementById("closeButton2");
+      editKeys2.style.display = "none";
+      focusButton2.style.display = "block";
+      closeButton2.style.display = "none";
     });
   })(jQuery);
+
 </script>
-#}
+
