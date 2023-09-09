@@ -698,6 +698,19 @@
             self.geofields_update(params.mapid, position);
           });
 
+          // Fix for Geofield Map Widget visibility issue inside Field Group,
+          // with Leaflet library
+          // @see https://www.drupal.org/project/geofield_map/issues/3087072
+          // Set to refresh when first in viewport to avoid visibility issue.
+          new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+              if(entry.intersectionRatio > 0) {
+                window.dispatchEvent(new Event('resize'));
+                observer.disconnect();
+              }
+            });
+          }).observe(document.getElementById(params.mapid));
+
         }
 
         // Events on Lat field change.
