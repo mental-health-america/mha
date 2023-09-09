@@ -524,7 +524,7 @@
         google.maps.event.addListenerOnce(map, 'idle', function () {
 
           // Open the Feature infowindow, if so set.
-          if (self.map_data[mapid].map_marker_and_infowindow.force_open && parseInt(self.map_data[mapid].map_marker_and_infowindow.force_open) === 1) {
+          if (self.map_data[mapid].map_marker_and_infowindow.force_open) {
             // map.setCenter(features[0].getPosition());
             self.infowindow_open(mapid, features[0]);
           }
