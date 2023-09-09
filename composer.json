@@ -70,7 +70,7 @@
         "drupal/colorbox_inline": "^2.0",
         "drupal/config_update": "^1.6",
         "drupal/console": "^1.0.2",
-        "drupal/content_access": "^2.0@RC",
+        "drupal/content_access": "^2.0",
         "drupal/content_sync": "^3.0@beta",
         "drupal/core": "^9.5.9.",
         "drupal/ctools": "^4.0",
