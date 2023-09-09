@@ -1026,17 +1026,19 @@ header.header-v3 .main-menu-inner {
 
 #footer {
   font-size: 14px;
-  color: #d5d7d8;
+  color: white !important;
   background: var(--mha-black);
   line-height: 28px;
 }
 
-#footer a {
-  color: #d5d7d8;
+#footer a,
+#footer a:visited {
+  color: white !important;
 }
 
 #footer a:hover, #footer a:focus {
-  color: var(--mha-blue-med);
+  color: white !important;
+  text-decoration: underline !important;
 }
 
 #footer .before-footer {
