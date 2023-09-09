@@ -311,3 +311,13 @@ table.gsc-search-box td.gsc-input {
 .header-2-search #gsc-i-id1 {
   width: 100% !important;
 }
+
+#footer a:hover, #footer a:focus {
+  color: white !important;
+  text-decoration: underline !important;
+}
+
+#footer .navigation .gva_menu > li > a:hover,
+#footer .navigation .gva_menu > li > a:active {
+  text-decoration: underline !important;
+}
