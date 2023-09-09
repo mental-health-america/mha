@@ -321,3 +321,14 @@ table.gsc-search-box td.gsc-input {
 #footer .navigation .gva_menu > li > a:active {
   text-decoration: underline !important;
 }
+
+.fa-x-twitter:before,
+.fa-threads:before {
+  font-size: 2rem;
+}
+
+i.fa.fa-linkedin-square,
+i.fa-brands.fa-threads,
+i.fa-brands.fa-x-twitter {
+  margin: 0 0.5rem;
+}
