@@ -11,6 +11,7 @@ use Drupal\Core\Entity\RevisionableInterface;
 use Drupal\Core\Entity\RevisionLogInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\File\FileSystemInterface;
+use Drupal\Core\StreamWrapper\StreamWrapperManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\TypedData\TranslatableInterface;
 use Drupal\file\FileInterface;
@@ -18,6 +19,7 @@ use Drupal\layout_builder\InlineBlockUsageInterface;
 use Drupal\layout_builder\Plugin\Block\InlineBlock;
 use Drupal\layout_builder\Section;
 use Drupal\layout_builder\SectionComponent;
+use Drupal\s3fs\StreamWrapper\S3fsStream;
 
 /**
  * Creates a helper service to import content.
@@ -76,6 +78,13 @@ class ContentImporter implements ContentImporterInterface {
   protected ?InlineBlockUsageInterface $inlineBlockUsage;
 
   /**
+   * The stream wrapper manager.
+   *
+   * @var \Drupal\Core\StreamWrapper\StreamWrapperManagerInterface
+   */
+  protected StreamWrapperManagerInterface $wrapperManager;
+
+  /**
    * ContentExporter constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -86,6 +95,8 @@ class ContentImporter implements ContentImporterInterface {
    *   The module handler.
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   The file system.
+   * @param \Drupal\Core\StreamWrapper\StreamWrapperManagerInterface $wrapper_manager
+   *   The stream wrapper manager.
    * @param \Drupal\single_content_sync\ContentSyncHelperInterface $content_sync_helper
    *   The content sync helper.
    * @param \Drupal\Component\Datetime\TimeInterface $time
@@ -93,11 +104,12 @@ class ContentImporter implements ContentImporterInterface {
    * @param \Drupal\layout_builder\InlineBlockUsageInterface|null $inline_block_usage
    *   The inline block usage service. This is optional dependency.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, EntityRepositoryInterface $entity_repository, ModuleHandlerInterface $module_handler, FileSystemInterface $file_system, ContentSyncHelperInterface $content_sync_helper, TimeInterface $time, InlineBlockUsageInterface $inline_block_usage = NULL) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, EntityRepositoryInterface $entity_repository, ModuleHandlerInterface $module_handler, FileSystemInterface $file_system, StreamWrapperManagerInterface $wrapper_manager, ContentSyncHelperInterface $content_sync_helper, TimeInterface $time, InlineBlockUsageInterface $inline_block_usage = NULL) {
     $this->entityTypeManager = $entity_type_manager;
     $this->entityRepository = $entity_repository;
     $this->moduleHandler = $module_handler;
     $this->fileSystem = $file_system;
+    $this->wrapperManager = $wrapper_manager;
     $this->contentSyncHelper = $content_sync_helper;
     $this->time = $time;
     $this->inlineBlockUsage = $inline_block_usage;
@@ -354,6 +366,11 @@ class ContentImporter implements ContentImporterInterface {
           }
           else {
             $file_path = NULL;
+            $file = $file_storage->create([
+              'uid' => 1,
+              'status' => FileInterface::STATUS_PERMANENT,
+              'uri' => $file_item['uri'],
+            ]);
 
             // Check if we have a file on the server. This is a case when you do
             // import content with assets from a zip file.
@@ -362,6 +379,19 @@ class ContentImporter implements ContentImporterInterface {
             }
             elseif (file($file_item['url']) !== FALSE) {
               $file_path = $file_item['url'];
+
+              // Get size of an external file.
+              if ($file_headers = get_headers($file_path, 1)) {
+                $file_headers = array_change_key_case($file_headers);
+                $file->setSize((int) $file_headers['content-length']);
+              }
+
+              // Write cache metadata for S3 stream to be able to generate
+              // image styles on a fly.
+              $wrapper = $this->wrapperManager->getViaUri($file_item['uri']);
+              if ($wrapper instanceof S3fsStream) {
+                $wrapper->writeUriToCache($file_item['uri']);
+              }
             }
 
             if (!$file_path) {
@@ -371,11 +401,6 @@ class ContentImporter implements ContentImporterInterface {
             // Create a file entity with the given uri as the file was already
             // imported in the proper directory. If the file is external then
             // we don't need to store file locally.
-            $file = $file_storage->create([
-              'uid' => 1,
-              'status' => FileInterface::STATUS_PERMANENT,
-              'uri' => $file_item['uri'],
-            ]);
             $file->save();
           }
 
@@ -574,10 +599,7 @@ class ContentImporter implements ContentImporterInterface {
    * {@inheritdoc}
    */
   public function importAssets(string $extracted_file_path, string $zip_file_path): void {
-    $default_scheme = $this->contentSyncHelper->getDefaultFileScheme();
-
-    // Use default scheme instead of the assets destinations.
-    $destination = str_replace('assets/', "{$default_scheme}://", $zip_file_path);
+    $destination = str_replace('assets/', 'public://', $zip_file_path);
     $directory = $this->fileSystem->dirname($destination);
     $this->contentSyncHelper->prepareFilesDirectory($directory);
     $this->fileSystem->move($extracted_file_path, $destination, FileSystemInterface::EXISTS_REPLACE);

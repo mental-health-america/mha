@@ -65,8 +65,7 @@ class ContentFileGenerator implements ContentFileGeneratorInterface {
    */
   public function generateYamlFile(FieldableEntityInterface $entity, bool $extract_translations = FALSE): FileInterface {
     $output = $this->contentExporter->doExportToYml($entity, $extract_translations);
-    $default_scheme = $this->contentSyncHelper->getDefaultFileScheme();
-    $directory = "{$default_scheme}://export";
+    $directory = 'temporary://export';
     $file_name = $this->contentSyncHelper->generateContentFileName($entity);
     $this->contentSyncHelper->prepareFilesDirectory($directory);
 
@@ -135,8 +134,7 @@ class ContentFileGenerator implements ContentFileGeneratorInterface {
    *   The generated empty zip file.
    */
   protected function generateEmptyZipFile(string $name): FileInterface {
-    $default_scheme = $this->contentSyncHelper->getDefaultFileScheme();
-    $directory = "{$default_scheme}://export/zip";
+    $directory = "temporary://export/zip";
     $this->contentSyncHelper->prepareFilesDirectory($directory);
 
     return $this->contentSyncHelper->saveFileContentTemporary('', "{$directory}/{$name}.zip");
