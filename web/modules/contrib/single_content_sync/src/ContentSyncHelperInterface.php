@@ -42,14 +42,6 @@ interface ContentSyncHelperInterface {
   public function createImportDirectory(): string;
 
   /**
-   * Get default file scheme.
-   *
-   * @return string
-   *   The name of the default file scheme.
-   */
-  public function getDefaultFileScheme(): string;
-
-  /**
    * Create a zip instance object from the real file path.
    *
    * @param string $file_real_path

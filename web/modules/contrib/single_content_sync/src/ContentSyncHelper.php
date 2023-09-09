@@ -130,23 +130,12 @@ class ContentSyncHelper implements ContentSyncHelperInterface {
    * {@inheritdoc}
    */
   public function createImportDirectory(): string {
-    $default_scheme = $this->getDefaultFileScheme();
     $uuid = $this->uuid->generate();
-    $import_directory = "{$default_scheme}://import/zip/{$uuid}";
+    $import_directory = "public://import/zip/{$uuid}";
 
     $this->prepareFilesDirectory($import_directory);
 
     return $import_directory;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getDefaultFileScheme(): string {
-    // We can only work with local files e.g. generating zip.
-    // External schema is not allowed as you can't create zip instance in this
-    // case.
-    return 'public';
   }
 
   /**

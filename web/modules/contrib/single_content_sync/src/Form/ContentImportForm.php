@@ -63,11 +63,9 @@ class ContentImportForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $default_scheme = $this->config('system.file')->get('default_scheme');
-
     $form['upload_fid'] = [
       '#type' => 'managed_file',
-      '#upload_location' => "{$default_scheme}://import/zip",
+      '#upload_location' => "temporary://import/zip",
       '#upload_validators' => [
         'file_validate_extensions' => ['zip yml'],
       ],
