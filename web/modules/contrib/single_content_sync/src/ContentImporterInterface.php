@@ -63,19 +63,6 @@ interface ContentImporterInterface {
   public function importAssets(string $extracted_file_path, string $zip_file_path): void;
 
   /**
-   * Do a mapping between entity base fields and exported content.
-   *
-   * @param string $entity_type_id
-   *   The entity type to import.
-   * @param array $values
-   *   Original exported values of base fields.
-   *
-   * @return array
-   *   Correct field mapping with exported values.
-   */
-  public function mapBaseFieldsValues(string $entity_type_id, array $values): array;
-
-  /**
    * Handle import of values for custom fields.
    *
    * @param \Drupal\Core\Entity\FieldableEntityInterface $entity
@@ -94,5 +81,28 @@ interface ContentImporterInterface {
    *   The base fields with values.
    */
   public function importBaseValues(FieldableEntityInterface $entity, array $fields): void;
+
+  /**
+   * Create a stub entity (import only base fields).
+   *
+   * @param array $entity
+   *   The exported stub entity (does not contain custom_fields).
+   *
+   * @return \Drupal\Core\Entity\EntityInterface
+   *   The stub entity object.
+   */
+  public function createStubEntity(array $entity): EntityInterface;
+
+  /**
+   * Validates whether an entity array is a full entity array or not.
+   *
+   * @param array $entity
+   *   The entity array to be validated.
+   *
+   * @return bool
+   *   If the entity is a full entity array will return TRUE,
+   *   else will return FALSE.
+   */
+  public function isFullEntity(array $entity): bool;
 
 }

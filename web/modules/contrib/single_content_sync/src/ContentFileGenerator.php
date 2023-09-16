@@ -3,8 +3,8 @@
 namespace Drupal\single_content_sync;
 
 use Drupal\Core\Archiver\ArchiverInterface;
-use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\TempStore\PrivateTempStore;
 use Drupal\file\FileInterface;
 
@@ -152,14 +152,16 @@ class ContentFileGenerator implements ContentFileGeneratorInterface {
     foreach ($assets as $file_uri) {
       // Add file to the zip.
       $file_full_path = $this->fileSystem->realpath($file_uri);
+      $file_relative_path = explode('://', $file_uri)[1];
 
       // Don't add external files as it can be imported by absolute url.
-      if (!$file_full_path) {
-        continue;
+      if ($file_full_path) {
+        $zip->getArchive()->addFile($file_full_path, "assets/{$file_relative_path}");
       }
-
-      $file_relative_path = explode('://', $file_uri)[1];
-      $zip->getArchive()->addFile($file_full_path, "assets/{$file_relative_path}");
+      elseif ($data = file_get_contents($file_uri)) {
+        // Add file contents to the ZIP archive with the same relative path.
+        $zip->getArchive()->addFromString("assets/{$file_relative_path}", $data);
+      }
     }
 
     // Clean up the storage after we exported assets to the zip.
