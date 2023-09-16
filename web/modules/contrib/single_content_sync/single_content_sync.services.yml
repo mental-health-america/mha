@@ -5,10 +5,12 @@ services:
       - '@entity_type.manager'
       - '@module_handler'
       - '@messenger'
-      - '@single_content_sync.store'
       - '@language_manager'
       - '@single_content_sync.helper'
       - '@entity.repository'
+      - '@plugin.manager.single_content_sync_field_processor'
+      - '@plugin.manager.single_content_sync_base_fields_processor'
+      - '@event_dispatcher'
 
   single_content_sync.importer:
     class: Drupal\single_content_sync\ContentImporter
@@ -17,10 +19,11 @@ services:
       - '@entity.repository'
       - '@module_handler'
       - '@file_system'
-      - '@stream_wrapper_manager'
       - '@single_content_sync.helper'
       - '@datetime.time'
-      - '@?inline_block.usage'
+      - '@plugin.manager.single_content_sync_field_processor'
+      - '@plugin.manager.single_content_sync_base_fields_processor'
+      - '@event_dispatcher'
 
   single_content_sync.file_generator:
     class: Drupal\single_content_sync\ContentFileGenerator
@@ -46,3 +49,23 @@ services:
     class: \Drupal\Core\TempStore\PrivateTempStore
     factory: ['@tempstore.private', 'get']
     arguments: [single_content_sync]
+
+  plugin.manager.single_content_sync_field_processor:
+    class: Drupal\single_content_sync\SingleContentSyncFieldProcessorPluginManager
+    parent: default_plugin_manager
+    arguments:
+      - '@entity_field.manager'
+
+  plugin.manager.single_content_sync_base_fields_processor:
+    class: Drupal\single_content_sync\SingleContentSyncBaseFieldsProcessorPluginManager
+    parent: default_plugin_manager
+    arguments:
+      - '@entity_type.manager'
+  single_content_sync.command_helper:
+    class: Drupal\single_content_sync\Utility\CommandHelper
+    arguments:
+      - '@single_content_sync.importer'
+      - '@config.factory'
+      - '@entity_type.manager'
+      - '@single_content_sync.helper'
+      - '@file_system'

@@ -11,15 +11,10 @@ use Drupal\Core\Entity\RevisionableInterface;
 use Drupal\Core\Entity\RevisionLogInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\File\FileSystemInterface;
-use Drupal\Core\StreamWrapper\StreamWrapperManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\TypedData\TranslatableInterface;
-use Drupal\file\FileInterface;
-use Drupal\layout_builder\InlineBlockUsageInterface;
-use Drupal\layout_builder\Plugin\Block\InlineBlock;
-use Drupal\layout_builder\Section;
-use Drupal\layout_builder\SectionComponent;
-use Drupal\s3fs\StreamWrapper\S3fsStream;
+use Drupal\single_content_sync\Event\ImportEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Creates a helper service to import content.
@@ -71,18 +66,25 @@ class ContentImporter implements ContentImporterInterface {
   protected TimeInterface $time;
 
   /**
-   * The inline block usage service.
+   * The field processor plugin manager.
    *
-   * @var \Drupal\layout_builder\InlineBlockUsageInterface|null
+   * @var \Drupal\single_content_sync\SingleContentSyncFieldProcessorPluginManagerInterface
    */
-  protected ?InlineBlockUsageInterface $inlineBlockUsage;
+  protected SingleContentSyncFieldProcessorPluginManagerInterface $fieldProcessorPluginManager;
 
   /**
-   * The stream wrapper manager.
+   * The entity base fields processor plugin manager.
    *
-   * @var \Drupal\Core\StreamWrapper\StreamWrapperManagerInterface
+   * @var \Drupal\single_content_sync\SingleContentSyncBaseFieldsProcessorPluginManagerInterface
    */
-  protected StreamWrapperManagerInterface $wrapperManager;
+  protected SingleContentSyncBaseFieldsProcessorPluginManagerInterface $entityBaseFieldsProcessorPluginManager;
+
+  /**
+   * The event dispatcher.
+   *
+   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+   */
+  protected EventDispatcherInterface $eventDispatcher;
 
   /**
    * ContentExporter constructor.
@@ -95,24 +97,37 @@ class ContentImporter implements ContentImporterInterface {
    *   The module handler.
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   The file system.
-   * @param \Drupal\Core\StreamWrapper\StreamWrapperManagerInterface $wrapper_manager
-   *   The stream wrapper manager.
    * @param \Drupal\single_content_sync\ContentSyncHelperInterface $content_sync_helper
    *   The content sync helper.
    * @param \Drupal\Component\Datetime\TimeInterface $time
    *   The time service.
-   * @param \Drupal\layout_builder\InlineBlockUsageInterface|null $inline_block_usage
-   *   The inline block usage service. This is optional dependency.
+   * @param \Drupal\single_content_sync\SingleContentSyncFieldProcessorPluginManagerInterface $field_processor_plugin_manager
+   *   The field processor plugin manager.
+   * @param \Drupal\single_content_sync\SingleContentSyncBaseFieldsProcessorPluginManagerInterface $entity_base_fields_processor_plugin_manager
+   *   The entity base field processor plugin manager.
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
+   *   The event dispatcher.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, EntityRepositoryInterface $entity_repository, ModuleHandlerInterface $module_handler, FileSystemInterface $file_system, StreamWrapperManagerInterface $wrapper_manager, ContentSyncHelperInterface $content_sync_helper, TimeInterface $time, InlineBlockUsageInterface $inline_block_usage = NULL) {
+  public function __construct(
+    EntityTypeManagerInterface $entity_type_manager,
+    EntityRepositoryInterface $entity_repository,
+    ModuleHandlerInterface $module_handler,
+    FileSystemInterface $file_system,
+    ContentSyncHelperInterface $content_sync_helper,
+    TimeInterface $time,
+    SingleContentSyncFieldProcessorPluginManagerInterface $field_processor_plugin_manager,
+    SingleContentSyncBaseFieldsProcessorPluginManagerInterface $entity_base_fields_processor_plugin_manager,
+    EventDispatcherInterface $event_dispatcher
+  ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->entityRepository = $entity_repository;
     $this->moduleHandler = $module_handler;
     $this->fileSystem = $file_system;
-    $this->wrapperManager = $wrapper_manager;
     $this->contentSyncHelper = $content_sync_helper;
     $this->time = $time;
-    $this->inlineBlockUsage = $inline_block_usage;
+    $this->fieldProcessorPluginManager = $field_processor_plugin_manager;
+    $this->entityBaseFieldsProcessorPluginManager = $entity_base_fields_processor_plugin_manager;
+    $this->eventDispatcher = $event_dispatcher;
   }
 
   /**
@@ -170,12 +185,21 @@ class ContentImporter implements ContentImporterInterface {
         break;
     }
 
+    $importEvent = new ImportEvent($entity, $content);
+    $this->eventDispatcher->dispatch($importEvent);
+    $entity = $importEvent->getEntity();
+    $content = $importEvent->getContent();
+
     // Import values from base fields.
     $this->importBaseValues($entity, $content['base_fields']);
 
     // Alter importing entity by using hook_content_import_entity_alter().
-    // Support of importing a new entity type can be provided in the hook.
-    $this->moduleHandler->alter('content_import_entity', $content, $entity);
+    $this->moduleHandler->alterDeprecated(
+      'Deprecated as of single_content_sync 1.4.0; subscribe to \Drupal\single_content_sync\Event\ImportEvent instead. For implementing support of new entity types, implement SingleContentSyncBaseFieldsProcessor plugin.',
+      'content_import_entity',
+      $content,
+      $entity
+    );
 
     // Import values from custom fields.
     $this->importCustomValues($entity, $content['custom_fields']);
@@ -215,7 +239,7 @@ class ContentImporter implements ContentImporterInterface {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  protected function createOrUpdate(EntityInterface &$entity): void {
+  public function createOrUpdate(EntityInterface &$entity): void {
     $definition = $this->entityTypeManager->getDefinition($entity->getEntityTypeId());
     $existing_entity = $this->entityRepository->loadEntityByUuid($entity->getEntityTypeId(), $entity->uuid());
 
@@ -240,7 +264,19 @@ class ContentImporter implements ContentImporterInterface {
    * {@inheritdoc}
    */
   public function importBaseValues(FieldableEntityInterface $entity, array $fields): void {
-    $values = $this->mapBaseFieldsValues($entity->getEntityTypeId(), $fields);
+    $entityProcessor = $this->entityBaseFieldsProcessorPluginManager
+      ->getEntityPluginInstance($entity->getEntityTypeId());
+
+    if (!$entityProcessor) {
+      throw new \Exception(sprintf('"%s" does not have entity field base processor defined.', $entity->getEntityTypeId()));
+    }
+
+    $values = $entityProcessor->mapBaseFieldsValues($fields);
+
+    // Set moderation state if it is supported for multiple entities.
+    if (isset($fields['moderation_state'])) {
+      $values['moderation_state'] = $fields['moderation_state'];
+    }
 
     // It's possible to export a single translation of the entity. In this case,
     // we need to load the translation of the entity to import the values.
@@ -267,226 +303,22 @@ class ContentImporter implements ContentImporterInterface {
       return;
     }
 
-    $field_definition = $entity->getFieldDefinition($field_name);
-
-    switch ($field_definition->getType()) {
-      case 'boolean':
-      case 'address':
-      case 'daterange':
-      case 'datetime':
-      case 'email':
-      case 'geolocation':
-      case 'link':
-      case 'telephone':
-      case 'timestamp':
-      case 'decimal':
-      case 'float':
-      case 'integer':
-      case 'list_float':
-      case 'list_integer':
-      case 'list_string':
-      case 'text':
-      case 'string':
-      case 'string_long':
-      case 'yearonly':
-        $entity->set($field_name, $field_value);
-        break;
-
-      case 'text_long':
-      case 'text_with_summary':
-        if (is_array($field_value)) {
-          foreach ($field_value as $item) {
-            $embed_entities = $item['embed_entities'] ?? [];
-
-            foreach ($embed_entities as $embed_entity) {
-              $this->doImport($embed_entity);
-            }
-          }
-        }
-
-        $entity->set($field_name, $field_value);
-        break;
-
-      case 'entity_reference':
-      case 'entity_reference_revisions':
-      case 'dynamic_entity_reference':
-        $values = [];
-        foreach ($field_value as $child_entity) {
-          // Import config relation just by setting target id.
-          if (isset($child_entity['type']) && $child_entity['type'] === 'config') {
-            $values[] = [
-              'target_id' => $child_entity['value'],
-            ];
-            continue;
-          }
-
-          // If the entity was fully exported we do the full import.
-          if ($this->isFullEntity($child_entity)) {
-            $values[] = $this->doImport($child_entity);
-            continue;
-          }
-
-          $reference_entity = $this->entityRepository->loadEntityByUuid($child_entity['entity_type'], $child_entity['uuid']);
-
-          // Create a stub entity without custom field values.
-          if (!$reference_entity) {
-            $reference_entity = $this->createStubEntity($child_entity);
-          }
-
-          $values[] = $reference_entity;
-        }
-
-        $entity->set($field_name, $values);
-        break;
-
-      case 'webform':
-        $webform_storage = $this->entityTypeManager->getStorage('webform');
-
-        if (isset($field_value['target_id'])) {
-          if ($webform = $webform_storage->load($field_value['target_id'])) {
-            $entity->set($field_name, $webform);
-          }
-        }
-        break;
-
-      case 'svg_image_field':
-      case 'file':
-      case 'image':
-        $file_storage = $this->entityTypeManager->getStorage('file');
-        $values = [];
-
-        foreach ($field_value as $file_item) {
-          $files = $file_storage->loadByProperties([
-            'uri' => $file_item['uri'],
-          ]);
-
-          /** @var \Drupal\file\FileInterface $file */
-          if (count($files)) {
-            $file = reset($files);
-          }
-          else {
-            $file_path = NULL;
-            $file = $file_storage->create([
-              'uid' => 1,
-              'status' => FileInterface::STATUS_PERMANENT,
-              'uri' => $file_item['uri'],
-            ]);
-
-            // Check if we have a file on the server. This is a case when you do
-            // import content with assets from a zip file.
-            if (file_exists($file_item['uri'])) {
-              $file_path = $file_item['uri'];
-            }
-            elseif (file($file_item['url']) !== FALSE) {
-              $file_path = $file_item['url'];
-
-              // Get size of an external file.
-              if ($file_headers = get_headers($file_path, 1)) {
-                $file_headers = array_change_key_case($file_headers);
-                $file->setSize((int) $file_headers['content-length']);
-              }
-
-              // Write cache metadata for S3 stream to be able to generate
-              // image styles on a fly.
-              $wrapper = $this->wrapperManager->getViaUri($file_item['uri']);
-              if ($wrapper instanceof S3fsStream) {
-                $wrapper->writeUriToCache($file_item['uri']);
-              }
-            }
-
-            if (!$file_path) {
-              continue;
-            }
-
-            // Create a file entity with the given uri as the file was already
-            // imported in the proper directory. If the file is external then
-            // we don't need to store file locally.
-            $file->save();
-          }
-
-          $file_value = [
-            'target_id' => $file->id(),
-          ];
-
-          if (isset($file_item['alt'])) {
-            $file_value['alt'] = $file_item['alt'];
-          }
-
-          if (isset($file_item['title'])) {
-            $file_value['title'] = $file_item['title'];
-          }
-
-          if (isset($file_item['description'])) {
-            $file_value['description'] = $file_item['description'];
-          }
-
-          $values[] = $file_value;
-        }
-
-        $entity->set($field_name, $values);
-        break;
-
-      case 'metatag':
-        $entity->set($field_name, [['value' => serialize($field_value)]]);
-        break;
-
-      case 'layout_section':
-        if (!$this->moduleHandler->moduleExists('layout_builder')) {
-          throw new \Exception('The layout could not be imported due to the layout_builder module was disabled.');
-        }
-
-        $imported_blocks = [];
-        $block_list = $field_value['blocks'] ?? [];
-
-        // Prepare entity to have id in the database to be used for inline block
-        // usages.
-        if ($block_list) {
-          $this->createOrUpdate($entity);
-        }
-
-        foreach ($block_list as $block) {
-          /** @var \Drupal\block_content\BlockContentInterface $new_block */
-          $new_block = $this->doImport($block);
-
-          if (!$this->inlineBlockUsage->getUsage($new_block->id())) {
-            $this->inlineBlockUsage->addUsage($new_block->id(), $entity);
-          }
-
-          $old_revision_id = $block['base_fields']['block_revision_id'];
-          $imported_blocks[$old_revision_id] = $new_block->getRevisionId();
-        }
-
-        // Get unserialized version of each section.
-        $base64_sections = base64_decode($field_value['sections'] ?? $field_value);
-        /** @var \Drupal\layout_builder\Section[] $sections */
-        $sections = array_map(function (string $section) {
-          return unserialize($section, [
-            'allowed_classes' => [Section::class, SectionComponent::class],
-          ]);
-        }, explode('|', $base64_sections));
-
-        foreach ($sections as $section) {
-          $section_components = $section->getComponents();
-          foreach ($section_components as $component) {
-            if ($component->getPlugin() instanceof InlineBlock) {
-              $configuration = $component->toArray()['configuration'];
-              if (isset($configuration['block_revision_id']) && isset($imported_blocks[$configuration['block_revision_id']])) {
-                // Replace the old revision id with a new revision id.
-                $configuration['block_revision_id'] = $imported_blocks[$configuration['block_revision_id']];
-                $component->setConfiguration($configuration);
-              }
-            }
-          }
-        }
-
-        $entity->set($field_name, $sections);
-        break;
+    // Get the field processor instance and call it to set the field value.
+    $fieldProcessor = $this
+      ->fieldProcessorPluginManager
+      ->getFieldPluginInstance(
+        $entity->getEntityTypeId(),
+        $entity->bundle(),
+        $field_name
+      );
+    if ($fieldProcessor) {
+      $fieldProcessor->importFieldValue($entity, $field_name, $field_value);
     }
 
     // Alter setting a field value during the import by using
-    // hook_content_import_field_value(). Support of importing a new field type
-    // can be provided in the hook.
-    $this->moduleHandler->alter('content_import_field_value', $entity, $field_name, $field_value);
+    // hook_content_import_field_value().
+    // This hook was previously used to support importing new field types.
+    $this->moduleHandler->alterDeprecated('Deprecated as of single_content_sync 1.4.0; implement SingleContentSyncFieldProcessor plugin instead to provide support for new field types.', 'content_import_field_value', $entity, $field_name, $field_value);
   }
 
   /**
@@ -608,132 +440,7 @@ class ContentImporter implements ContentImporterInterface {
   /**
    * {@inheritdoc}
    */
-  public function mapBaseFieldsValues(string $entity_type_id, array $values): array {
-    switch ($entity_type_id) {
-      case 'node':
-        $entity = [
-          'title' => $values['title'],
-          'langcode' => $values['langcode'],
-          'created' => $values['created'],
-          'status' => $values['status'],
-        ];
-
-        // We check if node url alias is filled in.
-        if (isset($values['url'])) {
-          $entity['path'] = [
-            'alias' => $values['url'],
-            'pathauto' => empty($values['url']),
-          ];
-        }
-        break;
-
-      case 'user':
-        $entity = [
-          'mail' => $values['mail'],
-          'init' => $values['init'],
-          'name' => $values['name'],
-          'created' => $values['created'],
-          'status' => $values['status'],
-          'timezone' => $values['timezone'],
-        ];
-        break;
-
-      case 'block_content':
-        $entity = [
-          'langcode' => $values['langcode'],
-          'info' => $values['info'],
-          'reusable' => $values['reusable'],
-        ];
-        break;
-
-      case 'media':
-        $entity = [
-          'langcode' => $values['langcode'],
-          'name' => $values['name'],
-          'status' => $values['status'],
-          'created' => $values['created'],
-        ];
-        break;
-
-      case 'taxonomy_term':
-        $entity = [
-          'name' => $values['name'],
-          'weight' => $values['weight'],
-          'langcode' => $values['langcode'],
-          'description' => $values['description'],
-        ];
-        break;
-
-      case 'paragraph':
-        $entity = [
-          'langcode' => $values['langcode'],
-          'created' => $values['created'],
-          'status' => $values['status'],
-        ];
-        break;
-
-      case 'menu_link_content':
-        $entity = [
-          'title' => $values['title'],
-          'enabled' => $values['enabled'],
-          'expanded' => $values['expanded'],
-          'langcode' => $values['langcode'],
-          'menu_name' => $values['menu_name'],
-          'description' => $values['description'],
-          'weight' => $values['weight'],
-          'link' => $values['link'],
-          'parent' => '',
-        ];
-
-        // Import parent menu link first.
-        if (!empty($values['parent'])) {
-          $parent = $this->doImport($values['parent']);
-          $entity['parent'] = implode(':', [$entity_type_id, $parent->uuid()]);
-        }
-
-        // Import linked entity.
-        foreach ($entity['link'] as &$item) {
-          if (!isset($item['entity'])) {
-            continue;
-          }
-
-          // If the entity was fully exported we do the full import.
-          if ($this->isFullEntity($item['entity'])) {
-            $this->doImport($item['entity']);
-          }
-
-          $linked_entity = $this->entityRepository->loadEntityByUuid($item['entity']['entity_type'], $item['entity']['uuid']);
-
-          if (!$linked_entity) {
-            $linked_entity = $this->createStubEntity($item['entity']);
-          }
-
-          $item['uri'] = "entity:{$linked_entity->getEntityTypeId()}/{$linked_entity->id()}";
-        }
-        break;
-
-      default:
-        return [];
-    }
-
-    // Set moderation state if it is supported for multiple entities.
-    if (isset($values['moderation_state'])) {
-      $entity['moderation_state'] = $values['moderation_state'];
-    }
-
-    return $entity;
-  }
-
-  /**
-   * Create a stub entity (import only base fields).
-   *
-   * @param array $entity
-   *   The exported stub entity (does not contain custom_fields).
-   *
-   * @return \Drupal\Core\Entity\EntityInterface
-   *   The stub entity object.
-   */
-  protected function createStubEntity(array $entity) {
+  public function createStubEntity(array $entity): EntityInterface {
     $stub_entity_values = [
       'uuid' => $entity['uuid'],
     ];
@@ -749,17 +456,13 @@ class ContentImporter implements ContentImporterInterface {
   }
 
   /**
-   * Validates whether an entity array is a full entity array or not.
-   *
-   * @param array $entity
-   *   The entity array to be validated.
-   *
-   * @return bool
-   *   If the entity is a full entity array will return TRUE,
-   *   else will return FALSE.
+   * {@inheritdoc}
    */
-  protected function isFullEntity(array $entity): bool {
-    return isset($entity['uuid']) && isset($entity['entity_type']) && isset($entity['base_fields']) && isset($entity['custom_fields']);
+  public function isFullEntity(array $entity): bool {
+    return isset($entity['uuid'])
+      && isset($entity['entity_type'])
+      && isset($entity['base_fields'])
+      && isset($entity['custom_fields']);
   }
 
 }

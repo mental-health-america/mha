@@ -2,10 +2,6 @@
 
 namespace Drupal\single_content_sync;
 
-use Drupal\block_content\BlockContentInterface;
-use Drupal\block_content\Entity\BlockContent;
-use Drupal\Component\Utility\Html;
-use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
@@ -15,16 +11,9 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\TempStore\PrivateTempStore;
 use Drupal\field\FieldConfigInterface;
-use Drupal\layout_builder\Plugin\Block\InlineBlock;
-use Drupal\link\Plugin\Field\FieldType\LinkItem;
-use Drupal\media\MediaInterface;
-use Drupal\menu_link_content\Entity\MenuLinkContent;
-use Drupal\menu_link_content\MenuLinkContentInterface;
-use Drupal\node\NodeInterface;
-use Drupal\taxonomy\TermInterface;
-use Drupal\user\UserInterface;
+use Drupal\single_content_sync\Event\ExportEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Define a service to export content.
@@ -62,13 +51,6 @@ class ContentExporter implements ContentExporterInterface {
   protected MessengerInterface $messenger;
 
   /**
-   * The private temp store of the module.
-   *
-   * @var \Drupal\Core\TempStore\PrivateTempStore
-   */
-  protected PrivateTempStore $privateTempStore;
-
-  /**
    * Local cache variable to store the reference info of entities.
    *
    * @var array
@@ -104,6 +86,27 @@ class ContentExporter implements ContentExporterInterface {
   protected EntityRepositoryInterface $entityRepository;
 
   /**
+   * The content sync field processor plugin manager.
+   *
+   * @var \Drupal\single_content_sync\SingleContentSyncFieldProcessorPluginManagerInterface
+   */
+  protected SingleContentSyncFieldProcessorPluginManagerInterface $fieldProcessorPluginManager;
+
+  /**
+   * The entity base fields processor plugin manager.
+   *
+   * @var \Drupal\single_content_sync\SingleContentSyncBaseFieldsProcessorPluginManagerInterface
+   */
+  protected SingleContentSyncBaseFieldsProcessorPluginManagerInterface $entityBaseFieldsProcessorPluginManager;
+
+  /**
+   * The event dispatcher.
+   *
+   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+   */
+  protected EventDispatcherInterface $eventDispatcher;
+
+  /**
    * ContentExporter constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -112,23 +115,39 @@ class ContentExporter implements ContentExporterInterface {
    *   The module handler.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger.
-   * @param \Drupal\Core\TempStore\PrivateTempStore $store
-   *   The private temp store of the module.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
    * @param \Drupal\single_content_sync\ContentSyncHelperInterface $content_sync_helper
    *   The configuration factory.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
    *   The entity repository.
+   * @param \Drupal\single_content_sync\SingleContentSyncFieldProcessorPluginManagerInterface $field_processor_plugin_manager
+   *   The field processor plugin manager.
+   * @param \Drupal\single_content_sync\SingleContentSyncBaseFieldsProcessorPluginManagerInterface $entity_base_fields_processor_plugin_manager
+   *   The entity base fields processor plugin manager.
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
+   *   The event dispatcher.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler, MessengerInterface $messenger, PrivateTempStore $store, LanguageManagerInterface $language_manager, ContentSyncHelperInterface $content_sync_helper, EntityRepositoryInterface $entity_repository) {
+  public function __construct(
+    EntityTypeManagerInterface $entity_type_manager,
+    ModuleHandlerInterface $module_handler,
+    MessengerInterface $messenger,
+    LanguageManagerInterface $language_manager,
+    ContentSyncHelperInterface $content_sync_helper,
+    EntityRepositoryInterface $entity_repository,
+    SingleContentSyncFieldProcessorPluginManagerInterface $field_processor_plugin_manager,
+    SingleContentSyncBaseFieldsProcessorPluginManagerInterface $entity_base_fields_processor_plugin_manager,
+    EventDispatcherInterface $event_dispatcher
+  ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->moduleHandler = $module_handler;
     $this->messenger = $messenger;
-    $this->privateTempStore = $store;
     $this->languageManager = $language_manager;
     $this->contentSyncHelper = $content_sync_helper;
     $this->entityRepository = $entity_repository;
+    $this->fieldProcessorPluginManager = $field_processor_plugin_manager;
+    $this->entityBaseFieldsProcessorPluginManager = $entity_base_fields_processor_plugin_manager;
+    $this->eventDispatcher = $event_dispatcher;
   }
 
   /**
@@ -174,7 +193,7 @@ class ContentExporter implements ContentExporterInterface {
    *   If the entity is present in the entityReferenceCache will return TRUE,
    *   else will return FALSE.
    */
-  protected function isReferenceCached(FieldableEntityInterface $entity): bool {
+  public function isReferenceCached(FieldableEntityInterface $entity): bool {
     return array_key_exists($this->generateCacheKey($entity), $this->entityReferenceCache);
   }
 
@@ -223,8 +242,17 @@ class ContentExporter implements ContentExporterInterface {
       'custom_fields' => $this->exportCustomValues($entity),
     ];
 
+    $exportEvent = new ExportEvent($entity, $output);
+    $this->eventDispatcher->dispatch($exportEvent);
+    $output = $exportEvent->getContent();
+
     // Alter value by using hook_content_export_entity_alter().
-    $this->moduleHandler->alter('content_export_entity', $output['base_fields'], $entity);
+    $this->moduleHandler->alterDeprecated(
+      'Deprecated as of single_content_sync 1.4.0; subscribe to \Drupal\single_content_sync\Event\ExportEvent instead. For implementing support of new entity types, implement SingleContentSyncBaseFieldsProcessor plugin.',
+      'content_export_entity',
+      $output['base_fields'],
+      $entity,
+    );
 
     // Display a message when we don't support base fields export for specific
     // entity type.
@@ -277,166 +305,14 @@ class ContentExporter implements ContentExporterInterface {
    * {@inheritdoc}
    */
   public function exportBaseValues(FieldableEntityInterface $entity): array {
-    $base_fields = [];
-    $entity_type = $entity->getEntityTypeId();
+    $entityProcessor = $this->entityBaseFieldsProcessorPluginManager
+      ->getEntityPluginInstance($entity->getEntityTypeId());
 
-    switch ($entity_type) {
-      case 'node':
-        if ($entity instanceof NodeInterface) {
-          $owner = $entity->getOwner();
-
-          $base_fields = [
-            'title' => $entity->getTitle(),
-            'status' => $entity->isPublished(),
-            'langcode' => $entity->language()->getId(),
-            'created' => $entity->getCreatedTime(),
-            'author' => $owner ? $owner->getEmail() : NULL,
-            'url' => $entity->hasField('path') ? $entity->get('path')->alias : NULL,
-            'revision_log_message' => $entity->getRevisionLogMessage(),
-            'revision_uid' => $entity->getRevisionUserId(),
-          ];
-
-          if ($this->moduleHandler->moduleExists('menu_ui')) {
-            $menu_link = menu_ui_get_menu_link_defaults($entity);
-            $storage = $this->entityTypeManager->getStorage('menu_link_content');
-
-            // Export content menu link item if available.
-            if (!empty($menu_link['entity_id']) && ($menu_link_entity = $storage->load($menu_link['entity_id']))) {
-              assert($menu_link_entity instanceof MenuLinkContentInterface);
-
-              // Avoid infinitive loop, export menu link only once.
-              if (!$this->isReferenceCached($menu_link_entity)) {
-                $base_fields['menu_link'] = $this->doExportToArray($menu_link_entity);
-              }
-            }
-          }
-        }
-        break;
-
-      case 'block_content':
-        if ($entity instanceof BlockContentInterface) {
-          $base_fields = [
-            'info' => $entity->label(),
-            'reusable' => $entity->isReusable(),
-            'langcode' => $entity->language()->getId(),
-            'block_revision_id' => $entity->getRevisionId(),
-            'enforce_new_revision' => TRUE,
-          ];
-        }
-        break;
-
-      case 'media':
-        if ($entity instanceof MediaInterface) {
-          $base_fields = [
-            'name' => $entity->getName(),
-            'created' => $entity->getCreatedTime(),
-            'status' => $entity->isPublished(),
-            'langcode' => $entity->language()->getId(),
-          ];
-        }
-        break;
-
-      case 'user':
-        if ($entity instanceof UserInterface) {
-          $base_fields = [
-            'mail' => $entity->getEmail(),
-            'init' => $entity->getInitialEmail(),
-            'name' => $entity->getAccountName(),
-            'created' => $entity->getCreatedTime(),
-            'status' => $entity->isActive(),
-            'timezone' => $entity->getTimeZone(),
-          ];
-        }
-        break;
-
-      case 'taxonomy_term':
-        if ($entity instanceof TermInterface) {
-          $base_fields = [
-            'name' => $entity->getName(),
-            'weight' => $entity->getWeight(),
-            'langcode' => $entity->language()->getId(),
-            'description' => $entity->getDescription(),
-            'parent' => $entity->get('parent')->target_id
-            ? $this->doExportToArray($entity->get('parent')->entity)
-            : 0,
-          ];
-        }
-        break;
-
-      case 'paragraph':
-        $base_fields = [
-          'status' => $entity->isPublished(),
-          'langcode' => $entity->language()->getId(),
-          'created' => $entity->getCreatedTime(),
-        ];
-        break;
-
-      case 'menu_link_content':
-        if ($entity instanceof MenuLinkContent) {
-          $base_fields = [
-            'title' => $entity->getTitle(),
-            'enabled' => $entity->isPublished(),
-            'expanded' => $entity->isExpanded(),
-            'langcode' => $entity->language()->getId(),
-            'menu_name' => $entity->get('menu_name')->value,
-            'description' => $entity->getDescription(),
-            'link' => $entity->get('link')->getValue(),
-            'weight' => $entity->getWeight(),
-            'parent' => '',
-          ];
-
-          // Export parent menu link.
-          if ($entity->getParentId()) {
-            [, $parent_uuid] = explode(':', $entity->getParentId());
-            $parent = $this->entityRepository->loadEntityByUuid($entity_type, $parent_uuid);
-
-            if ($parent instanceof MenuLinkContentInterface) {
-              $base_fields['parent'] = $this->doExportToArray($parent);
-            }
-          }
-
-          // Export linked entity.
-          foreach ($entity->get('link') as $index => $item) {
-            if (!$item instanceof LinkItem || !$item->getUrl()->isRouted()) {
-              continue;
-            }
-
-            if (preg_match('/^entity.(.+).canonical$/', $item->getUrl()->getRouteName(), $matches)) {
-              $linked_entity_type_id = $matches[1];
-              $linked_entity_id = $item->getUrl()->getRouteParameters()[$linked_entity_type_id] ?? NULL;
-
-              if (!$linked_entity_id) {
-                continue;
-              }
-
-              $linked_entity = $this->entityTypeManager->getStorage($linked_entity_type_id)
-                ->load($linked_entity_id);
-
-              if ($linked_entity instanceof FieldableEntityInterface) {
-                if (!$this->isReferenceCached($linked_entity)) {
-                  $base_fields['link'][$index]['entity'] = $this->doExportToArray($linked_entity);
-                }
-                else {
-                  $base_fields['link'][$index]['entity'] = [
-                    'uuid' => $linked_entity->uuid(),
-                    'entity_type' => $linked_entity->getEntityTypeId(),
-                    'base_fields' => $this->exportBaseValues($linked_entity),
-                    'bundle' => $linked_entity->bundle(),
-                  ];
-                }
-
-                $base_fields['link'][$index]['uri'] = "entity:{$linked_entity_type_id}/{$linked_entity->uuid()}";
-              }
-            }
-          }
-        }
-        break;
-
-      default:
-        // This entity type is not supported out of the box. Return an empty
-        // array to check later if there is a custom implementation.
-        return [];
+    if (!$entityProcessor) {
+      return [];
     }
+
+    $base_fields = $entityProcessor->exportBaseValues($entity);
 
     // Support moderation state for multiple entity types.
     if ($entity->hasField('moderation_state') && !$entity->get('moderation_state')->isEmpty()) {
@@ -466,222 +342,31 @@ class ContentExporter implements ContentExporterInterface {
    * {@inheritdoc}
    */
   public function getFieldValue(FieldItemListInterface $field) {
-    $value = NULL;
-    $field_definition = $field->getFieldDefinition();
-    $field_type = $field_definition->getType();
-    $field_type_not_supported = FALSE;
+    $fieldProcessor = $this
+      ->fieldProcessorPluginManager
+      ->getFieldPluginInstance(
+        $field->getEntity()->getEntityTypeId(),
+        $field->getEntity()->bundle(),
+        $field->getName()
+      );
 
-    switch ($field_type) {
-      case 'boolean':
-      case 'address':
-      case 'daterange':
-      case 'datetime':
-      case 'email':
-      case 'geolocation':
-      case 'link':
-      case 'telephone':
-      case 'timestamp':
-      case 'decimal':
-      case 'float':
-      case 'integer':
-      case 'list_float':
-      case 'list_integer':
-      case 'list_string':
-      case 'text':
-      case 'string':
-      case 'string_long':
-      case 'yearonly':
-        $value = $field->getValue();
-        break;
-
-      case 'text_long':
-      case 'text_with_summary':
-        $value = $field->getValue();
-
-        foreach ($value as &$item) {
-          $text = $item['value'];
-
-          if (stristr($text, '<drupal-media') === FALSE) {
-            continue;
-          }
-
-          $dom = Html::load($text);
-          $xpath = new \DOMXPath($dom);
-          $embed_entities = [];
-
-          foreach ($xpath->query('//drupal-media[@data-entity-type="media" and normalize-space(@data-entity-uuid)!=""]') as $node) {
-            /** @var \DOMElement $node */
-            $uuid = $node->getAttribute('data-entity-uuid');
-            $media = $this->entityRepository->loadEntityByUuid('media', $uuid);
-            assert($media === NULL || $media instanceof MediaInterface);
-
-            if ($media) {
-              $embed_entities[] = $this->doExportToArray($media);
-            }
-          }
-
-          $item['embed_entities'] = $embed_entities;
-        }
-        break;
-
-      case 'entity_reference':
-      case 'dynamic_entity_reference':
-        $value = [];
-        $ids_by_entity_type = [];
-        if ($field_type === 'entity_reference') {
-          $ids_by_entity_type[$field_definition->getSetting('target_type')] = array_column($field->getValue(), 'target_id');
-        }
-        else {
-          foreach ($field->getValue() as $item) {
-            $ids_by_entity_type[$item['target_type']][] = $item['target_id'];
-          }
-        }
-
-        foreach ($ids_by_entity_type as $entity_type => $ids) {
-          $storage = $this->entityTypeManager->getStorage($entity_type);
-          $entities = $storage->loadMultiple($ids);
-          foreach ($entities as $child_entity) {
-            if ($child_entity instanceof FieldableEntityInterface) {
-              if (!$this->isReferenceCached($child_entity)) {
-                // Export content entity relation.
-                $value[] = $this->doExportToArray($child_entity);
-              }
-              else {
-                $value[] = [
-                  'uuid' => $child_entity->uuid(),
-                  'entity_type' => $child_entity->getEntityTypeId(),
-                  'base_fields' => $this->exportBaseValues($child_entity),
-                  'bundle' => $child_entity->bundle(),
-                ];
-              }
-            }
-            // Support basic export of config entity relation.
-            elseif ($child_entity instanceof ConfigEntityInterface) {
-              $value[] = [
-                'type' => 'config',
-                'dependency_name' => $child_entity->getConfigDependencyName(),
-                'value' => $child_entity->id(),
-              ];
-            }
-          }
-        }
-        break;
-
-      case 'webform':
-        $value = [
-          'target_id' => $field->target_id,
-        ];
-        break;
-
-      case 'entity_reference_revisions':
-        $value = [];
-        $ids = array_column($field->getValue(), 'target_id');
-        $paragraph_storage = $this->entityTypeManager->getStorage('paragraph');
-        $paragraphs = $paragraph_storage->loadMultiple($ids);
-
-        foreach ($paragraphs as $paragraph) {
-          $value[] = $this->doExportToArray($paragraph);
-        }
-        break;
-
-      case 'svg_image_field':
-      case 'file':
-      case 'image':
-        $assets = $this->privateTempStore->get('export.assets') ?? [];
-
-        $value = [];
-        $file_storage = $this->entityTypeManager->getStorage('file');
-
-        foreach ($field->getValue() as $item) {
-          $file = $file_storage->load($item['target_id']);
-
-          $file_item = [
-            'uri' => $file->getFileUri(),
-            'url' => $file->createFileUrl(FALSE),
-          ];
-
-          $assets[] = $file_item['uri'];
-
-          if (isset($item['alt'])) {
-            $file_item['alt'] = $item['alt'];
-          }
-
-          if (isset($item['title'])) {
-            $file_item['title'] = $item['title'];
-          }
-
-          if (isset($item['description'])) {
-            $file_item['description'] = $item['description'];
-          }
-
-          $value[] = $file_item;
-        }
-
-        $assets = array_unique($assets);
-        $assets = array_values($assets);
-
-        // Let's store all exported assets in the private storage.
-        // This will be used during exporting all assets to the zip later on.
-        $this->privateTempStore->set('export.assets', $assets);
-        break;
-
-      case 'metatag':
-        $field_value = $field->getValue();
-        $value = !empty($field_value[0]['value'])
-        ? unserialize($field_value[0]['value'], ['allowed_classes' => FALSE])
-        : [];
-        break;
-
-      case 'layout_section':
-        $block_storage = $this->entityTypeManager->getStorage('block_content');
-        $block_list = [];
-        $sections = [];
-
-        foreach ($field->getValue() as $section_array) {
-          /** @var \Drupal\layout_builder\Section $section */
-          $section = $section_array['section'];
-          $sections[] = serialize($section);
-          $components = $section->getComponents();
-          foreach ($components as $component) {
-            if ($component->getPlugin() instanceof InlineBlock) {
-              $configuration = $component->toArray()['configuration'];
-              $block = NULL;
-
-              if (isset($configuration['block_serialized'])) {
-                $block = unserialize($configuration['block_serialized'], [
-                  'allowed_classes' => [BlockContent::class],
-                ]);
-              }
-              elseif (isset($configuration['block_revision_id'])) {
-                $block = $block_storage->loadRevision($configuration['block_revision_id']);
-              }
-
-              if ($block) {
-                $block_list[] = $this->doExportToArray($block);
-              }
-            }
-          }
-        }
-
-        $value = [
-          'sections' => base64_encode(implode('|', $sections)),
-          'blocks' => $block_list,
-        ];
-        break;
-
-      default:
-        $field_type_not_supported = TRUE;
-        break;
-    }
+    // Retrieve the exportable value, if plugin exists.
+    $value = $fieldProcessor
+      ? $fieldProcessor->exportFieldValue($field)
+      : NULL;
 
     // Alter value by using hook_content_export_field_value_alter().
-    $this->moduleHandler->alter('content_export_field_value', $value, $field);
+    // Note that hook is executed even if plugin does not exist; thus, it is
+    // possible to provide some value even if the field type is not supported.
+    $this->moduleHandler->alterDeprecated('Deprecated as of single_content_sync 1.4.0; implement SingleContentSyncFieldProcessor plugin instead to provide support for new field types.', 'content_export_field_value', $value, $field);
 
     // Display a message about non-supported field types.
-    if ($field_type_not_supported && is_null($value)) {
+    if (!$fieldProcessor && $value === NULL) {
+      $field_definition = $field->getFieldDefinition();
+
       $this->messenger->addWarning($this->t('The value of %field_label is empty because field type "@field_type" is not exportable out-of-the-box. Check README for a workaround.', [
         '%field_label' => $field_definition->getLabel(),
-        '@field_type' => $field_type,
+        '@field_type' => $field_definition->getType(),
       ]));
     }
 
