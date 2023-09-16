@@ -51,7 +51,9 @@ trait DatePopupTrait {
       // Detect filters that are using min/max.
       if (isset($element['min'])) {
         $element['min']['#type'] = 'date';
+        $element['min']['#attributes']['type'] = 'date';
         $element['max']['#type'] = 'date';
+        $element['max']['#attributes']['type'] = 'date';
         if ($options['value']['type'] == 'offset') {
           $element['min']['#default_value'] = static::setDefaultValue($element['min']['#default_value']);
           $element['max']['#default_value'] = static::setDefaultValue($element['max']['#default_value']);
@@ -59,10 +61,12 @@ trait DatePopupTrait {
 
         if (isset($element['value'])) {
           $element['value']['#type'] = 'date';
+          $element['#attributes']['type'] = 'date';
         }
       }
       else {
         $element['#type'] = 'date';
+        $element['#attributes']['type'] = 'date';
         $element['#default_value'] = static::setDefaultValue($element['#default_value']);
       }
     }
