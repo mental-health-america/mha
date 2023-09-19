@@ -1,0 +1,12 @@
+name: Google Translator
+type: module
+description: Provides a block with Google Translate's Website translator.
+core_version_requirement: ^9 || ^10
+
+dependencies:
+  - drupal:block
+
+# Information added by Drupal.org packaging script on 2022-08-04
+version: '2.1.0'
+project: 'google_translator'
+datestamp: 1659583641

@@ -6450,6 +6450,57 @@
             "install-path": "../../web/modules/contrib/google_tag"
         },
         {
+            "name": "drupal/google_translator",
+            "version": "2.1.0",
+            "version_normalized": "2.1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/google_translator.git",
+                "reference": "2.1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/google_translator-2.1.0.zip",
+                "reference": "2.1.0",
+                "shasum": "0658e5d5f9d57a467af2e112ee43af7004b3cd0e"
+            },
+            "require": {
+                "drupal/core": "^9 || ^10"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.1.0",
+                    "datestamp": "1659583639",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "jenna.tollerson",
+                    "homepage": "https://www.drupal.org/user/147099"
+                },
+                {
+                    "name": "jenna.tollerson",
+                    "homepage": "https://www.drupal.org/user/147099"
+                }
+            ],
+            "description": "Provides a block for Google Translate's Website translator.",
+            "homepage": "https://www.drupal.org/project/google_translator",
+            "support": {
+                "source": "https://git.drupalcode.org/project/google_translator"
+            },
+            "install-path": "../../web/modules/contrib/google_translator"
+        },
+        {
             "name": "drupal/honeypot",
             "version": "2.1.2",
             "version_normalized": "2.1.2.0",
