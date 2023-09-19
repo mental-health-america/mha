@@ -104,6 +104,7 @@
         "drupal/google_analytics": "^4.0",
         "drupal/google_cse": "^4.0@alpha",
         "drupal/google_tag": "^2.0",
+        "drupal/google_translator": "^2.1",
         "drupal/honeypot": "^2.0",
         "drupal/imce": "^3.0",
         "drupal/jquery_ui_accordion": "^2",
