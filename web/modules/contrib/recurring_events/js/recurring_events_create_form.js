@@ -3,7 +3,7 @@
  * Javascript functionality for the recurring events create form.
  */
 
-(function ($) {
+(function ($, once) {
   'use strict';
 
   /**
@@ -65,7 +65,7 @@
    */
   Drupal.behaviors.recurring_events_excluded_included_dates = {
     attach: function (context, settings) {
-      $('#edit-excluded-dates-wrapper, #edit-included-dates-wrapper').find('input.form-date').once().on('change', function (e) {
+      $(once('edit_excluded_date', $('#edit-excluded-dates-wrapper, #edit-included-dates-wrapper').find('input.form-date'))).on('change', function (e) {
         if ($(this).attr('name').includes('[value][date]')) {
           var start_date = this;
           var parent = $(this).closest('.form-wrapper');
@@ -81,4 +81,4 @@
     }
   };
 
-}(jQuery));
+}(jQuery, once));

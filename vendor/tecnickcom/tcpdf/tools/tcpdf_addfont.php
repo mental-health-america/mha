@@ -119,7 +119,7 @@ Options:
 	--fonts     Comma-separated list of input font files.
 
 	-h
-	--help      Display this help and form_exit.
+	--help      Display this help and exit.
 EOD;
 	echo $help."\n\n";
 	exit(0);
