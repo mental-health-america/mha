@@ -13,7 +13,7 @@ use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\Core\Entity\EntityFieldManager;
 use Drupal\Core\Field\FieldTypePluginManager;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\Extension\ModuleHandler;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\KeyValueStore\KeyValueFactoryInterface;
 use Drupal\recurring_events\Entity\EventInstance;
@@ -72,7 +72,7 @@ class EventCreationService {
   /**
    * The module handler service.
    *
-   * @var \Drupal\Core\Extension\ModuleHandler
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
   protected $moduleHandler;
 
@@ -105,14 +105,14 @@ class EventCreationService {
    *   The field type plugin manager.
    * @param \Drupal\Core\Entity\EntityFieldManager $entity_field_manager
    *   The entity field manager.
-   * @param \Drupal\Core\Extension\ModuleHandler $module_handler
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager service.
    * @param \Drupal\Core\KeyValueStore\KeyValueFactoryInterface $key_value
    *   The key value storage service.
    */
-  public function __construct(TranslationInterface $translation, Connection $database, LoggerChannelFactoryInterface $logger, Messenger $messenger, FieldTypePluginManager $field_type_plugin_manager, EntityFieldManager $entity_field_manager, ModuleHandler $module_handler, EntityTypeManagerInterface $entity_type_manager, KeyValueFactoryInterface $key_value) {
+  public function __construct(TranslationInterface $translation, Connection $database, LoggerChannelFactoryInterface $logger, Messenger $messenger, FieldTypePluginManager $field_type_plugin_manager, EntityFieldManager $entity_field_manager, ModuleHandlerInterface $module_handler, EntityTypeManagerInterface $entity_type_manager, KeyValueFactoryInterface $key_value) {
     $this->translation = $translation;
     $this->database = $database;
     $this->loggerChannel = $logger->get('recurring_events');
@@ -524,6 +524,7 @@ class EventCreationService {
         'end_value' => $end_date->format(DateTimeItemInterface::DATETIME_STORAGE_FORMAT),
       ],
       'type' => $event->getType(),
+      'uid' => $event->getOwnerId(),
     ];
 
     $this->moduleHandler->alter('recurring_events_event_instance', $data);

@@ -325,3 +325,11 @@ table.gsc-search-box td.gsc-input {
 a.twitter-x.list-inline-item {
   margin: 2px 5px 0 -5px;
 }
+#block-googletranslator {
+  float: initial;
+  text-align: right;
+  padding: 1px 20px 1px;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
