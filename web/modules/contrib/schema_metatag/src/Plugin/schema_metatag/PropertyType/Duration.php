@@ -28,7 +28,7 @@ class Duration extends PropertyTypeBase {
   /**
    * {@inheritdoc}
    */
-  public function output() {
+  public function output(): array {
     $element = parent::output();
     if (!empty($element)) {
       $input_value = $element['#attributes']['content'];

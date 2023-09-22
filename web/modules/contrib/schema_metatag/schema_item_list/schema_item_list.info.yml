@@ -8,6 +8,6 @@ dependencies:
   - metatag:metatag_views
 
 # Information added by Drupal.org packaging script on 2023-06-22
-version: '8.x-2.5'
+version: '3.0.1'
 project: 'schema_metatag'
-datestamp: 1687460394
+datestamp: 1687460149

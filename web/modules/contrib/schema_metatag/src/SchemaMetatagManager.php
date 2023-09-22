@@ -2,6 +2,7 @@
 
 namespace Drupal\schema_metatag;
 
+use Drupal\metatag\MetatagManager;
 use Drupal\Component\Utility\Random;
 use Drupal\Core\Entity\ContentEntityInterface;
 
@@ -11,6 +12,49 @@ use Drupal\Core\Entity\ContentEntityInterface;
  * @package Drupal\schema_metatag
  */
 class SchemaMetatagManager implements SchemaMetatagManagerInterface {
+
+  /**
+   * The SchemaMetatagManager service.
+   *
+   * @var \Drupal\metatag\MetatagManager
+   */
+  protected $metatagManager;
+
+  /**
+   * SchemaMetatag Manager constructor.
+   *
+   * @param \Drupal\Core\Render\Renderer $renderer
+   *   The renderer.
+   */
+  public function __construct(MetatagManager $metatag_manager) {
+    $this->metatagManager = $metatag_manager;
+  }
+
+  /*
+   * See if separator code is available on the parent class.
+   *
+   * @return bool
+   *   Whether or not the separator code is available.
+   *
+   * @see https://www.drupal.org/project/metatag/issues/3067803
+   */
+  public function hasSeparator() {
+    return is_callable([$this->metatagManager, 'getSeparator']);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getSeparator() {
+    // Check if the code from Metatag is available.
+    if ($this->hasSeparator()) {
+      return $this->metatagManager->getSeparator();
+    }
+    else {
+      // Backwards compatibility if that method is missing.
+      return ',';
+    }
+  }
 
   /**
    * {@inheritdoc}
@@ -191,9 +235,9 @@ class SchemaMetatagManager implements SchemaMetatagManagerInterface {
   /**
    * {@inheritdoc}
    */
-  public static function explode($value) {
+  public static function explode($value, $separator = ',') {
     if (is_string($value)) {
-      $value = explode(',', $value);
+      $value = explode($separator, $value);
     }
     if (is_array($value)) {
       $value = array_map('trim', $value);
