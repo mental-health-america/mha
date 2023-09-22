@@ -8,7 +8,7 @@ dependencies:
   - drupal:options
   - field_inheritance:field_inheritance
 
-# Information added by Drupal.org packaging script on 2023-07-25
-version: '2.0.0-rc12'
+# Information added by Drupal.org packaging script on 2023-09-04
+version: '2.0.0-rc14'
 project: 'recurring_events'
-datestamp: 1690263699
+datestamp: 1693813586
