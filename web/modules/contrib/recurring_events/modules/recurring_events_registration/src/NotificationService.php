@@ -8,7 +8,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Messenger\Messenger;
 use Drupal\Core\Utility\Token;
 use Drupal\recurring_events_registration\Entity\RegistrantInterface;
-use Drupal\Core\Extension\ModuleHandler;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Queue\QueueFactory;
 
@@ -55,7 +55,7 @@ class NotificationService {
   /**
    * The module handler service.
    *
-   * @var \Drupal\Core\Extension\ModuleHandler
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
   protected $moduleHandler;
 
@@ -135,14 +135,14 @@ class NotificationService {
    *   The messenger service.
    * @param \Drupal\Core\Utility\Token $token
    *   The token service.
-   * @param \Drupal\Core\Extension\ModuleHandler $module_handler
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler service.
    * @param \Drupal\recurring_events_registration\RegistrationCreationService $creation_service
    *   The registration creation service.
    * @param \Drupal\Core\Queue\QueueFactory $queue_factory
    *   The queue factory.
    */
-  public function __construct(TranslationInterface $translation, ConfigFactory $config_factory, LoggerChannelFactoryInterface $logger, Messenger $messenger, Token $token, ModuleHandler $module_handler, RegistrationCreationService $creation_service, QueueFactory $queue_factory) {
+  public function __construct(TranslationInterface $translation, ConfigFactory $config_factory, LoggerChannelFactoryInterface $logger, Messenger $messenger, Token $token, ModuleHandlerInterface $module_handler, RegistrationCreationService $creation_service, QueueFactory $queue_factory) {
     $this->translation = $translation;
     $this->configFactory = $config_factory;
     $this->loggerFactory = $logger->get('recurring_events_registration');
