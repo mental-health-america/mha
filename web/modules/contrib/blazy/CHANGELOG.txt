@@ -1,4 +1,28 @@
 
+Blazy 8.x-2.0-dev, 2023-09-23
+------------------------------
+- Issue #3388977 by smokris, gausarts: After updating from Blazy 2.16 to 2.17,
+  captions are missing.
+
+Blazy 8.x-2.0-dev, 2023-09-22
+------------------------------
+- Fixed for captions.overlay.
+
+Blazy 8.x-2.0-dev, 2023-09-21
+------------------------------
+- Fixed for Native Masonry with Views captions.
+- Fixed for IO infinite pager lock.
+
+Blazy 8.x-2.0-dev, 2023-09-18
+------------------------------
+- Issue #3387974 by mkalkbrenner: Undefined array key "applicable" in
+  Drupal\blazy\Views\BlazyStylePluginBase->buildElement().
+- Issue #3387933 by thomas.frobieter, gausarts: Blazy Image to Iframe
+  doesn'\''t work if Blazy Player buttons overridden in Twig (using the new
+  button attributes).
+- Issue #3387947 by jurgenhaas, gausarts, perpignan: After update to 2.17, it
+  breaks sites on PHP 7.4.
+
 Blazy 8.x-2.0-dev, 2023-09-18
 ------------------------------
 - Masonry (Flexbox and or Native Grid) are messed up, try uninstalling BigPipe.
