@@ -184,12 +184,14 @@ class Internals {
   }
 
   /**
-   * Returns minimal View data, hence just delta_limit option for now.
+   * Returns minimal View data.
    */
   public static function getViewFieldData($view): array {
-    $data = [];
+    $data = $names = [];
     foreach ($view->field as $field_name => $field) {
       if ($options = $field->options ?? []) {
+        $names[] = $field_name;
+
         if (!empty($options['group_rows'])
           && $limit = $options['delta_limit'] ?? 0) {
           if ($subsets = $options['settings'] ?? []) {
@@ -204,6 +206,8 @@ class Internals {
         }
       }
     }
+
+    $data['fields'] = $names;
     return $data;
   }
 
@@ -544,7 +548,7 @@ class Internals {
   public static function toContent(
     array &$data,
     $unset = FALSE,
-    array $keys = ['content', 'box', 'slide'],
+    array $keys = ['content', 'box', 'slide']
   ): array {
     $result = [];
     foreach ($keys as $key) {
