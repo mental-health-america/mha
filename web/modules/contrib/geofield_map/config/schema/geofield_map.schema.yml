@@ -169,6 +169,9 @@ field.widget.settings.geofield_map:
     click_to_remove_marker:
       type: boolean
       label: Click to Remove Marker
+    hide_geocode_address:
+      type: boolean
+      label: Hide Geocode Address Input
     hide_coordinates:
       type: boolean
       label: Hide Lat/Lon Coordinates Input
