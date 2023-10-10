@@ -55,7 +55,7 @@ class GeofieldMap extends GeofieldLatLon {
     // Geocode address textfield and functionality.
     $gmap_geocoder_enabled = \Drupal::moduleHandler()->moduleExists('geocoder') && $element['#gmap_geocoder'];
     $message_recipient = t("(Note: This message is only shown to the Geofield Map module administrator ('Configure Geofield Map' permission).");
-    if (!empty($element['#gmap_api_key']) || $gmap_geocoder_enabled) {
+    if ((!empty($element['#gmap_api_key']) || $gmap_geocoder_enabled) && ($element['#hide_geocode_address'] == FALSE)) {
       $element['map']['geocode'] = [
         '#title' => t("Geocode address"),
         '#type' => 'textfield',
@@ -82,7 +82,7 @@ class GeofieldMap extends GeofieldLatLon {
         $element['map']['geocode']['#description'] .= '<br>' . $message_recipient . '</div>';
       }
     }
-    elseif ($currentUser->hasPermission('configure geofield_map')) {
+    elseif ($currentUser->hasPermission('configure geofield_map') && $element['#hide_geocode_address'] == FALSE) {
       $geocoder_module_link = !\Drupal::moduleHandler()->moduleExists('geocoder') ? \Drupal::service('link_generator')->generate('Geocoder Module', Url::fromUri('https://www.drupal.org/project/geocoder', ['attributes' => ['target' => 'blank']])) : 'Geocoder Module';
       $element['map']['geocode_missing'] = [
         '#type' => 'html_tag',
