@@ -15,6 +15,7 @@ const $ = jQuery;
 function renderItem(ul, item) {
   var $line = $('<li>').addClass('linkit-result-line');
   var $wrapper = $('<div>').addClass('linkit-result-line-wrapper');
+  $wrapper.addClass(item.status);
   $wrapper.append($('<span>').html(item.label).addClass('linkit-result-line--title'));
 
   if (item.hasOwnProperty('description')) {

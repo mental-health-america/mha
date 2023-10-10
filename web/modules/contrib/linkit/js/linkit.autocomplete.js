@@ -66,21 +66,8 @@
     var linkSelector = event.target.getAttribute('data-drupal-selector');
     var $context = $(event.target).closest('form,fieldset,tr');
 
-    if (!ui.item.path) {
-      throw 'Missing path param.' + JSON.stringify(ui.item);
-    }
-
-    $('input[name="href_dirty_check"]', $context).val(ui.item.path);
-
-    if (ui.item.entity_type_id || ui.item.entity_uuid || ui.item.substitution_id) {
-      if (!ui.item.entity_type_id || !ui.item.entity_uuid || !ui.item.substitution_id) {
-        throw 'Missing path param.' + JSON.stringify(ui.item);
-      }
-    }
-    $('input[name="attributes[href]"], input[name$="[attributes][href]"]', $context).val(ui.item.path);
-    $('input[name="attributes[data-entity-type]"], input[name$="[attributes][data-entity-type]"]', $context).val(ui.item.entity_type_id);
-    $('input[name="attributes[data-entity-uuid]"], input[name$="[attributes][data-entity-uuid]"]', $context).val(ui.item.entity_uuid);
-    $('input[name="attributes[data-entity-substitution]"], input[name$="[attributes][data-entity-substitution]"]', $context).val(ui.item.substitution_id);
+    // Set hidden inputs for "href_dirty_check" and the "options" field.
+    setMetadata(ui.item, $context);
 
     if (ui.item.label) {
       // Automatically set the link title.
@@ -95,7 +82,7 @@
         }
         if (!$linkTitle.val() || $linkTitle.hasClass('link-widget-title--auto')) {
           // Set value to the label.
-          $linkTitle.val(ui.item.label);
+          $linkTitle.val($('<span>').html(ui.item.label).text());
           // Flag title as being automatically set.
           $linkTitle.addClass('link-widget-title--auto');
         }
@@ -105,6 +92,50 @@
     event.target.value = ui.item.path;
 
     return false;
+  }
+
+  /**
+   * Sets hidden inputs for "href_dirty_check" and the "options" field.
+   *
+   * @param {object} metadata
+   *   Values for path and other metadata.
+   * @param {jQuery} $context
+   *   The element search context.
+   */
+  function setMetadata(metadata, $context) {
+    const { path, entity_type_id, entity_uuid, substitution_id } = metadata;
+
+    if (!path) {
+      throw 'Missing path param. ' + JSON.stringify(metadata);
+    }
+
+    $('input[name="href_dirty_check"]', $context).val(path);
+
+    if (entity_type_id || entity_uuid || substitution_id) {
+      if (!entity_type_id || !entity_uuid || !substitution_id) {
+        throw 'Invalid parameter combination; must have all or none of: entity_type_id, entity_uuid, substiution_id. '
+          + JSON.stringify(metadata);
+      }
+    }
+    $getAttributesInput('href', $context).val(path);
+    $getAttributesInput('data-entity-type', $context).val(entity_type_id);
+    $getAttributesInput('data-entity-uuid', $context).val(entity_uuid);
+    $getAttributesInput('data-entity-substitution', $context).val(substitution_id);
+  }
+
+  /**
+   * Helper function for getting one of the "attributes" input elements.
+   *
+   * @param {string} name
+   *   The name of the input within the attributes group.
+   * @param {jQuery} $context
+   *   The element search context.
+   *
+   * @returns {jQuery}
+   *   The selected element.
+   */
+  function $getAttributesInput(name, $context) {
+    return $(`input[name="attributes[${name}]"], input[name$="[attributes][${name}]"]`, $context);
   }
 
   /**
@@ -121,6 +152,7 @@
   function renderItem(ul, item) {
     var $line = $('<li>').addClass('linkit-result-line');
     var $wrapper = $('<div>').addClass('linkit-result-line-wrapper');
+    $wrapper.addClass(item.status);
     $wrapper.append($('<span>').html(item.label).addClass('linkit-result-line--title'));
 
     if (item.hasOwnProperty('description')) {
@@ -199,6 +231,41 @@
         // Process each item.
         $autocomplete.each(function () {
           var $uri = $(this);
+
+          // In case the user makes an edit and does not click on the
+          // autocomplete dropdown (so selectHandler() does not run), add a
+          // listener to update the hidden form inputs.
+          $uri.focusout(event => {
+            const $context = $(event.target).closest('form,fieldset,tr');
+            let $href = $getAttributesInput('href', $context),
+                 href = new URL($href.val(), document.baseURI),
+                  uri = new URL($uri.val(), document.baseURI);
+            // If any of the these properties differ between the two URLs, the
+            // hidden inputs storing options field data will be cleared.
+            // Essentially, we leave out any of the props that contain URL
+            // fragment (#) or query string (?). These include hash, href,
+            // search, and others.
+            const URLpropsToCheck = [
+              'auth',
+              'host',
+              'hostname',
+              'pathname',
+              'protocol',
+              'slashes',
+              'port',
+            ];
+            // If the manually-entered path (uri text input) differs from the
+            // "href" hidden input, recalculate all the hidden inputs.
+            URLpropsToCheck.some(prop => {
+              if (href[prop] !== uri[prop]) {
+                setMetadata({ path: $uri.val() }, $context);
+                return true;
+              }
+            });
+            // Make sure the "href" metadata hidden input is always up to date,
+            // e.g., in case a fragment or query string is added to the uri.
+            $href.val($uri.val());
+          });
 
           // Use jQuery UI Autocomplete on the textfield.
           $uri.autocomplete(autocomplete.options);
