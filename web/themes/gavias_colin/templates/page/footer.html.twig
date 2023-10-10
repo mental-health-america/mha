@@ -120,41 +120,20 @@
 
 
                 <div class="col list-inline mt-3 ml-2 pb-3">
-
-                  {# FaceBook #}
-                  <a class="list-inline-item" href="https://www.facebook.com/mentalhealthamerica" aria-label="Facebook"><em>
-                      <i class="fa fa-facebook-official" aria-hidden="true" width="25" height="25"></i></em></a>
-
-                  {# Instagram #}
-                  <a class="list-inline-item" href=" https://www.instagram.com" aria-label="Instagram"><em>
-                      <i class="fa fa-instagram" aria-hidden="true" width="25" height="25"> </i></em></a>
-
-                  {# LinkedIn #}
-                  <a class="list-inline-item" href="https://www.linkedin.com/company/mental-health-america" aria-label="PLinkedin"><em>
-                      <i class="fa fa-linkedin-square" aria-hidden="true" width="25" height="25"></i></em></a>
-
-                  {# Threads #}
-                  <a class="threads list-inline-item" href="https://www.instagram.com/p/CuZn_TIgwmr/" aria-label="Threads">
-                    <img src="/themes/gavias_colin/images/threads.png" alt="Threads" width="40px" height="40px"></a>
-                  </a>
-
-                  {# X #}
-                  <a class="twitter-x list-inline-item" href="https://twitter.com/mentalhealtham?lang=en" aria-label="X">
-                    <img src="/themes/gavias_colin/images/x.png" alt="IX" width="37px" height="37px"></a>
-                  </a>
-
-                  {# YouTube #}
-                  <a class="list-inline-item" href="https://www.youtube.com/user/mentalhealthamerica" aria-label="YouTube"><em>
-                      <i class="fa fa-youtube-square" aria-hidden="true" width="25" height="25"></i></em></a>
-
-                  {# Inspire #}
-                  <a class="list-inline-item mha-social" href="https://www.inspire.com/groups/mental-health-america/">
+                  {% if page.social_media %}
+                      {{ page.social_media }}
+                    <a class="threads list-inline-item" href="https://www.instagram.com/p/CuZn_TIgwmr/" aria-label="Threads">
+                      <img src="/themes/gavias_colin/images/threads.png" alt="Threads" width="25px" height="25px"></a>
+                    </a>
+                    <a class="list-inline-item mha-social" href="https://www.inspire.com/groups/mental-health-america/">
                     <img src="/themes/gavias_colin/images/Inspire_Icon_Reverse_RGB.png" alt="Inspire Icon" width="25px" height="25px">&nbsp</a>
+                  {% endif %}
+                </div>
 
-              </div>
               <div class="col footer-copyright mt-5">
                 {{ '© Copyright'|t }} {{ "now"|date('Y') }} {{ 'Mental Health America, Inc.'|t }}
               </div>
+
             </div>
           </div>
         </div>
@@ -181,8 +160,10 @@
               </button>
               </a>
 
-              <a href="https://www.twitter.com/mentalhealtham">
-                <img src="/themes/gavias_colin/images/x.png" alt="IX" width="37px" height="37px"></a>
+              <a href="https://www.instagram.com/mentalhealthamerica/?hl=en">
+                <button type="button" class="btn btn-transparent">
+                  <i class="fa fa-instagram"></i>
+                </button>
               </a>
 
             </div>
