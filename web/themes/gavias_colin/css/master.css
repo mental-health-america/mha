@@ -478,12 +478,7 @@ span.mailto {
   display: none;
 }
 
-/* Social Media Block*/
-#block-socialmedialinks {
-  float: right;
-  width: 45%;
-}
-
+/* Social Media Block */
 #block-socialmedialinks ul.inline > li a {
   border: transparent !important;
   margin-left: 0 !important;
@@ -492,23 +487,34 @@ span.mailto {
 }
 
 #block-socialmedialinks .fa {
-<<<<<<< HEAD
   border-radius: 0;
   border: none;
   padding: 0;
-=======
-  border: 2px solid var(--mha-light-grey);
-  padding: 0.5em 0.6em;
->>>>>>> dev
 }
 
 #block-socialmedialinks .fa.fa-facebook.fa-2x {
   padding: 0.5em 0.75em;
 }
 
-.fa-home::before {
+.fa-home:before {
+  display: none;
+}
+
+.fa-home::after {
   content: ' ';
-  background: url('/themes/gavias_colin/images/inspire.png');
+  background: url('https://mhanational.org/themes/gavias_colin/images/Inspire_Icon_Reverse_RGB.png');
+  position:absolute;
+  top:0;
+  left:0;
+}
+
+.fa-rss:before {
+  display: none;
+}
+
+.fa-rss::after {
+  content: ' ';
+  background: url('https://mhanational.org/themes/gavias_colin/images/threads.png');
   position:absolute;
   top:0;
   left:0;

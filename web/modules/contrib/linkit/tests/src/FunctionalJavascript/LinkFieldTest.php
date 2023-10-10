@@ -219,6 +219,27 @@ class LinkFieldTest extends WebDriverTestBase {
     $url_input = $assert_session->elementExists('css', 'input[name="field_test_link[0][uri]"]', $widget_wrapper);
     $this->assertEquals($entity2->toUrl()->toString() . '#with-anchor?search=1', $url_input->getValue());
 
+    // Test issue when linking to content with ampersands
+    /** @var \Drupal\Core\Entity\EntityInterface $entity */
+    $entity3 = EntityTestMul::create(['name' => 'Zip & Zap']);
+    $entity3->save();
+
+    // Test the widget behavior.
+    $this->drupalGet('node/add/page');
+
+    $widget_wrapper = $assert_session->elementExists('css', '#edit-field-test-link-wrapper');
+    $uri_input = $assert_session->elementExists('css', 'input[name="field_test_link[0][uri]"]', $widget_wrapper);
+    $uri_input->setValue('Zip');
+    $session->getDriver()->keyDown($uri_input->getXpath(), ' ');
+    $assert_session->waitOnAutocomplete();
+    $first_result = $assert_session->elementExists('css', 'ul.linkit-ui-autocomplete li.linkit-result-line span.linkit-result-line--title');
+    $first_result->click();
+    $assert_session->assertWaitOnAjaxRequest();
+
+    // Check that the title was populated automatically.
+    $title_input = $assert_session->elementExists('css', 'input[name="field_test_link[0][title]"]', $widget_wrapper);
+    $this->assertEquals('Zip & Zap', $title_input->getValue());
+
     // Test external URLs.
     $this->drupalGet('node/add/page');
 

@@ -269,7 +269,6 @@ class Mailer implements MailerInterface {
         if (isset(static::TRACK_RESULTS[$row->result])) {
           $item = &$results_table[$row->entity_type][$row->entity_id][$row->result];
           $item = ($item ?? 0) + 1;
-          ;
         }
       }
 
@@ -360,7 +359,7 @@ class Mailer implements MailerInterface {
   /**
    * {@inheritdoc}
    */
-  public function sendTest(ContentEntityInterface $issue, array $test_addresses) {
+  public function sendTest(ContentEntityInterface $issue, array $test_addresses, string $key = 'test') {
     // Force the current user to anonymous to ensure consistent permissions.
     $this->accountSwitcher->switchTo(new AnonymousUserSession());
 
@@ -372,7 +371,7 @@ class Mailer implements MailerInterface {
     foreach ($test_addresses as $mail) {
       $mail = trim($mail);
       if (!empty($mail)) {
-        $subscriber = Subscriber::loadByMail($mail, 'create', $this->languageManager->getCurrentLanguage());
+        $subscriber = Subscriber::loadByMail($mail, 'create', $this->languageManager->getCurrentLanguage()->getId());
 
         if ($account = $subscriber->getUser()) {
           $recipients['user'][] = $account->getDisplayName() . ' <' . $mail . '>';
@@ -381,7 +380,7 @@ class Mailer implements MailerInterface {
           $recipients['anonymous'][] = $mail;
         }
         $mail = new MailEntity($issue, $subscriber, $this->mailCache);
-        $mail->setKey('test');
+        $mail->setKey($key);
         $this->sendMail($mail);
       }
     }

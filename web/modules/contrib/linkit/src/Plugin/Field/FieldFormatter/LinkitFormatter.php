@@ -2,12 +2,11 @@
 
 namespace Drupal\linkit\Plugin\Field\FieldFormatter;
 
+use Drupal\Core\Cache\CacheableDependencyInterface;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Path\PathValidatorInterface;
+use Drupal\Core\GeneratedUrl;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\link\LinkItemInterface;
 use Drupal\link\Plugin\Field\FieldFormatter\LinkFormatter;
@@ -47,49 +46,11 @@ class LinkitFormatter extends LinkFormatter {
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static(
-      $plugin_id,
-      $plugin_definition,
-      $configuration['field_definition'],
-      $configuration['settings'],
-      $configuration['label'],
-      $configuration['view_mode'],
-      $configuration['third_party_settings'],
-      $container->get('path.validator'),
-      $container->get('entity_type.manager'),
-      $container->get('plugin.manager.linkit.substitution')
-    );
-  }
+    $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
+    $instance->substitutionManager = $container->get('plugin.manager.linkit.substitution');
+    $instance->linkitProfileStorage = $container->get('entity_type.manager')->getStorage('linkit_profile');
 
-  /**
-   * Constructs a new Linkit field formatter.
-   *
-   * @param string $plugin_id
-   *   The plugin_id for the formatter.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Field\FieldDefinitionInterface $field_definition
-   *   The definition of the field to which the formatter is associated.
-   * @param array $settings
-   *   The formatter settings.
-   * @param string $label
-   *   The formatter label display setting.
-   * @param string $view_mode
-   *   The view mode.
-   * @param array $third_party_settings
-   *   Third party settings.
-   * @param \Drupal\Core\Path\PathValidatorInterface $path_validator
-   *   The path validator service.
-   * @param Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   * @param \Drupal\linkit\SubstitutionManagerInterface $substitution_manager
-   *   The substitution manager.
-   */
-  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, PathValidatorInterface $path_validator, EntityTypeManagerInterface $entityTypeManager, SubstitutionManagerInterface $substitution_manager) {
-    parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings, $path_validator);
-
-    $this->substitutionManager = $substitution_manager;
-    $this->linkitProfileStorage = $entityTypeManager->getStorage('linkit_profile');
+    return $instance;
   }
 
   /**
@@ -148,9 +109,14 @@ class LinkitFormatter extends LinkFormatter {
     foreach ($elements as $delta => &$item) {
       /** @var \Drupal\link\LinkItemInterface $link_item */
       $link_item = $items->get($delta);
-      $substituted_url = $this->getSubstitutedUrl($link_item);
-      // Convert generated URL into a URL object.
-      if ($substituted_url && ($url = $this->pathValidator->getUrlIfValid($substituted_url->getGeneratedUrl()))) {
+      if ($url = $this->getSubstitutedUrl($link_item)) {
+        if ($url instanceof CacheableDependencyInterface) {
+          $cacheable_url = $url;
+        }
+        if ($url instanceof GeneratedUrl) {
+          $url = $this->pathValidator->getUrlIfValid($url->getGeneratedUrl());
+          @trigger_error('Drupal\Core\GeneratedUrl in Linkit Substitution plugins is deprecated in linkit:6.0.1 and must return Drupal\Core\Url in linkit:7.0.0. See https://www.drupal.org/project/linkit/issues/3354873', E_USER_DEPRECATED);
+        }
         // Keep query and fragment.
         $parsed_url = parse_url($link_item->uri);
         if (!empty($parsed_url['query'])) {
@@ -163,11 +129,14 @@ class LinkitFormatter extends LinkFormatter {
         if (!empty($parsed_url['fragment'])) {
           $url->setOption('fragment', $parsed_url['fragment']);
         }
-        // Add cache dependency to the generated substituted URL.
-        $cacheable_metadata = BubbleableMetadata::createFromRenderArray($item)
-          ->addCacheableDependency($substituted_url);
-        // Add cache dependency to the referenced entity, e.g. for media direct
-        // file substitution.
+        $cacheable_metadata = BubbleableMetadata::createFromRenderArray($item);
+        if (isset($cacheable_url)) {
+          // Add cache dependency on the URL, if supported.
+          // Currently, this is only the case if the substitution uses legacy
+          // GeneratedUrl, but Url objects might as well be cacheable in the
+          // future; see https://www.drupal.org/project/drupal/issues/3358113
+          $cacheable_metadata->addCacheableDependency($cacheable_url);
+        }
         if ($entity = LinkitHelper::getEntityFromUserInput($link_item->uri)) {
           $cacheable_metadata->addCacheableDependency($entity);
         }
@@ -187,14 +156,19 @@ class LinkitFormatter extends LinkFormatter {
    * @param \Drupal\link\LinkItemInterface $item
    *   The link item.
    *
-   * @return \Drupal\Core\GeneratedUrl|null
+   * @return \Drupal\Core\Url|\Drupal\Core\GeneratedUrl|null
    *   The substitution URL, or NULL if not able to retrieve it from the item.
    */
   protected function getSubstitutedUrl(LinkItemInterface $item) {
     // First try to derive entity information from Linkit-specific attributes.
     // This is more reliable and is required for File entities.
     if (!empty($item->options['data-entity-type']) && !empty($item->options['data-entity-uuid'])) {
-      $entity = \Drupal::service('entity.repository')->loadEntityByUuid($item->options['data-entity-type'], $item->options['data-entity-uuid']);
+      /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
+      $entity_repository = \Drupal::service('entity.repository');
+      $entity = $entity_repository->loadEntityByUuid($item->options['data-entity-type'], $item->options['data-entity-uuid']);
+      if ($entity instanceof EntityInterface) {
+        $entity = $entity_repository->getTranslationFromContext($entity);
+      }
     }
     else {
       $entity = LinkitHelper::getEntityFromUserInput($item->uri);

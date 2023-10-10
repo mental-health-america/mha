@@ -37,7 +37,9 @@ trait AssertLinkitFilterTrait {
 
     $input = '<a data-entity-type="' . $entity->getEntityTypeId() . '" data-entity-uuid="' . $entity->uuid() . '">Link text</a>';
     $expected = '<a data-entity-type="' . $entity->getEntityTypeId() . '" data-entity-uuid="' . $entity->uuid() . '" href="' . $href . '">Link text</a>';
-    $this->assertSame($expected, $this->process($input, $langcode)->getProcessedText());
+    $actual = $this->process($input, $langcode)->getProcessedText();
+    $actual = urldecode($actual);
+    $this->assertSame($expected, $actual);
     $canonical_url_aka_not_path_alias = '/entity_test_mul/manage/1';
     $this->assertStringNotContainsString($canonical_url_aka_not_path_alias, $this->process($input, $langcode)->getProcessedText());
   }
@@ -61,7 +63,9 @@ trait AssertLinkitFilterTrait {
 
     $input = '<a data-entity-type="' . $entity->getEntityTypeId() . '" data-entity-uuid="' . $entity->uuid() . '">Link text</a>';
     $expected = '<a data-entity-type="' . $entity->getEntityTypeId() . '" data-entity-uuid="' . $entity->uuid() . '" href="' . $href . '" title="' . Html::decodeEntities($entity->label()) . '">Link text</a>';
-    $this->assertSame($expected, $this->process($input, $langcode)->getProcessedText());
+    $actual = $this->process($input, $langcode)->getProcessedText();
+    $actual = urldecode($actual);
+    $this->assertSame($expected, $actual);
   }
 
   /**
