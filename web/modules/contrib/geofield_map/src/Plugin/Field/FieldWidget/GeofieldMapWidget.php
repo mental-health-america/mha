@@ -279,6 +279,7 @@ class GeofieldMapWidget extends GeofieldLatLonWidget implements ContainerFactory
       'click_to_find_marker' => FALSE,
       'click_to_place_marker' => FALSE,
       'click_to_remove_marker' => FALSE,
+      'hide_geocode_address' => FALSE,
       'hide_coordinates' => FALSE,
       'geoaddress_field' => [
         'field' => '0',
@@ -544,6 +545,13 @@ class GeofieldMapWidget extends GeofieldLatLonWidget implements ContainerFactory
       '#description' => $html5_geolocation_description,
     ];
 
+    $elements['hide_geocode_address'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Hide Geocode Address Input'),
+      '#description' => $this->t('Option to visually hide the Geocode Address input element from the widget form.'),
+      '#default_value' => $this->getSetting('hide_geocode_address'),
+    ];
+
     $elements['hide_coordinates'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Hide Lat/Lon Coordinates Input'),
@@ -679,6 +687,10 @@ class GeofieldMapWidget extends GeofieldLatLonWidget implements ContainerFactory
       '#markup' => $this->t('Click to remove marker: @state', ['@state' => $this->getSetting('click_to_remove_marker') ? $this->t('enabled') : $this->t('disabled')]),
     ];
 
+    $hide_geocode_address = [
+      '#markup' => $this->t('Geocode address hidden: @state', ['@state' => $this->getSetting('hide_geocode_address') ? $this->t('enabled') : $this->t('disabled')]),
+    ];
+
     $hide_coordinates = [
       '#markup' => $this->t('Lat/Lon coordinates hidden: @state', ['@state' => $this->getSetting('hide_coordinates') ? $this->t('enabled') : $this->t('disabled')]),
     ];
@@ -726,6 +738,7 @@ class GeofieldMapWidget extends GeofieldLatLonWidget implements ContainerFactory
       'map_center' => $map_center,
       'marker_center' => $marker_center,
       'marker_remove' => $marker_remove,
+      'hide_geocode_address' => $hide_geocode_address,
       'hide_coordinates' => $hide_coordinates,
       'field' => $geoaddress_field_field,
       'hidden' => $geoaddress_field_hidden,
@@ -783,6 +796,7 @@ class GeofieldMapWidget extends GeofieldLatLonWidget implements ContainerFactory
         '#click_to_find_marker' => $this->getSetting('click_to_find_marker'),
         '#click_to_place_marker' => $this->getSetting('click_to_place_marker'),
         '#click_to_remove_marker' => $this->getSetting('click_to_remove_marker'),
+        '#hide_geocode_address' => $this->getSetting('hide_geocode_address'),
         '#hide_coordinates' => $this->getSetting('hide_coordinates'),
         '#geoaddress_field' => $this->getSetting('geoaddress_field'),
         '#error_label' => !empty($element['#title']) ? $element['#title'] : $this->fieldDefinition->getLabel(),
