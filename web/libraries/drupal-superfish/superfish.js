@@ -44,7 +44,7 @@
     return this.each(function() {
       var s = this.serial = sf.o.length;
       var o = $.extend({},sf.defaults,op);
-      $path = $('li.'+o.pathClass,this).slice(0,o.pathLevels);
+      o.$path = $('li.'+o.pathClass,this).slice(0,o.pathLevels);
       var p = o.$path;
       for (var l = 0; l < p.length; l++){
         p.eq(l).addClass([o.hoverClass,c.bcClass].join(' ')).filter('li:has(ul)').removeClass(o.pathClass);
@@ -54,7 +54,7 @@
       $('li:has(ul)',this)[($.fn.hoverIntent && !o.disableHI) ? 'hoverIntent' : 'hover'](over,out).each(function() {
         if (o.autoArrows) addArrow( $(this).children('a:first-child, span.nolink:first-child') );
       })
-      .not('.'+c.bcClass)
+        .not('.'+c.bcClass)
         .hideSuperfishUl();
 
       var $a = $('a, span.nolink',this);
@@ -105,7 +105,7 @@
         not = (o.retainPath===true) ? o.$path : '';
       o.retainPath = false;
       var $ul = $(['li.',o.hoverClass].join(''),this).add(this).not(not).removeClass(o.hoverClass)
-          .children('ul').addClass('sf-hidden');
+        .children('ul').addClass('sf-hidden');
       o.onHide.call($ul);
       return this;
     },
@@ -119,8 +119,4 @@
       return this;
     }
   });
-<<<<<<< HEAD
 })(jQuery);
-=======
-})(jQuery);
->>>>>>> dev
