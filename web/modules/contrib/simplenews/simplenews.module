@@ -26,6 +26,7 @@ use Drupal\node\NodeTypeInterface;
 use Drupal\user\Entity\User;
 use Drupal\simplenews\Entity\Newsletter;
 use Drupal\simplenews\Entity\Subscriber;
+use Drupal\simplenews\NewsletterInterface;
 use Drupal\simplenews\SubscriberInterface;
 use Drupal\user\UserInterface;
 
@@ -45,12 +46,6 @@ define('SIMPLENEWS_PRIORITY_LOWEST', 5);
 define('SIMPLENEWS_COMMAND_SEND_TEST', 0);
 define('SIMPLENEWS_COMMAND_SEND_NOW', 1);
 define('SIMPLENEWS_COMMAND_SEND_PUBLISH', 3);
-
-/**
- * NEWSLETTER SUBSCRIPTION STATUS.
- */
-define('SIMPLENEWS_SUBSCRIPTION_STATUS_SUBSCRIBED', 1);
-define('SIMPLENEWS_SUBSCRIPTION_STATUS_UNSUBSCRIBED', 0);
 
 /**
  * NEWSLETTER SENT STATUS.
@@ -409,26 +404,30 @@ function simplenews_form_user_register_form_alter(&$form, FormStateInterface $fo
  * Submit callback for the user profile form to save the newsletters setting.
  */
 function simplenews_user_profile_form_submit($form, FormStateInterface $form_state) {
-  $account = $form_state->getFormObject()->getEntity();
-  $subscriber = Subscriber::loadByMail($account->getEmail(), 'create', $account->getPreferredLangcode(), 'check_trust');
-
   // Process subscription check boxes.
   $subscriptions = array_filter($form_state->getValue('subscriptions', []));
-  foreach (Newsletter::loadMultiple($subscriptions) as $newsletter) {
-    $subscriber->subscribe($newsletter->id(), NULL, 'website');
-    \Drupal::messenger()->addMessage(t('You have been subscribed to %newsletter.', ['%newsletter' => $newsletter->name]));
-  }
+  if ($subscriptions) {
+    // The user entity hasn't yet been fully created, so use the form value.
+    // The correct langcode will be set in simplenews_user_insert().
+    $mail = $form_state->getValue('mail');
+    $subscriber = Subscriber::loadByMail($mail, 'create', NULL, 'check_trust');
 
-  // Process hidden (automatic) subscriptions.
-  if ($hidden = $form_state->getValue('simplenews_hidden')) {
-    foreach (explode(',', $hidden) as $newsletter_id) {
-      $subscriber->subscribe($newsletter_id, NULL, 'automatically');
+    foreach (Newsletter::loadMultiple($subscriptions) as $newsletter) {
+      $subscriber->subscribe($newsletter->id());
+      \Drupal::messenger()->addMessage(t('You have been subscribed to %newsletter.', ['%newsletter' => $newsletter->name]));
     }
-  }
 
-  // Save this subscriber for simplenews_user_insert().
-  Subscriber::$userRegSubscriber = $subscriber;
-  $subscriber->save();
+    // Process hidden (automatic) subscriptions.
+    if ($hidden = $form_state->getValue('simplenews_hidden')) {
+      foreach (explode(',', $hidden) as $newsletter_id) {
+        $subscriber->subscribe($newsletter_id);
+      }
+    }
+
+    // Save this subscriber for simplenews_user_insert().
+    Subscriber::$userRegSubscriber = $subscriber;
+    $subscriber->save();
+  }
 }
 
 /**
@@ -586,6 +585,7 @@ function simplenews_mail($key, &$message, $params) {
   switch ($key) {
     case 'node':
     case 'test':
+    case 'extra':
       $builder->buildNewsletterMail($message, $params['simplenews_mail']);
       break;
 
@@ -746,11 +746,48 @@ function simplenews_help($route_name, RouteMatchInterface $route_match) {
 }
 
 /**
- * Generates the hash key used for subscribe/unsubscribe link.
+ * Generates the hash key used for a subscriber link.
+ *
+ * @param string $mail
+ *   The email address.
+ * @param string $action
+ *   The action: confirm, manage, add or remove
+ * @param int $timestamp
+ *   The timestamp of the request.
+ *
+ * @return string
+ *   The hash key.
  */
-function simplenews_generate_hash($mail, $action = '', $timestamp = REQUEST_TIME) {
+function simplenews_generate_hash(string $mail, string $action, int $timestamp = REQUEST_TIME) {
   $data = $mail . \Drupal::service('private_key')->get() . $action . $timestamp;
   return Crypt::hashBase64($data);
+}
+
+/**
+ * Generates a subscriber URL.
+ *
+ * @param \Drupal\simplenews\SubscriberInterface $subscriber
+ *   The subscriber object including all subscriptions of this user.
+ * @param string $action
+ *   The action: confirm, manage, add or remove
+ * @param \Drupal\simplenews\NewsletterInterface $newsletter
+ *   (optional) The newsletter, for add/remove actions only.
+ *
+ * @return string
+ *   The URL string.
+ */
+function simplenews_generate_url(SubscriberInterface $subscriber, string $action, NewsletterInterface $newsletter = NULL) {
+  $url_arguments = ['absolute' => TRUE, 'langcode' => $subscriber->getLangcode()];
+  $route_parameters = [
+    'snid' => $subscriber->id(),
+    'timestamp' => \Drupal::time()->getRequestTime(),
+    'hash' => simplenews_generate_hash($subscriber->getMail(), $action),
+  ];
+  if ($newsletter) {
+    $route_parameters['newsletter_id'] = $newsletter->id();
+  }
+
+  return Url::fromRoute("simplenews.subscriptions_$action", $route_parameters, $url_arguments)->toString();
 }
 
 /**
@@ -796,16 +833,6 @@ function simplenews_access_options() {
   return [
     SIMPLENEWS_ACCESS_DEFAULT => t('Default'),
     SIMPLENEWS_ACCESS_HIDDEN => t('Hidden'),
-  ];
-}
-
-/**
- * Returns the available options for the subscription status.
- */
-function simplenews_subscription_status_options() {
-  return [
-    SIMPLENEWS_SUBSCRIPTION_STATUS_SUBSCRIBED => t('Subscribed'),
-    SIMPLENEWS_SUBSCRIPTION_STATUS_UNSUBSCRIBED => t('Unsubscribed'),
   ];
 }
 
@@ -860,6 +887,7 @@ function template_preprocess_simplenews_newsletter_body(&$variables) {
   $variables['key'] = $elements['#key'];
   $variables['newsletter'] = $elements['#newsletter'];
   $variables['simplenews_subscriber'] = $elements['#simplenews_subscriber'];
+  $variables['reason'] = $elements['#newsletter']->reason;
 
   $variables['build'] = [];
   foreach (Element::children($elements) as $key) {
@@ -871,11 +899,21 @@ function template_preprocess_simplenews_newsletter_body(&$variables) {
     $variables['build'][$key] = $elements[$key];
   }
 
-  $variables['unsubscribe_text'] = t('Unsubscribe from this newsletter', [], ['langcode' => $variables['language']]);
-  $variables['test_message'] = t('This is a test version of the newsletter.', [], ['langcode' => $variables['language']]);
+  if ($variables['key'] == 'extra') {
+    $variables['reason'] = t('This email is a one-off message sent by an administrator.', [], ['langcode' => $variables['language']]);
+  }
+  elseif ($variables['key'] == 'test') {
+    $variables['test_message'] = t('This is a test version of the newsletter.', [], ['langcode' => $variables['language']]);
+  }
 
-  // Do not display the unsubscribe link by default for hidden categories.
-  $variables['opt_out_hidden'] = !$variables['newsletter']->isAccessible();
+  // Display the unsubscribe link if accessible and not a temporary subscriber.
+  $temp_subscriber = ($variables['key'] != 'node') && !$elements['#simplenews_subscriber']->id();
+  if ($variables['newsletter']->isAccessible() && !$temp_subscriber) {
+    $variables['unsubscribe_text'] = t('Unsubscribe from this newsletter', [], ['langcode' => $variables['language']]);
+  }
+  else {
+    $variables['opt_out_hidden'] = TRUE;
+  }
 }
 
 /**

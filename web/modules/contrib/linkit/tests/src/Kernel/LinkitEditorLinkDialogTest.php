@@ -9,6 +9,7 @@ use Drupal\entity_test\Entity\EntityTest;
 use Drupal\filter\Entity\FilterFormat;
 use Drupal\linkit\SubstitutionManagerInterface;
 use Drupal\linkit\Tests\ProfileCreationTrait;
+use Drupal\user\Entity\User;
 
 /**
  * Tests EditorLinkDialog validation and conversion functionality.
@@ -85,6 +86,12 @@ class LinkitEditorLinkDialogTest extends LinkitKernelTestBase {
     $settings['plugins']['drupallink']['linkit_profile'] = $this->linkitProfile->id();
     $this->editor->setSettings($settings);
     $this->editor->save();
+
+    // Setup an anonymous user for our tests.
+    User::create([
+      'name' => '',
+      'uid' => 0,
+    ])->save();
   }
 
   /**

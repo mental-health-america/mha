@@ -31,6 +31,7 @@ regions:
   content_bottom: 'Content Bottom'
   sidebar_left: 'Sidebar Left'
   sidebar_right: 'Sidebar Right'
+  social_media: 'Social Media'
   after_content: 'After Content'
   after_content_fullwidth: 'After Content Fullwidth'
   highlighted: 'Highlighted'
