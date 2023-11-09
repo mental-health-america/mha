@@ -161,7 +161,7 @@ header button.btn.btn-default {
 
 @media (max-width: 480px) {
   .col-md-1.col-sm-1.col-xs-1.right-header.mha-search-region-btn {
-    top: -70px !important;
-    right: 85px !important;
+    top: -110px !important;
+    right: 95px !important;
   }
 }
