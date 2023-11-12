@@ -21,7 +21,6 @@ dependencies:
   - options
   - path
   - pathauto
-  - rdf
   - simplenews
   - system
   - taxonomy
