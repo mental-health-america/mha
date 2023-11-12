@@ -162,6 +162,8 @@
         "drupal/views_slideshow": "^5.0",
         "drupal/views_term_hierarchy_weight_field": "^1.1",
         "drupal/webform": "^6.1",
+        "drupal/webform_jqueryui_datepicker": "^6.2",
+        "drupal/webform_location_places": "^6.2",
         "drupal/webform_mass_email": "^1.0",
         "drupal/webform_submission_export_import": "^6.0",
         "drupal/webform_ui": "^5.0",
