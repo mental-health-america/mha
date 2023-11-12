@@ -492,3 +492,20 @@ h4.mb-3.white-text.connect {
 }
 
 
+.node--type-event .field.field--name-field-event-parent.field--type-entity-reference.field--label-above,
+.node--type-event .blazy.blazy--field.blazy--field-placement.blazy--field-placement--full.field.field--name-field-placement.field--type-entity-reference.field--label-above.is-blazy {
+  display: none !important;
+}
+
+.gsc-button.workplace.extra-large {
+  font-size:1.1rem !important;
+  text-transform:none !important;
+  padding: 50px !important;
+}
+
+.gsc-button.workplace-arrow.extra-large {
+  font-size:1.1rem !important;
+  text-transform:none !important;
+  padding: 50px !important;
+}
+
