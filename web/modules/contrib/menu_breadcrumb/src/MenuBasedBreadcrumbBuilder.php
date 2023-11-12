@@ -198,7 +198,7 @@ class MenuBasedBreadcrumbBuilder implements BreadcrumbBuilderInterface {
       ->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
 
     // Check each selected menu, in turn, until a menu or taxonomy match found:
-    // then cache its state for building & caching in build() and form_exit.
+    // then cache its state for building & caching in build() and exit.
     $menus = $this->config->get('menu_breadcrumb_menus');
     uasort($menus, function ($a, $b) {
       return SortArray::sortByWeightElement($a, $b);

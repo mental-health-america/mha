@@ -6,11 +6,11 @@
  */
 
 use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Template\Attribute;
 use Drupal\Core\Entity\ContentEntityTypeInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\StreamWrapper\StreamWrapperManager;
+use Drupal\Core\Template\Attribute;
 
 /**
  * Implements hook_help().
@@ -162,6 +162,11 @@ function single_content_sync_entity_access($entity, $operation, $account) {
  * Implements hook_file_download().
  */
 function single_content_sync_file_download($uri) {
+  $routeName = \Drupal::routeMatch()->getRouteName();
+  if ($routeName !== 'single_content_sync.file_download') {
+    return [];
+  }
+
   // Provide a custom filename for the download.
   $target = StreamWrapperManager::getTarget($uri);
   $disposition = 'attachment; filename="' . basename($target) . '"';

@@ -55,7 +55,7 @@ class ImportEvent extends Event {
    *
    * @return $this
    */
-  public function setEntity(ContentEntityInterface $entity): static {
+  public function setEntity(ContentEntityInterface $entity): ImportEvent {
     $this->entity = $entity;
     return $this;
   }

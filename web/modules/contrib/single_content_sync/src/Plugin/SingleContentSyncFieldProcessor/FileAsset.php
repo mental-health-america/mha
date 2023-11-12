@@ -3,14 +3,14 @@
 namespace Drupal\single_content_sync\Plugin\SingleContentSyncFieldProcessor;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\TempStore\PrivateTempStore;
 use Drupal\file\FileInterface;
 use Drupal\single_content_sync\ContentSyncHelperInterface;
 use Drupal\single_content_sync\SingleContentSyncFieldProcessorPluginBase;
-use Drupal\Core\Entity\FieldableEntityInterface;
-use Drupal\Core\Field\FieldItemListInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
