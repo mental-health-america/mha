@@ -5,12 +5,12 @@ namespace Drupal\single_content_sync\Plugin\SingleContentSyncFieldProcessor;
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\single_content_sync\ContentExporterInterface;
 use Drupal\single_content_sync\ContentImporterInterface;
 use Drupal\single_content_sync\SingleContentSyncFieldProcessorPluginBase;
-use Drupal\Core\Entity\FieldableEntityInterface;
-use Drupal\Core\Field\FieldItemListInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

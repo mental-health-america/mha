@@ -93,7 +93,7 @@ class ProcessHelper extends Helper
      * Runs the process.
      *
      * This is identical to run() except that an exception is thrown if the process
-     * exits with a non-zero form_exit code.
+     * exits with a non-zero exit code.
      *
      * @param array|Process $cmd      An instance of Process or a command to run
      * @param string|null   $error    An error message that must be displayed if something went wrong

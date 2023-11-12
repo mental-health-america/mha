@@ -156,7 +156,7 @@ class ContentSyncCommands extends DrushCommands {
     if ($is_dry_run) {
       // Generate the correct file name for the dry run.
       $file_name = count($entities) === 1 && !$include_assets
-        ? "{$this->contentSyncHelper->generateContentFileName($entities[0])}.yml"
+        ? "{$this->contentSyncHelper->generateContentFileName(reset($entities))}.yml"
         : sprintf('content-bulk-export-%s.zip', date('d_m_Y-H_i'));
 
       // Get the correct output path.
@@ -170,7 +170,7 @@ class ContentSyncCommands extends DrushCommands {
     // Generate YAML file if there is only 1 content to export without assets,
     // else, generate Zip file.
     $file = count($entities) === 1 && !$include_assets
-      ? $this->fileGenerator->generateYamlFile($entities[0], $include_translations)
+      ? $this->fileGenerator->generateYamlFile(reset($entities), $include_translations)
       : $this->fileGenerator->generateBulkZipFile($entities, $include_translations, $include_assets);
 
     $this->contentSyncHelper->prepareFilesDirectory($output_dir);

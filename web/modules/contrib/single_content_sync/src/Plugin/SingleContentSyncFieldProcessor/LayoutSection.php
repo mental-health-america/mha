@@ -2,13 +2,13 @@
 
 namespace Drupal\single_content_sync\Plugin\SingleContentSyncFieldProcessor;
 
-use Drupal\layout_builder\InlineBlockUsageInterface;
 use Drupal\block_content\Entity\BlockContent;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\layout_builder\InlineBlockUsageInterface;
 use Drupal\layout_builder\Plugin\Block\InlineBlock;
 use Drupal\layout_builder\Section;
 use Drupal\layout_builder\SectionComponent;
