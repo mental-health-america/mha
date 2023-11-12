@@ -96,7 +96,7 @@ code_sniffer: &code_sniffer
 
     - checkout
 
-    # Don't form_exit builds in CI when warning/error occurs.
+    # Don't exit builds in CI when warning/error occurs.
     # @todo fix errors so this becomes reliable
     - run:
         working_directory: /var/www/html

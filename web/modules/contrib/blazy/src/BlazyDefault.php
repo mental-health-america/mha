@@ -57,7 +57,7 @@ class BlazyDefault {
   /**
    * Provides the object ID to initialize BlazySettings. slicks, masons, etc.
    *
-   * @var string
+   * @var string|null
    */
   protected static $id = NULL;
 
@@ -120,8 +120,10 @@ class BlazyDefault {
   public static function imageSettings() {
     return [
       'layout'    => '',
+      'link'      => '',
       'view_mode' => '',
-    ] + self::baseSettings() + self::baseImageSettings();
+    ] + self::baseSettings()
+      + self::baseImageSettings();
   }
 
   /**

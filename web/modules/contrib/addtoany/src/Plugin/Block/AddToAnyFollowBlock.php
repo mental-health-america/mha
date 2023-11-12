@@ -74,7 +74,7 @@ class AddToAnyFollowBlock extends BlockBase {
       '#placeholder'   => ['32'],
     ];
 
-    $example_html = '<br /> <code>&lt;a class=&quot;a2a_button_facebook&quot; href=&quot;https://www.facebook.com/AddToAny&quot;&gt;&lt;/a&gt;<br />&lt;a class=&quot;a2a_button_twitter&quot; href=&quot;https://twitter.com/AddToAny&quot;&gt;&lt;/a&gt;<br />&lt;a class=&quot;a2a_button_youtube&quot; href=&quot;https://www.youtube.com/@YouTube&quot;&gt;&lt;/a&gt;</code>';
+    $example_html = '<br /> <code>&lt;a class=&quot;a2a_button_facebook&quot; href=&quot;https://www.facebook.com/AddToAny&quot;&gt;&lt;/a&gt;<br />&lt;a class=&quot;a2a_button_mastodon&quot; href=&quot;https://mastodon.social/@Gargron&quot;&gt;&lt;/a&gt;<br />&lt;a class=&quot;a2a_button_youtube&quot; href=&quot;https://www.youtube.com/@YouTube&quot;&gt;&lt;/a&gt;</code>';
 
     $form['addtoany_options']['addtoany_html'] = [
       '#required'      => TRUE,
