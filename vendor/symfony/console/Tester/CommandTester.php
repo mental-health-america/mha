@@ -46,7 +46,7 @@ class CommandTester
      * @param array $input   An array of command arguments and options
      * @param array $options An array of execution options
      *
-     * @return int The command form_exit code
+     * @return int The command exit code
      */
     public function execute(array $input, array $options = [])
     {

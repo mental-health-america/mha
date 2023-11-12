@@ -66,8 +66,8 @@ class TaxonomyTerm extends SingleContentSyncBaseFieldsProcessorPluginBase implem
       'langcode' => $entity->language()->getId(),
       'description' => $entity->getDescription(),
       'parent' => $entity->get('parent')->target_id
-      ? $this->exporter->doExportToArray($entity->get('parent')->entity)
-      : 0,
+        ? $this->exporter->doExportToArray($entity->get('parent')->entity)
+        : 0,
     ];
   }
 

@@ -61,7 +61,7 @@ function %%function_name%% {
         compopt -o default;
         return 0;
 
-    # Bail out if PHP didn't form_exit cleanly
+    # Bail out if PHP didn't exit cleanly
     elif [ $STATUS -ne 0 ]; then
         echo -e "$RESULT";
         return $?;
@@ -100,7 +100,7 @@ function %%function_name%% {
         _path_files;
         return 0;
 
-    # Bail out if PHP didn't form_exit cleanly
+    # Bail out if PHP didn't exit cleanly
     elif [ $STATUS -ne 0 ]; then
         echo -e "$RESULT";
         return $?;
