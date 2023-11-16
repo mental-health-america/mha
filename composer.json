@@ -58,6 +58,7 @@
         "drupal/admin_toolbar": "^3.0",
         "drupal/advanced_email_validation": "^1.1",
         "drupal/anchor_link": "^2.0",
+        "drupal/asset_injector": "^2.19",
         "drupal/back_to_top": "^3.0",
         "drupal/better_exposed_filters": "^6.0.3",
         "drupal/blazy": "^2.18",
