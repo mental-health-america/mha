@@ -73,7 +73,7 @@
         "drupal/config_update": "^2.0@alpha",
         "drupal/console": "^1.0.2",
         "drupal/content_access": "^2.0",
-        "drupal/core": "^10.",
+        "drupal/core": "^9.5",
         "drupal/ctools": "^4.0",
         "drupal/custom_search": "^1.0@beta",
         "drupal/date_popup": "^2.0",
