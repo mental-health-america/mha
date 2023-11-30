@@ -73,7 +73,7 @@
         "drupal/config_update": "^2.0@alpha",
         "drupal/console": "^1.0.2",
         "drupal/content_access": "^2.0",
-        "drupal/core": "^9.5.9.",
+        "drupal/core": "^10.",
         "drupal/ctools": "^4.0",
         "drupal/custom_search": "^1.0@beta",
         "drupal/date_popup": "^2.0",
@@ -81,6 +81,7 @@
         "drupal/dynamic_entity_reference": "^4.0@alpha",
         "drupal/editor_advanced_link": "^2.2",
         "drupal/embed": "^1.0",
+        "drupal/empty_page": "^3.0",
         "drupal/encrypt": "^3.0",
         "drupal/entity": "^1.0",
         "drupal/entity_clone": "^2.0@beta",
@@ -156,7 +157,9 @@
         "drupal/views_accordion": "^2.0",
         "drupal/views_infinite_scroll": "^2.0",
         "drupal/views_slideshow": "^5.0",
+        "drupal/views_term_hierarchy_weight_field": "1.2",
         "drupal/webform": "^6.1",
+        "drupal/webform_mass_email": "^1.0",
         "drupal/webform_submission_export_import": "^6.0",
         "drupal/webform_ui": "^5.0",
         "drupal/webform_validation": "^2.0@RC",
@@ -235,6 +238,9 @@
         },
         "drupal/csv_serialization": {
             "csv_serialization":"https://www.drupal.org/files/issues/2022-11-03/csv_serialization-3295036-5-d10_compat.patch"
+        },
+        "drupal/empty_page": {
+            "empty_page":"https://www.drupal.org/files/issues/2022-06-15/empty_page.3.0.rector.patch"
         },
 
         "installer-paths": {
