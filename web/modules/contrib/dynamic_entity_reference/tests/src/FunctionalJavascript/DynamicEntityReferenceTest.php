@@ -17,6 +17,7 @@ use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
  * Ensures that Dynamic Entity References field works correctly.
  *
  * @group dynamic_entity_reference
+ * @group functional_javascript
  */
 class DynamicEntityReferenceTest extends WebDriverTestBase {
 
@@ -172,14 +173,14 @@ class DynamicEntityReferenceTest extends WebDriverTestBase {
     $entity_type_field->selectOption('user');
     $this->performAutocompleteQuery($autocomplete_query, $autocomplete_field);
     $this->selectAutocompleteOption();
-    $assert_session->pageTextContains($this->anotherUser->label());
+    $this->assertStringContainsString($this->anotherUser->label(), $autocomplete_field->getValue());
     // Change to entity_test, this should automatically clear the autocomplete
     // field.
     $entity_type_field->selectOption('entity_test');
     $this->assertEmpty($autocomplete_field->getValue());
     $this->performAutocompleteQuery($autocomplete_query, $autocomplete_field);
     $this->selectAutocompleteOption();
-    $assert_session->pageTextContains($this->testEntity->label());
+    $this->assertStringContainsString($this->testEntity->label(), $autocomplete_field->getValue());
   }
 
   /**
@@ -277,7 +278,7 @@ class DynamicEntityReferenceTest extends WebDriverTestBase {
   }
 
   /**
-   * Peforms an autocomplete query on an element.
+   * Performs an autocomplete query on an element.
    *
    * @param string $autocomplete_query
    *   String to search for.

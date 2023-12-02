@@ -219,7 +219,7 @@ class PEAR
             );
         }
         return call_user_func_array(
-            array(self::class, '_' . $method),
+            array(get_class(), '_' . $method),
             array_merge(array($this), $arguments)
         );
     }
@@ -232,7 +232,7 @@ class PEAR
             );
         }
         return call_user_func_array(
-            array(self::class, '_' . $method),
+            array(get_class(), '_' . $method),
             array_merge(array(null), $arguments)
         );
     }
@@ -780,7 +780,7 @@ class PEAR
             if (preg_match('/^\d+$/', $source_date_epoch)) {
                 return (int) $source_date_epoch;
             } else {
-            //  "If the value is malformed, the build process SHOULD form_exit with a non-zero error code."
+            //  "If the value is malformed, the build process SHOULD exit with a non-zero error code."
             self::raiseError("Invalid SOURCE_DATE_EPOCH: $source_date_epoch");
             exit(1);
             }

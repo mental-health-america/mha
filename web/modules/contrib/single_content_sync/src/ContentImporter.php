@@ -355,7 +355,11 @@ class ContentImporter implements ContentImporterInterface {
     if (is_file($path) && $info['extension'] === 'yml') {
       // Extra directory found, let's skip the operation and trigger
       // an error later.
-      if (strpos($info['dirname'], $info['filename']) !== FALSE) {
+      [, $directory] = explode('://', $info['dirname']);
+
+      // If there are more than 3 parts, then there is an extra folder.
+      // e.g. import/zip/uuid is correct one.
+      if (count(explode('/', $directory)) > 3) {
         return FALSE;
       }
 
@@ -391,7 +395,8 @@ class ContentImporter implements ContentImporterInterface {
     foreach ($zip->listContents() as $zip_file) {
       $original_file_path = "{$import_directory}/{$zip_file}";
 
-      if (strpos($zip_file, 'assets') === 0) {
+      // Ensure only files from assets folder are imported.
+      if (strpos($zip_file, 'assets') === 0 && is_file($original_file_path)) {
         $batch['operations'][] = [
           '\Drupal\single_content_sync\ContentBatchImporter::batchImportAssets',
           [$original_file_path, $zip_file],

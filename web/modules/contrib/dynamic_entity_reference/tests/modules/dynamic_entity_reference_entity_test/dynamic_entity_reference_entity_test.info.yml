@@ -2,14 +2,14 @@ name: 'Dynamic Entity Reference Entity Test'
 type: module
 description: 'Provides base fields for dynamic_entity_reference tests of entity_test entity type.'
 package: Testing
-core_version_requirement: ^9.3
-php: 7.4
+core_version_requirement: ^9.3 || ^10
+php: 8.0
 hidden: TRUE
 dependencies:
-  - dynamic_entity_reference
-  - entity_test
+  - dynamic_entity_reference:dynamic_entity_reference
+  - drupal:entity_test
 
-# Information added by Drupal.org packaging script on 2022-02-07
-version: '8.x-2.0-alpha19'
+# Information added by Drupal.org packaging script on 2022-09-18
+version: '4.0.0-alpha1'
 project: 'dynamic_entity_reference'
-datestamp: 1644273089
+datestamp: 1663511669

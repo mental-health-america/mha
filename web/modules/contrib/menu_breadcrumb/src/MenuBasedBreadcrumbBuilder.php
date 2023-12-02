@@ -2,6 +2,7 @@
 
 namespace Drupal\menu_breadcrumb;
 
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Component\Utility\SortArray;
 use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Breadcrumb\BreadcrumbBuilderInterface;
@@ -30,7 +31,7 @@ use Symfony\Component\HttpFoundation\Request;
  * {@inheritdoc}
  */
 class MenuBasedBreadcrumbBuilder implements BreadcrumbBuilderInterface {
-  use \Drupal\Core\StringTranslation\StringTranslationTrait;
+  use StringTranslationTrait;
 
   /**
    * The configuration object generator.
@@ -198,7 +199,7 @@ class MenuBasedBreadcrumbBuilder implements BreadcrumbBuilderInterface {
       ->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
 
     // Check each selected menu, in turn, until a menu or taxonomy match found:
-    // then cache its state for building & caching in build() and form_exit.
+    // then cache its state for building & caching in build() and exit.
     $menus = $this->config->get('menu_breadcrumb_menus');
     uasort($menus, function ($a, $b) {
       return SortArray::sortByWeightElement($a, $b);

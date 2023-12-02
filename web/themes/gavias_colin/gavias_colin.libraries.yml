@@ -27,7 +27,7 @@ global-styling:
       css/datatables.css: {}
       css/newsearch.css: {}
       css/last.css: {}
-      css/final.css: {}
+      css/fix.css: {}
   js:
     vendor/jquery-migrate.min.js: {}
     js/bootstrap.js: {}
