@@ -660,3 +660,36 @@ function recurring_events_update_8014() {
   $config->set('creator_plugin', 'recurring_events_eventinstance_recreator');
   $config->save(TRUE);
 }
+
+/**
+ * Configure the event series to have the new yearly recur type.
+ */
+function recurring_events_update_8015() {
+  $yearly_recurring_date = BaseFieldDefinition::create('yearly_recurring_date')
+    ->setLabel(t('Yearly Event'))
+    ->setDescription('The yearly recurring date configuration.')
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE)
+    ->setRevisionable(TRUE)
+    ->setTranslatable(FALSE)
+    ->setCardinality(1)
+    ->setRequired(FALSE)
+    ->setDisplayOptions('form', [
+      'type' => 'yearly_recurring_date',
+      'weight' => 7,
+    ]);
+
+  \Drupal::entityDefinitionUpdateManager()->installFieldStorageDefinition('yearly_recurring_date', 'eventseries', 'eventseries', $yearly_recurring_date);
+
+  // Enable all the recur types.
+  $config = \Drupal::configFactory()->getEditable('recurring_events.eventseries.config');
+  $config->set('enabled_fields', 'consecutive_recurring_date,daily_recurring_date,weekly_recurring_date,monthly_recurring_date,yearly_recurring_date,custom');
+  $config->save(TRUE);
+}
+
+/**
+ * Set the default event instance plugin creator.
+ */
+function recurring_events_update_91001() {
+  recurring_events_update_8014();
+}

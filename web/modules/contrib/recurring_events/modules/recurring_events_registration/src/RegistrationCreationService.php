@@ -168,7 +168,7 @@ class RegistrationCreationService {
   }
 
   /**
-   * Retreive all registered parties.
+   * Retrieve all registered parties.
    *
    * @param bool $include_nonwaitlisted
    *   Whether or not to include non-waitlisted registrants.
@@ -218,6 +218,56 @@ class RegistrationCreationService {
       $parties = $results;
     }
     return $parties;
+  }
+
+  /**
+   * Retrieves the count of all registered parties.
+   *
+   * @param bool $include_nonwaitlisted
+   *   Whether or not to include non-waitlisted registrants.
+   * @param bool $include_waitlisted
+   *   Whether or not to include waitlisted registrants.
+   * @param int $uid
+   *   The user ID for whom to retrieve registrants.
+   *
+   * @return int
+   *   The count of registrants.
+   */
+  public function retrieveRegisteredPartiesCount($include_nonwaitlisted = TRUE, $include_waitlisted = TRUE, $uid = FALSE) {
+    $query = $this->storage->getQuery();
+
+    if ($include_nonwaitlisted && !$include_waitlisted) {
+      $query->condition('waitlist', 0);
+    }
+    elseif (!$include_nonwaitlisted && $include_waitlisted) {
+      $query->condition('waitlist', 1);
+    }
+
+    if (!$include_waitlisted) {
+      $query->condition('waitlist', 0);
+    }
+
+    if ($uid) {
+      $query->condition('user_id', $uid);
+    }
+
+    switch ($this->getRegistrationType()) {
+      case 'series':
+        if (!empty($this->eventSeries->id())) {
+          $query->condition('eventseries_id', $this->eventSeries->id());
+        }
+        break;
+
+      case 'instance':
+        if (!empty($this->eventInstance->id())) {
+          $query->condition('eventinstance_id', $this->eventInstance->id());
+        }
+        break;
+    }
+
+    $result = $query->count()->execute();
+
+    return $result;
   }
 
   /**
@@ -302,14 +352,15 @@ class RegistrationCreationService {
    */
   public function retrieveAvailability() {
     $availability = 0;
-    $parties = $this->retrieveRegisteredParties(TRUE, FALSE);
+
+    $parties_count = $this->retrieveRegisteredPartiesCount(TRUE, FALSE);
 
     $capacity = $this->eventSeries->event_registration->capacity;
     if (empty($capacity)) {
       // Set capacity to unlimited if no capacity is specified.
       return -1;
     }
-    $availability = $capacity - count($parties);
+    $availability = $capacity - $parties_count;
     if ($availability < 0) {
       $availability = 0;
     }
@@ -828,20 +879,20 @@ class RegistrationCreationService {
    *   An array of roles that are allowed to register for this event.
    */
   public function registrationPermittedRoles() {
-    // Remove extra spaces from the list of roles
+    // Remove extra spaces from the list of roles.
     $permitted_roles_string = str_replace(' ', '', $this->eventSeries->event_registration->permitted_roles);
 
-    // Convert the string into an array of roles
+    // Convert the string into an array of roles.
     $permitted_roles = [];
     if (!empty($permitted_roles_string)) {
-      if (strpos($permitted_roles_string, ','))
+      if (strpos($permitted_roles_string, ',')) {
         $permitted_roles = explode(',', $permitted_roles_string);
+      }
       else {
         $permitted_roles[] = $permitted_roles_string;
       }
     }
     return $permitted_roles;
   }
-
 
 }

@@ -2,8 +2,14 @@ name: Tests
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - 'playground-runner/**'
+      - 'playground-api/**'
   pull_request:
     branches: [main]
+    paths-ignore:
+      - 'playground-runner/**'
+      - 'playground-api/**'
   schedule:
     - cron: 0 0 * * *
 
@@ -17,9 +23,10 @@ jobs:
           - "7.4"
           - "8.0"
           - "8.1"
+          - "8.2"
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v3"
+        uses: "actions/checkout@v4"
       - name: "Install PHP"
         uses: "shivammathur/setup-php@v2"
         with:
@@ -51,12 +58,15 @@ jobs:
           - php-version: "8.1"
             drupal: "^10.0"
             experimental: false
-          - php-version: "8.1"
+          - php-version: "8.2"
+            drupal: "^10.0"
+            experimental: false
+          - php-version: "8.2"
             drupal: "11.x-dev"
             experimental: true
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v3"
+        uses: "actions/checkout@v4"
       - name: "Install PHP"
         uses: "shivammathur/setup-php@v2"
         with:
@@ -92,12 +102,12 @@ jobs:
           - php-version: "8.0"
             drupal: "^9.0"
             experimental: false
-          - php-version: "8.1"
+          - php-version: "8.2"
             drupal: "11.x-dev"
             experimental: true
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v3"
+        uses: "actions/checkout@v4"
       - name: "Install PHP"
         uses: "shivammathur/setup-php@v2"
         with:
@@ -164,12 +174,12 @@ jobs:
         drupal:
           - "^9.0"
         include:
-          - php-version: "8.1"
+          - php-version: "8.2"
             drupal: "11.x-dev"
             experimental: true
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v3"
+        uses: "actions/checkout@v4"
       - name: "Install PHP"
         uses: "shivammathur/setup-php@v2"
         with:
@@ -209,7 +219,7 @@ jobs:
     name: "Drupal core HEAD baseline check"
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v3"
+        uses: "actions/checkout@v4"
       - name: "set the version alias for self"
         run: |
           if [ "${{ github.event_name }}" == 'pull_request' ]; then
@@ -231,7 +241,7 @@ jobs:
         uses: "shivammathur/setup-php@v2"
         with:
           coverage: "none"
-          php-version: "8.1"
+          php-version: "8.2"
           tools: composer:v2
           extensions: dom, curl, libxml, mbstring, zip, pdo, mysql, pdo_mysql, gd, apcu
       - name: "Checkout Drupal core"

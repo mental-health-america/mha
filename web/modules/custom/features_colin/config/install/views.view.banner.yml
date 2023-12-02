@@ -276,7 +276,7 @@ display:
         type: some
         options:
           items_per_page: 10
-          offset: null
+          offset: 0
       css_class: 'banner-carousel v2'
       style:
         type: gvaowl
@@ -347,7 +347,7 @@ display:
         type: some
         options:
           items_per_page: 8
-          offset: null
+          offset: 0
       css_class: banner-carousel
       style:
         type: gvaowl
