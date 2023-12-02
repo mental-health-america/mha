@@ -3674,79 +3674,6 @@
             "install-path": "../../web/modules/contrib/ctools"
         },
         {
-            "name": "drupal/custom_search",
-            "version": "1.0.0-beta9",
-            "version_normalized": "1.0.0.0-beta9",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/custom_search.git",
-                "reference": "8.x-1.0-beta9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/custom_search-8.x-1.0-beta9.zip",
-                "reference": "8.x-1.0-beta9",
-                "shasum": "9b8b556db85d528d660875f7f5badcf16379d61f"
-            },
-            "require": {
-                "drupal/core": "^8 || ^9 || ^10"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "8.x-1.0-beta9",
-                    "datestamp": "1679409683",
-                    "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Beta releases are not covered by Drupal security advisories."
-                    }
-                }
-            },
-            "installation-source": "dist",
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0+"
-            ],
-            "authors": [
-                {
-                    "name": "Jérôme Danthinne",
-                    "homepage": "https://www.drupal.org/u/jdanthinne",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "Mario Steinitz",
-                    "homepage": "https://www.drupal.org/u/mario-steinitz",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "Mario Steinitz",
-                    "homepage": "https://www.drupal.org/user/2536014"
-                },
-                {
-                    "name": "rajeshwari10",
-                    "homepage": "https://www.drupal.org/user/3270754"
-                },
-                {
-                    "name": "rooby",
-                    "homepage": "https://www.drupal.org/user/350381"
-                },
-                {
-                    "name": "suzymasri",
-                    "homepage": "https://www.drupal.org/user/2428842"
-                }
-            ],
-            "description": "This module alters the default search box in many ways.",
-            "homepage": "https://www.drupal.org/project/custom_search",
-            "keywords": [
-                "Drupal"
-            ],
-            "support": {
-                "source": "http://cgit.drupalcode.org/custom_search",
-                "issues": "https://www.drupal.org/project/issues/custom_search"
-            },
-            "install-path": "../../web/modules/contrib/custom_search"
-        },
-        {
             "name": "drupal/date_popup",
             "version": "2.0.1",
             "version_normalized": "2.0.1.0",
@@ -4064,69 +3991,6 @@
                 "source": "https://git.drupalcode.org/project/embed"
             },
             "install-path": "../../web/modules/contrib/embed"
-        },
-        {
-            "name": "drupal/empty_page",
-            "version": "3.0.0",
-            "version_normalized": "3.0.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/empty_page.git",
-                "reference": "8.x-3.0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/empty_page-8.x-3.0.zip",
-                "reference": "8.x-3.0",
-                "shasum": "207a1ac3d66c5cfb4f8129e26670e30c66d4cd06"
-            },
-            "require": {
-                "drupal/core": "^8 || ^9"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "8.x-3.0",
-                    "datestamp": "1592930944",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "installation-source": "dist",
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Nick Robillard",
-                    "homepage": "https://www.drupal.org/user/176017"
-                },
-                {
-                    "name": "NormySan",
-                    "homepage": "https://www.drupal.org/user/112352"
-                },
-                {
-                    "name": "bleen",
-                    "homepage": "https://www.drupal.org/user/77375"
-                },
-                {
-                    "name": "merauluka",
-                    "homepage": "https://www.drupal.org/user/780004"
-                },
-                {
-                    "name": "mukila",
-                    "homepage": "https://www.drupal.org/user/3223526"
-                }
-            ],
-            "description": "A simple empty page solution. Assists in creating empty menu callbacks mostly used for pages that only consist of blocks.",
-            "homepage": "https://www.drupal.org/project/empty_page",
-            "support": {
-                "source": "https://git.drupalcode.org/project/empty_page"
-            },
-            "install-path": "../../web/modules/contrib/empty_page"
         },
         {
             "name": "drupal/encrypt",
@@ -9988,60 +9852,6 @@
             "install-path": "../../web/modules/contrib/views_slideshow"
         },
         {
-            "name": "drupal/views_term_hierarchy_weight_field",
-            "version": "1.2.0",
-            "version_normalized": "1.2.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/views_term_hierarchy_weight_field.git",
-                "reference": "8.x-1.2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/views_term_hierarchy_weight_field-8.x-1.2.zip",
-                "reference": "8.x-1.2",
-                "shasum": "2596b8cea4b7fff4bbfe9767b53d263d67f0f7a4"
-            },
-            "require": {
-                "drupal/core": "^8 || ^9"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "8.x-1.2",
-                    "datestamp": "1657913326",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "installation-source": "dist",
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0+"
-            ],
-            "authors": [
-                {
-                    "name": "Pol Dellaiera",
-                    "homepage": "https://www.drupal.org/user/47194",
-                    "email": "pol.dellaiera@protonmail.com"
-                }
-            ],
-            "description": "This module allows you to filter or sort terms according to their hierarchical order or hierarchical depth.",
-            "homepage": "https://www.drupal.org/project/views_term_hierarchy_weight_field",
-            "keywords": [
-                "drupal",
-                "sort",
-                "taxonomy",
-                "terms"
-            ],
-            "support": {
-                "source": "https://git.drupalcode.org/project/views_term_hierarchy_weight_field"
-            },
-            "install-path": "../../web/modules/contrib/views_term_hierarchy_weight_field"
-        },
-        {
             "name": "drupal/webform",
             "version": "6.2.0",
             "version_normalized": "6.2.0.0",
@@ -10259,63 +10069,6 @@
                 "source": "https://git.drupalcode.org/project/webform"
             },
             "install-path": null
-        },
-        {
-            "name": "drupal/webform_mass_email",
-            "version": "1.0.0",
-            "version_normalized": "1.0.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/webform_mass_email.git",
-                "reference": "8.x-1.0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/webform_mass_email-8.x-1.0.zip",
-                "reference": "8.x-1.0",
-                "shasum": "7ceec3525dafd575b94dc5e82010fceae5dbe06c"
-            },
-            "require": {
-                "drupal/core": "^8 || ^9",
-                "drupal/webform": "^5.0 || ^6.0",
-                "drupal/webform_ui": "*"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "8.x-1.0",
-                    "datestamp": "1653856605",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "installation-source": "dist",
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0+"
-            ],
-            "authors": [
-                {
-                    "name": "Sampo Turve (isampo)",
-                    "homepage": "https://www.drupal.org/u/isampo",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "Vit Moravsky (kyberman)",
-                    "homepage": "https://www.drupal.org/u/kyberman",
-                    "role": "Co-maintainer"
-                }
-            ],
-            "description": "Send bulk email for all recipients of the webform.",
-            "homepage": "https://www.drupal.org/project/webform_mass_email",
-            "support": {
-                "source": "http://cgit.drupalcode.org/webform_mass_email",
-                "issues": "https://www.drupal.org/project/issues/webform_mass_email",
-                "irc": "irc://irc.freenode.org/drupal-contribute"
-            },
-            "install-path": "../../web/modules/contrib/webform_mass_email"
         },
         {
             "name": "drupal/webform_submission_export_import",
