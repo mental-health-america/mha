@@ -5,7 +5,7 @@ description: Allows your site to be tracked by Facebook Pixel.
 package: Statistics
 configure: facebook_pixel.facebook_pixel_config_form
 
-# Information added by Drupal.org packaging script on 2022-12-05
-version: '2.0.0-rc4'
+# Information added by Drupal.org packaging script on 2023-11-09
+version: '2.0.0-rc5'
 project: 'facebook_pixel'
-datestamp: 1670258486
+datestamp: 1699567773

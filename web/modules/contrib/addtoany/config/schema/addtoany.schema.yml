@@ -29,3 +29,21 @@ addtoany.settings:
       sequence:
         type: integer
         label: 'Status'
+
+addtoany.block_base_settings:
+  type: block_settings
+  mapping:
+    buttons_size:
+      type: integer
+    addtoany_html:
+      type: string
+
+block.settings.addtoany_block:
+  type: addtoany.block_base_settings
+  mapping:
+    link_url:
+      type: uri
+    link_title:
+      type: label
+block.settings.addtoany_follow_block:
+  type: addtoany.block_base_settings

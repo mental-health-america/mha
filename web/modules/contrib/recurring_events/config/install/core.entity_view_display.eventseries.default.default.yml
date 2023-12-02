@@ -51,3 +51,4 @@ hidden:
   event_registration: true
   monthly_recurring_date: true
   weekly_recurring_date: true
+  yearly_recurring_date: true

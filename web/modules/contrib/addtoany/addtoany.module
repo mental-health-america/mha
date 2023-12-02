@@ -5,6 +5,7 @@
  * Handle AddToAny integration.
  */
 
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
@@ -22,8 +23,8 @@ function addtoany_help($route_name, RouteMatchInterface $route_match) {
     case 'help.page.addtoany':
       $output = '';
       $output .= '<h3>' . t('About') . '</h3>';
-      $output .= '<p>' . t('<a href="https://www.drupal.org/project/addtoany">Share Buttons by AddToAny</a> provides a nice suite of share buttons for Drupal. These include the AddToAny universal share button, Facebook, Twitter, Mastodon, Pinterest, WhatsApp and many more.') . '</p>';
-      $output .= '<p>' . t('AddToAny is a universal sharing platform that can be integrated into many parts of the website with the use of a web widget. Once installed, visitors to the website can share or save an item using a variety of services, such as Facebook, Twitter, Pinterest, email, and over 100 other services.');
+      $output .= '<p>' . t('<a href="https://www.drupal.org/project/addtoany">Share Buttons by AddToAny</a> provides a nice suite of share buttons for Drupal. These include the AddToAny universal share button, Facebook, Mastodon, Pinterest, WhatsApp, LinkedIn and many more.') . '</p>';
+      $output .= '<p>' . t('AddToAny is a universal sharing platform that can be integrated into many parts of the website with the use of a web widget. Once installed, visitors to the website can share or save an item using a variety of services, such as Facebook, Mastodon, Pinterest, email, and over 100 other services.');
       $output .= '<p>' . t('AddToAny icons are Scalable Vector Graphics, meaning they load fast, are mathematically precise, scalable to any size, and are stunning on High-PPI screens such as Retina and Retina HD displays.');
       $output .= '<p>' . t('AddToAny\'s lightweight code follows best practices, and is optimized to load efficiently from locations all around the world. Accessibility, cross-browser fallbacks, graceful degradation are a few AddToAny staples.');
       $output .= '<p>' . t('More documentation about AddToAny in Drupal 8 can be found in Drupal\'s <a href="https://www.drupal.org/node/2719155">Community Documentation </a>.') . '</p>';
@@ -236,20 +237,26 @@ function addtoany_page_attachments(&$page) {
 }
 
 /**
- * Generate data for AddToAny buttons for a node.
+ * Generate data for AddToAny buttons for an entity.
  *
- * @param object $node
- *   The node object to create the buttons for.
+ * @param \Drupal\Core\Entity\ContentEntityInterface $entity
+ *   The entity object to create the buttons for.
  * @param object $config
  *   If present this will be used as custom config data. Use NULL for default
  *   config data.
  *
  * @return array
- *   The array with url, title, additional_html that will be send to Twig.
+ *   The array with url, title, additional_html that will be sent to Twig.
  */
-function addtoany_create_entity_data($node, $config = NULL) {
-  $url = isset($node) ? $node->toUrl('canonical', ['absolute' => TRUE])->toString() : NULL;
-  $title = isset($node) && $node->access('view label') ? $node->label() : NULL;
+function addtoany_create_entity_data(ContentEntityInterface $entity, $config = NULL) {
+  // If the entity is Paragraph, find the first parent that is Node.
+  while ($entity instanceof EntityInterface && $entity->getEntityTypeId() == 'paragraph') {
+    $entity = $entity->getParentEntity();
+  }
+
+  $url = $entity->toUrl('canonical', ['absolute' => TRUE])->toString() ?? NULL;
+  $title = $entity->label() ?? NULL;
+
   return addtoany_create_data($url, $title, $config);
 }
 

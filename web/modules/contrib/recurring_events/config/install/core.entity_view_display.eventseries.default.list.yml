@@ -36,3 +36,4 @@ hidden:
   monthly_recurring_date: true
   recur_type: true
   weekly_recurring_date: true
+  yearly_recurring_date: true

@@ -187,7 +187,7 @@ class ProcessBase extends Process
         if (empty($data)) {
             return $data;
         }
-        // If the data is a simple quoted string, or an array, then form_exit.
+        // If the data is a simple quoted string, or an array, then exit.
         if ((($data[0] == '"') && ($data[strlen($data) - 1] == '"')) ||
             (($data[0] == "[") && ($data[strlen($data) - 1] == "]"))
         ) {

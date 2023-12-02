@@ -159,6 +159,21 @@ function hook_recurring_events_recur_field_types(&$fields) {
 }
 
 /**
+ * Alter the array of instances to be deleted when updating an event.
+ *
+ * @param \Drupal\recurring_events\Entity\EventInstance[] $instances
+ *   The instances.
+ */
+function hook_recurring_events_save_pre_instances_deletion_alter(array &$instances):void {
+  foreach($instances as $k => $instance) {
+    $is_published = $instance->get('status')->value;
+    if($is_published) {
+      unset($instances[$k]);
+    }
+  }
+}
+
+/**
  * Execute custom code before event instances are deleted.
  *
  * When an eventseries is updated and has date recurring configuration changes

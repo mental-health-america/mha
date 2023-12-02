@@ -19,6 +19,8 @@ class SimpleFieldDeriver extends DeriverBase {
     $simpleFieldTypes = [
       'address',
       'boolean',
+      'block_field',
+      'color_field_type',
       'daterange',
       'datetime',
       'decimal',
@@ -35,6 +37,7 @@ class SimpleFieldDeriver extends DeriverBase {
       'telephone',
       'text',
       'timestamp',
+      'weight',
       'yearonly',
     ];
 

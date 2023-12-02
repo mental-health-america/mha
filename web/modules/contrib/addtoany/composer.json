@@ -1,7 +1,7 @@
 {
     "name": "drupal/addtoany",
     "type": "drupal-module",
-    "description": "Share buttons for Drupal including the AddToAny universal share button, Facebook, Twitter, Pinterest, WhatsApp and many more.",
+    "description": "Share buttons for Drupal including the AddToAny universal share button, Facebook, Mastodon, Pinterest, WhatsApp and many more.",
     "keywords": ["Drupal"],
     "license": "GPL-2.0-or-later",
     "homepage": "https://www.drupal.org/project/addtoany",

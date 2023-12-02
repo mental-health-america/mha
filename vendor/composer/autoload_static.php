@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit6a304bd6fcf54197feff320618fdafbc
+class ComposerStaticInit6675372a6f6527fe51fb53f618c3d4f9
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -168,6 +168,7 @@ class ComposerStaticInit6a304bd6fcf54197feff320618fdafbc
         'E' => 
         array (
             'Enlightn\\SecurityChecker\\' => 25,
+            'EmailValidator\\' => 15,
             'Egulias\\EmailValidator\\' => 23,
         ),
         'D' => 
@@ -182,13 +183,9 @@ class ComposerStaticInit6a304bd6fcf54197feff320618fdafbc
             'DrupalCodeGenerator\\' => 20,
             'Dotenv\\' => 7,
             'Dompdf\\' => 7,
-            'Doctrine\\Persistence\\' => 21,
-            'Doctrine\\Inflector\\' => 19,
             'Doctrine\\Deprecations\\' => 22,
             'Doctrine\\Common\\Lexer\\' => 22,
-            'Doctrine\\Common\\Inflector\\' => 26,
             'Doctrine\\Common\\Collections\\' => 28,
-            'Doctrine\\Common\\Cache\\' => 22,
             'Doctrine\\Common\\Annotations\\' => 28,
             'Doctrine\\Common\\' => 16,
             'Dflydev\\DotAccessData\\' => 22,
@@ -543,6 +540,10 @@ class ComposerStaticInit6a304bd6fcf54197feff320618fdafbc
         array (
             0 => __DIR__ . '/..' . '/enlightn/security-checker/src',
         ),
+        'EmailValidator\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/stymiee/email-validator/src/EmailValidator',
+        ),
         'Egulias\\EmailValidator\\' => 
         array (
             0 => __DIR__ . '/..' . '/egulias/email-validator/src',
@@ -587,33 +588,17 @@ class ComposerStaticInit6a304bd6fcf54197feff320618fdafbc
         array (
             0 => __DIR__ . '/..' . '/dompdf/dompdf/src',
         ),
-        'Doctrine\\Persistence\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/doctrine/persistence/lib/Doctrine/Persistence',
-        ),
-        'Doctrine\\Inflector\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Inflector',
-        ),
         'Doctrine\\Deprecations\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/deprecations/lib/Doctrine/Deprecations',
         ),
         'Doctrine\\Common\\Lexer\\' => 
         array (
-            0 => __DIR__ . '/..' . '/doctrine/lexer/lib/Doctrine/Common/Lexer',
-        ),
-        'Doctrine\\Common\\Inflector\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Common/Inflector',
+            0 => __DIR__ . '/..' . '/doctrine/lexer/src',
         ),
         'Doctrine\\Common\\Collections\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/collections/lib/Doctrine/Common/Collections',
-        ),
-        'Doctrine\\Common\\Cache\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache',
         ),
         'Doctrine\\Common\\Annotations\\' => 
         array (
@@ -621,10 +606,7 @@ class ComposerStaticInit6a304bd6fcf54197feff320618fdafbc
         ),
         'Doctrine\\Common\\' => 
         array (
-            0 => __DIR__ . '/..' . '/doctrine/common/lib/Doctrine/Common',
-            1 => __DIR__ . '/..' . '/doctrine/event-manager/src',
-            2 => __DIR__ . '/..' . '/doctrine/persistence/lib/Doctrine/Common',
-            3 => __DIR__ . '/..' . '/doctrine/reflection/lib/Doctrine/Common',
+            0 => __DIR__ . '/..' . '/doctrine/reflection/lib/Doctrine/Common',
         ),
         'Dflydev\\DotAccessData\\' => 
         array (
@@ -741,6 +723,7 @@ class ComposerStaticInit6a304bd6fcf54197feff320618fdafbc
         'AllowFieldTruncationHeader' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceHeaderOptions.php',
         'AssignmentRuleHeader' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceHeaderOptions.php',
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
+        'CURLStringFile' => __DIR__ . '/..' . '/symfony/polyfill-php81/Resources/stubs/CURLStringFile.php',
         'CallOptions' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceHeaderOptions.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Datamatrix' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/barcodes/datamatrix.php',
@@ -822,11 +805,11 @@ class ComposerStaticInit6a304bd6fcf54197feff320618fdafbc
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit6a304bd6fcf54197feff320618fdafbc::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit6a304bd6fcf54197feff320618fdafbc::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit6a304bd6fcf54197feff320618fdafbc::$prefixesPsr0;
-            $loader->fallbackDirsPsr0 = ComposerStaticInit6a304bd6fcf54197feff320618fdafbc::$fallbackDirsPsr0;
-            $loader->classMap = ComposerStaticInit6a304bd6fcf54197feff320618fdafbc::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit6675372a6f6527fe51fb53f618c3d4f9::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit6675372a6f6527fe51fb53f618c3d4f9::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit6675372a6f6527fe51fb53f618c3d4f9::$prefixesPsr0;
+            $loader->fallbackDirsPsr0 = ComposerStaticInit6675372a6f6527fe51fb53f618c3d4f9::$fallbackDirsPsr0;
+            $loader->classMap = ComposerStaticInit6675372a6f6527fe51fb53f618c3d4f9::$classMap;
 
         }, null, ClassLoader::class);
     }

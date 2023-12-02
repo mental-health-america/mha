@@ -361,9 +361,9 @@ class Application implements ResetInterface
     }
 
     /**
-     * Gets whether to automatically form_exit after a command execution or not.
+     * Gets whether to automatically exit after a command execution or not.
      *
-     * @return bool Whether to automatically form_exit after a command execution or not
+     * @return bool Whether to automatically exit after a command execution or not
      */
     public function isAutoExitEnabled()
     {
@@ -371,9 +371,9 @@ class Application implements ResetInterface
     }
 
     /**
-     * Sets whether to automatically form_exit after a command execution or not.
+     * Sets whether to automatically exit after a command execution or not.
      *
-     * @param bool $boolean Whether to automatically form_exit after a command execution or not
+     * @param bool $boolean Whether to automatically exit after a command execution or not
      */
     public function setAutoExit($boolean)
     {

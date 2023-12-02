@@ -22,7 +22,7 @@ abstract class SingleContentSyncBrowserTestBase extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected $defaultTheme = 'stable';
+  protected $defaultTheme = 'stable9';
 
   /**
    * {@inheritdoc}

@@ -1327,6 +1327,10 @@ display:
                 operator: contains
                 value: monthly_recurring_date
               5:
+                title: Yearly
+                operator: contains
+                value: yearly_recurring_date
+              6:
                 title: Custom
                 operator: contains
                 value: custom

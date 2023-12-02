@@ -1,5 +1,5 @@
 name: 'Svg Maps'
 type: module
 description: 'Manage maps into content entities.'
-core_version_requirement: ^8.8 || ^9
+core_version_requirement: ^8.8 || ^9 || ^10
 package: 'SvgMaps'

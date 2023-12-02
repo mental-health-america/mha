@@ -2,12 +2,12 @@ name: Recurring Events Registration Reminders
 type: module
 description: Enables reminders to be sent for upcoming events.
 package: Recurring Events
-core_version_requirement: ^8.9 || ^9
+core_version_requirement: ^9.3 || ^10
 dependencies:
   - recurring_events:recurring_events
   - recurring_events:recurring_events_registration
 
-# Information added by Drupal.org packaging script on 2023-09-04
-version: '2.0.0-rc14'
+# Information added by Drupal.org packaging script on 2023-11-28
+version: '2.0.0-rc15'
 project: 'recurring_events'
-datestamp: 1693813586
+datestamp: 1701175029

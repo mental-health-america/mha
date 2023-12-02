@@ -6,16 +6,26 @@ workflows:
       - test:
           matrix:
             parameters:
-              php: ["7.4", "8.0"]
-              drupal-version: ["9.3.x", "9.4.x"]
+              php: ["8.0", "8.1"]
+              drupal-version: ["9.4.x", "9.5.x", "10.0.x", "10.1.x"]
+            exclude:
+            - php: "8.0"
+              drupal-version: "10.0.x"
+            - php: "8.0"
+              drupal-version: "10.1.x"
   # Run nightly tests every day 8 AM.
   nightly:
     jobs:
     - test:
         matrix:
           parameters:
-            php: ["7.4", "8.0"]
-            drupal-version: ["9.3.x", "9.4.x"]
+            php: ["8.0", "8.1"]
+            drupal-version: ["9.4.x", "9.5.x", "10.0.x", "10.1.x"]
+          exclude:
+          - php: "8.0"
+            drupal-version: "10.0.x"
+          - php: "8.0"
+            drupal-version: "10.1.x"
     triggers:
     - schedule:
         # Weekday (22=10pm UTC). Evaluates to 8am AEST.
@@ -23,8 +33,8 @@ workflows:
         filters:
           branches:
             only:
-            - 8.x-1.x
-            - 8.x-2.x
+            - 3.x
+            - 4.x
 
 jobs:
   test:
@@ -34,7 +44,7 @@ jobs:
       drupal-version:
         type: string
     docker:
-    - image: skpr/php-circleci:<< parameters.php >>-1.x
+    - image: skpr/php-circleci:<< parameters.php >>-v2-latest
       environment:
         MODULE_NAME: dynamic_entity_reference
         SIMPLETEST_BASE_URL: http://127.0.0.1:8080
@@ -66,8 +76,15 @@ jobs:
         name: Fetch drupal dependencies, dev dependencies, and module test dependencies
         command: |
           composer install --prefer-dist --no-progress
-          composer require drupal/diff:1.x-dev --no-progress
-          composer require --dev "phpstan/phpstan:^1.1" "phpstan/phpstan-deprecation-rules:^1.0" "mglaman/phpstan-drupal:^1.0"
+          composer require --dev "phpstan/phpstan-deprecation-rules:^1.0"
+    - when:
+        name: Fetch drupal 10 dependencies, dev dependencies, and module test dependencies
+        condition:
+          or:
+          - equal: [ "10.0.x", << parameters.drupal-version >> ]
+          - equal: [ "10.1.x", << parameters.drupal-version >> ]
+        steps:
+          - run: composer require 'drupal/hal-hal:^1.0'
 
     - checkout:
         path: modules/${MODULE_NAME}
@@ -119,7 +136,7 @@ jobs:
     - run:
         name: Run unit tests
         command: |
-          ./vendor/bin/phpunit --configuration ./core/phpunit.xml.dist --log-junit ../build/logs/phpunit/phpunit.xml modules/${MODULE_NAME}
+          ./vendor/bin/phpunit --configuration ./core/phpunit.xml.dist --log-junit ../build/logs/phpunit/phpunit.xml --exclude-group functional_javascript modules/${MODULE_NAME}
 #          ./vendor/bin/phpunit --verbose  --configuration ./core/phpunit.xml.dist --log-junit ../build/logs/phpunit/phpunit.xml modules/${MODULE_NAME}
 #          ./vendor/bin/phpunit --debug --verbose  --configuration ./core/phpunit.xml.dist --log-junit ../build/logs/phpunit/phpunit.xml modules/${MODULE_NAME}
 

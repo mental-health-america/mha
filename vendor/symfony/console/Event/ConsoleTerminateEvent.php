@@ -16,7 +16,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Allows to manipulate the form_exit code of a command after its execution.
+ * Allows to manipulate the exit code of a command after its execution.
  *
  * @author Francesco Levorato <git@flevour.net>
  *
@@ -34,9 +34,9 @@ class ConsoleTerminateEvent extends ConsoleEvent
     }
 
     /**
-     * Sets the form_exit code.
+     * Sets the exit code.
      *
-     * @param int $exitCode The command form_exit code
+     * @param int $exitCode The command exit code
      */
     public function setExitCode($exitCode)
     {
@@ -44,9 +44,9 @@ class ConsoleTerminateEvent extends ConsoleEvent
     }
 
     /**
-     * Gets the form_exit code.
+     * Gets the exit code.
      *
-     * @return int The command form_exit code
+     * @return int The command exit code
      */
     public function getExitCode()
     {

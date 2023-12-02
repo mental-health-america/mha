@@ -2,11 +2,11 @@ name: Simple Timeline
 type: module
 description: Provide a views style for displaying content in a vertical timeline.
 core: 8.x
-core_version_requirement: ^8 || ^9
+core_version_requirement: ^8 || ^9 || ^10
 dependencies:
   - drupal:views
 
-# Information added by Drupal.org packaging script on 2020-10-14
-version: '8.x-1.2'
+# Information added by Drupal.org packaging script on 2023-09-20
+version: '8.x-2.0'
 project: 'simple_timeline'
-datestamp: 1602651117
+datestamp: 1695223317

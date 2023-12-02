@@ -28,7 +28,7 @@ content:
     third_party_settings: {  }
   custom_date:
     type: daterange_default
-    weight: 7
+    weight: 8
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -40,13 +40,13 @@ content:
     third_party_settings: {  }
   excluded_dates:
     type: daterange_default
-    weight: 8
+    weight: 9
     settings: {  }
     region: content
     third_party_settings: {  }
   included_dates:
     type: daterange_default
-    weight: 9
+    weight: 10
     settings: {  }
     region: content
     third_party_settings: {  }
@@ -66,7 +66,7 @@ content:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 12
+    weight: 13
     region: content
     third_party_settings: {  }
   title:
@@ -79,7 +79,7 @@ content:
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 11
+    weight: 12
     settings:
       match_operator: CONTAINS
       size: 60
@@ -90,6 +90,12 @@ content:
   weekly_recurring_date:
     type: weekly_recurring_date
     weight: 5
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  yearly_recurring_date:
+    type: yearly_recurring_date
+    weight: 7
     region: content
     settings: {  }
     third_party_settings: {  }

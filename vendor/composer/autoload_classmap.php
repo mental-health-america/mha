@@ -9,6 +9,7 @@ return array(
     'AllowFieldTruncationHeader' => $vendorDir . '/messageagency/force.com-toolkit-for-php/soapclient/SforceHeaderOptions.php',
     'AssignmentRuleHeader' => $vendorDir . '/messageagency/force.com-toolkit-for-php/soapclient/SforceHeaderOptions.php',
     'Attribute' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
+    'CURLStringFile' => $vendorDir . '/symfony/polyfill-php81/Resources/stubs/CURLStringFile.php',
     'CallOptions' => $vendorDir . '/messageagency/force.com-toolkit-for-php/soapclient/SforceHeaderOptions.php',
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'Datamatrix' => $vendorDir . '/tecnickcom/tcpdf/include/barcodes/datamatrix.php',

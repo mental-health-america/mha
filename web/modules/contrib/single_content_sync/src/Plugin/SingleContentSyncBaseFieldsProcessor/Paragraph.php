@@ -24,6 +24,7 @@ class Paragraph extends SingleContentSyncBaseFieldsProcessorPluginBase {
       'status' => $entity->isPublished(),
       'langcode' => $entity->language()->getId(),
       'created' => $entity->getCreatedTime(),
+      'behavior_settings' => $entity->getAllBehaviorSettings(),
     ];
   }
 
@@ -31,11 +32,17 @@ class Paragraph extends SingleContentSyncBaseFieldsProcessorPluginBase {
    * {@inheritdoc}
    */
   public function mapBaseFieldsValues(array $values): array {
-    return [
+    $baseFields = [
       'langcode' => $values['langcode'],
       'created' => $values['created'],
       'status' => $values['status'],
     ];
+
+    if (!empty($values['behavior_settings'])) {
+      $baseFields['behavior_settings'] = serialize($values['behavior_settings']);
+    }
+
+    return $baseFields;
   }
 
 }

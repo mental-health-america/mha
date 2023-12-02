@@ -50,6 +50,13 @@ class CommandHelper implements CommandHelperInterface {
   protected FileSystemInterface $fileSystem;
 
   /**
+   * The app root.
+   *
+   * @var string
+   */
+  protected string $root;
+
+  /**
    * Constructor of ContentSyncCommands.
    *
    * @param \Drupal\single_content_sync\ContentImporterInterface $content_importer
@@ -62,6 +69,8 @@ class CommandHelper implements CommandHelperInterface {
    *   The content sync helper.
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   The file system.
+   * @param string $root
+   *   The app root.
    */
   public function __construct(
     ContentImporterInterface $content_importer,
@@ -69,12 +78,14 @@ class CommandHelper implements CommandHelperInterface {
     EntityTypeManagerInterface $entity_type_manager,
     ContentSyncHelperInterface $content_sync_helper,
     FileSystemInterface $file_system,
+    string $root
   ) {
     $this->contentImporter = $content_importer;
     $this->configFactory = $config_factory;
     $this->entityTypeManager = $entity_type_manager;
     $this->contentSyncHelper = $content_sync_helper;
     $this->fileSystem = $file_system;
+    $this->root = $root;
   }
 
   /**
@@ -172,7 +183,7 @@ class CommandHelper implements CommandHelperInterface {
    * {@inheritDoc}
    */
   public function getRealDirectory(string $output_path): string {
-    $grandparent_path = \Drupal::root();
+    $grandparent_path = $this->root;
     if (!$output_path) {
       return $grandparent_path . '/scs-export';
     }
