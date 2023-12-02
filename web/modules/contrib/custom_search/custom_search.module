@@ -456,12 +456,12 @@ function custom_search_theme($existing, $type, $theme, $path) {
 function custom_search_theme_registry_alter(&$theme_registry) {
   if (isset($theme_registry['item_list__search_results'])) {
     $theme_registry['item_list__search_results']['template'] = 'custom-search-results';
-    $theme_registry['item_list__search_results']['path'] = drupal_get_path('module', 'custom_search') . '/templates';
+    $theme_registry['item_list__search_results']['path'] = \Drupal::service('extension.list.module')->getPath('custom_search') . '/templates';
     $theme_registry['item_list__search_results']['variables']['filter_position'] = FALSE;
     $theme_registry['item_list__search_results']['variables']['filter'] = '';
   }
   if (isset($theme_registry['search_result'])) {
     $theme_registry['search_result']['template'] = 'custom-search-result';
-    $theme_registry['search_result']['path'] = drupal_get_path('module', 'custom_search') . '/templates';
+    $theme_registry['search_result']['path'] = \Drupal::service('extension.list.module')->getPath('custom_search') . '/templates';
   }
 }

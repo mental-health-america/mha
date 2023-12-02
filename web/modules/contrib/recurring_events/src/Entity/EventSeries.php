@@ -400,6 +400,20 @@ class EventSeries extends EditorialContentEntityBase implements EventInterface {
         'weight' => 6,
       ]);
 
+    $fields['yearly_recurring_date'] = BaseFieldDefinition::create('yearly_recurring_date')
+      ->setLabel(t('Yearly Event'))
+      ->setDescription('The yearly recurring date configuration.')
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE)
+      ->setRevisionable(TRUE)
+      ->setTranslatable(FALSE)
+      ->setCardinality(1)
+      ->setRequired(FALSE)
+      ->setDisplayOptions('form', [
+        'type' => 'yearly_recurring_date',
+        'weight' => 7,
+      ]);
+
     $fields['custom_date'] = BaseFieldDefinition::create('daterange')
       ->setLabel(t('Custom Date(s) and Time(s)'))
       ->setDescription('The custom date configuration.')
@@ -411,7 +425,7 @@ class EventSeries extends EditorialContentEntityBase implements EventInterface {
       ->setRequired(FALSE)
       ->setDisplayOptions('form', [
         'type' => 'daterange_default',
-        'weight' => 7,
+        'weight' => 8,
       ]);
 
     $fields['excluded_dates'] = BaseFieldDefinition::create('daterange')
@@ -426,7 +440,7 @@ class EventSeries extends EditorialContentEntityBase implements EventInterface {
       ->setSetting('datetime_type', 'date')
       ->setDisplayOptions('form', [
         'type' => 'daterange_default',
-        'weight' => 8,
+        'weight' => 9,
         'settings' => [
           'format_type' => 'html_date',
           'datetime_type' => 'date',
@@ -445,7 +459,7 @@ class EventSeries extends EditorialContentEntityBase implements EventInterface {
       ->setSetting('datetime_type', 'date')
       ->setDisplayOptions('form', [
         'type' => 'daterange_default',
-        'weight' => 9,
+        'weight' => 10,
         'settings' => [
           'format_type' => 'html_date',
           'datetime_type' => 'date',
@@ -471,7 +485,7 @@ class EventSeries extends EditorialContentEntityBase implements EventInterface {
         'settings' => [
           'display_label' => TRUE,
         ],
-        'weight' => 12,
+        'weight' => 13,
       ])
       ->setDisplayConfigurable('form', TRUE);
 
@@ -922,6 +936,150 @@ class EventSeries extends EditorialContentEntityBase implements EventInterface {
       $days = explode(',', $days);
     }
     return $days;
+  }
+
+  /**
+   * Get yearly recurring start date.
+   *
+   * @return \Drupal\Core\Datetime\DrupalDateTime|null
+   *   The date object for the yearly start date.
+   */
+  public function getYearlyStartDate() {
+    $userTimezone = new \DateTimeZone(date_default_timezone_get());
+    if (!empty($this->get('yearly_recurring_date')->start_date)) {
+      return $this->get('yearly_recurring_date')->start_date->setTimezone($userTimezone)->setTime(0, 0, 0);
+    }
+    return NULL;
+  }
+
+  /**
+   * Get yearly recurring end date.
+   *
+   * @return \Drupal\Core\Datetime\DrupalDateTime|null
+   *   The date object for the yearly end date.
+   */
+  public function getYearlyEndDate() {
+    $userTimezone = new \DateTimeZone(date_default_timezone_get());
+    if (!empty($this->get('yearly_recurring_date')->end_date)) {
+      return $this->get('yearly_recurring_date')->end_date->setTimezone($userTimezone)->setTime(0, 0, 0);
+    }
+    return NULL;
+  }
+
+  /**
+   * Get yearly recurring start time.
+   *
+   * @return string
+   *   The string for the yearly start time.
+   */
+  public function getYearlyStartTime() {
+    return $this->get('yearly_recurring_date')->time;
+  }
+
+  /**
+   * Get yearly recurring duration.
+   *
+   * @return int
+   *   The integer for the yearly duration.
+   */
+  public function getYearlyDuration() {
+    return $this->get('yearly_recurring_date')->duration;
+  }
+
+  /**
+   * Get yearly recurring end time.
+   *
+   * @return string
+   *   The string for the yearly end time.
+   */
+  public function getYearlyEndTime() {
+    return $this->get('yearly_recurring_date')->end_time;
+  }
+
+  /**
+   * Get yearly recurring duration or end time.
+   *
+   * @return string
+   *   The string for the yearly duration or end time.
+   */
+  public function getYearlyDurationOrEndTime() {
+    return $this->get('yearly_recurring_date')->duration_or_end_time;
+  }
+
+  /**
+   * Get yearly recurring days.
+   *
+   * @return array
+   *   The array of days for the yearly event.
+   */
+  public function getYearlyDays() {
+    $days = $this->get('yearly_recurring_date')->days;
+    if (!empty($days)) {
+      $days = explode(',', $days);
+    }
+    return $days;
+  }
+
+  /**
+   * Get yearly recurring type.
+   *
+   * @return string
+   *   The type of yearly recurrence.
+   */
+  public function getYearlyType() {
+    return $this->get('yearly_recurring_date')->type;
+  }
+
+  /**
+   * Get yearly recurring day occurrences.
+   *
+   * @return array
+   *   The day occurrences of the yearly recurrence.
+   */
+  public function getYearlyDayOccurrences() {
+    $occurrences = $this->get('yearly_recurring_date')->day_occurrence;
+    if (!empty($occurrences)) {
+      $occurrences = explode(',', $occurrences);
+    }
+    return $occurrences;
+  }
+
+  /**
+   * Get yearly recurring day of month.
+   *
+   * @return array
+   *   The days of month of yearly recurrence.
+   */
+  public function getYearlyDayOfMonth() {
+    $days = $this->get('yearly_recurring_date')->day_of_month;
+    if (!empty($days)) {
+      $days = explode(',', $days);
+    }
+    return $days;
+  }
+
+  /**
+   * Get yearly recurring interval.
+   *
+   * @return int
+   *   The number of years between occurrences.
+   */
+  public function getYearlyInterval() {
+    return $this->get('yearly_recurring_date')->year_interval;
+  }
+
+  /**
+   * Get yearly recurring months.
+   *
+   * @return array
+   *   The months in which the event occurs for yearly recurrence.
+   */
+  public function getYearlyMonths() {
+    $months = $this->get('yearly_recurring_date')->months;
+    if (!empty($months)) {
+      $months = explode(',', $months);
+    }
+    return $months;
   }
 
   /**
