@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'drupal-composer/drupal-project',
-        'pretty_version' => 'dev-master',
-        'version' => 'dev-master',
-        'reference' => '3ceb70ef21c7f7e284331eed34066fcb0fac6dea',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => 'f8f5c123e79a0715e6e8838ace9dd12d33253d39',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -206,9 +206,9 @@
             'dev_requirement' => false,
         ),
         'drupal-composer/drupal-project' => array(
-            'pretty_version' => 'dev-master',
-            'version' => 'dev-master',
-            'reference' => '3ceb70ef21c7f7e284331eed34066fcb0fac6dea',
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => 'f8f5c123e79a0715e6e8838ace9dd12d33253d39',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
