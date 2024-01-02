@@ -2,8 +2,9 @@
 
 namespace Drupal\salesforce;
 
-use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Component\Render\FormattableMarkup;
+use Throwable;
 
 /**
  * EntityNotFoundException extends Drupal\salesforce\Exception.
@@ -38,7 +39,7 @@ class EntityNotFoundException extends \RuntimeException {
    * @param \Throwable|null $previous
    *   Previous exception.
    */
-  public function __construct($entityProperties, $entityTypeId, \Throwable $previous = NULL) {
+  public function __construct($entityProperties, $entityTypeId, Throwable $previous = NULL) {
     parent::__construct($this->t('Entity not found. type: %type properties: %props', [
       '%type' => $entityTypeId,
       '%props' => var_export($entityProperties, TRUE),

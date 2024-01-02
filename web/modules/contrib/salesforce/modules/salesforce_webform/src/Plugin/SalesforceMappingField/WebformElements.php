@@ -5,8 +5,8 @@ namespace Drupal\salesforce_webform\Plugin\SalesforceMappingField;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\salesforce_mapping\Entity\SalesforceMappingInterface;
-use Drupal\salesforce_mapping\MappingConstants;
 use Drupal\salesforce_mapping\SalesforceMappingFieldPluginBase;
+use Drupal\salesforce_mapping\MappingConstants;
 
 /**
  * Adapter for Webform elements.
@@ -76,26 +76,13 @@ class WebformElements extends SalesforceMappingFieldPluginBase {
         ->objectDescribe($mapping->getSalesforceObjectType());
       $field_definition = $describe->getField($this->config('salesforce_field'));
       if ($field_definition['type'] == 'multipicklist') {
-        if (is_array($entity->getElementData($main_element_name))) {
-          return implode(';', $entity->getElementData($main_element_name));
-        }
-        else {
-          return $entity->getElementData($main_element_name);
-        }
+        return implode(';', $entity->getElementData($main_element_name));
       }
       else {
         $value = $entity->getElementData($main_element_name);
         if ($value && isset($element_parts[1])) {
-          // Flatten the array if nested, e.g., webform custom composite.
-          if (is_array($value) && isset($value[0])) {
-            $flattened = array_reduce($value, 'array_merge', []);
-            $value = $flattened[$element_parts[1]];
-          }
-          else {
-            $value = $value[$element_parts[1]];
-          }
+          $value = $value[$element_parts[1]];
         }
-
         return $value;
       }
     }
@@ -109,12 +96,12 @@ class WebformElements extends SalesforceMappingFieldPluginBase {
    */
   public function getPluginDefinition() {
     $definition = parent::getPluginDefinition();
-    $element_parts = explode('__', (string) $this->config('drupal_field_value'));
+    $element_parts = explode('__', $this->config('drupal_field_value'));
     $main_element_name = reset($element_parts);
     $webform = $this->entityTypeManager->getStorage('webform')->load($this->mapping->get('drupal_bundle'));
     // Unfortunately, the best we can do for webform dependencies is a single
     // dependency on the top-level webform, which is itself a monolithic config.
-    // @todo implement webform-element-changed hook, if that exists.
+    // @TODO implement webform-element-changed hook, if that exists.
     $definition['config_dependencies']['config'][] = $webform->getConfigDependencyName();
     return $definition;
   }
@@ -147,7 +134,7 @@ class WebformElements extends SalesforceMappingFieldPluginBase {
 
     // Loop over every field on the webform.
     foreach ($webform_elements as $element_id => $element) {
-      if (!empty($element['#webform_composite_elements'])) {
+      if (in_array($element['#type'], ['webform_address', 'webform_name'])) {
         $element = $webform->getElement($element_id, TRUE);
         foreach ($element['#webform_composite_elements'] as $sub_element) {
           $options[$sub_element['#webform_composite_key']] = $element['#title'] . ': ' . (string) $sub_element['#title'];

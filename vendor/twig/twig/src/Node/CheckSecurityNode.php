@@ -31,7 +31,7 @@ class CheckSecurityNode extends Node
         parent::__construct();
     }
 
-    public function compile(Compiler $compiler)
+    public function compile(Compiler $compiler): void
     {
         $tags = $filters = $functions = [];
         foreach (['tags', 'filters', 'functions'] as $type) {
@@ -58,8 +58,7 @@ class CheckSecurityNode extends Node
             ->indent()
             ->write(!$tags ? "[],\n" : "['".implode("', '", array_keys($tags))."'],\n")
             ->write(!$filters ? "[],\n" : "['".implode("', '", array_keys($filters))."'],\n")
-            ->write(!$functions ? "[],\n" : "['".implode("', '", array_keys($functions))."'],\n")
-            ->write("\$this->source\n")
+            ->write(!$functions ? "[]\n" : "['".implode("', '", array_keys($functions))."']\n")
             ->outdent()
             ->write(");\n")
             ->outdent()
@@ -87,5 +86,3 @@ class CheckSecurityNode extends Node
         ;
     }
 }
-
-class_alias('Twig\Node\CheckSecurityNode', 'Twig_Node_CheckSecurity');

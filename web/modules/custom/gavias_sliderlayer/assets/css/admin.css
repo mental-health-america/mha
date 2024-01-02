@@ -11,18 +11,34 @@
 .margin-top-30{
   margin-top: 30px!important;
 }
+#gavias_sliderlayer_main{
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 15px;
+}
 /**/
-input[type="text"], 
-input[type="tel"],
-input[type="password"],
-input[type="email"],
-input[type="number"],
-textarea, select{
+#gavias_sliderlayer_main input[type="text"], 
+#gavias_sliderlayer_main input[type="tel"],
+#gavias_sliderlayer_main input[type="password"],
+#gavias_sliderlayer_main input[type="email"],
+#gavias_sliderlayer_main input[type="number"],
+#gavias_sliderlayer_main textarea,
+#gavias_sliderlayer_main select{
   background-color: #fff!important;
   box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.02) inset;
   border: 1px solid #ccc!important;
-  padding: 6px 1%!important;
-  width: 94%!important;
+  padding: 6px 10px!important;
+  width: 100%!important;
+  line-height: 26px;
+  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+  box-sizing: border-box;         /* Opera/IE 8+ */
+  font-size: 14px;
+}
+ 
+#gavias_sliderlayer_main select{
+  background: #f3f3f3!important;
+  height: 39px;
 }
 
 input.file-input{
@@ -35,16 +51,14 @@ textarea{
   height: 120px;
 }
 
-label{
-  font-size: 12px;
-  text-transform: uppercase;
-}
 .g-label{
-  text-transform: uppercase;
-  font-size: 12px;
+  text-transform: capitalize;
+  font-size: 14px;
   font-weight: 700;
   display: block;
-  padding-top: 5px;
+  margin-top: 10px;
+  display: inline-block;
+  color: #5e5e5e;
 }
 .g-label.small{
   width: 50px;
@@ -75,8 +89,8 @@ label{
 
 .g-wrapper{
   border: 1px solid #ccc!important;
-  padding: 15px!important;
-  background: #f1f1f1;
+  padding: 0!important;
+  background: #F3F4F9;
   border: none;
   padding:0;
    margin: 0 0 20px;
@@ -102,13 +116,15 @@ label{
 
 #layeroptions table{
   border: none!important;
+  margin: 0;
 
  border-collapse: separate;
- border-spacing: 20px 5px;
+ border-spacing: 10px 5px;
 }
 #layeroptions table td{
  border: none!important;
  padding: 0!important;
+ background: #F3F4F9;
 }
 .back-list-sliders{
   padding: 15px;
@@ -210,7 +226,7 @@ div.vertical-tabs ul li{
   margin: 0;
 }
 div.vertical-tabs .vertical-tabs-panes {
-  margin: 0 270px 0 0;
+  margin: 0 280px 0 0;
   padding: 15px;
 }
 
@@ -229,12 +245,14 @@ div.vertical-tabs .vertical-tabs-panes {
 
 .gavias-heading{
   width: 100%;
-  background-color: #f1f1f1;
+  background-color: #5e74e1;
   border-bottom: 1px solid #ccc;
-  padding: 10px 15px;
+  padding: 10px 0;
   text-transform: uppercase;
   font-weight: 700;
-  margin: -15px -15px 15px;
+  margin: 0;
+  text-indent: 15px;
+  color: #fff;
 }
 
 #gavias_sliderlayer ul a{
@@ -254,8 +272,29 @@ ul.ui-tabs-nav li{
   padding: 5px 0;
 }
 */
-.form-global-setting-item{
-  padding: 15px;
+.gavias-sliderlayer-groupsetting{
+  max-width: 1000px;
+}
+.gavias-sliderlayer-groupsetting .g-wrapper .g-wrapper .gavias-heading{
+  border: none;
+  background: none;
+  color: #000;
+  border-top: 1px solid #ccc;
+  padding: 20px 0 0;
+}
+.gavias-sliderlayer-groupsetting .g-wrapper .g-wrapper{
+  border: none!important;
+}
+.gavias-sliderlayer-groupsetting .form-global-setting-item{
+  padding: 10px 15px!important;
+}
+
+.form-global-setting-item label{
+  color: #000;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 5px;
+  font-size: 14px;
 }
 .layer.selected {
   box-shadow: 0 0 8px #DDE573;
@@ -337,6 +376,22 @@ a#add_layer{
   }
 }
 
+#gavias_sliderlayer_main table{
+  margin: 0;
+}
+
+#gavias_sliderlayer_main table td{
+  background: #F3F4F9;
+  padding: 12px 15px 15px;
+  vertical-align: top;
+}
+#gavias_sliderlayer_main label{
+  font-size: 14px;
+  font-weight: 500;
+  color: #5e5e5e;
+  display: block;
+  margin-bottom: 5px;
+}
 #gavias_sliderlayer_main .gva-upload-image{
   
 }
@@ -436,6 +491,19 @@ a#add_layer{
 #gavias_slider_single{
    background-position: center center;
 }
+.layer-single-settingsss .option-responsive{
+  display: none;
+}
+.layer-single-settingsss.layer-settings__lg .option-lg{
+  display: block;
+}
+.layer-single-settingsss.layer-settings__sm .option-sm{
+  display: block;
+}
+.layer-single-settingsss.layer-settings__xs .option-xs{
+  display: block;
+}
+
 .gavias-image-demo{
   height: 46px;
   top: 4px;

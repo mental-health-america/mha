@@ -18,7 +18,6 @@ class UniqueFieldsConstraintValidator extends ConstraintValidator {
     $id_key = $entity_type->getKey('id');
 
     $query = \Drupal::entityQuery($entity_type->id())
-      ->accessCheck(FALSE)
       // The id could be NULL, so we cast it to 0 in that case.
       ->condition($id_key, (int) $entity->id(), '<>')
       ->range(0, 1);
@@ -26,7 +25,7 @@ class UniqueFieldsConstraintValidator extends ConstraintValidator {
     foreach ($constraint->fields as $field) {
       $field_name = $field;
       if (strpos($field_name, '.')) {
-        [$field_name, $property] = explode('.', $field_name, 2);
+        list($field_name, $property) = explode('.', $field_name, 2);
       }
       else {
         $property = $entity->{$field}->getFieldDefinition()->getMainPropertyName();
@@ -34,27 +33,20 @@ class UniqueFieldsConstraintValidator extends ConstraintValidator {
       $value = $entity->{$field_name}->{$property};
       $query->condition($field, $value);
     }
-    $id = $query->execute();
-    if (empty($id)) {
-      return;
+
+    if ($id = $query->execute()) {
+      $id = reset($id);
+      $entity = \Drupal::entityTypeManager()
+        ->getStorage($entity_type->id())
+        ->load($id);
+      $url = $entity->toUrl();
+      $message_replacements = [
+        '@entity_type' => $entity_type->getSingularLabel(),
+        ':url' => $url->toString(),
+        '@label' => $entity->label(),
+      ];
+      $this->context->addViolation($constraint->message, $message_replacements);
     }
-    $id = reset($id);
-    if (empty($id)) {
-      return;
-    }
-    $entity = \Drupal::entityTypeManager()
-      ->getStorage($entity_type->id())
-      ->load($id);
-    if (empty($entity)) {
-      return;
-    }
-    $url = $entity->toUrl();
-    $message_replacements = [
-      '@entity_type' => $entity_type->getSingularLabel(),
-      ':url' => $url->toString(),
-      '@label' => $entity->label(),
-    ];
-    $this->context->addViolation($constraint->message, $message_replacements);
   }
 
 }

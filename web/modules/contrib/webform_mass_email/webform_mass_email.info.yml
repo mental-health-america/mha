@@ -6,8 +6,3 @@ package: Webform
 configure: webform.config.mass_email
 dependencies:
   - webform:webform_ui
-
-# Information added by Drupal.org packaging script on 2022-05-29
-version: '8.x-1.0'
-project: 'webform_mass_email'
-datestamp: 1653856606

@@ -4,12 +4,13 @@ namespace Drupal\salesforce_mapping\Plugin\SalesforceMappingField;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+
 use Drupal\field\Entity\FieldConfig;
-use Drupal\salesforce\Exception as SalesforceException;
 use Drupal\salesforce\SFID;
 use Drupal\salesforce\SObject;
 use Drupal\salesforce_mapping\Entity\SalesforceMappingInterface;
 use Drupal\salesforce_mapping\SalesforceMappingFieldPluginBase;
+use Drupal\salesforce\Exception as SalesforceException;
 
 /**
  * Adapter for entity Reference and fields.
@@ -27,7 +28,7 @@ class RelatedIDs extends SalesforceMappingFieldPluginBase {
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $pluginForm = parent::buildConfigurationForm($form, $form_state);
 
-    // @todo inspecting the form and form_state feels wrong, but haven't found a good way to get the entity from config before the config is saved.
+    // @TODO inspecting the form and form_state feels wrong, but haven't found a good way to get the entity from config before the config is saved.
     $options = $this->getConfigurationOptions($form['#entity']);
 
     if (empty($options)) {
@@ -71,7 +72,7 @@ class RelatedIDs extends SalesforceMappingFieldPluginBase {
 
     // Now we can actually fetch the referenced entity.
     $field_settings = $field->getFieldDefinition()->getSettings();
-    // @todo this procedural call will go away when sf mapping object becomes a service or field
+    // @TODO this procedural call will go away when sf mapping object becomes a service or field
     $referenced_mappings = $this->mappedObjectStorage->loadByDrupal($field_settings['target_type'], $field->entity->id());
     if (!empty($referenced_mappings)) {
       $mapping = reset($referenced_mappings);
@@ -127,7 +128,7 @@ class RelatedIDs extends SalesforceMappingFieldPluginBase {
       if (!$this->instanceOfEntityReference($instance)) {
         continue;
       }
-      // @todo exclude config entities?
+      // @TODO exclude config entities?
       $options[$name] = $instance->getLabel();
     }
     asort($options);

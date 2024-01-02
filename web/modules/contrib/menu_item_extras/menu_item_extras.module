@@ -310,17 +310,6 @@ function menu_item_extras_menu_insert(EntityInterface $entity) {
   $mlc_helper->installViewModeField();
   $mlc_helper->updateMenuItemsBundle($entity->id());
   $mlc_helper->doEntityUpdate();
-
-  // @todo Remove when fixed https://www.drupal.org/node/2773591.
-  // Drupal\Component\Plugin\Exception\PluginNotFoundException until cache cleared.
-  drupal_register_shutdown_function('_menu_item_extras_post_menu_save');
-}
-
-/**
- * Menu insert shutdown callback
- */
-function _menu_item_extras_post_menu_save() {
-  \Drupal::service('cache.discovery')->deleteAll();
 }
 
 /**

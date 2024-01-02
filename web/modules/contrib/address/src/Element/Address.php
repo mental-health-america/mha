@@ -97,9 +97,9 @@ class Address extends FormElement {
   public static function applyDefaults(array $value) {
     $properties = [
       'given_name', 'additional_name', 'family_name', 'organization',
-      'address_line1', 'address_line2', 'postal_code', 'sorting_code',
-      'dependent_locality', 'locality', 'administrative_area',
-      'country_code', 'langcode',
+      'address_line1', 'address_line2', 'address_line3', 'postal_code',
+      'sorting_code', 'dependent_locality', 'locality',
+      'administrative_area', 'country_code', 'langcode',
     ];
     foreach ($properties as $property) {
       if (!isset($value[$property])) {
@@ -251,7 +251,7 @@ class Address extends FormElement {
         ];
       }
 
-      foreach ($line_fields as $field_index => $field) {
+      foreach ($line_fields as $field) {
         $property = FieldHelper::getPropertyName($field);
         $class = str_replace('_', '-', $property);
 
@@ -272,9 +272,12 @@ class Address extends FormElement {
         }
       }
     }
-    // Hide the label for the second address line.
+    // Hide the label for the second and third address lines.
     if (isset($element['address_line2'])) {
       $element['address_line2']['#title_display'] = 'invisible';
+    }
+    if (isset($element['address_line3'])) {
+      $element['address_line3']['#title_display'] = 'invisible';
     }
     // Add predefined options to the created subdivision elements.
     $element = static::processSubdivisionElements($element, $value, $address_format);

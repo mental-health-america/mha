@@ -2,9 +2,6 @@
 
 namespace Drupal\salesforce\Rest;
 
-/**
- *
- */
 interface SalesforceIdentityInterface {
 
   /**

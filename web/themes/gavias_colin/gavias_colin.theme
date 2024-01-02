@@ -9,7 +9,7 @@ use Drupal\Core\Template\Attribute;
 use Drupal\block\Entity\Block;
 use Drupal\Core\Url;
 
-$theme_path = drupal_get_path('theme', 'gavias_colin');
+$theme_path = \Drupal::service('extension.list.theme')->getPath('gavias_colin');
 
 include_once $theme_path . '/includes/functions.php';
 include_once $theme_path . '/includes/menu.php';
@@ -21,7 +21,7 @@ include_once $theme_path . '/customize/fonts.php';
 function gavias_colin_preprocess_page(&$variables) {
   global $base_url;
 
-  $theme_path = drupal_get_path('theme', 'gavias_colin');
+  $theme_path = \Drupal::service('extension.list.theme')->getPath('gavias_colin');
   $variables['sticky_menu'] = theme_get_setting('sticky_menu');
 
   $variables['preloader'] = theme_get_setting('preloader');
@@ -46,7 +46,7 @@ function gavias_colin_preprocess_page(&$variables) {
   if(file_exists($theme_path . '/templates/page/' . trim($header) . '.html.twig')){
     $variables['header_skin'] = $variables['directory'] . '/templates/page/' . trim($header) . '.html.twig';
   }else{
-    $variables['header_skin'] = $variables['directory'] . '/templates/page/backup-backup-header.html.twig';
+    $variables['header_skin'] = $variables['directory'] . '/templates/page/header.html.twig';
   }
 
 }
@@ -67,7 +67,7 @@ function gavias_colin_preprocess_html(&$variables) {
   global $theme, $base_url;
   global $parent_root;
 
-  $theme_path = drupal_get_path('theme', 'gavias_colin');
+  $theme_path = \Drupal::service('extension.list.theme')->getPath('gavias_colin');
 
   if(theme_get_setting('enable_panel') == '1' ){
     $current_url = $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
@@ -206,7 +206,7 @@ function gavias_colin_preprocess_block(&$variables) {
 
 function gavias_colin_preprocess_block__system_breadcrumb_block(&$variables){
   $styles = array();
-  $bg_image = base_path() . drupal_get_path('theme', 'gavias_colin') . '/images/breadcrumb.jpg';
+  $bg_image = base_path() . \Drupal::service('extension.list.theme')->getPath('gavias_colin') . '/images/breadcrumb.jpg';
   $bg_color = '#F6F6F6';
   $bg_position = 'center center';
   $bg_repeat = 'no-repeat';
@@ -234,7 +234,7 @@ function gavias_colin_preprocess_block__system_breadcrumb_block(&$variables){
         $bg_repeat = $breadcrumb_background_repeat;
       }
       if($breadcrumb_background_image_path){
-        $bg_image = file_create_url($breadcrumb_background_image_path);
+        $bg_image = \Drupal::service('file_url_generator')->generateAbsoluteString($breadcrumb_background_image_path);
       }
     }
   }
@@ -252,7 +252,7 @@ function gavias_colin_preprocess_block__system_breadcrumb_block(&$variables){
   $title = '';
   $request = \Drupal::request();
   $title = '';
-  if ($route = $request->attributes->get(\Symfony\Cmf\Component\Routing\RouteObjectInterface::ROUTE_OBJECT)) {
+  if ($route = $request->attributes->get(\Drupal\Core\Routing\RouteObjectInterface::ROUTE_OBJECT)) {
     $title = \Drupal::service('title_resolver')->getTitle($request, $route);
   }
   $variables['breadcrumb_title'] = $title;
@@ -352,15 +352,4 @@ function gavias_colin_preprocess_views_view(&$variables){
   }
 }
 
-/**
- * Implements hook_theme_suggestions_block_alter().
- */
-function gavias_colin_theme_suggestions_block_alter(array &$suggestions, array $variables, $hook) {
-  $element = $variables['elements'];
-  if (!empty($element['content']['#block_content'])) {
-    $block_bundle = $element['content']['#block_content']->bundle();
-    $suggestions_name = 'block__block_content__' . $block_bundle;
-    // Put it after 2 items from behind.
-    array_splice($suggestions, -2, 0, $suggestions_name);
-  }
-}
+

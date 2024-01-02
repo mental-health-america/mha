@@ -141,6 +141,11 @@ class Country extends FormElement {
     }
     $default_country = key($country_list);
 
+    $site_country = \Drupal::config('system.date')->get('country.default');
+    if ($site_country && isset($country_list[$site_country])) {
+      $default_country = $site_country;
+    }
+
     return $default_country;
   }
 

@@ -15,8 +15,8 @@ gavias_slider.assets.admin:
     - core/jquery
     - core/drupal
     - core/drupalSettings
-    - core/jquery.once
-    - core/jquery.ui.dialog 
+    - core/once
+    - core/jquery.ui.dialog
 
 gavias_slider.assets.frontend:
   version: 1.x

@@ -16,8 +16,12 @@ class CustomizeController extends ControllerBase {
     header('Content-type: application/json');
     $json = $_REQUEST['data'];
     $theme = $_REQUEST['theme_name'];
-    $path_theme = drupal_get_path('theme', $theme);
+    $path_theme = \Drupal::service('extension.list.theme')->getPath($theme);
+   if(file_exists($path_theme . '/css/customize.json')){
     gaviasthemer_writecache(  $path_theme . '/css/', 'customize', $json, 'json' );
+    }else{
+      gaviasthemer_writecache( $path_theme . '/assets/css/', 'customize', $json, 'json' );
+    } 
      // Clear all cache
     //$json = base64_encode($json);
     \Drupal::configFactory()->getEditable('gaviasthemer.settings')
@@ -35,7 +39,7 @@ class CustomizeController extends ControllerBase {
     header('Content-type: application/json');
     $json = $_REQUEST['data'];
     $theme = $_REQUEST['theme_name'];
-    $path_theme = drupal_get_path('theme', $theme);
+    $path_theme = \Drupal::service('extension.list.theme')->getPath($theme);
     $styles = '';
     if($json){
       ob_start();

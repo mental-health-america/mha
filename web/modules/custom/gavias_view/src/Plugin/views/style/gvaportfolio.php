@@ -76,46 +76,46 @@ class gvaportfolio extends StylePluginBase {
     $form['field_tid'] = array(
       '#type' => 'select',
       '#title' => $this->t('Field Term ID for content'),
-      '#default_value' => $this->options['field_tid'],
+      '#default_value' => isset($this->options['field_tid']) ? $this->options['field_tid'] : '',
       '#options' => $options_tid,
     );
 
     $form['columns'] = array(
       '#type' => 'select',
       '#title' => $this->t('Columns for items'),
-      '#default_value' => $this->options['columns'],
+      '#default_value' => isset($this->options['columns']) ? $this->options['columns'] : 3,
       '#options' => array('6'=>6, '4'=> 4, '3' => 3, '2'=>2, '1'=> 1)
     );
 
     $form['show_all'] = array(
       '#type' => 'checkbox',
       '#title' => $this->t('Display Button "All"'),
-      '#default_value' => $this->options['show_all'],
+      '#default_value' => isset($this->options['show_all']) ? $this->options['show_all'] : false,
     );
 
      $form['tids'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('Custom taxonomy term tabs filter'),
-      '#default_value' => $this->options['tids'],
+      '#default_value' => isset($this->options['tids']) ? $this->options['tids'] : '',
       '#description' => t('List id for term show in tabs filter, eg: 1, 2, 3, 4, 5. Show all term if empty')
     );
 
     $form['el_class'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('Extra class name'),
-      '#default_value' => $this->options['el_class'],
+      '#default_value' => isset($this->options['el_class']) ? $this->options['el_class'] : ''
     );
 
     $form['slideset'] = array(
       '#type' => 'checkbox',
       '#title' => $this->t('Use Slideset'),
-      '#default_value' => $this->options['slideset'],
+      '#default_value' => isset($this->options['slideset']) ? $this->options['slideset'] : ''
     );
 
     $form['bootstrap_4'] = array(
       '#type' => 'checkbox',
       '#title' => $this->t('Theme use Bootstrap 4'),
-      '#default_value' => $this->options['bootstrap_4'],
+      '#default_value' => isset($this->options['bootstrap_4']) ? $this->options['bootstrap_4'] : ''
     );
   }
 }

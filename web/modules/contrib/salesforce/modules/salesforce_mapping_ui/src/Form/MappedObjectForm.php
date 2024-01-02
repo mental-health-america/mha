@@ -5,8 +5,8 @@ namespace Drupal\salesforce_mapping_ui\Form;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Entity\ContentEntityForm;
 use Drupal\Core\Entity\EntityRepositoryInterface;
-use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\salesforce\Event\SalesforceErrorEvent;
 use Drupal\salesforce\Event\SalesforceEvents;
@@ -119,7 +119,8 @@ class MappedObjectForm extends ContentEntityForm {
       ->mappingStorage
       ->loadMultiple();
 
-    // @todo #states for entity-type + salesforce mapping dependency
+    // @TODO #states for entity-type + salesforce mapping dependency
+
     if ($mappings) {
       $options = array_keys($mappings);
       // Filter options based on drupal entity type.
@@ -202,7 +203,7 @@ class MappedObjectForm extends ContentEntityForm {
       return;
     }
 
-    // @todo more verbose feedback for successful push.
+    // @TODO: more verbose feedback for successful push.
     $this->messenger()->addStatus('Push successful.');
     $form_state->setRedirect('entity.salesforce_mapped_object.canonical', ['salesforce_mapped_object' => $mapped_object->id()]);
   }
@@ -244,7 +245,7 @@ class MappedObjectForm extends ContentEntityForm {
       return;
     }
 
-    // @todo more verbose feedback for successful pull.
+    // @TODO: more verbose feedback for successful pull.
     $this->messenger()->addStatus('Pull successful.');
     $form_state->setRedirect('entity.salesforce_mapped_object.canonical', ['salesforce_mapped_object' => $mapped_object->id()]);
   }
@@ -263,7 +264,7 @@ class MappedObjectForm extends ContentEntityForm {
    */
   private function getDrupalEntityFromUrl() {
     // Fetch the current entity from context.
-    // @todo what if there's more than one entity in route params?
+    // @TODO what if there's more than one entity in route params?
     $entity_type_id = $this->request->query->get('entity_type_id');
     $entity_id = $this->request->query->get('entity_id');
     if (empty($entity_id) || empty($entity_type_id)) {

@@ -133,7 +133,7 @@ class SliderController extends ControllerBase {
     $page['#attached']['drupalSettings']['gavias_sliderlayer']['deslider'] = $deslider;
     $page['#attached']['drupalSettings']['gavias_sliderlayer']['delayer'] = $delayer;
 
-    $style_fontend = drupal_get_path('theme', $theme_name) . '/css/sliderlayer.css';
+    $style_fontend = \Drupal::service('extension.list.theme')->getPath($theme_name) . '/css/sliderlayer.css';
     
     ob_start();
     include GAV_SLIDERLAYER_PATH . '/templates/backend/slider.php';
@@ -225,7 +225,7 @@ class SliderController extends ControllerBase {
       $path_folder = \Drupal::service('file_system')->realpath(gva_file_default_scheme(). "://gva-slider-upload");
     
       $file_path = $path_folder . '/' . $_id . '-' . $_FILES['upl']['name'];
-      $file_url = str_replace($base_url, '',file_create_url(gva_file_default_scheme(). "://gva-slider-upload") . '/' .  $_id .'-'. $_FILES['upl']['name']); 
+      $file_url = str_replace($base_url, '',\Drupal::service('file_url_generator')->generateAbsoluteString(gva_file_default_scheme(). "://gva-slider-upload") . '/' .  $_id .'-'. $_FILES['upl']['name']); 
       if (!is_dir($path_folder)) {
        @mkdir($path_folder); 
       }

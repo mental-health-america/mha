@@ -5,7 +5,7 @@ use Drupal\Core\Template\Attribute;
 use Drupal\Core\Form\FormStateInterface;
 
 define( 'gavias_slider_VERSION', '1.0' );
-define( 'GAVIAS_SLIDER_PATH', drupal_get_path('module', 'gavias_slider') );
+define( 'GAVIAS_SLIDER_PATH', \Drupal::service('extension.list.module')->getPath('gavias_slider') );
   module_load_include('php','gavias_slider', '/includes/functions');
   module_load_include('php','gavias_slider', '/includes/model');
 
@@ -52,7 +52,7 @@ function gavias_slider_slides($sid) {
     $vars['attributes']['data-autoplayspeed'] = (isset($settings->autoplay_speed) && $settings->autoplay_speed) ? $settings->autoplay_speed : '7000';
     $vars['attributes']['data-pause'] = (isset($settings->pause) && $settings->pause) ? $settings->pause : 'false';
     $height = (isset($settings->startheight) && $settings->startheight) ? $settings->startheight : '700';
-    $preload = drupal_get_path('module', 'gavias_slider') .'/assets/images/preloader-12.gif';
+    $preload = \Drupal::service('extension.list.module')->getPath('gavias_slider') .'/assets/images/preloader-12.gif';
     $attributes = '';
     foreach ($vars['attributes'] as $key => $value) {
       $attributes .= ' ' . $key . '="' . $value . '"';

@@ -5,9 +5,9 @@
     "homepage": "http://drupal.org/project/address",
     "license": "GPL-2.0-or-later",
     "require": {
-        "php": "^7.3 || ^8.0",
-        "drupal/core": "^9.2 || ^10",
-        "commerceguys/addressing": "^1.4.2"
+        "php": "^8.0",
+        "drupal/core": "^9.5 || ^10",
+        "commerceguys/addressing": "^2.1.1"
     },
     "require-dev": {
         "drupal/token": "^1.0"

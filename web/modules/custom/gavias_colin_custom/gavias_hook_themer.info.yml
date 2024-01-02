@@ -1,6 +1,0 @@
-type: module
-name : Gavias Colin Themer
-description : Gavias Colin Themer
-package: gavias
-core_version_requirement: ^8 || ^9 || ^10
-project: 'gavias_hook_themer'

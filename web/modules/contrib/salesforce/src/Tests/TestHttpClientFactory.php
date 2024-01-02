@@ -3,8 +3,8 @@
 namespace Drupal\salesforce\Tests;
 
 use Drupal\Component\Utility\NestedArray;
-use Drupal\Core\Http\ClientFactory;
 use Drupal\Core\Site\Settings;
+use Drupal\Core\Http\ClientFactory;
 
 /**
  * Helper class to construct a HTTP client with Drupal specific config.

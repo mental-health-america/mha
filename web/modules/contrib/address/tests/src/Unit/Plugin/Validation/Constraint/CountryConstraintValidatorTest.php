@@ -35,7 +35,10 @@ class CountryConstraintValidatorTest extends UnitTestCase {
    */
   public function setUp(): void {
     $country_repository = $this->prophesize(CountryRepositoryInterface::class);
-    $country_repository->getList()->willReturn(['RS' => 'Serbia', 'FR' => 'France']);
+    $country_repository->getList()->willReturn([
+      'RS' => 'Serbia',
+      'FR' => 'France',
+    ]);
 
     $this->constraint = new CountryConstraint(['availableCountries' => ['FR']]);
     $this->validator = new CountryConstraintValidator($country_repository->reveal());

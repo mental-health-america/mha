@@ -110,15 +110,17 @@ function template_preprocess_views_view_gvaportfolio(&$variables) {
       }
     }
     if(!$slideset){
-      $variables['rows'][$key] = '<div data-uk-filter="'.$tid.'" class="' . "{$xclass} {$tid}" . '">' . render($variables['rows'][$key]) . '</div>'; 
+      $variables['rows'][$key] = '<div data-uk-filter="'.$tid.'" class="' . "{$xclass} {$tid}" . '">' . \Drupal::service('renderer')->render($variables['rows'][$key]) . '</div>'; 
     }else{
-      $variables['rows'][$key] = '<li data-uk-filter="'.trim($tid).'">' . render($variables['rows'][$key]) . '</li>';
+      $variables['rows'][$key] = '<li data-uk-filter="'.trim($tid).'">' . \Drupal::service('renderer')->render($variables['rows'][$key]) . '</li>';
     } 
   }
   
   $langcode = \Drupal::languageManager()->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
 
   $terms_tmp = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadTree($taxonomy);
+
+  $terms = array();
 
   if($tids){
     $tids_arr = preg_split("/,/", $tids);
@@ -189,10 +191,10 @@ function gavias_view_owl_default_settings($key = NULL) {
     'items_sm' => 2,
     'items_xs' => 1,
     'loop' => FALSE,
-    'speed' => 200,
+    'speed' => 1000,
     'auto_play' => FALSE,
-    'auto_play_speed' => 1000,
-    'auto_play_timeout' => 3000,
+    'auto_play_speed' => 2000,
+    'auto_play_timeout' => 5000,
     'auto_play_hover' => TRUE,
     'navigation' => TRUE,
     'rewind_nav' => FALSE,

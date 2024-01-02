@@ -15,7 +15,7 @@ function gavias_slider_load($sid) {
       if($slideshow->slides){
         for ($i = 0; $i < count($slideshow->slides); $i++) {
           if (!empty($slideshow->slides[$i]->background_image_uri)) {
-            $slideshow->slides[$i]->background_image = file_create_url($slideshow->slides[$i]->background_image_uri);
+            $slideshow->slides[$i]->background_image = \Drupal::service('file_url_generator')->generateAbsoluteString($slideshow->slides[$i]->background_image_uri);
           }
         }
       }

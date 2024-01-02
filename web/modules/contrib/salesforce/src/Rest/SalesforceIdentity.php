@@ -4,9 +4,6 @@ namespace Drupal\salesforce\Rest;
 
 use OAuth\Common\Http\Exception\TokenResponseException;
 
-/**
- *
- */
 class SalesforceIdentity implements SalesforceIdentityInterface {
 
   protected $data;

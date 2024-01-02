@@ -2,14 +2,14 @@
 
 namespace Drupal\address\Element;
 
-use CommerceGuys\Addressing\AddressFormat\AddressFormat;
 use CommerceGuys\Addressing\AddressFormat\AddressField;
+use CommerceGuys\Addressing\AddressFormat\AddressFormat;
 use Drupal\address\FieldHelper;
 use Drupal\address\LabelHelper;
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element\FormElement;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element\FormElement;
 
 /**
  * Provides a zone territory form element.

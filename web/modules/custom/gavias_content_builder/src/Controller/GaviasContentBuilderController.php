@@ -57,7 +57,7 @@ class GaviasContentBuilderController extends ControllerBase {
 
     $page['#attached']['drupalSettings']['gavias_content_builder']['base_path'] = base_path();
 
-    $page['#attached']['drupalSettings']['gavias_content_builder']['path_modules'] = base_path()  . drupal_get_path('module', 'gavias_content_builder');
+    $page['#attached']['drupalSettings']['gavias_content_builder']['path_modules'] = base_path()  .\Drupal::service('extension.list.module')->getPath('gavias_content_builder');
 
     $url_redirect = '';
     
@@ -79,7 +79,7 @@ class GaviasContentBuilderController extends ControllerBase {
     
     ob_start();
 
-    include drupal_get_path('module', 'gavias_content_builder') . '/templates/backend/form.php';
+    include \Drupal::service('extension.list.module')->getPath('gavias_content_builder') . '/templates/backend/form.php';
 
     $content = ob_get_clean();
     $page['gcb-admin-form'] = array(

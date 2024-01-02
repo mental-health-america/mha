@@ -184,7 +184,7 @@
       </div>
         
        <div class="clearfix">
-        <?php include drupal_get_path('module', 'gavias_sliderlayer') . '/templates/backend/layers.php'; ?>
+        <?php include \Drupal::service('extension.list.module')->getPath('gavias_sliderlayer') . '/templates/backend/layers.php'; ?>
       </div>
       </div>
     </div>

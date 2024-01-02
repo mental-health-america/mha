@@ -2,8 +2,8 @@
 
 namespace Drupal\salesforce\Rest;
 
-use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class RestException.

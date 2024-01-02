@@ -2,19 +2,19 @@
 
 namespace Drupal\salesforce_mapping\Plugin\SalesforceMappingField;
 
-use Drupal\Core\Datetime\DateFormatterInterface;
-use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Utility\Token as TokenService;
-use Drupal\salesforce\Rest\RestClientInterface;
-use Drupal\salesforce_mapping\Entity\SalesforceMappingInterface;
-use Drupal\salesforce_mapping\MappingConstants;
 use Drupal\salesforce_mapping\SalesforceMappingFieldPluginBase;
+use Drupal\salesforce_mapping\Entity\SalesforceMappingInterface;
+use Drupal\salesforce\Rest\RestClientInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\salesforce_mapping\MappingConstants;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Datetime\DateFormatterInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -73,8 +73,9 @@ class Token extends SalesforceMappingFieldPluginBase {
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $pluginForm = parent::buildConfigurationForm($form, $form_state);
 
-    // @todo expose token options on mapping form: clear, callback, sanitize
-    // @todo add token validation
+    // @TODO expose token options on mapping form: clear, callback, sanitize
+    // @TODO add token validation
+
     $token_browser = [
       'token_browser' => [
         '#theme' => 'token_tree_link',
@@ -92,7 +93,7 @@ class Token extends SalesforceMappingFieldPluginBase {
       ]),
     ];
 
-    // @todo "Constant" as it's implemented now should only be allowed to be set to "Push". In the future: create "Pull" logic for constant, which pulls a constant value to a Drupal field. Probably a separate mapping field plugin.
+    // @TODO: "Constant" as it's implemented now should only be allowed to be set to "Push". In the future: create "Pull" logic for constant, which pulls a constant value to a Drupal field. Probably a separate mapping field plugin.
     $pluginForm['direction']['#options'] = [
       MappingConstants::SALESFORCE_MAPPING_DIRECTION_DRUPAL_SF => $pluginForm['direction']['#options'][MappingConstants::SALESFORCE_MAPPING_DIRECTION_DRUPAL_SF],
     ];

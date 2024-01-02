@@ -37,7 +37,7 @@ class FileController extends ControllerBase {
       $image_name =  basename($_FILES['upl']['name'], ".{$ext}");
 
       $file_path = $path_folder . '/' . $image_name . "-{$_id}" . ".{$ext}";
-      $file_url = str_replace($base_url, '',file_create_url(gva_file_default_scheme(). "://gva-sliderlayer-upload"). '/' .  $image_name . "-{$_id}" . ".{$ext}"); 
+      $file_url = str_replace($base_url, '',\Drupal::service('file_url_generator')->generateAbsoluteString(gva_file_default_scheme(). "://gva-sliderlayer-upload"). '/' .  $image_name . "-{$_id}" . ".{$ext}"); 
 
       if (!is_dir($path_folder)) {
        @mkdir($path_folder); 
@@ -63,14 +63,14 @@ class FileController extends ControllerBase {
 
     $file_path = \Drupal::service('file_system')->realpath(gva_file_default_scheme(). "://gva-sliderlayer-upload");
 
-    $file_url = file_create_url(gva_file_default_scheme(). "://gva-sliderlayer-upload"). '/';
+    $file_url = \Drupal::service('file_url_generator')->generateAbsoluteString(gva_file_default_scheme(). "://gva-sliderlayer-upload"). '/';
     $list_file = glob($file_path . '/*.{jpg,png,gif}', GLOB_BRACE);
 
     $files = array();
     $data = '';
     foreach ($list_file as $key => $file) {
       if(basename($file)){
-        $file_url = str_replace($base_url, '', file_create_url(gva_file_default_scheme(). "://gva-sliderlayer-upload"). '/' .  basename($file)); 
+        $file_url = str_replace($base_url, '', \Drupal::service('file_url_generator')->generateAbsoluteString(gva_file_default_scheme(). "://gva-sliderlayer-upload"). '/' .  basename($file)); 
         $files[$key]['file_url'] = $file_url;
         $files[$key]['file_url_full'] = $base_url . $file_url;
       }  

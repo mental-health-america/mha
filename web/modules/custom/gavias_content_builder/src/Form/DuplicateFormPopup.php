@@ -151,7 +151,7 @@ class DuplicateFormPopup extends FormBase{
 
     if (!empty($errors)) {
       $form_state->clearErrors();
-      drupal_get_messages('error'); // clear next message session;
+      \Drupal::messenger()->deleteByType('error'); // clear next message session;
       $content = '<div class="messages messages--error" aria-label="Error message" role="contentinfo"><div role="alert"><ul>';
       foreach ($errors as $name => $error) {
           $response = new AjaxResponse();

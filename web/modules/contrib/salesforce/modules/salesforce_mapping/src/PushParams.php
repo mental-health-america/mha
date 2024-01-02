@@ -2,8 +2,8 @@
 
 namespace Drupal\salesforce_mapping;
 
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\salesforce_mapping\Entity\SalesforceMappingInterface;
+use Drupal\Core\Entity\EntityInterface;
 
 /**
  * Wrapper for the array of values which will be pushed to Salesforce.

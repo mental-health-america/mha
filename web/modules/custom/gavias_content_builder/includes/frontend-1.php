@@ -15,7 +15,7 @@ function gavias_content_builder_frontend( $params ) {
 		'11' => 'col-lg-11 col-md-11 col-sm-12 col-xs-12',
 		'12' => 'col-lg-12 col-md-12 col-sm-12 col-xs-12',
 	);
-	$content = json_decode($params, true);
+	$content = json_decode((string)$params, true);
 	ob_start();
 	if ( ! empty( $content ) ) {
 		foreach ( $content as $k => $row ) {

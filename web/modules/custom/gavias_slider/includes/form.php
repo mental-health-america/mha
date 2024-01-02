@@ -69,7 +69,7 @@
 //   drupal_add_library('system', 'ui.dropable');
 //   drupal_add_library('system', 'ui.sortable');
 //   drupal_add_library('system', 'ui.dialog');
-//   drupal_add_css(gavias_slider_PATH.'/vendor/font-awesome/css/font-awesome.min.css');
+//   drupal_add_css(gavias_slider_PATH.'/vendor/font-awesome/css/font-awesome.min.css'); 
 //   drupal_add_css(gavias_slider_PATH.'/vendor/notify/styles/metro/notify-metro.css');
 //   drupal_add_js(gavias_slider_PATH . '/vendor/notify/notify.min.js');
 //   drupal_add_js(gavias_slider_PATH . '/vendor/notify/styles/metro/notify-metro.js');
@@ -85,7 +85,7 @@
 //   drupal_add_js($js, 'inline');
 //   drupal_add_js(gavias_slider_PATH . '/assets/js/admin.js');
 //   ob_start();
-//   include drupal_get_path('module', 'gavias_slider') . '/templates/backend/form.php';
+//   include \Drupal::service('extension.list.module')->getPath('gavias_slider') . '/templates/backend/form.php';
 //   $content = ob_get_clean();
 //   return $content;
 // }
@@ -106,10 +106,10 @@
 //       $row['columns'] = '';
 //       $gbb_els[] = $row;
 //     }
-
+  
 //     $array_rows_id = array_flip( $data['gbb-row-id'] );
 
-//   }
+//   } 
 // //print_r($gbb_els);die();
 //   $col_row_id = array();
 //  // print_r($data['gbb-column-id']);die();
@@ -131,15 +131,15 @@
 //         }
 //         $col_row_id[$column_id] = $new_parent_row_id;
 //       }
-//     }
-//   }
+//     }  
+//   } 
 
-//   // items
+//   // items 
 //   if( key_exists('element-type', $data) && is_array($data['element-type'])){
 //     $count = array();
 //     $count_tabs = array();
-
-//     foreach( $data['element-type'] as $type_k => $type ){
+    
+//     foreach( $data['element-type'] as $type_k => $type ){ 
 //       $item = array();
 //       $item['type'] = $type;
 //       $item['size'] = $data['element-size'][$type_k];
@@ -147,7 +147,7 @@
 //       if( ! key_exists($type, $count) ) $count[$type] = 0;
 //       if( ! key_exists($type, $count_tabs) ) $count_tabs[$type] = 0;
 
-//       if( key_exists($type, $data['gbb-items']) ){
+//       if( key_exists($type, $data['gbb-items']) ){ 
 //         foreach(  $data['gbb-items'][$type] as $attr_k => $attr ){
 
 //           if( $attr_k == 'tabs'){
@@ -163,7 +163,7 @@
 //               }
 //             }
 //           } else {
-//             $item['fields'][$attr_k] = stripslashes($attr[$count[$type]]);
+//             $item['fields'][$attr_k] = stripslashes($attr[$count[$type]]);            
 //           }
 //         }
 //       }
@@ -180,7 +180,7 @@
 // //print_r($gbb_els);die();
 //   // save
 //   if( $gbb_els ){
-//     $new = base64_encode(json_encode($gbb_els));
+//     $new = base64_encode(json_encode($gbb_els));    
 //   }
 //   return $new;
 // }
@@ -197,7 +197,7 @@
 //     $data = json_decode($data, true);
 //     $params = gavias_slider_save_element($data);
 //     //print_r($params);die();
-//   }
+//   } 
 //   if($params==null) $params = '';
 
 //   \Drupal::database()->update("gavias_slider")
@@ -211,7 +211,7 @@
 //     'data' => 'update saved'
 //   );
 //    print json_encode($result);
-//     form_exit(0);
+//     exit(0);
 // }
 
 
@@ -291,5 +291,5 @@ function gavias_slider_import_submit($form, $form_state) {
       ->execute();
     drupal_goto('admin/gavias_slider/'.$id.'/edit');
     \Drupal::messenger()->addMessage("Block Builder '{$form['title']['#value']}' has been updated");
-  }
+  } 
 }

@@ -1754,6 +1754,13 @@ ul.swith-language > li > a.active {
 .form-group.width-1-4 .content-inner {
   padding: 0 5px;
 }
+.form-group.width-1-3 {
+  width: 50%;
+  float: left;
+}
+.form-group.width-1-3 .content-inner {
+  padding: 0 5px;
+}
 .form-group.width-1-2 {
   width: 50%;
   float: left;

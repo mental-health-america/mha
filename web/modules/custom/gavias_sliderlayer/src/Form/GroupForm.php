@@ -29,12 +29,12 @@ class GroupForm implements FormInterface {
         $form = array();
         $form['id'] = array(
             '#type' => 'hidden',
-            '#default_value' => $slide['id']
+            '#default_value' => isset($slide['id']) ? $slide['id'] : ''
         );
         $form['title'] = array(
             '#type' => 'textfield',
             '#title' => 'Title',
-            '#default_value' => $slide['title']
+            '#default_value' => isset($slide['title']) ? $slide['title'] : ''
         );
         $form['submit'] = array(
             '#type' => 'submit',

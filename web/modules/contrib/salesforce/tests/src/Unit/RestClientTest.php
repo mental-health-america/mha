@@ -2,28 +2,28 @@
 
 namespace Drupal\Tests\salesforce\Unit;
 
-use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\State\State;
 use Drupal\salesforce\Entity\SalesforceAuthConfig;
+use Drupal\salesforce\SalesforceAuthProviderInterface;
+use Drupal\salesforce\SalesforceAuthProviderPluginManager;
+use Drupal\Tests\UnitTestCase;
 use Drupal\salesforce\Rest\RestClient;
 use Drupal\salesforce\Rest\RestResponse;
 use Drupal\salesforce\Rest\RestResponseDescribe;
 use Drupal\salesforce\Rest\RestResponseResources;
-use Drupal\salesforce\SalesforceAuthProviderInterface;
-use Drupal\salesforce\SalesforceAuthProviderPluginManager;
-use Drupal\salesforce\SelectQuery;
-use Drupal\salesforce\SelectQueryResult;
 use Drupal\salesforce\SFID;
 use Drupal\salesforce\SObject;
-use Drupal\Tests\UnitTestCase;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Psr7\Request as GuzzleRequest;
-use GuzzleHttp\Psr7\Response as GuzzleResponse;
+use Drupal\salesforce\SelectQueryResult;
+use Drupal\salesforce\SelectQuery;
 use OAuth\OAuth2\Token\TokenInterface;
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Response as GuzzleResponse;
+use GuzzleHttp\Psr7\Request as GuzzleRequest;
+use GuzzleHttp\Exception\RequestException;
+use Drupal\Component\Datetime\TimeInterface;
 
 /**
  * @coversDefaultClass \Drupal\salesforce\Rest\RestClient
@@ -194,7 +194,7 @@ class RestClientTest extends UnitTestCase {
     $response_401 = new GuzzleResponse(401);
     $response_200 = new GuzzleResponse(200);
 
-    // @todo this is extremely brittle, exposes complexity in underlying client. Refactor this.
+    // @TODO this is extremely brittle, exposes complexity in underlying client. Refactor this.
     $this->client->expects($this->exactly(2))
       ->method('httpRequest')
       ->willReturnOnConsecutiveCalls(
@@ -215,7 +215,7 @@ class RestClientTest extends UnitTestCase {
         'Test' => [
           'name' => 'Test',
           'updateable' => TRUE,
-        ],
+        ]
       ],
     ];
     $cache = (object) [
@@ -232,9 +232,6 @@ class RestClientTest extends UnitTestCase {
 
   }
 
-  /**
-   *
-   */
   public function testObjectsFromApiCall() {
     $this->initClient(array_merge($this->methods, ['apiCall']));
     $objects = [
@@ -279,7 +276,7 @@ class RestClientTest extends UnitTestCase {
       ->method('apiCall')
       ->willReturn($rawQueryResult);
 
-    // @todo this doesn't seem like a very good test.
+    // @TODO this doesn't seem like a very good test.
     $this->assertEquals(new SelectQueryResult($rawQueryResult), $this->client->query(new SelectQuery("")));
   }
 
@@ -289,7 +286,7 @@ class RestClientTest extends UnitTestCase {
   public function testObjectDescribe() {
     $this->initClient(array_merge($this->methods, ['apiCall']));
     $name = $this->randomMachineName();
-    // @todo this is fugly, do we need a refactor on RestResponse?
+    // @TODO this is fugly, do we need a refactor on RestResponse?
     $restResponse = new RestResponse(
       new GuzzleResponse('200', ['Content-Type' => 'application/json'], json_encode([
         'name' => $name,
@@ -331,7 +328,7 @@ class RestClientTest extends UnitTestCase {
     // (Otherwise, we'll blow the "once" condition)
     $this->assertEquals($expected, $this->client->objectDescribe($name));
 
-    // @todo what happens when we provide a name for non-existent SF table?
+    // @TODO what happens when we provide a name for non-existent SF table?
     // 404 exception?
     // Test that we throw an exception if name is not provided.
     $this->expectException(\Exception::class);
@@ -354,7 +351,7 @@ class RestClientTest extends UnitTestCase {
       ->method('apiCall')
       ->willReturn($restResponse);
 
-    // @todo this doesn't seem like a very good test.
+    // @TODO this doesn't seem like a very good test.
     $this->assertEquals($sfid, $this->client->objectCreate('', []));
 
   }
@@ -578,7 +575,7 @@ class RestClientTest extends UnitTestCase {
     $recordTypes = [
       $sObjectType => [
         $developerName =>
-        new SObject($rawQueryResult['records'][0]),
+          new SObject($rawQueryResult['records'][0]),
       ],
     ];
     $cache = (object) [
@@ -619,7 +616,7 @@ class RestClientTest extends UnitTestCase {
     $recordTypes = [
       $sObjectType => [
         $developerName =>
-        new SObject($rawQueryResult['records'][0]),
+          new SObject($rawQueryResult['records'][0]),
       ],
     ];
     $cache = (object) [
@@ -633,5 +630,6 @@ class RestClientTest extends UnitTestCase {
 
     $this->assertFalse($this->client->getRecordTypes('fail'));
   }
+
 
 }

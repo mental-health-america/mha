@@ -3,7 +3,7 @@ use Drupal\Core\Menu\MenuTreeParameters;
 use Drupal\Core\Template\Attribute;
 use Drupal\Core\Form\FormStateInterface;
 
-define( 'GAVIAS_CONTENT_BUILDER_PATH', drupal_get_path('module', 'gavias_content_builder') );
+define( 'GAVIAS_CONTENT_BUILDER_PATH',\Drupal::service('extension.list.module')->getPath('gavias_content_builder') );
 
 module_load_include('php','gavias_content_builder', 'includes/core/model');
 module_load_include('php','gavias_content_builder', 'includes/define');
@@ -27,8 +27,8 @@ function gavias_content_builder_theme_name(){
 }
 
 $theme_load_elements = gavias_content_builder_theme_name();
-if(file_exists(drupal_get_path('theme', $theme_load_elements['theme_name']) . '/gva_content_builder/_elements.php')){
-  require drupal_get_path('theme', $theme_load_elements['theme_name']) . '/gva_content_builder/_elements.php';
+if(file_exists(\Drupal::service('extension.list.theme')->getPath($theme_load_elements['theme_name']) . '/gva_content_builder/_elements.php')){
+  require \Drupal::service('extension.list.theme')->getPath($theme_load_elements['theme_name']) . '/gva_content_builder/_elements.php';
   $elements = [];
   if(function_exists('gavias_content_builder_set_elements')){
     $elements = gavias_content_builder_set_elements();
@@ -36,10 +36,10 @@ if(file_exists(drupal_get_path('theme', $theme_load_elements['theme_name']) . '/
   if($theme_load_elements['sub_theme']){ //If use sub theme
     foreach( $elements as $el ){
       $sc_path = '';
-      if(file_exists(drupal_get_path('theme', $theme_load_elements['sub_theme']) . '/gva_content_builder/' . $el . '.php')){
-        $sc_path = drupal_get_path('theme', $theme_load_elements['sub_theme']) . '/gva_content_builder/' . $el . '.php';
-      }elseif(file_exists(drupal_get_path('theme', $theme_load_elements['theme_name']) . '/gva_content_builder/' . $el . '.php')){
-        $sc_path = drupal_get_path('theme', $theme_load_elements['theme_name']) . '/gva_content_builder/' . $el . '.php';
+      if(file_exists(\Drupal::service('extension.list.theme')->getPath($theme_load_elements['sub_theme']) . '/gva_content_builder/' . $el . '.php')){
+        $sc_path = \Drupal::service('extension.list.theme')->getPath($theme_load_elements['sub_theme']) . '/gva_content_builder/' . $el . '.php';
+      }elseif(file_exists(\Drupal::service('extension.list.theme')->getPath($theme_load_elements['theme_name']) . '/gva_content_builder/' . $el . '.php')){
+        $sc_path = \Drupal::service('extension.list.theme')->getPath($theme_load_elements['theme_name']) . '/gva_content_builder/' . $el . '.php';
       }
       if($sc_path){
         require($sc_path);
@@ -47,8 +47,8 @@ if(file_exists(drupal_get_path('theme', $theme_load_elements['theme_name']) . '/
     }
   }else{
     foreach( $elements as $el ){ //if don't use sub theme
-      if(file_exists(drupal_get_path('theme', $theme_load_elements['theme_name']) . '/gva_content_builder/' . $el . '.php')){
-        $sc_path = drupal_get_path('theme', $theme_load_elements['theme_name']) . '/gva_content_builder/' . $el . '.php';
+      if(file_exists(\Drupal::service('extension.list.theme')->getPath($theme_load_elements['theme_name']) . '/gva_content_builder/' . $el . '.php')){
+        $sc_path = \Drupal::service('extension.list.theme')->getPath($theme_load_elements['theme_name']) . '/gva_content_builder/' . $el . '.php';
         require($sc_path);
       }
     }
@@ -61,7 +61,7 @@ function gavias_pagebuilder_get_el_fields(){
   if(function_exists('gavias_content_builder_set_elements')){
     $elements = gavias_content_builder_set_elements();
     foreach( $elements as $el ){
-      if(file_exists(drupal_get_path('theme', $theme_load_elements['theme_name']) . '/gva_content_builder/' . $el . '.php')){
+      if(file_exists(\Drupal::service('extension.list.theme')->getPath($theme_load_elements['theme_name']) . '/gva_content_builder/' . $el . '.php')){
         $_class = 'element_' . $el;
         if( class_exists($_class) ){
           $s = new $_class;

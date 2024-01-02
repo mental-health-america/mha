@@ -85,7 +85,7 @@ class MappedObject extends RevisionableContentEntityBase implements MappedObject
    * Overrides ContentEntityBase::__construct().
    */
   public function __construct(array $values) {
-    // @todo Revisit this language stuff
+    // @TODO: Revisit this language stuff
     // Drupal adds a layer of abstraction for translation purposes, even though
     // we're talking about numeric identifiers that aren't language-dependent
     // in any way, so we have to build our own constructor in order to allow
@@ -150,7 +150,7 @@ class MappedObject extends RevisionableContentEntityBase implements MappedObject
     }
     $count = $storage
       ->getQuery()
-      ->accessCheck(FALSE)
+      ->accessCheck(false)
       ->allRevisions()
       ->condition('id', $this->id())
       ->count()
@@ -162,7 +162,7 @@ class MappedObject extends RevisionableContentEntityBase implements MappedObject
     }
     $vids_to_delete = $storage
       ->getQuery()
-      ->accessCheck(FALSE)
+      ->accessCheck(false)
       ->allRevisions()
       ->condition('id', $this->id())
       ->range($limit, $count)
@@ -229,7 +229,7 @@ class MappedObject extends RevisionableContentEntityBase implements MappedObject
         'weight' => $i++,
       ]);
 
-    // @todo make this work with Drupal\salesforce\SFID (?)
+    // @TODO make this work with Drupal\salesforce\SFID (?)
     $fields['salesforce_id'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Salesforce ID'))
       ->setDescription(t('Reference to the mapped Salesforce object (SObject)'))
@@ -388,7 +388,8 @@ class MappedObject extends RevisionableContentEntityBase implements MappedObject
    * {@inheritdoc}
    */
   public function push() {
-    // @todo need error handling, logging, and hook invocations within this function, where we can provide full context, or short of that clear documentation on how callers should handle errors and exceptions. At the very least, we need to make sure to include $params in some kind of exception if we're not going to handle it inside this function.
+    // @TODO need error handling, logging, and hook invocations within this function, where we can provide full context, or short of that clear documentation on how callers should handle errors and exceptions. At the very least, we need to make sure to include $params in some kind of exception if we're not going to handle it inside this function.
+
     $mapping = $this->getMapping();
 
     $drupal_entity = $this->getMappedEntity();
@@ -400,7 +401,7 @@ class MappedObject extends RevisionableContentEntityBase implements MappedObject
       SalesforceEvents::PUSH_PARAMS
     );
 
-    // @todo is this the right place for this logic to live?
+    // @TODO is this the right place for this logic to live?
     // Cases:
     // 1. Already mapped to an existing Salesforce object + always_upsert not
     //    set?  Update.
@@ -435,12 +436,12 @@ class MappedObject extends RevisionableContentEntityBase implements MappedObject
       $this->set('entity_updated', $drupal_entity->getChangedTime());
     }
 
-    // @todo catch EntityStorageException ? Others ?
+    // @TODO: catch EntityStorageException ? Others ?
     if ($result instanceof SFID) {
       $this->set('salesforce_id', (string) $result);
     }
 
-    // @todo setNewRevision not chainable, per https://www.drupal.org/node/2839075
+    // @TODO setNewRevision not chainable, per https://www.drupal.org/node/2839075
     $this->setNewRevision(TRUE);
     $this
       ->set('last_sync_action', 'push_' . $action)
@@ -530,7 +531,7 @@ class MappedObject extends RevisionableContentEntityBase implements MappedObject
       throw new SalesforceException('Nothing to pull. Please specify a Salesforce ID, or choose a mapping with an Upsert Key defined.');
     }
 
-    // @todo better way to handle push/pull:
+    // @TODO better way to handle push/pull:
     $fields = $mapping->getPullFields();
     /** @var \Drupal\Core\Entity\FieldableEntityInterface $drupal_entity */
     $drupal_entity = $this->getMappedEntity() ?: $this->getDrupalEntityStub();
@@ -580,7 +581,7 @@ class MappedObject extends RevisionableContentEntityBase implements MappedObject
       }
     }
 
-    // @todo Event dispatching and entity saving should not be happening in this context, but inside a controller. This class needs to be more model-like.
+    // @TODO: Event dispatching and entity saving should not be happening in this context, but inside a controller. This class needs to be more model-like.
     $this->eventDispatcher()->dispatch(
       new SalesforcePullEvent($this, $drupal_entity->isNew()
         ? MappingConstants::SALESFORCE_MAPPING_SYNC_SF_CREATE

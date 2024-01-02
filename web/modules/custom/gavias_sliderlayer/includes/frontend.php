@@ -3,7 +3,7 @@ function gavias_sliderlayer_block_content($sid) {
   global $base_url;
   $slideshow = gavias_slider_load_frontend($sid);
   if(!$slideshow) return 'No slider selected';
-  $module_path = drupal_get_path('module', 'gavias_sliderlayer');
+  $module_path = \Drupal::service('extension.list.module')->getPath('gavias_sliderlayer');
 
   //Setting 
   $settings = $slideshow->settings;
@@ -128,7 +128,7 @@ function gavias_sliderlayer_slides($vars){
 
 function gavias_sliderlayer_slide($vars, $index){
   global $base_url;
-  $module_path = drupal_get_path('module', 'gavias_sliderlayer');
+  $module_path = \Drupal::service('extension.list.module')->getPath('gavias_sliderlayer');
   $slide = $vars['slide'];
   $layers = $slide->layers;
   $scount =  $vars['scount'];
@@ -198,7 +198,7 @@ function gavias_sliderlayer_slide($vars, $index){
         $vars['attributes_video_array']['data-nextslideatend'] = isset($slide->mp4_nextslideatend) ? $slide->mp4_nextslideatend : true;
         $vars['attributes_video_array']['data-videoloop'] = isset($slide->mp4_videoloop) ? $slide->mp4_videoloop : 'loopandnoslidestop';
       }
-      $vars['attributes_video_array']['data-videorate'] = '1.5';
+      $vars['attributes_video_array']['data-videorate'] = '1.0';
       $vars['attributes_video_array']['data-videowidth'] = '100%';
       $vars['attributes_video_array']['data-videoheight'] = '100%';
       $vars['attributes_video_array']['data-videocontrols'] = 'none';
@@ -243,7 +243,7 @@ function gavias_sliderlayer_slide($vars, $index){
 
 function gavias_sliderlayer_layer($vars){
   global $base_url;
-  $module_path = drupal_get_path('module', 'gavias_sliderlayer');
+  $module_path = \Drupal::service('extension.list.module')->getPath('gavias_sliderlayer');
   $layer = $vars['layer'];
   $scount = $vars['scount'];
   $settings = $vars['settings'];
@@ -266,7 +266,7 @@ function gavias_sliderlayer_layer($vars){
  
   $settings_delay = (isset($settings->delay) && $settings->delay) ? $settings->delay : 9000;
 
-  if($scount > 1 && ($layer->data_time_end + 20) < $settings_delay  && ((int)$layer->data_time_end > (int)$layer->data_time_start)){
+  if($scount > 1 && ((int)$layer->data_time_end + 20) < $settings_delay  && ((int)$layer->data_time_end > (int)$layer->data_time_start)){
     $vars['attributes_array']['data-end'] = $layer->data_time_end;
   }  
 
