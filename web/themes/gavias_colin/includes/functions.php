@@ -21,7 +21,7 @@ function gavias_colin_makeid($length = 5){
 
 function gavias_colin_base_url(){
   global $base_url;
-  $theme_path = drupal_get_path('theme', 'gavias_colin');
+  $theme_path = \Drupal::service('extension.list.theme')->getPath('gavias_colin');
   return $base_url . '/' . $theme_path . '/';
 }
 
@@ -106,7 +106,7 @@ function gavias_colin_preprocess_breadcrumb(&$variables){
   
   $request = \Drupal::request();
   $title = '';
-  if ($route = $request->attributes->get(\Symfony\Cmf\Component\Routing\RouteObjectInterface::ROUTE_OBJECT)) {
+  if ($route = $request->attributes->get(\Drupal\Core\Routing\RouteObjectInterface::ROUTE_OBJECT)) {
     $title = \Drupal::service('title_resolver')->getTitle($request, $route);
   }
 
