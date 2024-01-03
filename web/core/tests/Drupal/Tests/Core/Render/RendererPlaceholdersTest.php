@@ -978,10 +978,9 @@ class RendererPlaceholdersTest extends RendererTestBase {
   }
 
   /**
-   * Tests the creation of an element with a child and a sub-child.
-   *
-   * Each element has the same #lazy_builder callback, but with different
-   * contexts. They don't modify markup, only attach additional drupalSettings.
+   * Create an element with a child and subchild. Each element has the same
+   * #lazy_builder callback, but with different contexts. They don't modify
+   * markup, only attach additional drupalSettings.
    *
    * @covers ::render
    * @covers ::doRender

@@ -320,11 +320,9 @@ abstract class BrowserTestBase extends TestCase {
   }
 
   /**
-   * Gets the Mink driver args from an environment variable.
-   *
-   * The environment variable can be overridden in a derived class so it is
-   * possible to use a different value for a subset of tests, e.g. the
-   * JavaScript tests.
+   * Get the Mink driver args from an environment variable, if it is set. Can
+   * be overridden in a derived class so it is possible to use a different
+   * value for a subset of tests, e.g. the JavaScript tests.
    *
    * @return string|false
    *   The JSON-encoded argument string. False if it is not set.

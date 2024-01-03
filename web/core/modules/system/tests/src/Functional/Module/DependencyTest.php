@@ -73,7 +73,8 @@ class DependencyTest extends ModuleTestBase {
   }
 
   /**
-   * Tests enabling a module with an incompatible dependency version.
+   * Tests enabling a module that depends on an incompatible version of a
+   * module.
    */
   public function testIncompatibleModuleVersionDependency() {
     // Test that the system_incompatible_module_version_dependencies_test is
@@ -188,21 +189,6 @@ class DependencyTest extends ModuleTestBase {
     $this->drupalGet('admin/modules');
     $this->submitForm($edit, 'Install');
     $this->assertModules(['common_test', 'system_core_semver_test'], TRUE);
-  }
-
-  /**
-   * Tests the dependency checks when core version contains '8.x' within it.
-   */
-  public function testCoreVersionContains8X() {
-    // Enable the helper module that alters the version and dependencies.
-    \Drupal::service('module_installer')->install(['dependency_version_test']);
-
-    // Check that the above module installed OK.
-    $this->drupalGet('admin/modules');
-    $this->assertModules(['dependency_version_test'], TRUE);
-
-    // Check that test_module dependencies are met and the box is not greyed.
-    $this->assertSession()->fieldEnabled('modules[test_module][enable]');
   }
 
   /**

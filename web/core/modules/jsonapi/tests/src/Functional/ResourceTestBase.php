@@ -221,8 +221,6 @@ abstract class ResourceTestBase extends BrowserTestBase {
 
     $this->serializer = $this->container->get('jsonapi.serializer');
 
-    $this->config('system.logging')->set('error_level', ERROR_REPORTING_HIDE)->save();
-
     // Ensure the anonymous user role has no permissions at all.
     $user_role = Role::load(RoleInterface::ANONYMOUS_ID);
     foreach ($user_role->getPermissions() as $permission) {
@@ -727,14 +725,7 @@ abstract class ResourceTestBase extends BrowserTestBase {
     // Expected cache tags: X-Drupal-Cache-Tags header.
     $this->assertSame($expected_cache_tags !== FALSE, $response->hasHeader('X-Drupal-Cache-Tags'));
     if (is_array($expected_cache_tags)) {
-      $actual_cache_tags = explode(' ', $response->getHeader('X-Drupal-Cache-Tags')[0]);
-
-      $tag = 'config:system.logging';
-      if (!in_array($tag, $expected_cache_tags) && in_array($tag, $actual_cache_tags)) {
-        $expected_cache_tags[] = $tag;
-      }
-
-      $this->assertEqualsCanonicalizing($expected_cache_tags, $actual_cache_tags);
+      $this->assertEqualsCanonicalizing($expected_cache_tags, explode(' ', $response->getHeader('X-Drupal-Cache-Tags')[0]));
     }
 
     // Expected cache contexts: X-Drupal-Cache-Contexts header.

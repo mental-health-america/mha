@@ -46,7 +46,8 @@ class MigrateUserRoleTest extends MigrateDrupal6TestBase {
   }
 
   /**
-   * Helper to assert the user roles.
+   * Helper function to test the migration of the user roles. The user roles
+   * will be re-imported and the tests here will be repeated.
    *
    * @param \Drupal\migrate\Plugin\MigrateIdMapInterface $id_map
    *   The map table plugin.

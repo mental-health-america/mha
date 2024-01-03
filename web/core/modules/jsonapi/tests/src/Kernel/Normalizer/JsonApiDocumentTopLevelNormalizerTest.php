@@ -420,7 +420,8 @@ class JsonApiDocumentTopLevelNormalizerTest extends JsonapiKernelTestBase {
   }
 
   /**
-   * Tests the message and exceptions when requesting a Label only resource.
+   * Test the message and exceptions thrown when we are requesting additional
+   * field values for Label only resource.
    */
   public function testAliasFieldRouteException() {
     $this->assertSame('uid', $this->resourceTypeRepository->getByTypeName('node--article')->getPublicName('uid'));

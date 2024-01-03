@@ -75,7 +75,6 @@ class ParamConversionEnhancerTest extends UnitTestCase {
    */
   public function testCopyRawVariables() {
     $route = new Route('/test/{id}');
-    $route->setDefault('node_type', 'page');
     $defaults = [
       RouteObjectInterface::ROUTE_OBJECT => $route,
       'id' => '1',
@@ -91,10 +90,7 @@ class ParamConversionEnhancerTest extends UnitTestCase {
 
         return $defaults;
       });
-    $expected = new ParameterBag([
-      'id' => 1,
-      'node_type' => 'page',
-    ]);
+    $expected = new ParameterBag(['id' => 1]);
     $result = $this->paramConversionEnhancer->enhance($defaults, new Request());
     $this->assertEquals($result['_raw_variables'], $expected);
   }

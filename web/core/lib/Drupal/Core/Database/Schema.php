@@ -667,7 +667,8 @@ abstract class Schema implements PlaceholderInterface {
   }
 
   /**
-   * Escapes a value to be used as the default value on a column.
+   * Return an escaped version of its parameter to be used as a default value
+   * on a column.
    *
    * @param mixed $value
    *   The value to be escaped (int, float, null or string).

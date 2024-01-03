@@ -593,6 +593,7 @@ invalididentifier
 invokable
 iopt
 isam
+isdst
 isinstallable
 itoa
 itok
@@ -684,7 +685,6 @@ lolspeak
 longblob
 longerthan
 longtext
-longwave
 loquesea
 loreming
 loremingipsum
@@ -735,7 +735,7 @@ metapackage
 metapackages
 metatag
 metatags
-meφω
+meΦΩ
 miaus
 middlewares
 mikey
@@ -1503,7 +1503,6 @@ volgende
 vorige
 vous
 waitfor
-wcag
 wcprops
 webassert
 webcal
@@ -1523,6 +1522,7 @@ whitespaces
 whos
 widthx
 wimoids
+windir
 wmet
 wmlscript
 wordprocessingml
@@ -1582,7 +1582,8 @@ zwei
 zwjhek
 zxvf
 zzgroup
+Èxample
+Über
 åwesome
-èxample
 über
-ȅchȏ
+Ȅchȏ
