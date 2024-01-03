@@ -50,7 +50,8 @@ class TwigEnvironment extends Environment {
   protected $twigCachePrefix = '';
 
   /**
-   * Creates a TwigEnvironment object, including its cache and storage.
+   * Constructs a TwigEnvironment object and stores cache and storage
+   * internally.
    *
    * @param string $root
    *   The app root.

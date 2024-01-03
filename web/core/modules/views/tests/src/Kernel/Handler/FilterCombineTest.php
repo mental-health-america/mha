@@ -245,7 +245,8 @@ class FilterCombineTest extends ViewsKernelTestBase {
   }
 
   /**
-   * Tests that the "combine" filter is only valid on displays that use fields.
+   * Tests that the combine field filter is not valid on displays that don't use
+   * fields.
    */
   public function testNonFieldsRow() {
     $view = Views::getView('entity_test_fields');

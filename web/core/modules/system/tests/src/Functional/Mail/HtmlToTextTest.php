@@ -207,7 +207,8 @@ class HtmlToTextTest extends BrowserTestBase {
   }
 
   /**
-   * Tests the conversion of block-level HTML tags to plaintext with newlines.
+   * Tests that text separated by block-level tags in HTML get separated by
+   * (at least) a newline in the plaintext version.
    */
   public function testDrupalHtmlToTextBlockTagToNewline() {
     $input = <<<'EOT'
@@ -297,7 +298,8 @@ EOT;
   }
 
   /**
-   * Tests the plaintext conversion of different whitespace combinations.
+   * Tests that combinations of paragraph breaks, line breaks, linefeeds,
+   * and spaces are properly handled.
    */
   public function testDrupalHtmlToTextParagraphs() {
     $tests = [];

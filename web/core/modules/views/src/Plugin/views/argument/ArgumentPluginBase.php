@@ -551,9 +551,8 @@ abstract class ArgumentPluginBase extends HandlerBase implements CacheableDepend
   }
 
   /**
-   * Provides a form for selecting the default argument.
-   *
-   * This is used when the default action provides a default argument.
+   * Provide a form for selecting the default argument when the
+   * default action is set to provide default argument.
    */
   public function defaultArgumentForm(&$form, FormStateInterface $form_state) {
     $plugins = Views::pluginManager('argument_default')->getDefinitions();
@@ -617,9 +616,8 @@ abstract class ArgumentPluginBase extends HandlerBase implements CacheableDepend
   }
 
   /**
-   * Provides a form for selecting summary options.
-   *
-   * This is used when the default action displays a summary.
+   * Provide a form for selecting further summary options when the
+   * default action is set to display one.
    */
   public function defaultSummaryForm(&$form, FormStateInterface $form_state) {
     $style_plugins = Views::pluginManager('style')->getDefinitions();
@@ -784,7 +782,8 @@ abstract class ArgumentPluginBase extends HandlerBase implements CacheableDepend
   }
 
   /**
-   * Returns true, since the argument builder knows where to find the argument.
+   * This just returns true. The view argument builder will know where
+   * to find the argument from.
    */
   protected function defaultDefault() {
     return TRUE;
@@ -870,8 +869,7 @@ abstract class ArgumentPluginBase extends HandlerBase implements CacheableDepend
   }
 
   /**
-   * Adds the name field, which is the field displayed in summary queries.
-   *
+   * Add the name field, which is the field displayed in summary queries.
    * This is often used when the argument is numeric.
    */
   protected function summaryNameField() {
@@ -906,8 +904,6 @@ abstract class ArgumentPluginBase extends HandlerBase implements CacheableDepend
   }
 
   /**
-   * Adds basic information to the summary query.
-   *
    * Some basic summary behavior that doesn't need to be repeated as much as
    * code that goes into summaryQuery()
    */
@@ -926,9 +922,8 @@ abstract class ArgumentPluginBase extends HandlerBase implements CacheableDepend
   }
 
   /**
-   * Sorts the summary based upon the user's selection.
-   *
-   * The base variant of this is usually adequate.
+   * Sorts the summary based upon the user's selection. The base variant of
+   * this is usually adequate.
    *
    * @param $order
    *   The order selected in the UI.
@@ -941,9 +936,8 @@ abstract class ArgumentPluginBase extends HandlerBase implements CacheableDepend
   }
 
   /**
-   * Provides the argument to use to link from the summary to the next level.
-   *
-   * This will be called once per row of a summary, and used as part of
+   * Provide the argument to use to link from the summary to the next level;
+   * this will be called once per row of a summary, and used as part of
    * $view->getUrl().
    *
    * @param $data
@@ -954,7 +948,8 @@ abstract class ArgumentPluginBase extends HandlerBase implements CacheableDepend
   }
 
   /**
-   * Provides the name to use for the summary, defaults to the name field.
+   * Provides the name to use for the summary. By default this is just
+   * the name field.
    *
    * @param $data
    *   The query results for the row.
@@ -987,10 +982,8 @@ abstract class ArgumentPluginBase extends HandlerBase implements CacheableDepend
   }
 
   /**
-   * Determines the title to use for the view.
-   *
-   * This may be set by a validator so we don't necessarily call through to
-   * title().
+   * Called by the view object to get the title. This may be set by a
+   * validator so we don't necessarily call through to title().
    */
   public function getTitle() {
     if (isset($this->validated_title)) {

@@ -37,14 +37,14 @@ interface FileSystemInterface {
    *
    * @see \Drupal\Core\File\FileSystemInterface::INSECURE_EXTENSION_REGEX
    */
-  public const INSECURE_EXTENSIONS = ['phar', 'php', 'pl', 'py', 'cgi', 'asp', 'js', 'htaccess', 'phtml'];
+  public const INSECURE_EXTENSIONS = ['phar', 'php', 'pl', 'py', 'cgi', 'asp', 'js', 'htaccess'];
 
   /**
    * The regex pattern used when checking for insecure file types.
    *
    * @see \Drupal\Core\File\FileSystemInterface::INSECURE_EXTENSIONS
    */
-  public const INSECURE_EXTENSION_REGEX = '/\.(phar|php|pl|py|cgi|asp|js|htaccess|phtml)(\.|$)/i';
+  public const INSECURE_EXTENSION_REGEX = '/\.(phar|php|pl|py|cgi|asp|js|htaccess)(\.|$)/i';
 
   /**
    * Moves an uploaded file to a new location.
@@ -173,7 +173,8 @@ interface FileSystemInterface {
   public function basename($uri, $suffix = NULL);
 
   /**
-   * Creates a directory, optionally creating missing components in the path.
+   * Creates a directory, optionally creating missing components in the path to
+   * the directory.
    *
    * When PHP's mkdir() creates a directory, the requested mode is affected by
    * the process's umask. This function overrides the umask and sets the mode

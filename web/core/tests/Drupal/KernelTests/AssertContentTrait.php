@@ -488,7 +488,8 @@ trait AssertContentTrait {
   }
 
   /**
-   * Passes if raw text IS NOT found escaped on loaded page, fail otherwise.
+   * Passes if the raw text IS NOT found escaped on the loaded page, fail
+   * otherwise.
    *
    * Raw text refers to the raw HTML that the page generated.
    *
