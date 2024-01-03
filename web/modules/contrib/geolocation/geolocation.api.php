@@ -21,7 +21,7 @@
  *   ];
  * @endcode
  *
- * @see \Drupal\geolocation\Plugin\Field\FieldWidget\GeolocationMapWidgetBase
+ * @see \Drupal\geolocation\Plugin\Field\FieldWidget\GeolocationMapWidget
  */
 function hook_geolocation_field_map_widget_alter(array &$element, $context) {
   // Do something.

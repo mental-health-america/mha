@@ -29,12 +29,12 @@ class GeolocationGeometryWidgetLeaflet extends GeolocationGeometryWidgetBase {
   /**
    * {@inheritdoc}
    */
-  static protected $mapProviderId = 'leaflet';
+  static protected string $mapProviderId = 'leaflet';
 
   /**
    * {@inheritdoc}
    */
-  static protected $mapProviderSettingsFormId = 'leaflet_settings';
+  static protected string $mapProviderSettingsFormId = 'leaflet_settings';
 
   /**
    * {@inheritdoc}

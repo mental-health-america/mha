@@ -3,6 +3,7 @@
 namespace Drupal\geolocation\Plugin\geolocation\MapCenter;
 
 use Drupal\Core\Render\BubbleableMetadata;
+
 use Drupal\geolocation\MapCenterInterface;
 use Drupal\geolocation\MapCenterBase;
 use Drupal\geolocation\ViewsContextTrait;
@@ -23,11 +24,10 @@ class ViewsBoundaryArgument extends MapCenterBase implements MapCenterInterface 
   /**
    * {@inheritdoc}
    */
-  public function getAvailableMapCenterOptions($context) {
+  public function getAvailableMapCenterOptions(array $context = []): array {
     $options = [];
 
     if ($displayHandler = self::getViewsDisplayHandler($context)) {
-      /** @var \Drupal\views\Plugin\views\HandlerBase $context */
       /** @var \Drupal\views\Plugin\views\argument\ArgumentPluginBase $argument */
       foreach ($displayHandler->getHandlers('argument') as $argument_id => $argument) {
         if ($argument->getPluginId() == 'geolocation_argument_boundary') {
@@ -42,37 +42,24 @@ class ViewsBoundaryArgument extends MapCenterBase implements MapCenterInterface 
   /**
    * {@inheritdoc}
    */
-  public function alterMap(array $map, $center_option_id, array $center_option_settings, $context = NULL) {
-    $map = parent::alterMap($map, $center_option_id, $center_option_settings, $context);
+  public function alterMap(array $render_array, string $center_option_id, int $weight, array $center_option_settings = [], array $context = []): array {
+    $render_array = parent::alterMap($render_array, $center_option_id, $weight, $center_option_settings, $context);
 
     if (!($displayHandler = self::getViewsDisplayHandler($context))) {
-      return $map;
+      return $render_array;
     }
 
     /** @var \Drupal\geolocation\Plugin\views\argument\BoundaryArgument $argument */
     $argument = $displayHandler->getHandler('argument', substr($center_option_id, 18));
     if ($values = $argument->getParsedBoundary()) {
-
-      if (
-        isset($values['lat_north_east'])
-        && $values['lat_north_east'] !== ""
-        && isset($values['lng_north_east'])
-        && $values['lng_north_east'] !== ""
-        && isset($values['lat_south_west'])
-        && $values['lat_south_west'] !== ""
-        && isset($values['lng_south_west'])
-        && $values['lng_south_west'] !== ""
-      ) {
-        $map['#attached'] = BubbleableMetadata::mergeAttachments($map['#attached'], [
-          'library' => [
-            'geolocation/map_center.viewsBoundaryArgument',
-          ],
-          'drupalSettings' => [
-            'geolocation' => [
-              'maps' => [
-                $map['#id'] => [
-                  'map_center' => [
-                    'views_boundary_argument' => [
+      $render_array['#attached'] = BubbleableMetadata::mergeAttachments($render_array['#attached'], [
+        'drupalSettings' => [
+          'geolocation' => [
+            'maps' => [
+              $render_array['#id'] => [
+                'mapCenter' => [
+                  'views_boundary_argument' => [
+                    'settings' => [
                       'latNorthEast' => (float) $values['lat_north_east'],
                       'lngNorthEast' => (float) $values['lng_north_east'],
                       'latSouthWest' => (float) $values['lat_south_west'],
@@ -83,11 +70,12 @@ class ViewsBoundaryArgument extends MapCenterBase implements MapCenterInterface 
               ],
             ],
           ],
-        ]);
-      }
+        ],
+      ]);
+
     }
 
-    return $map;
+    return $render_array;
   }
 
 }

@@ -2,6 +2,7 @@
 
 namespace Drupal\geolocation_geometry\Plugin\Field\FieldType;
 
+use Drupal;
 use Drupal\Core\Field\FieldItemBase;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
@@ -18,7 +19,7 @@ abstract class GeolocationGeometryBase extends FieldItemBase {
   /**
    * {@inheritdoc}
    */
-  public static function schema(FieldStorageDefinitionInterface $field_definition) {
+  public static function schema(FieldStorageDefinitionInterface $field_definition): array {
     return [
       'columns' => [
         'geometry' => [
@@ -28,12 +29,6 @@ abstract class GeolocationGeometryBase extends FieldItemBase {
           'pgsql_type' => 'geometry',
           'size' => 'big',
           'not null' => FALSE,
-        ],
-        'wkt' => [
-          'description' => 'Stores the geometry as Well Known Text',
-          'type' => 'text',
-          'size' => 'big',
-          'not null' => TRUE,
         ],
         'geojson' => [
           'description' => 'Stores the geometry as GeoJSON',
@@ -55,19 +50,11 @@ abstract class GeolocationGeometryBase extends FieldItemBase {
   /**
    * {@inheritdoc}
    */
-  public static function propertyDefinitions(FieldStorageDefinitionInterface $field_definition) {
-
+  public static function propertyDefinitions(FieldStorageDefinitionInterface $field_definition): array {
     $geom_type = explode("_", $field_definition->getType())[2];
 
-    $properties['geometry'] = DataDefinition::create('string')
-      ->setComputed('true')
-      ->setLabel(t('Geometry'));
-    $properties['wkt'] = DataDefinition::create('string')->setLabel(t('WKT'))
-      ->addConstraint(
-        'GeometryType',
-        ['geometryType' => $geom_type, 'type' => 'WKT']
-      );
-    $properties['geojson'] = DataDefinition::create('string')->setLabel(t('GeoJSON'))
+    $properties['geojson'] = DataDefinition::create('string')
+      ->setLabel(t('GeoJSON'))
       ->addConstraint(
         'GeometryType',
         ['geometryType' => $geom_type, 'type' => 'GeoJSON']
@@ -77,17 +64,21 @@ abstract class GeolocationGeometryBase extends FieldItemBase {
     return $properties;
   }
 
+  public static function mainPropertyName(): string {
+    return 'geojson';
+  }
+
   /**
    * {@inheritdoc}
    */
-  public function postSave($update) {
+  public function postSave($update): void {
     parent::postSave($update);
 
     $entity = $this->getEntity();
-    $entity_storage = \Drupal::entityTypeManager()->getStorage($entity->getEntityTypeId());
+    $entity_storage = Drupal::entityTypeManager()->getStorage($entity->getEntityTypeId());
 
     if (!is_a($entity_storage, '\Drupal\Core\Entity\Sql\SqlContentEntityStorage')) {
-      return FALSE;
+      return;
     }
 
     /** @var \Drupal\Core\Entity\Sql\SqlContentEntityStorage $entity_storage */
@@ -96,36 +87,21 @@ abstract class GeolocationGeometryBase extends FieldItemBase {
 
     if ($entity->getEntityType()->isRevisionable()) {
       /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
-      $query = \Drupal::database()->update($table_mapping->getDedicatedRevisionTableName($field_storage_definition));
-      if (!empty($this->values['geojson'])) {
-        $query->expression($field_storage_definition->getName() . '_geometry', 'ST_GeomFromGeoJSON(' . $field_storage_definition->getName() . '_geojson)');
-        $query->expression($field_storage_definition->getName() . '_wkt', 'ST_AsText(ST_GeomFromGeoJSON(' . $field_storage_definition->getName() . '_geojson))');
-      }
-      elseif (!empty($this->values['wkt'])) {
-        $query->expression($field_storage_definition->getName() . '_geometry', 'ST_GeomFromText(' . $field_storage_definition->getName() . '_wkt, 4326)');
-        $query->expression($field_storage_definition->getName() . '_geojson', 'ST_AsGeoJSON(ST_GeomFromText(' . $field_storage_definition->getName() . '_wkt, 4326))');
-      }
+      $revision_query = Drupal::database()->update($table_mapping->getDedicatedRevisionTableName($field_storage_definition));
+      $revision_query->expression($field_storage_definition->getName() . '_geometry', 'ST_GeomFromGeoJSON(' . $field_storage_definition->getName() . '_geojson)');
 
       if (empty($this->values['data'])) {
-        $query->fields([$field_storage_definition->getName() . '_data' => serialize(NULL)]);
+        $revision_query->fields([$field_storage_definition->getName() . '_data' => serialize(NULL)]);
       }
-      $query->condition('entity_id', $entity->id());
-      $query->condition('revision_id', $entity->getRevisionId());
-      $query->condition('bundle', $entity->bundle());
-      $query->condition('delta', $this->getName());
-      $query->condition('langcode', $this->getLangcode());
-      $query->execute();
+      $revision_query->condition('entity_id', $entity->id());
+      $revision_query->condition('revision_id', $entity->getRevisionId());
+      $revision_query->condition('bundle', $entity->bundle());
+      $revision_query->condition('delta', $this->getName());
+      $revision_query->execute();
     }
 
-    $query = \Drupal::database()->update($table_mapping->getDedicatedDataTableName($field_storage_definition));
-    if (!empty($this->values['geojson'])) {
-      $query->expression($field_storage_definition->getName() . '_geometry', 'ST_GeomFromGeoJSON(' . $field_storage_definition->getName() . '_geojson)');
-      $query->expression($field_storage_definition->getName() . '_wkt', 'ST_AsText(ST_GeomFromGeoJSON(' . $field_storage_definition->getName() . '_geojson))');
-    }
-    elseif (!empty($this->values['wkt'])) {
-      $query->expression($field_storage_definition->getName() . '_geometry', 'ST_GeomFromText(' . $field_storage_definition->getName() . '_wkt, 4326)');
-      $query->expression($field_storage_definition->getName() . '_geojson', 'ST_AsGeoJSON(ST_GeomFromText(' . $field_storage_definition->getName() . '_wkt, 4326))');
-    }
+    $query = Drupal::database()->update($table_mapping->getDedicatedDataTableName($field_storage_definition));
+    $query->expression($field_storage_definition->getName() . '_geometry', 'ST_GeomFromGeoJSON(' . $field_storage_definition->getName() . '_geojson)');
 
     if (empty($this->values['data'])) {
       $query->fields([$field_storage_definition->getName() . '_data' => serialize(NULL)]);
@@ -133,16 +109,13 @@ abstract class GeolocationGeometryBase extends FieldItemBase {
     $query->condition('entity_id', $entity->id());
     $query->condition('bundle', $entity->bundle());
     $query->condition('delta', $this->getName());
-    $query->condition('langcode', $this->getLangcode());
     $query->execute();
-
-    return FALSE;
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function generateSampleValue(FieldDefinitionInterface $field_definition) {
+  public static function generateSampleValue(FieldDefinitionInterface $field_definition): array {
     $coordinates = self::getRandomCoordinates();
     $values['geojson'] = '{"type": "Point", "coordinates": [' . $coordinates['longitude'] . ', ' . $coordinates['latitude'] . ']}';
     return $values;
@@ -154,13 +127,20 @@ abstract class GeolocationGeometryBase extends FieldItemBase {
    * @return float[]
    *   Coordinates.
    */
-  protected static function getRandomCoordinates(array $reference_point = NULL, int $range = 5) {
+  protected static function getRandomCoordinates(array $reference_point = NULL, float $range = 5): array {
     if ($reference_point) {
       return [
-        'latitude' => rand(max(-89, ($reference_point['latitude'] - $range)), min(90, ($reference_point['latitude'] + $range))) - (rand(0, 999999) / 1000000),
-        'longitude' => rand(max(-179, ($reference_point['longitude'] - $range)), min(180, ($reference_point['longitude'] + $range))) - (rand(0, 999999) / 1000000),
+        'latitude' => rand(
+          (int) max(-89, ($reference_point['latitude'] - $range)),
+          (int) min(90, ($reference_point['latitude'] + $range))
+        ) - (rand(0, 999999) / 1000000),
+        'longitude' => rand(
+          (int) max(-179, ($reference_point['longitude'] - $range)),
+          (int) min(180, ($reference_point['longitude'] + $range))
+        ) - (rand(0, 999999) / 1000000),
       ];
     }
+
     return [
       'latitude' => rand(-89, 90) - rand(0, 999999) / 1000000,
       'longitude' => rand(-179, 180) - rand(0, 999999) / 1000000,
@@ -177,10 +157,10 @@ abstract class GeolocationGeometryBase extends FieldItemBase {
    * @param array $center_point
    *   Center Coordinate.
    *
-   * @return bool
+   * @return int
    *   Sort.
    */
-  protected static function sortCoordinatesByAngle(array $coordinate1, array $coordinate2, array $center_point = []) {
+  protected static function sortCoordinatesByAngle(array $coordinate1, array $coordinate2, array $center_point = []): int {
     if (empty($center_point)) {
       $center_point = ['latitude' => 0, 'longitude' => 0];
     }
@@ -203,7 +183,7 @@ abstract class GeolocationGeometryBase extends FieldItemBase {
    * @param array $coordinates
    *   Coordinates.
    */
-  protected static function getCenterFromCoordinates(array $coordinates) {
+  protected static function getCenterFromCoordinates(array $coordinates): array {
     $x = 0.0;
     $y = 0.0;
     $z = 0.0;
@@ -237,8 +217,7 @@ abstract class GeolocationGeometryBase extends FieldItemBase {
   /**
    * {@inheritdoc}
    */
-  public function isEmpty() {
-    return (empty($this->get('wkt')->getValue()) && empty($this->get('geojson')->getValue()));
+  public function isEmpty(): bool {
+    return empty($this->get('geojson')->getValue());
   }
-
 }

@@ -19,16 +19,42 @@ geolocation_plugin_base_settings:
 geolocation_map_provider:
   type: mapping
   mapping:
+    conditional_initialization:
+      type: string
+      label: 'Conditional initialization option'
+    conditional_description:
+      type: string
+      label: 'Conditional initialization text'
+    conditional_label:
+      type: string
+      label: 'Conditional initialization label'
     map_features:
       type: sequence
       label: 'Map feature settings'
       sequence:
         type: plugin.plugin_configuration.geolocation.map_feature.[%key]
         label: 'The settings for a map feature'
+    data_layers:
+      type: sequence
+      label: 'Data layer settings'
+      sequence:
+        type: plugin.plugin_configuration.geolocation.data_layer.[%key]
+        label: 'The settings for a data layer'
 
 geolocation.map_provider.*:
   type: geolocation_map_provider
   label: 'Empty map provider'
+
+geolocation.data_layer_settings:
+  type: geolocation_plugin_base_settings
+  label: 'Default data layer configuration'
+  mapping:
+    enabled:
+      type: boolean
+      label: 'Enabled yes/no/maybe'
+
+plugin.plugin_configuration.geolocation.data_layer.*:
+  type: geolocation.data_layer_settings
 
 geolocation.map_feature_settings:
   type: geolocation_plugin_base_settings
@@ -61,6 +87,9 @@ geolocation_geocoder:
     description:
       type: label
       label: 'Description'
+    autocomplete_min_length:
+      type: integer
+      label: 'Min Length'
 
 geolocation.geocoder.*:
   type: geolocation_geocoder

@@ -2,6 +2,8 @@
 
 namespace Drupal\geolocation\Plugin\views\field;
 
+use Drupal\Component\Render\MarkupInterface;
+use Drupal\views\Annotation\ViewsField;
 use Drupal\views\ResultRow;
 use Drupal\views\Plugin\views\field\NumericField;
 use Drupal\Core\Form\FormStateInterface;
@@ -21,35 +23,19 @@ class ProximityField extends NumericField implements ContainerFactoryPluginInter
 
   use ProximityTrait;
 
-  /**
-   * Location manager.
-   *
-   * @var \Drupal\geolocation\LocationManager
-   */
-  protected $locationManager;
-
-  /**
-   * Constructs a Handler object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\geolocation\LocationManager $location_manager
-   *   Location manager.
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LocationManager $location_manager) {
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    protected LocationManager $locationManager
+) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-
-    $this->locationManager = $location_manager;
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): ProximityField {
     return new static(
       $configuration,
       $plugin_id,
@@ -61,7 +47,7 @@ class ProximityField extends NumericField implements ContainerFactoryPluginInter
   /**
    * {@inheritdoc}
    */
-  protected function defineOptions() {
+  protected function defineOptions(): array {
     $options = parent::defineOptions();
 
     $options['center'] = ['default' => []];
@@ -75,7 +61,7 @@ class ProximityField extends NumericField implements ContainerFactoryPluginInter
    */
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
     parent::buildOptionsForm($form, $form_state);
-    $form['center'] = $this->locationManager->getLocationOptionsForm($this->options['center'], $this);
+    $form['center'] = $this->locationManager->getLocationOptionsForm($this->options['center'], ['views_field' => $this]);
 
     $form['display_unit'] = [
       '#title' => $this->t('Distance unit'),
@@ -99,8 +85,8 @@ class ProximityField extends NumericField implements ContainerFactoryPluginInter
    * @return array
    *   Center value.
    */
-  protected function getCenter() {
-    return $this->locationManager->getLocation($this->options['center'], $this);
+  protected function getCenter(): array {
+    return $this->locationManager->getLocation($this->options['center'], ['views_filter' => $this]);
   }
 
   /**
@@ -129,23 +115,21 @@ class ProximityField extends NumericField implements ContainerFactoryPluginInter
    */
   public function getValue(ResultRow $values, $field = NULL) {
     $value = parent::getValue($values, $field);
-    $value = self::convertDistance((float) $value, $this->options['display_unit'], TRUE);
-
-    return $value;
+    return self::convertDistance((float) $value, $this->options['display_unit'], TRUE);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function render(ResultRow $row) {
+  public function render(ResultRow $values): MarkupInterface|string {
 
     // Remove once https://www.drupal.org/node/1232920 lands.
-    $value = $this->getValue($row);
+    $value = $this->getValue($values);
     // Hiding should happen before rounding or adding prefix/suffix.
     if ($this->options['hide_empty'] && empty($value) && ($value !== 0 || $this->options['empty_zero'])) {
       return '';
     }
-    return parent::render($row);
+    return parent::render($values);
   }
 
 }

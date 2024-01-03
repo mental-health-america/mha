@@ -10,12 +10,13 @@ use Drupal\field\FieldStorageConfigInterface;
 /**
  * Implements hook_field_views_data().
  */
-function geolocation_field_views_data(FieldStorageConfigInterface $field_storage) {
+function geolocation_field_views_data(FieldStorageConfigInterface $field_storage): array {
   // Make sure views.views.inc is loaded.
-  \Drupal::moduleHandler()->loadInclude('inc', 'views', 'views.views');
+  Drupal::moduleHandler()->loadInclude('views', 'inc', 'views.views');
 
-  $entity_storage = \Drupal::entityTypeManager()->getStorage($field_storage->getTargetEntityTypeId());
-  $entity_definition = \Drupal::entityTypeManager()->getDefinition($field_storage->getTargetEntityTypeId());
+  /** @var \Drupal\Core\Entity\Sql\SqlEntityStorageInterface $entity_storage */
+  $entity_storage = Drupal::entityTypeManager()->getStorage($field_storage->getTargetEntityTypeId());
+  $entity_definition = Drupal::entityTypeManager()->getDefinition($field_storage->getTargetEntityTypeId());
 
   // Get the default data from the views module.
   $data = views_field_default_views_data($field_storage);
@@ -32,7 +33,7 @@ function geolocation_field_views_data(FieldStorageConfigInterface $field_storage
 
   $args = ['@field_name' => $field_storage->getName()];
 
-  // Loop through all of the results and set our overrides.
+  // Loop through all the results and set our overrides.
   foreach ($data as $table_name => $table_data) {
     $data[$table_name]['table']['entity type'] = $field_storage->getTargetEntityTypeId();
     foreach ($table_data as $field_name => $field_data) {
@@ -44,11 +45,11 @@ function geolocation_field_views_data(FieldStorageConfigInterface $field_storage
           $data[$table_name][$field_name]['field']['click sortable'] = FALSE;
         }
         if (isset($field_data['filter'])) {
-          if (substr($field_name, -4, 4) == '_lat') {
+          if (str_ends_with($field_name, '_lat')) {
             $data[$table_name][$field_name]['title'] = t('Latitude (@field_name)', $args);
             continue;
           }
-          if (substr($field_name, -4, 4) == '_lng') {
+          if (str_ends_with($field_name, '_lng')) {
             $data[$table_name][$field_name]['title'] = t('Longitude (@field_name)', $args);
             continue;
           }

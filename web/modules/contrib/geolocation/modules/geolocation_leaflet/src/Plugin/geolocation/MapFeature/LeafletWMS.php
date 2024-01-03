@@ -2,8 +2,9 @@
 
 namespace Drupal\geolocation_leaflet\Plugin\geolocation\MapFeature;
 
+
 use Drupal\geolocation\MapFeatureBase;
-use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\geolocation\MapProviderInterface;
 
 /**
  * Provides Web Map services.
@@ -17,26 +18,33 @@ use Drupal\Core\Render\BubbleableMetadata;
  */
 class LeafletWMS extends MapFeatureBase {
 
+  protected array $scripts = [
+    'https://cdn.jsdelivr.net/gh/heigeo/leaflet.wms@0.2.0/dist/leaflet.wms.min.js',
+  ];
+
   /**
    * {@inheritdoc}
    */
-  public static function getDefaultSettings() {
-    return [
-      'url' => '',
-      'version' => '1.1.1',
-      'layers' => '',
-      'styles' => '',
-      'srs' => '',
-      'format' => 'image/jpeg',
-      'transparent' => FALSE,
-      'identify' => FALSE,
-    ];
+  public static function getDefaultSettings(): array {
+    return array_replace_recursive(
+      parent::getDefaultSettings(),
+      [
+        'url' => '',
+        'version' => '1.1.1',
+        'layers' => '',
+        'styles' => '',
+        'srs' => '',
+        'format' => 'image/jpeg',
+        'transparent' => FALSE,
+        'identify' => FALSE,
+      ]
+    );
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getSettingsForm(array $settings, array $parents) {
+  public function getSettingsForm(array $settings, array $parents = [], MapProviderInterface $mapProvider = NULL): array {
     $form['url'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Service url'),
@@ -88,43 +96,6 @@ class LeafletWMS extends MapFeatureBase {
     ];
 
     return $form;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function alterMap(array $render_array, array $feature_settings, array $context = []) {
-    $render_array = parent::alterMap($render_array, $feature_settings, $context);
-
-    $render_array['#attached'] = BubbleableMetadata::mergeAttachments(
-      empty($render_array['#attached']) ? [] : $render_array['#attached'],
-      [
-        'library' => [
-          'geolocation_leaflet/mapfeature.' . $this->getPluginId(),
-        ],
-        'drupalSettings' => [
-          'geolocation' => [
-            'maps' => [
-              $render_array['#id'] => [
-                $this->getPluginId() => [
-                  'enable' => TRUE,
-                  'url' => $feature_settings['url'],
-                  'version' => $feature_settings['version'],
-                  'layers' => $feature_settings['layers'],
-                  'styles' => $feature_settings['styles'],
-                  'srs' => $feature_settings['srs'],
-                  'format' => $feature_settings['format'],
-                  'transparent' => $feature_settings['transparent'],
-                  'identify' => $feature_settings['identify'],
-                ],
-              ],
-            ],
-          ],
-        ],
-      ]
-    );
-
-    return $render_array;
   }
 
 }

@@ -20,7 +20,7 @@ class GeoBoundaryFilter extends BoundaryFilter {
   /**
    * {@inheritdoc}
    */
-  public function query() {
+  public function query(): void {
     if (!($this->query instanceof Sql)) {
       return;
     }

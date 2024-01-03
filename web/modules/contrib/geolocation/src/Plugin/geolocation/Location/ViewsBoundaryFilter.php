@@ -2,10 +2,9 @@
 
 namespace Drupal\geolocation\Plugin\geolocation\Location;
 
+
 use Drupal\geolocation\LocationInterface;
 use Drupal\geolocation\LocationBase;
-use Drupal\geolocation\LocationInputManager;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\geolocation\ViewsContextTrait;
 
 /**
@@ -22,37 +21,9 @@ class ViewsBoundaryFilter extends LocationBase implements LocationInterface {
   use ViewsContextTrait;
 
   /**
-   * Proximity center manager.
-   *
-   * @var \Drupal\geolocation\LocationInputManager
-   */
-  protected $locationInputManager;
-
-  /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LocationInputManager $location_input_manager) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
-
-    $this->locationInputManager = $location_input_manager;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static(
-      $configuration,
-      $plugin_id,
-      $plugin_definition,
-      $container->get('plugin.manager.geolocation.locationinput')
-    );
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getAvailableLocationOptions($context): array {
+  public function getAvailableLocationOptions(array $context = []): array {
     $options = [];
 
     if ($displayHandler = self::getViewsDisplayHandler($context)) {

@@ -513,7 +513,7 @@ display:
           empty_zero: 0
           hide_alter_empty: 1
           click_sort_column: geometry
-          type: geolocation_geometry_wkt
+          type: geolocation_geometry_data
           settings: {  }
           group_column: ''
           group_columns: {  }
@@ -536,11 +536,10 @@ display:
           data_provider_id: geolocation_geometry
           data_provider_settings:
             stroke_color: '#ff0044'
-            stroke_color_randomize: 1
+            color_randomize: 1
             stroke_width: '1'
             stroke_opacity: '0.8'
             fill_color: '#0033ff'
-            fill_color_randomize: 1
             fill_opacity: '0.1'
           title_field: none
           label_field: none
@@ -1029,7 +1028,6 @@ display:
                   settings:
                     label: Address
                     description: 'Enter an address to be localized.'
-                    autocomplete_min_length: 1
                     component_restrictions:
                       route: ''
                       locality: ''

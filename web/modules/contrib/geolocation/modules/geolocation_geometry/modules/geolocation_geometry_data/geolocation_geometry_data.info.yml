@@ -1,13 +1,13 @@
-name: Geolocation - Geometry Data
+name: Geolocation - Geometry - Data
 type: module
-description: 'Import and provide geometry data. ATTENTION: Requires "composer require gasparesganga/php-shapefile".'
-core_version_requirement: ^9.3 || ^10
+description: Multiple data sets prepared for import via feeds
+core_version_requirement: ^9 || ^10
 package: Geolocation
 dependencies:
-  - geolocation_geometry
-  - taxonomy
+  - geolocation:geolocation_geometry
+  - feeds:feeds
 
-# Information added by Drupal.org packaging script on 2023-01-09
-version: '8.x-3.12'
+# Information added by Drupal.org packaging script on 2023-07-27
+version: '4.0.0-alpha2'
 project: 'geolocation'
-datestamp: 1673282365
+datestamp: 1690455955

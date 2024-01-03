@@ -17,7 +17,7 @@ class GeolocationIntersects extends JoinPluginBase implements JoinPluginInterfac
   /**
    * {@inheritdoc}
    */
-  public function buildJoin($select_query, $table, $view_query) {
+  public function buildJoin($select_query, $table, $view_query): void {
     /** @var \Drupal\Core\Database\Query\Select $select_query */
 
     $geometry_field = $table['alias'] . '.' . $this->field . '_geometry';

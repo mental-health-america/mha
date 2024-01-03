@@ -2,6 +2,8 @@
 
 namespace Drupal\geolocation;
 
+use Drupal;
+
 /**
  * Class KeyProvider plugin.
  *
@@ -21,11 +23,11 @@ class KeyProvider {
 
     // If the "Key" module exists, assume we are storing the key name instead of
     // the actual value, which should be a secret not saved in config.
-    if (!\Drupal::moduleHandler()->moduleExists('key')) {
+    if (!Drupal::moduleHandler()->moduleExists('key')) {
       return $api_key;
     }
 
-    $store = \Drupal::service('key.repository')->getKey($api_key);
+    $store = Drupal::service('key.repository')->getKey($api_key);
     if (empty($store)) {
       return $api_key;
     }

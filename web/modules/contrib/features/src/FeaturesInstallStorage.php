@@ -2,11 +2,11 @@
 
 namespace Drupal\features;
 
+use Drupal\Core\Extension\ExtensionPathResolver;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\Config\ExtensionInstallStorage;
 use Drupal\Core\Config\StorageInterface;
 use Drupal\Core\Extension\ExtensionDiscovery;
-use Drupal\Core\Extension\ExtensionPathResolver;
-use Drupal\Core\Site\Settings;
 
 /**
  * Storage to access configuration and schema in installed extensions.

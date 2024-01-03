@@ -16,7 +16,8 @@
    */
   Drupal.behaviors.geolocationGeometryWidgetGoogleMaps = {
     attach: function (context) {
-      $(once("geolocation-geometry-processed", ".geolocation-geometry-widget-google-maps-geojson", context))
+      $(".geolocation-geometry-widget-google-maps-geojson", context)
+        .once("geolocation-geometry-processed")
         .each(function (index, item) {
           var mapWrapper = $(
             ".geolocation-geometry-widget-google-maps-geojson-map",

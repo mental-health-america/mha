@@ -2,6 +2,8 @@
 
 namespace Drupal\geolocation\Plugin\views\style;
 
+use Drupal\views\Annotation\ViewsStyle;
+
 /**
  * Allow to display several field items on a common map.
  *
@@ -20,10 +22,10 @@ class Layer extends GeolocationStyleBase {
   /**
    * {@inheritdoc}
    */
-  public function render() {
+  public function render(): array {
 
     $render = parent::render();
-    if ($render === FALSE) {
+    if (!$render) {
       return [];
     }
 
@@ -32,7 +34,7 @@ class Layer extends GeolocationStyleBase {
       '#attributes' => [
         'id' => $this->displayHandler->display['id'],
         'class' => [
-          'geolocation-layer',
+          'geolocation-map-layer',
         ],
       ],
     ];

@@ -22,14 +22,14 @@ content:
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: geolocation_geometry_wkt
+    type: geolocation_geometry_data
     region: content
   field_geolocation_geometry_polyg:
     weight: 103
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: geolocation_geometry_wkt
+    type: geolocation_geometry_data
     region: content
   links:
     weight: 100

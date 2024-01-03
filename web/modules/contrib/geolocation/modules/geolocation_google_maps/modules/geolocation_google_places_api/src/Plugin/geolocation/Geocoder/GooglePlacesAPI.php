@@ -27,11 +27,11 @@ class GooglePlacesAPI extends GoogleGeocoderBase {
   /**
    * {@inheritdoc}
    */
-  public function formAttachGeocoder(array &$render_array, $element_name) {
-    parent::formAttachGeocoder($render_array, $element_name);
+  public function alterRenderArray(array &$render_array, $element_name) {
+    parent::alterRenderArray($render_array, $element_name);
 
     $render_array['#attached'] = BubbleableMetadata::mergeAttachments(
-      $render_array['#attached'],
+      $render_array['#attached'] ?? [],
       [
         'library' => [
           'geolocation_google_places_api/geolocation_google_places_api.geocoder.googleplacesapi',

@@ -3,6 +3,9 @@
 namespace Drupal\geolocation_leaflet\Plugin\geolocation\MapFeature;
 
 use Drupal\Core\Render\BubbleableMetadata;
+
+use Drupal\geolocation\MapProviderInterface;
+use Drupal\geolocation\Plugin\geolocation\MapFeature\ControlCustomElementBase;
 use Drupal\geolocation_leaflet\LeafletTileLayerProviders;
 
 /**
@@ -16,24 +19,26 @@ use Drupal\geolocation_leaflet\LeafletTileLayerProviders;
  * )
  */
 class LeafletControlLayer extends ControlCustomElementBase {
+
   use LeafletTileLayerProviders;
 
-  /**
-   * {@inheritdoc}
-   */
-  public static function getDefaultSettings() {
-    return [
-      'default_label' => 'Default',
-      'tile_layer_providers' => [],
-      'tile_providers_options' => [],
-    ];
+  protected array $scripts = [
+    'https://cdnjs.cloudflare.com/ajax/libs/leaflet-providers/1.13.0/leaflet-providers.min.js',
+  ];
+
+  public static function getDefaultSettings(): array {
+    return array_replace_recursive(
+      parent::getDefaultSettings(),
+      [
+        'default_label' => 'Default',
+        'tile_layer_providers' => [],
+        'tile_providers_options' => [],
+      ]
+    );
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function getSettingsForm(array $settings, array $parents) {
-    $form = parent::getSettingsForm($settings, $parents);
+  public function getSettingsForm(array $settings, array $parents = [], MapProviderInterface $mapProvider = NULL): array {
+    $form = parent::getSettingsForm($settings, $parents, $mapProvider);
 
     if ($parents) {
       $first = array_shift($parents);
@@ -64,12 +69,12 @@ class LeafletControlLayer extends ControlCustomElementBase {
         $form['tile_layer_providers'][$provider][$key]['checkbox'] = [
           '#type' => 'checkbox',
           '#title' => $variant,
-          '#default_value' => isset($settings['tile_layer_providers'][$provider][$key]['checkbox']) ? $settings['tile_layer_providers'][$provider][$key]['checkbox'] : 0,
+          '#default_value' => $settings['tile_layer_providers'][$provider][$key]['checkbox'] ?? 0,
         ];
         $form['tile_layer_providers'][$provider][$key]['label'] = [
           '#type' => 'textfield',
           '#description' => $this->t('Label for the layer in the control.'),
-          '#default_value' => isset($settings['tile_layer_providers'][$provider][$key]['label']) ? $settings['tile_layer_providers'][$provider][$key]['label'] : '',
+          '#default_value' => $settings['tile_layer_providers'][$provider][$key]['label'] ?? '',
           '#states' => [
             'visible' => [
               ':input[name="' . $parents_string . '][tile_layer_providers][' . $provider . '][' . $key . '][checkbox]"]' => ['checked' => TRUE],
@@ -79,7 +84,7 @@ class LeafletControlLayer extends ControlCustomElementBase {
       }
       if (in_array($provider, $this->register)) {
         $states = [];
-        foreach ($providers[$provider] as $key => $variant) {
+        foreach ($variants as $key => $variant) {
           $states[][':input[name="' . $parents_string . '][tile_layer_providers][' . $provider . '][' . $key . '][checkbox]"]'] = ['checked' => TRUE];
         }
         foreach ($form['tile_providers_options'][$provider] as $key => $value) {
@@ -91,11 +96,8 @@ class LeafletControlLayer extends ControlCustomElementBase {
     return $form;
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function alterMap(array $render_array, array $feature_settings, array $context = []) {
-    $render_array = parent::alterMap($render_array, $feature_settings, $context);
+  public function alterMap(array $render_array, array $feature_settings = [], array $context = [], MapProviderInterface $mapProvider = NULL): array {
+    $render_array = parent::alterMap($render_array, $feature_settings, $context, $mapProvider);
 
     $providers = [];
     foreach ($feature_settings['tile_layer_providers'] as $list) {
@@ -108,16 +110,14 @@ class LeafletControlLayer extends ControlCustomElementBase {
     }
 
     $render_array['#attached'] = BubbleableMetadata::mergeAttachments(
-      empty($render_array['#attached']) ? [] : $render_array['#attached'],
+      $render_array['#attached'] ?? [],
       [
         'drupalSettings' => [
           'geolocation' => [
             'maps' => [
               $render_array['#id'] => [
                 $this->getPluginId() => [
-                  'defaultLabel' => $feature_settings['default_label'],
-                  'tileLayerProviders' => $providers,
-                  'tileLayerOptions' => $feature_settings['tile_providers_options'],
+                  'tile_layer_providers' => $providers,
                 ],
               ],
             ],

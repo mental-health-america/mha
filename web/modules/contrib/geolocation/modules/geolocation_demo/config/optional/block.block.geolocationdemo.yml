@@ -9,7 +9,6 @@ dependencies:
     module:
       - geolocation_demo
 id: geolocationdemo
-theme: bartik
 region: sidebar_first
 weight: 0
 provider: null

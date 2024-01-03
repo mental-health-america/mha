@@ -1,39 +1,58 @@
 <?php
 
-/**
- * @file
- * Geolocation Geometry.
- */
-
-use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\feeds\Entity\Feed;
 
 /**
- * Implements hook_uninstall().
+ * Implements hook_install().
  */
-function geolocation_geometry_data_uninstall() {
-  $field_storage_config = FieldStorageConfig::loadByName('taxonomy_term', 'field_geometry_data_geometry');
-  if ($field_storage_config) {
-    $field_storage_config->delete();
+function geolocation_geometry_data_install($is_syncing = NULL): void {
+  if (!Drupal::moduleHandler()->moduleExists('feeds')) {
+    return;
   }
 
-}
+  $entityTypeManager = Drupal::service('entity_type.manager');
 
-/**
- * Implements hook_requirements().
- */
-function geolocation_geometry_data_requirements($phase) {
-  $requirements = [];
-  $requirements['geolocation_geometry_data_composer'] = [
-    'title' => t('Geolocation Geometry Data - Composer dependency'),
-    'value' => t('Libraries installed'),
-    'description' => t('Use "composer require gasparesganga/php-shapefile" to install required library.'),
-    'severity' => REQUIREMENT_OK,
+  $imports = [
+    [
+      'feed_title' => 'Geolocation Countries',
+      'feed_type' => 'geolocation_countries',
+      'url' => 'https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/cultural/ne_110m_admin_0_countries.zip',
+    ],
+    [
+      'feed_title' => 'Geolocation US States',
+      'feed_type' => 'geolocation_us_states',
+      'url' => 'https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/cultural/ne_110m_admin_1_states_provinces.zip',
+    ],
+    [
+      'feed_title' => 'Provinces of Canada',
+      'feed_type' => 'geolocation_provinces_of_canada',
+      'url' => 'https://www.weather.gov/source/gis/Shapefiles/Misc/province.zip',
+    ],
   ];
 
-  if (!class_exists('Shapefile\\ShapefileReader')) {
-    $requirements['geolocation_geometry_data_composer']['value'] = t('Libraries not installed');
-    $requirements['geolocation_geometry_data_composer']['severity'] = REQUIREMENT_ERROR;
+  foreach ($imports as $import) {
+    $countriesFeedIds = $entityTypeManager->getStorage('feeds_feed')->loadByProperties([
+      'title' => $import['feed_title'],
+    ]);
+
+    if ($countriesFeedIds) {
+      continue;
+    }
+
+    $countriesType = $entityTypeManager->getStorage('feeds_feed_type')->load($import['feed_type']);
+    if (!$countriesType) {
+      continue;
+    }
+
+    /** @var \Drupal\feeds\FeedInterface $feed */
+    $feed = Feed::create([
+      'type' => $import['feed_type'],
+      'title' => $import['feed_title'],
+      'source' => $import['url'],
+    ]);
+    $feed->save();
+
+    $feed->startBatchImport();
   }
 
-  return $requirements;
 }

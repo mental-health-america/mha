@@ -3,6 +3,7 @@
 namespace Drupal\geolocation\Annotation;
 
 use Drupal\Component\Annotation\Plugin;
+use Drupal\Core\Annotation\Translation;
 
 /**
  * Defines a Location annotation object.
@@ -19,7 +20,7 @@ class Location extends Plugin {
    *
    * @var string
    */
-  public $id;
+  public string $id;
 
   /**
    * The name of the Location.
@@ -28,7 +29,7 @@ class Location extends Plugin {
    *
    * @ingroup plugin_translatable
    */
-  public $name;
+  public Translation $name;
 
   /**
    * The description of the Location.
@@ -37,6 +38,6 @@ class Location extends Plugin {
    *
    * @ingroup plugin_translatable
    */
-  public $description;
+  public Translation $description;
 
 }

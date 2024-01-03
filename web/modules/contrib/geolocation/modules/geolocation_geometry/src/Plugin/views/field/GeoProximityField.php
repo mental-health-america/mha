@@ -19,7 +19,7 @@ class GeoProximityField extends ProximityField {
   /**
    * {@inheritdoc}
    */
-  public function query() {
+  public function query(): void {
     /** @var \Drupal\views\Plugin\views\query\Sql $query */
     $query = $this->query;
 

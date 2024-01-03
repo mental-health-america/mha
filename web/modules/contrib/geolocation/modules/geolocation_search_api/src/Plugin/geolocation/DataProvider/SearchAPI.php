@@ -24,16 +24,16 @@ class SearchAPI extends DataProviderBase implements DataProviderInterface {
   /**
    * {@inheritdoc}
    */
-  public function isViewsGeoOption(FieldPluginBase $views_field) {
-    if ($views_field instanceof SearchApiEntityField) {
-      $index_id = str_replace('search_api_index_', '', $views_field->table);
+  public function isViewsGeoOption(FieldPluginBase $viewsField) {
+    if ($viewsField instanceof SearchApiEntityField) {
+      $index_id = str_replace('search_api_index_', '', $viewsField->table);
       $index = Index::load($index_id);
       if (empty($index)) {
         return FALSE;
       }
 
       /** @var \Drupal\search_api\Item\FieldInterface $search_api_field */
-      $search_api_field = $index->getField($views_field->field);
+      $search_api_field = $index->getField($viewsField->field);
       if (empty($search_api_field)) {
         return FALSE;
       }
@@ -55,14 +55,14 @@ class SearchAPI extends DataProviderBase implements DataProviderInterface {
   /**
    * {@inheritdoc}
    */
-  public function getPositionsFromViewsRow(ResultRow $row, FieldPluginBase $views_field = NULL) {
+  public function getPositionsFromViewsRow(ResultRow $row, FieldPluginBase $viewsField = NULL) {
     $positions = [];
 
-    if (!($views_field instanceof SearchApiEntityField)) {
+    if (!($viewsField instanceof SearchApiEntityField)) {
       return [];
     }
 
-    foreach ($views_field->getItems($row) as $item) {
+    foreach ($viewsField->getItems($row) as $item) {
       if (!empty($item['value'])) {
         $pieces = explode(',', $item['value']);
         if (count($pieces) != 2) {

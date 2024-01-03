@@ -19,20 +19,20 @@ class GeocoderCountryFormatting extends Plugin {
    *
    * @var string
    */
-  public $id;
+  public string $id;
 
   /**
    * The country code.
    *
    * @var string
    */
-  public $countryCode;
+  public string $countryCode;
 
   /**
    * The geocoder ID.
    *
    * @var string
    */
-  public $geocoder;
+  public string $geocoder;
 
 }

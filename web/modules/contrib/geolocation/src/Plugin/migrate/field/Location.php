@@ -31,7 +31,7 @@ class Location extends FieldPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function getFieldFormatterMap() {
+  public function getFieldFormatterMap(): array {
     return [
       'location_default' => 'geolocation_latlng',
     ];
@@ -40,7 +40,7 @@ class Location extends FieldPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function getFieldWidgetMap() {
+  public function getFieldWidgetMap(): array {
     return [
       'location' => 'geolocation_latlng',
     ];

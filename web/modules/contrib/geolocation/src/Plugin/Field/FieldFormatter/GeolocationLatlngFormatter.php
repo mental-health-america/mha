@@ -2,6 +2,7 @@
 
 namespace Drupal\geolocation\Plugin\Field\FieldFormatter;
 
+use Drupal\Core\Field\Annotation\FieldFormatter;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
 

@@ -29,12 +29,12 @@ class GeolocationGeometryMapFormatter extends GeolocationMapFormatterBase {
   /**
    * {@inheritdoc}
    */
-  static protected $dataProviderId = 'geolocation_geometry';
+  static protected string $dataProviderId = 'geolocation_geometry';
 
   /**
    * {@inheritdoc}
    */
-  public function settingsForm(array $form, FormStateInterface $form_state) {
+  public function settingsForm(array $form, FormStateInterface $form_state): array {
     $element = parent::settingsForm($form, $form_state);
 
     unset($element['set_marker']);

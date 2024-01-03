@@ -2,7 +2,8 @@
 
 namespace Drupal\geolocation_leaflet\Plugin\geolocation\MapFeature;
 
-use Drupal\geolocation\MapFeatureFrontendBase;
+
+use Drupal\geolocation\MapFeatureBase;
 
 /**
  * Provides disabled interaction.
@@ -14,6 +15,6 @@ use Drupal\geolocation\MapFeatureFrontendBase;
  *   type = "leaflet",
  * )
  */
-class LeafletDisableUserInteraction extends MapFeatureFrontendBase {
+class LeafletDisableUserInteraction extends MapFeatureBase {
 
 }

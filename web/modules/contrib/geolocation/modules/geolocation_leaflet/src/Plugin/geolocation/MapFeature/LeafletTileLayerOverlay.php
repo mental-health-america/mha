@@ -5,8 +5,10 @@ namespace Drupal\geolocation_leaflet\Plugin\geolocation\MapFeature;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormStateInterface;
+
 use Drupal\geolocation\MapFeatureBase;
 use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\geolocation\MapProviderInterface;
 
 /**
  * Provides map tile layer overlay support.
@@ -20,13 +22,17 @@ use Drupal\Core\Render\BubbleableMetadata;
  */
 class LeafletTileLayerOverlay extends MapFeatureBase {
 
-  /**
-   * {@inheritdoc}
-   */
-  public static function getDefaultSettings() {
-    return [
-      'tile_layer_overlay' => 'OpenInfraMap.Power',
-    ];
+  protected array $scripts = [
+    'https://cdnjs.cloudflare.com/ajax/libs/leaflet-providers/1.13.0/leaflet-providers.min.js',
+  ];
+
+  public static function getDefaultSettings(): array {
+    return array_replace_recursive(
+      parent::getDefaultSettings(),
+      [
+        'tile_layer_overlay' => 'OpenInfraMap.Power',
+      ]
+    );
   }
 
   /**
@@ -38,7 +44,7 @@ class LeafletTileLayerOverlay extends MapFeatureBase {
    * @return array
    *   Options form.
    */
-  public static function getOptionsForm($overlay) {
+  public static function getOptionsForm(string $overlay): array {
 
     $form = [
       '#prefix' => '<div id="tile-overlay-settings">',
@@ -70,7 +76,7 @@ class LeafletTileLayerOverlay extends MapFeatureBase {
    * @return \Drupal\Core\Ajax\AjaxResponse
    *   Settings form.
    */
-  public static function addTileOverlaySettingsFormAjax(array $form, FormStateInterface $form_state) {
+  public static function addTileOverlaySettingsFormAjax(array $form, FormStateInterface $form_state): AjaxResponse {
 
     $ajax_response = new AjaxResponse();
 
@@ -86,12 +92,7 @@ class LeafletTileLayerOverlay extends MapFeatureBase {
   /**
    * {@inheritdoc}
    */
-  public function getSettingsForm(array $settings, array $parents) {
-    $settings = array_replace_recursive(
-      self::getDefaultSettings(),
-      $settings
-    );
-
+  public function getSettingsForm(array $settings, array $parents = [], MapProviderInterface $mapProvider = NULL): array {
     $form['tile_layer_overlay'] = [
       '#type' => 'select',
       '#options' => $this->getTileOverlays(),
@@ -112,18 +113,17 @@ class LeafletTileLayerOverlay extends MapFeatureBase {
   /**
    * {@inheritdoc}
    */
-  public function alterMap(array $render_array, array $feature_settings, array $context = []) {
-    $render_array = parent::alterMap($render_array, $feature_settings, $context);
+  public function alterMap(array $render_array, array $feature_settings = [], array $context = [], MapProviderInterface $mapProvider = NULL): array {
+    $render_array = parent::alterMap($render_array, $feature_settings, $context, $mapProvider);
 
     $tileLayer = [
-      'enable' => TRUE,
       'tileLayerOverlay' => $feature_settings['tile_layer_overlay'],
     ];
     if (isset($feature_settings['tile_overlay_options'])) {
       $tileLayer['tileLayerOptions'] = $feature_settings['tile_overlay_options'];
     }
     $render_array['#attached'] = BubbleableMetadata::mergeAttachments(
-      empty($render_array['#attached']) ? [] : $render_array['#attached'],
+      $render_array['#attached'] ?? [],
       [
         'library' => [
           'geolocation_leaflet/mapfeature.tilelayeroverlay',
@@ -149,7 +149,7 @@ class LeafletTileLayerOverlay extends MapFeatureBase {
    * @return array
    *   An array containing tile overlay IDs.
    */
-  private function getTileOverlays() {
+  private function getTileOverlays(): array {
     return [
       'OpenInfraMap' => [
         'OpenInfraMap.Power' => 'OpenInfraMap Power',

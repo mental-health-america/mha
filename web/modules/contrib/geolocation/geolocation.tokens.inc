@@ -11,9 +11,9 @@ use Drupal\Core\Entity\ContentEntityInterface;
 /**
  * Implements hook_token_info().
  */
-function geolocation_token_info() {
+function geolocation_token_info(): array {
   if (!\Drupal::hasService('token.entity_mapper')) {
-    return;
+    return [];
   }
 
   $types = [];
@@ -62,10 +62,8 @@ function geolocation_token_info() {
 
 /**
  * Implements hook_tokens().
- *
- * {@inheritdoc}
  */
-function geolocation_tokens($type, $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata) {
+function geolocation_tokens($type, $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata): array {
   $replacements = [];
 
   if (!empty($data['field_property'])) {
@@ -111,7 +109,7 @@ function geolocation_tokens($type, $tokens, array $data, array $options, Bubblea
                 if (is_array($value) || ($value instanceof \Traversable)) {
                   foreach ($value as $deepkey => $deepvalue) {
                     if (is_string($deepvalue)) {
-                      $replacements[$token . ':' . $key . ':' . $deepkey . ']'] = (string) $deepvalue;
+                      $replacements[$token . ':' . $key . ':' . $deepkey . ']'] = $deepvalue;
                     }
                   }
                 }

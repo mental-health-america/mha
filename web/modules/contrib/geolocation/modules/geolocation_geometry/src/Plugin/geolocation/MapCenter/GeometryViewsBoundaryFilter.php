@@ -18,7 +18,7 @@ class GeometryViewsBoundaryFilter extends ViewsBoundaryFilter {
   /**
    * {@inheritdoc}
    */
-  public function getAvailableMapCenterOptions($context) {
+  public function getAvailableMapCenterOptions(array $context = []): array {
     $options = [];
 
     if ($displayHandler = self::getViewsDisplayHandler($context)) {

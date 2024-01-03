@@ -2,7 +2,9 @@
 
 namespace Drupal\geolocation\Plugin\geolocation\MapFeature;
 
+
 use Drupal\geolocation\MapFeatureBase;
+use Drupal\geolocation\MapProviderInterface;
 
 /**
  * Redraw locations as shapes.
@@ -19,7 +21,7 @@ class GeolocationShapes extends MapFeatureBase {
   /**
    * {@inheritdoc}
    */
-  public static function getDefaultSettings() {
+  public static function getDefaultSettings(): array {
     return [
       'remove_markers' => FALSE,
       'polyline' => TRUE,
@@ -37,8 +39,8 @@ class GeolocationShapes extends MapFeatureBase {
   /**
    * {@inheritdoc}
    */
-  public function getSettingsSummary(array $settings) {
-    $summary = parent::getSettingsSummary($settings);
+  public function getSettingsSummary(array $settings, MapProviderInterface $mapProvider = NULL): array {
+    $summary = parent::getSettingsSummary($settings, $mapProvider);
     $summary[] = $this->t('Draw polyline: @polyline', ['@polyline' => $settings['polyline'] ? $this->t('Yes') : $this->t('No')]);
     $summary[] = $this->t('Draw polygon: @polygon', ['@polygon' => $settings['polygon'] ? $this->t('Yes') : $this->t('No')]);
 
@@ -48,7 +50,9 @@ class GeolocationShapes extends MapFeatureBase {
   /**
    * {@inheritdoc}
    */
-  public function getSettingsForm(array $settings, array $parents) {
+  public function getSettingsForm(array $settings, array $parents = [], MapProviderInterface $mapProvider = NULL): array {
+    $form = parent::getSettingsForm($settings, $parents, $mapProvider);
+
     $states_prefix = array_shift($parents) . '[' . implode('][', $parents) . ']';
 
     $form['remove_markers'] = [
@@ -161,8 +165,8 @@ class GeolocationShapes extends MapFeatureBase {
   /**
    * {@inheritdoc}
    */
-  public function alterMap(array $render_array, array $feature_settings, array $context = []) {
-    $render_array = parent::alterMap($render_array, $feature_settings, $context);
+  public function alterMap(array $render_array, array $feature_settings = [], array $context = [], MapProviderInterface $mapProvider = NULL): array {
+    $render_array = parent::alterMap($render_array, $feature_settings, $context, $mapProvider);
 
     if (empty($render_array['#children']['locations'])) {
       return $render_array;
@@ -184,7 +188,7 @@ class GeolocationShapes extends MapFeatureBase {
       $render_array['#children']['polyline'] = [
         '#type' => 'geolocation_map_polyline',
         '#coordinates' => $coordinates,
-        '#title' => \Drupal::token()->replace($feature_settings['polyline_title'], $context),
+        '#title' => $this->token->replace($feature_settings['polyline_title'], $context),
         '#stroke_color' => $feature_settings['strokeColor'],
         '#stroke_width' => $feature_settings['strokeWidth'],
         '#stroke_opacity' => $feature_settings['strokeOpacity'],
@@ -195,7 +199,7 @@ class GeolocationShapes extends MapFeatureBase {
       $render_array['#children']['polygon'] = [
         '#type' => 'geolocation_map_polygon',
         '#coordinates' => $coordinates,
-        '#title' => \Drupal::token()->replace($feature_settings['polygon_title'], $context),
+        '#title' => $this->token->replace($feature_settings['polygon_title'], $context),
         '#stroke_color' => $feature_settings['strokeColor'],
         '#stroke_width' => $feature_settings['strokeWidth'],
         '#stroke_opacity' => $feature_settings['strokeOpacity'],

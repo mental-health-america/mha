@@ -2,8 +2,12 @@
 
 namespace Drupal\geolocation_google_maps\Form;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Extension\ModuleHandler;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Messenger\MessengerTrait;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Implements the GeolocationGoogleMapAPIkey form controller.
@@ -12,10 +16,27 @@ use Drupal\Core\Form\FormStateInterface;
  */
 class GeolocationGoogleMapsSettings extends ConfigFormBase {
 
+  use MessengerTrait;
+
+  protected ModuleHandler $moduleHandler;
+
+  public function __construct(ConfigFactoryInterface $config_factory, ModuleHandler $module_handler) {
+    parent::__construct($config_factory);
+
+    $this->moduleHandler = $module_handler;
+  }
+
+  public static function create(ContainerInterface $container): GeolocationGoogleMapsSettings {
+    return new static(
+      $container->get('config.factory'),
+      $container->get('module_handler')
+    );
+  }
+
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state) {
+  public function buildForm(array $form, FormStateInterface $form_state): array {
     $config = $this->configFactory->get('geolocation_google_maps.settings');
 
     $form['#tree'] = TRUE;
@@ -51,7 +72,7 @@ class GeolocationGoogleMapsSettings extends ConfigFormBase {
       ],
     ];
 
-    $module_parameters = \Drupal::moduleHandler()->invokeAll('geolocation_google_maps_parameters');
+    $module_parameters = $this->moduleHandler->invokeAll('geolocation_google_maps_parameters');
 
     if (!empty($module_parameters['libraries'])) {
       $module_libraries = array_unique($module_parameters['libraries']);
@@ -124,14 +145,14 @@ class GeolocationGoogleMapsSettings extends ConfigFormBase {
     $form['use_current_language'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Use current interface language in Google Maps'),
-      '#default_value' => $config->get('use_current_language') ? TRUE : FALSE,
+      '#default_value' => (bool) $config->get('use_current_language'),
       '#description' => $this->t('If a supported language is set by Drupal, it will be handed over to Google Maps. Defaults to language parameter above if set. List of <a href=":google_languages_list">supported languages here</a>.', [':google_languages_list' => 'https://developers.google.com/maps/faq#languagesupport']),
     ];
 
     $form['china_mode'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Enable China mode'),
-      '#default_value' => $config->get('china_mode') ? TRUE : FALSE,
+      '#default_value' => (bool) $config->get('china_mode'),
       '#description' => $this->t('Use the specific URLs required in the PR China. See explanation at <a href=":google_faq">Google FAQ</a>.', [':google_faq' => 'https://developers.google.com/maps/faq?#china_ws_access']),
     ];
 
@@ -153,10 +174,10 @@ class GeolocationGoogleMapsSettings extends ConfigFormBase {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   Form state.
    */
-  public function addLibrariesSubmit(array &$form, FormStateInterface &$form_state) {
+  public function addLibrariesSubmit(array &$form, FormStateInterface $form_state) {
     $max = $form_state->get('fields_count') + 1;
     $form_state->set('fields_count', $max);
-    $form_state->setRebuild(TRUE);
+    $form_state->setRebuild();
   }
 
   /**
@@ -170,21 +191,21 @@ class GeolocationGoogleMapsSettings extends ConfigFormBase {
    * @return array
    *   Ajax return value.
    */
-  public function addLibrariesCallback(array &$form, FormStateInterface &$form_state) {
+  public function addLibrariesCallback(array $form, FormStateInterface &$form_state): array {
     return $form['parameters']['libraries'];
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getFormId() {
+  public function getFormId(): string {
     return 'geolocation_settings';
   }
 
   /**
    * {@inheritdoc}
    */
-  protected function getEditableConfigNames() {
+  protected function getEditableConfigNames(): array {
     return [
       'geolocation_google_maps.settings',
     ];
@@ -216,7 +237,7 @@ class GeolocationGoogleMapsSettings extends ConfigFormBase {
     $config->save();
 
     // Confirmation on form submission.
-    \Drupal::messenger()->addMessage($this->t('The configuration options have been saved.'));
+    $this->messenger()->addMessage($this->t('The configuration options have been saved.'));
 
     drupal_flush_all_caches();
   }

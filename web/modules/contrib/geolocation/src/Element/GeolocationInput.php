@@ -24,7 +24,7 @@ class GeolocationInput extends FormElement {
   /**
    * {@inheritdoc}
    */
-  public function getInfo() {
+  public function getInfo(): array {
     $class = get_class($this);
     return [
       '#input' => TRUE,
@@ -56,7 +56,7 @@ class GeolocationInput extends FormElement {
    * @return array
    *   The processed element.
    */
-  public static function processGeolocation(array &$element, FormStateInterface $form_state, array &$complete_form) {
+  public static function processGeolocation(array &$element, FormStateInterface $form_state, array &$complete_form): array {
     $default_field_values = [
       'lat' => '',
       'lng' => '',
@@ -105,12 +105,8 @@ class GeolocationInput extends FormElement {
       ],
     ];
 
-    if (empty($element['#wrapper_attributes'])) {
-      $element['#wrapper_attributes'] = [];
-    }
-
     $element['#wrapper_attributes'] = array_merge_recursive(
-      $element['#wrapper_attributes'],
+      $element['#wrapper_attributes'] ?? [],
       [
         'class' => [
           'geolocation-input',
@@ -131,7 +127,7 @@ class GeolocationInput extends FormElement {
    * @param array $complete_form
    *   The complete form structure.
    */
-  public static function validateGeolocation(array &$element, FormStateInterface $form_state, array &$complete_form) {
+  public static function validateGeolocation(array &$element, FormStateInterface $form_state, array &$complete_form): void {
     if (
       empty($element['#value']['lng'])
       && empty($element['#value']['lat'])

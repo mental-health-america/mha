@@ -2,16 +2,23 @@
 
 namespace Drupal\geolocation;
 
+use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Component\Utility\NestedArray;
+use Exception;
+use Traversable;
 
 /**
  * Search plugin manager.
+ *
+ * @method MapProviderInterface createInstance($plugin_id, array $configuration = [])
  */
 class MapProviderManager extends DefaultPluginManager {
+
+  use LoggerChannelTrait;
 
   /**
    * Constructs an MapProviderManager object.
@@ -24,53 +31,30 @@ class MapProviderManager extends DefaultPluginManager {
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler to invoke the alter hook with.
    */
-  public function __construct(\Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler) {
+  public function __construct(Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler) {
     parent::__construct('Plugin/geolocation/MapProvider', $namespaces, $module_handler, 'Drupal\geolocation\MapProviderInterface', 'Drupal\geolocation\Annotation\MapProvider');
     $this->alterInfo('geolocation_mapprovider_info');
     $this->setCacheBackend($cache_backend, 'geolocation_mapprovider');
   }
 
-  /**
-   * Return MapProvider by ID.
-   *
-   * @param string $id
-   *   MapProvider ID.
-   * @param array $configuration
-   *   Configuration.
-   *
-   * @return \Drupal\geolocation\MapProviderInterface|false
-   *   MapProvider instance.
-   */
-  public function getMapProvider($id, array $configuration = []) {
+  public function getMapProvider(string $id, array $configuration = []): ?MapProviderInterface {
     if (!$this->hasDefinition($id)) {
-      return FALSE;
+      return NULL;
     }
+
     try {
-      /** @var \Drupal\geolocation\MapProviderInterface $instance */
-      $instance = $this->createInstance($id, $configuration);
-      if ($instance) {
-        return $instance;
-      }
+      return $this->createInstance($id, $configuration);
     }
-    catch (\Exception $e) {
-      return FALSE;
+    catch (Exception $e) {
+      $this->getLogger('geolocation')->warning($e->getMessage());
+      return NULL;
     }
-    return FALSE;
   }
 
-  /**
-   * Return MapProvider default ssettings by ID.
-   *
-   * @param string $id
-   *   MapProvider ID.
-   *
-   * @return array|false
-   *   MapProvider default settings.
-   */
-  public function getMapProviderDefaultSettings($id) {
+  public function getMapProviderDefaultSettings(string $id): ?array {
     $definitions = $this->getDefinitions();
     if (empty($definitions[$id])) {
-      return FALSE;
+      return NULL;
     }
 
     /** @var \Drupal\geolocation\MapProviderInterface $classname */
@@ -79,13 +63,7 @@ class MapProviderManager extends DefaultPluginManager {
     return $classname::getDefaultSettings();
   }
 
-  /**
-   * Get Map provider settings.
-   *
-   * @return array
-   *   Options.
-   */
-  public function getMapProviderOptions() {
+  public function getMapProviderOptions(): array {
     $options = [];
     foreach ($this->getDefinitions() as $id => $definition) {
       $options[$id] = $definition['name'];
@@ -102,10 +80,10 @@ class MapProviderManager extends DefaultPluginManager {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   Current From State.
    *
-   * @return array|false
+   * @return array|null
    *   Settings form.
    */
-  public static function addSettingsFormAjax(array $form, FormStateInterface $form_state) {
+  public static function addSettingsFormAjax(array $form, FormStateInterface $form_state): ?array {
     $triggering_element_parents = $form_state->getTriggeringElement()['#array_parents'];
 
     $settings_element_parents = $triggering_element_parents;

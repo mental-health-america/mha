@@ -19,7 +19,7 @@ class GeoProximityFilter extends ProximityFilter {
   /**
    * {@inheritdoc}
    */
-  public function query() {
+  public function query(): void {
     $table = $this->ensureMyTable();
     $this->value['value'] = self::convertDistance($this->value['value'], $this->options['unit']);
 
@@ -33,7 +33,7 @@ class GeoProximityFilter extends ProximityFilter {
       ];
     }
     else {
-      $center = $this->locationInputManager->getCoordinates((array) $this->value['center'], $this->options['location_input'], $this);
+      $center = $this->locationInputManager->getCoordinates((array) $this->value['center'], $this->options['location_input'], ['filter' => $this]);
     }
 
     if (

@@ -3,6 +3,7 @@
 namespace Drupal\geolocation\Plugin\views\display;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\views\Annotation\ViewsDisplay;
 use Drupal\views\ViewExecutable;
 use Drupal\views\Plugin\views\display\Attachment;
 
@@ -125,6 +126,10 @@ class Layer extends Attachment {
     if ($this->getOption('inherit_pager')) {
       $view->display_handler->usesPager = $this->view->displayHandlers->get($display_id)->usesPager();
       $view->display_handler->setOption('pager', $this->view->displayHandlers->get($display_id)->getOption('pager'));
+    }
+
+    if (empty($this->view->geolocationLayers)) {
+      $this->view->geolocationLayers = [];
     }
 
     if (empty($this->view->geolocationLayers[$display_id])) {

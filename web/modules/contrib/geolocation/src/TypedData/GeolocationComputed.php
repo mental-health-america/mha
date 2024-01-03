@@ -19,17 +19,17 @@ class GeolocationComputed extends TypedData {
    *
    * @var string
    */
-  protected $value = NULL;
+  protected string $value = '';
 
   /**
    * {@inheritdoc}
    */
   public function getValue() {
-    if ($this->value !== NULL) {
+    if (!empty($this->value)) {
       return $this->value;
     }
 
-    /** @var \Drupal\geolocation\Plugin\Field\FieldType\GeolocationItem $item */
+    /** @var \Drupal\geolocation\Plugin\Field\FieldType\GeolocationItem|null $item */
     $item = $this->getParent();
 
     // Ensure latitude and longitude exist.
@@ -47,7 +47,7 @@ class GeolocationComputed extends TypedData {
    * {@inheritdoc}
    */
   public function setValue($value, $notify = TRUE) {
-    $this->value = $value;
+    $this->value = (string) $value;
 
     // Notify the parent of any changes.
     if ($notify && isset($this->parent)) {

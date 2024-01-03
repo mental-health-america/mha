@@ -26,13 +26,13 @@ content:
     weight: 122
     settings: {  }
     third_party_settings: {  }
-    type: geolocation_geometry_wkt
+    type: geolocation_geometry_geojson
     region: content
   field_geolocation_geometry_polyg:
     weight: 123
     settings: {  }
     third_party_settings: {  }
-    type: geolocation_geometry_wkt
+    type: geolocation_geometry_geojson
     region: content
   promote:
     type: boolean_checkbox

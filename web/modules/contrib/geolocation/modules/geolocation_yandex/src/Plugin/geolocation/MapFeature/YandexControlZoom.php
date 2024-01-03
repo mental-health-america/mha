@@ -2,6 +2,8 @@
 
 namespace Drupal\geolocation_yandex\Plugin\geolocation\MapFeature;
 
+use Drupal\geolocation\Plugin\geolocation\MapFeature\ControlElementBase;
+
 /**
  * Provides Zoom control element.
  *

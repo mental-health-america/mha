@@ -2,6 +2,8 @@
 
 namespace Drupal\geolocation\Plugin\Field\FieldFormatter;
 
+use Drupal\Core\Field\Annotation\FieldFormatter;
+
 /**
  * Plugin implementation of the 'geolocation' formatter.
  *
@@ -19,6 +21,6 @@ class GeolocationMapFormatter extends GeolocationMapFormatterBase {
   /**
    * {@inheritdoc}
    */
-  static protected $dataProviderId = 'geolocation_field_provider';
+  static protected string $dataProviderId = 'geolocation_field_provider';
 
 }

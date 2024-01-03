@@ -37,9 +37,9 @@ interface GeocoderCountryFormattingInterface extends PluginInspectionInterface {
    * @param array $atomics
    *   Address components.
    *
-   * @return array||null
+   * @return array|null
    *   Address or NULL.
    */
-  public function format(array $atomics);
+  public function format(array $atomics): ?array;
 
 }

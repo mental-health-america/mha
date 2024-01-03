@@ -106,8 +106,8 @@ class AddressFieldProvider extends DataProviderBase implements DataProviderInter
   /**
    * {@inheritdoc}
    */
-  public function isViewsGeoOption(FieldPluginBase $views_field) {
-    if ($views_field instanceof EntityField) {
+  public function isViewsGeoOption(FieldPluginBase $viewsField) {
+    if ($viewsField instanceof EntityField) {
 
       /** @var \Drupal\Core\Entity\EntityFieldManagerInterface $entityFieldManager */
       $entityFieldManager = \Drupal::service('entity_field.manager');
@@ -116,12 +116,12 @@ class AddressFieldProvider extends DataProviderBase implements DataProviderInter
 
       if (
         !empty($field_map)
-        &&!empty($views_field->configuration['entity_type'])
-        && !empty($views_field->configuration['field_name'])
-        && !empty($field_map[$views_field->configuration['entity_type']])
-        && !empty($field_map[$views_field->configuration['entity_type']][$views_field->configuration['field_name']])
+        &&!empty($viewsField->configuration['entity_type'])
+        && !empty($viewsField->configuration['field_name'])
+        && !empty($field_map[$viewsField->configuration['entity_type']])
+        && !empty($field_map[$viewsField->configuration['entity_type']][$viewsField->configuration['field_name']])
       ) {
-        if ($field_map[$views_field->configuration['entity_type']][$views_field->configuration['field_name']]['type'] == 'address') {
+        if ($field_map[$viewsField->configuration['entity_type']][$viewsField->configuration['field_name']]['type'] == 'address') {
           return TRUE;
         }
       }
@@ -169,7 +169,7 @@ class AddressFieldProvider extends DataProviderBase implements DataProviderInter
     $address = $address . ' ' . $this->countryRepository->get($item->getCountryCode())->getName();
 
     $coordinates = $this->geocoder->geocode($address);
-    return (!empty($coordinates['location'])) ? [$coordinates['location']] : [];
+    return !empty($coordinates['location']) ? [$coordinates['location']] : [];
   }
 
   /**

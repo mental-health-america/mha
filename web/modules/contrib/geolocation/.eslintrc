@@ -1,12 +1,25 @@
 {
   "extends": "eslint:recommended",
   "globals": {
-    "google": true,
-    "L": true
+    "Drupal": true
   },
   "rules": {
     "max-nested-callbacks": [1, 6],
     "no-mutable-exports": 0,
     "no-unused-vars": 0
-  }
+  },
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module"
+  },
+  "env": {
+    "es6": true,
+    "browser": true
+  },
+  "overrides": [
+    {
+      "files": ["js/g*.js" ],
+      "parserOptions": { "sourceType": "script"}
+    }
+  ]
 }

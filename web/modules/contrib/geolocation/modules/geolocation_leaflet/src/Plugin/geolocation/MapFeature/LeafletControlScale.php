@@ -2,7 +2,9 @@
 
 namespace Drupal\geolocation_leaflet\Plugin\geolocation\MapFeature;
 
-use Drupal\Core\Render\BubbleableMetadata;
+
+use Drupal\geolocation\MapProviderInterface;
+use Drupal\geolocation\Plugin\geolocation\MapFeature\ControlElementBase;
 
 /**
  * Provides Scale control element.
@@ -16,21 +18,18 @@ use Drupal\Core\Render\BubbleableMetadata;
  */
 class LeafletControlScale extends ControlElementBase {
 
-  /**
-   * {@inheritdoc}
-   */
-  public static function getDefaultSettings() {
-    return [
-      'metric' => TRUE,
-      'imperial' => TRUE,
-    ];
+  public static function getDefaultSettings(): array {
+    return array_replace_recursive(
+      parent::getDefaultSettings(),
+      [
+        'metric' => TRUE,
+        'imperial' => TRUE,
+      ]
+    );
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function getSettingsForm(array $settings, array $parents) {
-    $form = parent::getSettingsForm($settings, $parents);
+  public function getSettingsForm(array $settings, array $parents = [], MapProviderInterface $mapProvider = NULL): array {
+    $form = parent::getSettingsForm($settings, $parents, $mapProvider);
 
     $form['metric'] = [
       '#type' => 'checkbox',
@@ -47,32 +46,4 @@ class LeafletControlScale extends ControlElementBase {
 
     return $form;
   }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function alterMap(array $render_array, array $feature_settings, array $context = []) {
-    $render_array = parent::alterMap($render_array, $feature_settings, $context);
-
-    $render_array['#attached'] = BubbleableMetadata::mergeAttachments(
-      empty($render_array['#attached']) ? [] : $render_array['#attached'],
-      [
-        'drupalSettings' => [
-          'geolocation' => [
-            'maps' => [
-              $render_array['#id'] => [
-                $this->getPluginId() => [
-                  'metric' => $feature_settings['metric'],
-                  'imperial' => $feature_settings['imperial'],
-                ],
-              ],
-            ],
-          ],
-        ],
-      ]
-    );
-
-    return $render_array;
-  }
-
 }

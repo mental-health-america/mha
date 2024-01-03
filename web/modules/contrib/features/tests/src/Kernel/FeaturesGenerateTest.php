@@ -2,11 +2,11 @@
 
 namespace Drupal\Tests\features\Kernel;
 
-use Drupal\Component\Serialization\Yaml;
-use Drupal\Core\Archiver\ArchiveTar;
 use Drupal\features\Entity\FeaturesBundle;
 use Drupal\features\FeaturesBundleInterface;
 use Drupal\KernelTests\KernelTestBase;
+use Drupal\Component\Serialization\Yaml;
+use Drupal\Core\Archiver\ArchiveTar;
 use org\bovigo\vfs\vfsStream;
 
 /**
@@ -136,7 +136,7 @@ class FeaturesGenerateTest extends KernelTestBase {
     $this->featuresManager->setRoot('vfs://drupal');
     $package = $this->featuresManager->getPackage(self::PACKAGE_NAME);
     // Find out where package will be exported.
-    [$full_name, $path] = $this->featuresManager->getExportInfo($package, $this->assigner->getBundle());
+    list($full_name, $path) = $this->featuresManager->getExportInfo($package, $this->assigner->getBundle());
     $path = 'vfs://drupal/' . $path . '/' . $full_name;
     $this->assertFalse(file_exists($path), 'Package directory already exists.');
 

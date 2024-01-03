@@ -2,7 +2,10 @@
 
 namespace Drupal\geolocation\Plugin\geolocation\MapCenter;
 
+use Drupal\Core\Extension\ModuleHandler;
+use Drupal\Core\File\FileSystem;
 use Drupal\Core\Render\BubbleableMetadata;
+
 use Drupal\geolocation\LocationManager;
 use Drupal\geolocation\MapCenterInterface;
 use Drupal\geolocation\MapCenterBase;
@@ -20,36 +23,33 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class Location extends MapCenterBase implements MapCenterInterface {
 
   /**
-   * Location manager.
-   *
-   * @var \Drupal\geolocation\LocationManager
-   */
-  protected $locationManager;
-
-  /**
    * Location Plugin ID.
    *
    * @var string
    */
-  protected $locationPluginId = '';
+  protected string $locationPluginId = '';
+
+public function __construct(
+  array $configuration,
+  $plugin_id,
+  $plugin_definition,
+  ModuleHandler $moduleHandler,
+  FileSystem $fileSystem,
+  protected LocationManager $locationManager
+) {
+  parent::__construct($configuration, $plugin_id, $plugin_definition, $moduleHandler, $fileSystem);
+}
 
   /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LocationManager $location_manager) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
-
-    $this->locationManager = $location_manager;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): MapCenterInterface {
     return new static(
       $configuration,
       $plugin_id,
       $plugin_definition,
+      $container->get('module_handler'),
+      $container->get('file_system'),
       $container->get('plugin.manager.geolocation.location')
     );
   }
@@ -57,14 +57,13 @@ class Location extends MapCenterBase implements MapCenterInterface {
   /**
    * {@inheritdoc}
    */
-  public function getSettingsForm($location_plugin_id = NULL, array $settings = [], $context = NULL) {
+  public function getSettingsForm(string $location_plugin_id = NULL, array $settings = [], array $context = []): array {
     if (!$this->locationManager->hasDefinition($location_plugin_id)) {
       return [];
     }
 
     $form = [];
 
-    /** @var \Drupal\geolocation\LocationInterface $location_plugin */
     $location_plugin = $this->locationManager->createInstance($location_plugin_id);
     $location_options = $location_plugin->getAvailableLocationOptions($context);
 
@@ -97,22 +96,18 @@ class Location extends MapCenterBase implements MapCenterInterface {
       ];
     }
 
-    /** @var \Drupal\geolocation\LocationInterface $location_plugin */
     $location_plugin = $this->locationManager->createInstance($location_plugin_id);
-    $form = array_merge_recursive($form, $location_plugin->getSettingsForm($option_id, $settings, $context));
 
-    return $form;
+    return array_merge_recursive($form, $location_plugin->getSettingsForm($option_id, $settings, $context));
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getAvailableMapCenterOptions($context = NULL) {
+  public function getAvailableMapCenterOptions(array $context = []): array {
     $options = [];
 
-    /** @var \Drupal\geolocation\LocationInterface $location_plugin */
     foreach ($this->locationManager->getDefinitions() as $location_plugin_id => $location_plugin_definition) {
-      /** @var \Drupal\geolocation\LocationInterface $location_plugin */
       $location_plugin = $this->locationManager->createInstance($location_plugin_id);
       $location_options = $location_plugin->getAvailableLocationOptions($context);
 
@@ -128,39 +123,34 @@ class Location extends MapCenterBase implements MapCenterInterface {
   /**
    * {@inheritdoc}
    */
-  public function alterMap(array $map, $center_plugin_id, array $center_option_settings, $context = NULL) {
-    if (!$this->locationManager->hasDefinition($center_plugin_id)) {
-      return $map;
+  public function alterMap(array $render_array, string $center_option_id, int $weight, array $center_option_settings = [], array $context = []): array {
+    if (!$this->locationManager->hasDefinition($center_option_id)) {
+      return $render_array;
     }
 
-    /** @var \Drupal\geolocation\LocationInterface $location */
-    $location = $this->locationManager->createInstance($center_plugin_id);
+    $location = $this->locationManager->createInstance($center_option_id);
 
     if (!empty($center_option_settings['location_option_id'])) {
       $location_id = $center_option_settings['location_option_id'];
     }
     else {
-      $location_id = $center_plugin_id;
+      $location_id = $center_option_id;
     }
 
-    $map['#attached']['drupalSettings']['geolocation']['maps'][$map['#id']]['map_center']['location_plugins_' . $location_id] = $map['#attached']['drupalSettings']['geolocation']['maps'][$map['#id']]['map_center']['location_plugins'];
-    unset($map['#attached']['drupalSettings']['geolocation']['maps'][$map['#id']]['map_center']['location_plugins']);
+    $render_array['#centre'] = $location->getCoordinates($location_id, $center_option_settings, $context);
 
-    $map_center = $location->getCoordinates($location_id, $center_option_settings, $context);
-    if (!empty($map_center)) {
-      $map['#centre'] = $map_center;
-    }
-    $map['#attached'] = BubbleableMetadata::mergeAttachments($map['#attached'], [
-      'library' => [
-        'geolocation/map_center.static_location',
-      ],
+    $render_array['#attached'] = BubbleableMetadata::mergeAttachments($render_array['#attached'] ?? [], [
       'drupalSettings' => [
         'geolocation' => [
           'maps' => [
-            $map['#id'] => [
-              'map_center' => [
+            $render_array['#id'] => [
+              'mapCenter' => [
                 'location_plugins_' . $location_id => [
-                  'success' => !empty($map_center),
+                  'weight' => $weight,
+                  'import_path' => $this->getJavascriptModulePath(),
+                  'settings' => [
+                    'success' => (bool) $location,
+                  ],
                 ],
               ],
             ],
@@ -169,7 +159,7 @@ class Location extends MapCenterBase implements MapCenterInterface {
       ],
     ]);
 
-    return $map;
+    return $render_array;
   }
 
 }

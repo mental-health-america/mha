@@ -2,85 +2,56 @@
 
 namespace Drupal\geolocation\Plugin\Field\FieldWidget;
 
-use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Field\WidgetBase;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\geolocation\MapProviderManager;
+use Drupal\views\FieldAPIHandlerTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\geolocation\MapProviderInterface;
 
 /**
  * Map geometry widget base.
  */
 abstract class GeolocationGeometryWidgetBase extends WidgetBase implements ContainerFactoryPluginInterface {
 
-  /**
-   * Map Provider ID.
-   *
-   * @var string
-   */
-  static protected $mapProviderId;
+  use FieldAPIHandlerTrait;
 
-  /**
-   * Map Provider Settings Form ID.
-   *
-   * @var string
-   */
-  static protected $mapProviderSettingsFormId;
+  static protected string $mapProviderId;
 
-  /**
-   * The entity field manager.
-   *
-   * @var \Drupal\Core\Entity\EntityFieldManagerInterface
-   */
-  protected $entityFieldManager;
+  static protected string $mapProviderSettingsFormId;
 
-  /**
-   * Map Provider.
-   *
-   * @var \Drupal\geolocation\MapProviderInterface
-   */
-  protected $mapProvider;
+  protected MapProviderInterface $mapProvider;
 
-  /**
-   * Constructs a WidgetBase object.
-   *
-   * @param string $plugin_id
-   *   The plugin_id for the widget.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Field\FieldDefinitionInterface $field_definition
-   *   The definition of the field to which the widget is associated.
-   * @param array $settings
-   *   The widget settings.
-   * @param array $third_party_settings
-   *   Any third party settings.
-   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entity_field_manager
-   *   The entity field manager.
-   */
-  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, array $third_party_settings, EntityFieldManagerInterface $entity_field_manager) {
+  public function __construct(
+    $plugin_id,
+    $plugin_definition,
+    FieldDefinitionInterface $field_definition,
+    array $settings,
+    array $third_party_settings,
+    protected MapProviderManager $mapProviderManager
+  ) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $third_party_settings);
 
-    $this->entityFieldManager = $entity_field_manager;
-
     if (!empty(static::$mapProviderId)) {
-      $this->mapProvider = \Drupal::service('plugin.manager.geolocation.mapprovider')->getMapProvider(static::$mapProviderId);
+      $this->mapProvider = $this->mapProviderManager->getMapProvider(static::$mapProviderId);
     }
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): GeolocationGeometryWidgetBase {
     return new static(
       $plugin_id,
       $plugin_definition,
       $configuration['field_definition'],
       $configuration['settings'],
       $configuration['third_party_settings'],
-      $container->get('entity_field.manager'),
+      $container->get('plugin.manager.geolocation.mapprovider'),
     );
   }
 

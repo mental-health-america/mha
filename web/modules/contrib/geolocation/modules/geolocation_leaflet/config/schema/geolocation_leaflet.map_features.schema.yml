@@ -94,7 +94,7 @@ plugin.plugin_configuration.geolocation.map_feature.leaflet_control_geocoder:
         geocoder:
           type: string
           label: 'Geocoder'
-        settings:
+        geocoder_settings:
           type: geolocation.geocoder.[%parent.geocoder]
 
 plugin.plugin_configuration.geolocation.map_feature.leaflet_control_locate:

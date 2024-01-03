@@ -15,7 +15,7 @@ interface LocationInputInterface extends PluginInspectionInterface {
    * @return array
    *   The settings array with the default plugin settings.
    */
-  public static function getDefaultSettings();
+  public static function getDefaultSettings(): array;
 
   /**
    * Provide LocationInput option specific settings.
@@ -26,66 +26,49 @@ interface LocationInputInterface extends PluginInspectionInterface {
    * @return array
    *   An array only containing keys defined in this plugin.
    */
-  public function getSettings(array $settings);
+  public function getSettings(array $settings): array;
 
   /**
    * Settings form by ID and context.
    *
-   * @param int $center_option_id
-   *   LocationInput option ID.
-   * @param array $settings
+  * @param array $settings
    *   The current option settings.
-   * @param mixed $context
+   * @param array $context
    *   Current context.
    *
    * @return array
    *   A form array to be integrated in whatever.
    */
-  public function getSettingsForm($center_option_id, array $settings, $context = NULL);
+  public function getSettingsForm(array $settings, array $context = []): array;
 
   /**
    * For one LocationInput (i.e. boundary filter), return all options.
    *
-   * @param mixed $context
+   * @param array $context
    *   Context like field formatter, field widget or view.
    *
    * @return array
    *   Available center options indexed by ID.
    */
-  public function getAvailableLocationInputOptions($context);
+  public function getAvailableLocationInputOptions(array $context = []): array;
 
   /**
    * Get center value.
    *
-   * @param mixed $form_value
+   * @param array $form_value
    *   Form value.
-   * @param int $center_option_id
+   * @param string $location_input_option_id
    *   LocationInput option ID.
-   * @param array $center_option_settings
+   * @param array $location_input_option_settings
    *   The current feature settings.
-   * @param mixed $context
+   * @param array $context
    *   Context like field formatter, field widget or view.
    *
    * @return array
    *   Render array.
    */
-  public function getCoordinates($form_value, $center_option_id, array $center_option_settings, $context = NULL);
+  public function getCoordinates(array $form_value, array $settings, array $context = []): array;
 
-  /**
-   * Get center form.
-   *
-   * @param string $center_option_id
-   *   LocationInput option ID.
-   * @param array $center_option_settings
-   *   The current feature settings.
-   * @param mixed $context
-   *   Context like field formatter, field widget or view.
-   * @param array|null $default_value
-   *   Optional form values.
-   *
-   * @return array
-   *   Form.
-   */
-  public function getForm(string $center_option_id, array $center_option_settings, $context = NULL, array $default_value = NULL);
+  public function alterForm(array $form, array $settings, array $context = [], array $default_value = NULL): array;
 
 }

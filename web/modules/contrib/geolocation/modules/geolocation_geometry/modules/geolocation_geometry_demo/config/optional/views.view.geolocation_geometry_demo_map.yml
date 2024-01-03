@@ -60,11 +60,10 @@ display:
           data_provider_id: geolocation_geometry
           data_provider_settings:
             stroke_color: '#ff0044'
-            stroke_color_randomize: false
+            color_randomize: false
             stroke_width: 1
             stroke_opacity: 0.8
             fill_color: '#0033ff'
-            fill_color_randomize: false
             fill_opacity: 0.1
           title_field: title
           label_field: title
@@ -719,7 +718,7 @@ display:
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: geometry
-          type: geolocation_geometry_wkt
+          type: geolocation_geometry_data
           settings: {  }
           group_column: ''
           group_columns: {  }
@@ -782,7 +781,7 @@ display:
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: geometry
-          type: geolocation_geometry_wkt
+          type: geolocation_geometry_data
           settings: {  }
           group_column: ''
           group_columns: {  }
@@ -870,11 +869,10 @@ display:
           data_provider_id: geolocation_geometry
           data_provider_settings:
             stroke_color: '#ff0044'
-            stroke_color_randomize: 0
+            color_randomize: 0
             stroke_width: '1'
             stroke_opacity: '0.8'
             fill_color: '#0033ff'
-            fill_color_randomize: 0
             fill_opacity: '0.1'
           title_field: title
           label_field: title

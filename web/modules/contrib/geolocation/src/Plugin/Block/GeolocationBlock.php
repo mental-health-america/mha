@@ -2,7 +2,9 @@
 
 namespace Drupal\geolocation\Plugin\Block;
 
+use Drupal\Core\Block\Annotation\Block;
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Extension\ModuleHandler;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Component\Utility\NestedArray;
@@ -21,77 +23,55 @@ use Drupal\filter\Entity\FilterFormat;
  */
 class GeolocationBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
-  /**
-   * Map Provider.
-   *
-   * @var \Drupal\geolocation\MapProviderManager
-   */
-  protected $mapProviderManager = NULL;
-
-  /**
-   * MapCenter options manager.
-   *
-   * @var \Drupal\geolocation\MapCenterManager
-   */
-  protected $mapCenterManager = NULL;
-
-  /**
-   * Construct a GeoocationBlock instance.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param string $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\geolocation\MapProviderManager $map_provider_manager
-   *   The map provider manager.
-   * @param \Drupal\geolocation\MapCenterManager $map_center_manager
-   *   The map center manager.
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, MapProviderManager $map_provider_manager, MapCenterManager $map_center_manager) {
-    $this->mapProviderManager = $map_provider_manager;
-    $this->mapCenterManager = $map_center_manager;
-
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    protected MapProviderManager $mapProviderManager,
+    protected MapCenterManager $mapCenterManager,
+    protected ModuleHandler $moduleHandler
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): GeolocationBlock {
     return new static(
       $configuration,
       $plugin_id,
       $plugin_definition,
       $container->get('plugin.manager.geolocation.mapprovider'),
-      $container->get('plugin.manager.geolocation.mapcenter')
+      $container->get('plugin.manager.geolocation.mapcenter'),
+      $container->get('module_handler')
     );
   }
 
   /**
    * {@inheritdoc}
    */
-  public function defaultConfiguration() {
+  public function defaultConfiguration(): array {
     $configuration = parent::defaultConfiguration();
     $configuration['map_provider_id'] = '';
-    if (\Drupal::moduleHandler()->moduleExists('geolocation_google_maps')) {
+    if ($this->moduleHandler->moduleExists('geolocation_google_maps')) {
       $configuration['map_provider_id'] = 'google_maps';
     }
-    elseif (\Drupal::moduleHandler()->moduleExists('geolocation_leaflet')) {
+    elseif ($this->moduleHandler->moduleExists('geolocation_leaflet')) {
       $configuration['map_provider_id'] = 'leaflet';
     }
     $configuration['map_provider_settings'] = [];
 
     $configuration['centre'] = [];
     $configuration['locations'] = [];
+
     return $configuration;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function blockForm($form, FormStateInterface $form_state) {
+  public function blockForm($form, FormStateInterface $form_state): array {
     $form = parent::blockForm($form, $form_state);
 
     $form['locations'] = [
@@ -197,7 +177,8 @@ class GeolocationBlock extends BlockBase implements ContainerFactoryPluginInterf
       'settings',
     ];
 
-    $map_provider_id = NestedArray::getValue($form_state->getUserInput(), array_merge($parents, ['map_provider_id']));
+    $user_input = $form_state->getUserInput();
+    $map_provider_id = NestedArray::getValue($user_input, array_merge($parents, ['map_provider_id']));
     if (empty($map_provider_id)) {
       $map_provider_id = $this->configuration['map_provider_id'];
     }
@@ -205,7 +186,7 @@ class GeolocationBlock extends BlockBase implements ContainerFactoryPluginInterf
       $map_provider_id = key($map_provider_options);
     }
 
-    $map_provider_settings = NestedArray::getValue($form_state->getUserInput(), array_merge($parents, ['map_provider_settings']));
+    $map_provider_settings = NestedArray::getValue($user_input, array_merge($parents, ['map_provider_settings']));
     if (empty($map_provider_settings)) {
       $map_provider_settings = $this->configuration['map_provider_settings'];
     }
@@ -238,7 +219,7 @@ class GeolocationBlock extends BlockBase implements ContainerFactoryPluginInterf
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   Current form state.
    */
-  public function addCallback(array &$form, FormStateInterface &$form_state) {
+  public function addCallback(array &$form, FormStateInterface $form_state) {
     $locations = $form_state->get('locations');
     $locations[] = [
       'marker_title' => '',
@@ -260,7 +241,7 @@ class GeolocationBlock extends BlockBase implements ContainerFactoryPluginInterf
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   Current form state.
    */
-  public function removeCallback(array &$form, FormStateInterface &$form_state) {
+  public function removeCallback(array &$form, FormStateInterface $form_state) {
     $parents = $form_state->getTriggeringElement()['#parents'];
     end($parents);
     $key = prev($parents);
@@ -281,7 +262,7 @@ class GeolocationBlock extends BlockBase implements ContainerFactoryPluginInterf
    * @return array
    *   Render array.
    */
-  public function addLocation(array &$form, FormStateInterface &$form_state) {
+  public function addLocation(array $form, FormStateInterface &$form_state): array {
     return $form['settings']['locations'];
   }
 
@@ -323,7 +304,7 @@ class GeolocationBlock extends BlockBase implements ContainerFactoryPluginInterf
   /**
    * {@inheritdoc}
    */
-  public function build() {
+  public function build(): array {
     $build = [
       '#id' => uniqid("map-"),
       '#type' => 'geolocation_map',
@@ -346,15 +327,13 @@ class GeolocationBlock extends BlockBase implements ContainerFactoryPluginInterf
       ];
     }
 
-    $build = $this->mapCenterManager->alterMap($build, $this->configuration['centre'], ['block' => $this]);
-
-    return $build;
+    return $this->mapCenterManager->alterMap($build, $this->configuration['centre'], ['block' => $this]);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function calculateDependencies() {
+  public function calculateDependencies(): array {
     $dependencies = parent::calculateDependencies();
     foreach ($this->configuration['locations'] as $index => $location) {
       $filter_format = FilterFormat::load($location['marker_content']['format']);

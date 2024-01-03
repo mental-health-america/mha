@@ -16,7 +16,7 @@ trait ProximityTrait {
    * @return array|float
    *   Either specific factor or all.
    */
-  public static function getDistanceConversions($unit = NULL) {
+  public static function getDistanceConversions($unit = NULL): float | array {
     $conversions = [
       'km' => 1,
       'mi' => 1.609344,
@@ -42,10 +42,10 @@ trait ProximityTrait {
    * @param bool $invert
    *   FALSE converts to, TRUE from km.
    *
-   * @return bool|float
+   * @return float|null
    *   Distance in km or target.
    */
-  public static function convertDistance($value, $factor = NULL, $invert = FALSE) {
+  public static function convertDistance($value, $factor = NULL, $invert = FALSE): ?float {
     $value = (float) $value;
 
     if (empty($factor)) {
@@ -66,7 +66,7 @@ trait ProximityTrait {
       return (float) $value * $factor;
     }
 
-    return FALSE;
+    return NULL;
   }
 
   /**
@@ -84,12 +84,12 @@ trait ProximityTrait {
    * @return string
    *   The fragment to enter to actual query.
    */
-  public static function getProximityQueryFragment($table_name, $field_id, $filter_lat, $filter_lng) {
+  public static function getProximityQueryFragment(string $table_name, string $field_id, string $filter_lat, string $filter_lng): string {
 
     // Define the field names.
-    $field_latsin = "{$table_name}.{$field_id}_lat_sin";
-    $field_latcos = "{$table_name}.{$field_id}_lat_cos";
-    $field_lng    = "{$table_name}.{$field_id}_lng_rad";
+    $field_latsin = "$table_name.{$field_id}_lat_sin";
+    $field_latcos = "$table_name.{$field_id}_lat_cos";
+    $field_lng    = "$table_name.{$field_id}_lng_rad";
 
     // deg2rad() is sensitive to empty strings. Replace with integer zero.
     $filter_lat = empty($filter_lat) ? 0 : $filter_lat;

@@ -3,7 +3,6 @@
 namespace Drupal\geolocation_leaflet\Plugin\geolocation\MapProvider;
 
 use Drupal\geolocation\MapProviderBase;
-use Drupal\Core\Render\BubbleableMetadata;
 
 /**
  * Provides Leaflet maps.
@@ -16,10 +15,15 @@ use Drupal\Core\Render\BubbleableMetadata;
  */
 class Leaflet extends MapProviderBase {
 
-  /**
-   * {@inheritdoc}
-   */
-  public static function getDefaultSettings() {
+  protected array $scripts = [
+    'https://unpkg.com/leaflet@1.9.3/dist/leaflet.js',
+  ];
+
+  protected array $stylesheets = [
+    'https://unpkg.com/leaflet@1.9.3/dist/leaflet.css',
+  ];
+
+  public static function getDefaultSettings(): array {
     return array_replace_recursive(
       parent::getDefaultSettings(),
       [
@@ -27,37 +31,37 @@ class Leaflet extends MapProviderBase {
         'height' => '400px',
         'width' => '100%',
         'minZoom' => 0,
-        'maxZoom' => 0,
+        'maxZoom' => 10,
         'maxBounds' => [
           'north_east_bound' => [],
           'south_west_bound' => [],
         ],
         'crs' => 'EPSG3857',
         'preferCanvas' => FALSE,
-        'zoomSnap' => 1,
-        'zoomDelta' => 1,
-        'trackResize' => TRUE,
-        'boxZoom' => TRUE,
-        'doubleClickZoom' => TRUE,
-        'dragging' => TRUE,
-        'zoomAnimation' => TRUE,
-        'zoomAnimationThreshold' => 4,
-        'fadeAnimation' => TRUE,
-        'markerZoomAnimation' => TRUE,
-        'inertia' => FALSE,
-        'inertiaDeceleration' => 3000,
-        'easeLinearity' => 0.2,
-        'worldCopyJump' => FALSE,
-        'maxBoundsViscosity' => 0.0,
-        'keyboard' => TRUE,
-        'keyboardPanDelta' => 80,
-        'scrollWheelZoom' => TRUE,
-        'wheelDebounceTime' => 40,
-        'wheelPxPerZoomLevel' => 60,
-        'tap' => TRUE,
-        'tapTolerance' => 15,
-        'touchZoom' => TRUE,
-        'bounceAtZoomLimits' => TRUE,
+          'zoomSnap' => 1,
+          'zoomDelta' => 1,
+          'trackResize' => TRUE,
+          'boxZoom' => TRUE,
+          'doubleClickZoom' => TRUE,
+          'dragging' => TRUE,
+          'zoomAnimation' => TRUE,
+          'zoomAnimationThreshold' => 4,
+          'fadeAnimation' => TRUE,
+          'markerZoomAnimation' => TRUE,
+          'inertia' => FALSE,
+          'inertiaDeceleration' => 3000,
+          'easeLinearity' => 0.2,
+          'worldCopyJump' => FALSE,
+          'maxBoundsViscosity' => 0.0,
+          'keyboard' => TRUE,
+          'keyboardPanDelta' => 80,
+          'scrollWheelZoom' => TRUE,
+          'wheelDebounceTime' => 40,
+          'wheelPxPerZoomLevel' => 60,
+          'tap' => TRUE,
+          'tapTolerance' => 15,
+          'touchZoom' => TRUE,
+          'bounceAtZoomLimits' => TRUE,
         'map_features' => [
           'leaflet_control_zoom' => [
             'enabled' => TRUE,
@@ -76,38 +80,7 @@ class Leaflet extends MapProviderBase {
     );
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function getSettings(array $settings) {
-    $settings = parent::getSettings($settings);
-
-    $settings['zoom'] = (int) $settings['zoom'];
-
-    if (empty($settings['minZoom'])) {
-      unset($settings['minZoom']);
-    }
-    else {
-      $settings['minZoom'] = (int) $settings['minZoom'];
-    }
-    if (empty($settings['maxZoom'])) {
-      unset($settings['maxZoom']);
-    }
-    else {
-      $settings['maxZoom'] = (int) $settings['maxZoom'];
-    }
-
-    return $settings;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getSettingsSummary(array $settings) {
-    $settings = array_replace_recursive(
-      self::getDefaultSettings(),
-      $settings
-    );
+  public function getSettingsSummary(array $settings): array {
     $summary = parent::getSettingsSummary($settings);
     $summary[] = $this->t('Zoom level: @zoom', ['@zoom' => $settings['zoom']]);
     $summary[] = $this->t('Height: @height', ['@height' => $settings['height']]);
@@ -115,19 +88,12 @@ class Leaflet extends MapProviderBase {
     return $summary;
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function getSettingsForm(array $settings, array $parents = []) {
+  public function getSettingsForm(array $settings, array $parents = []): array {
     $settings += self::getDefaultSettings();
-    if ($parents) {
-      $parents_string = implode('][', $parents);
-    }
-    else {
-      $parents_string = NULL;
-    }
 
     $form = parent::getSettingsForm($settings, $parents);
+
+    $parents_string = $parents ? implode('][', $parents) : NULL;
 
     $form['height'] = [
       '#group' => $parents_string,
@@ -352,7 +318,6 @@ class Leaflet extends MapProviderBase {
       '#title' => $this->t("With this option enabled, the map tracks when you pan to another 'copy' of the world and seamlessly jumps to the original one so that all overlays like markers and vector layers are still visible."),
       '#default_value' => $settings['worldCopyJump'],
     ];
-
     $form['easeLinearity'] = [
       '#group' => $advanced_parents_string,
       '#type' => 'number',
@@ -473,10 +438,7 @@ class Leaflet extends MapProviderBase {
     return $form;
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function alterRenderArray(array $render_array, array $map_settings, array $context = []) {
+  public function alterRenderArray(array $render_array, array $map_settings, array $context = []): array {
     if (
       !empty($map_settings['maxBounds'])
       && !empty($map_settings['maxBounds']['north_east_bound'])
@@ -505,55 +467,16 @@ class Leaflet extends MapProviderBase {
       unset($map_settings['maxBounds']);
     }
 
-    $render_array['#attached'] = BubbleableMetadata::mergeAttachments(
-      empty($render_array['#attached']) ? [] : $render_array['#attached'],
-      [
-        'library' => [
-          'geolocation_leaflet/geolocation.leaflet',
-        ],
-        'drupalSettings' => [
-          'geolocation' => [
-            'maps' => [
-              $render_array['#id'] => [
-                'settings' => [
-                  'leaflet_settings' => $map_settings,
-                ],
-              ],
-            ],
-          ],
-        ],
-      ]
-    );
-
     return parent::alterRenderArray($render_array, $map_settings, $context);
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  public static function getControlPositions() {
+  public static function getControlPositions(): array {
     return [
       'topleft' => t('Top left'),
       'topright' => t('Top right'),
       'bottomleft' => t('Bottom left'),
       'bottomright' => t('Bottom right'),
     ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function alterCommonMap(array $render_array, array $map_settings, array $context) {
-    $render_array['#attached'] = BubbleableMetadata::mergeAttachments(
-      empty($render_array['#attached']) ? [] : $render_array['#attached'],
-      [
-        'library' => [
-          'geolocation_leaflet/commonmap.leaflet',
-        ],
-      ]
-    );
-
-    return $render_array;
   }
 
 }

@@ -22,7 +22,7 @@ class GooglegeocoderWidget extends DemoWidget {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
 
-    $widget_form = $this->getWidgetForm('geolocation_googlegeocoder', $form, $form_state);
+    $widget_form = $this->getWidgetForm('geolocation_map', $form, $form_state);
 
     $form['widget'] = $widget_form;
 

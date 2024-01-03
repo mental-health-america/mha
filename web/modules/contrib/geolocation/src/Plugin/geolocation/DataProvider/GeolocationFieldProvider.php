@@ -2,12 +2,16 @@
 
 namespace Drupal\geolocation\Plugin\geolocation\DataProvider;
 
+use Exception;
+use Drupal\Core\Annotation\Translation;
 use Drupal\Core\Field\FieldItemInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
+
 use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\geolocation\DataProviderInterface;
 use Drupal\geolocation\DataProviderBase;
 use Drupal\geolocation\Plugin\Field\FieldType\GeolocationItem;
+use Traversable;
 
 /**
  * Provides default geolocation field.
@@ -23,7 +27,7 @@ class GeolocationFieldProvider extends DataProviderBase implements DataProviderI
   /**
    * {@inheritdoc}
    */
-  public function getTokenHelp(FieldDefinitionInterface $fieldDefinition = NULL) {
+  public function getTokenHelp(FieldDefinitionInterface $fieldDefinition = NULL): array {
 
     $element = parent::getTokenHelp($fieldDefinition);
 
@@ -51,10 +55,10 @@ class GeolocationFieldProvider extends DataProviderBase implements DataProviderI
   /**
    * {@inheritdoc}
    */
-  public function replaceFieldItemTokens($text, FieldItemInterface $fieldItem) {
+  public function replaceFieldItemTokens($text, FieldItemInterface $fieldItem): string {
     $token_context['geolocation_current_item'] = $fieldItem;
 
-    $text = \Drupal::token()->replace($text, $token_context, [
+    $text = $this->token->replace($text, $token_context, [
       'callback' => [$this, 'geolocationItemTokens'],
       'clear' => FALSE,
     ]);
@@ -62,9 +66,6 @@ class GeolocationFieldProvider extends DataProviderBase implements DataProviderI
     return parent::replaceFieldItemTokens($text, $fieldItem);
   }
 
-  /**
-   * {@inheritdoc}
-   */
   public function geolocationItemTokens(array &$replacements, array $data, array $options) {
     if (isset($data['geolocation_current_item'])) {
 
@@ -76,14 +77,14 @@ class GeolocationFieldProvider extends DataProviderBase implements DataProviderI
 
       // Handle data tokens.
       $metadata = $item->get('data')->getValue();
-      if (is_array($metadata) || ($metadata instanceof \Traversable)) {
+      if (is_array($metadata) || ($metadata instanceof Traversable)) {
         foreach ($metadata as $key => $value) {
           try {
             // Maybe there is values inside the values.
-            if (is_array($value) || ($value instanceof \Traversable)) {
+            if (is_array($value) || ($value instanceof Traversable)) {
               foreach ($value as $deepkey => $deepvalue) {
                 if (is_string($deepvalue)) {
-                  $replacements['[geolocation_current_item:data:' . $key . ':' . $deepkey . ']'] = (string) $deepvalue;
+                  $replacements['[geolocation_current_item:data:' . $key . ':' . $deepkey . ']'] = $deepvalue;
                 }
               }
             }
@@ -91,7 +92,7 @@ class GeolocationFieldProvider extends DataProviderBase implements DataProviderI
               $replacements['[geolocation_current_item:data:' . $key . ']'] = (string) $value;
             }
           }
-          catch (\Exception $e) {
+          catch (Exception $e) {
             watchdog_exception('geolocation', $e);
           }
         }
@@ -102,21 +103,21 @@ class GeolocationFieldProvider extends DataProviderBase implements DataProviderI
   /**
    * {@inheritdoc}
    */
-  public function isViewsGeoOption(FieldPluginBase $views_field) {
-    return ($views_field->getPluginId() == 'geolocation_field');
+  public function isViewsGeoOption(FieldPluginBase $viewsField): bool {
+    return ($viewsField->getPluginId() == 'geolocation_field');
   }
 
   /**
    * {@inheritdoc}
    */
-  public function isFieldGeoOption(FieldDefinitionInterface $fieldDefinition) {
+  public function isFieldGeoOption(FieldDefinitionInterface $fieldDefinition): bool {
     return ($fieldDefinition->getType() == 'geolocation');
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getPositionsFromItem(FieldItemInterface $fieldItem) {
+  public function getPositionsFromItem(FieldItemInterface $fieldItem): array {
     if ($fieldItem instanceof GeolocationItem) {
       return [
         [
@@ -126,7 +127,7 @@ class GeolocationFieldProvider extends DataProviderBase implements DataProviderI
       ];
     }
 
-    return FALSE;
+    return [];
   }
 
 }

@@ -5,6 +5,7 @@ namespace Drupal\geolocation\Plugin\views\argument;
 use Drupal\geolocation\GeocoderManager;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\views\Annotation\ViewsArgument;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -16,36 +17,19 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class GeocoderArgument extends ProximityArgument implements ContainerFactoryPluginInterface {
 
-
-  /**
-   * The GeocoderManager object.
-   *
-   * @var \Drupal\geolocation\GeocoderManager
-   */
-  protected $geocoderManager;
-
-  /**
-   * Constructs a Handler object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\geolocation\GeocoderManager $geocoder_manager
-   *   Geocoder manager.
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, GeocoderManager $geocoder_manager) {
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    protected GeocoderManager $geocoderManager
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-
-    $this->geocoderManager = $geocoder_manager;
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): GeocoderArgument {
     return new static(
       $configuration,
       $plugin_id,
@@ -57,7 +41,7 @@ class GeocoderArgument extends ProximityArgument implements ContainerFactoryPlug
   /**
    * {@inheritdoc}
    */
-  protected function defineOptions() {
+  protected function defineOptions(): array {
     return array_replace_recursive(
       parent::defineOptions(),
       [
@@ -70,7 +54,7 @@ class GeocoderArgument extends ProximityArgument implements ContainerFactoryPlug
   /**
    * {@inheritdoc}
    */
-  public function buildOptionsForm(&$form, FormStateInterface $form_state) {
+  public function buildOptionsForm(&$form, FormStateInterface $form_state): void {
     parent::buildOptionsForm($form, $form_state);
 
     $geocoder_options = [];
@@ -132,10 +116,10 @@ class GeocoderArgument extends ProximityArgument implements ContainerFactoryPlug
   /**
    * Processes the passed argument into an array of relevant geolocation data.
    *
-   * @return array|bool
+   * @return array
    *   The calculated values.
    */
-  public function getParsedReferenceLocation() {
+  public function getParsedReferenceLocation(): array {
     // Cache the vales so this only gets processed once.
     static $values;
 

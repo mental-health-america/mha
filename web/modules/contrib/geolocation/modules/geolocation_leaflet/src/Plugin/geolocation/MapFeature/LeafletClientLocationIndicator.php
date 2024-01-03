@@ -2,10 +2,11 @@
 
 namespace Drupal\geolocation_leaflet\Plugin\geolocation\MapFeature;
 
-use Drupal\geolocation\MapFeatureFrontendBase;
+
+use Drupal\geolocation\MapFeatureBase;
 
 /**
- * Provides continious client location indicator.
+ * Provides continuous client location indicator.
  *
  * @MapFeature(
  *   id = "leaflet_client_location_indicator",
@@ -14,6 +15,6 @@ use Drupal\geolocation\MapFeatureFrontendBase;
  *   type = "leaflet",
  * )
  */
-class LeafletClientLocationIndicator extends MapFeatureFrontendBase {
+class LeafletClientLocationIndicator extends MapFeatureBase {
 
 }

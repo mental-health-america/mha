@@ -3,6 +3,7 @@
 namespace Drupal\geolocation\Plugin\geolocation\MapCenter;
 
 use Drupal\Core\Render\BubbleableMetadata;
+
 use Drupal\geolocation\MapCenterInterface;
 use Drupal\geolocation\MapCenterBase;
 use Drupal\geolocation\ViewsContextTrait;
@@ -23,7 +24,7 @@ class ViewsBoundaryFilter extends MapCenterBase implements MapCenterInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getDefaultSettings() {
+  public static function getDefaultSettings(): array {
     return array_replace_recursive(
       parent::getDefaultSettings(),
       [
@@ -35,7 +36,7 @@ class ViewsBoundaryFilter extends MapCenterBase implements MapCenterInterface {
   /**
    * {@inheritdoc}
    */
-  public function getSettingsForm($center_option_id = NULL, array $settings = [], $context = NULL) {
+  public function getSettingsForm(string $center_option_id = NULL, array $settings = [], array $context = []): array {
     $form = parent::getSettingsForm($center_option_id, $settings, $context);
 
     $form['clear_address_input'] = [
@@ -50,7 +51,7 @@ class ViewsBoundaryFilter extends MapCenterBase implements MapCenterInterface {
   /**
    * {@inheritdoc}
    */
-  public function getAvailableMapCenterOptions($context) {
+  public function getAvailableMapCenterOptions(array $context = []): array {
     $options = [];
 
     if ($displayHandler = self::getViewsDisplayHandler($context)) {
@@ -69,28 +70,31 @@ class ViewsBoundaryFilter extends MapCenterBase implements MapCenterInterface {
   /**
    * {@inheritdoc}
    */
-  public function alterMap(array $map, $center_option_id, array $center_option_settings, $context = NULL) {
-    $map = parent::alterMap($map, $center_option_id, $center_option_settings, $context);
+  public function alterMap(array $render_array, string $center_option_id, int $weight, array $center_option_settings = [], array $context = []): array {
+    $render_array = parent::alterMap($render_array, $center_option_id, $weight, $center_option_settings, $context);
 
     if (!($displayHandler = self::getViewsDisplayHandler($context))) {
-      return $map;
+      return $render_array;
     }
 
     /** @var \Drupal\geolocation\Plugin\views\filter\BoundaryFilter $handler */
     $handler = $displayHandler->getHandler('filter', substr($center_option_id, 16));
 
-    $map['#attached'] = BubbleableMetadata::mergeAttachments($map['#attached'], [
-      'library' => [
-        'geolocation/map_center.viewsBoundaryFilter',
-      ],
+    if (!$handler) {
+      return $render_array;
+    }
+
+    $render_array['#attached'] = BubbleableMetadata::mergeAttachments($render_array['#attached'], [
       'drupalSettings' => [
         'geolocation' => [
           'maps' => [
-            $map['#id'] => [
-              'map_center' => [
+            $render_array['#id'] => [
+              'mapCenter' => [
                 'views_boundary_filter' => [
-                  'clearAddressInput' => (bool) $center_option_settings['clear_address_input'],
-                  'identifier' => $handler->options['expose']['identifier'],
+                  'settings' => [
+                    'clearAddressInput' => (bool) $center_option_settings['clear_address_input'],
+                    'identifier' => $handler->options['expose']['identifier'],
+                  ],
                 ],
               ],
             ],
@@ -109,17 +113,19 @@ class ViewsBoundaryFilter extends MapCenterBase implements MapCenterInterface {
       && isset($handler->value['lng_south_west'])
       && $handler->value['lng_south_west'] !== ""
     ) {
-      $map['#attached'] = BubbleableMetadata::mergeAttachments($map['#attached'], [
+      $render_array['#attached'] = BubbleableMetadata::mergeAttachments($render_array['#attached'], [
         'drupalSettings' => [
           'geolocation' => [
             'maps' => [
-              $map['#id'] => [
-                'map_center' => [
+              $render_array['#id'] => [
+                'mapCenter' => [
                   'views_boundary_filter' => [
-                    'latNorthEast' => (float) $handler->value['lat_north_east'],
-                    'lngNorthEast' => (float) $handler->value['lng_north_east'],
-                    'latSouthWest' => (float) $handler->value['lat_south_west'],
-                    'lngSouthWest' => (float) $handler->value['lng_south_west'],
+                    'settings' => [
+                      'north' => (float) $handler->value['lat_north_east'],
+                      'east' => (float) $handler->value['lng_north_east'],
+                      'south' => (float) $handler->value['lat_south_west'],
+                      'west' => (float) $handler->value['lng_south_west'],
+                    ],
                   ],
                 ],
               ],
@@ -129,7 +135,7 @@ class ViewsBoundaryFilter extends MapCenterBase implements MapCenterInterface {
       ]);
     }
 
-    return $map;
+    return $render_array;
   }
 
 }

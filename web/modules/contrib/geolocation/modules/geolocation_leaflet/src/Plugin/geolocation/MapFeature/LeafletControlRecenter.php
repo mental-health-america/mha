@@ -2,6 +2,9 @@
 
 namespace Drupal\geolocation_leaflet\Plugin\geolocation\MapFeature;
 
+use Drupal\geolocation\MapProviderInterface;
+use Drupal\geolocation\Plugin\geolocation\MapFeature\ControlCustomElementBase;
+
 /**
  * Provides Recenter control element.
  *
@@ -17,8 +20,8 @@ class LeafletControlRecenter extends ControlCustomElementBase {
   /**
    * {@inheritdoc}
    */
-  public function alterMap(array $render_array, array $settings, array $context = []) {
-    $render_array = parent::alterMap($render_array, $settings, $context);
+  public function alterMap(array $render_array, array $feature_settings = [], array $context = [], MapProviderInterface $mapProvider = NULL): array {
+    $render_array = parent::alterMap($render_array, $feature_settings, $context, $mapProvider);
 
     $render_array['#controls'][$this->getPluginId()]['control_recenter'] = [
       '#type' => 'html_tag',

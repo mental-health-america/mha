@@ -2,7 +2,14 @@
 
 namespace Drupal\geolocation\Plugin\views\style;
 
+use Drupal\Core\Extension\ModuleHandler;
+use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\geolocation\DataLayerProviderManager;
+use Drupal\geolocation\MapCenterManager;
+use Drupal\geolocation\MapProviderManager;
+use Drupal\views\Annotation\ViewsStyle;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Component\Utility\NestedArray;
 
@@ -24,46 +31,41 @@ class CommonMap extends GeolocationStyleBase {
   /**
    * Map ID.
    *
-   * @var bool|string
+   * @var string
    */
-  protected $mapId = FALSE;
-
-  /**
-   * Map provider manager.
-   *
-   * @var \Drupal\geolocation\MapProviderManager
-   */
-  protected $mapProviderManager = NULL;
-
-  /**
-   * MapCenter options manager.
-   *
-   * @var \Drupal\geolocation\MapCenterManager
-   */
-  protected $mapCenterManager = NULL;
+  protected string $mapId;
 
   /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, $map_provider_manager, $map_center_manager, $file_url_generator, $data_provider_manager) {
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    $data_provider_manager,
+    FileUrlGeneratorInterface $file_url_generator,
+    protected MapProviderManager $mapProviderManager,
+    protected MapCenterManager $mapCenterManager,
+    protected DataLayerProviderManager $dataLayerProviderManager,
+    protected ModuleHandler $moduleHandler
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $data_provider_manager, $file_url_generator);
-
-    $this->mapProviderManager = $map_provider_manager;
-    $this->mapCenterManager = $map_center_manager;
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): CommonMap {
     return new static(
       $configuration,
       $plugin_id,
       $plugin_definition,
+      $container->get('plugin.manager.geolocation.dataprovider'),
+      $container->get('file_url_generator'),
       $container->get('plugin.manager.geolocation.mapprovider'),
       $container->get('plugin.manager.geolocation.mapcenter'),
-      $container->get('file_url_generator'),
-      $container->get('plugin.manager.geolocation.dataprovider')
+      $container->get('plugin.manager.geolocation.datalayerprovider'),
+      $container->get('module_handler')
     );
   }
 
@@ -77,7 +79,7 @@ class CommonMap extends GeolocationStyleBase {
    * @return array
    *   The determined options.
    */
-  protected function getMapUpdateOptions() {
+  protected function getMapUpdateOptions(): array {
     $options = [];
 
     foreach ($this->displayHandler->getOption('filters') as $filter_id => $filter) {
@@ -100,128 +102,14 @@ class CommonMap extends GeolocationStyleBase {
   /**
    * {@inheritdoc}
    */
-  public function evenEmpty() {
+  public function evenEmpty(): bool {
     return (bool) $this->options['even_empty'];
   }
 
   /**
    * {@inheritdoc}
    */
-  public function render() {
-
-    $render = parent::render();
-    if ($render === FALSE) {
-      return [];
-    }
-
-    if (!empty($this->options['dynamic_map']['enabled'])) {
-      // @todo Not unique enough, but uniqueid() changes on every AJAX request.
-      // For the geolocationCommonMapBehavior to work, this has to stay
-      // identical.
-      $this->mapId = $this->view->id() . '-' . $this->view->current_display;
-      $this->mapId = str_replace('_', '-', $this->mapId);
-    }
-    else {
-      $this->mapId = $this->view->dom_id;
-    }
-
-    $map_settings = [];
-    if (!empty($this->options['map_provider_settings'])) {
-      $map_settings = $this->options['map_provider_settings'];
-    }
-
-    $build = [
-      '#type' => 'geolocation_map',
-      '#maptype' => $this->options['map_provider_id'],
-      '#id' => $this->mapId,
-      '#settings' => $map_settings,
-      '#layers' => [],
-      '#attached' => [
-        'library' => [
-          'geolocation/geolocation.commonmap',
-        ],
-      ],
-      '#context' => ['view' => $this->view],
-    ];
-
-    /*
-     * Dynamic map handling.
-     */
-    if (!empty($this->options['dynamic_map']['enabled'])) {
-      if (
-        !empty($this->options['dynamic_map']['update_target'])
-        && $this->view->displayHandlers->has($this->options['dynamic_map']['update_target'])
-      ) {
-        $update_view_display_id = $this->options['dynamic_map']['update_target'];
-      }
-      else {
-        $update_view_display_id = $this->view->current_display;
-      }
-
-      $build['#attached']['drupalSettings']['geolocation']['commonMap'][$this->mapId]['dynamic_map'] = [
-        'enable' => TRUE,
-        'hide_form' => $this->options['dynamic_map']['hide_form'],
-        'views_refresh_delay' => $this->options['dynamic_map']['views_refresh_delay'],
-        'update_view_id' => $this->view->id(),
-        'update_view_display_id' => $update_view_display_id,
-      ];
-
-      if (substr($this->options['dynamic_map']['update_handler'], 0, strlen('boundary_filter_')) === 'boundary_filter_') {
-        $filter_id = substr($this->options['dynamic_map']['update_handler'], strlen('boundary_filter_'));
-        $filters = $this->displayHandler->getOption('filters');
-        $filter_options = $filters[$filter_id];
-        $build['#attached']['drupalSettings']['geolocation']['commonMap'][$this->mapId]['dynamic_map'] += [
-          'boundary_filter' => TRUE,
-          'parameter_identifier' => $filter_options['expose']['identifier'],
-        ];
-      }
-    }
-
-    $this->renderFields($this->view->result);
-
-    /*
-     * Add locations to output.
-     */
-    foreach ($this->view->result as $row) {
-      foreach ($this->getLocationsFromRow($row) as $location) {
-        $build['locations'][] = $location;
-      }
-    }
-
-    $build = $this->mapCenterManager->alterMap($build, $this->options['centre'], $this);
-
-    if ($this->view->getRequest()->get('geolocation_common_map_dynamic_view')) {
-      if (empty($build['#attributes'])) {
-        $build['#attributes'] = [];
-      }
-      $build['#attributes'] = array_replace_recursive($build['#attributes'], [
-        'data-preserve-map-center' => TRUE,
-      ]);
-    }
-
-    if ($this->mapProviderManager->hasDefinition($this->options['map_provider_id'])) {
-      $build = $this->mapProviderManager
-        ->createInstance($this->options['map_provider_id'], $this->options['map_provider_settings'])
-        ->alterCommonMap($build, $this->options['map_provider_settings'], ['view' => $this]);
-    }
-
-    if (
-      !empty($this->view->geolocationLayers)
-      && !empty($this->view->geolocationLayers[$this->view->current_display])
-    ) {
-      if (empty($build['#layers'])) {
-        $build['#layers'] = [];
-      }
-      $build['#layers'][] = $this->view->geolocationLayers[$this->view->current_display];
-    }
-
-    return $build;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function defineOptions() {
+  protected function defineOptions(): array {
     $options = parent::defineOptions();
 
     $options['even_empty'] = ['default' => '1'];
@@ -240,13 +128,22 @@ class CommonMap extends GeolocationStyleBase {
     $options['map_provider_id'] = ['default' => ''];
     $options['map_provider_settings'] = ['default' => []];
 
+    $options['data_layers'] = [
+      'default' => [
+        'geolocation_default_layer:default' => [
+          'enabled' => TRUE,
+          'weight' => 1,
+        ],
+      ],
+    ];
+
     return $options;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function buildOptionsForm(&$form, FormStateInterface $form_state) {
+  public function buildOptionsForm(&$form, FormStateInterface $form_state): void {
     $map_provider_options = $this->mapProviderManager->getMapProviderOptions();
 
     if (empty($map_provider_options)) {
@@ -324,33 +221,37 @@ class CommonMap extends GeolocationStyleBase {
             $update_targets[$instance_id] = $display_instance->display['display_title'];
           }
         }
-        if (!empty($update_targets)) {
-          $form['dynamic_map']['update_target'] = [
-            '#title' => $this->t('Dynamic map update target'),
-            '#type' => 'select',
-            '#default_value' => $this->options['dynamic_map']['update_target'],
-            '#description' => $this->t("Targets other than page or block can only update themselves."),
-            '#options' => $update_targets,
-            '#states' => [
-              'visible' => [
-                ':input[name="style_options[dynamic_map][enabled]"]' => ['checked' => TRUE],
-              ],
+        $form['dynamic_map']['update_target'] = [
+          '#title' => $this->t('Dynamic map update target'),
+          '#type' => 'select',
+          '#default_value' => $this->options['dynamic_map']['update_target'],
+          '#description' => $this->t("Targets other than page or block can only update themselves."),
+          '#options' => $update_targets,
+          '#states' => [
+            'visible' => [
+              ':input[name="style_options[dynamic_map][enabled]"]' => ['checked' => TRUE],
             ],
-          ];
-        }
+          ],
+        ];
       }
     }
 
     /*
      * Centre handling.
      */
-    $form['centre'] = $this->mapCenterManager->getCenterOptionsForm((array) $this->options['centre'], $this);
+    $center_form = $this->mapCenterManager->getCenterOptionsForm((array) $this->options['centre'], ['views_style' => $this]);
+    $center_form['#parents'] = ['style_options', 'centre'];
+    $form['centre'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Center options'),
+      'form' => $center_form,
+    ];
 
     /*
      * Advanced settings
      */
     $form['advanced_settings'] = [
-      '#type' => 'fieldset',
+      '#type' => 'details',
       '#title' => $this->t('Advanced settings'),
     ];
 
@@ -382,8 +283,9 @@ class CommonMap extends GeolocationStyleBase {
       '#value' => $this->t("No settings available."),
     ];
 
+    $user_input = $form_state->getUserInput();
     $map_provider_id = NestedArray::getValue(
-      $form_state->getUserInput(),
+      $user_input,
       ['style_options', 'map_provider_id']
     );
     if (empty($map_provider_id)) {
@@ -408,16 +310,22 @@ class CommonMap extends GeolocationStyleBase {
       }
     }
 
-    if (!empty($map_provider_id)) {
-      $form['map_provider_settings'] = $this->mapProviderManager
-        ->createInstance($map_provider_id, $map_provider_settings)
-        ->getSettingsForm(
-          $map_provider_settings,
-          [
-            'style_options',
-            'map_provider_settings',
-          ]
-        );
+    $map_provider = NULL;
+    if (
+      $map_provider_id
+      && $this->mapProviderManager->hasDefinition($map_provider_id)
+    ) {
+      $map_provider = $this->mapProviderManager->createInstance($map_provider_id, $map_provider_settings);
+    }
+
+    if ($map_provider) {
+      $form['map_provider_settings'] = $map_provider->getSettingsForm(
+        $map_provider_settings,
+        [
+          'style_options',
+          'map_provider_settings',
+        ]
+      );
     }
 
     $form['map_provider_settings'] = array_replace(
@@ -427,12 +335,19 @@ class CommonMap extends GeolocationStyleBase {
         '#suffix' => '</div>',
       ]
     );
+
+    $form['data_layers'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Data layers'),
+      '#weight' => 1,
+      'form' => $this->dataLayerProviderManager->getOptionsForm($this->options['data_layers'] ?? [], ['style_options', 'data_layers'], $map_provider),
+    ];
   }
 
   /**
    * {@inheritdoc}
    */
-  public function calculateDependencies() {
+  public function calculateDependencies(): array {
     $dependencies = parent::calculateDependencies();
     if (empty($this->options['map_provider_id'])) {
       return $dependencies;
@@ -441,6 +356,111 @@ class CommonMap extends GeolocationStyleBase {
     $definition = $this->mapProviderManager->getDefinition($this->options['map_provider_id']);
 
     return array_merge_recursive($dependencies, ['module' => [$definition['provider']]]);
+  }
+
+
+  /**
+   * {@inheritdoc}
+   */
+  public function render(): array {
+
+    $render = parent::render();
+    if (!$render) {
+      return [];
+    }
+
+    if (!empty($this->options['dynamic_map']['enabled'])) {
+      // @todo Not unique enough, but uniqueid() changes on every AJAX request.
+      // For the geolocationCommonMapBehavior to work, this has to stay
+      // identical.
+      $this->mapId = 'map-' . $this->view->id() . '-' . $this->view->current_display;
+      $this->mapId = str_replace('_', '-', $this->mapId);
+    }
+    else {
+      $this->mapId = 'map-' . $this->view->dom_id;
+    }
+
+    $map_settings = [];
+    if (!empty($this->options['map_provider_settings'])) {
+      $map_settings = $this->options['map_provider_settings'];
+    }
+
+    $build = [
+      '#type' => 'geolocation_map',
+      '#maptype' => $this->options['map_provider_id'],
+      '#id' => $this->mapId,
+      '#settings' => $map_settings,
+      '#context' => ['view' => $this->view],
+    ];
+
+    /*
+     * Dynamic map handling.
+     */
+    if (!empty($this->options['dynamic_map']['enabled'])) {
+      if (
+        !empty($this->options['dynamic_map']['update_target'])
+        && $this->view->displayHandlers->has($this->options['dynamic_map']['update_target'])
+      ) {
+        $update_view_display_id = $this->options['dynamic_map']['update_target'];
+      }
+      else {
+        $update_view_display_id = $this->view->current_display;
+      }
+
+      $feature_settings = [
+        'enable' => TRUE,
+        'hide_form' => $this->options['dynamic_map']['hide_form'],
+        'views_refresh_delay' => $this->options['dynamic_map']['views_refresh_delay'],
+        'update_view_id' => $this->view->id(),
+        'update_view_display_id' => $update_view_display_id,
+      ];
+
+      if (str_starts_with($this->options['dynamic_map']['update_handler'], 'boundary_filter_')) {
+        $filter_id = substr($this->options['dynamic_map']['update_handler'], strlen('boundary_filter_'));
+        $filters = $this->displayHandler->getOption('filters');
+        $filter_options = $filters[$filter_id];
+        $feature_settings += [
+          'boundary_filter' => TRUE,
+          'parameter_identifier' => $filter_options['expose']['identifier'],
+        ];
+      }
+
+      $build['#attached'] = BubbleableMetadata::mergeAttachments($build['#attached'] ?? [], [
+        'drupalSettings' => [
+          'geolocation' => [
+            'maps' => [
+              $this->mapId => [
+                'features' => [
+                  'geolocation_ajax_update' => [
+                    'import_path' => base_path()
+                      . $this->moduleHandler->getModule('geolocation')->getPath()
+                      . '/js/MapFeature/GeolocationAjaxUpdate.js',
+                    'settings' => $feature_settings,
+                  ],
+                ],
+              ],
+            ],
+          ],
+        ],
+      ]);
+    }
+
+    $this->renderFields($this->view->result);
+
+    /*
+     * Add locations to output.
+     */
+    foreach ($this->view->result as $row) {
+      foreach ($this->getLocationsFromRow($row) as $location) {
+        $build['locations'][] = $location;
+      }
+    }
+
+    $build = $this->mapCenterManager->alterMap($build, $this->options['centre'], ['views_style' => $this]);
+
+    $build = $this->dataLayerProviderManager->alterMap($build, $this->options['data_layers'], ['views_style' => $this]);
+
+    return $build;
   }
 
 }

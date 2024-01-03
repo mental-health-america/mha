@@ -8,27 +8,27 @@
 /**
  * Implements hook_requirements().
  */
-function geolocation_geometry_requirements($phase) {
+function geolocation_geometry_requirements($phase): array {
   $requirements = [];
   $requirements['geolocation_geometry_database_compatibility'] = [
     'title' => t('Geolocation Geometry - Database Compatibility'),
     'value' => t('Database meets required spatial data capability.'),
-    'description' => t('Requires MySQL >= 5.7.6 or MariaDB >= 10.1.2 or PostgreSQL with PostGIS installed.'),
+    'description' => t('Requires MySQL >= 8 or MariaDB >= 10.1.2 or PostgreSQL with PostGIS installed.'),
     'severity' => REQUIREMENT_OK,
   ];
 
   // Must be MySQL >= 5.7.6 or MariaDB >= 10.1.2.
-  $connection = \Drupal::database();
+  $connection = Drupal::database();
 
   if ($connection->driver() === 'mysql') {
     $version = $connection->version();
-    if ((float) substr($version, 0, 5) >= 5.7) {
+    if ((float) substr($version, 0, 5) >= 8) {
       return $requirements;
     }
     elseif (
-      strpos($version, 'MariaDB') !== FALSE
-      && strpos($version, '10.') !== FALSE
-      && strpos($version, '10.0') === FALSE
+      str_contains($version, 'MariaDB')
+      && str_contains($version, '10.')
+      && !str_contains($version, '10.0')
     ) {
       return $requirements;
     }

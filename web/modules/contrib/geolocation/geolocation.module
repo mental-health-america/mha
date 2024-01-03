@@ -12,7 +12,7 @@ use Drupal\geolocation\Plugin\migrate\field\Location;
 /**
  * Implements hook_help().
  */
-function geolocation_help($route_name, RouteMatchInterface $route_match) {
+function geolocation_help($route_name, RouteMatchInterface $route_match): ?string {
   switch ($route_name) {
 
     case 'help.page.geolocation':
@@ -35,18 +35,26 @@ function geolocation_help($route_name, RouteMatchInterface $route_match) {
 /**
  * Implements hook_theme().
  */
-function geolocation_theme() {
+function geolocation_theme(): array {
   return [
     'geolocation_map_wrapper' => [
       'variables' => [
         'attributes' => NULL,
         'maptype' => NULL,
-        'locations' => NULL,
         'centre' => NULL,
         'id' => NULL,
+        'layers' => NULL,
         'children' => NULL,
         'controls' => NULL,
         'context' => NULL,
+      ],
+    ],
+    'geolocation_map_layer' => [
+      'variables' => [
+        'attributes' => NULL,
+        'title' => NULL,
+        'id' => NULL,
+        'children' => NULL,
       ],
     ],
     'geolocation_map_location' => [
@@ -62,23 +70,13 @@ function geolocation_theme() {
         'row' => NULL,
       ],
     ],
-    'geolocation_map_polyline' => [
+    'geolocation_map_geometry' => [
       'variables' => [
         'attributes' => NULL,
         'children' => NULL,
         'title' => NULL,
-        'coordinates' => NULL,
-        'stroke_color' => NULL,
-        'stroke_width' => NULL,
-        'stroke_opacity' => NULL,
-      ],
-    ],
-    'geolocation_map_polygon' => [
-      'variables' => [
-        'attributes' => NULL,
-        'children' => NULL,
-        'title' => NULL,
-        'coordinates' => NULL,
+        'geometry' => NULL,
+        'geometry_type' => NULL,
         'stroke_color' => NULL,
         'stroke_width' => NULL,
         'stroke_opacity' => NULL,
@@ -106,7 +104,7 @@ function geolocation_theme() {
 /**
  * Implements hook_migrate_field_info_alter().
  */
-function geolocation_migrate_field_info_alter(&$definitions) {
+function geolocation_migrate_field_info_alter(&$definitions): void {
   // Defines the location-to-geolocation migrate field plugin.
   // This code also wants to replace the location-to-address migrate field
   // plugin of Address module: a geolocation with latitude and longitude is way

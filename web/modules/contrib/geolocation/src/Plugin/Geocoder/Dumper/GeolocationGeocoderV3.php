@@ -2,6 +2,7 @@
 
 namespace Drupal\geolocation\Plugin\Geocoder\Dumper;
 
+use Drupal\geocoder\Annotation\GeocoderDumper;
 use Drupal\geocoder\DumperBase;
 use Geocoder\Location;
 

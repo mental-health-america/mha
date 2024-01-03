@@ -17,7 +17,7 @@ abstract class LocationBase extends PluginBase implements LocationInterface, Con
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): LocationInterface {
     return new static(
       $configuration,
       $plugin_id,
@@ -28,38 +28,33 @@ abstract class LocationBase extends PluginBase implements LocationInterface, Con
   /**
    * {@inheritdoc}
    */
-  public static function getDefaultSettings() {
+  public static function getDefaultSettings(): array {
     return [];
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getSettings(array $settings) {
+  public function getSettings(array $settings): array {
     $default_settings = $this->getDefaultSettings();
-    $settings = array_replace_recursive($default_settings, $settings);
-
-    return $settings;
+    return array_replace_recursive($default_settings, $settings);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getSettingsForm($option_id = NULL, array $settings = [], $context = NULL) {
+  public function getSettingsForm(string $location_option_id, array $settings = [], array $context = []): array {
     $form = [];
 
     return $form;
   }
 
-  /**
-   * {@inheritdoc}
-   */
   public function validateSettingsForm(array $values, FormStateInterface $form_state) {}
 
   /**
    * {@inheritdoc}
    */
-  public function getAvailableLocationOptions($context) {
+  public function getAvailableLocationOptions(array $context = []): array {
     return [
       $this->getPluginId() => $this->getPluginDefinition()['name'],
     ];
@@ -68,7 +63,7 @@ abstract class LocationBase extends PluginBase implements LocationInterface, Con
   /**
    * {@inheritdoc}
    */
-  public function getCoordinates($center_option_id, array $center_option_settings, $context = NULL) {
+  public function getCoordinates(string $location_option_id, array $location_option_settings, array $context = []): ?array {
     return [];
   }
 

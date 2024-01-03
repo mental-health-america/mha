@@ -2,6 +2,7 @@
 
 namespace Drupal\geolocation\Plugin\Field\FieldFormatter;
 
+use Drupal\Core\Field\Annotation\FieldFormatter;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
 
@@ -22,7 +23,7 @@ class GeolocationSexagesimalFormatter extends FormatterBase {
   /**
    * {@inheritdoc}
    */
-  public function viewElements(FieldItemListInterface $items, $langcode) {
+  public function viewElements(FieldItemListInterface $items, $langcode): array {
     $element = [];
 
     foreach ($items as $delta => $item) {

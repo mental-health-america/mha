@@ -2,13 +2,13 @@
 
 namespace Drupal\features;
 
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ConfigInstaller;
 use Drupal\Core\Config\ConfigInstallerInterface;
-use Drupal\Core\Config\ConfigManagerInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Extension\ExtensionPathResolver;
 use Drupal\Core\Config\StorageInterface;
 use Drupal\Core\Config\TypedConfigManagerInterface;
-use Drupal\Core\Extension\ExtensionPathResolver;
+use Drupal\Core\Config\ConfigManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**

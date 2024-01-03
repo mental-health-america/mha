@@ -3,12 +3,12 @@
 namespace Drupal\features\Plugin\FeaturesGeneration;
 
 use Drupal\Core\Access\CsrfTokenGenerator;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\features\FeaturesGenerationMethodBase;
 use Drupal\Core\Archiver\ArchiveTar;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\features\FeaturesBundleInterface;
-use Drupal\features\FeaturesGenerationMethodBase;
 use Drupal\features\Package;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 

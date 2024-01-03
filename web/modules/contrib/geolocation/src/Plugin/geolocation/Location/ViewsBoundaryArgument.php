@@ -2,6 +2,7 @@
 
 namespace Drupal\geolocation\Plugin\geolocation\Location;
 
+
 use Drupal\geolocation\LocationInterface;
 use Drupal\geolocation\LocationBase;
 use Drupal\geolocation\ViewsContextTrait;
@@ -22,7 +23,7 @@ class ViewsBoundaryArgument extends LocationBase implements LocationInterface {
   /**
    * {@inheritdoc}
    */
-  public function getAvailableLocationOptions($context): array {
+  public function getAvailableLocationOptions(array $context = []): array {
     $options = [];
 
     if ($displayHandler = self::getViewsDisplayHandler($context)) {
@@ -40,28 +41,29 @@ class ViewsBoundaryArgument extends LocationBase implements LocationInterface {
   /**
    * {@inheritdoc}
    */
-  public function getCoordinates($location_option_id, array $location_option_settings, $context = NULL) {
+  public function getCoordinates($location_option_id, array $location_option_settings, array $context = []): ?array {
     if ($displayHandler = self::getViewsDisplayHandler($context)) {
 
-      /** @var \Drupal\geolocation\Plugin\views\argument\BoundaryArgument $argument */
+      /** @var \Drupal\geolocation\Plugin\views\argument\BoundaryArgument|null $argument */
       $argument = $displayHandler->getHandler('argument', $location_option_id);
       if (empty($argument)) {
-        return FALSE;
-      }
-      $values = $argument->getParsedBoundary();
-
-      // See documentation at
-      // http://tubalmartin.github.io/spherical-geometry-php/#LatLngBounds
-      $latitude = ($values['lat_south_west'] + $values['lat_north_east']) / 2;
-      $longitude = ($values['lng_south_west'] + $values['lng_north_east']) / 2;
-      if ($values['lng_south_west'] > $values['lng_north_east']) {
-        $longitude = $longitude == 0 ? 180 : fmod((fmod((($longitude + 180) - -180), 360) + 360), 360) + -180;
+        return NULL;
       }
 
-      return [
-        'lat' => $latitude,
-        'lng' => $longitude,
-      ];
+      if ($values = $argument->getParsedBoundary()) {
+        // See documentation at
+        // http://tubalmartin.github.io/spherical-geometry-php/#LatLngBounds
+        $latitude = ($values['lat_south_west'] + $values['lat_north_east']) / 2;
+        $longitude = ($values['lng_south_west'] + $values['lng_north_east']) / 2;
+        if ($values['lng_south_west'] > $values['lng_north_east']) {
+          $longitude = $longitude == 0 ? 180 : fmod((fmod((($longitude + 180) - -180), 360) + 360), 360) + -180;
+        }
+
+        return [
+          'lat' => $latitude,
+          'lng' => $longitude,
+        ];
+      }
     }
 
     return parent::getCoordinates($location_option_id, $location_option_settings, $context);

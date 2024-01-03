@@ -12,8 +12,8 @@ abstract class GeocoderCountryFormattingBase extends PluginBase implements Geoco
   /**
    * {@inheritdoc}
    */
-  public function format(array $atomics) {
-    $address_elements = [
+  public function format(array $atomics): ?array {
+    return [
       'organization' => '',
       'addressLine1' => '',
       'addressLine2' => '',
@@ -22,8 +22,6 @@ abstract class GeocoderCountryFormattingBase extends PluginBase implements Geoco
       'administrativeArea' => '',
       'countryCode' => '',
     ];
-
-    return $address_elements;
   }
 
 }

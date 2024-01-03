@@ -2,6 +2,8 @@
 
 namespace Drupal\geolocation_leaflet\Plugin\geolocation\Geocoder;
 
+use Drupal;
+
 use Drupal\geolocation\GeocoderBase;
 use Drupal\geolocation\GeocoderInterface;
 use Drupal\Component\Serialization\Json;
@@ -28,14 +30,14 @@ class Nominatim extends GeocoderBase implements GeocoderInterface {
    *
    * @var string
    */
-  protected static $nominatimBaseUrl = 'https://nominatim.openstreetmap.org';
+  protected static string $nominatimBaseUrl = 'https://nominatim.openstreetmap.org';
 
   /**
    * {@inheritdoc}
    */
-  public function geocode($address) {
+  public function geocode(string $address): ?array {
     if (empty($address)) {
-      return FALSE;
+      return NULL;
     }
 
     $request_url_base = $this->getRequestUrlBase();
@@ -49,17 +51,17 @@ class Nominatim extends GeocoderBase implements GeocoderInterface {
     ]);
 
     try {
-      $result = Json::decode(\Drupal::httpClient()->get($url->toString())->getBody());
+      $result = Json::decode(Drupal::httpClient()->get($url->toString())->getBody());
     }
     catch (RequestException $e) {
       watchdog_exception('geolocation', $e);
-      return FALSE;
+      return NULL;
     }
 
     $location = [];
 
     if (empty($result[0])) {
-      return FALSE;
+      return NULL;
     }
     else {
       $location['location'] = [
@@ -87,7 +89,7 @@ class Nominatim extends GeocoderBase implements GeocoderInterface {
   /**
    * {@inheritdoc}
    */
-  public function reverseGeocode($latitude, $longitude) {
+  public function reverseGeocode(float $latitude, float $longitude): ?array {
     $request_url_base = $this->getRequestUrlBase();
     $url = Url::fromUri($request_url_base . '/reverse/', [
       'query' => [
@@ -103,15 +105,15 @@ class Nominatim extends GeocoderBase implements GeocoderInterface {
     ]);
 
     try {
-      $result = Json::decode(\Drupal::httpClient()->get($url->toString())->getBody());
+      $result = Json::decode(Drupal::httpClient()->get($url->toString())->getBody());
     }
     catch (RequestException $e) {
       watchdog_exception('geolocation', $e);
-      return FALSE;
+      return NULL;
     }
 
     if (empty($result['address'])) {
-      return FALSE;
+      return NULL;
     }
 
     $address_atomics = [];
@@ -176,8 +178,8 @@ class Nominatim extends GeocoderBase implements GeocoderInterface {
    * @return string
    *   Base URL.
    */
-  protected function getRequestUrlBase() {
-    $config = \Drupal::config('geolocation_leaflet.nominatim_settings');
+  protected function getRequestUrlBase(): string {
+    $config = Drupal::config('geolocation_leaflet.nominatim_settings');
 
     if (!empty($config->get('nominatim_base_url'))) {
       $request_url = $config->get('nominatim_base_url');
@@ -194,14 +196,14 @@ class Nominatim extends GeocoderBase implements GeocoderInterface {
    * @return string
    *   Get Request Email.
    */
-  protected function getRequestEmail() {
-    $config = \Drupal::config('geolocation_leaflet.nominatim_settings');
+  protected function getRequestEmail(): string {
+    $config = Drupal::config('geolocation_leaflet.nominatim_settings');
 
     if (!empty($config->get('nominatim_email'))) {
       $request_email = $config->get('nominatim_email');
     }
     else {
-      $request_email = \Drupal::config('system.site')->get('mail');
+      $request_email = Drupal::config('system.site')->get('mail');
     }
     return $request_email;
   }

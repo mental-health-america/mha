@@ -8,15 +8,15 @@
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Field\WidgetInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
-use Drupal\geolocation\Plugin\Field\FieldWidget\GeolocationMapWidgetBase;
+use Drupal\geolocation\Plugin\Field\FieldWidget\GeolocationMapWidget;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\geolocation_address\Plugin\migrate\field\Location;
 
 /**
  * Implements hook_geolocation_field_map_widget_alter().
  */
-function geolocation_address_geolocation_field_map_widget_alter(&$element, $context) {
-  /** @var \Drupal\geolocation\Plugin\Field\FieldWidget\GeolocationMapWidgetBase $widget */
+function geolocation_address_geolocation_field_map_widget_alter(&$element, $context): void {
+  /** @var \Drupal\geolocation\Plugin\Field\FieldWidget\GeolocationMapWidget $widget */
   $widget = $context['widget'];
 
   /** @var \Drupal\Core\Field\FieldDefinitionInterface $field_definition */
@@ -44,24 +44,31 @@ function geolocation_address_geolocation_field_map_widget_alter(&$element, $cont
   $element['#attached'] = BubbleableMetadata::mergeAttachments(
     empty($element['#attached']) ? [] : $element['#attached'],
     [
-      'library' => [
-        'geolocation_address/geolocation_address.widget',
-      ],
+
       'drupalSettings' => [
         'geolocation' => [
-          'addressIntegration' => [
-            $element['widget']['#field_name'] => [
-              'geocoder' => $settings['geocoder'],
-              'settings' => $settings['settings'],
-              'address_field' => $settings['address_field'],
-              'sync_mode' => $settings['sync_mode'],
-              'direction' => $settings['direction'],
-              'ignore' => $settings['ignore'],
+          'widgetSettings' => [
+            $element['##attached']['id'] => [
+              'widgetSubscribers' => [
+                'address_widget  ' => [
+                  'import_path' => base_path()
+                    . \Drupal::service('moduleHandler')->getModule('geolocation')->getPath()
+                    . '/js/WidgetSubscriber/GeolocationFieldWidget.js',
+                  'settings' => [
+                    'geocoder' => $settings['geocoder'],
+                    'settings' => $settings['settings'],
+                    'address_field' => $settings['address_field'],
+                    'sync_mode' => $settings['sync_mode'],
+                    'direction' => $settings['direction'],
+                    'ignore' => $settings['ignore'],
+                  ]
+                ],
+              ],
             ],
           ],
         ],
       ],
-    ]
+    ],
   );
 
   $element['#attributes'] = BubbleableMetadata::mergeAttachments(
@@ -120,8 +127,8 @@ function geolocation_address_geolocation_field_map_widget_alter(&$element, $cont
 /**
  * Implements hook_field_widget_third_party_settings_form().
  */
-function geolocation_address_field_widget_third_party_settings_form(WidgetInterface $widget, FieldDefinitionInterface $field_definition, $form_mode, $form, FormStateInterface $form_state) {
-  if (!($widget instanceof GeolocationMapWidgetBase)) {
+function geolocation_address_field_widget_third_party_settings_form(WidgetInterface $widget, FieldDefinitionInterface $field_definition, $form_mode, $form, FormStateInterface $form_state): array {
+  if (!($widget instanceof GeolocationMapWidget)) {
     return [];
   }
 
@@ -327,11 +334,11 @@ function geolocation_address_field_widget_third_party_settings_form(WidgetInterf
 /**
  * Implements hook_field_widget_settings_summary_alter().
  */
-function geolocation_address_field_widget_settings_summary_alter(&$summary, $context) {
-  /** @var \Drupal\geolocation\Plugin\Field\FieldWidget\GeolocationMapWidgetBase $widget */
+function geolocation_address_field_widget_settings_summary_alter(&$summary, $context): void {
+  /** @var \Drupal\geolocation\Plugin\Field\FieldWidget\GeolocationMapWidget $widget */
   $widget = $context['widget'];
 
-  if (!($widget instanceof GeolocationMapWidgetBase)) {
+  if (!($widget instanceof GeolocationMapWidget)) {
     return;
   }
 
@@ -339,7 +346,6 @@ function geolocation_address_field_widget_settings_summary_alter(&$summary, $con
   if (!empty($settings['enable'])) {
     $summary[] = t('Syncing with %field address field', ['%field' => $settings['address_field']]);
   }
-
 }
 
 /**
@@ -351,7 +357,7 @@ function geolocation_address_field_widget_settings_summary_alter(&$summary, $con
  * @return array
  *   The widget settings including defaults.
  */
-function geolocation_address_get_widget_settings(WidgetInterface $widget) {
+function geolocation_address_get_widget_settings(WidgetInterface $widget): array {
   $settings = $widget->getThirdPartySettings('geolocation_address');
 
   // Backwards compatibility if the third party settings have the
@@ -362,21 +368,21 @@ function geolocation_address_get_widget_settings(WidgetInterface $widget) {
   }
 
   return $settings + [
-    'enable' => FALSE,
-    'address_field' => NULL,
-    'geocoder' => NULL,
-    'settings' => [],
-    'sync_mode' => 'auto',
-    'direction' => 'duplex',
-    'button_position' => NULL,
-    'ignore' => [],
-  ];
+      'enable' => FALSE,
+      'address_field' => NULL,
+      'geocoder' => NULL,
+      'settings' => [],
+      'sync_mode' => 'auto',
+      'direction' => 'duplex',
+      'button_position' => NULL,
+      'ignore' => [],
+    ];
 }
 
 /**
  * Implements hook_migrate_field_info_alter().
  */
-function geolocation_address_migrate_field_info_alter(&$definitions) {
+function geolocation_address_migrate_field_info_alter(&$definitions): void {
   // When geolocation and also address modules are present, we can migrate both
   // the geological locations and also the addresses into their own field.
   if (!empty($definitions['location'])) {

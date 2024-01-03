@@ -2,9 +2,9 @@
 
 namespace Drupal\Tests\features\Unit;
 
+use Prophecy\PhpUnit\ProphecyTrait;
 use Drupal\features\Entity\FeaturesBundle;
 use Drupal\Tests\UnitTestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * @coversDefaultClass Drupal\features\Entity\FeaturesBundle
@@ -13,7 +13,6 @@ use Prophecy\PhpUnit\ProphecyTrait;
 class FeaturesBundleTest extends UnitTestCase {
 
   use ProphecyTrait;
-
   /**
    * {@inheritDoc}
    */

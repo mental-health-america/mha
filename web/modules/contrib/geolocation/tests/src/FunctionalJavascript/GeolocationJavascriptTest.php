@@ -61,7 +61,7 @@ class GeolocationJavascriptTest extends GeolocationJavascriptTestBase {
 
     EntityFormDisplay::load('node.article.default')
       ->setComponent('field_geolocation', [
-        'type' => 'geolocation_googlegeocoder',
+        'type' => 'geolocation_map',
         'settings' => [
           'allow_override_map_settings' => TRUE,
         ],

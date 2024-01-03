@@ -4,6 +4,6 @@
   "description": "Geolocation here maps module",
   "private": true,
   "devDependencies": {
-    "@types/heremaps": "^3.0.12"
+    "@types/heremaps": "^3.1.8"
   }
 }

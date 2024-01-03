@@ -2,7 +2,9 @@
 
 namespace Drupal\geolocation_leaflet\Plugin\geolocation\MapFeature;
 
-use Drupal\Core\Render\BubbleableMetadata;
+
+use Drupal\geolocation\MapProviderInterface;
+use Drupal\geolocation\Plugin\geolocation\MapFeature\ControlElementBase;
 
 /**
  * Provides Attribution control element.
@@ -19,7 +21,7 @@ class LeafletControlAttribution extends ControlElementBase {
   /**
    * {@inheritdoc}
    */
-  public static function getDefaultSettings() {
+  public static function getDefaultSettings(): array {
     return array_replace_recursive(
       parent::getDefaultSettings(),
       [
@@ -31,8 +33,8 @@ class LeafletControlAttribution extends ControlElementBase {
   /**
    * {@inheritdoc}
    */
-  public function getSettingsForm(array $settings, array $parents) {
-    $form = parent::getSettingsForm($settings, $parents);
+  public function getSettingsForm(array $settings, array $parents = [], MapProviderInterface $mapProvider = NULL): array {
+    $form = parent::getSettingsForm($settings, $parents, $mapProvider);
 
     $form['prefix'] = [
       '#type' => 'textfield',
@@ -42,33 +44,6 @@ class LeafletControlAttribution extends ControlElementBase {
     ];
 
     return $form;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function alterMap(array $render_array, array $feature_settings, array $context = []) {
-    $render_array = parent::alterMap($render_array, $feature_settings, $context);
-
-    $render_array['#attached'] = BubbleableMetadata::mergeAttachments(
-      empty($render_array['#attached']) ? [] : $render_array['#attached'],
-      [
-        'drupalSettings' => [
-          'geolocation' => [
-            'maps' => [
-              $render_array['#id'] => [
-                $this->getPluginId() => [
-                  'position' => $feature_settings['position'],
-                  'prefix' => $feature_settings['prefix'],
-                ],
-              ],
-            ],
-          ],
-        ],
-      ]
-    );
-
-    return $render_array;
   }
 
 }

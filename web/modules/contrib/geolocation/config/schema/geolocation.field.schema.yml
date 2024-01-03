@@ -69,24 +69,28 @@ geolocation.field.widget.map.base:
   type: mapping
   label: 'Geolocation Widget Base'
   mapping:
-    auto_client_location:
+    map_provider_id:
       type: string
-      label: 'Automatically use client location'
-    auto_client_location_marker:
-      type: string
-      label: 'Automatically set marker as well'
+      label: 'Map provider ID'
+    map_provider_settings:
+      type: geolocation.map_provider.[%parent.map_provider_id]
+      label: 'Map provider settings'
     allow_override_map_settings:
       type: integer
       label: 'Allow override map settings.'
-    hide_textfield_form:
+    hide_inputs:
       type: boolean
-      label: 'Hide textfields'
+      label: 'Hide inputs'
     centre:
       type: sequence
       label: 'Center option settings'
       sequence:
         type: plugin.plugin_configuration.geolocation.map_center_option.[%key]
         label: 'The settings for a map center option'
+
+field.widget.settings.geolocation_map:
+  type: geolocation.field.widget.map.base
+  label: 'Geolocation Map Widget'
 
 field.value.geolocation:
   type: mapping

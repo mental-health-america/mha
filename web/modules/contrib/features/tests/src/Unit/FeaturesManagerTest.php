@@ -2,22 +2,23 @@
 
 namespace Drupal\Tests\features\Unit;
 
+use Prophecy\PhpUnit\ProphecyTrait;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\config_update\ConfigDiffInterface;
-use Drupal\config_update\ConfigRevertInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ConfigManagerInterface;
 use Drupal\Core\Config\InstallStorage;
 use Drupal\Core\Config\StorageInterface;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\Extension\Extension;
-use Drupal\Core\Extension\ExtensionPathResolver;
 use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\features\ConfigurationItem;
+use Drupal\Core\Extension\ExtensionPathResolver;
+use Drupal\config_update\ConfigRevertInterface;
 use Drupal\features\Entity\FeaturesBundle;
 use Drupal\features\FeaturesAssignerInterface;
 use Drupal\features\FeaturesBundleInterface;
+use Drupal\features\ConfigurationItem;
 use Drupal\features\FeaturesExtensionStoragesInterface;
 use Drupal\features\FeaturesManager;
 use Drupal\features\FeaturesManagerInterface;
@@ -25,7 +26,6 @@ use Drupal\features\Package;
 use Drupal\Tests\UnitTestCase;
 use org\bovigo\vfs\vfsStream;
 use Prophecy\Argument;
-use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * @coversDefaultClass Drupal\features\FeaturesManager

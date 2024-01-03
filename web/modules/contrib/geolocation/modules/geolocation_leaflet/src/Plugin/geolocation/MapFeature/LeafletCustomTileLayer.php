@@ -2,8 +2,10 @@
 
 namespace Drupal\geolocation_leaflet\Plugin\geolocation\MapFeature;
 
+
 use Drupal\geolocation\MapFeatureBase;
 use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\geolocation\MapProviderInterface;
 
 /**
  * Provides map tile layer support.
@@ -17,26 +19,23 @@ use Drupal\Core\Render\BubbleableMetadata;
  */
 class LeafletCustomTileLayer extends MapFeatureBase {
 
-  /**
-   * {@inheritdoc}
-   */
-  public static function getDefaultSettings() {
-    return [
-      'tile_layer_url' => '//{s}.tile.osm.org/{z}/{x}/{y}.png',
-      'tile_layer_attribution' => '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
-      'tile_layer_subdomains' => 'abc',
-      'tile_layer_zoom' => 18,
-    ];
+  public static function getDefaultSettings(): array {
+    return array_replace_recursive(
+      parent::getDefaultSettings(),
+      [
+        'tile_layer_url' => '//{s}.tile.osm.org/{z}/{x}/{y}.png',
+        'tile_layer_attribution' => '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
+        'tile_layer_subdomains' => 'abc',
+        'tile_layer_zoom' => 18,
+      ]
+    );
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function getSettingsForm(array $settings, array $parents) {
+  public function getSettingsForm(array $settings, array $parents = [], MapProviderInterface $mapProvider = NULL): array {
     $form['tile_layer_url'] = [
       '#type' => 'textfield',
       '#title' => $this->t('URL'),
-      '#description' => $this->t('Enter a tile server url like "http://{s}.tile.osm.org/{z}/{x}/{y}.png".'),
+      '#description' => $this->t('Enter a tile server url like "https://{s}.tile.osm.org/{z}/{x}/{y}.png".'),
       '#default_value' => $settings['tile_layer_url'],
     ];
     $form['tile_layer_attribution'] = [
@@ -62,39 +61,6 @@ class LeafletCustomTileLayer extends MapFeatureBase {
     ];
 
     return $form;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function alterMap(array $render_array, array $feature_settings, array $context = []) {
-    $render_array = parent::alterMap($render_array, $feature_settings, $context);
-
-    $render_array['#attached'] = BubbleableMetadata::mergeAttachments(
-      empty($render_array['#attached']) ? [] : $render_array['#attached'],
-      [
-        'library' => [
-          'geolocation_leaflet/mapfeature.' . $this->getPluginId(),
-        ],
-        'drupalSettings' => [
-          'geolocation' => [
-            'maps' => [
-              $render_array['#id'] => [
-                $this->getPluginId() => [
-                  'enable' => TRUE,
-                  'tileLayerUrl' => $feature_settings['tile_layer_url'],
-                  'tileLayerAttribution' => $feature_settings['tile_layer_attribution'],
-                  'tileLayerSubdomains' => $feature_settings['tile_layer_subdomains'],
-                  'tileLayerZoom' => $feature_settings['tile_layer_zoom'],
-                ],
-              ],
-            ],
-          ],
-        ],
-      ]
-    );
-
-    return $render_array;
   }
 
 }

@@ -26,10 +26,10 @@ trait BoundaryTrait {
    * @return string
    *   The fragment to enter to actual query.
    */
-  public static function getBoundaryQueryFragment($table_name, $field_id, $filter_lat_north_east, $filter_lng_north_east, $filter_lat_south_west, $filter_lng_south_west) {
+  public static function getBoundaryQueryFragment(string $table_name, string $field_id, string $filter_lat_north_east, string $filter_lng_north_east, string $filter_lat_south_west, string $filter_lng_south_west): string {
     // Define the field name.
-    $field_lat = "{$table_name}.{$field_id}_lat";
-    $field_lng = "{$table_name}.{$field_id}_lng";
+    $field_lat = "$table_name.{$field_id}_lat";
+    $field_lng = "$table_name.{$field_id}_lng";
 
     /*
      * Map shows a map, not a globe. Therefore it will never flip over

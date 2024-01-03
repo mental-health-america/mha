@@ -2,6 +2,9 @@
 
 namespace Drupal\geolocation\Plugin\geolocation\LocationInput;
 
+use Drupal\Core\Extension\ModuleHandler;
+use Drupal\Core\File\FileSystem;
+
 use Drupal\geolocation\LocationManager;
 use Drupal\geolocation\LocationInputInterface;
 use Drupal\geolocation\LocationInputBase;
@@ -18,37 +21,27 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class Location extends LocationInputBase implements LocationInputInterface {
 
-  /**
-   * Location manager.
-   *
-   * @var \Drupal\geolocation\LocationManager
-   */
-  protected $locationManager;
-
-  /**
-   * Location Plugin ID.
-   *
-   * @var string
-   */
-  protected $locationPluginId = '';
-
-  /**
-   * {@inheritdoc}
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LocationManager $location_manager) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
-
-    $this->locationManager = $location_manager;
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    ModuleHandler $moduleHandler,
+    FileSystem $fileSystem,
+    protected LocationManager $locationManager
+  ) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $moduleHandler, $fileSystem);
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): LocationInputInterface {
     return new static(
       $configuration,
       $plugin_id,
       $plugin_definition,
+      $container->get('module_handler'),
+      $container->get('file_system'),
       $container->get('plugin.manager.geolocation.location')
     );
   }
@@ -56,7 +49,7 @@ class Location extends LocationInputBase implements LocationInputInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getDefaultSettings() {
+  public static function getDefaultSettings(): array  {
     $settings = parent::getDefaultSettings();
     $settings['location_settings'] = [
       'settings' => [],
@@ -69,8 +62,8 @@ class Location extends LocationInputBase implements LocationInputInterface {
   /**
    * {@inheritdoc}
    */
-  public function getSettingsForm($option_id = NULL, array $settings = [], $context = NULL) {
-    $values = explode(':', $option_id);
+  public function getSettingsForm(array $settings = [], array $context = []): array {
+    $values = explode(':', $location_input_option_id ?? '');
     if (count($values) !== 2) {
       return [];
     }
@@ -81,9 +74,8 @@ class Location extends LocationInputBase implements LocationInputInterface {
       return [];
     }
 
-    /** @var \Drupal\geolocation\LocationInterface $location_plugin */
     $location_plugin = $this->locationManager->createInstance($location_plugin_id);
-    $form = parent::getSettingsForm($location_plugin->getPluginId(), $settings, $context);
+    $form = parent::getSettingsForm($settings, $context);
     // A bit more complicated to use location schema.
     $form['location_settings']['settings'] = $location_plugin->getSettingsForm($location_option_id, $settings['location_settings']['settings'], $context);
     $form['location_plugin_id'] = [
@@ -97,11 +89,10 @@ class Location extends LocationInputBase implements LocationInputInterface {
   /**
    * {@inheritdoc}
    */
-  public function getAvailableLocationInputOptions($context) {
+  public function getAvailableLocationInputOptions(array $context = []): array {
     $options = [];
 
     foreach ($this->locationManager->getDefinitions() as $location_plugin_id => $location_plugin_definition) {
-      /** @var \Drupal\geolocation\LocationInterface $location_plugin */
       $location_plugin = $this->locationManager->createInstance($location_plugin_id);
       foreach ($location_plugin->getAvailableLocationOptions($context) as $location_id => $location_label) {
         $options[$location_plugin_id . ':' . $location_id] = $location_label;
@@ -114,8 +105,8 @@ class Location extends LocationInputBase implements LocationInputInterface {
   /**
    * {@inheritdoc}
    */
-  public function getCoordinates($form_value, $center_option_id, array $center_option_settings, $context = NULL) {
-    $values = explode(':', $center_option_id);
+  public function getCoordinates(array $form_value, array $settings, array $context = NULL): array {
+    $values = explode(':', $location_input_option_id ?? '');
     if (count($values) !== 2) {
       return [];
     }
@@ -126,22 +117,14 @@ class Location extends LocationInputBase implements LocationInputInterface {
       return [];
     }
 
-    /** @var \Drupal\geolocation\LocationInterface $location */
     $location = $this->locationManager->createInstance($location_plugin_id);
 
-    $center = $location->getCoordinates($location_option_id, $center_option_settings['location_settings']['settings'], $context);
+    $center = $location->getCoordinates($location_option_id, $settings['location_settings']['settings'], $context);
     if (empty($center)) {
-      return FALSE;
+      return [];
     }
 
     return $center;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getForm(string $center_option_id, array $center_option_settings, $context = NULL, array $default_value = NULL) {
-    return [];
   }
 
 }

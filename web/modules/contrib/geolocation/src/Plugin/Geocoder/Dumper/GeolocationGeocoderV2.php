@@ -2,6 +2,7 @@
 
 namespace Drupal\geolocation\Plugin\Geocoder\Dumper;
 
+use Drupal\geocoder\Annotation\GeocoderDumper;
 use Drupal\geocoder\DumperBase;
 use Geocoder\Model\Address;
 
@@ -17,6 +18,7 @@ class GeolocationGeocoderV2 extends DumperBase {
 
   /**
    * {@inheritdoc}
+   * @noinspection PhpHierarchyChecksInspection
    */
   public function dump(Address $address) {
     $data = $address->toArray();

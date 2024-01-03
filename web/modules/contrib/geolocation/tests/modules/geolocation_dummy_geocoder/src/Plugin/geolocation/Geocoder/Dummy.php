@@ -40,7 +40,7 @@ class Dummy extends GeocoderBase {
   /**
    * {@inheritdoc}
    */
-  public function formAttachGeocoder(array &$render_array, $element_name) {
+  public function alterRenderArray(array &$render_array, $element_name) {
     $render_array['geolocation_geocoder_dummy'] = [
       '#type' => 'textfield',
       '#description' => $this->t('Enter one of the statically defined targets. See geolocation/Geocoder/Dummy.php.'),

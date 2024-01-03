@@ -57,7 +57,7 @@ class GeolocationGoogleGeocoderWidgetTest extends GeolocationJavascriptTestBase 
 
     EntityFormDisplay::load('node.article.default')
       ->setComponent('field_geolocation', [
-        'type' => 'geolocation_googlegeocoder',
+        'type' => 'geolocation_map',
         'settings' => [
           'allow_override_map_settings' => TRUE,
         ],
@@ -143,7 +143,7 @@ class GeolocationGoogleGeocoderWidgetTest extends GeolocationJavascriptTestBase 
   public function testGeocoderWidgetEmptyValuePreserved() {
     EntityFormDisplay::load('node.article.default')
       ->setComponent('field_geolocation', [
-        'type' => 'geolocation_googlegeocoder',
+        'type' => 'geolocation_map',
         'settings' => [
           'default_latitude' => 12,
           'default_longitude' => 24,
@@ -161,7 +161,7 @@ class GeolocationGoogleGeocoderWidgetTest extends GeolocationJavascriptTestBase 
 
     /** @var \Drupal\node\NodeInterface $new_node */
     $new_node = \Drupal::entityTypeManager()->getStorage('node')->load(5);
-    $this->assertTrue($new_node->get('field_geolocation')->isEmpty());
+    $this->assertSession()->assert($new_node->get('field_geolocation')->isEmpty(), "Node geolocation field empty after saving from predefined location widget");
   }
 
 }

@@ -4,11 +4,13 @@ namespace Drupal\geolocation\Plugin\migrate\process;
 
 use Drupal\Core\Database\DatabaseExceptionWrapper;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\migrate\Annotation\MigrateProcessPlugin;
 use Drupal\migrate\MigrateExecutableInterface;
 use Drupal\migrate\Plugin\MigrationInterface;
 use Drupal\migrate\ProcessPluginBase;
 use Drupal\migrate\Row;
 use Drupal\migrate_drupal\Plugin\migrate\source\DrupalSqlBase;
+use PDO;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -74,7 +76,7 @@ class LocationToGeolocation extends ProcessPluginBase implements ContainerFactor
         ->fields('l')
         ->condition('l.lid', $value['lid'])
         ->execute()
-        ->fetchAllAssoc('lid', \PDO::FETCH_ASSOC);
+        ->fetchAllAssoc('lid', PDO::FETCH_ASSOC);
 
       if (count($location_result) === 1) {
         $location_raw = reset($location_result);

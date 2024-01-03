@@ -2,7 +2,7 @@
 
 namespace Drupal\geolocation\Plugin\geolocation\MapCenter;
 
-use Drupal\Core\Render\BubbleableMetadata;
+
 use Drupal\geolocation\MapCenterInterface;
 use Drupal\geolocation\MapCenterBase;
 
@@ -20,7 +20,7 @@ class FixedBoundaries extends MapCenterBase implements MapCenterInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getDefaultSettings() {
+  public static function getDefaultSettings(): array {
     return [
       'north' => NULL,
       'east' => NULL,
@@ -32,7 +32,7 @@ class FixedBoundaries extends MapCenterBase implements MapCenterInterface {
   /**
    * {@inheritdoc}
    */
-  public function getSettingsForm($option_id = NULL, array $settings = [], $context = NULL) {
+  public function getSettingsForm(string $option_id = NULL, array $settings = [], array $context = []): array {
     $form = parent::getSettingsForm($option_id, $settings, $context);
     $form['north'] = [
       '#type' => 'number',
@@ -68,20 +68,6 @@ class FixedBoundaries extends MapCenterBase implements MapCenterInterface {
     ];
 
     return $form;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function alterMap(array $map, $center_option_id, array $center_option_settings, $context = NULL) {
-    $map = parent::alterMap($map, $center_option_id, $center_option_settings, $context);
-    $map['#attached'] = BubbleableMetadata::mergeAttachments($map['#attached'], [
-      'library' => [
-        'geolocation/map_center.fixed_boundaries',
-      ],
-    ]);
-
-    return $map;
   }
 
 }

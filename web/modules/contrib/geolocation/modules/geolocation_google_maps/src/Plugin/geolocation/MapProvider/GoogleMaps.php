@@ -2,6 +2,7 @@
 
 namespace Drupal\geolocation_google_maps\Plugin\geolocation\MapProvider;
 
+
 use Drupal\geolocation_google_maps\GoogleMapsProviderBase;
 use Drupal\Core\Render\BubbleableMetadata;
 
@@ -21,38 +22,19 @@ class GoogleMaps extends GoogleMapsProviderBase {
    *
    * @var int
    */
-  public static $maxZoomLevel = 20;
+  public static int $maxZoomLevel = 20;
 
   /**
    * Google map min zoom level.
    *
    * @var int
    */
-  public static $minZoomLevel = 0;
+  public static int $minZoomLevel = 0;
 
   /**
    * {@inheritdoc}
    */
-  public static $googleMapsApiUrlPath = '/maps/api/js';
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getGoogleMapsApiParameters(array $additional_parameters = []) {
-    $parameters = parent::getGoogleMapsApiParameters($additional_parameters);
-    $parameters['callback'] = 'Drupal.geolocation.google.load';
-
-    if (!empty($parameters['client'])) {
-      unset($parameters['key']);
-    }
-
-    return $parameters;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function getDefaultSettings() {
+  public static function getDefaultSettings(): array {
     return array_replace_recursive(
       parent::getDefaultSettings(),
       [
@@ -80,7 +62,7 @@ class GoogleMaps extends GoogleMapsProviderBase {
   /**
    * {@inheritdoc}
    */
-  public static function getControlPositions() {
+  public static function getControlPositions(): array {
     return [
       'LEFT_TOP' => t('Left top'),
       'LEFT_CENTER' => t('Left center'),
@@ -100,7 +82,7 @@ class GoogleMaps extends GoogleMapsProviderBase {
   /**
    * {@inheritdoc}
    */
-  public function getSettings(array $settings) {
+  public function getSettings(array $settings): array {
     $settings = parent::getSettings($settings);
 
     $settings['minZoom'] = (int) $settings['minZoom'];
@@ -112,7 +94,7 @@ class GoogleMaps extends GoogleMapsProviderBase {
   /**
    * {@inheritdoc}
    */
-  public function getSettingsForm(array $settings, array $parents = []) {
+  public function getSettingsForm(array $settings, array $parents = []): array {
     $settings = $this->getSettings($settings);
     $parents_string = '';
     if ($parents) {
@@ -157,7 +139,7 @@ class GoogleMaps extends GoogleMapsProviderBase {
     ];
 
     $form['behavior_settings'] = [
-      '#type' => 'fieldset',
+      '#type' => 'details',
       '#title' => $this->t('Behavior'),
     ];
     $form['gestureHandling'] = [
@@ -190,20 +172,16 @@ class GoogleMaps extends GoogleMapsProviderBase {
   /**
    * {@inheritdoc}
    */
-  public function alterRenderArray(array $render_array, array $map_settings, array $context = []) {
+  public function alterRenderArray(array $render_array, array $map_settings = [], array $context = []): array {
     $render_array['#attached'] = BubbleableMetadata::mergeAttachments(
-      empty($render_array['#attached']) ? [] : $render_array['#attached'],
+      $render_array['#attached'] ?? [],
       [
-        'library' => [
-          'geolocation_google_maps/google',
-        ],
         'drupalSettings' => [
           'geolocation' => [
             'maps' => [
               $render_array['#id'] => [
-                'settings' => [
-                  'google_map_settings' => $map_settings,
-                ],
+                'scripts' => [$this->googleMapsService->getGoogleMapsApiUrl([], '\js')],
+                'google_map_settings' => $map_settings,
               ],
             ],
           ],
@@ -212,22 +190,6 @@ class GoogleMaps extends GoogleMapsProviderBase {
     );
 
     return parent::alterRenderArray($render_array, $map_settings, $context);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function alterCommonMap(array $render_array, array $map_settings, array $context) {
-    $render_array['#attached'] = BubbleableMetadata::mergeAttachments(
-      empty($render_array['#attached']) ? [] : $render_array['#attached'],
-      [
-        'library' => [
-          'geolocation_google_maps/commonmap.google',
-        ],
-      ]
-    );
-
-    return $render_array;
   }
 
 }

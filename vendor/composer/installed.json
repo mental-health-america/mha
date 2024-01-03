@@ -3441,18 +3441,18 @@
         },
         {
             "name": "drupal/features",
-            "version": "3.14.0",
-            "version_normalized": "3.14.0.0",
+            "version": "5.0.0-alpha1",
+            "version_normalized": "5.0.0.0-alpha1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/features.git",
-                "reference": "8.x-3.14"
+                "reference": "5.0.0-alpha1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/features-8.x-3.14.zip",
-                "reference": "8.x-3.14",
-                "shasum": "fff0bb2d133c524ddb326422eba625c55585232c"
+                "url": "https://ftp.drupal.org/files/projects/features-5.0.0-alpha1.zip",
+                "reference": "5.0.0-alpha1",
+                "shasum": "4279efd774c44f2a72a528c3c8f585f37005a52e"
             },
             "require": {
                 "drupal/config_update": "^1.4 || ^2",
@@ -3461,16 +3461,16 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-3.14",
-                    "datestamp": "1702059191",
+                    "version": "5.0.0-alpha1",
+                    "datestamp": "1681517363",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
                     }
                 },
                 "drush": {
                     "services": {
-                        "drush.services.yml": "^10 || ^11"
+                        "drush.services.yml": "^9 || ^10"
                     }
                 }
             },
@@ -4145,48 +4145,43 @@
         },
         {
             "name": "drupal/geolocation",
-            "version": "3.12.0",
-            "version_normalized": "3.12.0.0",
+            "version": "4.0.0-alpha2",
+            "version_normalized": "4.0.0.0-alpha2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/geolocation.git",
-                "reference": "8.x-3.12"
+                "reference": "4.0.0-alpha2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/geolocation-8.x-3.12.zip",
-                "reference": "8.x-3.12",
-                "shasum": "eb31fe9080e2e0dcf442fc9b0a859f326219db5a"
+                "url": "https://ftp.drupal.org/files/projects/geolocation-4.0.0-alpha2.zip",
+                "reference": "4.0.0-alpha2",
+                "shasum": "832426088bd3064d68b2a82a965141be646c1d60"
             },
             "require": {
-                "drupal/core": "^9.3 || ^10",
-                "drupal/jquery_ui": "*",
-                "drupal/jquery_ui_autocomplete": "^2.0",
-                "php": "^7.3 || ^8.0"
+                "drupal/core": "^10.0",
+                "php": "^8.1"
             },
             "require-dev": {
                 "drupal/address": "*",
+                "drupal/feeds": "*",
                 "drupal/geofield": "*",
                 "drupal/geolocation_demo": "*",
                 "drupal/geolocation_geometry": "*",
-                "drupal/geolocation_geometry_data": "*",
                 "drupal/geolocation_google_maps": "*",
                 "drupal/geolocation_google_maps_demo": "*",
                 "drupal/geolocation_google_static_maps": "*",
                 "drupal/geolocation_leaflet": "*",
-                "drupal/geolocation_leaflet_demo": "*",
-                "drupal/search_api": "*",
-                "drupal/search_api_location": "*",
-                "drupal/search_api_location_views": "*"
+                "drupal/search_api": "*"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-3.12",
-                    "datestamp": "1673282362",
+                    "version": "4.0.0-alpha2",
+                    "datestamp": "1690455952",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -8004,38 +7999,58 @@
         },
         {
             "name": "drupal/yoast_seo",
-            "version": "1.8.0",
-            "version_normalized": "1.8.0.0",
+            "version": "2.0.0-alpha10",
+            "version_normalized": "2.0.0.0-alpha10",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/yoast_seo.git",
-                "reference": "8.x-1.8"
+                "reference": "8.x-2.0-alpha10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/yoast_seo-8.x-1.8.zip",
-                "reference": "8.x-1.8",
-                "shasum": "83eef12e887824bf51db07bcf844e0ef70f4eb9c"
+                "url": "https://ftp.drupal.org/files/projects/yoast_seo-8.x-2.0-alpha10.zip",
+                "reference": "8.x-2.0-alpha10",
+                "shasum": "29488b36f2523ada5735a12d4d99675cd8380b5f"
             },
             "require": {
                 "drupal/core": "^8 || ^9 || ^10",
-                "drupal/metatag": "*"
+                "drupal/metatag": "^1.3 || ^2.0",
+                "goalgorilla/rtseo.js": "^2.0"
+            },
+            "conflict": {
+                "drupal/commerce": ">2.0 <2.5"
+            },
+            "require-dev": {
+                "composer/installers": "^2",
+                "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
+                "dmore/behat-chrome-extension": "^1.4",
+                "drupal/devel": "^5.0.2",
+                "drupal/drupal-extension": "^5",
+                "drupal/paragraphs": "^1.15",
+                "drush/drush": "^11.0",
+                "friends-of-behat/mink-debug-extension": "^2.1",
+                "mglaman/phpstan-drupal": "^1.1.25",
+                "phpspec/prophecy-phpunit": "v2.0.1",
+                "phpstan/extension-installer": "^1.1.0",
+                "phpstan/phpstan": "^1.9.2",
+                "phpstan/phpstan-deprecation-rules": "^1.0",
+                "phpstan/phpstan-phpunit": "^1.1.1"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.8",
-                    "datestamp": "1671186804",
+                    "version": "8.x-2.0-alpha10",
+                    "datestamp": "1695378976",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
                     }
                 }
             },
             "installation-source": "dist",
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
@@ -8060,9 +8075,10 @@
                 }
             ],
             "description": "Adds Real-time SEO page analysis and configuration.",
-            "homepage": "https://www.drupal.org/project/yoast_seo",
+            "homepage": "http://drupal.org/project/yoast_seo",
             "support": {
-                "source": "https://git.drupalcode.org/project/yoast_seo"
+                "source": "http://cgit.drupalcode.org/yoast_seo",
+                "issues": "http://drupal.org/project/yoast_seo"
             },
             "install-path": "../../web/modules/contrib/yoast_seo"
         },
@@ -8352,6 +8368,35 @@
                 "source": "https://github.com/enlightn/security-checker/tree/v1.11.0"
             },
             "install-path": "../enlightn/security-checker"
+        },
+        {
+            "name": "goalgorilla/rtseo.js",
+            "version": "2.1.0",
+            "version_normalized": "2.1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/goalgorilla/RTSEO.js.git",
+                "reference": "ab5f9c3ff478e0e9d61f5cc3831038e4f22bbbb0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/goalgorilla/RTSEO.js/zipball/ab5f9c3ff478e0e9d61f5cc3831038e4f22bbbb0",
+                "reference": "ab5f9c3ff478e0e9d61f5cc3831038e4f22bbbb0",
+                "shasum": ""
+            },
+            "time": "2018-01-19T23:11:36+00:00",
+            "type": "drupal-library",
+            "installation-source": "dist",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0"
+            ],
+            "description": "Text analysis application for use with the Real-Time SEO Drupal module.",
+            "homepage": "https://github.com/goalgorilla/RTSEO.js",
+            "support": {
+                "source": "https://github.com/goalgorilla/RTSEO.js/tree/2.1.0"
+            },
+            "install-path": "../../web/libraries/rtseo.js"
         },
         {
             "name": "google/charts",

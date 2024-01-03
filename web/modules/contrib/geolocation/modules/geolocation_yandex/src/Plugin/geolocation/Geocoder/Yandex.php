@@ -27,11 +27,11 @@ class Yandex extends GeocoderBase implements GeocoderInterface {
   /**
    * {@inheritdoc}
    */
-  public function formAttachGeocoder(array &$render_array, $element_name) {
-    parent::formAttachGeocoder($render_array, $element_name);
+  public function alterRenderArray(array &$render_array, $element_name) {
+    parent::alterRenderArray($render_array, $element_name);
 
     $render_array['#attached'] = BubbleableMetadata::mergeAttachments(
-      empty($render_array['#attached']) ? [] : $render_array['#attached'],
+      $render_array['#attached'] ?? [],
       [
         'drupalSettings' => [
           'geolocation' => [

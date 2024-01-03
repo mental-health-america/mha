@@ -5,6 +5,7 @@ namespace Drupal\geolocation\Plugin\views\field;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\views\Annotation\ViewsField;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\geolocation\LocationManager;
 use Drupal\geolocation\LocationInputManager;
@@ -27,39 +28,22 @@ class ProximityFormField extends ProximityField implements ContainerFactoryPlugi
    *
    * @var array
    */
-  protected $centerValue = [];
+  protected array $centerValue = [];
 
-  /**
-   * Location input manager.
-   *
-   * @var \Drupal\geolocation\LocationInputManager
-   */
-  protected $locationInputManager;
-
-  /**
-   * Constructs a Handler object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\geolocation\LocationManager $location_manager
-   *   Location manager.
-   * @param \Drupal\geolocation\LocationInputManager $location_input_manager
-   *   Location input manager.
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LocationManager $location_manager, LocationInputManager $location_input_manager) {
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    LocationManager $location_manager,
+    protected LocationInputManager $locationInputManager
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $location_manager);
-
-    $this->locationInputManager = $location_input_manager;
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): ProximityField {
     return new static(
       $configuration,
       $plugin_id,
@@ -75,8 +59,9 @@ class ProximityFormField extends ProximityField implements ContainerFactoryPlugi
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
     parent::buildOptionsForm($form, $form_state);
 
+    $user_input = $form_state->getUserInput();
     $proximity_center_options = NestedArray::getValue(
-      $form_state->getUserInput(),
+      $user_input,
       ['options', 'center'],
     );
     if (empty($proximity_center_options)) {
@@ -85,17 +70,15 @@ class ProximityFormField extends ProximityField implements ContainerFactoryPlugi
     if (empty($proximity_center_options)) {
       $proximity_center_options = [];
     }
-    $form['center'] = $this->locationInputManager->getOptionsForm($proximity_center_options, $this);
+    $form['center'] = $this->locationInputManager->getOptionsForm($proximity_center_options, ['views_field' => $this]);
   }
 
   /**
-   * {@inheritdoc}
-   *
    * Provide a more useful title to improve the accessibility.
    */
   public function viewsForm(&$form, FormStateInterface $form_state) {
     $form['#tree'] = TRUE;
-    $form['center'] = $this->locationInputManager->getForm($this->options['center'], $this, $this->getCenter());
+    $form['center'] = $this->locationInputManager->getForm($this->options['center'], ['views_field' => $this], $this->getCenter());
 
     $form['actions']['submit']['#value'] = $this->t('Calculate proximity');
 
@@ -125,16 +108,16 @@ class ProximityFormField extends ProximityField implements ContainerFactoryPlugi
    */
   public function viewsFormSubmit(array &$form, FormStateInterface $form_state) {
     if ($form_state->get('step') == 'views_form_views_form') {
-      $form_state->disableRedirect(TRUE);
+      $form_state->disableRedirect();
     }
   }
 
   /**
    * {@inheritdoc}
    */
-  protected function getCenter() {
+  protected function getCenter(): array {
     if (empty($this->centerValue)) {
-      $this->centerValue = $this->locationInputManager->getCoordinates((array) $this->view->getRequest()->get('center', []), $this->options['center'], $this);
+      $this->centerValue = $this->locationInputManager->getCoordinates((array) $this->view->getRequest()->get('center', []), $this->options['center'], ['views_field' => $this]);
     }
     return $this->centerValue;
   }

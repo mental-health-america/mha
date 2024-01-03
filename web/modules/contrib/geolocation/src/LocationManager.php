@@ -7,9 +7,13 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Component\Utility\SortArray;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Exception;
+use Traversable;
 
 /**
  * Search plugin manager.
+ *
+ * @method LocationInterface createInstance($plugin_id, array $configuration = [])
  */
 class LocationManager extends DefaultPluginManager {
 
@@ -26,7 +30,7 @@ class LocationManager extends DefaultPluginManager {
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler to invoke the alter hook with.
    */
-  public function __construct(\Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler) {
+  public function __construct(Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler) {
     parent::__construct('Plugin/geolocation/Location', $namespaces, $module_handler, 'Drupal\geolocation\LocationInterface', 'Drupal\geolocation\Annotation\Location');
     $this->alterInfo('geolocation_location_info');
     $this->setCacheBackend($cache_backend, 'geolocation_location');
@@ -40,24 +44,19 @@ class LocationManager extends DefaultPluginManager {
    * @param array $configuration
    *   Configuration.
    *
-   * @return \Drupal\geolocation\LocationInterface|false
+   * @return \Drupal\geolocation\LocationInterface|null
    *   Location instance.
    */
-  public function getLocationPlugin($id, array $configuration = []) {
+  public function getLocationPlugin(string $id, array $configuration = []): ?LocationInterface {
     if (!$this->hasDefinition($id)) {
-      return FALSE;
+      return NULL;
     }
     try {
-      /** @var \Drupal\geolocation\LocationInterface $instance */
-      $instance = $this->createInstance($id, $configuration);
-      if ($instance) {
-        return $instance;
-      }
+      return $this->createInstance($id, $configuration);
     }
-    catch (\Exception $e) {
-      return FALSE;
+    catch (Exception $e) {
+      return NULL;
     }
-    return FALSE;
   }
 
   /**
@@ -65,13 +64,13 @@ class LocationManager extends DefaultPluginManager {
    *
    * @param array $settings
    *   Settings.
-   * @param mixed $context
+   * @param array $context
    *   Optional context.
    *
    * @return array
    *   Form.
    */
-  public function getLocationOptionsForm(array $settings, $context = NULL) {
+  public function getLocationOptionsForm(array $settings, array $context = []): array {
     $form = [
       '#type' => 'table',
       '#prefix' => $this->t('<h3>Centre options</h3>Please note: Each option will, if it can be applied, supersede any following option.'),
@@ -86,17 +85,17 @@ class LocationManager extends DefaultPluginManager {
         [
           'action' => 'order',
           'relationship' => 'sibling',
-          'group' => 'geolocation-centre-option-weight',
+          'group' => 'geolocation-location-weight',
         ],
       ],
     ];
 
     foreach ($this->getDefinitions() as $location_id => $location_definition) {
-      /** @var \Drupal\geolocation\LocationInterface $mapCenter */
+      /** @var \Drupal\geolocation\LocationInterface $location */
       $location = $this->createInstance($location_id);
       foreach ($location->getAvailableLocationOptions($context) as $option_id => $label) {
         $option_enable_id = uniqid($option_id . '_enabled');
-        $weight = isset($settings[$option_id]['weight']) ? $settings[$option_id]['weight'] : 0;
+        $weight = $settings[$option_id]['weight'] ?? 0;
         $form[$option_id] = [
           '#weight' => $weight,
           '#attributes' => [
@@ -109,7 +108,7 @@ class LocationManager extends DefaultPluginManager {
               'id' => $option_enable_id,
             ],
             '#type' => 'checkbox',
-            '#default_value' => isset($settings[$option_id]['enable']) ? $settings[$option_id]['enable'] : FALSE,
+            '#default_value' => $settings[$option_id]['enable'] ?? FALSE,
           ],
           'option' => [
             '#markup' => $label,
@@ -120,7 +119,7 @@ class LocationManager extends DefaultPluginManager {
             '#title_display' => 'invisible',
             '#size' => 4,
             '#default_value' => $weight,
-            '#attributes' => ['class' => ['geolocation-centre-option-weight']],
+            '#attributes' => ['class' => ['geolocation-location-weight']],
           ],
           'location_plugin_id' => [
             '#type' => 'value',
@@ -130,7 +129,7 @@ class LocationManager extends DefaultPluginManager {
 
         $option_form = $location->getSettingsForm(
           $option_id,
-          empty($settings[$option_id]['settings']) ? [] : $settings[$option_id]['settings'],
+          $settings[$option_id]['settings'] ?? [],
           $context
         );
 
@@ -157,13 +156,13 @@ class LocationManager extends DefaultPluginManager {
    *
    * @param array $settings
    *   Center option settings.
-   * @param mixed $context
+   * @param array $context
    *   Context.
    *
-   * @return array
+   * @return array|null
    *   Centre value.
    */
-  public function getLocation(array $settings, $context = NULL) {
+  public function getLocation(array $settings, array $context = []): ?array {
     $center = [];
 
     foreach ($settings as $option_id => $option) {

@@ -15,7 +15,15 @@ interface GeocoderInterface extends PluginInspectionInterface {
    * @return array
    *   Options form.
    */
-  public function getOptionsForm();
+  public function getOptionsForm(): array;
+
+  /**
+   * Return settings.
+   *
+   * @return array
+   *   Settings.
+   */
+  public function getSettings(): array;
 
   /**
    * Process the form built above.
@@ -26,20 +34,20 @@ interface GeocoderInterface extends PluginInspectionInterface {
    * @return array|null
    *   Settings to store or NULL.
    */
-  public function processOptionsForm(array $form_element);
+  public function processOptionsForm(array $form_element): ?array;
 
   /**
    * Attach geocoding logic to input element.
    *
    * @param array $render_array
    *   Form containing the input element.
-   * @param string $element_name
+   * @param string $identifier
    *   Name of the input element.
    *
    * @return array|null
    *   Updated form element or NULL.
    */
-  public function formAttachGeocoder(array &$render_array, $element_name);
+  public function alterRenderArray(array &$render_array, string $identifier): ?array;
 
   /**
    * Geocode an address.
@@ -47,10 +55,10 @@ interface GeocoderInterface extends PluginInspectionInterface {
    * @param string $address
    *   Address to geocode.
    *
-   * @return array||null
+   * @return array|null
    *   Location or NULL.
    */
-  public function geocode($address);
+  public function geocode(string $address): ?array;
 
   /**
    * Reverse geocode an address.
@@ -78,9 +86,9 @@ interface GeocoderInterface extends PluginInspectionInterface {
    * @param float $longitude
    *   Longitude to reverse geocode.
    *
-   * @return array||null
+   * @return array|null
    *   Address or NULL.
    */
-  public function reverseGeocode($latitude, $longitude);
+  public function reverseGeocode(float $latitude, float $longitude): ?array;
 
 }

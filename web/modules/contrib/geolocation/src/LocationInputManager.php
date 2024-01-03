@@ -3,19 +3,24 @@
 namespace Drupal\geolocation;
 
 use Drupal\Component\Utility\SortArray;
-use Drupal\Component\Utility\NestedArray;
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Exception;
+use Traversable;
 
 /**
  * Search plugin manager.
+ *
+ * @method LocationInputInterface createInstance($plugin_id, array $configuration = [])
  */
 class LocationInputManager extends DefaultPluginManager {
 
   use StringTranslationTrait;
+  use LoggerChannelTrait;
 
   /**
    * Constructs an LocationInputManager object.
@@ -28,7 +33,7 @@ class LocationInputManager extends DefaultPluginManager {
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler to invoke the alter hook with.
    */
-  public function __construct(\Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler) {
+  public function __construct(Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler) {
     parent::__construct('Plugin/geolocation/LocationInput', $namespaces, $module_handler, 'Drupal\geolocation\LocationInputInterface', 'Drupal\geolocation\Annotation\LocationInput');
     $this->alterInfo('geolocation_locationinput_info');
     $this->setCacheBackend($cache_backend, 'geolocation_locationinput');
@@ -42,24 +47,20 @@ class LocationInputManager extends DefaultPluginManager {
    * @param array $configuration
    *   Configuration.
    *
-   * @return \Drupal\geolocation\LocationInputInterface|false
+   * @return \Drupal\geolocation\LocationInputInterface|null
    *   LocationInput instance.
    */
-  public function getLocationInputPlugin($id, array $configuration = []) {
+  public function getLocationInputPlugin(string $id, array $configuration = []): ?LocationInputInterface {
     if (!$this->hasDefinition($id)) {
-      return FALSE;
+      return NULL;
     }
     try {
-      /** @var \Drupal\geolocation\LocationInputInterface $instance */
-      $instance = $this->createInstance($id, $configuration);
-      if ($instance) {
-        return $instance;
-      }
+      return $this->createInstance($id, $configuration);
     }
-    catch (\Exception $e) {
-      return FALSE;
+    catch (Exception $e) {
+      $this->getLogger('geolocation')->warning("Error loading LocationInput: " . $e->getMessage());
+      return NULL;
     }
-    return FALSE;
   }
 
   /**
@@ -67,16 +68,16 @@ class LocationInputManager extends DefaultPluginManager {
    *
    * @param array $settings
    *   Settings.
-   * @param mixed $context
+   * @param array $context
    *   Optional context.
    *
    * @return array
    *   Form.
    */
-  public function getOptionsForm(array $settings, $context = NULL) {
+  public function getOptionsForm(array $settings, array $context = [], string $title = ''): array {
     $form = [
       '#type' => 'table',
-      '#prefix' => $this->t('<h3>Location input</h3>Each option will, if it can be applied, supersede any following option.'),
+      '#prefix' => $title ?? $this->t('<h3>Location input</h3>Each option will, if it can be applied, supersede any following option.'),
       '#header' => [
         [
           'data' => $this->t('Enable'),
@@ -90,17 +91,16 @@ class LocationInputManager extends DefaultPluginManager {
         [
           'action' => 'order',
           'relationship' => 'sibling',
-          'group' => 'geolocation-centre-option-weight',
+          'group' => 'geolocation-location-option-weight',
         ],
       ],
     ];
 
     foreach ($this->getDefinitions() as $location_input_id => $location_input_definition) {
-      /** @var \Drupal\geolocation\LocationInputInterface $location_input */
       $location_input = $this->createInstance($location_input_id);
       foreach ($location_input->getAvailableLocationInputOptions($context) as $option_id => $label) {
         $option_enable_id = HTML::getUniqueId($option_id . '_enabled');
-        $weight = isset($settings[$option_id]['weight']) ? $settings[$option_id]['weight'] : 0;
+        $weight = $settings[$option_id]['weight'] ?? 0;
 
         $form[$option_id] = [
           '#weight' => $weight,
@@ -114,7 +114,7 @@ class LocationInputManager extends DefaultPluginManager {
               'id' => $option_enable_id,
             ],
             '#type' => 'checkbox',
-            '#default_value' => isset($settings[$option_id]['enable']) ? $settings[$option_id]['enable'] : FALSE,
+            '#default_value' => $settings[$option_id]['enable'] ?? FALSE,
           ],
           'location_input_id' => [
             '#type' => 'value',
@@ -132,7 +132,7 @@ class LocationInputManager extends DefaultPluginManager {
             '#title_display' => 'invisible',
             '#size' => 4,
             '#default_value' => $weight,
-            '#attributes' => ['class' => ['geolocation-centre-option-weight']],
+            '#attributes' => ['class' => ['geolocation-location-option-weight']],
           ],
         ];
 
@@ -141,7 +141,6 @@ class LocationInputManager extends DefaultPluginManager {
           $location_input_settings = $settings[$option_id]['settings'];
         }
         $option_form = $location_input->getSettingsForm(
-          $option_id,
           $location_input->getSettings($location_input_settings),
           $context
         );
@@ -171,16 +170,16 @@ class LocationInputManager extends DefaultPluginManager {
    *   Form values.
    * @param array $settings
    *   Option settings.
-   * @param mixed $context
+   * @param array $context
    *   Context.
    *
    * @return array
    *   Centre value.
    */
-  public function getCoordinates(array $form_values, array $settings, $context = NULL) {
+  public function getCoordinates(array $form_values, array $settings, array $context = []): array {
     $coordinates = [];
 
-    foreach ($settings as $option_id => $option) {
+    foreach ($settings as $option) {
       // Ignore if not enabled.
       if (empty($option['enable'])) {
         continue;
@@ -190,12 +189,11 @@ class LocationInputManager extends DefaultPluginManager {
         continue;
       }
 
-      /** @var \Drupal\geolocation\LocationInputInterface $location_input_plugin */
       $location_input_plugin = $this->createInstance($option['location_input_id']);
       if (empty($option['settings'])) {
         $option['settings'] = [];
       }
-      $plugin_coordinates = $location_input_plugin->getCoordinates($form_values, $option_id, $location_input_plugin->getSettings($option['settings']), $context);
+      $plugin_coordinates = $location_input_plugin->getCoordinates($form_values, $location_input_plugin->getSettings($option['settings']), $context);
 
       if (!empty($plugin_coordinates)) {
         // Break on first found coordinates.
@@ -211,7 +209,7 @@ class LocationInputManager extends DefaultPluginManager {
    *
    * @param array $settings
    *   Option settings.
-   * @param mixed $context
+   * @param array $context
    *   Context.
    * @param array|null $default_value
    *   Form values.
@@ -219,14 +217,49 @@ class LocationInputManager extends DefaultPluginManager {
    * @return array
    *   Centre value.
    */
-  public function getForm(array $settings, $context = NULL, array $default_value = NULL) {
-    $form = [];
+  public function getForm(array $settings, array $context = [], array $default_value = NULL, string $title = ''): array {
+
+    $identifier = Html::getUniqueId('location-input-form');
+
+    $form = [
+      '#type' => 'container',
+      '#attributes' => [
+        'class' => [
+          'geolocation-location-input',
+        ],
+        'data-identifier' => $identifier,
+      ],
+      '#attached' => [
+        'library' => [
+          'geolocation/geolocation.location.input',
+        ],
+        'drupalSettings' => [
+          'geolocation' => [
+            'locationInput' => [
+              $identifier => [],
+            ],
+          ],
+        ],
+      ],
+    ];
+
+    $form['coordinates'] = [
+      '#type' => 'geolocation_input',
+      '#title' => $title ?? $this->t('Coordinates'),
+      '#attributes' => [
+        'class' => [
+          'geolocation-location-input-coordinates',
+        ],
+      ],
+    ];
+    if (!empty($default_value)) {
+      $form['coordinates']['#default_value'] = $default_value;
+    }
 
     /*
      * Centre handling.
      */
-    foreach ($settings as $option_id => $option) {
-      // Ignore if not enabled.
+    foreach ($settings as $option) {
       if (empty($option['enable'])) {
         continue;
       }
@@ -235,12 +268,9 @@ class LocationInputManager extends DefaultPluginManager {
         continue;
       }
 
-      /** @var \Drupal\geolocation\LocationInputInterface $location_input_plugin */
       $location_input_plugin = $this->createInstance($option['location_input_id']);
-      $plugin_form = $location_input_plugin->getForm($option_id, empty($option['settings']) ? [] : $option['settings'], $context, $default_value);
-      if ($plugin_form) {
-        $form = NestedArray::mergeDeep($plugin_form, $form);
-      }
+
+      $form = $location_input_plugin->alterForm($form, empty($option['settings']) ? [] : $option['settings'], $context, $default_value);
     }
 
     return $form;

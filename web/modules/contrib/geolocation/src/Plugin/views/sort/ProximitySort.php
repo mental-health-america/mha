@@ -2,6 +2,7 @@
 
 namespace Drupal\geolocation\Plugin\views\sort;
 
+use Drupal\views\Annotation\ViewsSort;
 use Drupal\views\Plugin\views\sort\SortPluginBase;
 use Drupal\views\Plugin\views\query\Sql;
 
@@ -22,11 +23,14 @@ class ProximitySort extends SortPluginBase {
       return;
     }
 
+    /** @var \Drupal\views\Plugin\views\field\FieldHandlerInterface $field */
     $field = $this->displayHandler->getHandler('field', $this->field);
 
     if (!empty($field->field_alias) && $field->field_alias != 'unknown') {
       $this->query->addOrderBy(NULL, NULL, $this->options['order'], $field->field_alias);
-      $this->tableAlias = $field->tableAlias;
+      if (!empty($field->tableAlias)) {
+        $this->tableAlias = $field->tableAlias;
+      }
     }
   }
 

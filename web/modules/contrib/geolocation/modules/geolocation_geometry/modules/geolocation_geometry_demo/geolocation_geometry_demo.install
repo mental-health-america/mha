@@ -11,7 +11,7 @@ use Drupal\field\Entity\FieldStorageConfig;
 /**
  * Implements hook_install().
  */
-function geolocation_geometry_demo_install() {
+function geolocation_geometry_demo_install(): void {
 
   /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
   $module_handler = \Drupal::service('module_handler');

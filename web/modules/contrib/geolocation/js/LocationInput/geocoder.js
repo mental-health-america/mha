@@ -1,73 +1,51 @@
+import { GeolocationLocationInputBase } from "./GeolocationLocationInputBase.js";
+
 /**
- * @file
- * Javascript for the Geolocation location input.
+ * @typedef {Object} GeocoderLocationInputSettings
+ *
+ * @extends GeolocationLocationInputSettings
+ *
+ * @property {Boolean} auto_submit
+ * @property {Boolean} hide_form
+ * @property {Object} geocoder_settings
+ * @property {String} geocoder_settings.import_path
+ * @property {GeolocationGeocoderSettings} geocoder_settings.settings
  */
 
-(function ($, Drupal) {
-  "use strict";
+/**
+ * @property {GeocoderLocationInputSettings} settings
+ */
+export default class Geocoder extends GeolocationLocationInputBase {
+  constructor(form, settings = {}) {
+    super(form, settings);
 
-  /**
-   * Generic behavior.
-   *
-   * @type {Drupal~behavior}
-   * @type {Object} drupalSettings.geolocation
-   *
-   * @prop {Drupal~behaviorAttach} attach
-   *   Attaches functionality to relevant elements.
-   */
-  Drupal.behaviors.locationInputGeocoder = {
-    attach: function (context, drupalSettings) {
-      $.each(
-        drupalSettings.geolocation.locationInput.geocoder,
-        function (index, settings) {
-          var inputWrapper =
-            $(once("location-input-geocoder-processed", $(
-               ".location-input-geocoder." + settings.identifier,
-               context
-             )))
-            .first();
-          if (inputWrapper.length) {
-            if (settings.hideForm) {
-              inputWrapper.hide();
-            }
+    import(this.settings.geocoder_settings.import_path)
+      /** @param {GeolocationGeocoder} geocoder */
+      .then((geocoder) => {
+        this.geocoder = new geocoder.default(this.settings.geocoder_settings);
 
-            var latitudeInput = inputWrapper
-              .find("input.geolocation-input-latitude")
-              .first();
-            var longitudeInput = inputWrapper
-              .find("input.geolocation-input-longitude")
-              .first();
-            var geocoderAddressInput = inputWrapper
-              .parent()
-              .find("input.geolocation-geocoder-address")
-              .first();
-
-            Drupal.geolocation.geocoder.addResultCallback(function (address) {
-              if (typeof address.geometry.location === "undefined") {
-                return false;
-              }
-              latitudeInput.val(address.geometry.location.lat());
-              longitudeInput.val(address.geometry.location.lng());
-
-              if (settings.autoSubmit) {
-                if (geocoderAddressInput.length) {
-                  geocoderAddressInput.val(address.formatted_address);
-                }
-                inputWrapper
-                  .closest("form")
-                  .find("input.js-form-submit")
-                  .first()
-                  .click();
-              }
-            }, settings.identifier);
-
-            Drupal.geolocation.geocoder.addClearCallback(function () {
-              latitudeInput.val("");
-              longitudeInput.val("");
-            }, settings.identifier);
-          }
+        if (!this.geocoder) {
+          console.error(this.geocoder, "Could not instantiate Geocoder. No Geocoding feature support.");
         }
-      );
-    },
-  };
-})(jQuery, Drupal);
+
+        this.geocoder.addResultCallback((result) => {
+          if (result.coordinates) {
+            this.setCoordinates(result.coordinates);
+          }
+
+          if (this.settings.auto_submit) {
+            this.submit();
+          }
+        });
+
+        let geocoderInput = this.form.querySelector(".geolocation-geocoder-address");
+
+        if (!geocoderInput) {
+          console.error("No Geocoder input found");
+          return false;
+        }
+
+        this.geocoder.attachToElement(geocoderInput);
+      });
+  }
+}

@@ -3,6 +3,7 @@
 namespace Drupal\geolocation\Annotation;
 
 use Drupal\Component\Annotation\Plugin;
+use Drupal\Core\Annotation\Translation;
 
 /**
  * Defines a LocationInput annotation object.
@@ -19,7 +20,7 @@ class LocationInput extends Plugin {
    *
    * @var string
    */
-  public $id;
+  public string $id;
 
   /**
    * The name of the LocationInput.
@@ -28,7 +29,7 @@ class LocationInput extends Plugin {
    *
    * @ingroup plugin_translatable
    */
-  public $name;
+  public Translation $name;
 
   /**
    * The description of the LocationInput.
@@ -37,6 +38,6 @@ class LocationInput extends Plugin {
    *
    * @ingroup plugin_translatable
    */
-  public $description;
+  public Translation $description;
 
 }

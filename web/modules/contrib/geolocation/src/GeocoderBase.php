@@ -2,8 +2,12 @@
 
 namespace Drupal\geolocation;
 
+use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Extension\ModuleHandler;
+use Drupal\Core\File\FileSystem;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use ReflectionClass;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -13,40 +17,28 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 abstract class GeocoderBase extends PluginBase implements GeocoderInterface, ContainerFactoryPluginInterface {
 
-  /**
-   * Country formatter manager.
-   *
-   * @var \Drupal\geolocation\GeocoderCountryFormattingManager
-   */
-  protected $countryFormatterManager;
-
-  /**
-   * GoogleGeocoderBase constructor.
-   *
-   * @param array $configuration
-   *   Configuration.
-   * @param string $plugin_id
-   *   Plugin ID.
-   * @param mixed $plugin_definition
-   *   Plugin definition.
-   * @param \Drupal\geolocation\GeocoderCountryFormattingManager $geocoder_country_formatter_manager
-   *   Country formatter manager.
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, GeocoderCountryFormattingManager $geocoder_country_formatter_manager) {
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    protected GeocoderCountryFormattingManager $countryFormatterManager,
+    protected ModuleHandler $moduleHandler,
+    protected FileSystem $fileSystem
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-
-    $this->countryFormatterManager = $geocoder_country_formatter_manager;
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): GeocoderInterface {
     return new static(
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('plugin.manager.geolocation.geocoder_country_formatting')
+      $container->get('plugin.manager.geolocation.geocoder_country_formatting'),
+      $container->get('module_handler'),
+      $container->get('file_system')
     );
   }
 
@@ -56,10 +48,11 @@ abstract class GeocoderBase extends PluginBase implements GeocoderInterface, Con
    * @return array
    *   Default settings.
    */
-  protected function getDefaultSettings() {
+  protected function getDefaultSettings(): array {
     return [
       'label' => $this->t('Address'),
       'description' => $this->t('Enter an address to be localized.'),
+      'autocomplete_min_length' => 1,
     ];
   }
 
@@ -69,29 +62,53 @@ abstract class GeocoderBase extends PluginBase implements GeocoderInterface, Con
    * @return array
    *   Settings.
    */
-  public function getSettings() {
-    return array_replace_recursive($this->getDefaultSettings(), $this->configuration);
+  public function getSettings(): array {
+    $settings = NestedArray::mergeDeep($this->getDefaultSettings(), $this->configuration);
+
+    $settings['import_path'] = $this->getJavascriptModulePath();
+
+    return $settings;
+  }
+
+  private function getJavascriptModulePath() : ?string {
+    $class_name = (new ReflectionClass($this))->getShortName();
+
+    $module_path = $this->moduleHandler->getModule($this->getPluginDefinition()['provider'])->getPath();
+
+    if (!file_exists($this->fileSystem->realpath($module_path) . '/js/Geocoder/' . $class_name . '.js')) {
+      return NULL;
+    }
+
+    return base_path() . $module_path . '/js/Geocoder/' . $class_name . '.js';
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getOptionsForm() {
+  public function getOptionsForm(): array {
     $settings = $this->getSettings();
 
     return [
       'label' => [
         '#type' => 'textfield',
         '#title' => $this->t('Label'),
-        '#default_value' => $settings['label'],
+        '#default_value' => (string) $settings['label'],
         '#size' => 15,
       ],
 
       'description' => [
         '#type' => 'textfield',
         '#title' => $this->t('Description'),
-        '#default_value' => $settings['description'],
+        '#default_value' => (string) $settings['description'],
         '#size' => 25,
+      ],
+
+      'autocomplete_min_length' => [
+        '#title' => $this->t('Autocomplete minimal input length'),
+        '#type' => 'number',
+        '#min' => 1,
+        '#step' => 1,
+        '#default_value' => (int) $settings['autocomplete_min_length'],
       ],
     ];
   }
@@ -99,45 +116,38 @@ abstract class GeocoderBase extends PluginBase implements GeocoderInterface, Con
   /**
    * {@inheritdoc}
    */
-  public function processOptionsForm(array $form_element) {
+  public function processOptionsForm(array $form_element): ?array {
     return NULL;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function formAttachGeocoder(array &$render_array, $element_name) {
+  public function alterRenderArray(array &$render_array, string $identifier): ?array {
     $settings = $this->getSettings();
 
     $render_array['geolocation_geocoder_address'] = [
       '#type' => 'search',
-      '#title' => $settings['label'] ?: $this->t('Address'),
-      '#placeholder' => $settings['label'] ?: $this->t('Address'),
-      '#description' => $settings['description'] ?: $this->t('Enter an address to retrieve location.'),
+      '#title' => (string) $settings['label'] ?: $this->t('Address'),
+      '#placeholder' => (string) $settings['label'] ?: $this->t('Address'),
+      '#description' => (string) $settings['description'] ?: $this->t('Enter an address to retrieve location.'),
       '#description_display' => 'after',
       '#maxlength' => 256,
       '#size' => 25,
       '#attributes' => [
         'class' => [
           'geolocation-geocoder-address',
-          'form-autocomplete',
         ],
-        'data-source-identifier' => $element_name,
+        'data-source-identifier' => $identifier,
       ],
       '#attached' => [
-        'drupalSettings' => [
-          'geolocation' => [
-            'geocoder' => [
-              $this->getPluginId() => [
-                'inputIds' => [
-                  $element_name => $element_name,
-                ],
-              ],
-            ],
-          ],
+        'library' => [
+          'core/drupal.autocomplete',
         ],
       ],
     ];
+
+    return $render_array;
   }
 
   /**
@@ -149,7 +159,7 @@ abstract class GeocoderBase extends PluginBase implements GeocoderInterface, Con
    * @return array
    *   Address Elements
    */
-  protected function addressElements(array $address_atomics) {
+  protected function addressElements(array $address_atomics): array {
     $formatter = $this->countryFormatterManager->getCountry($address_atomics['countryCode'], $this->getPluginId());
     if (empty($formatter)) {
       return $address_atomics;
@@ -160,14 +170,14 @@ abstract class GeocoderBase extends PluginBase implements GeocoderInterface, Con
   /**
    * {@inheritdoc}
    */
-  public function geocode($address) {
+  public function geocode(string $address): ?array {
     return NULL;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function reverseGeocode($latitude, $longitude) {
+  public function reverseGeocode(float $latitude, float $longitude): ?array {
     return NULL;
   }
 

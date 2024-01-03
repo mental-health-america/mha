@@ -4,9 +4,6 @@ dependencies:
   module:
     - geolocation_geometry
     - path
-  enforced:
-    module:
-      - geolocation_geometry_data
 id: taxonomy_term.field_geometry_data_geometry
 field_name: field_geometry_data_geometry
 entity_type: taxonomy_term

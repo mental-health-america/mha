@@ -12,7 +12,7 @@ trait LeafletTileLayerProviders {
    *
    * @var array
    */
-  protected $register = ['Thunderforest', 'MapBox', 'HERE', 'GeoportailFrance'];
+  protected array $register = ['Thunderforest', 'MapBox', 'HERE', 'GeoportailFrance'];
 
   /**
    * Provide a form with the provider options.
@@ -23,7 +23,7 @@ trait LeafletTileLayerProviders {
    * @return array
    *   An array containing the form with the provider options.
    */
-  protected function getProviderOptionsForm(array $settings) {
+  protected function getProviderOptionsForm(array $settings): array {
     $form['Thunderforest']['apikey'] = [
       '#type' => 'textfield',
       '#title' => $this->t('API key'),
@@ -56,7 +56,7 @@ trait LeafletTileLayerProviders {
         '#default_value' => isset($settings['HERE']) ? $settings['HERE']['app_code'] : '',
         '#description' => $this->t('Get your @key here <a href="@url">@provider</a>.', [
           '@key' => $this->t('APP ID and Code'),
-          '@url' => 'http://developer.here.com/',
+          '@url' => 'https://developer.here.com/',
           '@provider' => 'HERE',
         ]),
       ],
@@ -67,7 +67,7 @@ trait LeafletTileLayerProviders {
       '#default_value' => isset($settings['GeoportailFrance']) ? $settings['GeoportailFrance']['apikey'] : '',
       '#description' => $this->t('Get your @key here <a href="@url">@provider</a>.', [
         '@key' => $this->t('API Key'),
-        '@url' => 'http://professionnels.ign.fr/ign/contrats',
+        '@url' => 'https://professionnels.ign.fr/ign/contrats',
         '@provider' => 'GeoportailFrance',
       ]),
     ];
@@ -82,7 +82,7 @@ trait LeafletTileLayerProviders {
    * @return array
    *   An array containing tile provider IDs.
    */
-  protected function getBaseMaps() {
+  protected function getBaseMaps(): array {
     return [
       'OpenStreetMap' => [
         'OpenStreetMap Mapnik' => 'OpenStreetMap Mapnik',

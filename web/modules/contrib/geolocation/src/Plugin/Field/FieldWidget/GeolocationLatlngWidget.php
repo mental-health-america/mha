@@ -2,6 +2,7 @@
 
 namespace Drupal\geolocation\Plugin\Field\FieldWidget;
 
+use Drupal\Core\Field\Annotation\FieldWidget;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\WidgetBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -72,8 +73,8 @@ class GeolocationLatlngWidget extends WidgetBase {
         !empty($geolocation['lat'])
         && !empty($geolocation['lng'])
       ) {
-        $latitude = GeolocationItem::sexagesimalToDecimal($values[$index]['lat']);
-        $longitude = GeolocationItem::sexagesimalToDecimal($values[$index]['lng']);
+        $latitude = GeolocationItem::sexagesimalToDecimal($geolocation['lat']);
+        $longitude = GeolocationItem::sexagesimalToDecimal($geolocation['lng']);
 
         if (!empty($latitude) && !empty($longitude)) {
           $values[$index]['lat'] = $latitude;

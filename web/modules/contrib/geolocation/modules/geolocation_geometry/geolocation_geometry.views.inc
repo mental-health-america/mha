@@ -10,7 +10,7 @@ use Drupal\field\FieldStorageConfigInterface;
 /**
  * Implements hook_field_views_data().
  */
-function geolocation_geometry_field_views_data(FieldStorageConfigInterface $field_storage) {
+function geolocation_geometry_field_views_data(FieldStorageConfigInterface $field_storage): array {
 
   $geometry_fields = [];
   foreach (
@@ -30,7 +30,7 @@ function geolocation_geometry_field_views_data(FieldStorageConfigInterface $fiel
       $entity_storage = \Drupal::entityTypeManager()->getStorage($entity_type);
       $entity_definition = \Drupal::entityTypeManager()->getDefinition($entity_type);
       $entity_table_mapping = $entity_storage->getTableMapping();
-      $entity_label = (string) $entity_definition->getBundleLabel();
+      $entity_label = $entity_definition->getBundleLabel();
       foreach ($geometry_field_list as $geometry_field_name => $geometry_field_data) {
         $geometry_field_id = $entity_type . '__' . $geometry_field_name;
         $geometry_fields[$geometry_field_id] = $geometry_field_data;
@@ -46,7 +46,7 @@ function geolocation_geometry_field_views_data(FieldStorageConfigInterface $fiel
   }
 
   // Make sure views.views.inc is loaded.
-  \Drupal::moduleHandler()->loadInclude('inc', 'views', 'views.views');
+  \Drupal::moduleHandler()->loadInclude('views', 'inc', 'views.views');
 
   $entity_definition = \Drupal::entityTypeManager()->getDefinition($field_storage->getTargetEntityTypeId());
 
@@ -64,15 +64,11 @@ function geolocation_geometry_field_views_data(FieldStorageConfigInterface $fiel
         continue;
       }
       if (isset($field_data['filter'])) {
-        if (substr($field_name, -9, 9) == '_geometry') {
+        if (str_ends_with($field_name, '_geometry')) {
           $data[$table_name][$field_name]['title'] = t('Geometry (@field_name)', $args);
           continue;
         }
-        if (substr($field_name, -4, 4) == '_wkt') {
-          $data[$table_name][$field_name]['title'] = t('WKT/Well Known Text (@field_name)', $args);
-          continue;
-        }
-        if (substr($field_name, -8, 8) == '_geojson') {
+        if (str_ends_with($field_name, '_geojson')) {
           $data[$table_name][$field_name]['title'] = t('GeoJSON (@field_name)', $args);
           continue;
         }
@@ -216,7 +212,7 @@ function geolocation_geometry_field_views_data(FieldStorageConfigInterface $fiel
 /**
  * Implements hook_field_views_data_views_data_alter().
  */
-function geolocation_geometry_field_views_data_views_data_alter(array &$data, FieldStorageConfigInterface $field_storage) {
+function geolocation_geometry_field_views_data_views_data_alter(array &$data, FieldStorageConfigInterface $field_storage): void {
   $entity_type = $field_storage->getTargetEntityTypeId();
   /** @var \Drupal\Core\Entity\Sql\SqlEntityStorageInterface $entity_storage */
   $entity_storage = \Drupal::entityTypeManager()->getStorage($entity_type);

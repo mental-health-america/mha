@@ -2,8 +2,9 @@
 
 namespace Drupal\geolocation_yandex\Plugin\geolocation\MapProvider;
 
-use Drupal\geolocation\MapProviderBase;
+use Drupal;
 use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\geolocation\MapProviderBase;
 
 /**
  * Provides Yandex Maps API.
@@ -16,12 +17,7 @@ use Drupal\Core\Render\BubbleableMetadata;
  */
 class Yandex extends MapProviderBase {
 
-  /**
-   * Yandex API Url.
-   *
-   * @var string
-   */
-  public static $apiBaseUrl = 'https://api-maps.yandex.ru/2.1/';
+  public static string $apiBaseUrl = 'https://api-maps.yandex.ru/2.1/';
 
   /**
    * {@inheritdoc}
@@ -54,10 +50,6 @@ class Yandex extends MapProviderBase {
    * {@inheritdoc}
    */
   public function getSettingsSummary(array $settings): array {
-    $settings = array_replace_recursive(
-      self::getDefaultSettings(),
-      $settings
-    );
     $summary = parent::getSettingsSummary($settings);
     $summary[] = $this->t('Zoom level: @zoom', ['@zoom' => $settings['zoom']]);
     $summary[] = $this->t('Height: @height', ['@height' => $settings['height']]);
@@ -149,49 +141,7 @@ class Yandex extends MapProviderBase {
   /**
    * {@inheritdoc}
    */
-  public function alterRenderArray(array $render_array, array $map_settings, array $context = []): array {
-    $yandex_url_parts = parse_url(self::$apiBaseUrl);
-
-    $render_array['#attached'] = BubbleableMetadata::mergeAttachments(
-      empty($render_array['#attached']) ? [] : $render_array['#attached'],
-      [
-        'library' => [
-          'geolocation_yandex/geolocation.yandex',
-        ],
-        'drupalSettings' => [
-          'geolocation' => [
-            'maps' => [
-              $render_array['#id'] => [
-                'settings' => [
-                  'yandex_settings' => $map_settings,
-                ],
-              ],
-            ],
-          ],
-        ],
-        // Add 'preconnect' resource hint.
-        'html_head' => [
-          [
-            [
-              '#tag' => 'link',
-              '#attributes' => [
-                'rel' => 'preconnect',
-                'href' => $yandex_url_parts['scheme'] . "://" . $yandex_url_parts['host'],
-              ],
-            ],
-            'geolocation_yandex_link_preconnect_map',
-          ],
-        ],
-      ]
-    );
-
-    return parent::alterRenderArray($render_array, $map_settings, $context);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function getControlPositions() {
+  public static function getControlPositions(): array {
     return [
       'top' => t('Top'),
       'right' => t('Right'),
@@ -223,29 +173,13 @@ class Yandex extends MapProviderBase {
   }
 
   /**
-   * {@inheritdoc}
-   */
-  public function alterCommonMap(array $render_array, array $map_settings, array $context): array {
-    $render_array['#attached'] = BubbleableMetadata::mergeAttachments(
-      empty($render_array['#attached']) ? [] : $render_array['#attached'],
-      [
-        'library' => [
-          'geolocation_yandex/commonmap.yandex',
-        ],
-      ]
-    );
-
-    return $render_array;
-  }
-
-  /**
    * Get Yandex API Base URL.
    *
    * @return string
    *   Base Url.
    */
   public function getApiUrl(): string {
-    $config = \Drupal::config('geolocation_yandex.settings');
+    $config = Drupal::config('geolocation_yandex.settings');
     $api_key = $config->get('api_key');
 
     $packages = $config->get('packages');
@@ -256,7 +190,7 @@ class Yandex extends MapProviderBase {
 
     $base_url = self::$apiBaseUrl;
     $langcode = self::getApiUrlLangcode();
-    return "$base_url?apikey=$api_key&load=$packages_str&lang=$langcode&coordorder=longlat";
+    return "$base_url?apikey=$api_key&load=$packages_str&lang=$langcode&coordorder=latlong";
   }
 
   /**
@@ -270,7 +204,7 @@ class Yandex extends MapProviderBase {
    */
   public static function getApiUrlLangcode(string $langId = NULL): string {
     if (empty($langId)) {
-      $langId = \Drupal::languageManager()->getCurrentLanguage()->getId();
+      $langId = Drupal::languageManager()->getCurrentLanguage()->getId();
     }
 
     $langId = strtolower((string) $langId);
@@ -287,6 +221,29 @@ class Yandex extends MapProviderBase {
     }
 
     return $langcode;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function alterRenderArray(array $render_array, array $map_settings = [], array $context = []): array {
+    $render_array['#attached'] = BubbleableMetadata::mergeAttachments(
+      $render_array['#attached'] ?? [],
+      [
+        'drupalSettings' => [
+          'geolocation' => [
+            'maps' => [
+              $render_array['#id'] => [
+                'scripts' => [$this->getApiUrl()],
+                'yandex_settings' => $map_settings,
+              ],
+            ],
+          ],
+        ],
+      ]
+    );
+
+    return parent::alterRenderArray($render_array, $map_settings, $context);
   }
 
 }

@@ -1,16 +1,16 @@
 <?php
 
 namespace Drupal\features;
+use Drupal\Core\Config\ImmutableConfig;
+use Drupal;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Component\Utility\NestedArray;
-use Drupal\config_update\ConfigRevertInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ConfigManagerInterface;
-use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Config\InstallStorage;
 use Drupal\Core\Config\StorageInterface;
-use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Extension\Dependency;
 use Drupal\Core\Extension\Extension;
 use Drupal\Core\Extension\ExtensionDiscovery;
@@ -18,6 +18,7 @@ use Drupal\Core\Extension\ExtensionPathResolver;
 use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\config_update\ConfigRevertInterface;
 
 /**
  * The FeaturesManager provides helper functions for building packages.
@@ -129,13 +130,6 @@ class FeaturesManager implements FeaturesManagerInterface {
    * @var array
    */
   protected $featureInfoCache;
-
-  /**
-   * The features generator.
-   *
-   * @var \Drupal\features\FeaturesGeneratorInterface
-   */
-  protected $generator;
 
   /**
    * Constructs a FeaturesManager object.

@@ -2,7 +2,16 @@
 
 namespace Drupal\geolocation_leaflet\Plugin\geolocation\MapFeature;
 
+use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Asset\LibraryDiscovery;
+use Drupal\Core\Extension\ModuleHandler;
+use Drupal\Core\File\FileSystem;
+use Drupal\Core\Utility\Token;
+
 use Drupal\geolocation\GeocoderManager;
+use Drupal\geolocation\MapFeatureInterface;
+use Drupal\geolocation\MapProviderInterface;
+use Drupal\geolocation\Plugin\geolocation\MapFeature\ControlCustomElementBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -17,39 +26,28 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class LeafletControlGeocoder extends ControlCustomElementBase {
 
-  /**
-   * The GeocoderManager object.
-   *
-   * @var \Drupal\geolocation\GeocoderManager
-   */
-  protected $geocoderManager;
-
-  /**
-   * ControlCustomGeocoder constructor.
-   *
-   * @param array $configuration
-   *   Configuration.
-   * @param string $plugin_id
-   *   Plugin ID.
-   * @param mixed $plugin_definition
-   *   Plugin configuration.
-   * @param \Drupal\geolocation\GeocoderManager $geocoder_manager
-   *   Geocoder manager.
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, GeocoderManager $geocoder_manager) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
-
-    $this->geocoderManager = $geocoder_manager;
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    ModuleHandler $moduleHandler,
+    FileSystem $fileSystem,
+    Token $token,
+    LibraryDiscovery $libraryDiscovery,
+    protected GeocoderManager $geocoderManager
+  ) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $moduleHandler, $fileSystem, $token, $libraryDiscovery);
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): MapFeatureInterface {
     return new static(
       $configuration,
       $plugin_id,
       $plugin_definition,
+      $container->get('module_handler'),
+      $container->get('file_system'),
+      $container->get('token'),
+      $container->get('library.discovery'),
       $container->get('plugin.manager.geolocation.geocoder')
     );
   }
@@ -57,26 +55,34 @@ class LeafletControlGeocoder extends ControlCustomElementBase {
   /**
    * {@inheritdoc}
    */
-  public static function getDefaultSettings() {
+  public static function getDefaultSettings(): array {
     return array_replace_recursive(
       parent::getDefaultSettings(),
       [
         'geocoder' => 'nominatim',
-        'settings' => [],
+        'geocoder_settings' => [],
       ]
     );
+  }
+
+  public function getSettings(array $settings, MapProviderInterface $mapProvider = NULL): array {
+    $settings = parent::getSettings($settings, $mapProvider);
+
+    $geocoder_plugin = $this->geocoderManager->getGeocoder($settings['geocoder'] ?? '', $settings['geocoder_settings'] ?? []);
+    if ($geocoder_plugin) {
+      $settings['geocoder_settings'] = array_replace_recursive($geocoder_plugin->getSettings(), $settings['geocoder_settings']);
+    }
+
+    return $settings;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getSettingsForm(array $settings, array $parents) {
-    $form = parent::getSettingsForm($settings, $parents);
+  public function getSettingsForm(array $settings, array $parents = [], MapProviderInterface $mapProvider = NULL): array {
+    $form = parent::getSettingsForm($settings, $parents, $mapProvider);
 
-    $settings = array_replace_recursive(
-      self::getDefaultSettings(),
-      $settings
-    );
+    $settings = $this->getSettings($settings);
 
     $geocoder_options = [];
     foreach ($this->geocoderManager->getDefinitions() as $id => $definition) {
@@ -86,53 +92,45 @@ class LeafletControlGeocoder extends ControlCustomElementBase {
       $geocoder_options[$id] = $definition['name'];
     }
 
-    if ($geocoder_options) {
-
-      $form['geocoder'] = [
-        '#type' => 'select',
-        '#options' => $geocoder_options,
-        '#title' => $this->t('Geocoder plugin'),
-        '#default_value' => $settings['geocoder'],
-        '#ajax' => [
-          'callback' => [
-            get_class($this->geocoderManager), 'addGeocoderSettingsFormAjax',
-          ],
-          'wrapper' => 'leaflet-control-geocoder-plugin-settings',
-          'effect' => 'fade',
-        ],
-      ];
-
-      if (!empty($settings['geocoder'])) {
-        $geocoder_plugin = $this->geocoderManager->getGeocoder(
-          $settings['geocoder'],
-          $settings['settings']
-        );
-      }
-      elseif (current(array_keys($geocoder_options))) {
-        $geocoder_plugin = $this->geocoderManager->getGeocoder(current(array_keys($geocoder_options)));
-      }
-
-      if (!empty($geocoder_plugin)) {
-        $geocoder_settings_form = $geocoder_plugin->getOptionsForm();
-        if ($geocoder_settings_form) {
-          $form['settings'] = $geocoder_settings_form;
-        }
-      }
-
-      if (empty($form['settings'])) {
-        $form['settings'] = [
-          '#type' => 'html_tag',
-          '#tag' => 'span',
-          '#value' => $this->t("No settings available."),
-        ];
-      }
-
-      $form['settings'] = array_replace_recursive($form['settings'], [
-        '#flatten' => TRUE,
-        '#prefix' => '<div id="leaflet-control-geocoder-plugin-settings">',
-        '#suffix' => '</div>',
-      ]);
+    if (!$geocoder_options) {
+      return $form;
     }
+
+    $form['geocoder'] = [
+      '#type' => 'select',
+      '#options' => $geocoder_options,
+      '#title' => $this->t('Geocoder plugin'),
+      '#default_value' => $settings['geocoder'],
+      '#ajax' => [
+        'callback' => [
+          get_class($this->geocoderManager), 'addGeocoderSettingsFormAjax',
+        ],
+        'wrapper' => $this->getPluginId() . '-geocoder-plugin-settings',
+        'effect' => 'fade',
+      ],
+    ];
+
+    $geocoder_plugin = $this->geocoderManager->getGeocoder(
+      $settings['geocoder'],
+      $settings['geocoder_settings']
+    );
+
+    if ($geocoder_plugin) {
+      $form['geocoder_settings'] = $geocoder_plugin->getOptionsForm();
+    }
+    else {
+      $form['geocoder_settings'] = [
+        '#type' => 'html_tag',
+        '#tag' => 'span',
+        '#value' => $this->t("No settings available."),
+      ];
+    }
+
+    $form['geocoder_settings'] = NestedArray::mergeDeep($form['geocoder_settings'], [
+      '#flatten' => TRUE,
+      '#prefix' => '<div id="' . $this->getPluginId() . '-geocoder-plugin-settings">',
+      '#suffix' => '</div>',
+    ]);
 
     return $form;
   }
@@ -140,16 +138,15 @@ class LeafletControlGeocoder extends ControlCustomElementBase {
   /**
    * {@inheritdoc}
    */
-  public function alterMap(array $render_array, array $feature_settings, array $context = []) {
-    $render_array = parent::alterMap($render_array, $feature_settings, $context);
+  public function alterMap(array $render_array, array $feature_settings = [], array $context = [], MapProviderInterface $mapProvider = NULL): array {
+    $render_array = parent::alterMap($render_array, $feature_settings, $context, $mapProvider);
 
-    /** @var \Drupal\geolocation\GeocoderInterface $geocoder_plugin */
-    $geocoder_plugin = $this->geocoderManager->getGeocoder(
-      $feature_settings['geocoder'],
-      $feature_settings['settings']
-    );
+    $geocoder_plugin = $this->geocoderManager->getGeocoder($feature_settings['geocoder'], $feature_settings['geocoder_settings']);
+    if (empty($geocoder_plugin)) {
+      return $render_array;
+    }
 
-    $geocoder_plugin->formAttachGeocoder($render_array['#controls'][$this->pluginId], $render_array['#id']);
+    $geocoder_plugin->alterRenderArray($render_array['#controls'][$this->pluginId], $render_array['#id']);
 
     return $render_array;
   }
