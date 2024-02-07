@@ -68,7 +68,7 @@
         "drupal/checklistapi": "^2.1",
         "drupal/config_update": "^2.0@alpha",
         "drupal/content_access": "^2.0",
-        "drupal/core": "^9.5",
+        "drupal/core": "^9.5.11",
         "drupal/ctools": "^4.0",
         "drupal/date_popup": "^2.0",
         "drupal/draggableviews": "^2.0",
