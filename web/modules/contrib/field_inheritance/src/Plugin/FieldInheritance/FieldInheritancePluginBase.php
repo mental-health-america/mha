@@ -8,7 +8,7 @@ use Drupal\field_inheritance\FieldInheritancePluginInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\KeyValueStore\KeyValueFactory;
+use Drupal\Core\KeyValueStore\KeyValueFactoryInterface;
 
 /**
  * Abstract class FieldInheritancePluginBase.
@@ -81,7 +81,7 @@ abstract class FieldInheritancePluginBase extends PluginBase implements FieldInh
   /**
    * The key value store.
    *
-   * @var \Drupal\Core\KeyValueStore\KeyValueFactory
+   * @var \Drupal\Core\KeyValueStore\KeyValueFactoryInterface
    */
   protected $keyValue;
 
@@ -94,14 +94,14 @@ abstract class FieldInheritancePluginBase extends PluginBase implements FieldInh
    *   The plugin ID.
    * @param mixed $plugin_definition
    *   The plugin definition.
-   * @param Drupal\Core\Language\LanguageManagerInterface $language_manager
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager service.
-   * @param Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
-   * @param Drupal\Core\KeyValueStore\KeyValueFactory $key_value
+   * @param \Drupal\Core\KeyValueStore\KeyValueFactoryInterface $key_value
    *   The key value store.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LanguageManagerInterface $language_manager, EntityTypeManagerInterface $entity_type_manager, KeyValueFactory $key_value) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LanguageManagerInterface $language_manager, EntityTypeManagerInterface $entity_type_manager, KeyValueFactoryInterface $key_value) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->fieldInheritanceId = $configuration['id'];
     $this->entity = $configuration['entity'];
@@ -221,21 +221,24 @@ abstract class FieldInheritancePluginBase extends PluginBase implements FieldInh
   /**
    * Retrieve inherited data.
    *
-   * @return string
+   * @return array
    *   The inherited data.
    */
   protected function inheritData() {
     $source_entity = $this->getSourceEntity();
-    if ($source_entity === FALSE) {
+    if ($source_entity === FALSE
+      || $source_entity->{$this->getSourceField()}->isEmpty()
+    ) {
       return [];
     }
-    return $source_entity->{$this->getSourceField()}->getValue() ?? '';
+
+    return $source_entity->{$this->getSourceField()}->getValue();
   }
 
   /**
    * Retrieve prepended data.
    *
-   * @return string
+   * @return array
    *   The prepended data.
    */
   protected function prependData() {
@@ -247,10 +250,10 @@ abstract class FieldInheritancePluginBase extends PluginBase implements FieldInh
       return $values;
     }
 
-    if (!empty($destination_entity->{$this->getDestinationField()}->getValue())) {
+    if (!$destination_entity->{$this->getDestinationField()}->isEmpty()) {
       $values = array_merge($values, $destination_entity->{$this->getDestinationField()}->getValue());
     }
-    if (!empty($source_entity->{$this->getSourceField()}->getValue())) {
+    if (!$source_entity->{$this->getSourceField()}->isEmpty()) {
       $values = array_merge($values, $source_entity->{$this->getSourceField()}->getValue());
     }
     return $values;
@@ -271,10 +274,10 @@ abstract class FieldInheritancePluginBase extends PluginBase implements FieldInh
       return $values;
     }
 
-    if (!empty($source_entity->{$this->getSourceField()}->getValue())) {
+    if (!$source_entity->{$this->getSourceField()}->isEmpty()) {
       $values = array_merge($values, $source_entity->{$this->getSourceField()}->getValue());
     }
-    if (!empty($destination_entity->{$this->getDestinationField()}->getValue())) {
+    if (!$destination_entity->{$this->getDestinationField()}->isEmpty()) {
       $values = array_merge($values, $destination_entity->{$this->getDestinationField()}->getValue());
     }
     return $values;
@@ -283,7 +286,7 @@ abstract class FieldInheritancePluginBase extends PluginBase implements FieldInh
   /**
    * Retrieve fallback data.
    *
-   * @return string
+   * @return array
    *   The fallback data.
    */
   protected function fallbackData() {
@@ -295,10 +298,10 @@ abstract class FieldInheritancePluginBase extends PluginBase implements FieldInh
       return $values;
     }
 
-    if (!empty($destination_entity->{$this->getDestinationField()}->getValue())) {
+    if (!$destination_entity->{$this->getDestinationField()}->isEmpty()) {
       $values = $destination_entity->{$this->getDestinationField()}->getValue();
     }
-    elseif (!empty($source_entity->{$this->getSourceField()}->getValue())) {
+    elseif (!$source_entity->{$this->getSourceField()}->isEmpty()) {
       $values = $source_entity->{$this->getSourceField()}->getValue();
     }
     return $values;

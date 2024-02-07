@@ -1,13 +1,14 @@
 name: 'Views Term Hierarchy Weight Field'
 description: 'Provides a new field for Views to sort terms in hierarchical order. You can sort them too.'
-core_version_requirement: ^8 || ^9 || ^10
+core: 8.x
+core_version_requirement: ^8 || ^9
 package: Views
 dependencies:
   - drupal:views
   - drupal:taxonomy
 type: module
 
-# Information added by Drupal.org packaging script on 2022-07-15
-version: '8.x-1.2'
+# Information added by Drupal.org packaging script on 2024-01-29
+version: '8.x-1.3'
 project: 'views_term_hierarchy_weight_field'
-datestamp: 1657913328
+datestamp: 1706552301
