@@ -71,7 +71,7 @@ class RegistrantController extends ControllerBase implements ContainerInjectionI
    * @param Drupal\recurring_events\Entity\EventInstance $eventinstance
    *   The eventinstance entity.
    *
-   * @return Drupal\Core\Access\AccessResultInterface
+   * @return \Drupal\Core\Access\AccessResultInterface
    *   Whether access is allowed based on whether registration is enabled.
    */
   public static function hasRegistration(EventInstance $eventinstance) {
@@ -94,7 +94,7 @@ class RegistrantController extends ControllerBase implements ContainerInjectionI
    * @param Drupal\recurring_events\Entity\EventInstance $eventinstance
    *   The eventinstance entity.
    *
-   * @return Drupal\Core\Access\AccessResultInterface
+   * @return \Drupal\Core\Access\AccessResultInterface
    *   Whether access is allowed based on whether registration is enabled.
    */
   public function canContactRegistrants(EventInstance $eventinstance) {

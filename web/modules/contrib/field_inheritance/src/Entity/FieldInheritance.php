@@ -127,7 +127,7 @@ class FieldInheritance extends ConfigEntityBase implements FieldInheritanceInter
    * {@inheritdoc}
    */
   public function type() {
-    return isset($this->type) ? $this->type : NULL;
+    return $this->type ?? NULL;
   }
 
   /**
@@ -142,49 +142,49 @@ class FieldInheritance extends ConfigEntityBase implements FieldInheritanceInter
    * {@inheritdoc}
    */
   public function sourceEntityType() {
-    return isset($this->sourceEntityType) ? $this->sourceEntityType : NULL;
+    return $this->sourceEntityType ?? NULL;
   }
 
   /**
    * {@inheritdoc}
    */
   public function destinationEntityType() {
-    return isset($this->destinationEntityType) ? $this->destinationEntityType : NULL;
+    return $this->destinationEntityType ?? NULL;
   }
 
   /**
    * {@inheritdoc}
    */
   public function sourceEntityBundle() {
-    return isset($this->sourceEntityBundle) ? $this->sourceEntityBundle : NULL;
+    return $this->sourceEntityBundle ?? NULL;
   }
 
   /**
    * {@inheritdoc}
    */
   public function destinationEntityBundle() {
-    return isset($this->destinationEntityBundle) ? $this->destinationEntityBundle : NULL;
+    return $this->destinationEntityBundle ?? NULL;
   }
 
   /**
    * {@inheritdoc}
    */
   public function sourceField() {
-    return isset($this->sourceField) ? $this->sourceField : NULL;
+    return $this->sourceField ?? NULL;
   }
 
   /**
    * {@inheritdoc}
    */
   public function destinationField() {
-    return isset($this->destinationField) ? $this->destinationField : NULL;
+    return $this->destinationField ?? NULL;
   }
 
   /**
    * {@inheritdoc}
    */
   public function plugin() {
-    return isset($this->plugin) ? $this->plugin : NULL;
+    return $this->plugin ?? NULL;
   }
 
   /**
