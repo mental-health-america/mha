@@ -4,9 +4,9 @@ namespace Drupal\Tests\simplenews\Functional;
 
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
-use Drupal\user\UserInterface;
 use Drupal\simplenews\Entity\Newsletter;
 use Drupal\simplenews\Entity\Subscriber;
+use Drupal\user\UserInterface;
 
 /**
  * Un/subscription of anonymous and authenticated users.
@@ -171,20 +171,6 @@ class SimplenewsSubscribeTest extends SimplenewsTestBase {
     $this->assertSession()->responseContains('Subscription changes confirmed for <em class="placeholder">' . $email . '</em>.');
     $this->assertHookResult('add', $email, 'default');
     $this->assertNoHookResult();
-  }
-
-  /**
-   * Extract a validation link from a mail body.
-   */
-  protected function extractValidationLink($body) {
-    $pattern = '@simplenews/manage/.+/.+/.{20,}@';
-    $found = preg_match($pattern, $body, $match);
-    if (!$found) {
-      $this->fail(t('No validation URL found in "@body".', ['@body' => $body]));
-      return FALSE;
-    }
-    $validate_url = $match[0];
-    return $validate_url;
   }
 
   /**
@@ -749,7 +735,7 @@ class SimplenewsSubscribeTest extends SimplenewsTestBase {
     \Drupal::service('simplenews.spool_storage')->addIssue($node);
     \Drupal::service('simplenews.mailer')->sendSpool();
 
-    $unsubscribe_url = $this->extractConfirmationLink($this->getMail(0));
+    $unsubscribe_url = $this->extractConfirmationLink($this->getMail(0), 'remove');
     $this->drupalGet($unsubscribe_url);
     $this->assertSession()->pageTextContains('Confirm remove subscription');
     $this->submitForm([], 'Unsubscribe');
@@ -765,7 +751,9 @@ class SimplenewsSubscribeTest extends SimplenewsTestBase {
     $mail = $user->getEmail();
     $subscriber = Subscriber::loadByMail($mail, 'create');
     $subscriber->save();
-    $this->drupalGet('/simplenews/validate');
+    $this->drupalGet('simplenews/subscriptions');
+    $this->assertSession()->addressEquals('/simplenews/validate');
+
     $this->submitForm(['mail' => $mail], 'Submit');
     $this->assertSession()->pageTextContains("Please log in to manage your subscriptions.");
     $this->assertSession()->addressEquals('user/' . $user->id() . '/simplenews');
@@ -788,7 +776,7 @@ class SimplenewsSubscribeTest extends SimplenewsTestBase {
     $this->drupalGet('/simplenews/validate');
     $this->submitForm(['mail' => $mail2], 'Submit');
     $this->assertSession()->pageTextContains("If $mail2 is subscribed, an email will be sent with a link to manage your subscriptions.");
-    $validate_url = $this->extractValidationLink($this->getMail(0));
+    $validate_url = $this->extractConfirmationLink($this->getMail(0), 'manage');
     $this->drupalGet($validate_url);
     $this->assertSession()->pageTextContains("Subscriptions for $mail2");
   }

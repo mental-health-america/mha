@@ -133,6 +133,7 @@ function recurring_events_views_data_alter(array &$data) {
     'daily_recurring_date__',
     'weekly_recurring_date__',
     'monthly_recurring_date__',
+    'yearly_recurring_date__',
   ];
   foreach ($fields as $field) {
     foreach ($data['eventseries_field_data'] as $field_name => $field_info) {

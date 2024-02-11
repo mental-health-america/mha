@@ -2,19 +2,19 @@
 
 namespace Drupal\siteimprove\Form;
 
-use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Form\ConfigFormBase;
-use Drupal\Core\Entity\EntityStorageInterface;
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\Core\Messenger\Messenger;
-use Drupal\Core\Cache\Cache;
-use Drupal\Core\Extension\ModuleHandler;
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Form\ConfigFormBase;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\siteimprove\Plugin\SiteimproveDomainManager;
 use Drupal\siteimprove\SiteimproveUtils;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use GuzzleHttp\Client;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Siteimprove settings.
@@ -40,7 +40,7 @@ class SettingsForm extends ConfigFormBase {
   /**
    * Drupal Core Messenger service.
    *
-   * @var \Drupal\Core\Messenger\Messenger
+   * @var \Drupal\Core\Messenger\MessengerInterface
    */
   protected $messenger;
 
@@ -61,7 +61,7 @@ class SettingsForm extends ConfigFormBase {
   /**
    * The module handler.
    *
-   * @var \Drupal\Core\Extension\ModuleHandler
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
   protected $moduleHandler;
 
@@ -75,7 +75,7 @@ class SettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function __construct(ConfigFactoryInterface $config_factory, SiteimproveUtils $siteimprove, SiteimproveDomainManager $pluginManagerSiteimproveDomain, Messenger $messenger, Client $httpClient, EntityStorageInterface $vocabulary_storage, ModuleHandler $moduleHandler, ?EntityStorageInterface $groupTypeStorage) {
+  public function __construct(ConfigFactoryInterface $config_factory, SiteimproveUtils $siteimprove, SiteimproveDomainManager $pluginManagerSiteimproveDomain, MessengerInterface $messenger, Client $httpClient, EntityStorageInterface $vocabulary_storage, ModuleHandlerInterface $moduleHandler, ?EntityStorageInterface $groupTypeStorage) {
     parent::__construct($config_factory);
 
     $this->siteimprove = $siteimprove;
@@ -124,7 +124,7 @@ class SettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $config = $this->configFactory->get('siteimprove.settings');
+    $config = $this->config('siteimprove.settings');
 
     $form['container'] = [
       '#title' => $this->t('Token'),
@@ -249,10 +249,12 @@ class SettingsForm extends ConfigFormBase {
     ];
 
     if ($config->get('prepublish_enabled')) {
+      $full_config = $this->configFactory->get('siteimprove.settings');
+
       // Check API if prepublish checking has been enabled.
       $url = 'https://api.siteimprove.com/v2/settings/content_checking';
       $res = $this->httpClient->request('GET', $url, [
-        'auth' => [$config->get('api_username'), $config->get('api_key')],
+        'auth' => [$full_config->get('api_username'), $full_config->get('api_key')],
         'headers' => [
           'Accept' => 'application/json',
         ],
@@ -324,8 +326,8 @@ class SettingsForm extends ConfigFormBase {
     $options = node_type_get_names();
     $form['prepublish']['content_types']['enabled_content_types'] = [
       '#type' => 'checkboxes',
-      '#options' => $options,
-      '#default_value' => $config->get('enabled_content_types'),
+      '#options' => $options ?? [],
+      '#default_value' => $config->get('enabled_content_types') ?? [],
       '#title' => $this->t('Select prepublish check enabled content types'),
       '#description' => $this->t('Select which content types Siteimprove Prepublish check is enabled for'),
     ];
@@ -348,8 +350,8 @@ class SettingsForm extends ConfigFormBase {
     }
     $form['prepublish']['taxonomies']['enabled_taxonomies'] = [
       '#type' => 'checkboxes',
-      '#options' => $taxonomy_options,
-      '#default_value' => $config->get('enabled_taxonomies'),
+      '#options' => $taxonomy_options ?? [],
+      '#default_value' => $config->get('enabled_taxonomies') ?? [],
       '#title' => $this->t('Select prepublish check enabled taxonomies'),
       '#description' => $this->t('Select which taxonomies Siteimprove Prepublish check is enabled for'),
     ];

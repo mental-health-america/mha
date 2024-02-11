@@ -23,16 +23,16 @@ function hook_field_inheritance_inheritance_class_alter(&$class, $field) {
  * Alter the computed value for an inherited field.
  *
  * @param array $value
- *    Array of field item values
+ *   Array of field item values.
  * @param array $context
- *    Array of context information for the field inheritance, with keys:
+ *   Array of context information for the field inheritance, with keys:
  *      - source_field
  *      - source_entity
  *      - destination_field
  *      - destination_entity
- *      - method
+ *      - method.
  */
-function field_inheritance_field_inheritance_compute_value_alter(&$value, $context) {
+function field_inheritance_field_inheritance_compute_value_alter(array &$value, array $context) {
   if ($context['destination_field'] === 'my_field') {
     $value[0]['value'] = 'foo';
   }

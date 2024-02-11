@@ -9,6 +9,7 @@ use Drupal\Core\Config\Entity\ConfigEntityType;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Config\FileStorage;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
 
 /**
  * Set up the config to allow field inheritance for event instances.
@@ -659,4 +660,77 @@ function recurring_events_update_8014() {
   $config = \Drupal::configFactory()->getEditable('recurring_events.eventseries.config');
   $config->set('creator_plugin', 'recurring_events_eventinstance_recreator');
   $config->save(TRUE);
+}
+
+/**
+ * Configure the event series to have the new yearly recur type.
+ */
+function recurring_events_update_8015() {
+  $yearly_recurring_date = BaseFieldDefinition::create('yearly_recurring_date')
+    ->setLabel(t('Yearly Event'))
+    ->setDescription('The yearly recurring date configuration.')
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE)
+    ->setRevisionable(TRUE)
+    ->setTranslatable(FALSE)
+    ->setCardinality(1)
+    ->setRequired(FALSE)
+    ->setDisplayOptions('form', [
+      'type' => 'yearly_recurring_date',
+      'weight' => 7,
+    ]);
+
+  \Drupal::entityDefinitionUpdateManager()->installFieldStorageDefinition('yearly_recurring_date', 'eventseries', 'eventseries', $yearly_recurring_date);
+
+  // Enable all the recur types.
+  $config = \Drupal::configFactory()->getEditable('recurring_events.eventseries.config');
+  $config->set('enabled_fields', 'consecutive_recurring_date,daily_recurring_date,weekly_recurring_date,monthly_recurring_date,yearly_recurring_date,custom');
+  $config->save(TRUE);
+}
+
+/**
+ * Set the default event instance plugin creator.
+ */
+function recurring_events_update_91001() {
+  recurring_events_update_8014();
+}
+
+/**
+ * Fix entity field mismatches with various fields.
+ */
+function recurring_events_update_91002() {
+  $entity_definition_update_manager = \Drupal::entityDefinitionUpdateManager();
+  foreach (['eventseries', 'eventinstance'] as $entity_type) {
+    $field_definitions = \Drupal::service('entity_field.manager')
+      ->getFieldDefinitions($entity_type, $entity_type);
+
+    if (!empty($field_definitions['uid']) && $field_definitions['uid'] instanceof FieldStorageDefinitionInterface) {
+      $entity_definition_update_manager
+        ->installFieldStorageDefinition(
+          'uid',
+          $entity_type,
+          'recurring_events',
+          $field_definitions['uid']
+        );
+    }
+  }
+
+  foreach ([
+    'daily_recurring_date',
+    'weekly_recurring_date',
+    'monthly_recurring_date'
+  ] as $field_name) {
+    $field_definitions = \Drupal::service('entity_field.manager')
+      ->getFieldDefinitions('eventseries', 'eventseries');
+
+    if (!empty($field_definitions[$field_name]) && $field_definitions[$field_name] instanceof FieldStorageDefinitionInterface) {
+      $entity_definition_update_manager
+        ->installFieldStorageDefinition(
+          $field_name,
+          'eventseries',
+          'recurring_events',
+          $field_definitions[$field_name]
+        );
+    }
+  }
 }

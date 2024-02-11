@@ -405,6 +405,10 @@ class EventCreationService {
 
     // Find all the instances and delete them.
     $instances = $event->event_instances->referencedEntities();
+    $initial_instance_count = count($instances);
+
+    $this->moduleHandler->invokeAll('recurring_events_save_pre_instances_deletion_alter', [&$instances]);
+
     if (!empty($instances)) {
       foreach ($instances as $instance) {
         // Allow other modules to react prior to deleting a specific
@@ -423,9 +427,17 @@ class EventCreationService {
           $instance,
         ]);
       }
+
       $this->messenger->addStatus($this->translation->translate('A total of %count existing event instances were removed', [
         '%count' => count($instances),
       ]));
+
+      $final_instance_count = count($instances);
+      if ($initial_instance_count > $final_instance_count) {
+        $this->messenger->addStatus($this->translation->translate('%count existing event instances were skipped.', [
+          '%count' => $initial_instance_count - $final_instance_count,
+        ]));
+      }
     }
 
     // Allow other modules to react after the deletion of all instances.
@@ -471,6 +483,9 @@ class EventCreationService {
             foreach ($events_to_create as $custom_event) {
               $instance = $this->createEventInstance($event, $custom_event['start_date'], $custom_event['end_date']);
               $this->configureDefaultInheritances($instance, $event->id());
+              if ($instance) {
+                $instance->save();
+              }
               $event_instances[] = $instance;
             }
           }
@@ -489,6 +504,9 @@ class EventCreationService {
           foreach ($events_to_create as $event_to_create) {
             $instance = $this->createEventInstance($event, $event_to_create['start_date'], $event_to_create['end_date']);
             $this->configureDefaultInheritances($instance, $event->id());
+            if ($instance) {
+              $instance->save();
+            }
             $event_instances[] = $instance;
           }
         }
@@ -559,10 +577,7 @@ class EventCreationService {
       }
     }
 
-    if ($entity) {
-      $entity->save();
-    }
-    else {
+    if (!$entity) {
       $this->loggerChannel->warning('Missing event instance in default language. Translation could not be created');
     }
 

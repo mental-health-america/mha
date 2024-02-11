@@ -131,6 +131,13 @@ class FeaturesManager implements FeaturesManagerInterface {
   protected $featureInfoCache;
 
   /**
+   * The features generator.
+   *
+   * @var \Drupal\features\FeaturesGeneratorInterface
+   */
+  protected $generator;
+
+  /**
    * Constructs a FeaturesManager object.
    *
    * @param string $root
