@@ -165,7 +165,6 @@ class ComposerStaticInit6675372a6f6527fe51fb53f618c3d4f9
         'F' => 
         array (
             'FontLib\\' => 8,
-            'Firebase\\JWT\\' => 13,
         ),
         'E' => 
         array (
@@ -538,10 +537,6 @@ class ComposerStaticInit6675372a6f6527fe51fb53f618c3d4f9
         array (
             0 => __DIR__ . '/..' . '/phenx/php-font-lib/src/FontLib',
         ),
-        'Firebase\\JWT\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/firebase/php-jwt/src',
-        ),
         'Enlightn\\SecurityChecker\\' => 
         array (
             0 => __DIR__ . '/..' . '/enlightn/security-checker/src',
@@ -683,17 +678,6 @@ class ComposerStaticInit6675372a6f6527fe51fb53f618c3d4f9
                 0 => __DIR__ . '/..' . '/stack/builder/src',
             ),
         ),
-        'O' => 
-        array (
-            'OAuth\\Unit' => 
-            array (
-                0 => __DIR__ . '/..' . '/lusitanian/oauth/tests',
-            ),
-            'OAuth' => 
-            array (
-                0 => __DIR__ . '/..' . '/lusitanian/oauth/src',
-            ),
-        ),
         'D' => 
         array (
             'Dflydev\\PlaceholderResolver' => 
@@ -726,11 +710,8 @@ class ComposerStaticInit6675372a6f6527fe51fb53f618c3d4f9
     );
 
     public static $classMap = array (
-        'AllowFieldTruncationHeader' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceHeaderOptions.php',
-        'AssignmentRuleHeader' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceHeaderOptions.php',
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
         'CURLStringFile' => __DIR__ . '/..' . '/symfony/polyfill-php81/Resources/stubs/CURLStringFile.php',
-        'CallOptions' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceHeaderOptions.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Datamatrix' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/barcodes/datamatrix.php',
         'Dompdf\\Cpdf' => __DIR__ . '/..' . '/dompdf/dompdf/lib/Cpdf.php',
@@ -759,37 +740,13 @@ class ComposerStaticInit6675372a6f6527fe51fb53f618c3d4f9
         'Drupal\\Core\\Http\\InputBag' => __DIR__ . '/../..' . '/web/core/lib/Drupal/Core/Http/InputBag.php',
         'Drupal\\Core\\Installer\\InstallerRedirectTrait' => __DIR__ . '/../..' . '/web/core/lib/Drupal/Core/Installer/InstallerRedirectTrait.php',
         'Drupal\\Core\\Site\\Settings' => __DIR__ . '/../..' . '/web/core/lib/Drupal/Core/Site/Settings.php',
-        'Email' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceEmail.php',
-        'EmailHeader' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceHeaderOptions.php',
         'JsonException' => __DIR__ . '/..' . '/symfony/polyfill-php73/Resources/stubs/JsonException.php',
-        'LocaleOptions' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceHeaderOptions.php',
-        'LoginScopeHeader' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceHeaderOptions.php',
-        'MassEmailMessage' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceEmail.php',
-        'MruHeader' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceHeaderOptions.php',
         'Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
         'PDF417' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/barcodes/pdf417.php',
         'PEAR_Exception' => __DIR__ . '/..' . '/pear/pear_exception/PEAR/Exception.php',
-        'PackageVersion' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceHeaderOptions.php',
-        'PackageVersionHeader' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceHeaderOptions.php',
         'PhpToken' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/PhpToken.php',
-        'ProcessRequest' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceProcessRequest.php',
-        'ProcessSubmitRequest' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceProcessRequest.php',
-        'ProcessWorkitemRequest' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceProcessRequest.php',
-        'ProxySettings' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/ProxySettings.php',
         'QRcode' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/barcodes/qrcode.php',
-        'QueryOptions' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceHeaderOptions.php',
-        'QueryResult' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceBaseClient.php',
         'ReturnTypeWillChange' => __DIR__ . '/..' . '/symfony/polyfill-php81/Resources/stubs/ReturnTypeWillChange.php',
-        'SObject' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceBaseClient.php',
-        'SforceBaseClient' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceBaseClient.php',
-        'SforceCustomField' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceMetaObject.php',
-        'SforceCustomObject' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceMetaObject.php',
-        'SforceEnterpriseClient' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceEnterpriseClient.php',
-        'SforceMetadataClient' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceMetadataClient.php',
-        'SforcePartnerClient' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforcePartnerClient.php',
-        'SforceSearchResult' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceBaseClient.php',
-        'SforceSoapClient' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforcePartnerClient.php',
-        'SingleEmailMessage' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceEmail.php',
         'Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
         'TCPDF' => __DIR__ . '/..' . '/tecnickcom/tcpdf/tcpdf.php',
         'TCPDF2DBarcode' => __DIR__ . '/..' . '/tecnickcom/tcpdf/tcpdf_barcodes_2d.php',
@@ -803,7 +760,6 @@ class ComposerStaticInit6675372a6f6527fe51fb53f618c3d4f9
         'TCPDF_PARSER' => __DIR__ . '/..' . '/tecnickcom/tcpdf/tcpdf_parser.php',
         'TCPDF_STATIC' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/tcpdf_static.php',
         'UnhandledMatchError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
-        'UserTerritoryDeleteHeader' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceHeaderOptions.php',
         'ValueError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
         'geoPHP' => __DIR__ . '/..' . '/itamair/geophp/geoPHP.inc',
     );

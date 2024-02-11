@@ -87,7 +87,6 @@ return array(
     'GuzzleHttp\\' => array($vendorDir . '/guzzlehttp/guzzle/src'),
     'Grasmash\\Expander\\' => array($vendorDir . '/grasmash/expander/src'),
     'FontLib\\' => array($vendorDir . '/phenx/php-font-lib/src/FontLib'),
-    'Firebase\\JWT\\' => array($vendorDir . '/firebase/php-jwt/src'),
     'Enlightn\\SecurityChecker\\' => array($vendorDir . '/enlightn/security-checker/src'),
     'EmailValidator\\' => array($vendorDir . '/stymiee/email-validator/src/EmailValidator'),
     'Egulias\\EmailValidator\\' => array($vendorDir . '/egulias/email-validator/src'),
