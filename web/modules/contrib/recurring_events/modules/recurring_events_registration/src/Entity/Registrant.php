@@ -279,7 +279,7 @@ class Registrant extends EditorialContentEntityBase implements RegistrantInterfa
   /**
    * Get the event series.
    *
-   * @return Drupal\recurring_events\Entity\EventSeries
+   * @return \Drupal\recurring_events\Entity\EventSeries
    *   The event series entity.
    */
   public function getEventSeries() {
@@ -292,7 +292,7 @@ class Registrant extends EditorialContentEntityBase implements RegistrantInterfa
    * @param Drupal\recurring_events\Entity\EventSeries $event
    *   The event series entity.
    *
-   * @return Drupal\recurring_events_registration\Entity\RegistrantInterface
+   * @return \Drupal\recurring_events_registration\Entity\RegistrantInterface
    *   The registrant entity.
    */
   public function setEventSeries(EventSeries $event) {
@@ -303,7 +303,7 @@ class Registrant extends EditorialContentEntityBase implements RegistrantInterfa
   /**
    * Get the event.
    *
-   * @return Drupal\recurring_events\Entity\EventInstance
+   * @return \Drupal\recurring_events\Entity\EventInstance
    *   The eventinstance entity.
    */
   public function getEventInstance() {
@@ -316,7 +316,7 @@ class Registrant extends EditorialContentEntityBase implements RegistrantInterfa
    * @param Drupal\recurring_events\Entity\EventInstance $event
    *   The eventinstance entity.
    *
-   * @return Drupal\recurring_events_registration\Entity\RegistrantInterface
+   * @return \Drupal\recurring_events_registration\Entity\RegistrantInterface
    *   The registrant entity.
    */
   public function setEventInstance(EventInstance $event) {
@@ -340,7 +340,7 @@ class Registrant extends EditorialContentEntityBase implements RegistrantInterfa
    * @param string $type
    *   The type of registration, series or instance.
    *
-   * @return Drupal\recurring_events_registration\Entity\RegistrantInterface
+   * @return \Drupal\recurring_events_registration\Entity\RegistrantInterface
    *   The registrant entity.
    */
   public function setRegistrationType($type) {
@@ -364,7 +364,7 @@ class Registrant extends EditorialContentEntityBase implements RegistrantInterfa
    * @param int $waitlist
    *   Whether the registrant is on the waitlist.
    *
-   * @return Drupal\recurring_events_registration\Entity\RegistrantInterface
+   * @return \Drupal\recurring_events_registration\Entity\RegistrantInterface
    *   The registrant entity.
    */
   public function setWaitlist($waitlist) {

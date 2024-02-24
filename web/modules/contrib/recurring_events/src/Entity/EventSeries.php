@@ -502,7 +502,7 @@ class EventSeries extends EditorialContentEntityBase implements EventInterface {
   /**
    * Get series start.
    *
-   * @return Drupal\Core\Datetime\DrupalDateTime
+   * @return \Drupal\Core\Datetime\DrupalDateTime
    *   The date object for the series start date.
    */
   public function getSeriesStart() {
@@ -549,7 +549,7 @@ class EventSeries extends EditorialContentEntityBase implements EventInterface {
   /**
    * Get consecutive recurring start date.
    *
-   * @return Drupal\Core\Datetime\DrupalDateTime
+   * @return \Drupal\Core\Datetime\DrupalDateTime
    *   The date object for the consecutive start date.
    */
   public function getConsecutiveStartDate() {
@@ -563,7 +563,7 @@ class EventSeries extends EditorialContentEntityBase implements EventInterface {
   /**
    * Get consecutive recurring end date.
    *
-   * @return Drupal\Core\Datetime\DrupalDateTime
+   * @return \Drupal\Core\Datetime\DrupalDateTime
    *   The date object for the consecutive end date.
    */
   public function getConsecutiveEndDate() {
@@ -637,7 +637,7 @@ class EventSeries extends EditorialContentEntityBase implements EventInterface {
   /**
    * Get daily recurring start date.
    *
-   * @return Drupal\Core\Datetime\DrupalDateTime
+   * @return \Drupal\Core\Datetime\DrupalDateTime
    *   The date object for the daily start date.
    */
   public function getDailyStartDate() {
@@ -651,7 +651,7 @@ class EventSeries extends EditorialContentEntityBase implements EventInterface {
   /**
    * Get daily recurring end date.
    *
-   * @return Drupal\Core\Datetime\DrupalDateTime
+   * @return \Drupal\Core\Datetime\DrupalDateTime
    *   The date object for the daily end date.
    */
   public function getDailyEndDate() {
@@ -705,7 +705,7 @@ class EventSeries extends EditorialContentEntityBase implements EventInterface {
   /**
    * Get weekly recurring start date.
    *
-   * @return Drupal\Core\Datetime\DrupalDateTime
+   * @return \Drupal\Core\Datetime\DrupalDateTime
    *   The date object for the weekly start date.
    */
   public function getWeeklyStartDate() {
@@ -719,7 +719,7 @@ class EventSeries extends EditorialContentEntityBase implements EventInterface {
   /**
    * Get weekly recurring end date.
    *
-   * @return Drupal\Core\Datetime\DrupalDateTime
+   * @return \Drupal\Core\Datetime\DrupalDateTime
    *   The date object for the weekly end date.
    */
   public function getWeeklyEndDate() {
@@ -821,7 +821,7 @@ class EventSeries extends EditorialContentEntityBase implements EventInterface {
   /**
    * Get monthly recurring start date.
    *
-   * @return Drupal\Core\Datetime\DrupalDateTime
+   * @return \Drupal\Core\Datetime\DrupalDateTime
    *   The date object for the monthly start date.
    */
   public function getMonthlyStartDate() {
@@ -835,7 +835,7 @@ class EventSeries extends EditorialContentEntityBase implements EventInterface {
   /**
    * Get monthly recurring end date.
    *
-   * @return Drupal\Core\Datetime\DrupalDateTime
+   * @return \Drupal\Core\Datetime\DrupalDateTime
    *   The date object for the monthly end date.
    */
   public function getMonthlyEndDate() {

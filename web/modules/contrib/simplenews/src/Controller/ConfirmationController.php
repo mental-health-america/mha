@@ -4,12 +4,12 @@ namespace Drupal\simplenews\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
-use Drupal\simplenews\SubscriberInterface;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Drupal\simplenews\Entity\Subscriber;
 use Drupal\simplenews\Entity\Newsletter;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\simplenews\Entity\Subscriber;
+use Drupal\simplenews\SubscriberInterface;
 use Drupal\simplenews\Subscription\SubscriptionManagerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Returns responses for confirmation and subscriber routes.
@@ -186,6 +186,24 @@ class ConfirmationController extends ControllerBase {
       }
     }
     throw new NotFoundHttpException();
+  }
+
+  /**
+   * Redirects subscribers to the appropriate page.
+   *
+   * Redirect to the 'Newsletters' tab for authenticated users or the 'Access
+   * your subscriptions' page otherwise.
+   *
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse
+   *   Returns a redirect to the correct page.
+   */
+  public function subscriptionsPage() {
+    $user = $this->currentUser();
+
+    if ($user->isAuthenticated()) {
+      return $this->redirect('simplenews.newsletter_subscriptions_user', ['user' => $user->id()]);
+    }
+    return $this->redirect('simplenews.subscriptions_validate');
   }
 
 }

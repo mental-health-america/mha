@@ -4,9 +4,9 @@ namespace Drupal\Tests\simplenews\Functional;
 
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
-use Drupal\user\UserInterface;
 use Drupal\simplenews\Entity\Newsletter;
 use Drupal\simplenews\Entity\Subscriber;
+use Drupal\user\UserInterface;
 
 /**
  * Un/subscription of anonymous and authenticated users.
@@ -751,7 +751,9 @@ class SimplenewsSubscribeTest extends SimplenewsTestBase {
     $mail = $user->getEmail();
     $subscriber = Subscriber::loadByMail($mail, 'create');
     $subscriber->save();
-    $this->drupalGet('/simplenews/validate');
+    $this->drupalGet('simplenews/subscriptions');
+    $this->assertSession()->addressEquals('/simplenews/validate');
+
     $this->submitForm(['mail' => $mail], 'Submit');
     $this->assertSession()->pageTextContains("Please log in to manage your subscriptions.");
     $this->assertSession()->addressEquals('user/' . $user->id() . '/simplenews');

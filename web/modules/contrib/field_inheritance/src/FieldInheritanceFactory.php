@@ -81,4 +81,11 @@ class FieldInheritanceFactory extends FieldItemList {
     return \Drupal::service('plugin.manager.field_inheritance');
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function setValue($values, $notify = TRUE) {
+    $this->ensureComputedValue();
+  }
+
 }

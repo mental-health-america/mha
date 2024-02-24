@@ -20,7 +20,7 @@ use Drupal\recurring_events_registration\Entity\RegistrantInterface;
  * @param Drupal\recurring_events_registration\Entity\Registrant $registrant
  *   The default selected registrant.
  *
- * @return Drupal\recurring_events_registration\Entity\Registrant
+ * @return \Drupal\recurring_events_registration\Entity\Registrant
  *   A valid registrant entity.
  */
 function hook_recurring_events_registration_first_waitlist_alter(Registrant $registrant) {

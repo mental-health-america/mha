@@ -121,7 +121,8 @@ function field_inheritance_entity_bundle_field_info_alter(&$fields, EntityTypeIn
           ->setDisplayOptions('view', [
             'label' => 'visible',
             'weight' => (50 + $x),
-          ]);
+          ])
+          ->setProvider('field_inheritance');
         $x++;
       }
     }
@@ -132,6 +133,9 @@ function field_inheritance_entity_bundle_field_info_alter(&$fields, EntityTypeIn
  * Implements hook_form_alter().
  */
 function field_inheritance_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if (!\Drupal::currentUser()->hasPermission('administer field inheritance')) {
+    return;
+  }
   $form_object = $form_state->getFormObject();
   if (!empty($form_object) && $form_object instanceof EntityForm) {
     $entity = $form_state->getFormObject()->getEntity();

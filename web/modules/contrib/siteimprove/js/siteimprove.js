@@ -182,7 +182,7 @@
       var sicmsplugin = cookies.get('sicmsplugin');
 
       if (!sicmsplugin) {
-        let siOverlaySettings = drupalSettings?.siteimprove?.overlay_default_collapse ?? NULL;
+        let siOverlaySettings = drupalSettings?.siteimprove?.overlay_default_collapse ?? null;
         if (siOverlaySettings) {
           cookies.set('sicmsplugin', OVERLAY_COLLAPSED, {
             domain: document.domain,
