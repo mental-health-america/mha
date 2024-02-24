@@ -31,11 +31,12 @@ function google_cse_form_search_block_form_alter(&$form, &$form_state, $form_id)
   $form['#attached']['library'][] = 'google_cse/googlecseWatermark';
   $form['#attributes']['class'][] = 'google-cse';
   $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $watermark = $config['watermark'] ?? 1;
   $form['#attached']['drupalSettings']['googlePSE'] = [
     'language' => $language,
-    'displayWatermark' => $config['watermark'] ?? 0,
+    'displayWatermark' => $watermark,
   ];
-  if ($config['watermark'] === 0) {
+  if ($watermark === 0) {
     $form['#attached']['library'][] = 'google_cse/noWatermark';
   }
   if (intval($config['results_searchbox_width']) > 0) {
