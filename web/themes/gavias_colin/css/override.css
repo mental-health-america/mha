@@ -1249,7 +1249,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 }
 
 .stuck .header-main-inner.p-relative {
-    padding: 8px 0 0;
+    padding: 20px 0 0;
     left: 0 !important;
 }
 

@@ -1,0 +1,17 @@
+name: mental
+recipe: drupal9
+config:
+  php: '8.2'
+  webroot: web
+
+# Services
+services:
+  database:
+    portforward: 56077
+  mental-phpmyadmin:
+    type: phpmyadmin
+
+# Proxy
+proxy:
+  mental-phpmyadmin:
+    - mental-phpmyadmin.lndo.site

@@ -1,5 +1,4 @@
 # All libraries are defined in alphabetical order.
-
 backbone:
   remote: https://github.com/jashkenas/backbone
   version: "1.4.1"
