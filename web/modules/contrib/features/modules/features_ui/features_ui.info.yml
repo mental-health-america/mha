@@ -7,7 +7,7 @@ configure: features.assignment
 dependencies:
   - features:features
 
-# Information added by Drupal.org packaging script on 2023-06-06
-version: '8.x-3.13'
+# Information added by Drupal.org packaging script on 2023-12-08
+version: '8.x-3.14'
 project: 'features'
-datestamp: 1686073888
+datestamp: 1702059194

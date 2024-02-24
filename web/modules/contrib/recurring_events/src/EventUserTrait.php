@@ -32,6 +32,7 @@ trait EventUserTrait {
         ->setLabel(new TranslatableMarkup('User ID'))
         ->setSetting('target_type', 'user')
         ->setTranslatable($entity_type->isTranslatable())
+        ->setRevisionable($entity_type->isRevisionable())
         ->setDefaultValueCallback(static::class . '::getDefaultEntityOwner'),
     ];
   }
