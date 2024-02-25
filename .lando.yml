@@ -1,4 +1,4 @@
-name: mental
+name: mentalhealthamerica
 recipe: drupal9
 config:
   php: '8.2'
