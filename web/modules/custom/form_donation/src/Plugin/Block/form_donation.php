@@ -23,7 +23,7 @@ class form_donation extends BlockBase {
     return array(
       '#markup' => $this->t('
 <div id="donation-form">
-<a href="#XNFZSHWU" style="display: none"></a>
+<a href="#XZZZTXBC" style="display: none"></a>
 </div>
       '),
     );
