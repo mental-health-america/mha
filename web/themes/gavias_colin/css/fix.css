@@ -241,16 +241,29 @@ event-full .extra.btn.btn-primary {
   letter-spacing: 1px !important;
 }
 
-#superfish-main li:nth-child(6) a.sf-depth-1 {
-  color: #000 !important;
-  font-size: .8rem !important;
-  background: #7eb420 !important;
+#superfish-main li:nth-child(4) a.sf-depth-1 {
+  background: #fff !important;
+  color: #385988 !important;
+  border: none !important;
+  margin-top: 4px;
+  padding: 1px 1px 1px 0 !important;
+  border-radius: 0 !important;
 }
 
+
 #superfish-main li:nth-child(5) a.sf-depth-1 {
-  color: #fff !important;
-  font-size: .8rem !important;
-  background: #385988 !important;
+  color: #385988 !important;
+  border-radius: 0 !important;
+  font-size: 1em !important;
+  background: white !important;
+  border-left: 1px solid var(--mha-orange-bright) !important;
+  padding: .3rem 1rem !important;
+}
+
+#superfish-main li:nth-child(5) a.sf-depth-1:hover {
+  border-radius: 0 !important;
+  background-color: white !important;
+  color:var(--mha-orange-bright) !important;
 }
 
 #superfish-main li:nth-child(6) a.sf-depth-1:hover {
@@ -259,9 +272,10 @@ event-full .extra.btn.btn-primary {
   color: #000 !important;
 }
 
-#superfish-main li:nth-child(5) a.sf-depth-1:hover {
-  border-radius: 15px !important;
-  background-color: #7B2E68 !important;
+#superfish-main li:nth-child(6) a.sf-depth-1 {
+  color: #000 !important;
+  font-size: .8rem !important;
+  background: #7eb420 !important;
 }
 
 .fa {
@@ -523,3 +537,6 @@ event-full .extra.btn.btn-primary {
     padding-right: 30px !important;
   }
 }
+
+
+
