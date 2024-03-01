@@ -1,6 +1,6 @@
-name: Form Donation
+name: MHA Donation
 type: module
-description: 'Form donation.'
+description: 'MHA donation form.'
 package: Custom
 version: 8.x
 core_version_requirement: ^8 || ^9 || ^10
