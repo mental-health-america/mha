@@ -1013,3 +1013,8 @@ input#edit-reset--3 {
     }
 
 }
+
+
+div#block-formdonationbutton {
+  z-index: 99999999 !important;
+}

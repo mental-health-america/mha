@@ -244,20 +244,16 @@ event-full .extra.btn.btn-primary {
 #superfish-main li:nth-child(4) a.sf-depth-1 {
   background: #fff !important;
   color: #385988 !important;
-  border: none !important;
   margin-top: 4px;
-  padding: 1px 1px 1px 0 !important;
   border-radius: 0 !important;
 }
-
 
 #superfish-main li:nth-child(5) a.sf-depth-1 {
   color: #385988 !important;
   border-radius: 0 !important;
   font-size: 1em !important;
   background: white !important;
-  border-left: 1px solid var(--mha-orange-bright) !important;
-  padding: .3rem 1rem !important;
+  margin: .4rem 0 0;
 }
 
 #superfish-main li:nth-child(5) a.sf-depth-1:hover {
