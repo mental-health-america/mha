@@ -7346,54 +7346,6 @@
             "install-path": "../../web/modules/contrib/salesforce"
         },
         {
-            "name": "drupal/salesforce_oauth",
-            "version": "4.2.0",
-            "version_normalized": "4.2.0.0",
-            "require": {
-                "drupal/core": "^8.7.7 || ^9",
-                "drupal/salesforce": "*"
-            },
-            "type": "metapackage",
-            "extra": {
-                "drupal": {
-                    "version": "8.x-4.2",
-                    "datestamp": "1616088748",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "AaronBauman",
-                    "homepage": "https://www.drupal.org/user/384578"
-                },
-                {
-                    "name": "gcb",
-                    "homepage": "https://www.drupal.org/user/1682976"
-                },
-                {
-                    "name": "ironsizide",
-                    "homepage": "https://www.drupal.org/user/787980"
-                },
-                {
-                    "name": "mariacha1",
-                    "homepage": "https://www.drupal.org/user/2210776"
-                }
-            ],
-            "description": "Provides user-agent-based Salesforce OAuth authentication.",
-            "homepage": "https://www.drupal.org/project/salesforce",
-            "support": {
-                "source": "https://git.drupalcode.org/project/salesforce"
-            },
-            "install-path": null
-        },
-        {
             "name": "drupal/scheduler",
             "version": "2.0.1",
             "version_normalized": "2.0.1.0",
@@ -9122,17 +9074,17 @@
         },
         {
             "name": "drupal/webform_ui",
-            "version": "5.13.0",
-            "version_normalized": "5.13.0.0",
+            "version": "6.2.2",
+            "version_normalized": "6.2.2.0",
             "require": {
-                "drupal/core": "^8.7.7 || ^9",
+                "drupal/core": "^9.4 || ^10",
                 "drupal/webform": "*"
             },
             "type": "metapackage",
             "extra": {
                 "drupal": {
-                    "version": "8.x-5.13",
-                    "datestamp": "1614791857",
+                    "version": "6.2.2",
+                    "datestamp": "1701948363",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
