@@ -5,7 +5,7 @@ core_version_requirement: ^9 || ^10
 dependencies:
   - drupal:search
 
-# Information added by Drupal.org packaging script on 2024-02-14
-version: '4.0.0-alpha4'
+# Information added by Drupal.org packaging script on 2024-02-28
+version: '4.0.0-alpha5'
 project: 'google_cse'
-datestamp: 1707944662
+datestamp: 1709163559
