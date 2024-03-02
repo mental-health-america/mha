@@ -31,7 +31,7 @@ function google_cse_form_search_block_form_alter(&$form, &$form_state, $form_id)
   $form['#attached']['library'][] = 'google_cse/googlecseWatermark';
   $form['#attributes']['class'][] = 'google-cse';
   $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
-  $watermark = $config['watermark'] ?? 1;
+  $watermark = $config['watermark'] ?? 0;
   $form['#attached']['drupalSettings']['googlePSE'] = [
     'language' => $language,
     'displayWatermark' => $watermark,

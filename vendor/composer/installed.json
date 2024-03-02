@@ -4652,18 +4652,18 @@
         },
         {
             "name": "drupal/geofield_map",
-            "version": "3.0.14",
-            "version_normalized": "3.0.14.0",
+            "version": "3.0.15",
+            "version_normalized": "3.0.15.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/geofield_map.git",
-                "reference": "3.0.14"
+                "reference": "3.0.15"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/geofield_map-3.0.14.zip",
-                "reference": "3.0.14",
-                "shasum": "8f87ab5587f113e415fc09091f62f2425843e123"
+                "url": "https://ftp.drupal.org/files/projects/geofield_map-3.0.15.zip",
+                "reference": "3.0.15",
+                "shasum": "e91cc0026059e9ec1ed36fbd9671a13a94a041bd"
             },
             "require": {
                 "drupal/core": "^9.3 || ^10",
@@ -4672,8 +4672,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "3.0.14",
-                    "datestamp": "1696883247",
+                    "version": "3.0.15",
+                    "datestamp": "1708985049",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -4846,18 +4846,18 @@
         },
         {
             "name": "drupal/google_cse",
-            "version": "4.0.0-alpha4",
-            "version_normalized": "4.0.0.0-alpha4",
+            "version": "4.0.0-alpha5",
+            "version_normalized": "4.0.0.0-alpha5",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/google_cse.git",
-                "reference": "4.0.0-alpha4"
+                "reference": "4.0.0-alpha5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/google_cse-4.0.0-alpha4.zip",
-                "reference": "4.0.0-alpha4",
-                "shasum": "3ad1307670c2e725d9f89cb063ef6501d1eb9d8f"
+                "url": "https://ftp.drupal.org/files/projects/google_cse-4.0.0-alpha5.zip",
+                "reference": "4.0.0-alpha5",
+                "shasum": "5aaecd0c32c989e9566a20e7087f6e9585a02440"
             },
             "require": {
                 "drupal/core": "^9 || ^10"
@@ -4865,8 +4865,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "4.0.0-alpha4",
-                    "datestamp": "1707944660",
+                    "version": "4.0.0-alpha5",
+                    "datestamp": "1709163557",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -4942,6 +4942,10 @@
                 {
                     "name": "navneet0693",
                     "homepage": "https://www.drupal.org/user/3200545"
+                },
+                {
+                    "name": "ricksta",
+                    "homepage": "https://www.drupal.org/user/311042"
                 },
                 {
                     "name": "tsphethean",
