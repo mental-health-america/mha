@@ -1,0 +1,10 @@
+name: Form Donation Button
+type: module
+description: 'Form Donation Button.'
+package: Custom
+version: 8.x
+core_version_requirement: ^8 || ^9 || ^10
+dependencies:
+  - node
+  - block
+

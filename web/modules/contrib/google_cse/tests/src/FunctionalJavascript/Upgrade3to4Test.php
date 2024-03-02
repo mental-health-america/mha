@@ -26,7 +26,7 @@ class Upgrade3to4Test extends WebDriverTestBase {
    *
    * @var string
    */
-  protected $defaultTheme = 'stable';
+  protected $defaultTheme = 'stable9';
 
   /**
    * {@inheritdoc}

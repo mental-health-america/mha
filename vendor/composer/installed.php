@@ -3,7 +3,8 @@
         'name' => 'drupal-composer/drupal-project',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => 'fb2364406655e6ce2b59273f25db414a631f595f',
+
+        'reference' => '37ac0e0040c4a2e880a436ba65740fdc32e1ca1e',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -220,7 +221,11 @@
         'drupal-composer/drupal-project' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
+<<<<<<< HEAD
             'reference' => 'fb2364406655e6ce2b59273f25db414a631f595f',
+=======
+            'reference' => '37ac0e0040c4a2e880a436ba65740fdc32e1ca1e',
+>>>>>>> master
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -764,9 +769,9 @@
             'dev_requirement' => false,
         ),
         'drupal/geofield_map' => array(
-            'pretty_version' => '3.0.14',
-            'version' => '3.0.14.0',
-            'reference' => '3.0.14',
+            'pretty_version' => '3.0.15',
+            'version' => '3.0.15.0',
+            'reference' => '3.0.15',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../web/modules/contrib/geofield_map',
             'aliases' => array(),
@@ -791,9 +796,9 @@
             'dev_requirement' => false,
         ),
         'drupal/google_cse' => array(
-            'pretty_version' => '4.0.0-alpha4',
-            'version' => '4.0.0.0-alpha4',
-            'reference' => '4.0.0-alpha4',
+            'pretty_version' => '4.0.0-alpha5',
+            'version' => '4.0.0.0-alpha5',
+            'reference' => '4.0.0-alpha5',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../web/modules/contrib/google_cse',
             'aliases' => array(),

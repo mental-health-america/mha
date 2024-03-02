@@ -241,16 +241,25 @@ event-full .extra.btn.btn-primary {
   letter-spacing: 1px !important;
 }
 
-#superfish-main li:nth-child(6) a.sf-depth-1 {
-  color: #000 !important;
-  font-size: .8rem !important;
-  background: #7eb420 !important;
+#superfish-main li:nth-child(4) a.sf-depth-1 {
+  background: #fff !important;
+  color: #385988 !important;
+  margin-top: 4px;
+  border-radius: 0 !important;
 }
 
 #superfish-main li:nth-child(5) a.sf-depth-1 {
-  color: #fff !important;
-  font-size: .8rem !important;
-  background: #385988 !important;
+  color: #385988 !important;
+  border-radius: 0 !important;
+  font-size: 1em !important;
+  background: white !important;
+  margin: .4rem 0 0;
+}
+
+#superfish-main li:nth-child(5) a.sf-depth-1:hover {
+  border-radius: 0 !important;
+  background-color: white !important;
+  color:var(--mha-orange-bright) !important;
 }
 
 #superfish-main li:nth-child(6) a.sf-depth-1:hover {
@@ -259,9 +268,10 @@ event-full .extra.btn.btn-primary {
   color: #000 !important;
 }
 
-#superfish-main li:nth-child(5) a.sf-depth-1:hover {
-  border-radius: 15px !important;
-  background-color: #7B2E68 !important;
+#superfish-main li:nth-child(6) a.sf-depth-1 {
+  color: #000 !important;
+  font-size: .8rem !important;
+  background: #7eb420 !important;
 }
 
 .fa {
@@ -522,4 +532,25 @@ event-full .extra.btn.btn-primary {
   .padding-right {
     padding-right: 30px !important;
   }
+}
+
+.stuck .header-main-inner.p-relative {
+  padding: 0;
+  left: -200px !important;
+  top: 15px !important;
+}
+
+.stuck div#block-formdonationbutton {
+  position: absolute;
+  right: -130px;
+  top: -18px;
+}
+
+.container.header-content-layout.gv-sticky-menu.stuck {
+  background: white !important;
+  height: 125px !important;
+}
+
+header.header-default .stuck, header.header-v1 .stuck {
+  max-height: 55px !important;
 }
