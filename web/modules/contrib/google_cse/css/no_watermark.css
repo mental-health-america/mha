@@ -4,3 +4,6 @@ input.gsc-input {
 img.gcsc-branding-img-noclear {
   display: none;
 }
+.google-cse input[type="search"] {
+  background: unset!important;
+}
