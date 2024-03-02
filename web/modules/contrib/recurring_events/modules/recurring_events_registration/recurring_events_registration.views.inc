@@ -76,6 +76,16 @@ function recurring_events_registration_views_data_alter(array &$data) {
     ],
   ];
 
+  $data['eventseries_field_data']['eventseries_registration_type'] = [
+    'title' => t('Registration Type'),
+    'field' => [
+      'title' => t('Registration Type'),
+      'help' => t('The type of registration allowed for the series.'),
+      'id' => 'eventseries_registration_type',
+      'click sortable' => TRUE,
+    ],
+  ];
+
   // We do not want people adding the event_registration__ fields to views as
   // they will not work. Instead for any fields necessary we create them above.
   foreach ($data['eventseries_field_data'] as $field_name => $field) {
