@@ -111,7 +111,7 @@ abstract class AttributeClassLoader implements LoaderInterface
     /**
      * @throws \InvalidArgumentException When route can't be parsed
      */
-    public function load(mixed $class, string $type = null): RouteCollection
+    public function load(mixed $class, ?string $type = null): RouteCollection
     {
         if (!class_exists($class)) {
             throw new \InvalidArgumentException(sprintf('Class "%s" does not exist.', $class));
@@ -144,7 +144,9 @@ abstract class AttributeClassLoader implements LoaderInterface
 
                 if (1 === $collection->count() - \count($routeNamesBefore)) {
                     $newRouteName = current(array_diff(array_keys($collection->all()), $routeNamesBefore));
-                    $collection->addAlias(sprintf('%s::%s', $class->name, $method->name), $newRouteName);
+                    if ($newRouteName !== $aliasName = sprintf('%s::%s', $class->name, $method->name)) {
+                        $collection->addAlias($aliasName, $newRouteName);
+                    }
                 }
             }
             if (0 === $collection->count() && $class->hasMethod('__invoke')) {
@@ -155,8 +157,14 @@ abstract class AttributeClassLoader implements LoaderInterface
                 }
             }
             if ($fqcnAlias && 1 === $collection->count()) {
-                $collection->addAlias($class->name, $invokeRouteName = key($collection->all()));
-                $collection->addAlias(sprintf('%s::__invoke', $class->name), $invokeRouteName);
+                $invokeRouteName = key($collection->all());
+                if ($invokeRouteName !== $class->name) {
+                    $collection->addAlias($class->name, $invokeRouteName);
+                }
+
+                if ($invokeRouteName !== $aliasName = sprintf('%s::__invoke', $class->name)) {
+                    $collection->addAlias($aliasName, $invokeRouteName);
+                }
             }
 
             if ($this->hasDeprecatedAnnotations) {
@@ -259,7 +267,7 @@ abstract class AttributeClassLoader implements LoaderInterface
         }
     }
 
-    public function supports(mixed $resource, string $type = null): bool
+    public function supports(mixed $resource, ?string $type = null): bool
     {
         if ('annotation' === $type) {
             trigger_deprecation('symfony/routing', '6.4', 'The "annotation" route type is deprecated, use the "attribute" route type instead.');

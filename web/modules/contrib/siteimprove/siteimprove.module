@@ -205,7 +205,10 @@ function _siteimprove_toolbar_basic() {
         '#title' => 'Siteimprove',
         '#url' => Url::fromUserInput('#'),
         '#attributes' => [
-          'class' => ['siteimprove-link'],
+          'class' => [
+            'siteimprove-link',
+            'toolbar-icon',
+          ],
         ],
       ],
       '#wrapper_attributes' => [

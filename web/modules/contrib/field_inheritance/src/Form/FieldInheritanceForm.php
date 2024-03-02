@@ -419,7 +419,6 @@ class FieldInheritanceForm extends EntityForm {
       ];
     }
 
-
     return $form;
   }
 
@@ -530,6 +529,7 @@ class FieldInheritanceForm extends EntityForm {
         ->getStorage($this->entity->getEntityTypeId())
         ->getQuery()
         ->condition('id', $id)
+        ->accessCheck(FALSE)
         ->execute();
       return $return;
     }

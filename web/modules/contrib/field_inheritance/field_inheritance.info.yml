@@ -4,7 +4,7 @@ description: 'Provides the ability to inherit data from one entity to another'
 core_version_requirement: ^8.8 || ^9 || ^10
 package: 'Field Inheritance'
 
-# Information added by Drupal.org packaging script on 2022-07-13
-version: '2.0.0-rc6'
+# Information added by Drupal.org packaging script on 2024-02-02
+version: '2.0.0'
 project: 'field_inheritance'
-datestamp: 1657744601
+datestamp: 1706902694

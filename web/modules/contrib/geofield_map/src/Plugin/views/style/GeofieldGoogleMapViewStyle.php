@@ -734,7 +734,7 @@ class GeofieldGoogleMapViewStyle extends DefaultStyle implements ContainerFactor
         '#type' => 'table',
         '#caption' => $this->t('Available Map Themers & Descriptions:'),
         '#attributes' => [
-          'class' => 'map-theming-options',
+          'class' => ['map-theming-options'],
         ],
       ],
     ];

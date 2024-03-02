@@ -26,6 +26,8 @@ sites/*/example.sites.php
 /web/sites/development.services.yml
 /web/sites/default/settings.local.php
 /web/sites/default/settings.php
+web/sites/
+
 
 # Ignore paths that may contain user-generated content
 /web/sites/*/files
