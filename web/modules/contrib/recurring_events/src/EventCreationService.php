@@ -223,7 +223,7 @@ class EventCreationService {
     $utc_timezone = new \DateTimeZone(DateTimeItemInterface::STORAGE_TIMEZONE);
     $user_input = $form_state->getValues();
 
-    $config['type'] = $user_input['recur_type'][0]['value'];
+    $config['type'] = $user_input['recur_type'][0]['value'] ?? 'custom';
 
     $config['excluded_dates'] = [];
     if (!empty($user_input['excluded_dates'])) {
@@ -236,6 +236,7 @@ class EventCreationService {
     }
 
     if ($config['type'] === 'custom') {
+      $user_input['custom_date'] = $user_input['custom_date'] ?? [];
       foreach ($user_input['custom_date'] as $key => $custom_date) {
         if (!is_numeric($key)) {
           continue;
@@ -351,6 +352,7 @@ class EventCreationService {
       }
 
       if ($entity_config['type'] === 'custom') {
+        $form_config['custom_dates'] = $form_config['custom_dates'] ?? [];
         if ($entity_config['custom_dates'] !== $form_config['custom_dates']) {
           $stored_start_ends = $overridden_start_ends = [];
 

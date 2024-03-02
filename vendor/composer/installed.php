@@ -3,8 +3,7 @@
         'name' => 'drupal-composer/drupal-project',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-
-        'reference' => '37ac0e0040c4a2e880a436ba65740fdc32e1ca1e',
+        'reference' => '194b87232c5cc0de95f2dbba035c25936aa85b26',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -174,9 +173,9 @@
             'dev_requirement' => false,
         ),
         'doctrine/collections' => array(
-            'pretty_version' => '2.1.4',
-            'version' => '2.1.4.0',
-            'reference' => '72328a11443a0de79967104ad36ba7b30bded134',
+            'pretty_version' => '2.2.0',
+            'version' => '2.2.0.0',
+            'reference' => '07e16cd7b80a2cffed99e36b541876af172f0257',
             'type' => 'library',
             'install_path' => __DIR__ . '/../doctrine/collections',
             'aliases' => array(),
@@ -221,11 +220,7 @@
         'drupal-composer/drupal-project' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-<<<<<<< HEAD
-            'reference' => 'fb2364406655e6ce2b59273f25db414a631f595f',
-=======
-            'reference' => '37ac0e0040c4a2e880a436ba65740fdc32e1ca1e',
->>>>>>> master
+            'reference' => '194b87232c5cc0de95f2dbba035c25936aa85b26',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -597,15 +592,6 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
-        'drupal/empty_page' => array(
-            'pretty_version' => '3.0.0',
-            'version' => '3.0.0.0',
-            'reference' => '8.x-3.0',
-            'type' => 'drupal-module',
-            'install_path' => __DIR__ . '/../../web/modules/contrib/empty_page',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
         'drupal/encrypt' => array(
             'pretty_version' => '3.1.0',
             'version' => '3.1.0.0',
@@ -805,9 +791,9 @@
             'dev_requirement' => false,
         ),
         'drupal/google_tag' => array(
-            'pretty_version' => '2.0.2',
-            'version' => '2.0.2.0',
-            'reference' => '2.0.2',
+            'pretty_version' => '2.0.4',
+            'version' => '2.0.4.0',
+            'reference' => '2.0.4',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../web/modules/contrib/google_tag',
             'aliases' => array(),
@@ -1093,9 +1079,9 @@
             'dev_requirement' => false,
         ),
         'drupal/recurring_events' => array(
-            'pretty_version' => '2.0.0',
-            'version' => '2.0.0.0',
-            'reference' => '2.0.0',
+            'pretty_version' => '2.0.1',
+            'version' => '2.0.1.0',
+            'reference' => '2.0.1',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../web/modules/contrib/recurring_events',
             'aliases' => array(),
@@ -2171,9 +2157,9 @@
             ),
         ),
         'symfony/string' => array(
-            'pretty_version' => 'v6.4.3',
-            'version' => '6.4.3.0',
-            'reference' => '7a14736fb179876575464e4658fce0c304e8c15b',
+            'pretty_version' => 'v6.4.4',
+            'version' => '6.4.4.0',
+            'reference' => '4e465a95bdc32f49cf4c7f07f751b843bbd6dcd9',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/string',
             'aliases' => array(),
@@ -2213,9 +2199,9 @@
             'dev_requirement' => false,
         ),
         'symfony/var-dumper' => array(
-            'pretty_version' => 'v5.4.35',
-            'version' => '5.4.35.0',
-            'reference' => 'ce4685b30e47d94dfc990c5566285ff99ddf012b',
+            'pretty_version' => 'v5.4.36',
+            'version' => '5.4.36.0',
+            'reference' => '2e9c2b11267119d9c90d6b3fdce5e4e9f15e2e90',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/var-dumper',
             'aliases' => array(),

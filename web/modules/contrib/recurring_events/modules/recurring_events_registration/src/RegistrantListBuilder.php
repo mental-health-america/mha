@@ -95,12 +95,12 @@ class RegistrantListBuilder extends EntityListBuilder {
     $header['series'] = $this->t('Series');
     $header['instance'] = $this->t('Instance');
     $header['type'] = $this->t('Type');
-    foreach ($this->getCustomFields() as $machine_name => $field) {
-      $header[$machine_name] = $field;
-    }
     $header['email'] = $this->t('Email');
     $header['waitlist'] = $this->t('Waitlist');
     $header['status'] = $this->t('Status');
+    foreach ($this->getCustomFields() as $machine_name => $field) {
+      $header[$machine_name] = $field;
+    }
     return $header + parent::buildHeader();
   }
 
@@ -119,24 +119,27 @@ class RegistrantListBuilder extends EntityListBuilder {
     $date->setTimezone($timezone);
     $row['instance'] = $instance->toLink($date->format($this->config->get('recurring_events_registration.registrant.config')->get('date_format')));
     $row['type'] = $entity->getRegistrationType() == 'series' ? $this->t('Series') : $this->t('Instance');
-    foreach ($this->getCustomFields() as $machine_name => $field) {
-      $row[$machine_name] = $entity->get($machine_name)->value;
-    }
     $row['email'] = $entity->get('email')->value;
     $row['waitlist'] = $entity->get('waitlist')->value ? $this->t('Yes') : $this->t('No');
     $row['status'] = $entity->get('status')->value ? $this->t('Complete') : $this->t('Pending');
+    foreach ($this->getCustomFields($entity->bundle()) as $machine_name => $field) {
+      $row[$machine_name] = $entity->get($machine_name)->value;
+    }
     return $row + parent::buildRow($entity);
   }
 
   /**
    * Get custom fields.
    *
+   * @param string $bundle
+   *   The name of the entity bundle.
+   *
    * @return array
    *   An array of custom fields.
    */
-  protected function getCustomFields() {
+  protected function getCustomFields(string $bundle = 'default') {
     $custom_fields = [];
-    $fields = $this->entityFieldManager->getFieldDefinitions('registrant', 'registrant');
+    $fields = $this->entityFieldManager->getFieldDefinitions('registrant', $bundle);
     foreach ($fields as $machine_name => $field) {
       if (strpos($machine_name, 'field_') === 0) {
         $custom_fields[$machine_name] = $field->label();

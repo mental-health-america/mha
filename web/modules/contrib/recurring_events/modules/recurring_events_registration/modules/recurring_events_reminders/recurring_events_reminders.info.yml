@@ -7,7 +7,7 @@ dependencies:
   - recurring_events:recurring_events
   - recurring_events:recurring_events_registration
 
-# Information added by Drupal.org packaging script on 2024-02-02
-version: '2.0.0'
+# Information added by Drupal.org packaging script on 2024-02-28
+version: '2.0.1'
 project: 'recurring_events'
-datestamp: 1706902869
+datestamp: 1709083051
