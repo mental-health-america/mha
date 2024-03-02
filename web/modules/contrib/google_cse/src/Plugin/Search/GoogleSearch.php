@@ -187,8 +187,8 @@ class GoogleSearch extends ConfigurableSearchPluginBase implements AccessibleInt
     $form['results_searchbox_width'] = [
       '#title' => $this->t('Search input width'),
       '#type' => 'number',
-      '#min' => 1,
-      '#max' => 300,
+      '#min' => 0,
+      '#max' => 500,
       '#size' => 6,
       '#description' => $this->t('Enter the desired width, in characters, of the searchbox on the Google Search block.'),
       '#default_value' => $this->configuration['results_searchbox_width'] ?? $default['results_searchbox_width'],

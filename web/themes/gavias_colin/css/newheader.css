@@ -465,11 +465,6 @@ ul.sf-menu.sf-style-default {
     content: '\f077';
 }
 
-#superfish-main li:nth-child(4) a.sf-depth-1 {
-    border-right: none !important;
-}
-
-#superfish-main li:nth-child(5) a.sf-depth-1,
 #superfish-main li:nth-child(6) a.sf-depth-1 {
     padding: 6px 20px !important
 }
@@ -1017,4 +1012,9 @@ input#edit-reset--3 {
         padding: 2rem !important;
     }
 
+}
+
+
+div#block-formdonationbutton {
+  z-index: 99999999 !important;
 }

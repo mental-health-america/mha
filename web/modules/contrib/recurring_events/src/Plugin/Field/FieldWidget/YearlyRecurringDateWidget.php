@@ -108,7 +108,8 @@ class YearlyRecurringDateWidget extends MonthlyRecurringDateWidget {
    */
   public function validateForm(array &$element, FormStateInterface $form_state, array &$complete_form) {
     $recur_type = $form_state->getValue('recur_type');
-    if ($recur_type[0]['value'] === 'yearly_recurring_date') {
+    if ((is_array($recur_type) && $recur_type[0]['value'] === 'yearly_recurring_date')
+      || $recur_type === 'yearly_recurring_date') {
       $values = $form_state->getValue('yearly_recurring_date');
       if (empty($values[0])) {
         $form_state->setError($element, $this->t('Please configure the Yearly Recurring Date settings'));

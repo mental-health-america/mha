@@ -162,6 +162,9 @@ function views_term_hierarchy_weight_field_update(TermInterface $term, $hierarch
  * Implements hook_entity_insert().
  */
 function views_term_hierarchy_weight_field_entity_insert(EntityInterface $entity) {
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
   if ($entity->getEntityTypeId() === 'taxonomy_vocabulary') {
     \Drupal::service('views_term_hierarchy_weight_field.fields')->createFields($entity);
   }

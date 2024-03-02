@@ -28,7 +28,7 @@ class DisplayTest extends WebDriverTestBase {
    *
    * @var string
    */
-  protected $defaultTheme = 'stable';
+  protected $defaultTheme = 'stable9';
 
   /**
    * A user for tests.
@@ -137,7 +137,7 @@ class DisplayTest extends WebDriverTestBase {
     $this->drupalGet($config_form_path);
     $page->fillField('edit-results-prefix', '<h3>Some results prefix text</h3><script>alert("hi");</script>');
     $page->fillField('edit-results-suffix', '<h3>Some results suffix text</h3>');
-    $page->fillField('edit-results-searchbox-width', 10);
+    $page->fillField('edit-results-searchbox-width', '10');
     $page->fillField('edit-custom-css', '/sites/default/files/custom.css');
     $page->pressButton('Save search page');
     $this->assertNotEmpty($session->waitForText('The Google Programmable Search search page has been updated.'));
@@ -218,7 +218,7 @@ class DisplayTest extends WebDriverTestBase {
     $this->drupalGet('');
     $this->submitForm($terms, 'Search', 'google-cse-search-box-form');
     // Module-provided block renders results on same page.
-    $this->assertEquals('/user/2', parse_url($this->getUrl(), PHP_URL_PATH), 'Submitted to correct URL.');
+    $this->assertEquals(\Drupal::request()->getBasePath() . '/user/2', parse_url($this->getUrl(), PHP_URL_PATH), 'Submitted to correct URL.');
     $session->elementTextContains('css',
       'div.gsc-control-cse.gsc-control-cse-en div.gsc-control-wrapper-cse div.gsc-results-wrapper-nooverlay.gsc-results-wrapper-visible div.gsc-wrapper div.gsc-resultsbox-visible div.gsc-resultsRoot.gsc-tabData.gsc-tabdActive div.gsc-results.gsc-webResult div.gsc-expansionArea div.gsc-webResult.gsc-result div.gs-webResult.gs-result div.gsc-table-result div.gsc-table-cell-snippet-close div.gs-bidi-start-align.gs-snippet',
       'une chose pitoyable et burlesque'

@@ -15,7 +15,18 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @Chart(
  *   id = "charts_test_library",
- *   name = @Translation("Charts Test Library")
+ *   name = @Translation("Charts Test Library"),
+ *   types = {
+ *     "area",
+ *     "bar",
+ *     "bubble",
+ *     "column",
+ *     "donut",
+ *     "gauge",
+ *     "line",
+ *     "pie",
+ *     "scatter",
+ *   },
  * )
  */
 class ChartsTestLibrary extends ChartBase implements ContainerFactoryPluginInterface {
@@ -105,6 +116,7 @@ class ChartsTestLibrary extends ChartBase implements ContainerFactoryPluginInter
     $chart_definition['title']['color'] = $element['#title_color'];
     $chart_definition['title']['position'] = $element['#title_position'];
     $chart_definition['subtitle']['text'] = $element['#subtitle'];
+    $chart_definition['type'] = $element['#chart_type'];
     $chart_definition['title']['font'] = [
       'weight' => $element['#title_font_weight'],
       'style' => $element['#title_font_style'],

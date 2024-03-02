@@ -23,7 +23,6 @@ use Drupal\migrate\Plugin\MigrationInterface;
 use Drupal\migrate\Row;
 use Drupal\node\NodeInterface;
 use Drupal\node\NodeTypeInterface;
-use Drupal\user\Entity\User;
 use Drupal\simplenews\Entity\Newsletter;
 use Drupal\simplenews\Entity\Subscriber;
 use Drupal\simplenews\NewsletterInterface;
@@ -296,6 +295,13 @@ function simplenews_form_node_form_alter(&$form, FormStateInterface $form_state,
       }
     }
 
+    // Adds link to send page above a newsletter.
+    $admin_or_send_rights = (\Drupal::currentUser()->hasPermission('administer newsletters') || \Drupal::currentUser()->hasPermission('send newsletter'));
+    if ($admin_or_send_rights && ($node->simplenews_issue->status == SIMPLENEWS_STATUS_SEND_NOT)) {
+      // Adding custom callback to customize status message.
+      $form['actions']['submit']['#submit'][] = 'simplenews_form_node_submit';
+    }
+
     $config = \Drupal::config('simplenews.settings');
     if ($config->get('newsletter.issue_tokens') && \Drupal::moduleHandler()->moduleExists('token')) {
       $form['simplenews_token_help'] = [
@@ -314,6 +320,15 @@ function simplenews_form_node_form_alter(&$form, FormStateInterface $form_state,
       ];
     }
   }
+}
+
+/**
+ * Custom callback to customize status message.
+ */
+function simplenews_form_node_submit(array $form, FormStateInterface $form_state) {
+  $node_id = $form_state->getFormObject()->getEntity()->id();
+  $newsletter_url = Url::fromRoute('simplenews.node_tab', ['node' => $node_id]);
+  \Drupal::messenger()->addStatus(t('Send the newsletter via the <a href=":newsletter_url">Newsletter</a> tab.', [':newsletter_url' => $newsletter_url->toString()]));
 }
 
 /**
@@ -726,7 +741,7 @@ function simplenews_help($route_name, RouteMatchInterface $route_match) {
     case 'simplenews.settings_newsletter':
       $help = '<ul>';
       $help .= '<li>' . t('These settings are default to all newsletters. Newsletter specific settings can be found at the <a href=":page">newsletter\'s settings page</a>.', [':page' => Url::fromRoute('simplenews.newsletter_list')->toString()]) . "</li>\n";
-      $help .= '<li>' . t('Install <a href=":swift_mail_url">Swift Mailer</a> to send HTML emails or emails with attachments (both plain text and HTML).', [':swift_mail_url' => 'https://www.drupal.org/project/swiftmailer']) . "</li>\n";
+      $help .= '<li>' . t('Install <a href=":dsm_url">Drupal Symfony Mailer</a> to send HTML emails or emails with attachments (both plain text and HTML).', [':dsm_url' => 'https://www.drupal.org/project/symfony_mailer']) . "</li>\n";
       $help .= '</ul>';
       return $help;
 
@@ -751,7 +766,7 @@ function simplenews_help($route_name, RouteMatchInterface $route_match) {
  * @param string $mail
  *   The email address.
  * @param string $action
- *   The action: confirm, manage, add or remove
+ *   The action: confirm, manage, add or remove.
  * @param int $timestamp
  *   The timestamp of the request.
  *
@@ -769,7 +784,7 @@ function simplenews_generate_hash(string $mail, string $action, int $timestamp =
  * @param \Drupal\simplenews\SubscriberInterface $subscriber
  *   The subscriber object including all subscriptions of this user.
  * @param string $action
- *   The action: confirm, manage, add or remove
+ *   The action: confirm, manage, add or remove.
  * @param \Drupal\simplenews\NewsletterInterface $newsletter
  *   (optional) The newsletter, for add/remove actions only.
  *

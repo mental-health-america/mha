@@ -167,7 +167,8 @@ class MonthlyRecurringDateWidget extends WeeklyRecurringDateWidget {
    */
   public function validateForm(array &$element, FormStateInterface $form_state, array &$complete_form) {
     $recur_type = $form_state->getValue('recur_type');
-    if ($recur_type[0]['value'] === 'monthly_recurring_date') {
+    if ((is_array($recur_type) && $recur_type[0]['value'] === 'monthly_recurring_date')
+      || $recur_type === 'monthly_recurring_date') {
       $values = $form_state->getValue('monthly_recurring_date');
       if (empty($values[0])) {
         $form_state->setError($element, $this->t('Please configure the Monthly Recurring Date settings'));
