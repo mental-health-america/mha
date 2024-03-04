@@ -143,13 +143,11 @@
 
         <div class="grid-container">
 
-          <a href="/donate-now">
+          {% if page.donate_footer %}
             <div class="left-column p-4">
-            <button class="btn-donate heart">
-               {{'DONATE'|t}}
-            </button>
-          </div>
-          </a>
+              {{ page.donate_footer }}
+            </div>
+          {% endif %}
 
           <div class="right-column">
             <div class="btn-group pt-2" role="group">

@@ -43,6 +43,7 @@ regions:
   after_footer: 'After Footer'
   copyright: 'Copyright'
   contact_one: 'Contact One'
+  donate_footer: 'Donate Footer'
   contact_two: 'Contact Two'
   other: 'Other'
 
