@@ -554,3 +554,8 @@ event-full .extra.btn.btn-primary {
 header.header-default .stuck, header.header-v1 .stuck {
   max-height: 55px !important;
 }
+
+.header-v2 div#block-formdonationbutton {
+  right: -250px;
+  top: -18px;
+}
