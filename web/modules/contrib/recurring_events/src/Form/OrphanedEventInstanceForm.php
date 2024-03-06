@@ -5,7 +5,7 @@ namespace Drupal\recurring_events\Form;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Extension\ModuleHandler;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -34,7 +34,7 @@ class OrphanedEventInstanceForm extends FormBase {
   /**
    * The module handler service.
    *
-   * @var \Drupal\Core\Extension\ModuleHandler
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
   protected $moduleHandler;
 
@@ -66,10 +66,10 @@ class OrphanedEventInstanceForm extends FormBase {
    *   The database connection.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager service.
-   * @param \Drupal\Core\Extension\ModuleHandler $module_handler
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler service.
    */
-  public function __construct(Connection $database, EntityTypeManagerInterface $entity_type_manager, ModuleHandler $module_handler) {
+  public function __construct(Connection $database, EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler) {
     $this->database = $database;
     $this->entityTypeManager = $entity_type_manager;
     $this->moduleHandler = $module_handler;

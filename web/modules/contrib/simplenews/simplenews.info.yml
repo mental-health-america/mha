@@ -12,7 +12,7 @@ test_dependencies:
   - monitoring:monitoring
 configure: simplenews.newsletter_list
 
-# Information added by Drupal.org packaging script on 2024-01-07
-version: '4.0.0-rc1'
+# Information added by Drupal.org packaging script on 2024-03-05
+version: '4.0.0'
 project: 'simplenews'
-datestamp: 1704652913
+datestamp: 1709644067
