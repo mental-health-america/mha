@@ -30,7 +30,7 @@ div#block-formdonationbutton {
 }
 </style>
 <div id="donation-form">
-<a href="#XZZZTXBC" style="display: none"></a>
+<a href="#XQUJNWQR" style="display: none"></a>
 </div>
       '),
     );
