@@ -220,18 +220,20 @@ class PushQueue extends DatabaseQueue implements PushQueueInterface {
    *
    * @return int
    *   On success, \Drupal\Core\Database\Query\Merge::STATUS_INSERT or
-   *   Drupal\Core\Database\Query\Merge::STATUS_UPDATE whether item was inserted
+   *   Drupal\Core\Database\Query\Merge::STATUS_UPDATE whether item was
+   *   inserted
    *   or updated.
    *
    * @throws \Exception
    *   If the required indexes are not provided.
    *
-   * @todo convert $data to a proper class and make sure that's what we get for this argument.
+   * @todo convert $data to a proper class and make sure that's what we get for
+   *   this argument.
    */
   protected function doCreateItem($data) { // @codingStandardsIgnoreLine
     if (empty($data['name'])
-    || empty($data['entity_id'])
-    || empty($data['op'])) {
+      || empty($data['entity_id'])
+      || empty($data['op'])) {
       throw new \Exception('Salesforce push queue data values are required for "name", "entity_id" and "op"');
     }
     $this->name = $data['name'];
@@ -282,7 +284,10 @@ class PushQueue extends DatabaseQueue implements PushQueueInterface {
         }
         // @todo convert items to content entities.
         // @see \Drupal::entityQuery()
-        $items = $this->connection->queryRange('SELECT * FROM {' . static::TABLE_NAME . '} q WHERE expire = 0 AND name = :name AND failures < :fail_limit ORDER BY created, item_id ASC', 0, $n, [':name' => $this->name, ':fail_limit' => $fail_limit])->fetchAllAssoc('item_id');
+        $items = $this->connection->queryRange('SELECT * FROM {' . static::TABLE_NAME . '} q WHERE expire = 0 AND name = :name AND failures < :fail_limit ORDER BY created, item_id ASC', 0, $n, [
+          ':name' => $this->name,
+          ':fail_limit' => $fail_limit,
+        ])->fetchAllAssoc('item_id');
       }
       catch (\Exception $e) {
         $this->catchException($e);

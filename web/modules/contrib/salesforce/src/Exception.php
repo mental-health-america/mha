@@ -5,7 +5,7 @@ namespace Drupal\salesforce;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 /**
- * Class Exception.
+ * Class Exception an exception.
  *
  * @package Drupal\salesforce
  */

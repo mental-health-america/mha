@@ -3,8 +3,11 @@
 namespace Drupal\salesforce\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\TypedConfigManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
 use Drupal\salesforce\Rest\RestClientInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -30,19 +33,36 @@ class SettingsForm extends ConfigFormBase {
   protected $eventDispatcher;
 
   /**
-   * Constructs a \Drupal\system\ConfigFormBase object.
+   * Typed config.
    *
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   The factory for configuration objects.
-   * @param \Drupal\salesforce\Rest\RestClientInterface $salesforce_client
-   *   The factory for configuration objects.
-   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
-   *   The event dispatcher.
+   * @var \Drupal\Core\Config\TypedConfigManagerInterface
    */
-  public function __construct(ConfigFactoryInterface $config_factory, RestClientInterface $salesforce_client, EventDispatcherInterface $event_dispatcher) {
+  protected $typedConfigManager;
+
+  /**
+   * Module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
+   * State.
+   *
+   * @var \Drupal\Core\State\StateInterface
+   */
+  protected $state;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __construct(ConfigFactoryInterface $config_factory, RestClientInterface $salesforce_client, EventDispatcherInterface $event_dispatcher, TypedConfigManagerInterface $typedConfigManager, ModuleHandlerInterface $moduleHandler, StateInterface $state) {
     parent::__construct($config_factory);
     $this->client = $salesforce_client;
     $this->eventDispatcher = $event_dispatcher;
+    $this->typedConfigManager = $typedConfigManager;
+    $this->moduleHandler = $moduleHandler;
+    $this->state = $state;
   }
 
   /**
@@ -52,7 +72,10 @@ class SettingsForm extends ConfigFormBase {
     return new static(
       $container->get('config.factory'),
       $container->get('salesforce.client'),
-      $container->get('event_dispatcher')
+      $container->get('event_dispatcher'),
+      $container->get('config.typed'),
+      $container->get('module_handler'),
+      $container->get('state')
     );
   }
 
@@ -76,10 +99,12 @@ class SettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
+    // phpcs:disable Drupal.Semantics.FunctionT.NotLiteralString
     // We're not actually doing anything with this, but may figure out
     // something that makes sense.
     $config = $this->config('salesforce.settings');
-    $definition = \Drupal::service('config.typed')->getDefinition('salesforce.settings');
+    $definition = $this->typedConfigManager
+      ->getDefinition('salesforce.settings');
     $definition = $definition['mapping'];
 
     $form['use_latest'] = [
@@ -94,7 +119,11 @@ class SettingsForm extends ConfigFormBase {
     }
     catch (\Exception $e) {
       $href = new Url('salesforce.admin_config_salesforce');
-      $this->messenger()->addError($this->t('Error when connecting to Salesforce. Please <a href="@href">check your credentials</a> and try again: %message', ['@href' => $href->toString(), '%message' => $e->getMessage()]));
+      $this->messenger()
+        ->addError($this->t('Error when connecting to Salesforce. Please <a href="@href">check your credentials</a> and try again: %message', [
+          '@href' => $href->toString(),
+          '%message' => $e->getMessage(),
+        ]));
     }
 
     $form['rest_api_version'] = [
@@ -125,7 +154,7 @@ class SettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('short_term_cache_lifetime'),
     ];
 
-    if (\Drupal::moduleHandler()->moduleExists('salesforce_push')) {
+    if ($this->moduleHandler->moduleExists('salesforce_push')) {
       $form['global_push_limit'] = [
         '#title' => $this->t($definition['global_push_limit']['label']),
         '#type' => 'number',
@@ -136,7 +165,7 @@ class SettingsForm extends ConfigFormBase {
       ];
     }
 
-    if (\Drupal::moduleHandler()->moduleExists('salesforce_pull')) {
+    if ($this->moduleHandler->moduleExists('salesforce_pull')) {
       $form['pull_max_queue_size'] = [
         '#title' => $this->t($definition['pull_max_queue_size']['label']),
         '#type' => 'number',
@@ -147,7 +176,7 @@ class SettingsForm extends ConfigFormBase {
       ];
     }
 
-    if (\Drupal::moduleHandler()->moduleExists('salesforce_mapping')) {
+    if ($this->moduleHandler->moduleExists('salesforce_mapping')) {
       $form['limit_mapped_object_revisions'] = [
         '#title' => $this->t($definition['limit_mapped_object_revisions']['label']),
         '#description' => $this->t($definition['limit_mapped_object_revisions']['description']),
@@ -165,7 +194,9 @@ class SettingsForm extends ConfigFormBase {
       ];
     }
 
-    if (\Drupal::moduleHandler()->moduleExists('salesforce_push') || \Drupal::moduleHandler()->moduleExists('salesforce_pull')) {
+    if ($this->moduleHandler
+      ->moduleExists('salesforce_push') || $this->moduleHandler
+      ->moduleExists('salesforce_pull')) {
       $form['standalone'] = [
         '#title' => $this->t($definition['standalone']['label']),
         '#description' => $this->t($definition['standalone']['description']),
@@ -173,10 +204,10 @@ class SettingsForm extends ConfigFormBase {
         '#default_value' => $config->get('standalone'),
       ];
 
-      if (\Drupal::moduleHandler()->moduleExists('salesforce_push')) {
+      if ($this->moduleHandler->moduleExists('salesforce_push')) {
         $standalone_push_url = Url::fromRoute(
           'salesforce_push.endpoint',
-          ['key' => \Drupal::state()->get('system.cron_key')],
+          ['key' => $this->state->get('system.cron_key')],
           ['absolute' => TRUE]);
         $form['standalone_push_url'] = [
           '#type' => 'item',
@@ -189,10 +220,10 @@ class SettingsForm extends ConfigFormBase {
           ],
         ];
       }
-      if (\Drupal::moduleHandler()->moduleExists('salesforce_pull')) {
+      if ($this->moduleHandler->moduleExists('salesforce_pull')) {
         $standalone_pull_url = Url::fromRoute(
           'salesforce_pull.endpoint',
-          ['key' => \Drupal::state()->get('system.cron_key')],
+          ['key' => $this->state->get('system.cron_key')],
           ['absolute' => TRUE]);
         $form['standalone_pull_url'] = [
           '#type' => 'item',

@@ -7,7 +7,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 
 /**
- * Class SalesforceAuthDeleteForm.
+ * Delete auth form.
  */
 class SalesforceAuthDeleteForm extends EntityConfirmFormBase {
 
@@ -40,7 +40,7 @@ class SalesforceAuthDeleteForm extends EntityConfirmFormBase {
     if ($form_state->getErrors()) {
       return;
     }
-    if (\Drupal::config('salesforce.settings')->get('salesforce_auth_provider') == $this->entity->id()) {
+    if ($this->config('salesforce.settings')->get('salesforce_auth_provider') == $this->entity->id()) {
       $form_state->setError($form, $this->t('You cannot delete the default auth provider. Please <a href="@href">assign a new auth provider</a> before deleting the active one.', ['@href' => Url::fromRoute('salesforce.auth_config')->toString()]));
     }
   }

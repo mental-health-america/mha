@@ -53,7 +53,7 @@ class SalesforceMappingLocalTask extends DeriverBase implements ContainerDeriver
     $this->derivatives = [];
 
     foreach ($this->etm->getDefinitions() as $entity_type_id => $entity_type) {
-      if (!($has_canonical_path = $entity_type->hasLinkTemplate('salesforce'))) {
+      if (!$entity_type->hasLinkTemplate('salesforce')) {
         continue;
       }
       $this->derivatives["$entity_type_id.salesforce_tab"] = [

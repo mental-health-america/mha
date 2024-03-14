@@ -3,7 +3,7 @@
         'name' => 'drupal-composer/drupal-project',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => 'da05b28ee705d6fbbda13084b589a411490fee05',
+        'reference' => '94e24dc81de6b4dec3ac3c80c45997c7326dcc30',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -220,7 +220,7 @@
         'drupal-composer/drupal-project' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'da05b28ee705d6fbbda13084b589a411490fee05',
+            'reference' => '94e24dc81de6b4dec3ac3c80c45997c7326dcc30',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -827,9 +827,9 @@
             'dev_requirement' => false,
         ),
         'drupal/imce' => array(
-            'pretty_version' => '3.0.11',
-            'version' => '3.0.11.0',
-            'reference' => '3.0.11',
+            'pretty_version' => '3.0.12',
+            'version' => '3.0.12.0',
+            'reference' => '3.0.12',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../web/modules/contrib/imce',
             'aliases' => array(),
@@ -1115,9 +1115,9 @@
             'dev_requirement' => false,
         ),
         'drupal/salesforce' => array(
-            'pretty_version' => '5.0.3',
-            'version' => '5.0.3.0',
-            'reference' => '5.0.3',
+            'pretty_version' => '5.0.4',
+            'version' => '5.0.4.0',
+            'reference' => '5.0.4',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../web/modules/contrib/salesforce',
             'aliases' => array(),
@@ -1553,9 +1553,9 @@
             'dev_requirement' => false,
         ),
         'league/container' => array(
-            'pretty_version' => '4.2.0',
-            'version' => '4.2.0.0',
-            'reference' => '375d13cb828649599ef5d48a339c4af7a26cd0ab',
+            'pretty_version' => '4.2.2',
+            'version' => '4.2.2.0',
+            'reference' => 'ff346319ca1ff0e78277dc2311a42107cc1aab88',
             'type' => 'library',
             'install_path' => __DIR__ . '/../league/container',
             'aliases' => array(),
@@ -1676,9 +1676,9 @@
             'dev_requirement' => false,
         ),
         'pear/pear-core-minimal' => array(
-            'pretty_version' => 'v1.10.14',
-            'version' => '1.10.14.0',
-            'reference' => 'a86fc145edb5caedbf96527214ce3cadc9de4a32',
+            'pretty_version' => 'v1.10.15',
+            'version' => '1.10.15.0',
+            'reference' => 'd457b5c93e5001fbf4b5726d21038266e029e3be',
             'type' => 'library',
             'install_path' => __DIR__ . '/../pear/pear-core-minimal',
             'aliases' => array(),
@@ -1703,9 +1703,9 @@
             'dev_requirement' => false,
         ),
         'phenx/php-svg-lib' => array(
-            'pretty_version' => '0.5.2',
-            'version' => '0.5.2.0',
-            'reference' => '732faa9fb4309221e2bd9b2fda5de44f947133aa',
+            'pretty_version' => '0.5.3',
+            'version' => '0.5.3.0',
+            'reference' => '0e46722c154726a5f9ac218197ccc28adba16fcf',
             'type' => 'library',
             'install_path' => __DIR__ . '/../phenx/php-svg-lib',
             'aliases' => array(),
@@ -1721,9 +1721,9 @@
             'dev_requirement' => false,
         ),
         'phpstan/phpstan' => array(
-            'pretty_version' => '1.10.59',
-            'version' => '1.10.59.0',
-            'reference' => 'e607609388d3a6d418a50a49f7940e8086798281',
+            'pretty_version' => '1.10.62',
+            'version' => '1.10.62.0',
+            'reference' => 'cd5c8a1660ed3540b211407c77abf4af193a6af9',
             'type' => 'library',
             'install_path' => __DIR__ . '/../phpstan/phpstan',
             'aliases' => array(),
@@ -1768,8 +1768,8 @@
         'psr/container-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '^1.0',
-                1 => '1.0',
+                0 => '1.0',
+                1 => '^1.0',
             ),
         ),
         'psr/event-dispatcher-implementation' => array(
@@ -1865,7 +1865,7 @@
         'rsky/pear-core-min' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => 'v1.10.14',
+                0 => 'v1.10.15',
             ),
         ),
         'sabberworm/php-css-parser' => array(

@@ -27,11 +27,7 @@ class TestHttpClientWrapper implements ClientInterface {
   protected $extensionPathResolver;
 
   /**
-   * HttpClientWrapper constructor.
-   *
-   * @param \GuzzleHttp\ClientInterface $httpClient
-   *   Guzzle HTTP client service, from core http_client.
-   * @param
+   * {@inheritdoc}
    */
   public function __construct(GuzzleClientInterface $httpClient, ExtensionPathResolver $extensionPathResolver) {
     $this->httpClient = $httpClient;
@@ -62,7 +58,7 @@ class TestHttpClientWrapper implements ClientInterface {
     elseif ($endpoint->getPath() == '/id/XXXXXXXXXXXXXXXXXX/XXXXXXXXXXXXXXXXXX') {
       $content = file_get_contents($dir . '/identityResponse.json');
     }
-    return $content ?: '';
+    return $content ?? '';
   }
 
 }

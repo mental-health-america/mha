@@ -87,32 +87,32 @@ salesforce_mapping.salesforce_mapping.*:
       type: sequence
       label: 'Field Mappings'
       sequence:
-        - type: mapping
-          label: 'Field Mapping'
-          mapping:
-            drupal_field_type:
-              type: string
-              label: 'Fieldmap Type'
-            drupal_field_value:
-              type: string
-              label: 'Fieldmap Value'
-            direction:
-              type: string
-              label: 'Direction'
-            salesforce_field:
-              type: string
-              label: 'Salesforce Field Name'
-            id:
-              type: integer
-              label: 'Field Id'
-            drupal_constant:
-              type: string
-              label: 'Drupal Constant'
-            description:
-              type: text
-              label: 'Description'
+        type: mapping
+        label: 'Field Mapping'
+        mapping:
+          drupal_field_type:
+            type: string
+            label: 'Fieldmap Type'
+          drupal_field_value:
+            type: string
+            label: 'Fieldmap Value'
+          direction:
+            type: string
+            label: 'Direction'
+          salesforce_field:
+            type: string
+            label: 'Salesforce Field Name'
+          id:
+            type: integer
+            label: 'Field Id'
+          drupal_constant:
+            type: string
+            label: 'Drupal Constant'
+          description:
+            type: text
+            label: 'Description'
 
-# Schema / Config API requires that we add these:
+    # Schema / Config API requires that we add these:
     status:
       type: boolean
       label: 'Status'

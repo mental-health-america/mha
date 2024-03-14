@@ -91,8 +91,6 @@ class SalesforceMappingFieldsForm extends SalesforceMappingFormBase {
       ],
     ];
 
-    $add_field_text = !empty($field_mappings) ? $this->t('Add another field mapping') : $this->t('Add a field mapping to get started');
-
     $form['buttons'] = [
       '#type' => 'container',
       '#tree' => TRUE,
@@ -105,7 +103,7 @@ class SalesforceMappingFieldsForm extends SalesforceMappingFormBase {
       '#empty_option' => $this->t('- Select -'),
     ];
     $form['buttons']['add'] = [
-      '#value' => $add_field_text,
+      '#value' => $this->t('Add a field mapping'),
       '#type' => 'submit',
       '#limit_validation_errors' => [['buttons']],
       '#submit' => ['::addField'],
@@ -289,7 +287,7 @@ class SalesforceMappingFieldsForm extends SalesforceMappingFormBase {
   }
 
   /**
-   *
+   * Another ajax callback for adding a new field.
    */
   public function addField(&$form, FormStateInterface $form_state) {
     $trigger = $form_state->getTriggeringElement();

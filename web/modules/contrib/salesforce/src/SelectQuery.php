@@ -3,7 +3,7 @@
 namespace Drupal\salesforce;
 
 /**
- * Class SelectQuery.
+ * Class SelectQuery wrapper for Salesforce.
  *
  * @package Drupal\salesforce
  */
@@ -45,6 +45,20 @@ class SelectQuery implements SelectQueryInterface {
   public $conditions = [];
 
   /**
+   * Starting elements number for query result.
+   *
+   * @var int
+   */
+  public $offset;
+
+  /**
+   * The operator used to combine conditions, defaults to 'AND'.
+   *
+   * @var string
+   */
+  public $conjunction;
+
+  /**
    * SelectQuery constructor.
    *
    * @param string $object_type
@@ -52,10 +66,14 @@ class SelectQuery implements SelectQueryInterface {
    */
   public function __construct($object_type = '') {
     $this->objectType = $object_type;
+    $this->conjunction = 'AND';
   }
 
   /**
    * Add a condition to the query.
+   *
+   * Conditions will be combined with the conjunction defined by
+   * $this->conjunction. Defaults to 'AND'.
    *
    * @param string $field
    *   Field name.
@@ -93,6 +111,8 @@ class SelectQuery implements SelectQueryInterface {
    * Implements PHP's magic toString().
    *
    * Function to convert the query to a string to pass to the SF API.
+   * Conditions will be combined with the conjunction defined by
+   * $this->conjunction. Defaults to 'AND'.
    *
    * @return string
    *   SOQL query ready to be executed the SF API.
@@ -109,7 +129,7 @@ class SelectQuery implements SelectQueryInterface {
       foreach ($this->conditions as $condition) {
         $where[] = implode('+', $condition);
       }
-      $query .= '+WHERE+' . implode('+AND+', $where);
+      $query .= '+WHERE+' . implode('+' . $this->conjunction . '+', $where);
     }
 
     if ($this->order) {
@@ -123,6 +143,10 @@ class SelectQuery implements SelectQueryInterface {
 
     if ($this->limit) {
       $query .= "+LIMIT+" . (int) $this->limit;
+    }
+
+    if ($this->offset) {
+      $query .= "+OFFSET+" . (int) $this->offset;
     }
 
     return $query;

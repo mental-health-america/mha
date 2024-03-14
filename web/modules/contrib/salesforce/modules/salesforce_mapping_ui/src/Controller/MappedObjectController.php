@@ -5,13 +5,36 @@ namespace Drupal\salesforce_mapping_ui\Controller;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Returns responses for devel module routes.
  */
 class MappedObjectController extends ControllerBase {
+
+  /**
+   * Current route.
+   *
+   * @var \Drupal\Core\Routing\CurrentRouteMatch
+   */
+  protected $route;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __construct(CurrentRouteMatch $route) {
+    $this->route = $route;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static($container->get('current_route_match'));
+  }
 
   /**
    * Access callback for Mapped Object entity.
@@ -22,7 +45,7 @@ class MappedObjectController extends ControllerBase {
     }
 
     // There must be a better way to get the entity from a route match.
-    $param = current(\Drupal::routeMatch()->getParameters()->all());
+    $param = current($this->route->getParameters()->all());
     if (!is_object($param)) {
       return AccessResult::forbidden();
     }
@@ -34,8 +57,8 @@ class MappedObjectController extends ControllerBase {
     return $this->entityTypeManager()
       ->getStorage('salesforce_mapping')
       ->loadByEntity($param)
-        ? AccessResult::allowed()
-        : AccessResult::forbidden();
+      ? AccessResult::allowed()
+      : AccessResult::forbidden();
   }
 
   /**
@@ -53,7 +76,8 @@ class MappedObjectController extends ControllerBase {
    * @todo find a more specific exception class
    */
   private function getEntity(RouteMatchInterface $route_match) {
-    $parameter_name = $route_match->getRouteObject()->getOption('_salesforce_entity_type_id');
+    $parameter_name = $route_match->getRouteObject()
+      ->getOption('_salesforce_entity_type_id');
     if (empty($parameter_name)) {
       throw new \Exception('Entity type paramater not found.');
     }
@@ -107,8 +131,10 @@ class MappedObjectController extends ControllerBase {
     }
 
     // Show the entity view for the mapped object.
-    $builder = $this->entityTypeManager()->getListBuilder('salesforce_mapped_object');
-    return $builder->setEntityIds(array_keys($salesforce_mapped_objects))->render();
+    $builder = $this->entityTypeManager()
+      ->getListBuilder('salesforce_mapped_object');
+    return $builder->setEntityIds(array_keys($salesforce_mapped_objects))
+      ->render();
   }
 
 }

@@ -4,7 +4,6 @@ namespace Drupal\salesforce_jwt\Plugin\SalesforceAuthProvider;
 
 use Drupal\Core\Form\FormStateInterface;
 use OAuth\Common\Http\Uri\Uri;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * JWT Oauth plugin.
@@ -16,14 +15,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class SalesforceJWTGovCloudPlugin extends SalesforceJWTPlugin {
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    $configuration = array_merge(self::defaultConfiguration(), $configuration);
-    return new static($configuration, $plugin_id, $plugin_definition, $container->get('salesforce.http_client_wrapper'), $container->get('salesforce.auth_token_storage'), $container->get('key.repository'));
-  }
 
   /**
    * {@inheritdoc}
@@ -48,10 +39,10 @@ class SalesforceJWTGovCloudPlugin extends SalesforceJWTPlugin {
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildConfigurationForm($form, $form_state);
     $form['token_url'] = [
-      '#title' => t('Token URL'),
+      '#title' => $this->t('Token URL'),
       '#type' => 'textfield',
       '#default_value' => $this->getCredentials()->getTokenUrl(),
-      '#description' => t('Enter a token URL, like https://yourcompany.my.salesforce.com'),
+      '#description' => $this->t('Enter a token URL, like https://yourcompany.my.salesforce.com'),
       '#required' => TRUE,
     ];
 

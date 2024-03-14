@@ -33,6 +33,32 @@ class QueueHandlerTest extends UnitTestCase {
    */
   static protected $modules = ['salesforce_pull'];
 
+  protected $configFactory;
+
+  protected $ed;
+
+  protected $etm;
+
+  protected $mapping;
+
+  protected $mappingStorage;
+
+  protected $qh;
+
+  protected $queue;
+
+  protected $queue_factory;
+
+  protected $sfapi;
+
+  protected $sqr;
+
+  protected $sqrDone;
+
+  protected $state;
+
+  protected $time;
+
   /**
    * {@inheritdoc}
    */
@@ -65,7 +91,8 @@ class QueueHandlerTest extends UnitTestCase {
       ->willReturn($this->sqrDone);
     $this->sfapi = $prophecy->reveal();
 
-    $this->mapping = $this->getMockBuilder(SalesforceMappingInterface::CLASS)->getMock();
+    $this->mapping = $this->getMockBuilder(SalesforceMappingInterface::CLASS)
+      ->getMock();
     $this->mapping->expects($this->any())
       ->method('__get')
       ->with($this->equalTo('id'))
@@ -93,17 +120,20 @@ class QueueHandlerTest extends UnitTestCase {
 
     // Mock mapping ConfigEntityStorage object.
     $prophecy = $this->prophesize(SalesforceMappingStorage::CLASS);
-    $prophecy->loadCronPullMappings(Argument::any())->willReturn([$this->mapping]);
+    $prophecy->loadCronPullMappings(Argument::any())
+      ->willReturn([$this->mapping]);
     $this->mappingStorage = $prophecy->reveal();
 
     // Mock EntityTypeManagerInterface.
     $prophecy = $this->prophesize(EntityTypeManagerInterface::CLASS);
-    $prophecy->getStorage('salesforce_mapping')->willReturn($this->mappingStorage);
+    $prophecy->getStorage('salesforce_mapping')
+      ->willReturn($this->mappingStorage);
     $this->etm = $prophecy->reveal();
 
     // Mock config.
     $prophecy = $this->prophesize(Config::CLASS);
-    $prophecy->get('pull_max_queue_size', Argument::any())->willReturn(QueueHandler::PULL_MAX_QUEUE_SIZE);
+    $prophecy->get('pull_max_queue_size', Argument::any())
+      ->willReturn(QueueHandler::PULL_MAX_QUEUE_SIZE);
     $config = $prophecy->reveal();
 
     $prophecy = $this->prophesize(ConfigFactoryInterface::CLASS);
@@ -112,31 +142,28 @@ class QueueHandlerTest extends UnitTestCase {
 
     // Mock state.
     $prophecy = $this->prophesize(StateInterface::CLASS);
-    $prophecy->get('salesforce.mapping_pull_info', Argument::any())->willReturn([1 => ['last_pull_timestamp' => '0']]);
-    $prophecy->set('salesforce.mapping_pull_info', Argument::any())->willReturn(NULL);
+    $prophecy->get('salesforce.mapping_pull_info', Argument::any())
+      ->willReturn([1 => ['last_pull_timestamp' => '0']]);
+    $prophecy->set('salesforce.mapping_pull_info', Argument::any())
+      ->willReturn(NULL);
     $this->state = $prophecy->reveal();
 
     // Mock event dispatcher.
     $prophecy = $this->prophesize(EventDispatcherInterface::CLASS);
-    $prophecy->dispatch(Argument::any(), Argument::any())->willReturnArgument(0);
+    $prophecy->dispatch(Argument::any(), Argument::any())
+      ->willReturnArgument(0);
     $this->ed = $prophecy->reveal();
 
     $this->time = $this->getMockBuilder(TimeInterface::CLASS)->getMock();
 
-    $this->qh = $this->getMockBuilder(QueueHandler::CLASS)
-      ->setMethods(['parseUrl'])
-      ->setConstructorArgs([
+    $this->qh = new QueueHandler(
         $this->sfapi,
         $this->etm,
         $this->queue_factory,
         $this->configFactory,
         $this->ed,
-        $this->time,
-      ])
-      ->getMock();
-    $this->qh->expects($this->any())
-      ->method('parseUrl')
-      ->willReturn('https://example.salesforce.com');
+        $this->time
+      );
   }
 
   /**
@@ -161,27 +188,22 @@ class QueueHandlerTest extends UnitTestCase {
     // Initialize with queue size > 100000 (default)
     $prophecy = $this->prophesize(QueueInterface::CLASS);
     $prophecy->createItem()->willReturn(1);
-    $prophecy->numberOfItems()->willReturn(QueueHandler::PULL_MAX_QUEUE_SIZE + 1);
+    $prophecy->numberOfItems()
+      ->willReturn(QueueHandler::PULL_MAX_QUEUE_SIZE + 1);
     $this->queue = $prophecy->reveal();
 
     $prophecy = $this->prophesize(QueueDatabaseFactory::CLASS);
     $prophecy->get(Argument::any())->willReturn($this->queue);
     $this->queue_factory = $prophecy->reveal();
 
-    $this->qh = $this->getMockBuilder(QueueHandler::CLASS)
-      ->setMethods(['parseUrl'])
-      ->setConstructorArgs([
+    $this->qh = new QueueHandler(
         $this->sfapi,
         $this->etm,
         $this->queue_factory,
         $this->configFactory,
         $this->ed,
-        $this->time,
-      ])
-      ->getMock();
-    $this->qh->expects($this->any())
-      ->method('parseUrl')
-      ->willReturn('https://example.salesforce.com');
+        $this->time
+    );
     $result = $this->qh->getUpdatedRecords();
     $this->assertFalse($result);
   }

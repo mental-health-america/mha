@@ -29,15 +29,31 @@ class PullQueueTest extends BrowserTestBase {
   protected static $modules = [
     'typed_data',
     'dynamic_entity_reference',
+    'salesforce',
     'salesforce_mapping',
     'salesforce_mapping_test',
+    'salesforce_test_rest_client',
     'salesforce_pull',
   ];
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp(): void {
+    parent::setUp();
+    // Why do we have to do this here but not for other modules?
+    \Drupal::service('config.installer')->installDefaultConfig('module', 'salesforce_mapping_test');
+    drupal_flush_all_caches();
+  }
 
   /**
    * Test that saving mapped nodes enqueues them for push to Salesforce.
    */
   public function testEnqueue() {
+    // Process the queue.
+    $mapping = SalesforceMapping::load('test_mapping');
+    $this->assertTrue($mapping->doesPull());
+
     // Trigger salesforce_pull_cron to ensure an item in the pull queue, thanks
     // to our mocked response from TestRestClient service.
     \Drupal::service('salesforce_pull.queue_handler')->getUpdatedRecords();
@@ -55,8 +71,6 @@ class PullQueueTest extends BrowserTestBase {
     $queueFactory->get('cron_salesforce_pull')->createQueue();
     $queue_worker = $queueManager->createInstance($queue_name);
 
-    // Process the queue.
-    $mapping = SalesforceMapping::load('test_mapping');
     /** @var \Drupal\salesforce_mapping\MappedObjectStorage $mappedObjectStorage */
     $mappedObjectStorage = \Drupal::entityTypeManager()
       ->getStorage('salesforce_mapped_object');
@@ -94,11 +108,12 @@ class PullQueueTest extends BrowserTestBase {
         ->field('Description'), $createdEntity->field_salesforce_test_link->uri);
     }
 
+    $mapping->setLastPullTime(NULL)->save();
     drupal_flush_all_caches();
     // If we have any entity reference, we can't be sure it'll be pulled
     // before the record to which it points. So, we pull the entire queue a 2nd
     // time in order to check that references get assigned properly.
-    \Drupal::service('salesforce_pull.queue_handler')->getUpdatedRecords();
+    \Drupal::service('salesforce_pull.queue_handler')->getUpdatedRecords(TRUE);
 
     // Make sure our queue was re-populated.
     $this->assertEquals($items['totalSize'], $queue->numberOfItems());
