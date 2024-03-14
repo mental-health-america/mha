@@ -91,6 +91,13 @@ abstract class SalesforceMappingFieldPluginBase extends PluginBase implements Sa
   protected $entityTypeManager;
 
   /**
+   * Date formatter service.
+   *
+   * @var \Drupal\Core\Datetime\DateFormatterInterface
+   */
+  protected $dateFormatter;
+
+  /**
    * Event dispatcher service.
    *
    * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
@@ -187,7 +194,10 @@ abstract class SalesforceMappingFieldPluginBase extends PluginBase implements Sa
       $field_definition = $describe->getField($this->config('salesforce_field'));
     }
     catch (\Exception $e) {
-      $this->eventDispatcher->dispatch(new SalesforceWarningEvent($e, 'Field definition not found for %describe.%field', ['%describe' => $describe->getName(), '%field' => $this->config('salesforce_field')]), SalesforceEvents::WARNING);
+      $this->eventDispatcher->dispatch(new SalesforceWarningEvent($e, 'Field definition not found for %describe.%field', [
+        '%describe' => $describe->getName(),
+        '%field' => $this->config('salesforce_field'),
+      ]), SalesforceEvents::WARNING);
       // If getField throws, however, just return the raw value.
       return $value;
     }
@@ -240,8 +250,8 @@ abstract class SalesforceMappingFieldPluginBase extends PluginBase implements Sa
         break;
     }
 
-    if (!empty($value) && $field_definition['length'] > 0 && strlen($value) > $field_definition['length']) {
-      $value = substr($value, 0, $field_definition['length']);
+    if (!empty($value) && $field_definition['length'] > 0 && mb_strlen($value) > $field_definition['length']) {
+      $value = mb_substr($value, 0, $field_definition['length']);
     }
 
     return $value;
@@ -318,8 +328,8 @@ abstract class SalesforceMappingFieldPluginBase extends PluginBase implements Sa
 
       default:
         if (is_string($value)) {
-          if (isset($drupal_field_settings['max_length']) && $drupal_field_settings['max_length'] > 0 && $drupal_field_settings['max_length'] < strlen($value)) {
-            $value = substr($value, 0, $drupal_field_settings['max_length']);
+          if (isset($drupal_field_settings['max_length']) && $drupal_field_settings['max_length'] > 0 && $drupal_field_settings['max_length'] < mb_strlen($value)) {
+            $value = mb_substr($value, 0, $drupal_field_settings['max_length']);
           }
         }
         break;
@@ -409,9 +419,9 @@ abstract class SalesforceMappingFieldPluginBase extends PluginBase implements Sa
       '#attributes' => ['class' => ['narrow']],
     ];
     $pluginForm['description'] = [
-      '#title' => t('Description'),
+      '#title' => $this->t('Description'),
       '#type' => 'textarea',
-      '#description' => t('Details about this field mapping.'),
+      '#description' => $this->t('Details about this field mapping.'),
       '#default_value' => $this->config('description'),
     ];
 
@@ -421,10 +431,10 @@ abstract class SalesforceMappingFieldPluginBase extends PluginBase implements Sa
   /**
    * Helper for buildConfigurationForm() to build a broken field plugin.
    *
-   * @see buildConfigurationForm()
-   *
    * @return array
    *   The dummy form with message to indicate the plugin is broken.
+   *
+   * @see buildConfigurationForm()
    */
   protected function buildBrokenConfigurationForm(array &$pluginForm, FormStateInterface $form_state) {
     foreach ($this->config() as $key => $value) {
@@ -466,7 +476,7 @@ abstract class SalesforceMappingFieldPluginBase extends PluginBase implements Sa
    * {@inheritdoc}
    */
   public function calculateDependencies() {
-
+    return [];
   }
 
   /**
@@ -511,10 +521,10 @@ abstract class SalesforceMappingFieldPluginBase extends PluginBase implements Sa
   }
 
   /**
-   * Helper to retreive a list of fields for a given object type.
+   * Helper to retrieve a list of fields for a given object type.
    *
    * @param string $sfobject_name
-   *   The object type of whose fields you want to retreive.
+   *   The object type of whose fields you want to retrieve.
    *
    * @return array
    *   An array of values keyed by machine name of the field with the label as
@@ -562,7 +572,7 @@ abstract class SalesforceMappingFieldPluginBase extends PluginBase implements Sa
   /**
    * Wraper for plugin.manager.entity_reference_selection service.
    *
-   * @return \Drupal\Core\Entity\EntityAutocompleteMatcher
+   * @return \Drupal\Core\Entity\EntityReferenceSelection\SelectionPluginManagerInterface
    *   Entity autocompleter service.
    */
   protected function selectionPluginManager() {

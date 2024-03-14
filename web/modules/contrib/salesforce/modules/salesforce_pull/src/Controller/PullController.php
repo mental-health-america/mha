@@ -133,7 +133,8 @@ class PullController extends ControllerBase {
     if ($key != $this->stateService->get('system.cron_key')) {
       throw new AccessDeniedHttpException();
     }
-    $global_standalone = $this->config('salesforce.settings')->get('standalone');
+    $global_standalone = $this->config('salesforce.settings')
+      ->get('standalone');
     if (!$salesforce_mapping && !$global_standalone) {
       throw new AccessDeniedHttpException();
     }
@@ -195,7 +196,10 @@ class PullController extends ControllerBase {
     $count = 0;
     while ((!$this->getTimeLimit() || time() < $end) && ($item = $queue->claimItem())) {
       try {
-        $this->eventDispatcher->dispatch(new SalesforceNoticeEvent(NULL, 'Processing item @id from @name queue.', ['@name' => QueueHandler::PULL_QUEUE_NAME, '@id' => $item->item_id]), SalesforceEvents::NOTICE);
+        $this->eventDispatcher->dispatch(new SalesforceNoticeEvent(NULL, 'Processing item @id from @name queue.', [
+          '@name' => QueueHandler::PULL_QUEUE_NAME,
+          '@id' => $item->item_id,
+        ]), SalesforceEvents::NOTICE);
         $worker->processItem($item->data);
         $queue->deleteItem($item);
         $count++;

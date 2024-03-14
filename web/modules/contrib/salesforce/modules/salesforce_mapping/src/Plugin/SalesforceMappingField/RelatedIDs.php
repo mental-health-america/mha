@@ -165,6 +165,7 @@ class RelatedIDs extends SalesforceMappingFieldPluginBase {
         }
       }
     }
+    return parent::checkFieldMappingDependency($dependencies);
   }
 
 }

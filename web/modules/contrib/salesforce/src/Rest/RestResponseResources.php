@@ -3,7 +3,7 @@
 namespace Drupal\salesforce\Rest;
 
 /**
- * Class RestResponseResources.
+ * Class RestResponseResources response wrapper.
  *
  * @package Drupal\salesforce\Rest
  */

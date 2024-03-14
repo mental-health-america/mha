@@ -4962,17 +4962,17 @@
         },
         {
             "name": "drupal/imce",
-            "version": "3.0.11",
+            "version": "3.0.12",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/imce.git",
-                "reference": "3.0.11"
+                "reference": "3.0.12"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/imce-3.0.11.zip",
-                "reference": "3.0.11",
-                "shasum": "8d9fb9df41288baa7851a6700be1f1af47de00b1"
+                "url": "https://ftp.drupal.org/files/projects/imce-3.0.12.zip",
+                "reference": "3.0.12",
+                "shasum": "31c07ec0084892c5f6feb2737e42cd6e76944756"
             },
             "require": {
                 "drupal/core": "^9.3 || ^10"
@@ -4983,8 +4983,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "3.0.11",
-                    "datestamp": "1704304923",
+                    "version": "3.0.12",
+                    "datestamp": "1709855260",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -6275,7 +6275,7 @@
             "extra": {
                 "drupal": {
                     "version": "8.x-1.17",
-                    "datestamp": "1705234146",
+                    "datestamp": "1709804220",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -6998,21 +6998,21 @@
         },
         {
             "name": "drupal/salesforce",
-            "version": "5.0.3",
+            "version": "5.0.4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/salesforce.git",
-                "reference": "5.0.3"
+                "reference": "5.0.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/salesforce-5.0.3.zip",
-                "reference": "5.0.3",
-                "shasum": "45f22b818a7b4104ee11dce9751bf47fd2ee3b6a"
+                "url": "https://ftp.drupal.org/files/projects/salesforce-5.0.4.zip",
+                "reference": "5.0.4",
+                "shasum": "ba231ab50095552f3d075d2fbe4b4e0a075141b1"
             },
             "require": {
                 "consolidation/output-formatters": "^3.2.0 || ^4.1",
-                "drupal/address": "^1.8",
+                "drupal/address": "^1.8 || ^2.0",
                 "drupal/core": "^9 || ^10",
                 "drupal/dynamic_entity_reference": "^1.9 || ^2.0 || ^3 || ^4",
                 "drupal/key": "^1.14",
@@ -7045,8 +7045,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "5.0.3",
-                    "datestamp": "1691095606",
+                    "version": "5.0.4",
+                    "datestamp": "1710339009",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -10154,16 +10154,16 @@
         },
         {
             "name": "league/container",
-            "version": "4.2.0",
+            "version": "4.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/container.git",
-                "reference": "375d13cb828649599ef5d48a339c4af7a26cd0ab"
+                "reference": "ff346319ca1ff0e78277dc2311a42107cc1aab88"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/container/zipball/375d13cb828649599ef5d48a339c4af7a26cd0ab",
-                "reference": "375d13cb828649599ef5d48a339c4af7a26cd0ab",
+                "url": "https://api.github.com/repos/thephpleague/container/zipball/ff346319ca1ff0e78277dc2311a42107cc1aab88",
+                "reference": "ff346319ca1ff0e78277dc2311a42107cc1aab88",
                 "shasum": ""
             },
             "require": {
@@ -10224,7 +10224,7 @@
             ],
             "support": {
                 "issues": "https://github.com/thephpleague/container/issues",
-                "source": "https://github.com/thephpleague/container/tree/4.2.0"
+                "source": "https://github.com/thephpleague/container/tree/4.2.2"
             },
             "funding": [
                 {
@@ -10232,7 +10232,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-11-16T10:29:06+00:00"
+            "time": "2024-03-13T13:12:53+00:00"
         },
         {
             "name": "lobsterr/drupal-superfish",
@@ -10984,16 +10984,16 @@
         },
         {
             "name": "pear/pear-core-minimal",
-            "version": "v1.10.14",
+            "version": "v1.10.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pear/pear-core-minimal.git",
-                "reference": "a86fc145edb5caedbf96527214ce3cadc9de4a32"
+                "reference": "d457b5c93e5001fbf4b5726d21038266e029e3be"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pear/pear-core-minimal/zipball/a86fc145edb5caedbf96527214ce3cadc9de4a32",
-                "reference": "a86fc145edb5caedbf96527214ce3cadc9de4a32",
+                "url": "https://api.github.com/repos/pear/pear-core-minimal/zipball/d457b5c93e5001fbf4b5726d21038266e029e3be",
+                "reference": "d457b5c93e5001fbf4b5726d21038266e029e3be",
                 "shasum": ""
             },
             "require": {
@@ -11029,7 +11029,7 @@
                 "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=PEAR",
                 "source": "https://github.com/pear/pear-core-minimal"
             },
-            "time": "2023-11-26T16:15:38+00:00"
+            "time": "2024-03-09T19:38:40+00:00"
         },
         {
             "name": "pear/pear_exception",
@@ -11136,16 +11136,16 @@
         },
         {
             "name": "phenx/php-svg-lib",
-            "version": "0.5.2",
+            "version": "0.5.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dompdf/php-svg-lib.git",
-                "reference": "732faa9fb4309221e2bd9b2fda5de44f947133aa"
+                "reference": "0e46722c154726a5f9ac218197ccc28adba16fcf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dompdf/php-svg-lib/zipball/732faa9fb4309221e2bd9b2fda5de44f947133aa",
-                "reference": "732faa9fb4309221e2bd9b2fda5de44f947133aa",
+                "url": "https://api.github.com/repos/dompdf/php-svg-lib/zipball/0e46722c154726a5f9ac218197ccc28adba16fcf",
+                "reference": "0e46722c154726a5f9ac218197ccc28adba16fcf",
                 "shasum": ""
             },
             "require": {
@@ -11164,7 +11164,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "LGPL-3.0"
+                "LGPL-3.0-or-later"
             ],
             "authors": [
                 {
@@ -11176,9 +11176,9 @@
             "homepage": "https://github.com/PhenX/php-svg-lib",
             "support": {
                 "issues": "https://github.com/dompdf/php-svg-lib/issues",
-                "source": "https://github.com/dompdf/php-svg-lib/tree/0.5.2"
+                "source": "https://github.com/dompdf/php-svg-lib/tree/0.5.3"
             },
-            "time": "2024-02-07T12:49:40+00:00"
+            "time": "2024-02-23T20:39:24+00:00"
         },
         {
             "name": "phpmailer/phpmailer",
@@ -11263,16 +11263,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.59",
+            "version": "1.10.62",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "e607609388d3a6d418a50a49f7940e8086798281"
+                "reference": "cd5c8a1660ed3540b211407c77abf4af193a6af9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/e607609388d3a6d418a50a49f7940e8086798281",
-                "reference": "e607609388d3a6d418a50a49f7940e8086798281",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/cd5c8a1660ed3540b211407c77abf4af193a6af9",
+                "reference": "cd5c8a1660ed3540b211407c77abf4af193a6af9",
                 "shasum": ""
             },
             "require": {
@@ -11321,7 +11321,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-02-20T13:59:13+00:00"
+            "time": "2024-03-13T12:27:20+00:00"
         },
         {
             "name": "phpstan/phpstan-deprecation-rules",

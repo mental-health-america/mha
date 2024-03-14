@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class AutocompleteController.
+ * Controller for autocomplete.
  */
 class AutocompleteController extends ControllerBase {
 

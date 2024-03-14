@@ -38,6 +38,32 @@ class RestClientTest extends UnitTestCase {
    */
   protected static $modules = ['salesforce'];
 
+  protected $authConfig;
+
+  protected $authMan;
+
+  protected $authProvider;
+
+  protected $authToken;
+
+  protected $cache;
+
+  protected $client;
+
+  protected $configFactory;
+
+  protected $httpClient;
+
+  protected $json;
+
+  protected $methods;
+
+  protected $salesforce_id;
+
+  protected $state;
+
+  protected $time;
+
   /**
    * Set up for each test.
    */
@@ -57,7 +83,8 @@ class RestClientTest extends UnitTestCase {
       $this->getMockBuilder(State::CLASS)
         ->disableOriginalConstructor()
         ->getMock();
-    $this->cache = $this->getMockBuilder(CacheBackendInterface::CLASS)->getMock();
+    $this->cache = $this->getMockBuilder(CacheBackendInterface::CLASS)
+      ->getMock();
     $this->json = $this->getMockBuilder(Json::CLASS)->getMock();
     $this->time = $this->getMockBuilder(TimeInterface::CLASS)->getMock();
     $this->authToken = $this->getMockBuilder(TokenInterface::CLASS)->getMock();
@@ -233,7 +260,7 @@ class RestClientTest extends UnitTestCase {
   }
 
   /**
-   *
+   * @covers ::objects
    */
   public function testObjectsFromApiCall() {
     $this->initClient(array_merge($this->methods, ['apiCall']));
@@ -347,7 +374,7 @@ class RestClientTest extends UnitTestCase {
       new GuzzleResponse('200', ['Content-Type' => 'application/json'], json_encode([
         'id' => $this->salesforce_id,
       ]))
-      );
+    );
 
     $sfid = new SFID($this->salesforce_id);
     $this->client->expects($this->once())
@@ -538,7 +565,7 @@ class RestClientTest extends UnitTestCase {
     $recordTypes = [
       $sObjectType => [
         $developerName =>
-        new SObject($rawQueryResult['records'][0]),
+          new SObject($rawQueryResult['records'][0]),
       ],
     ];
 
@@ -578,7 +605,7 @@ class RestClientTest extends UnitTestCase {
     $recordTypes = [
       $sObjectType => [
         $developerName =>
-        new SObject($rawQueryResult['records'][0]),
+          new SObject($rawQueryResult['records'][0]),
       ],
     ];
     $cache = (object) [
@@ -619,7 +646,7 @@ class RestClientTest extends UnitTestCase {
     $recordTypes = [
       $sObjectType => [
         $developerName =>
-        new SObject($rawQueryResult['records'][0]),
+          new SObject($rawQueryResult['records'][0]),
       ],
     ];
     $cache = (object) [

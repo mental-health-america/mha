@@ -8,7 +8,7 @@ use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Class RestResponse.
+ * Class Rest Response wrapper.
  *
  * @package Drupal\salesforce\Rest
  */
@@ -92,7 +92,7 @@ class RestResponse extends Response {
     }
 
     if (empty($data) || !is_array($data)) {
-      throw new RestException($this, $this->t('Invalid response'));
+      throw new RestException($this, 'Invalid response');
     }
 
     if (!empty($data['error'])) {

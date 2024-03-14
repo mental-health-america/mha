@@ -2,10 +2,15 @@
 
 namespace Drupal\salesforce_oauth\Plugin\SalesforceAuthProvider;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\TrustedRedirectResponse;
+use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\Core\Url;
 use Drupal\salesforce\SalesforceAuthProviderPluginBase;
+use Drupal\salesforce\Storage\SalesforceAuthTokenStorageInterface;
+use OAuth\Common\Http\Client\ClientInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Salesforce OAuth user-agent flow auth provider plugin.
@@ -13,7 +18,8 @@ use Drupal\salesforce\SalesforceAuthProviderPluginBase;
  * @Plugin(
  *   id = "oauth",
  *   label = @Translation("Salesforce OAuth User-Agent"),
- *   credentials_class = "\Drupal\salesforce_oauth\Consumer\SalesforceOAuthCredentials"
+ *   credentials_class =
+ *   "\Drupal\salesforce_oauth\Consumer\SalesforceOAuthCredentials"
  * )
  */
 class SalesforceOAuthPlugin extends SalesforceAuthProviderPluginBase {
@@ -24,6 +30,37 @@ class SalesforceOAuthPlugin extends SalesforceAuthProviderPluginBase {
    * @var \Drupal\salesforce_oauth\Consumer\SalesforceOAuthCredentials
    */
   protected $credentials;
+
+  /**
+   * Temp store service.
+   *
+   * @var \Drupal\Core\TempStore\PrivateTempStoreFactory
+   */
+  protected $tempstore;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ClientInterface $httpClient, SalesforceAuthTokenStorageInterface $storage, ConfigFactoryInterface $configFactory, PrivateTempStoreFactory $tempstore) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $httpClient, $storage, $configFactory);
+    $this->tempstore = $tempstore;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    $configuration = array_merge(static::defaultConfiguration(), $configuration);
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('http_client'),
+      $container->get('salesforce.auth_token_storage'),
+      $container->get('config.factory'),
+      $container->get('tempstore.private')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -74,7 +111,7 @@ class SalesforceOAuthPlugin extends SalesforceAuthProviderPluginBase {
     // Write the config id to private temp store, so that we can use the same
     // callback URL for all OAuth applications in Salesforce.
     /** @var \Drupal\Core\TempStore\PrivateTempStore $tempstore */
-    $tempstore = \Drupal::service('tempstore.private')->get('salesforce_oauth');
+    $tempstore = $this->tempstore->get('salesforce_oauth');
     $tempstore->set('config_id', $form_state->getValue('id'));
 
     try {
@@ -89,7 +126,8 @@ class SalesforceOAuthPlugin extends SalesforceAuthProviderPluginBase {
       // the user will be redirected to {redirect_uri} to complete the OAuth
       // handshake, and thence to the entity listing. Upon failure, the user
       // redirect URI will send the user back to the edit form.
-      $form_state->setResponse(new TrustedRedirectResponse(Url::fromUri($path . '?' . http_build_query($query))->toString()));
+      $form_state->setResponse(new TrustedRedirectResponse(Url::fromUri($path . '?' . http_build_query($query))
+        ->toString()));
     }
     catch (\Exception $e) {
       $form_state->setError($form, $this->t("Error during authorization: %message", ['%message' => $e->getMessage()]));

@@ -42,8 +42,8 @@ class SalesforceMappingEnableForm extends EntityConfirmFormBase {
   /**
    * {@inheritdoc}
    */
-  public function submit(array $form, FormStateInterface $form_state) {
-    parent::submit($form, $form_state);
+  public function submitForm(array &$form, FormStateInterface $form_state) {
+    parent::submitForm($form, $form_state);
 
     $this->entity->enable()->save();
     $form_state['redirect_route'] = [

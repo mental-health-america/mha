@@ -2,12 +2,17 @@
 
 namespace Drupal\salesforce_mapping_ui\Form;
 
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Entity\ContentEntityConfirmFormBase;
+use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\Exception\UndefinedLinkTemplateException;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\salesforce\Event\SalesforceEvents;
 use Drupal\salesforce\Event\SalesforceNoticeEvent;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Provides a form for deleting a salesforce_mapped_oject entity.
@@ -15,6 +20,26 @@ use Drupal\salesforce\Event\SalesforceNoticeEvent;
  * @ingroup content_entity_example
  */
 class MappedObjectDeleteForm extends ContentEntityConfirmFormBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __construct(EntityRepositoryInterface $entity_repository, EntityTypeBundleInfoInterface $entity_type_bundle_info, TimeInterface $time, EventDispatcherInterface $eventDispatcher) {
+    parent::__construct($entity_repository, $entity_type_bundle_info, $time);
+    $this->eventDispatcher = $eventDispatcher;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('entity.repository'),
+      $container->get('entity_type.bundle.info'),
+      $container->get('datetime.time'),
+      $container->get('event_dispatcher')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -60,7 +85,7 @@ class MappedObjectDeleteForm extends ContentEntityConfirmFormBase {
 
     $message = 'MappedObject @sfid deleted.';
     $args = ['@sfid' => $mapped_object->salesforce_id->value];
-    \Drupal::service('event_dispatcher')->dispatch(new SalesforceNoticeEvent(NULL, $message, $args), SalesforceEvents::NOTICE);
+    $this->eventDispatcher->dispatch(new SalesforceNoticeEvent(NULL, $message, $args), SalesforceEvents::NOTICE);
     $mapped_object->delete();
   }
 

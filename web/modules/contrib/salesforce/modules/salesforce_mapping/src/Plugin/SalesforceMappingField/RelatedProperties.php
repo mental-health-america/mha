@@ -109,7 +109,7 @@ class RelatedProperties extends SalesforceMappingFieldPluginBase {
     }
 
     if (strpos($field_name, ':')) {
-      [$field_name, $dummy] = explode(':', $field_name, 2);
+      [$field_name] = explode(':', $field_name, 2);
     }
     // Add reference field.
     if ($field = FieldConfig::loadByName($this->mapping->getDrupalEntityType(), $this->mapping->getDrupalBundle(), $field_name)) {
@@ -136,6 +136,7 @@ class RelatedProperties extends SalesforceMappingFieldPluginBase {
         }
       }
     }
+    return parent::checkFieldMappingDependency($dependencies);
   }
 
   /**
@@ -189,7 +190,7 @@ class RelatedProperties extends SalesforceMappingFieldPluginBase {
     }
 
     // Alphabetize options for UI.
-    foreach ($options as $group => &$option_set) {
+    foreach ($options as &$option_set) {
       asort($option_set);
     }
     asort($options);

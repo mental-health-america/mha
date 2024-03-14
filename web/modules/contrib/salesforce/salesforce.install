@@ -69,18 +69,29 @@ function salesforce_get_auth_provider_requirements() {
   $authMan = \Drupal::service('plugin.manager.salesforce.auth_providers');
   if (!$authMan->hasProviders()) {
     $requirements += [
-      'description' => t('No auth providers have been created. Please <a href="@href">create an auth provider</a> to connect to Salesforce.', ['@href' => Url::fromRoute('entity.salesforce_auth.add_form')->toString()]),
+      'description' => t('No auth providers have been created. Please <a href="@href">create an auth provider</a> to connect to Salesforce.', [
+        '@href' => Url::fromRoute('entity.salesforce_auth.add_form')
+          ->toString(),
+      ]),
       'severity' => REQUIREMENT_ERROR,
     ];
   }
   elseif (!$authMan->getConfig()) {
     $requirements += [
-      'description' => t('Default auth provider has not been set. Please <a href="@href">choose an auth provider</a> to connect to Salesforce.', ['@href' => Url::fromRoute('salesforce.auth_config')->toString()]),
+      'description' => t('Default auth provider has not been set. Please <a href="@href">choose an auth provider</a> to connect to Salesforce.', [
+        '@href' => Url::fromRoute('salesforce.auth_config')
+          ->toString(),
+      ]),
       'severity' => REQUIREMENT_ERROR,
     ];
   }
   else {
-    $failMessage = t('Salesforce authentication failed. Please <a href="@href">check your auth provider settings</a> to connect to Salesforce.', ['@href' => Url::fromRoute('entity.salesforce_auth.edit_form', ['salesforce_auth' => $authMan->getConfig()->id()])->toString()]);
+    $failMessage = t('Salesforce authentication failed. Please <a href="@href">check your auth provider settings</a> to connect to Salesforce.', [
+      '@href' => Url::fromRoute('entity.salesforce_auth.edit_form', [
+        'salesforce_auth' => $authMan->getConfig()
+          ->id(),
+      ])->toString(),
+    ]);
     try {
       if (!$authMan->getToken()) {
         $requirements += [
@@ -113,13 +124,15 @@ function salesforce_fetch_new_tls() {
     // Ping the howsmyssl web service to check TLS version support for this
     // client.
     \Drupal::state()->set('salesforce.last_requirements_check', time());
-    $raw_response = \Drupal::service('http_client')->get('https://www.howsmyssl.com/a/check', ['json' => TRUE, 'timeout' => 5]);
+    $raw_response = \Drupal::service('http_client')
+      ->get('https://www.howsmyssl.com/a/check', [
+        'json' => TRUE,
+        'timeout' => 5,
+      ]);
     $body = $raw_response->getBody();
+    $body = $body->getContents();
     if (!empty($body)) {
-      $body = $body->getContents();
-      if (!empty($body)) {
-        $response = Json::decode($body);
-      }
+      $response = Json::decode($body);
     }
   }
   catch (Exception $e) {
@@ -244,7 +257,8 @@ function salesforce_update_8003() {
   if ($consumer_key = \Drupal::state()->get('salesforce.consumer_key', FALSE)) {
     $config->set('consumer_key', $consumer_key);
   }
-  if ($consumer_secret = \Drupal::state()->get('salesforce.consumer_secret', FALSE)) {
+  if ($consumer_secret = \Drupal::state()
+    ->get('salesforce.consumer_secret', FALSE)) {
     $config->set('consumer_secret', $consumer_secret);
   }
   if ($login_url = \Drupal::state()->get('salesforce.login_url', FALSE)) {
@@ -384,7 +398,8 @@ function salesforce_update_8402() {
     return;
   }
 
-  $profile = \Drupal::service('encrypt.encryption_profile.manager')->getEncryptionProfile($profile);
+  $profile = \Drupal::service('encrypt.encryption_profile.manager')
+    ->getEncryptionProfile($profile);
   if (!$profile) {
     return;
   }
@@ -434,9 +449,6 @@ function salesforce_update_8402() {
     $tokenStorage->storeAccessToken('oauth_default', $token);
 
     $identity = $tokenStorage->retrieveIdentity('oauth_default');
-    if (empty($identity)) {
-      return;
-    }
     if (is_string($identity)) {
       $identity = $encryption->decrypt($identity, $profile);
       if (empty($identity) || !is_string($identity)) {

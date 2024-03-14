@@ -2,17 +2,71 @@
 
 namespace Drupal\salesforce_mapping_ui\Form;
 
+use Drupal\Core\Datetime\DateFormatterInterface;
+use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
 use Drupal\salesforce\Event\SalesforceErrorEvent;
 use Drupal\salesforce\Event\SalesforceEvents;
+use Drupal\salesforce\Rest\RestClientInterface;
 use Drupal\salesforce_mapping\MappingConstants;
+use Drupal\salesforce_mapping\SalesforceMappableEntityTypesInterface;
+use Drupal\salesforce_mapping\SalesforceMappingFieldPluginManager;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Salesforce Mapping Form base.
  */
 abstract class SalesforceMappingFormCrudBase extends SalesforceMappingFormBase {
+
+  /**
+   * Date formatter service.
+   *
+   * @var \Drupal\Core\Datetime\DateFormatterInterface
+   */
+  protected $date;
+
+  /**
+   * State service.
+   *
+   * @var \Drupal\Core\State\StateInterface
+   */
+  protected $state;
+
+  /**
+   * Event dispatcher service.
+   *
+   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+   */
+  protected $eventDispatcher;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __construct(SalesforceMappingFieldPluginManager $mappingFieldPluginManager, RestClientInterface $client, SalesforceMappableEntityTypesInterface $mappableEntityTypes, EntityTypeBundleInfoInterface $bundleInfo, DateFormatterInterface $date, StateInterface $state, EventDispatcherInterface $eventDispatcher) {
+    parent::__construct($mappingFieldPluginManager, $client, $mappableEntityTypes, $bundleInfo);
+    $this->date = $date;
+    $this->state = $state;
+    $this->eventDispatcher = $eventDispatcher;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('plugin.manager.salesforce_mapping_field'),
+      $container->get('salesforce.client'),
+      $container->get('salesforce_mapping.mappable_entity_types'),
+      $container->get('entity_type.bundle.info'),
+      $container->get('date.formatter'),
+      $container->get('state'),
+      $container->get('event_dispatcher'),
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -37,7 +91,10 @@ abstract class SalesforceMappingFormCrudBase extends SalesforceMappingFormBase {
       '#default_value' => $mapping->id(),
       '#maxlength' => EntityTypeInterface::ID_MAX_LENGTH,
       '#machine_name' => [
-        'exists' => ['Drupal\salesforce_mapping\Entity\SalesforceMapping', 'load'],
+        'exists' => [
+          'Drupal\salesforce_mapping\Entity\SalesforceMapping',
+          'load',
+        ],
         'source' => ['label'],
       ],
       '#disabled' => !$mapping->isNew(),
@@ -179,7 +236,10 @@ abstract class SalesforceMappingFormCrudBase extends SalesforceMappingFormBase {
       if (!$mapping->isNew()) {
         $form['pull']['last_pull_date'] = [
           '#type' => 'item',
-          '#title' => $this->t('Last Pull Date: %last_pull', ['%last_pull' => $mapping->getLastPullTime() ? \Drupal::service('date.formatter')->format($mapping->getLastPullTime()) : 'never']),
+          '#title' => $this->t('Last Pull Date: %last_pull', [
+            '%last_pull' => $mapping->getLastPullTime() ? $this->date
+              ->format($mapping->getLastPullTime()) : 'never',
+          ]),
           '#markup' => $this->t('Resetting last pull date will cause salesforce pull module to query for updated records without respect for the pull trigger date. This is useful, for example, to re-pull all records after a purge.'),
         ];
         $form['pull']['last_pull_reset'] = [
@@ -192,7 +252,10 @@ abstract class SalesforceMappingFormCrudBase extends SalesforceMappingFormBase {
 
         $form['pull']['last_delete_date'] = [
           '#type' => 'item',
-          '#title' => $this->t('Last Delete Date: %last_pull', ['%last_pull' => $mapping->getLastDeleteTime() ? \Drupal::service('date.formatter')->format($mapping->getLastDeleteTime()) : 'never']),
+          '#title' => $this->t('Last Delete Date: %last_pull', [
+            '%last_pull' => $mapping->getLastDeleteTime() ? $this->date
+              ->format($mapping->getLastDeleteTime()) : 'never',
+          ]),
           '#markup' => $this->t('Resetting last delete date will cause salesforce pull module to query for deleted record without respect for the pull trigger date.'),
         ];
         $form['pull']['last_delete_reset'] = [
@@ -249,7 +312,7 @@ abstract class SalesforceMappingFormCrudBase extends SalesforceMappingFormBase {
           'salesforce_pull.endpoint.salesforce_mapping',
           [
             'salesforce_mapping' => $mapping->id(),
-            'key' => \Drupal::state()->get('system.cron_key'),
+            'key' => $this->state->get('system.cron_key'),
           ],
           ['absolute' => TRUE])
           ->toString();
@@ -265,7 +328,8 @@ abstract class SalesforceMappingFormCrudBase extends SalesforceMappingFormBase {
       // If global standalone is enabled, then we force this mapping's
       // standalone property to true.
       if ($this->config('salesforce.settings')->get('standalone')) {
-        $settings_url = Url::fromRoute('salesforce.global_settings')->toString();
+        $settings_url = Url::fromRoute('salesforce.global_settings')
+          ->toString();
         $form['pull']['pull_standalone']['#default_value'] = TRUE;
         $form['pull']['pull_standalone']['#disabled'] = TRUE;
         $form['pull']['pull_standalone']['#description'] .= ' ' . $this->t('See also <a href="@url">global standalone processing settings</a>.', ['@url' => $settings_url]);
@@ -331,7 +395,7 @@ abstract class SalesforceMappingFormCrudBase extends SalesforceMappingFormBase {
           'salesforce_push.endpoint.salesforce_mapping',
           [
             'salesforce_mapping' => $mapping->id(),
-            'key' => \Drupal::state()->get('system.cron_key'),
+            'key' => $this->state->get('system.cron_key'),
           ],
           ['absolute' => TRUE])
           ->toString();
@@ -348,7 +412,8 @@ abstract class SalesforceMappingFormCrudBase extends SalesforceMappingFormBase {
       // If global standalone is enabled, then we force this mapping's
       // standalone property to true.
       if ($this->config('salesforce.settings')->get('standalone')) {
-        $settings_url = Url::fromRoute('salesforce.global_settings')->toString();
+        $settings_url = Url::fromRoute('salesforce.global_settings')
+          ->toString();
         $form['push']['push_standalone']['#default_value'] = TRUE;
         $form['push']['push_standalone']['#disabled'] = TRUE;
         $form['push']['push_standalone']['#description'] .= ' ' . $this->t('See also <a href="@url">global standalone processing settings</a>.', ['@url' => $settings_url]);
@@ -395,7 +460,8 @@ abstract class SalesforceMappingFormCrudBase extends SalesforceMappingFormBase {
       }
       catch (\Exception $e) {
         $form_state->setError($form['pull']['pull_where_clause'], $this->t('Test pull query returned an error. Please check logs for error details.'));
-        \Drupal::service('event_dispatcher')->dispatch(new SalesforceErrorEvent($e), SalesforceEvents::ERROR);
+        $this->eventDispatcher
+          ->dispatch(new SalesforceErrorEvent($e), SalesforceEvents::ERROR);
       }
     }
   }
@@ -454,7 +520,7 @@ abstract class SalesforceMappingFormCrudBase extends SalesforceMappingFormBase {
     $options = [];
     $mappable_entity_types = $this->mappableEntityTypes
       ->getMappableEntityTypes();
-    foreach ($mappable_entity_types as $entity_type_id => $info) {
+    foreach ($mappable_entity_types as $info) {
       $options[$info->id()] = $info->getLabel();
     }
     uasort($options, function ($a, $b) {
@@ -464,7 +530,7 @@ abstract class SalesforceMappingFormCrudBase extends SalesforceMappingFormBase {
   }
 
   /**
-   * Helper to retreive a list of object type options.
+   * Helper to retrieve a list of object type options.
    *
    * @return array
    *   An array of values keyed by machine name of the object with the label as
@@ -475,10 +541,12 @@ abstract class SalesforceMappingFormCrudBase extends SalesforceMappingFormBase {
 
     // Note that we're filtering SF object types to a reasonable subset.
     $config = $this->config('salesforce.settings');
-    $filter = $config->get('show_all_objects') ? [] : [
-      'updateable' => TRUE,
-      'triggerable' => TRUE,
-    ];
+    $filter = $config->get('show_all_objects')
+      ? []
+      : [
+        'updateable' => TRUE,
+        'triggerable' => TRUE,
+      ];
     $sfobjects = $this->client->objects($filter);
     foreach ($sfobjects as $object) {
       $sfobject_options[$object['name']] = $object['label'] . ' (' . $object['name'] . ')';

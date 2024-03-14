@@ -1,5 +1,7 @@
 <?php
 
+// phpcs:ignorefile
+
 namespace Drupal\salesforce_example\EventSubscriber;
 
 use Drupal\Core\File\FileSystemInterface;
@@ -23,6 +25,33 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class SalesforceExampleSubscriber implements EventSubscriberInterface {
 
   use StringTranslationTrait;
+
+  /**
+   * Logger.
+   *
+   * @var \Psr\Log\LoggerInterface
+   */
+  protected $logger;
+
+  /**
+   * The Salesforce REST client.
+   *
+   * @var \Drupal\salesforce\Rest\RestClientInterface
+   */
+  protected $client;
+
+  /**
+   * Create a new Salesforce object.
+   *
+   * @param \Psr\Log\LoggerInterface $logger
+   *   The logger.
+   * @param \Drupal\salesforce\Rest\RestClientInterface $salesforce_client
+   *   The factory for configuration objects.
+   */
+  public function __construct(LoggerInterface $logger, RestClientInterface $salesforce_client) {
+    $this->logger = $logger;
+    $this->client = $salesforce_client;
+  }
 
   /**
    * SalesforcePushAllowedEvent callback.
@@ -79,7 +108,7 @@ class SalesforceExampleSubscriber implements EventSubscriberInterface {
         // Do Y.
         break;
     }
-    \Drupal::messenger()->addStatus('push success example subscriber!: ' . $event->getMappedObject()->sfid());
+    $this->messenger->addStatus('push success example subscriber!: ' . $event->getMappedObject()->sfid());
   }
 
   /**
@@ -89,7 +118,7 @@ class SalesforceExampleSubscriber implements EventSubscriberInterface {
    *   The event.
    */
   public function pushFail(SalesforcePushOpEvent $event) {
-    \Drupal::messenger()->addStatus('push fail example: ' . $event->getMappedObject()->id());
+    $this->messenger->addStatus('push fail example: ' . $event->getMappedObject()->id());
   }
 
   /**
@@ -131,7 +160,7 @@ class SalesforceExampleSubscriber implements EventSubscriberInterface {
         // Attachment data, if given.
         $account = $event->getEntity();
         $sf_data = $event->getMappedObject()->getSalesforceRecord();
-        $client = \Drupal::service('salesforce.client');
+        $client = $this->client;
         // Fetch the attachment URL from raw sf data.
         $attachments = [];
         try {
@@ -145,7 +174,7 @@ class SalesforceExampleSubscriber implements EventSubscriberInterface {
           return;
         }
         // If Attachments field was set, it will contain a URL from which we can
-        // fetch the attached binary. We must append "body" to the retreived URL
+        // fetch the attached binary. We must append "body" to the retrieved URL
         // https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/dome_sobject_blob_retrieve.htm
         $attachment_url = $attachments['records'][0]['attributes']['url'];
         $attachment_url = $client->getInstanceUrl() . $attachment_url . '/Body';
@@ -156,7 +185,7 @@ class SalesforceExampleSubscriber implements EventSubscriberInterface {
         }
         catch (\Exception $e) {
           // Unable to fetch file data from SF.
-          \Drupal::logger('db')->error($this->t('failed to fetch attachment for user @user', ['@user' => $account->id()]));
+          $this->logger('db')->error($this->t('failed to fetch attachment for user @user', ['@user' => $account->id()]));
           return;
         }
 
@@ -165,11 +194,11 @@ class SalesforceExampleSubscriber implements EventSubscriberInterface {
 
         // Attach the new file id to the user entity.
         /* var \Drupal\file\FileInterface */
-        if ($file = file_save_data($file_data, $destination, FileSystemInterface::EXISTS_REPLACE)) {
+        if ($file =  \Drupal::service('file.repository')->writeData($file_data, $destination, FileSystemInterface::EXISTS_REPLACE)) {
           $account->user_picture->target_id = $file->id();
         }
         else {
-          \Drupal::logger('db')->error('failed to save profile pic for user ' . $account->id());
+          $this->logger('db')->error('failed to save profile pic for user ' . $account->id());
         }
 
         break;

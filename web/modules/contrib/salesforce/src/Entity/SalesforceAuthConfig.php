@@ -81,13 +81,6 @@ class SalesforceAuthConfig extends ConfigEntityBase implements EntityWithPluginC
   protected $manager;
 
   /**
-   * The plugin provider.
-   *
-   * @var \Drupal\salesforce\SalesforceAuthProviderInterface
-   */
-  protected $plugin;
-
-  /**
    * Id getter.
    */
   public function id() {
@@ -110,10 +103,7 @@ class SalesforceAuthConfig extends ConfigEntityBase implements EntityWithPluginC
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
   public function getPlugin() {
-    if (!$this->plugin) {
-      $this->plugin = $this->provider ? $this->authManager()->createInstance($this->provider, $this->getProviderSettings()) : NULL;
-    }
-    return $this->plugin;
+    return $this->provider ? $this->authManager()->createInstance($this->provider, $this->getProviderSettings()) : NULL;
   }
 
   /**
