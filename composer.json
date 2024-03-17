@@ -75,7 +75,6 @@
         "drupal/dynamic_entity_reference": "^4.0@alpha",
         "drupal/editor_advanced_link": "^2.2",
         "drupal/embed": "^1.0",
-        "drupal/empty_page": "^3.0",
         "drupal/encrypt": "^3.0",
         "drupal/entity": "^1.0",
         "drupal/entity_clone": "^2.0@beta",
@@ -225,12 +224,6 @@
             },
             "drupal/csv_serialization": {
                 "csv_serialization": "https://www.drupal.org/files/issues/2022-11-03/csv_serialization-3295036-5-d10_compat.patch"
-            },
-            "drupal/empty_page": {
-                "empty_page": "https://www.drupal.org/files/issues/2022-06-15/empty_page.3.0.rector.patch"
-            },
-            "drupal/webform_mass_email": {
-                "webform_mass_email": "https://www.drupal.org/files/issues/2022-06-16/webform_mass_email.1.x-dev.rector.patch"
             }
         },
             "installer-paths": {

@@ -3,7 +3,7 @@
         'name' => 'drupal-composer/drupal-project',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '94e24dc81de6b4dec3ac3c80c45997c7326dcc30',
+        'reference' => '8640d23eb162412f6c2959999ac412c8813aaa9a',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -220,7 +220,7 @@
         'drupal-composer/drupal-project' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '94e24dc81de6b4dec3ac3c80c45997c7326dcc30',
+            'reference' => '8640d23eb162412f6c2959999ac412c8813aaa9a',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -589,15 +589,6 @@
             'reference' => '8.x-1.7',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../web/modules/contrib/embed',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'drupal/empty_page' => array(
-            'pretty_version' => '3.0.0',
-            'version' => '3.0.0.0',
-            'reference' => '8.x-3.0',
-            'type' => 'drupal-module',
-            'install_path' => __DIR__ . '/../../web/modules/contrib/empty_page',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
@@ -1768,8 +1759,8 @@
         'psr/container-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '1.0',
-                1 => '^1.0',
+                0 => '^1.0',
+                1 => '1.0',
             ),
         ),
         'psr/event-dispatcher-implementation' => array(
