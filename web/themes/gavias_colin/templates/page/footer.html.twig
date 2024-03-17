@@ -138,38 +138,40 @@
           </div>
         </div>
       </div>
+    </div>
 
-      <div class="d-block d-sm-none mha-fixed-bottom mha-black">
 
-        <div class="grid-container">
 
-          {% if page.donate_footer %}
-            <div class="left-column p-1">
-              {{ page.donate_footer }}
-            </div>
-          {% endif %}
-
-          <div class="right-column">
-            <div class="btn-group pt-2" role="group">
-
-              <a href="https://www.facebook.com/mentalhealthamerica">
-              <button type="button" class="btn btn-transparent">
-                <i class="fa fa-facebook"></i>
-              </button>
-              </a>
-
-              <a href="https://www.instagram.com/mentalhealthamerica/?hl=en">
-                <button type="button" class="btn btn-transparent">
-                  <i class="fa fa-instagram"></i>
-                </button>
-              </a>
-
-            </div>
-          </div>
-
-        </div>
-      </div>
+<div id="donate-mobile" class="container d-block d-sm-none mha-black">
+  <div class="row justify-content-center">
+    <div class="col-12 text-center">
+      {% if page.donate_footer %}
+        {{ page.donate_footer }}
+      {% endif %}
+    </div>
+  </div>
+</div>
 
 </footer>
+
+    {# Social Media
+    <div class="right-column">
+      <div class="btn-group pt-2" role="group">
+
+        <a href="https://www.facebook.com/mentalhealthamerica">
+          <button type="button" class="btn btn-transparent">
+            <i class="fa fa-facebook"></i>
+          </button>
+        </a>
+
+        <a href="https://www.instagram.com/mentalhealthamerica/?hl=en">
+          <button type="button" class="btn btn-transparent">
+            <i class="fa fa-instagram"></i>
+          </button>
+        </a>
+
+      </div>
+    </div>
+    #}
 
 
