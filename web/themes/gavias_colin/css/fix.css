@@ -559,3 +559,8 @@ header.header-default .stuck, header.header-v1 .stuck {
   right: -250px;
   top: -18px;
 }
+
+#donate-mobile {
+  background: #336677;
+  padding: 1rem 0;
+}
