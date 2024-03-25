@@ -23,7 +23,7 @@ class mhm_fundraising_form extends BlockBase {
     return array(
       '#markup' => $this->t('
 <div id="mhm_fundraising_form">
-<a href="#XZZZTXBC" style="display: none"></a>
+<a href="#XRGKQKRD" style="display: none"></a>
 </div>
       '),
     );
