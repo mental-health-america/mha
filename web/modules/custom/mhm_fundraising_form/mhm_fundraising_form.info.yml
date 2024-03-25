@@ -1,0 +1,10 @@
+name: MHM Fundraise Form
+type: module
+description: 'MHM Fundraise Form.'
+package: Custom
+version: 8.x
+core_version_requirement: ^8 || ^9 || ^10
+dependencies:
+  - node
+  - block
+
