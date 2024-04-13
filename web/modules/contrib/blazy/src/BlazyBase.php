@@ -444,6 +444,13 @@ abstract class BlazyBase implements BlazyInterface {
   /**
    * {@inheritdoc}
    */
+  public function import(array $options): void {
+    Internals::import($options);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function initGrid(array $options): array {
     return Grid::initGrid($options);
   }
@@ -585,6 +592,11 @@ abstract class BlazyBase implements BlazyInterface {
       // Ensures to merge to not nullify previous values.
       $object->set($data, NULL, TRUE);
     }
+
+    if ($key == 'blazies') {
+      Internals::count($object);
+    }
+
     $settings[$key] = $object;
     return $settings;
   }

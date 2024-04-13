@@ -266,7 +266,7 @@ class Check {
       }
     }
 
-    // 4. No longer needed once extracted above, remove.
+    // 5. No longer needed once extracted above, remove.
     $blazies->unset('first.data')
       ->set('was.blazy', TRUE);
   }
