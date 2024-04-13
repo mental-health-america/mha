@@ -3,52 +3,15 @@
 namespace Drupal\yoast_seo\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Link;
 use Drupal\Core\Url;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
- * YoastSeoController.
+ * SettingsController.
+ *
+ * Provides the settings pages for the Real-Time SEO module.
  */
-class YoastSeoController extends ControllerBase {
-
-  /**
-   * Returns a set of tokens' values.
-   *
-   * @param \Symfony\Component\HttpFoundation\Request $request
-   *   The request of the page.
-   *   * data The context to use to retrieve the tokens value,
-   *     see Drupal\Core\Utility\token::replace()
-   *   * tokens An array of tokens to get the values for.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   The JSON response.
-   *
-   * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
-   *   In case of AccessDeniedException.
-   * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-   *   In case of NotFoundHttpException.
-   */
-  public function tokens(Request $request) {
-    /** @var MetatagToken $metatag_token */
-    $metatag_token = \Drupal::service('metatag.token');
-    $token_values = array();
-    $tokens       = $request->request->get('tokens');
-    $data         = $request->request->get('data');
-
-    if (is_null($data)) {
-      $data = array();
-    }
-
-    // Retrieve the tokens values.
-    // Use the metatag token service, which use either core or token module
-    // regarding if this one is installed.
-    foreach ($tokens as $token) {
-      $token_values[$token] = $metatag_token->replace($token, $data);
-    }
-
-    return new JsonResponse($token_values);
-  }
+class SettingsController extends ControllerBase {
 
   /**
    * Settings page.
@@ -56,7 +19,7 @@ class YoastSeoController extends ControllerBase {
    * @return array
    *   The configuration form.
    */
-  public function settings() {
+  public function index() {
     $form = [];
 
     $xmlsitemap_enabled = \Drupal::moduleHandler()->moduleExists('xmlsitemap');
@@ -71,12 +34,15 @@ class YoastSeoController extends ControllerBase {
     }
     elseif ($xmlsitemap_enabled) {
       // Inform the user about altering the XML Sitemap configuration on the
-      // module configuration page if he has access to do so.
+      // module configuration page if they have access to do so.
       if (\Drupal::currentUser()->hasPermission('administer xmlsitemap')) {
         $xmlsitemap_description = $this->t(
-          'You can configure the XML Sitemap settings at the <a href="@url">configuration page</a>',
+          'You can configure the XML Sitemap settings at the @url.',
           [
-            '@url' => Url::fromRoute('xmlsitemap.admin_search')->toString(),
+            '@url' => Link::fromTextAndUrl(
+              $this->t('configuration page'),
+              Url::fromRoute('xmlsitemap.admin_search')
+            )->toString(),
           ]
         );
       }
@@ -87,12 +53,15 @@ class YoastSeoController extends ControllerBase {
     }
     elseif (\Drupal::moduleHandler()->moduleExists('simple_sitemap')) {
       // Inform the user about altering the XML Sitemap configuration on the
-      // module configuration page if he has access to do so.
+      // module configuration page if they have access to do so.
       if (\Drupal::currentUser()->hasPermission('administer simple_sitemap')) {
         $xmlsitemap_description = $this->t(
-          'You can configure the Simple XML Sitemap settings at the <a href="@url">configuration page</a>.',
+          'You can configure the Simple XML Sitemap settings at the @url.',
           [
-            '@url' => Url::fromRoute('simple_sitemap.settings')->toString(),
+            '@url' => Link::fromTextAndUrl(
+              $this->t('configuration page'),
+              Url::fromRoute('simple_sitemap.settings')
+            )->toString(),
           ]
         );
       }
@@ -102,7 +71,7 @@ class YoastSeoController extends ControllerBase {
       }
     }
     else {
-      // XML Sitemap is not enabled, inform the user he should think about
+      // XML Sitemap is not enabled, inform the user they should think about
       // installing and enabling it.
       $xmlsitemap_description = $this->t(
         'You currently do not have a sitemap module enabled. We strongly recommend you to install a sitemap module. You can download the <a href="@project1-url">@project1-name</a> or <a href="@project2-url">@project2-name</a> module to use as sitemap generator.',
@@ -123,13 +92,16 @@ class YoastSeoController extends ControllerBase {
     ];
 
     // Inform the user about altering the Metatag configuration on the module
-    // configuration page if he has access to do so.
+    // configuration page if they have access to do so.
     // We do not check if the module is enabled since it is our dependency.
     if (\Drupal::currentUser()->hasPermission('administer meta tags')) {
       $metatag_description = $this->t(
-        'You can configure and override the Metatag title & description default settings at the <a href="@url">Metatag configuration page</a>.',
+        'You can configure and override the Metatag title & description default settings at the @url.',
         [
-          '@url' => Url::fromRoute('entity.metatag_defaults.collection')->toString(),
+          '@url' => Link::fromTextAndUrl(
+            $this->t('Metatag configuration page'),
+            Url::fromRoute('entity.metatag_defaults.collection')
+          )->toString(),
         ]
       );
     }
@@ -142,18 +114,6 @@ class YoastSeoController extends ControllerBase {
       '#type' => 'details',
       '#title' => $this->t('Configure Metatag default templates'),
       '#markup' => $metatag_description,
-      '#open' => TRUE,
-    ];
-
-    // Add to the page the Yoast SEO form which allows the administrator
-    // to enable/disable Yoast SEO by bundles.
-    $config_form = \Drupal::formBuilder()
-      ->getForm('Drupal\yoast_seo\Form\YoastSeoConfigForm');
-    $form['yoast_seo'] = [
-      '#type' => 'details',
-      '#title' => 'Configure Real-time SEO by bundles',
-      '#description' => 'Select the bundles Real-time SEO will be enabled for',
-      '#markup' => \Drupal::service('renderer')->render($config_form),
       '#open' => TRUE,
     ];
 

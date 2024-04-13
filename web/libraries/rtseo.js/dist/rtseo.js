@@ -2636,7 +2636,7 @@ DomHandler.prototype.onerror = function(error){
 
 DomHandler.prototype.onclosetag = function(){
 	//if(this._tagStack.pop().name !== name) this._handleCallback(Error("Tagname didn't match!"));
-
+	
 	var elem = this._tagStack.pop();
 
 	if(this._options.withEndIndices){
@@ -3181,7 +3181,7 @@ exports.prepend = function(elem, prev){
 	if(elem.prev){
 		elem.prev.next = prev;
 	}
-
+	
 	prev.parent = parent;
 	prev.prev = elem.prev;
 	prev.next = elem;
@@ -7688,7 +7688,7 @@ var createBaseFor = require('./_createBaseFor');
 /**
  * The base implementation of `baseForOwn` which iterates over `object`
  * properties returned by `keysFunc` and invokes `iteratee` for each property.
- * Iteratee functions may form_exit iteration early by explicitly returning `false`.
+ * Iteratee functions may exit iteration early by explicitly returning `false`.
  *
  * @private
  * @param {Object} object The object to iterate over.
@@ -12399,7 +12399,7 @@ var arrayEach = require('./_arrayEach'),
 /**
  * Iterates over elements of `collection` and invokes `iteratee` for each element.
  * The iteratee is invoked with three arguments: (value, index|key, collection).
- * Iteratee functions may form_exit iteration early by explicitly returning `false`.
+ * Iteratee functions may exit iteration early by explicitly returning `false`.
  *
  * **Note:** As with other "Collections" methods, objects with a "length"
  * property are iterated like arrays. To avoid this behavior use `_.forIn`
