@@ -143,11 +143,9 @@
         "drupal/views_accordion": "^2.0",
         "drupal/views_infinite_scroll": "^2.0",
         "drupal/views_slideshow": "^5.0",
-        "drupal/views_term_hierarchy_weight_field": "^1.2",
         "drupal/webform": "^6.1",
         "drupal/webform_jqueryui_datepicker": "^6.2",
         "drupal/webform_location_places": "^6.2",
-        "drupal/webform_mass_email": "^1.0",
         "drupal/webform_submission_export_import": "^6.0",
         "drupal/webform_ui": "^5.0",
         "drupal/webform_validation": "^2.0@RC",
@@ -218,9 +216,6 @@
             },
             "drupal/cacheflush_cron": {
                 "Cache flush Cron": "https://www.drupal.org/files/issues/2019-06-03/cacheflush_cron_fix_preset_name_-3052418-3.patch"
-            },
-            "drupal/draggableviews": {
-                "Draggableviews": "https://www.drupal.org/files/issues/2021-10-11/not_working_with_group_by-draggableviews-2867348-48.patch"
             },
             "drupal/csv_serialization": {
                 "csv_serialization": "https://www.drupal.org/files/issues/2022-11-03/csv_serialization-3295036-5-d10_compat.patch"
