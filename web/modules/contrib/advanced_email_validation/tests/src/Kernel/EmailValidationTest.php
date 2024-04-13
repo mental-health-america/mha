@@ -149,12 +149,12 @@ class EmailValidationTest extends KernelTestBase {
   }
 
   /**
-   * Test free email provider list customisation.
+   * Test free email provider list customization.
    *
    * MUST be a separate test because the list is statically cached by the 3rd
    * party library.
    */
-  public function testFreeProviderListCustomisation(): void {
+  public function testFreeProviderListCustomization(): void {
     // User that should pass defaults.
     $accountName = $this->randomMachineName();
     $drupalEmailAccount = User::create([
@@ -162,7 +162,13 @@ class EmailValidationTest extends KernelTestBase {
       'mail' => $accountName . '@drupal.org',
     ]);
 
-    // Turn the test on and customise the list.
+    // User that should fail free email validation when using fetched lists.
+    $freeEmailAccount = User::create([
+      'name' => $accountName,
+      'mail' => $accountName . '@gmail.com',
+    ]);
+
+    // Turn the test on and customize the list.
     $config = $this->config('advanced_email_validation.settings');
     $config->set('rules.free', 1)
       ->set('domain_lists.free', ['drupal.org'])
@@ -171,6 +177,11 @@ class EmailValidationTest extends KernelTestBase {
     // Run validation.
     $violations = $drupalEmailAccount->validate();
     $this->assertEquals(1, $violations->count(), 'Custom free provider validation should fail with an email address on the custom free provider list.');
+
+    // Turn on local-only validation.
+    $config->set('local_list_only.free', TRUE)->save();
+    $violations = $freeEmailAccount->validate();
+    $this->assertEquals(0, $violations->count(), 'Free provider validation should pass with an email using a free email provider that is not in the custom list.');
   }
 
   /**
@@ -209,12 +220,12 @@ class EmailValidationTest extends KernelTestBase {
   }
 
   /**
-   * Test disposable email provider list customisation.
+   * Test disposable email provider list customization.
    *
    * MUST be a separate test because the list is statically cached by the 3rd
    * party library.
    */
-  public function testDisposableProviderListCustomisation(): void {
+  public function testDisposableProviderListCustomization(): void {
     // User that should pass defaults.
     $accountName = $this->randomMachineName();
     $drupalEmailAccount = User::create([
@@ -222,7 +233,14 @@ class EmailValidationTest extends KernelTestBase {
       'mail' => $accountName . '@drupal.org',
     ]);
 
-    // Turn the test on and customise the list.
+    // User that should fail disposable email validation when using fetched
+    // lists.
+    $disposableEmailAccount = User::create([
+      'name' => $accountName,
+      'mail' => $accountName . '@mailinator.com',
+    ]);
+
+    // Turn the test on and customize the list.
     $config = $this->config('advanced_email_validation.settings');
     $config->set('rules.disposable', 1)
       ->set('domain_lists.disposable', ['drupal.org'])
@@ -231,6 +249,11 @@ class EmailValidationTest extends KernelTestBase {
     // Run validation.
     $violations = $drupalEmailAccount->validate();
     $this->assertEquals(1, $violations->count(), 'Custom disposable provider validation should fail with an email using a provider on the custom disposable provider list.');
+
+    // Turn on local-only validation.
+    $config->set('local_list_only.disposable', TRUE)->save();
+    $violations = $disposableEmailAccount->validate();
+    $this->assertEquals(0, $violations->count(), 'Disposable provider validation should pass with an email using a disposable email provider that is not in the custom list.');
   }
 
   /**

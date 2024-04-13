@@ -48,6 +48,11 @@ class EmailValidatorHelper {
           'title' => t('Additional disposable domains'),
           'description' => $libraryIntro,
         ],
+        'local_list_only' => [
+          'title' => t('Use local domain list only'),
+          'description' => t('Disposable domain validation will be limited to
+            the domains you provide above.'),
+        ],
       ],
 
       AdvancedEmailValidator::FREE_DOMAIN => [
@@ -57,6 +62,11 @@ class EmailValidatorHelper {
         'domain_list' => [
           'title' => t('Additional free domains'),
           'description' => $libraryIntro,
+        ],
+        'local_list_only' => [
+          'title' => t('Use local domain list only'),
+          'description' => t('Free domain validation will be limited to
+            the domains you provide above.'),
         ],
       ],
 

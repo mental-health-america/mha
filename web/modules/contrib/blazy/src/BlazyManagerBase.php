@@ -27,6 +27,7 @@ abstract class BlazyManagerBase extends BlazyBase implements BlazyManagerBaseInt
     $load = [];
     $blazies = Check::attachments($load, $attach);
 
+    Internals::count($blazies);
     $this->attachments($load, $attach, $blazies);
 
     // Since 2.17 with self::attachments(), allows altering the ecosystem once.

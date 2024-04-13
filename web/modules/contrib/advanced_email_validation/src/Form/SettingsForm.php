@@ -2,9 +2,9 @@
 
 namespace Drupal\advanced_email_validation\Form;
 
+use Drupal\advanced_email_validation\Helper\EmailValidatorHelper;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\advanced_email_validation\Helper\EmailValidatorHelper;
 
 /**
  * Configure Email Validation settings for this site.
@@ -69,6 +69,15 @@ class SettingsForm extends ConfigFormBase {
         ];
       }
 
+      if (array_key_exists('local_list_only', $check)) {
+        $form[$key][$key . '_local_list_only'] = [
+          '#type' => 'checkbox',
+          '#title' => $check['local_list_only']['title'],
+          '#description' => $check['local_list_only']['description'],
+          '#default_value' => $config->get('local_list_only.' . $key),
+        ];
+      }
+
       $weight++;
 
       if (array_key_exists('rule_title', $check)) {
@@ -122,6 +131,11 @@ class SettingsForm extends ConfigFormBase {
           $domain = trim($domain);
         }
         $config->set('domain_lists.' . $key, $domainList);
+      }
+
+      if (array_key_exists('local_list_only', $check)) {
+        $localList = (bool)$form_state->getValue($key . '_local_list_only');
+        $config->set('local_list_only.' . $key, $localList);
       }
     }
 
