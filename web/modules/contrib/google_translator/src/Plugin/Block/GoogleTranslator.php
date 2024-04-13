@@ -7,6 +7,7 @@ use Drupal\Component\Utility\Xss;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Render\RendererInterface;
 use Psr\Log\LoggerInterface;
@@ -48,6 +49,13 @@ class GoogleTranslator extends BlockBase implements ContainerFactoryPluginInterf
   protected $renderer;
 
   /**
+   * Language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * Class constructor.
    *
    * @param array $configuration
@@ -62,19 +70,23 @@ class GoogleTranslator extends BlockBase implements ContainerFactoryPluginInterf
    *   A logger channel for this module.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer service.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
+   *   Language manager.
    */
   public function __construct(
     array $configuration,
-    $plugin_id,
-    $plugin_definition,
+          $plugin_id,
+          $plugin_definition,
     ImmutableConfig $module_config,
     LoggerInterface $log,
-    RendererInterface $renderer) {
+    RendererInterface $renderer,
+    LanguageManagerInterface $languageManager) {
 
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->moduleConfig = $module_config;
     $this->log = $log;
     $this->renderer = $renderer;
+    $this->languageManager = $languageManager;
   }
 
   /**
@@ -97,7 +109,9 @@ class GoogleTranslator extends BlockBase implements ContainerFactoryPluginInterf
         ->get('logger.factory')
         ->get('google_translator'),
       $container
-        ->get('renderer')
+        ->get('renderer'),
+      $container
+        ->get('language_manager')
     );
   }
 
@@ -197,6 +211,8 @@ class GoogleTranslator extends BlockBase implements ContainerFactoryPluginInterf
    *   A render array with markup for targeting by the Google Translate script.
    */
   protected function getElement() {
+    // Get current language code.
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
     // Make sure languages are enabled.
     $active_languages = array_filter($this->moduleConfig
@@ -231,6 +247,7 @@ class GoogleTranslator extends BlockBase implements ContainerFactoryPluginInterf
           'drupalSettings' => [
             'googleTranslatorElement' => [
               'id' => static::ELEMENT_ID,
+              'langcode' => $langcode,
               'languages' => implode(',', $active_languages),
               'displayMode' => $display_mode ?: 'SIMPLE',
             ],

@@ -32,7 +32,7 @@
           var translateGadgetObserver = new MutationObserver((mutations, obs) => {
             var displayMode = settings.googleTranslatorDisclaimer.displayMode;
             if (displayMode == "SIMPLE") {
-              var gadget = document.getElementsByClassName('goog-te-menu-value')[0];
+              var gadget = document.querySelector('.goog-te-gadget-simple a');
             } else {
               var gadget = document.getElementsByClassName('goog-te-combo')[0];
             }

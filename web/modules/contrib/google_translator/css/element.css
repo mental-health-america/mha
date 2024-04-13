@@ -4,3 +4,7 @@
   display: inline;
   color: #333;
 }
+
+#google_translator_element img {
+  display: inline;
+}
