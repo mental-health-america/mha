@@ -154,7 +154,7 @@
         "drupal/webform_views": "^5.2",
         "drupal/webp": "^1.0@RC",
         "drupal/yaml_editor": "^1.1",
-        "drupal/yoast_seo": "^1.8",
+        "drupal/yoast_seo": "^2.0@alpha",
         "drush/drush": "*",
         "google/charts": "^45.0",
         "mikehaertl/phpwkhtmltopdf": "~2.1",
