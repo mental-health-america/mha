@@ -6,10 +6,11 @@
  */
 
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\search\Entity\SearchPage;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\google_cse\Plugin\Search\GoogleSearch;
 use Drupal\migrate\Exception\RequirementsException;
 use Drupal\migrate_drupal\Plugin\migrate\source\DrupalSqlBase;
+use Drupal\search\Entity\SearchPage;
 
 /**
  * Alter the core-provided search input block primarily for stylistic purposes.
@@ -28,6 +29,11 @@ function google_cse_form_search_block_form_alter(&$form, &$form_state, $form_id)
     return;
   }
   $config = $implementation->getPlugin()->getConfiguration();
+  $query_key = $config['query_key'] ?? GoogleSearch::$defaultQueryKey;
+  if ($query_key !== 'keys') {
+    $form[$query_key] = $form['keys'];
+    unset($form['keys']);
+  }
   $form['#attached']['library'][] = 'google_cse/googlecseWatermark';
   $form['#attributes']['class'][] = 'google-cse';
   $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
@@ -40,7 +46,7 @@ function google_cse_form_search_block_form_alter(&$form, &$form_state, $form_id)
     $form['#attached']['library'][] = 'google_cse/noWatermark';
   }
   if (intval($config['results_searchbox_width']) > 0) {
-    $form['keys']['#size'] = intval($config['results_searchbox_width']);
+    $form[$query_key]['#size'] = intval($config['results_searchbox_width']);
   }
   if ($config['results_display'] === 'google') {
     // This search has been configured to display results on Google.
@@ -50,8 +56,8 @@ function google_cse_form_search_block_form_alter(&$form, &$form_state, $form_id)
       '#type' => 'hidden',
       '#value' => $config['cx'],
     ];
-    $form['q'] = $form['keys'];
-    unset($form['keys']);
+    $form['q'] = $form[$query_key];
+    unset($form[$query_key]);
   }
 }
 
@@ -79,7 +85,7 @@ function google_cse_theme($existing, $type, $theme, $path) {
  * Implements hook_preprocess_item_list__search_results().
  */
 function google_cse_preprocess_item_list__search_results(&$variables) {
-  if ($variables['context']['plugin'] !== 'google_cse_search') {
+  if (!isset($variables['context']['plugin']) || $variables['context']['plugin'] !== 'google_cse_search') {
     return;
   }
   // In the context of Google PSE, we rely on Google to render the content.

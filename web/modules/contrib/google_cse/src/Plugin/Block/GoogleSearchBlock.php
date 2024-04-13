@@ -8,10 +8,11 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBuilderInterface;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\FormState;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\google_cse\Plugin\Search\GoogleSearch;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -181,8 +182,10 @@ class GoogleSearchBlock extends BlockBase implements ContainerFactoryPluginInter
     $google_markup = $plugin->buildResults();
     $config = $this->configFactory->get('search.page.' . $search_id);
     $settings = $config->get('configuration');
+    $query = $settings['query_key'] ?? GoogleSearch::$defaultQueryKey;
+    $form['search'] = ['#markup' => '<div class="gcse-searchbox-only" data-resultsUrl="/search/' . $entity->get('path') . '" data-queryParameterName="' . $query . '"></div>'];
     if ($search_type === 'google') {
-      $form['search'] = ['#markup' => '<div class="gcse-searchbox-only" data-resultsUrl="/search/' . $entity->get('path') . '" data-queryParameterName="keys"></div>'];
+      $form['search'] = ['#markup' => '<div class="gcse-searchbox-only" data-resultsUrl="/search/' . $entity->get('path') . '" data-queryParameterName="' . $query . '"></div>'];
       // Add the Google Programmable Search library itself, with ID as a param.
       $form['#attached']['html_head'][] = [
         [
