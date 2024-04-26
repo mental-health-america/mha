@@ -138,7 +138,7 @@
         "drupal/token_filter": "^2.0",
         "drupal/twig_tweak": "^3.1",
         "drupal/typed_data": "^1.0@alpha",
-        "drupal/upgrade_status": "^4.1",
+        "drupal/upgrade_status": "^4.2",
         "drupal/video_embed_field": "^2.5",
         "drupal/views_accordion": "^2.0",
         "drupal/views_infinite_scroll": "^2.0",

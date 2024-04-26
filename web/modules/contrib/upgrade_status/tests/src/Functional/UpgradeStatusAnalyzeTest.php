@@ -134,15 +134,16 @@ class UpgradeStatusAnalyzeTest extends UpgradeStatusTestBase {
 
     $report = $key_value->get('upgrade_status_test_twig');
     $this->assertNotEmpty($report);
-    $this->assertEquals(4, $report['data']['totals']['file_errors']);
-    $this->assertCount(2, $report['data']['files']);
+    $this->assertEquals($this->getDrupalCoreMajorVersion() < 10 ? 4 : 5, $report['data']['totals']['file_errors']);
+    $this->assertCount($this->getDrupalCoreMajorVersion() < 10 ? 2 : 3, $report['data']['files']);
 
+    $file = array_shift($report['data']['files']);
+    $upgrade_status_test_twig_directory = $this->container->get('module_handler')->getModule('upgrade_status_test_twig')->getPath();
     if ($this->getDrupalCoreMajorVersion() < 10) {
-      // In Drupal 9, the spaceless tag deprecation is found with Twig 2, but
-      // the info file is properly compatible with Drupal 10.
-      $file = array_shift($report['data']['files']);
-      $upgrade_status_test_twig_directory = $this->container->get('module_handler')->getModule('upgrade_status_test_twig')->getPath();
       $this->assertEquals(sprintf('The spaceless tag in "%s/templates/spaceless.html.twig" at line 2 is deprecated since Twig 2.7, use the "spaceless" filter with the "apply" tag instead. See https://drupal.org/node/3071078.', $upgrade_status_test_twig_directory), $file['messages'][0]['message']);
+    }
+    else {
+      $this->assertEquals(sprintf('Twig template %s/templates/spaceless.html.twig contains a syntax error and cannot be parsed.', $upgrade_status_test_twig_directory), $file['messages'][0]['message']);
     }
     $file = array_shift($report['data']['files']);
     $this->assertEquals('Twig Filter "deprecatedfilter" is deprecated. See https://drupal.org/node/3071078.', $file['messages'][0]['message']);

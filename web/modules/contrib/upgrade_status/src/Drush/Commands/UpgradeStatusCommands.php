@@ -2,6 +2,7 @@
 
 namespace Drupal\upgrade_status\Drush\Commands;
 
+use Consolidation\AnnotatedCommand\CommandResult;
 use Drupal\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Extension\Extension;
@@ -80,7 +81,46 @@ class UpgradeStatusCommands extends DrushCommands {
   }
 
   /**
-   * Analyze projects output as XML.
+   * Analyze projects and output results in selected format.
+   *
+   * @param array $projects
+   *   List of projects to analyze.
+   * @param array $options
+   *   Additional options for the command.
+   * @return \Consolidation\AnnotatedCommand\CommandResult;
+   *   Exit code of self::EXIT_SUCCESS if no errors found, 
+   *   self::EXIT_FAILURE_WITH_CLARITY if at least one error found.
+   * 
+   * @command upgrade_status:analyze
+   * @option all Analyze all projects.
+   * @option skip-existing Return results from a previous scan of a project if available, otherwise start a new one.
+   * @option ignore-uninstalled Ignore uninstalled projects.
+   * @option ignore-contrib Ignore contributed projects.
+   * @option ignore-custom Ignore custom projects.
+   * @option phpstan-memory-limit Set memory limit for PHPStan.
+   * @option format Set the format: plain or checkstyle.
+   * @aliases us-a
+   *
+   * @throws \InvalidArgumentException
+   *   Thrown when one of the passed arguments is invalid or no arguments were provided.
+   */
+  public function analyze(array $projects, array $options = ['all' => FALSE, 'skip-existing' => FALSE, 'ignore-uninstalled' => FALSE, 'ignore-contrib' => FALSE, 'ignore-custom' => FALSE, 'phpstan-memory-limit' => '1500M', 'format' => 'plain']) {
+    $extensions = $this->doAnalyze($projects, $options);
+
+    $found_issue = FALSE;
+    switch ($options['format']) {
+      case 'checkstyle':
+        $found_issue = $this->formatAllAsCheckStyle($extensions);
+        break;
+      default:
+        $found_issue = $this->formatAllAsPlain($extensions);
+    }
+
+    return CommandResult::exitCode($found_issue ? self::EXIT_FAILURE_WITH_CLARITY : self::EXIT_SUCCESS);
+  }
+
+  /**
+   * Analyze projects and output results in checkstyle XML.
    *
    * @param array $projects
    *   List of projects to analyze.
@@ -100,19 +140,36 @@ class UpgradeStatusCommands extends DrushCommands {
    *   Thrown when one of the passed arguments is invalid or no arguments were provided.
    */
   public function checkstyle(array $projects, array $options = ['all' => FALSE, 'skip-existing' => FALSE, 'ignore-uninstalled' => FALSE, 'ignore-contrib' => FALSE, 'ignore-custom' => FALSE, 'phpstan-memory-limit' => '1500M']) {
-    $extensions = $this->doAnalyze($projects, $options);
+
+    $this->logger()->notice('The checkstyle (us-cs) drush command is deprecated and will be removed. Use the analyze command with --format=checkstyle instead.');
+    $options['format'] = 'checkstyle';
+    return $this->analyze($projects, $options);
+  }
+
+  /**
+   * Formats command output as checkstyle XML.
+   * 
+   * @param array $extensions
+   *   Result data by extension.
+   * @return bool
+   *   Whether issues were found.
+   */
+  protected function formatAllAsCheckStyle(array $extensions) {
     $xml = new \SimpleXMLElement("<?xml version='1.0'?><checkstyle/>");
 
+    $found_issue = FALSE;
     foreach ($extensions as $list) {
       foreach ($list as $name => $extension) {
         $result = $this->resultFormatter->getRawResult($extension);
 
         if (is_null($result)) {
+          $found_issue = TRUE;
           $this->logger()->error('Project scan @name failed.', ['@name' => $name]);
           continue;
         }
 
         foreach ($result['data']['files'] as $filepath => $errors) {
+          $found_issue = TRUE;
           $short_path = str_replace(DRUPAL_ROOT . '/', '', $filepath);
           $file_xml = $xml->addChild('file');
           $file_xml->addAttribute('name', $short_path);
@@ -134,31 +191,19 @@ class UpgradeStatusCommands extends DrushCommands {
     }
 
     $this->output()->writeln($xml->asXML());
+    return $found_issue;
   }
 
   /**
-   * Analyze projects output as ASCII.
-   *
-   * @param array $projects
-   *   List of projects to analyze.
-   * @param array $options
-   *   Additional options for the command.
-   *
-   * @command upgrade_status:analyze
-   * @option all Analyze all projects.
-   * @option skip-existing Return results from a previous scan of a project if available, otherwise start a new one.
-   * @option ignore-uninstalled Ignore uninstalled projects.
-   * @option ignore-contrib Ignore contributed projects.
-   * @option ignore-custom Ignore custom projects.
-   * @option phpstan-memory-limit Set memory limit for PHPStan.
-   * @aliases us-a
-   *
-   * @throws \InvalidArgumentException
-   *   Thrown when one of the passed arguments is invalid or no arguments were provided.
+   * Formats command output as plain text tables.
+   * 
+   * @param array $extensions
+   *   Result data by extension.
+   * @return bool
+   *   Whether issues were found.
    */
-  public function analyze(array $projects, array $options = ['all' => FALSE, 'skip-existing' => FALSE, 'ignore-uninstalled' => FALSE, 'ignore-contrib' => FALSE, 'ignore-custom' => FALSE, 'phpstan-memory-limit' => '1500M']) {
-    $extensions = $this->doAnalyze($projects, $options);
-
+  protected function formatAllAsPlain(array $extensions) {
+    $found_issue = FALSE;
     foreach ($extensions as $list) {
       $this->output()->writeln('');
       $this->output()->writeln(str_pad('', 80, '='));
@@ -167,37 +212,37 @@ class UpgradeStatusCommands extends DrushCommands {
         $result = $this->resultFormatter->getRawResult($extension);
 
         if (is_null($result)) {
+          $found_issue = TRUE;
           $this->logger()->error('Project scan @name failed.', ['@name' => $name]);
           continue;
         }
 
-        $output = $this->formatDrushStdoutResult($extension);
-        foreach ($output as $line) {
+        $output = $this->formatExtensionAsPlain($extension, $result);
+        foreach ($output['table'] as $line) {
           $this->output()->writeln($line);
+        }
+        // If we did not find an extension with an issue earlier, use the result
+        // from this extension.
+        if (!$found_issue) {
+          $found_issue = $output['found_issue'];
         }
       }
     }
+    return $found_issue;
   }
 
   /**
-   * Analyze projects and return all processed extensions.
+   * Analyzes projects and returns results for processed extensions.
    *
    * @param array $projects
    *   List of projects to analyze.
    * @param array $options
    *   Additional options for the command.
    *
-   * @option all Analyze all projects.
-   * @option skip-existing Return results from a previous scan of a project if available, otherwise start a new one.
-   * @option ignore-uninstalled Ignore uninstalled projects.
-   * @option ignore-contrib Ignore contributed projects.
-   * @option ignore-custom Ignore custom projects.
-   * @option phpstan-memory-limit Set memory limit for PHPStan (default: 1500M).
-   *
    * @throws \InvalidArgumentException
    *   Thrown when one of the passed arguments is invalid or no arguments were provided.
    */
-  public function doAnalyze(array $projects, array $options = ['all' => FALSE, 'skip-existing' => FALSE, 'ignore-uninstalled' => FALSE, 'ignore-contrib' => FALSE, 'ignore-custom' => FALSE, 'phpstan-memory-limit' => '1500M']) {
+  protected function doAnalyze(array $projects, array $options = ['all' => FALSE, 'skip-existing' => FALSE, 'ignore-uninstalled' => FALSE, 'ignore-contrib' => FALSE, 'ignore-custom' => FALSE, 'phpstan-memory-limit' => '1500M']) {
     // Group by type here so we can tell loader what is type of each one of
     // these.
     $extensions = [];
@@ -286,13 +331,16 @@ class UpgradeStatusCommands extends DrushCommands {
    *
    * @param \Drupal\Core\Extension\Extension $extension
    *   Drupal extension objet.
+   * @param array $result
+   *   Deprecation checking results.
    *
    * @return array
-   *   Scan results formatted for output, per line.
+   *   Associative array with the 'table' key containing the ASCII
+   *   output, and 'found_issue' key indicating whether issues were
+   *   identified.
    */
-  public function formatDrushStdoutResult(Extension $extension) {
+  protected function formatExtensionAsPlain(Extension $extension, array $result) {
     $table = [];
-    $result = $this->resultFormatter->getRawResult($extension);
     $info = $extension->info;
 
     $table[] = $info['name'] . ', ' . (!empty($info['version']) ? ' ' . $info['version'] : '--');
@@ -311,7 +359,7 @@ class UpgradeStatusCommands extends DrushCommands {
       $table[] = '';
       $table[] = dt('No known issues found.');
       $table[] = '';
-      return $table;
+      return ['table' => $table, 'found_issue' => FALSE];
     }
 
     foreach ($result['data']['files'] as $filepath => $errors) {
@@ -374,7 +422,7 @@ class UpgradeStatusCommands extends DrushCommands {
     }
     $table[] = '';
 
-    return $table;
+    return ['table' => $table, 'found_issue' => TRUE];
   }
 
 }
