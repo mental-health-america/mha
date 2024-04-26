@@ -335,7 +335,8 @@ final class DeprecationAnalyzer {
    * @param \Drupal\Core\Extension\Extension $extension
    *   The extension to analyze.
    * @param array $options
-   *   Options for the analysis.
+   *   Options for the analysis. Only the phpstan-memory-limit key is used
+   *   with a default value of 1500M.
    *
    * @return null
    *   Errors are logged to the logger, data is stored to keyvalue storage.
@@ -679,7 +680,7 @@ final class DeprecationAnalyzer {
       // 0.5.2
       'Call to deprecated function entity_get_form_display(). Deprecated in drupal:8.8.0 and is removed from drupal:9.0.0. Use EntityDisplayRepositoryInterface::getFormDisplay() instead.',
       'Call to deprecated function entity_get_display(). Deprecated in drupal:8.8.0 and is removed from drupal:9.0.0. Use EntityDisplayRepositoryInterface::getViewDisplay() instead.',
-      'Call to deprecated constant REQUEST_TIME: Deprecated in drupal:8.3.0 and is removed from drupal:10.0.0. Use Drupal::time()->getRequestTime();',
+      'Call to deprecated constant REQUEST_TIME: Deprecated in drupal:8.3.0 and is removed from drupal:11.0.0. Use Drupal::time()->getRequestTime();',
       'Call to deprecated method urlInfo() of class Drupal\Core\Entity\EntityInterface. Deprecated in drupal:8.0.0 and is removed from drupal:9.0.0. Use Drupal\Core\Entity\EntityInterface::toUrl() instead.',
       'Call to deprecated function file_scan_directory(). Deprecated in drupal:8.8.0 and is removed from drupal:9.0.0. Use Drupal\Core\File\FileSystemInterface::scanDirectory() instead.',
       'Call to deprecated function file_default_scheme(). Deprecated in drupal:8.8.0 and is removed from drupal:9.0.0. Use Drupal::config(\'system.file\')->get(\'default_scheme\') instead.',
@@ -796,7 +797,7 @@ final class DeprecationAnalyzer {
       // No new rules
 
       // 0.12.3
-      'Call to deprecated function user_password(). Deprecated in drupal:9.1.0 and is removed from drupal:10.0.0. Use \Drupal\Core\Password\PasswordGeneratorInterface::generate() instead.',
+      'Call to deprecated function user_password(). Deprecated in drupal:9.1.0 and is removed from drupal:10.0.0. Use Drupal\Core\Password\PasswordGeneratorInterface::generate() instead.',
 
       // 0.12.4
       'Call to deprecated function file_build_uri(). Deprecated in drupal:9.3.0 and is removed from drupal:10.0.0 without replacement.',
@@ -829,6 +830,42 @@ final class DeprecationAnalyzer {
 
       // 0.18.1
       'Drupal\Tests\BrowserTestBase::$defaultTheme is required in drupal:9.0.0 when using an install profile that does not set a default theme. See https://www.drupal.org/node/3083055, which includes recommendations on which theme to use.',
+
+      // 0.18.2
+      'Call to deprecated function system_time_zones(). Deprecated in drupal:10.1.0 and is removed from drupal:11.0.0. This function is no longer used in Drupal core. Use Drupal\Core\Datetime\TimeZoneFormHelper::getOptionsList() or \DateTimeZone::listIdentifiers() instead.',
+
+      // 0.18.3
+      'Missing call to parent::setUp() method.',
+      'Missing call to parent::tearDown() method.',
+
+      // 0.18.4
+      'Call to deprecated function module_load_include(). Deprecated in drupal:9.4.0 and is removed from drupal:11.0.0. Use Drupal::moduleHandler()->loadInclude($module, $type, $name = NULL). Note that including code from uninstalled extensions is no longer supported.',
+      'Call to deprecated function module_load_install(). Deprecated in drupal:9.4.0 and is removed from drupal:10.0.0. Use Drupal::moduleHandler()->loadInclude($module, \'install\') instead. Note, the replacement no longer allows including code from uninstalled modules.',
+
+      // 0.18.5
+      'Call to deprecated constant FILE_STATUS_PERMANENT: Deprecated in drupal:9.3.0 and is removed from drupal:10.0.0. Use Drupal\file\FileInterface::STATUS_PERMANENT or \Drupal\file\FileInterface::setPermanent().',
+      'Call to deprecated method toInt() of class Drupal\Component\Utility\Bytes. Deprecated in drupal:9.1.0 and is removed from drupal:10.0.0. Use Drupal\Component\Utility\Bytes::toNumber() instead.',
+
+      // 0.18.6
+      // no new rules
+
+      // 0.19.0
+      'Call to deprecated function format_size(). Deprecated in drupal:10.2.0 and is removed from drupal:11.0.0. Use Drupal\Core\StringTranslation\ByteSizeMarkup::create($size, $langcode) instead.',
+
+      // 0.19.1
+      // no new rules
+
+      // 0.19.2
+      // no new rules
+
+      // 0.20.0
+      'Call to deprecated method getResource() of class Drupal\system\Plugin\ImageToolkit\GDToolkit. Deprecated in drupal:10.2.0 and is removed from drupal:11.0.0. Use Drupal\system\Plugin\ImageToolkit\GDToolkit::getImage() instead.',
+      'Call to deprecated method setResource() of class Drupal\system\Plugin\ImageToolkit\GDToolkit. Deprecated in drupal:10.2.0 and is removed from drupal:11.0.0. Use Drupal\system\Plugin\ImageToolkit\GDToolkit::setImage() instead.',
+
+      // 0.21.0
+      'Symfony\Cmf\Component\Routing\RouteObjectInterface::ROUTE_OBJECT is deprecated and removed in Drupal 10. Use Drupal\Core\Routing\RouteObjectInterface::ROUTE_OBJECT instead.',
+      'Symfony\Cmf\Component\Routing\RouteObjectInterface::ROUTE_NAME is deprecated and removed in Drupal 10. Use Drupal\Core\Routing\RouteObjectInterface::ROUTE_NAME instead.',
+      'Symfony\Cmf\Component\Routing\RouteObjectInterface::CONTROLLER_NAME is deprecated and removed in Drupal 10. Use Drupal\Core\Routing\RouteObjectInterface::CONTROLLER_NAME instead.',
     ];
     return
       in_array($string, $rector_covered) ||
