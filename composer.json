@@ -78,7 +78,7 @@
         "drupal/encrypt": "^3.0",
         "drupal/entity": "^1.0",
         "drupal/entity_clone": "^2.0@beta",
-        "drupal/entity_print": "^2.13",
+        "drupal/entity_print": "^2.14",
         "drupal/extlink": "^1.1",
         "drupal/facebook_pixel": "^2.0@RC",
         "drupal/features": "^3.8",
