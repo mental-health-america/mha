@@ -115,7 +115,7 @@ class PostRenderSubscriber implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     return [PrintEvents::POST_RENDER => 'postRender'];
   }
 
