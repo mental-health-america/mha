@@ -4637,18 +4637,18 @@
         },
         {
             "name": "drupal/geolocation",
-            "version": "3.12.0",
-            "version_normalized": "3.12.0.0",
+            "version": "3.13.0",
+            "version_normalized": "3.13.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/geolocation.git",
-                "reference": "8.x-3.12"
+                "reference": "8.x-3.13"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/geolocation-8.x-3.12.zip",
-                "reference": "8.x-3.12",
-                "shasum": "eb31fe9080e2e0dcf442fc9b0a859f326219db5a"
+                "url": "https://ftp.drupal.org/files/projects/geolocation-8.x-3.13.zip",
+                "reference": "8.x-3.13",
+                "shasum": "49029950bc0927f14b1d0ce01f93e03cdd131ee6"
             },
             "require": {
                 "drupal/core": "^9.3 || ^10",
@@ -4674,8 +4674,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-3.12",
-                    "datestamp": "1673282362",
+                    "version": "8.x-3.13",
+                    "datestamp": "1714403539",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -7334,18 +7334,18 @@
         },
         {
             "name": "drupal/scheduler",
-            "version": "2.0.2",
-            "version_normalized": "2.0.2.0",
+            "version": "2.0.3",
+            "version_normalized": "2.0.3.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/scheduler.git",
-                "reference": "2.0.2"
+                "reference": "2.0.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/scheduler-2.0.2.zip",
-                "reference": "2.0.2",
-                "shasum": "1f02e0f198b85e5e5d5a39c148db4106ca1cee2d"
+                "url": "https://ftp.drupal.org/files/projects/scheduler-2.0.3.zip",
+                "reference": "2.0.3",
+                "shasum": "1ef7a92afcb8e138cf697dc35f15cbc2353801b4"
             },
             "require": {
                 "drupal/core": "^8 || ^9 || ^10"
@@ -7361,8 +7361,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.2",
-                    "datestamp": "1713553950",
+                    "version": "2.0.3",
+                    "datestamp": "1714312557",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
