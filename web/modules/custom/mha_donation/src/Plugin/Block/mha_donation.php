@@ -23,7 +23,7 @@ class mha_donation extends BlockBase {
     return array(
       '#markup' => $this->t('
 <div id="donation-form-mha">
-<a href="#XNFZSHWU" style="display: none"></a>
+<a href="#XRTWEYXW" style="display: none"></a>
 </div>
       '),
     );
