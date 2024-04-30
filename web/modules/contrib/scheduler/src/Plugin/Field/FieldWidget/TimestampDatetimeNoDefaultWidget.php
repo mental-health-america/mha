@@ -40,7 +40,7 @@ class TimestampDatetimeNoDefaultWidget extends TimestampDatetimeWidget {
     FieldDefinitionInterface $field_definition,
     array $settings,
     array $third_party_settings,
-    $scheduler_settings
+    $scheduler_settings,
   ) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $third_party_settings);
     $this->schedulerSettings = $scheduler_settings;

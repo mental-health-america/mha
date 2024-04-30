@@ -20,7 +20,7 @@ variables:
   OPT_IN_TEST_NEXT_MAJOR: 1
   OPT_IN_TEST_PREVIOUS_MINOR: 1
   OPT_IN_TEST_PREVIOUS_MAJOR: 1
-  OPT_IN_TEST_MAX_PHP: 0
+  OPT_IN_TEST_MAX_PHP: 1
 
   _SHOW_ENVIRONMENT_VARIABLES: 1
   _PHPUNIT_CONCURRENT: 1
@@ -41,17 +41,22 @@ variables:
     printf "CI_PROJECT_ROOT_NAMESPACE   = %s\n" $CI_PROJECT_ROOT_NAMESPACE &&
     printf "CI_PAGES_URL                = %s\n" $CI_PAGES_URL &&
     printf "CI_PROJECT_NAME             = %s\n" $CI_PROJECT_NAME &&
-    printf "MODULE_NAME                 = %s\n" $MODULE_NAME &&
     printf "CI_JOB_NAME                 = %s\n" "$CI_JOB_NAME" &&
-    printf "CI_JOB_NAME chopped         = %s\n" "${CI_JOB_NAME%:*}"
+    printf "CI_JOB_NAME chopped         = %s\n" "${CI_JOB_NAME%:*}" &&
+    printf "MODULE_NAME                 = %s\n" $MODULE_NAME
 
 # -------------------------------- BUILD ---------------------------------------
 
-composer:
+.composer-base:
   after_script:
     # Show the last two commits. Current directory /builds/project/scheduler ($CI_PROJECT_DIR) is correct.
-    - git show -2 --stat
-    - echo ">>> Last commit message - $CI_COMMIT_TITLE"
+    - git show -2 --stat --oneline
+
+composer (max PHP version):
+  rules:
+    - !reference [ .opt-in-max-php-rule ]
+    - when: manual
+  allow_failure: true
 
 composer (previous minor):
   # Using when: manual needs 'allow failure: true' otherwise the overall pipeline status shows 'blocked'
@@ -122,18 +127,20 @@ phpunit:
     - |
       printf "_MATRIX_VALUE               = %s\n" $_MATRIX_VALUE &&
       printf "_PHPUNIT_CONCURRENT         = %s\n" $_PHPUNIT_CONCURRENT &&
-      printf "_PHPUNIT_TESTGROUPS         = %s\n" $_PHPUNIT_TESTGROUPS &&
-      printf "_PHPUNIT_EXTRA              = %s\n" $_PHPUNIT_EXTRA &&
+      printf "_PHPUNIT_TESTGROUPS         = %s\n" "$_PHPUNIT_TESTGROUPS" &&
+      printf "_PHPUNIT_EXTRA              = %s\n" "$_PHPUNIT_EXTRA" &&
       printf "SYMFONY_DEPRECATIONS_HELPER = %s\n" $SYMFONY_DEPRECATIONS_HELPER
     - |
-      if [[ "$_PHPUNIT_CONCURRENT" == "0" ]]; then
-        # Specify parameters that will be passed to PHPUNIT (needs --group)
-        export _PHPUNIT_EXTRA="$_PHPUNIT_EXTRA --group $_MATRIX_VALUE"
-      else
-        # Specify parameters that will be passed to RUN-TESTS.SH (without --group)
-        export _PHPUNIT_EXTRA="$_PHPUNIT_EXTRA $_MATRIX_VALUE"
-        # Ensure the value is 1 if it is not 0.
-        export _PHPUNIT_CONCURRENT=1
+      if [[ "$_MATRIX_VALUE" != "" ]]; then
+        if [[ "$_PHPUNIT_CONCURRENT" == "0" ]]; then
+          # Specify parameters that will be passed to PHPUNIT (needs --group)
+          export _PHPUNIT_EXTRA="$_PHPUNIT_EXTRA --group $_MATRIX_VALUE"
+        else
+          # Specify parameters that will be passed to RUN-TESTS.SH (without --group)
+          export _PHPUNIT_EXTRA="$_PHPUNIT_EXTRA $_MATRIX_VALUE"
+          # Ensure the value is 1 if it is not 0.
+          export _PHPUNIT_CONCURRENT=1
+        fi
       fi
     - echo "End of before_script _PHPUNIT_CONCURRENT=$_PHPUNIT_CONCURRENT _PHPUNIT_EXTRA=$_PHPUNIT_EXTRA"
 
