@@ -39,6 +39,18 @@ class UpgradeStatusCommandsTest extends UpgradeStatusTestBase {
     $this->assertStringContainsString('<file', $output);
     $this->assertStringContainsString('<error', $output);
 
+    // Test codeclimate output.
+    $this->drush('upgrade_status:analyze', ['upgrade_status_test_error'], ['format' => 'codeclimate'], null, null, 3);
+    $output = $this->getOutput();
+    $this->assertStringContainsString('"type": "issue"', $output);
+    $this->assertStringContainsString('check_name', $output);
+    $this->assertStringContainsString('description', $output);
+    $this->assertStringContainsString('categories', $output);
+    $this->assertStringContainsString('Compatibility', $output);
+    $this->assertStringContainsString('location', $output);
+    $this->assertStringContainsString('fingerprint', $output);
+    $this->assertStringContainsString('severity', $output);
+
     // Test deprecated checkstyle output.
     $this->drush('upgrade_status:checkstyle', ['upgrade_status_test_error'], [], null, null, 3);
     $output = $this->getOutput();

@@ -49,7 +49,8 @@ class TwigDeprecationAnalyzer {
           $deprecations[] = new DeprecationMessage(
             $msg,
             $file_matches[1],
-            $line_matches[1] ?? 0
+            $line_matches[1] ?? 0,
+            'TwigDeprecationAnalyzer'
           );
         }
         else {
@@ -57,7 +58,8 @@ class TwigDeprecationAnalyzer {
           $deprecations[] = new DeprecationMessage(
             $msg,
             $file,
-            $line
+            $line,
+            'TwigDeprecationAnalyzer'
           );
         }
       }
@@ -74,7 +76,8 @@ class TwigDeprecationAnalyzer {
         $deprecations[] = new DeprecationMessage(
           'Twig template ' . $name . ' contains a syntax error and cannot be parsed.',
           $name,
-          $e->getTemplateLine()
+          $e->getTemplateLine(),
+         'TwigDeprecationAnalyzer'
         );
       }
     }

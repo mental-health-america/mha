@@ -74,7 +74,7 @@ final class ThemeFunctionDeprecationAnalyzer {
           $function = new \ReflectionFunction($extension->getName() . '_' . $machine_name);
           $file = $function->getFileName();
           $line = $function->getStartLine();
-          $deprecation_messages[$extension->getName() . '_' . $machine_name] = new DeprecationMessage(sprintf('The theme is overriding the "%s" theme function. Theme functions are deprecated. For more info, see https://www.drupal.org/node/2575445.', $machine_name), $file, $line);
+          $deprecation_messages[$extension->getName() . '_' . $machine_name] = new DeprecationMessage(sprintf('The theme is overriding the "%s" theme function. Theme functions are deprecated. For more info, see https://www.drupal.org/node/2575445.', $machine_name), $file, $line, 'ThemeFunctionDeprecationAnalyzer');
         } catch (\ReflectionException $e) {
           // This should never happen because drupal_find_theme_functions()
           // ensures that the function exists.
@@ -120,7 +120,7 @@ final class ThemeFunctionDeprecationAnalyzer {
       $ast = $parser->parse(file_get_contents($function_reflection->getFileName()));
     } catch (Error $error) {
       // The function cannot be evaluated because of a syntax error.
-      $deprecation_messages[] = new DeprecationMessage(sprintf('Parse error while processing the %s hook implementation.', $function), $function_reflection->getFileName(), $function_reflection->getStartLine());
+      $deprecation_messages[] = new DeprecationMessage(sprintf('Parse error while processing the %s hook implementation.', $function), $function_reflection->getFileName(), $function_reflection->getStartLine(), 'ThemeFunctionDeprecationAnalyzer');
     }
 
     if (!is_iterable($ast)) {
@@ -151,7 +151,7 @@ final class ThemeFunctionDeprecationAnalyzer {
     });
     foreach ($theme_function_nodes as $node) {
       $theme_function = $node->value instanceof String_ ? sprintf('"%s"', $node->value->value) : 'an unknown';
-      $deprecation_messages[] = new DeprecationMessage(sprintf('The %s is defining %s theme function. Theme functions are deprecated. For more info, see https://www.drupal.org/node/2575445.', $extension->getType(), $theme_function), $function_reflection->getFileName(), $node->getStartLine());
+      $deprecation_messages[] = new DeprecationMessage(sprintf('The %s is defining %s theme function. Theme functions are deprecated. For more info, see https://www.drupal.org/node/2575445.', $extension->getType(), $theme_function), $function_reflection->getFileName(), $node->getStartLine(), 'ThemeFunctionDeprecationAnalyzer');
     }
 
     // Find theme functions that are being added to an existing array using
@@ -166,7 +166,7 @@ final class ThemeFunctionDeprecationAnalyzer {
     });
     foreach ($theme_function_dim_nodes as $node) {
       $theme_function = $node->expr instanceof String_ ? sprintf('"%s"', $node->expr->value) : 'an unknown';
-      $deprecation_messages[] = new DeprecationMessage(sprintf('The %s is defining %s theme function. Theme functions are deprecated. For more info, see https://www.drupal.org/node/2575445.', $extension->getType(), $theme_function), $function_reflection->getFileName(), $node->getStartLine());
+      $deprecation_messages[] = new DeprecationMessage(sprintf('The %s is defining %s theme function. Theme functions are deprecated. For more info, see https://www.drupal.org/node/2575445.', $extension->getType(), $theme_function), $function_reflection->getFileName(), $node->getStartLine(), 'ThemeFunctionDeprecationAnalyzer');
     }
 
     return $deprecation_messages;
