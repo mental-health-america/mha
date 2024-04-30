@@ -375,29 +375,39 @@ final class DeprecationAnalyzer {
     if (json_last_error() !== JSON_ERROR_NONE) {
       $stdout = trim($process->getOutput()) ?: 'Empty.';
       $stderr = trim($process->getErrorOutput()) ?: 'Empty.';
-       $formatted_error =
-         "<h6>PHPStan command failed:</h6> <p>" . implode(" ", $command) .
-         "</p> <h6>Command output:</h6> <p>" . $stdout .
-         "</p> <h6>Command error:</h6> <p>" . $stderr . '</p>';
-       $this->logger->error('%phpstan_fail', ['%phpstan_fail' => strip_tags($formatted_error)]);
-       $json = [
-         'files' => [
-           // Add a failure message with the nonexistent 'PHPStan failed'
-           // filename, so the error conforms to the expected format.
-           'PHPStan failed' => [
-             'messages' => [
-               [
-                 'message' => $formatted_error,
-                 'line' => 0,
-               ],
-             ],
-           ]
-         ],
-         'totals' => [
-           'errors' => 1,
-           'file_errors' => 1,
-         ],
-       ];
+      $json = [
+        'files' => [],
+        'totals' => [
+          'errors' => 0,
+          'file_errors' => 0,
+        ],
+      ];
+      if (strpos($stderr, 'No files found to analyse.') === FALSE) {
+        // 'No files found to analyse,' is reported as an error, but for us it is a valid
+        // situation that an extension may not have any PHP files.
+        $formatted_error =
+          "<h6>PHPStan command failed:</h6> <p>" . implode(" ", $command) .
+          "</p> <h6>Command output:</h6> <p>" . $stdout .
+          "</p> <h6>Command error:</h6> <p>" . $stderr . '</p>';
+        $this->logger->error('%phpstan_fail', ['%phpstan_fail' => strip_tags($formatted_error)]);
+        // Add a failure message with the nonexistent 'PHPStan failed'
+        // filename, so the error conforms to the expected format.
+        $json['files']['PHPStan failed'] = [
+          'messages' => [
+            [
+              'message' => $formatted_error,
+              'line' => 0,
+            ],
+          ],
+        ];
+        $json['totals']['errors']++;
+        $json['totals']['file_errors']++;
+      }
+    }
+    foreach ($json['files'] as &$errors) {
+      foreach ($errors['messages'] as &$error) {
+        $error['analyzer'] = 'PHPStan';
+      }
     }
     $result = [
       'date' => $this->time->getRequestTime(),
@@ -426,6 +436,7 @@ final class DeprecationAnalyzer {
       $result['data']['files'][$one_deprecation->getFile()]['messages'][] = [
         'message' => $one_deprecation->getMessage(),
         'line' => $one_deprecation->getLine(),
+        'analyzer' => $one_deprecation->getAnalyzer(),
       ];
       $result['data']['totals']['errors']++;
       $result['data']['totals']['file_errors']++;

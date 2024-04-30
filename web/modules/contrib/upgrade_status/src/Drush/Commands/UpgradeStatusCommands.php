@@ -88,9 +88,9 @@ class UpgradeStatusCommands extends DrushCommands {
    * @param array $options
    *   Additional options for the command.
    * @return \Consolidation\AnnotatedCommand\CommandResult;
-   *   Exit code of self::EXIT_SUCCESS if no errors found, 
+   *   Exit code of self::EXIT_SUCCESS if no errors found,
    *   self::EXIT_FAILURE_WITH_CLARITY if at least one error found.
-   * 
+   *
    * @command upgrade_status:analyze
    * @option all Analyze all projects.
    * @option skip-existing Return results from a previous scan of a project if available, otherwise start a new one.
@@ -98,7 +98,7 @@ class UpgradeStatusCommands extends DrushCommands {
    * @option ignore-contrib Ignore contributed projects.
    * @option ignore-custom Ignore custom projects.
    * @option phpstan-memory-limit Set memory limit for PHPStan.
-   * @option format Set the format: plain or checkstyle.
+   * @option format Set the format: plain, checkstyle or codeclimate.
    * @aliases us-a
    *
    * @throws \InvalidArgumentException
@@ -111,6 +111,9 @@ class UpgradeStatusCommands extends DrushCommands {
     switch ($options['format']) {
       case 'checkstyle':
         $found_issue = $this->formatAllAsCheckStyle($extensions);
+        break;
+      case 'codeclimate':
+        $found_issue = $this->formatAllAsCodeClimate($extensions);
         break;
       default:
         $found_issue = $this->formatAllAsPlain($extensions);
@@ -148,7 +151,7 @@ class UpgradeStatusCommands extends DrushCommands {
 
   /**
    * Formats command output as checkstyle XML.
-   * 
+   *
    * @param array $extensions
    *   Result data by extension.
    * @return bool
@@ -196,7 +199,7 @@ class UpgradeStatusCommands extends DrushCommands {
 
   /**
    * Formats command output as plain text tables.
-   * 
+   *
    * @param array $extensions
    *   Result data by extension.
    * @return bool
@@ -423,6 +426,89 @@ class UpgradeStatusCommands extends DrushCommands {
     $table[] = '';
 
     return ['table' => $table, 'found_issue' => TRUE];
+  }
+
+  /**
+   * Formats command output as Code Climate issues JSON.
+   *
+   * @param array $extensions
+   *   Result data by extension.
+   * @return bool
+   *   Whether issues were found.
+   */
+  protected function formatAllAsCodeClimate(array $extensions): bool {
+    $found_issue = FALSE;
+    $report = [];
+
+    foreach ($extensions as $list) {
+      foreach ($list as $name => $extension) {
+        $result = $this->resultFormatter->getRawResult($extension);
+
+        if (is_null($result)) {
+          $found_issue = TRUE;
+          $this->logger()->error('Project scan @name failed.', ['@name' => $name]);
+          continue;
+        }
+
+        foreach ($result['data']['files'] as $filepath => $errors) {
+          $found_issue = TRUE;
+          $short_path = str_replace(DRUPAL_ROOT . '/', '', $filepath);
+          foreach ($errors['messages'] as $error) {
+            $severity = 'major';
+
+            // We downgrade to 'info' severity, if:
+            // - It has the ignore/later category, as these issues shouldn't be
+            //   fixed now.
+            // - It is not an error, but something unable to detect.
+            if (
+              in_array($error['upgrade_status_category'], ['ignore', 'later'], TRUE) ||
+              str_contains($error['message'], 'Cannot decide if it is deprecated or not.') ||
+              str_contains($error['message'], 'Cannot check deprecated library use.')
+            ) {
+              $severity = 'info';
+            }
+
+            // We downgrade to 'minor' severity, if:
+            // - The category is 'uncategorized', because we might not need to
+            //   fix it now.
+            elseif ($error['upgrade_status_category'] == 'uncategorized') {
+              $severity = 'minor';
+            }
+
+            $description = $name . ' - ' . $error['message'];
+
+            $fingerprint = hash(
+              'sha256',
+              implode(
+                [
+                  $filepath,
+                  $error['line'],
+                  $error['message'],
+                ]
+              ));
+
+            $report[] = [
+              'type' => 'issue',
+              'check_name' => $error['analyzer'],
+              'categories' => ['Compatibility'],
+              'description' => $description,
+              'fingerprint' => $fingerprint,
+              'severity' => $severity,
+              'location' => [
+                'path' => $short_path,
+                'lines' => [
+                  'begin' => $error['line'] ?: 0,
+                ],
+              ],
+            ];
+
+          }
+        }
+      }
+    }
+
+    $this->output()->writeln(json_encode($report, JSON_PRETTY_PRINT));
+    return $found_issue;
   }
 
 }

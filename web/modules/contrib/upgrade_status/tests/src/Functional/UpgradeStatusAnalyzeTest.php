@@ -72,14 +72,14 @@ class UpgradeStatusAnalyzeTest extends UpgradeStatusTestBase {
     $this->assertEquals('upgrade_status_test_error.info.yml', basename(key($report['data']['files'])));
     $message = $file['messages'][0];
     $this->assertEquals("Add core_version_requirement to designate which Drupal versions is the extension compatible with. See https://drupal.org/node/3070687.", $message['message']);
-    $this->assertEquals(0, $message['line']);
+    $this->assertEquals(1, $message['line']);
 
     // The Drupal 10 compatible test modules are not Drupal 11 compatible.
     $test_10_compatibles = [
-      'upgrade_status_test_10_compatible' => '^9 || ^10',
-      'upgrade_status_test_contrib_10_compatible' => '^9.1 || ^10',
+      'upgrade_status_test_10_compatible' => ['^9 || ^10', 5],
+      'upgrade_status_test_contrib_10_compatible' => ['^9.1 || ^10', 7]
     ];
-    foreach ($test_10_compatibles as $name => $version_requirement) {
+    foreach ($test_10_compatibles as $name => $condition) {
       $report = $key_value->get($name);
       $this->assertNotEmpty($report);
       if ($this->getDrupalCoreMajorVersion() < 10) {
@@ -92,8 +92,8 @@ class UpgradeStatusAnalyzeTest extends UpgradeStatusTestBase {
         $file = reset($report['data']['files']);
         $this->assertEquals($name . '.info.yml', basename(key($report['data']['files'])));
         $message = $file['messages'][0];
-        $this->assertEquals("Value of core_version_requirement: $version_requirement is not compatible with the next major version of Drupal core. See https://drupal.org/node/3070687.", $message['message']);
-        $this->assertEquals(0, $message['line']);
+        $this->assertEquals("Value of core_version_requirement: $condition[0] is not compatible with the next major version of Drupal core. See https://drupal.org/node/3070687.", $message['message']);
+        $this->assertEquals($condition[1], $message['line']);
       }
     }
 
@@ -129,7 +129,7 @@ class UpgradeStatusAnalyzeTest extends UpgradeStatusTestBase {
     $this->assertEquals('upgrade_status_test_contrib_error.info.yml', basename(key($report['data']['files'])));
     $message = $file['messages'][0];
     $this->assertEquals("Add core_version_requirement to designate which Drupal versions is the extension compatible with. See https://drupal.org/node/3070687.", $message['message']);
-    $this->assertEquals(0, $message['line']);
+    $this->assertEquals(1, $message['line']);
     $this->assertEquals('uncategorized', $message['upgrade_status_category']);
 
     $report = $key_value->get('upgrade_status_test_twig');
@@ -156,7 +156,7 @@ class UpgradeStatusAnalyzeTest extends UpgradeStatusTestBase {
       // In Drupal 10, this module is not yet forward compatible.
       $file = array_shift($report['data']['files']);
       $this->assertEquals("Value of core_version_requirement: ^9 || ^10 is not compatible with the next major version of Drupal core. See https://drupal.org/node/3070687.", $file['messages'][0]['message']);
-      $this->assertEquals(0, $file['messages'][0]['line']);
+      $this->assertEquals(5, $file['messages'][0]['line']);
     }
 
     $report = $key_value->get('upgrade_status_test_theme');
@@ -183,7 +183,7 @@ class UpgradeStatusAnalyzeTest extends UpgradeStatusTestBase {
       // In Drupal 10, this theme is not yet forward compatible.
       $file = next($report['data']['files']);
       $this->assertEquals("Value of core_version_requirement: ^9 || ^10 is not compatible with the next major version of Drupal core. See https://drupal.org/node/3070687.", $file['messages'][0]['message']);
-      $this->assertEquals(0, $file['messages'][0]['line']);
+      $this->assertEquals(5, $file['messages'][0]['line']);
     }
     // @see https://www.drupal.org/project/upgrade_status/issues/3219968 base theme cannot be tested practically.
     /*$file = next($report['data']['files']);
@@ -212,7 +212,7 @@ class UpgradeStatusAnalyzeTest extends UpgradeStatusTestBase {
       $this->assertCount(1, $report['data']['files']);
       $file = reset($report['data']['files']);
       $this->assertEquals("Value of core_version_requirement: ^9 || ^10 is not compatible with the next major version of Drupal core. See https://drupal.org/node/3070687.", $file['messages'][0]['message']);
-      $this->assertEquals(0, $file['messages'][0]['line']);
+      $this->assertEquals(4, $file['messages'][0]['line']);
     }
 
     // On at least Drupal 10, these projects will not be ready for the next major.
@@ -257,10 +257,11 @@ class UpgradeStatusAnalyzeTest extends UpgradeStatusTestBase {
     if ($this->getDrupalCoreMajorVersion() > 9) {
       // In Drupal 10, this module is not yet forward compatible.
       $this->assertEquals("Value of core_version_requirement: ^9 || ^10 is not compatible with the next major version of Drupal core. See https://drupal.org/node/3070687.", $file['messages'][0]['message']);
-      $this->assertEquals(0, $file['messages'][0]['line']);
+      $this->assertEquals(5, $file['messages'][0]['line']);
       $index = 1;
     }
     $this->assertEquals("This extension is deprecated. Don't use it. See https://drupal.org/project/upgrade_status.", $file['messages'][$index]['message']);
+    $this->assertEquals(6, $file['messages'][$index]['line']);
   }
 
 }

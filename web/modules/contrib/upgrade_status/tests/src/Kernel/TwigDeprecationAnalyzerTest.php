@@ -28,7 +28,8 @@ final class TwigDeprecationAnalyzerTest extends KernelTestBase {
     $this->assertContainsEquals(new DeprecationMessage(
       'Twig Filter "deprecatedfilter" is deprecated. See https://drupal.org/node/3071078.',
       $templates_directory . '/test.html.twig',
-      '10'
+      '10',
+     'TwigDeprecationAnalyzer'
     ), $twig_deprecations);
 
     if (version_compare('10.0.0', \Drupal::VERSION) === -1) {
@@ -36,7 +37,8 @@ final class TwigDeprecationAnalyzerTest extends KernelTestBase {
       $this->assertContainsEquals(new DeprecationMessage(
         sprintf('Twig template %s/spaceless.html.twig contains a syntax error and cannot be parsed.', $templates_directory),
         $templates_directory . '/spaceless.html.twig',
-        '2'
+        '2',
+        'TwigDeprecationAnalyzer'
       ), $twig_deprecations);
     }
     else {
@@ -44,7 +46,8 @@ final class TwigDeprecationAnalyzerTest extends KernelTestBase {
       $this->assertContainsEquals(new DeprecationMessage(
         sprintf('The spaceless tag in "%s/spaceless.html.twig" at line 2 is deprecated since Twig 2.7, use the "spaceless" filter with the "apply" tag instead. See https://drupal.org/node/3071078.', $templates_directory),
         $templates_directory . '/spaceless.html.twig',
-        0
+        0,
+        'TwigDeprecationAnalyzer'
       ), $twig_deprecations);
     }
   }
