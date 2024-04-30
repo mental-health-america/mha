@@ -2266,17 +2266,17 @@
         },
         {
             "name": "drupal/charts",
-            "version": "5.0.12",
+            "version": "5.0.13",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/charts.git",
-                "reference": "5.0.12"
+                "reference": "5.0.13"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/charts-5.0.12.zip",
-                "reference": "5.0.12",
-                "shasum": "3adf23ac41862f6893ca49f171509695455e8e3e"
+                "url": "https://ftp.drupal.org/files/projects/charts-5.0.13.zip",
+                "reference": "5.0.13",
+                "shasum": "0a7a8a8ad429c65fbf90c2785779c1fa1464d035"
             },
             "require": {
                 "drupal/core": "^9.2 || ^10"
@@ -2284,8 +2284,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "5.0.12",
-                    "datestamp": "1709568581",
+                    "version": "5.0.13",
+                    "datestamp": "1714145378",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
