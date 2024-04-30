@@ -16,12 +16,16 @@ function _scheduler_token_types() {
     return $token_types;
   }
   $plugin_types = \Drupal::service('scheduler.manager')->getPluginEntityTypes();
-  // This function should only get executed if the Token module is enabled,
-  // therefore we can assume the token.entity_mapper service exists without
-  // having to check for it.
-  foreach ($plugin_types as $type) {
-    $token_type = \Drupal::service('token.entity_mapper')->getTokenTypeForEntityType($type, TRUE);
-    $token_types[] = $token_type;
+  // Derive the token type id from the entity type id. Use second parameter TRUE
+  // to fall back to the input value if the mapping is not found. If the token
+  // module is not enabled then use the entity type id.
+  if (\Drupal::getContainer()->has('token.entity_mapper')) {
+    foreach ($plugin_types as $type) {
+      $token_types[] = \Drupal::service('token.entity_mapper')->getTokenTypeForEntityType($type, TRUE);
+    }
+  }
+  else {
+    $token_types = $plugin_types;
   }
   return $token_types;
 }

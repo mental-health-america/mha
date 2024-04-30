@@ -5,7 +5,7 @@ package: Testing
 dependencies:
   - scheduler:scheduler
 
-# Information added by Drupal.org packaging script on 2024-04-19
-version: '2.0.2'
+# Information added by Drupal.org packaging script on 2024-04-28
+version: '2.0.3'
 project: 'scheduler'
-datestamp: 1713553952
+datestamp: 1714312560

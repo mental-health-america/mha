@@ -29,7 +29,7 @@ class SchedulerPluginManager extends DefaultPluginManager {
     \Traversable $namespaces,
     CacheBackendInterface $cacheBackend,
     ModuleHandlerInterface $module_handler,
-    EntityTypeManagerInterface $entity_type_manager
+    EntityTypeManagerInterface $entity_type_manager,
   ) {
     $subdir = 'Plugin/Scheduler';
     $plugin_interface = SchedulerPluginInterface::class;

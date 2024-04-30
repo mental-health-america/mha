@@ -94,15 +94,16 @@ class SchedulerManager {
   /**
    * Constructs a SchedulerManager object.
    */
-  public function __construct(DateFormatterInterface $dateFormatter,
-                              LoggerInterface $logger,
-                              ModuleHandlerInterface $moduleHandler,
-                              EntityTypeManagerInterface $entityTypeManager,
-                              ConfigFactoryInterface $configFactory,
-                              EventDispatcherInterface $eventDispatcher,
-                              TimeInterface $time,
-                              EntityFieldManagerInterface $entityFieldManager,
-                              SchedulerPluginManager $pluginManager
+  public function __construct(
+    DateFormatterInterface $dateFormatter,
+    LoggerInterface $logger,
+    ModuleHandlerInterface $moduleHandler,
+    EntityTypeManagerInterface $entityTypeManager,
+    ConfigFactoryInterface $configFactory,
+    EventDispatcherInterface $eventDispatcher,
+    TimeInterface $time,
+    EntityFieldManagerInterface $entityFieldManager,
+    SchedulerPluginManager $pluginManager,
   ) {
     $this->dateFormatter = $dateFormatter;
     $this->logger = $logger;
