@@ -33,7 +33,7 @@ class User extends SingleContentSyncBaseFieldsProcessorPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function mapBaseFieldsValues(array $values): array {
+  public function mapBaseFieldsValues(array $values, FieldableEntityInterface $entity): array {
     return [
       'mail' => $values['mail'],
       'init' => $values['init'],

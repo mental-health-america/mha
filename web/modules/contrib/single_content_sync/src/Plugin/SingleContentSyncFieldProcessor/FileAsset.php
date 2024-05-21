@@ -113,6 +113,11 @@ class FileAsset extends SingleContentSyncFieldProcessorPluginBase implements Con
     foreach ($field->getValue() as $item) {
       $file = $file_storage->load($item['target_id']);
 
+      // The file could not be loaded. Check other files in the field.
+      if (!$file instanceof FileInterface) {
+        continue;
+      }
+
       $file_item = [
         'uri' => $file->getFileUri(),
         'url' => $file->createFileUrl(FALSE),

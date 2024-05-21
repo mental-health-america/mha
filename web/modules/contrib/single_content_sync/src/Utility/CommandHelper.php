@@ -118,7 +118,7 @@ class CommandHelper implements CommandHelperInterface {
   /**
    * {@inheritDoc}
    */
-  public function getEntitiesToExport(string $entityType = 'node', bool $all_allowed_content = FALSE, string $entity_ids_to_export = NULL): array {
+  public function getEntitiesToExport(string $entityType = 'node', string $bundle = '', bool $all_allowed_content = FALSE, string $entity_ids_to_export = NULL): array {
     if ($all_allowed_content) {
       $allowed_entity_types = $this->configFactory->get('single_content_sync.settings')->get('allowed_entity_types');
       $entities = array_reduce($this->entityTypeManager->getDefinitions(), function ($carry, $entity_type) use ($allowed_entity_types) {
@@ -130,6 +130,13 @@ class CommandHelper implements CommandHelperInterface {
     }
     elseif ($entity_ids_to_export) {
       $entities = $this->getSelectedEntities($entityType, $entity_ids_to_export);
+    }
+    elseif (!empty($bundle)) {
+      $bundle_names = [
+        'node' => 'type',
+        'taxonomy_term' => 'vid',
+      ];
+      $entities = $this->entityTypeManager->getStorage($entityType)->loadByProperties([$bundle_names[$entityType] => $bundle]);
     }
     else {
       $entities = $this->entityTypeManager->getStorage($entityType)->loadMultiple();

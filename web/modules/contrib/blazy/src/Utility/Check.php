@@ -93,6 +93,7 @@ class Check {
     // @todo remove when VIS detaches behaviors properly like IO.
     if ($blazies->use('ajax', FALSE)) {
       $load['library'][] = 'blazy/bio.ajax';
+      $config['useAjax'] = TRUE;
     }
 
     // Preload.
