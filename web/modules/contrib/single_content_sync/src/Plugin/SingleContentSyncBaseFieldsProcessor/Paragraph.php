@@ -31,7 +31,7 @@ class Paragraph extends SingleContentSyncBaseFieldsProcessorPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function mapBaseFieldsValues(array $values): array {
+  public function mapBaseFieldsValues(array $values, FieldableEntityInterface $entity): array {
     $baseFields = [
       'langcode' => $values['langcode'],
       'created' => $values['created'],

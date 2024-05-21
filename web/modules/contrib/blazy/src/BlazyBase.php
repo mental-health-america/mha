@@ -541,6 +541,19 @@ abstract class BlazyBase implements BlazyInterface {
   /**
    * {@inheritdoc}
    */
+  public function renderInIsolation(array &$elements) {
+    // @todo call directly ::renderInIsolation() when min D10.3.
+    if (Blazy::versionGreaterThan('10.3')) {
+      // @phpstan-ignore-next-line
+      return $this->renderer->renderInIsolation($elements);
+    }
+    // @phpstan-ignore-next-line
+    return $this->renderer->renderPlain($elements);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function service($name): ?object {
     return Internals::service($name);
   }

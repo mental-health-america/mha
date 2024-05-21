@@ -148,8 +148,8 @@ class MenuLinkContent extends SingleContentSyncBaseFieldsProcessorPluginBase imp
   /**
    * {@inheritdoc}
    */
-  public function mapBaseFieldsValues(array $values): array {
-    $entity = [
+  public function mapBaseFieldsValues(array $values, FieldableEntityInterface $entity): array {
+    $baseFields = [
       'title' => $values['title'],
       'enabled' => $values['enabled'],
       'expanded' => $values['expanded'],
@@ -164,11 +164,11 @@ class MenuLinkContent extends SingleContentSyncBaseFieldsProcessorPluginBase imp
     // Import parent menu link first.
     if (!empty($values['parent'])) {
       $parent = $this->importer->doImport($values['parent']);
-      $entity['parent'] = implode(':', ['menu_link_content', $parent->uuid()]);
+      $baseFields['parent'] = implode(':', ['menu_link_content', $parent->uuid()]);
     }
 
     // Import linked entity.
-    foreach ($entity['link'] as &$item) {
+    foreach ($baseFields['link'] as &$item) {
       if (!isset($item['entity'])) {
         continue;
       }
@@ -187,7 +187,7 @@ class MenuLinkContent extends SingleContentSyncBaseFieldsProcessorPluginBase imp
       $item['uri'] = "entity:{$linked_entity->getEntityTypeId()}/{$linked_entity->id()}";
     }
 
-    return $entity;
+    return $baseFields;
   }
 
 }

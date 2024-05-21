@@ -1,4 +1,28 @@
 
+Blazy 8.x-2.0-dev, 2024-05-15
+------------------------------
+- Fixed for D10.3 deprecated Renderer::renderPlain.
+
+Blazy 8.x-2.0-dev, 2024-05-12
+------------------------------
+- Supports triggering events with extra arguments ala jQuery.
+
+Blazy 8.x-2.0-dev, 2024-04-13
+------------------------------
+- Fixed for native grid masonry.
+
+Blazy 8.x-2.0-dev, 2024-04-13
+------------------------------
+- Changed grid dimensions to object due to breaking NestedArray downstream.
+
+Blazy 8.x-2.0-dev, 2024-04-12
+------------------------------
+- Improved media player responsiveness.
+
+Blazy 8.x-2.0-dev, 2024-04-11
+------------------------------
+- Fixed for SVG thumbnail.
+
 Blazy 8.x-2.0-dev, 2024-03-14
 ------------------------------
 - Issue #3427632 by Mortarion: Shortcode compatibility with CKeditor5.

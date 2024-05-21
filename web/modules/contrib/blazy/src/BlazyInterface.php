@@ -534,6 +534,17 @@ interface BlazyInterface {
   public function moduleExists($name): bool;
 
   /**
+   * A D9-12 compat \Drupal\Core\Render\RendererInterface::renderInIsolation().
+   *
+   * @param array $elements
+   *   The structured array describing the data to be rendered.
+   *
+   * @return \Drupal\Component\Render\MarkupInterface
+   *   The rendered HTML.
+   */
+  public function renderInIsolation(array &$elements);
+
+  /**
    * An alias for Internals::service().
    *
    * @param string $name
