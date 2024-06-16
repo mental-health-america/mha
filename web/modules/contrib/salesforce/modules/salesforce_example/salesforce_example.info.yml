@@ -7,7 +7,7 @@ dependencies:
   - salesforce:salesforce_push
   - salesforce:salesforce_mapping
 
-# Information added by Drupal.org packaging script on 2024-03-13
-version: '5.0.4'
+# Information added by Drupal.org packaging script on 2024-05-22
+version: '5.0.5'
 project: 'salesforce'
-datestamp: 1710339013
+datestamp: 1716388802

@@ -74,3 +74,20 @@ function better_exposed_filters_form_views_ui_config_item_form_alter(&$form, For
     '#token_types' => [],
   ];
 }
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function better_exposed_filters_library_info_alter(&$libraries, $extension) {
+  if ($extension === 'better_exposed_filters' && isset($libraries['sliders'])) {
+    $libraries_directory_file_finder = \Drupal::service('library.libraries_directory_file_finder');
+    $lib_slider_internal = $libraries_directory_file_finder->find('nouislider');
+
+    if ($lib_slider_internal) {
+      $libraries['sliders']['dependencies'][] = 'better_exposed_filters/nouislider_internal';
+    }
+    else {
+      $libraries['sliders']['dependencies'][] = 'better_exposed_filters/nouislider_external';
+    }
+  }
+}

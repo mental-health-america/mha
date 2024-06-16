@@ -9,7 +9,6 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\views\Plugin\views\ViewsHandlerInterface;
 use Drupal\views\ViewExecutable;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Base class for Better exposed filters widget plugins.
@@ -161,7 +160,14 @@ abstract class BetterExposedFiltersWidgetBase extends PluginBase implements Bett
         return $carry || ($value === $default_value ? '' : ($value || $default_value === 0));
       }, FALSE);
 
-      if ($has_values) {
+      $collapsible_disable_automatic_open = FALSE;
+      if (isset($form[$element]['#collapsible_disable_automatic_open'])) {
+        $collapsible_disable_automatic_open = $form[$element]['#collapsible_disable_automatic_open'];
+      }
+      elseif (isset($form[$group]['#collapsible_disable_automatic_open'])) {
+        $collapsible_disable_automatic_open = $form[$group]['#collapsible_disable_automatic_open'];
+      }
+      if ($has_values && !$collapsible_disable_automatic_open) {
         $form[$group]['#open'] = TRUE;
       }
     }
@@ -177,37 +183,7 @@ abstract class BetterExposedFiltersWidgetBase extends PluginBase implements Bett
    *   Url object.
    */
   protected function getExposedFormActionUrl(FormStateInterface $form_state) {
-    /** @var \Drupal\views\ViewExecutable $view */
-    $view = $form_state->get('view');
-    $display = $form_state->get('display');
     $request = \Drupal::request();
-    if (isset($display['display_options']['path'])) {
-      $args = [];
-      if (\Drupal::routeMatch()->getRouteName() == 'views.ajax') {
-        $previousUrl = $request->server->get('HTTP_REFERER');
-        $url_request = Request::create($previousUrl);
-        $url_object = \Drupal::service('path.validator')->getUrlIfValid($url_request->getRequestUri());
-        if ($url_object) {
-          $args = $url_object->getRouteParameters();
-        }
-      }
-      else {
-        $route = $request->attributes->get('_route_object');
-        /** @var \Symfony\Component\HttpFoundation\ParameterBag $raw_params */
-        $raw_params = $request->attributes->get('_raw_variables');
-        $route_params = $request->attributes->get('_route_params');
-        $map = $route->hasOption('_view_argument_map') ? $route->getOption('_view_argument_map') : [];
-
-        foreach ($map as $attribute => $parameter_name) {
-          $arg = $raw_params->get($parameter_name) ?? $route_params[$parameter_name];
-
-          if (isset($arg)) {
-            $args[$attribute] = $arg;
-          }
-        }
-      }
-    }
-
     $url = Url::createFromRequest(clone $request);
     $url->setAbsolute();
 

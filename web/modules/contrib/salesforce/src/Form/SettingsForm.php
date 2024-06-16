@@ -132,7 +132,7 @@ class SettingsForm extends ConfigFormBase {
       '#type' => 'select',
       '#options' => $versions,
       '#tree' => TRUE,
-      '#default_value' => $config->get('rest_api_version')['version'],
+      '#default_value' => $config->get('rest_api_version') ? $config->get('rest_api_version')['version'] : NULL,
       '#states' => [
         'visible' => [
           ':input[name="use_latest"]' => ['checked' => FALSE],

@@ -75,10 +75,12 @@ abstract class FilterWidgetBase extends BetterExposedFiltersWidgetBase implement
     return parent::defaultConfiguration() + [
       'advanced' => [
         'collapsible' => FALSE,
+        'collapsible_disable_automatic_open' => FALSE,
         'is_secondary' => FALSE,
         'placeholder_text' => '',
         'rewrite' => [
           'filter_rewrite_values' => '',
+          'filter_rewrite_values_key' => FALSE,
         ],
         'sort_options' => FALSE,
       ],
@@ -137,6 +139,12 @@ abstract class FilterWidgetBase extends BetterExposedFiltersWidgetBase implement
   </pre> Leave the replacement text blank to remove an option altogether. If using hierarchical taxonomy filters, do not including leading hyphens in the current text.
           '),
       ];
+      $form['advanced']['rewrite']['filter_rewrite_values_key'] = [
+        '#type' => 'checkbox',
+        '#title' => $this->t('Rewrite the text displayed based on key'),
+        '#default_value' => $this->configuration['advanced']['rewrite']['filter_rewrite_values_key'],
+        '#description' => $this->t('Change behavior of "Rewrite the text displayed" to overwrite labels based on option key. eg. All|New label'),
+      ];
     }
 
     // Allow any filter to be collapsible.
@@ -147,6 +155,21 @@ abstract class FilterWidgetBase extends BetterExposedFiltersWidgetBase implement
       '#description' => $this->t(
         'Puts the filter options in a collapsible details element.'
       ),
+    ];
+
+    // Allow any filter to be collapsible.
+    $form['advanced']['collapsible_disable_automatic_open'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Disable the automatic opening of collapsed filters with selections'),
+      '#default_value' => !empty($this->configuration['advanced']['collapsible_disable_automatic_open']),
+      '#description' => $this->t(
+        'When a selection is made, by default the collapsed filter will be set to open. If you provide an alternative means for the user to see filter selections, you can the default open behavior by enabling this.'
+      ),
+      '#states' => [
+        'visible' => [
+          ':input[name="exposed_form_options[bef][filter][' . $filter->options['id'] . '][configuration][advanced][collapsible]"]' => ['checked' => TRUE],
+        ],
+      ],
     ];
 
     // Allow any filter to be moved into the secondary options' element.
@@ -174,6 +197,7 @@ abstract class FilterWidgetBase extends BetterExposedFiltersWidgetBase implement
     $filter_id = $filter->options['expose']['identifier'];
     $field_id = $this->getExposedFilterFieldId();
     $is_collapsible = $this->configuration['advanced']['collapsible'];
+    $collapsible_disable_automatic_open = $this->configuration['advanced']['collapsible_disable_automatic_open'];
     $is_secondary = !empty($form['secondary']) && $this->configuration['advanced']['is_secondary'];
 
     // Sort options alphabetically.
@@ -192,7 +216,7 @@ abstract class FilterWidgetBase extends BetterExposedFiltersWidgetBase implement
     // Handle filter value rewrites.
     if (!empty($form[$field_id]['#options']) && $this->configuration['advanced']['rewrite']['filter_rewrite_values']) {
       // Reorder options based on rewrite values, if sort options is disabled.
-      $form[$field_id]['#options'] = BetterExposedFiltersHelper::rewriteOptions($form[$field_id]['#options'], $this->configuration['advanced']['rewrite']['filter_rewrite_values'], !$this->configuration['advanced']['sort_options']);
+      $form[$field_id]['#options'] = BetterExposedFiltersHelper::rewriteOptions($form[$field_id]['#options'], $this->configuration['advanced']['rewrite']['filter_rewrite_values'], !$this->configuration['advanced']['sort_options'], $this->configuration['advanced']['rewrite']['filter_rewrite_values_key']);
       // @todo what is $selected?
       // if (isset($selected) &&
       // !isset($form[$field_id]['#options'][$selected])) {
@@ -223,6 +247,7 @@ abstract class FilterWidgetBase extends BetterExposedFiltersWidgetBase implement
         '#attributes' => [
           'class' => ['form-item'],
         ],
+        '#collapsible_disable_automatic_open' => $collapsible_disable_automatic_open,
       ];
 
       if ($is_secondary) {

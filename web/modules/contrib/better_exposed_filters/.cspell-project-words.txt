@@ -18,6 +18,7 @@ mikeker
 mkeereman
 Mustgrave
 Neslee
+nouislider
 Olot
 Olèrdola
 Podanenko
