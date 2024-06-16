@@ -5,7 +5,7 @@ services:
 
   plugin.manager.salesforce.auth_providers:
     class: Drupal\salesforce\SalesforceAuthProviderPluginManager
-    arguments: ['@container.namespaces', '@cache.discovery', '@module_handler', '@entity_type.manager']
+    arguments: ['@container.namespaces', '@cache.discovery', '@module_handler', '@entity_type.manager', '@config.factory']
 
   salesforce.http_client_wrapper:
     class: Drupal\salesforce\Client\HttpClientWrapper

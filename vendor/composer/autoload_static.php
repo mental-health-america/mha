@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInite2da6a12b5db179f2d3e2f1348d5a67b
+class ComposerStaticInit1133f5d72fede0e3a8db42f8833ca1bc
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -166,6 +166,7 @@ class ComposerStaticInite2da6a12b5db179f2d3e2f1348d5a67b
             'Drupal\\Driver\\' => 14,
             'Drupal\\Core\\' => 12,
             'Drupal\\Component\\' => 17,
+            'DrupalFinder\\' => 13,
             'DrupalCodeGenerator\\' => 20,
             'Dotenv\\' => 7,
             'Dompdf\\' => 7,
@@ -374,7 +375,7 @@ class ComposerStaticInite2da6a12b5db179f2d3e2f1348d5a67b
         ),
         'Svg\\' => 
         array (
-            0 => __DIR__ . '/..' . '/phenx/php-svg-lib/src/Svg',
+            0 => __DIR__ . '/..' . '/dompdf/php-svg-lib/src/Svg',
         ),
         'SelfUpdate\\' => 
         array (
@@ -471,7 +472,7 @@ class ComposerStaticInite2da6a12b5db179f2d3e2f1348d5a67b
         ),
         'FontLib\\' => 
         array (
-            0 => __DIR__ . '/..' . '/phenx/php-font-lib/src/FontLib',
+            0 => __DIR__ . '/..' . '/dompdf/php-font-lib/src/FontLib',
         ),
         'Firebase\\JWT\\' => 
         array (
@@ -504,6 +505,10 @@ class ComposerStaticInite2da6a12b5db179f2d3e2f1348d5a67b
         'Drupal\\Component\\' => 
         array (
             0 => __DIR__ . '/../..' . '/web/core/lib/Drupal/Component',
+        ),
+        'DrupalFinder\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/webflo/drupal-finder/src',
         ),
         'DrupalCodeGenerator\\' => 
         array (
@@ -629,10 +634,6 @@ class ComposerStaticInite2da6a12b5db179f2d3e2f1348d5a67b
         ),
     );
 
-    public static $fallbackDirsPsr0 = array (
-        0 => __DIR__ . '/..' . '/pear/pear-core-minimal/src',
-    );
-
     public static $classMap = array (
         'AllowFieldTruncationHeader' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceHeaderOptions.php',
         'AssignmentRuleHeader' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceHeaderOptions.php',
@@ -642,7 +643,6 @@ class ComposerStaticInite2da6a12b5db179f2d3e2f1348d5a67b
         'Datamatrix' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/barcodes/datamatrix.php',
         'Dompdf\\Cpdf' => __DIR__ . '/..' . '/dompdf/dompdf/lib/Cpdf.php',
         'Drupal' => __DIR__ . '/../..' . '/web/core/lib/Drupal.php',
-        'DrupalFinder\\DrupalFinder' => __DIR__ . '/..' . '/webflo/drupal-finder/src/DrupalFinder.php',
         'DrupalProject\\composer\\ScriptHandler' => __DIR__ . '/../..' . '/scripts/composer/ScriptHandler.php',
         'Drupal\\Component\\DependencyInjection\\Container' => __DIR__ . '/../..' . '/web/core/lib/Drupal/Component/DependencyInjection/Container.php',
         'Drupal\\Component\\DependencyInjection\\PhpArrayContainer' => __DIR__ . '/../..' . '/web/core/lib/Drupal/Component/DependencyInjection/PhpArrayContainer.php',
@@ -674,7 +674,11 @@ class ComposerStaticInite2da6a12b5db179f2d3e2f1348d5a67b
         'MassEmailMessage' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceEmail.php',
         'MruHeader' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceHeaderOptions.php',
         'Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
+        'OS_Guess' => __DIR__ . '/..' . '/pear/pear-core-minimal/src/OS/Guess.php',
         'PDF417' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/barcodes/pdf417.php',
+        'PEAR' => __DIR__ . '/..' . '/pear/pear-core-minimal/src/PEAR.php',
+        'PEAR_Error' => __DIR__ . '/..' . '/pear/pear-core-minimal/src/PEAR.php',
+        'PEAR_ErrorStack' => __DIR__ . '/..' . '/pear/pear-core-minimal/src/PEAR/ErrorStack.php',
         'PEAR_Exception' => __DIR__ . '/..' . '/pear/pear_exception/PEAR/Exception.php',
         'PackageVersion' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceHeaderOptions.php',
         'PackageVersionHeader' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceHeaderOptions.php',
@@ -697,6 +701,7 @@ class ComposerStaticInite2da6a12b5db179f2d3e2f1348d5a67b
         'SforceSoapClient' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforcePartnerClient.php',
         'SingleEmailMessage' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceEmail.php',
         'Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
+        'System' => __DIR__ . '/..' . '/pear/pear-core-minimal/src/System.php',
         'TCPDF' => __DIR__ . '/..' . '/tecnickcom/tcpdf/tcpdf.php',
         'TCPDF2DBarcode' => __DIR__ . '/..' . '/tecnickcom/tcpdf/tcpdf_barcodes_2d.php',
         'TCPDFBarcode' => __DIR__ . '/..' . '/tecnickcom/tcpdf/tcpdf_barcodes_1d.php',
@@ -717,11 +722,10 @@ class ComposerStaticInite2da6a12b5db179f2d3e2f1348d5a67b
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInite2da6a12b5db179f2d3e2f1348d5a67b::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInite2da6a12b5db179f2d3e2f1348d5a67b::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInite2da6a12b5db179f2d3e2f1348d5a67b::$prefixesPsr0;
-            $loader->fallbackDirsPsr0 = ComposerStaticInite2da6a12b5db179f2d3e2f1348d5a67b::$fallbackDirsPsr0;
-            $loader->classMap = ComposerStaticInite2da6a12b5db179f2d3e2f1348d5a67b::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit1133f5d72fede0e3a8db42f8833ca1bc::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit1133f5d72fede0e3a8db42f8833ca1bc::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit1133f5d72fede0e3a8db42f8833ca1bc::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit1133f5d72fede0e3a8db42f8833ca1bc::$classMap;
 
         }, null, ClassLoader::class);
     }

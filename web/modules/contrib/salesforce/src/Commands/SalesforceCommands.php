@@ -410,7 +410,7 @@ class SalesforceCommands extends SalesforceCommandsBase {
       $this->logger()->error(dt('Could not load data for object !object', ['!object' => $object]));
       return;
     }
-
+    $rows = [];
     foreach ($objectDescription->getFields() as $field => $data) {
       if (!empty($data['picklistValues'])) {
         $fix_data = [];
@@ -419,7 +419,7 @@ class SalesforceCommands extends SalesforceCommandsBase {
         }
         $data['picklistValues'] = $fix_data;
       }
-      foreach ($data as $k => &$v) {
+      foreach ($data as &$v) {
         if (is_array($v)) {
           $v = implode("\n", $v);
         }
@@ -445,6 +445,7 @@ class SalesforceCommands extends SalesforceCommandsBase {
   public function listResources() {
     $resources = $this->client->listResources();
     if ($resources) {
+      $rows = [];
       foreach ($resources->resources as $resource => $url) {
         $rows[$url] = ['resource' => $resource, 'url' => $url];
       }

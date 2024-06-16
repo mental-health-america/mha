@@ -154,20 +154,16 @@ class ContentImporter implements ContentImporterInterface {
 
     switch ($content['entity_type']) {
       case 'node':
-        if (isset($content['base_fields']['author']) && ($account = user_load_by_mail($content['base_fields']['author']))) {
-          $entity->setOwner($account);
+        if ($entity instanceof RevisionLogInterface) {
+          $entity->setNewRevision();
+          $entity->setRevisionCreationTime($this->time->getCurrentTime());
 
-          if ($entity instanceof RevisionLogInterface) {
-            $entity->setNewRevision();
-            $entity->setRevisionCreationTime($this->time->getCurrentTime());
+          if (isset($content['base_fields']['revision_uid'])) {
+            $entity->setRevisionUserId($content['base_fields']['revision_uid']);
+          }
 
-            if (isset($content['base_fields']['revision_uid'])) {
-              $entity->setRevisionUserId($content['base_fields']['revision_uid']);
-            }
-
-            if (isset($content['base_fields']['revision_log_message'])) {
-              $entity->setRevisionLogMessage($content['base_fields']['revision_log_message']);
-            }
+          if (isset($content['base_fields']['revision_log_message'])) {
+            $entity->setRevisionLogMessage($content['base_fields']['revision_log_message']);
           }
         }
         break;
@@ -271,7 +267,7 @@ class ContentImporter implements ContentImporterInterface {
       throw new \Exception(sprintf('"%s" does not have entity field base processor defined.', $entity->getEntityTypeId()));
     }
 
-    $values = $entityProcessor->mapBaseFieldsValues($fields);
+    $values = $entityProcessor->mapBaseFieldsValues($fields, $entity);
 
     // Set moderation state if it is supported for multiple entities.
     if (isset($fields['moderation_state'])) {

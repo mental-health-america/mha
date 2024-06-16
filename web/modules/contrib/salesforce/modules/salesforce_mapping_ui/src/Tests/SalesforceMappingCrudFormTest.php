@@ -12,8 +12,6 @@ use Drupal\Tests\BrowserTestBase;
  */
 class SalesforceMappingCrudFormTest extends BrowserTestBase {
 
-  use StringTranslationTrait;
-
   /**
    * Default theme required for D9.
    *
@@ -59,8 +57,8 @@ class SalesforceMappingCrudFormTest extends BrowserTestBase {
    * Tests webform admin settings.
    */
   public function testMappingCrudForm() {
-    global $base_path;
-    $mappingStorage = \Drupal::entityTypeManager()->getStorage('salesforce_mapping');
+    $mappingStorage = \Drupal::entityTypeManager()
+      ->getStorage('salesforce_mapping');
     $this->drupalLogin($this->adminSalesforceUser);
 
     $this->drupalGet('admin/structure/salesforce/mappings/add');
@@ -73,8 +71,9 @@ class SalesforceMappingCrudFormTest extends BrowserTestBase {
       'drupal_bundle' => 'salesforce_mapping_test_content',
       'salesforce_object_type' => 'Contact',
     ];
-    $this->submitForm($post, $this->t('Save'));
-    $this->assertSession()->pageTextContainsOnce($this->t('The mapping has been successfully saved.'));
+    $this->submitForm($post, 'Save');
+    $this->assertSession()
+      ->pageTextContainsOnce('The mapping has been successfully saved.');
 
     $mapping = $mappingStorage->load($mapping_name);
     // Make sure mapping was saved correctly.
@@ -91,7 +90,7 @@ class SalesforceMappingCrudFormTest extends BrowserTestBase {
       'drupal_bundle' => 'salesforce_mapping_test_content',
       'salesforce_object_type' => 'Contact',
     ];
-    $this->submitForm($post, $this->t('Save'));
+    $this->submitForm($post, 'Save');
     $this->assertSession()->fieldValueEquals('label', $post['label']);
 
     // Test simply adding a field plugin of every possible type. This is not
@@ -107,21 +106,32 @@ class SalesforceMappingCrudFormTest extends BrowserTestBase {
       if (call_user_func([$definition['class'], 'isAllowed'], $mapping)) {
         // Add a new field:
         $post['buttons[field_type]'] = $definition['id'];
-        $this->submitForm($post, $this->t('Add a field mapping to get started'));
+        $this->submitForm($post, 'Add a field mapping');
         // Confirm that the new field shows up:
         $this->assertSession()->pageTextContains($definition['label']);
 
-        // @todo need an interface for field plugins that will tell us which config values are applicable.
-        // Add all components of this field plugin to our post array to build up the mapping.
-        $this->assertSession()->elementExists('css', "[name='field_mappings[$i][config][drupal_field_value]'], [name='field_mappings[$i][config][drupal_field_value][setting]']");
-        $this->assertSession()->elementExists('css', "[name='field_mappings[$i][config][salesforce_field]'], [name='field_mappings[$i][config][drupal_constant]']");
-        $this->assertSession()->fieldExists("field_mappings[$i][config][description]");
-        $this->assertSession()->fieldExists("field_mappings[$i][config][direction]");
-        $this->assertSession()->hiddenFieldExists("field_mappings[$i][drupal_field_type]");
-        if ($this->getSession()->getPage()->find('css', "select[name='field_mappings[$i][config][salesforce_field]'] option[value='LastName']")) {
+        // @todo need an interface for field plugins that will tell us which
+        // config values are applicable.
+        // Add all components of this field plugin to our post array to build up
+        // the mapping.
+        $this->assertSession()
+          ->elementExists('css', "[name='field_mappings[$i][config][drupal_field_value]'], [name='field_mappings[$i][config][drupal_field_value][setting]']");
+        $this->assertSession()
+          ->elementExists('css', "[name='field_mappings[$i][config][salesforce_field]'], [name='field_mappings[$i][config][drupal_constant]']");
+        $this->assertSession()
+          ->fieldExists("field_mappings[$i][config][description]");
+        $this->assertSession()
+          ->fieldExists("field_mappings[$i][config][direction]");
+        $this->assertSession()
+          ->hiddenFieldExists("field_mappings[$i][drupal_field_type]");
+        if ($this->getSession()
+          ->getPage()
+          ->find('css', "select[name='field_mappings[$i][config][salesforce_field]'] option[value='LastName']")) {
           $post["field_mappings[$i][config][salesforce_field]"] = 'LastName';
         }
-        if ($this->getSession()->getPage()->find('css', "select[name='field_mappings[$i][config][drupal_field_value]'] option[value='title']")) {
+        if ($this->getSession()
+          ->getPage()
+          ->find('css', "select[name='field_mappings[$i][config][drupal_field_value]'] option[value='title']")) {
           $post["field_mappings[$i][config][drupal_field_value]"] = 'title';
         }
         $i++;
@@ -129,10 +139,12 @@ class SalesforceMappingCrudFormTest extends BrowserTestBase {
     }
 
     // Confirm that form saves correctly.
-    $this->submitForm($post, $this->t('Save'));
-    $this->assertSession()->pageTextContainsOnce($this->t('The mapping has been successfully saved.'));
+    $this->submitForm($post, 'Save');
+    $this->assertSession()
+      ->pageTextContainsOnce('The mapping has been successfully saved.');
 
-    // Confirm that the changes are stored properly by reloading and counting the fields.
+    // Confirm that the changes are stored properly by reloading and counting
+    // the fields.
     $this->drupalGet('admin/structure/salesforce/mappings/manage/' . $mapping_name . '/fields');
     for ($j = 0; $j < $i; $j++) {
       $this->assertSession()->elementExists('css', "#edit-field-mappings-$j");

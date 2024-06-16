@@ -38,6 +38,40 @@ class SalesforcePushQueueProcessorRestTest extends UnitTestCase {
    */
   protected static $modules = ['salesforce_pull'];
 
+  protected $entityType;
+
+  protected $queue;
+
+  protected $client;
+
+  protected $eventDispatcher;
+
+  protected $entity_manager;
+
+  protected $string_translation;
+
+  protected $mapping;
+
+  protected $mappingStorage;
+
+  protected $mappedObjectStorage;
+
+  protected $entityTypeManager;
+
+  protected $authToken;
+
+  protected $authMan;
+
+  protected $handler;
+
+  protected $queueItem;
+
+  protected $mappedObject;
+
+  protected $entityStorage;
+
+  protected $entity;
+
   /**
    * {@inheritdoc}
    */
@@ -45,21 +79,26 @@ class SalesforcePushQueueProcessorRestTest extends UnitTestCase {
     $this->entityType = 'default';
 
     $this->queue = $this->getMockBuilder(PushQueueInterface::CLASS)->getMock();
-    $this->client = $this->getMockBuilder(RestClientInterface::CLASS)->getMock();
-    $this->eventDispatcher = $this->getMockBuilder(EventDispatcherInterface::CLASS)->getMock();
+    $this->client = $this->getMockBuilder(RestClientInterface::CLASS)
+      ->getMock();
+    $this->eventDispatcher = $this->getMockBuilder(EventDispatcherInterface::CLASS)
+      ->getMock();
     $this->eventDispatcher->expects($this->any())
       ->method('dispatch')
       ->willReturnArgument(0);
-    $this->entity_manager = $this->getMockBuilder(EntityTypeManagerInterface::class)->getMock();
+    $this->entity_manager = $this->getMockBuilder(EntityTypeManagerInterface::class)
+      ->getMock();
 
-    $this->string_translation = $this->getMockBuilder(TranslationInterface::class)->getMock();
+    $this->string_translation = $this->getMockBuilder(TranslationInterface::class)
+      ->getMock();
     $this->string_translation->expects($this->any())
       ->method('translateString')
       ->willReturnCallback(function (TranslatableMarkup $markup) {
         return $markup->getUntranslatedString();
       });
 
-    $this->mapping = $this->getMockBuilder(SalesforceMappingInterface::CLASS)->getMock();
+    $this->mapping = $this->getMockBuilder(SalesforceMappingInterface::CLASS)
+      ->getMock();
 
     $this->mapping->expects($this->any())
       ->method('id')
@@ -70,12 +109,14 @@ class SalesforcePushQueueProcessorRestTest extends UnitTestCase {
       ->with($this->equalTo('drupal_entity_type'))
       ->willReturn($this->entityType);
 
-    $this->mappingStorage = $this->getMockBuilder(ConfigEntityStorageInterface::CLASS)->getMock();
+    $this->mappingStorage = $this->getMockBuilder(ConfigEntityStorageInterface::CLASS)
+      ->getMock();
     $this->mappingStorage->expects($this->any())
       ->method('load')
       ->willReturn($this->mapping);
 
-    $this->mappedObjectStorage = $this->getMockBuilder(SqlEntityStorageInterface::CLASS)->getMock();
+    $this->mappedObjectStorage = $this->getMockBuilder(SqlEntityStorageInterface::CLASS)
+      ->getMock();
 
     $prophecy = $this->prophesize(EntityTypeManagerInterface::class);
     $prophecy->getStorage('salesforce_mapping')
@@ -180,7 +221,8 @@ class SalesforcePushQueueProcessorRestTest extends UnitTestCase {
       ->setMethods(['getMappedObject'])
       ->getMock();
 
-    $mappedObject = $this->getMockBuilder(MappedObjectInterface::class)->getMock();
+    $mappedObject = $this->getMockBuilder(MappedObjectInterface::class)
+      ->getMock();
     $mappedObject->expects($this->once())
       ->method('isNew')
       ->willReturn(TRUE);
@@ -207,7 +249,8 @@ class SalesforcePushQueueProcessorRestTest extends UnitTestCase {
       'name' => 'bar',
     ];
 
-    $this->mappedObject = $this->getMockBuilder(MappedObjectInterface::class)->getMock();
+    $this->mappedObject = $this->getMockBuilder(MappedObjectInterface::class)
+      ->getMock();
 
     $this->mappedObject->expects($this->once())
       ->method('pushDelete')
@@ -240,7 +283,8 @@ class SalesforcePushQueueProcessorRestTest extends UnitTestCase {
    */
   public function testProcessItemPush() {
     // Test push on op == insert / update.
-    $this->mappedObject = $this->getMockBuilder(MappedObjectInterface::class)->getMock();
+    $this->mappedObject = $this->getMockBuilder(MappedObjectInterface::class)
+      ->getMock();
     $this->queueItem = (object) [
       'entity_id' => 'foo',
       'op' => NULL,
@@ -248,7 +292,8 @@ class SalesforcePushQueueProcessorRestTest extends UnitTestCase {
       'name' => NULL,
     ];
     $this->entity = $this->getMockBuilder(EntityInterface::class)->getMock();
-    $this->entityStorage = $this->getMockBuilder(SqlEntityStorageInterface::CLASS)->getMock();
+    $this->entityStorage = $this->getMockBuilder(SqlEntityStorageInterface::CLASS)
+      ->getMock();
     $this->entityStorage->expects($this->once())
       ->method('load')
       ->willReturn($this->entity);
@@ -302,12 +347,14 @@ class SalesforcePushQueueProcessorRestTest extends UnitTestCase {
       'entity_id' => 'foo',
     ];
 
-    $this->mappedObject = $this->getMockBuilder(MappedObjectInterface::class)->getMock();
+    $this->mappedObject = $this->getMockBuilder(MappedObjectInterface::class)
+      ->getMock();
     $this->mappedObject->expects($this->any())
       ->method('isNew')
       ->willReturn(TRUE);
 
-    $this->entityStorage = $this->getMockBuilder(SqlEntityStorageInterface::CLASS)->getMock();
+    $this->entityStorage = $this->getMockBuilder(SqlEntityStorageInterface::CLASS)
+      ->getMock();
     $prophecy = $this->prophesize(EntityTypeManagerInterface::class);
     $prophecy->getStorage($this->entityType)
       ->willReturn($this->entityStorage);

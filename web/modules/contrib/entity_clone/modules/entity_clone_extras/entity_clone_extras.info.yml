@@ -6,7 +6,7 @@ package: 'Entity Clone'
 dependencies:
   - drupal:entity_clone
 
-# Information added by Drupal.org packaging script on 2023-06-20
-version: '2.0.0-beta4'
+# Information added by Drupal.org packaging script on 2024-04-08
+version: '2.0.0-beta6'
 project: 'entity_clone'
-datestamp: 1687250712
+datestamp: 1712549901

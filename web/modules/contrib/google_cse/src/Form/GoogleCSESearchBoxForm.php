@@ -4,6 +4,7 @@ namespace Drupal\google_cse\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\google_cse\Plugin\Search\GoogleSearch;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -57,25 +58,25 @@ class GoogleCSESearchBoxForm extends FormBase {
       '#type' => 'hidden',
       '#value' => $settings['cx'],
     ];
-    $query = 'keys';
+    $query_key = $settings['query_key'] ?? GoogleSearch::$defaultQueryKey;
     if ($settings['results_display'] === 'google') {
       $form['#action'] = 'https://cse.google.com/cse';
-      // If the results are to be displayed on this site, use the query
-      // parameter 'keys'. If on Google, use 'q'.
-      $query = 'q';
+      // If the results are to be displayed on this site, use the site query
+      // parameter. If on Google, use 'q'.
+      $query_key = 'q';
     }
-    $form[$query] = [
+    $form[$query_key] = [
       '#type' => 'textfield',
       '#id' => 'google-cse-query',
-      '#default_value' => $this->requestStack->getCurrentRequest()->query->has('query') ? $this->requestStack->getCurrentRequest()->query->get('query') : '',
+      '#default_value' => $this->requestStack->getCurrentRequest()->query->has($query_key) ? $this->requestStack->getCurrentRequest()->query->get($query_key) : '',
     ];
     $form['sa'] = [
       '#type' => 'submit',
       '#id' => 'google-cse-submit',
       '#value' => $this->t('Search'),
     ];
-    $form['keys']['#size'] = intval($settings['results_searchbox_width']);
-    $form['keys']['#title'] = $this->t('Enter your keywords');
+    $form[$query_key]['#size'] = intval($settings['results_searchbox_width']);
+    $form[$query_key]['#title'] = $this->t('Enter your keywords');
     return $form;
   }
 

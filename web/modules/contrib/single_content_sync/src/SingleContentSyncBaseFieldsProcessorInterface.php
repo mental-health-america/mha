@@ -33,10 +33,12 @@ interface SingleContentSyncBaseFieldsProcessorInterface {
    *
    * @param array $values
    *   Original exported values of base fields.
+   * @param \Drupal\Core\Entity\FieldableEntityInterface $entity
+   *   The entity.
    *
    * @return array
    *   Correct field mapping with exported values.
    */
-  public function mapBaseFieldsValues(array $values): array;
+  public function mapBaseFieldsValues(array $values, FieldableEntityInterface $entity): array;
 
 }

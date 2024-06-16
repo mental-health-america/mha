@@ -168,13 +168,15 @@ class SalesforcePullCommands extends SalesforceMappingCommandsBase {
     $start = $options['start'] ? strtotime($options['start']) : 0;
     $stop = $options['stop'] ? strtotime($options['stop']) : 0;
     if ($start > $stop) {
-      $this->logger()->error(dt('Stop date-time must be later than start date-time.'));
+      $this->logger()
+        ->error(dt('Stop date-time must be later than start date-time.'));
       return;
     }
 
     foreach ($mappings as $mapping) {
       if (!($soql = $mapping->getPullQuery([], $start, $stop))) {
-        $this->logger()->error(dt('!mapping: Unable to generate pull query. Does this mapping have any Salesforce Action Triggers enabled?', ['!mapping' => $mapping->id()]));
+        $this->logger()
+          ->error(dt('!mapping: Unable to generate pull query. Does this mapping have any Salesforce Action Triggers enabled?', ['!mapping' => $mapping->id()]));
         continue;
       }
 
@@ -193,8 +195,9 @@ class SalesforcePullCommands extends SalesforceMappingCommandsBase {
       ]));
       $results = $this->client->query($soql);
 
-      if (empty($results)) {
-        $this->logger()->warning(dt('!mapping: No records found to pull.', ['!mapping' => $mapping->id()]));
+      if (!$results->size()) {
+        $this->logger()
+          ->warning(dt('!mapping: No records found to pull.', ['!mapping' => $mapping->id()]));
         return;
       }
 
@@ -224,14 +227,16 @@ class SalesforcePullCommands extends SalesforceMappingCommandsBase {
   public function pullFile($file, $name) {
     /** @var \Drupal\salesforce_mapping\Entity\SalesforceMapping $mapping */
     if (!($mapping = $this->mappingStorage->load($name))) {
-      $this->logger()->error(dt('Failed to load mapping "%name"', ['%name' => $name]));
+      $this->logger()
+        ->error(dt('Failed to load mapping "%name"', ['%name' => $name]));
       return;
     }
 
     // Fetch the base query to make sure we can pull using this mapping.
     $soql = $mapping->getPullQuery([], 1, 0);
     if (empty($soql)) {
-      $this->logger()->error(dt('Failed to load mapping "%name"', ['%name' => $name]));
+      $this->logger()
+        ->error(dt('Failed to load mapping "%name"', ['%name' => $name]));
       return;
     }
 
@@ -245,14 +250,14 @@ class SalesforcePullCommands extends SalesforceMappingCommandsBase {
     // up to 18000 characters per query, plus up to 2000 for fields, where
     // condition, etc.
     $queries = [];
-    foreach (array_chunk($rows, 1000) as $i => $chunk) {
+    foreach (array_chunk($rows, 1000) as $chunk) {
       // Reset our base query:
       $soql = $mapping->getPullQuery([], 1, 0);
 
       // Now add all the IDs to it.
       $sfids = [];
       foreach ($chunk as $j => $row) {
-        if (empty($row) || empty($row[0])) {
+        if (empty($row[0])) {
           $this->logger->warning(dt('Skipping row !n, no SFID found.', ['!n' => $j]));
           continue;
         }
@@ -262,7 +267,11 @@ class SalesforcePullCommands extends SalesforceMappingCommandsBase {
           // If so, this is probably a good SFID.
           // If not, it is definitely not a good SFID.
           if ($mapping->getSalesforceObjectType() != $this->client->getObjectTypeName($sfid)) {
-            $this->logger()->error(dt('SFID !sfid does not match type !type', ['!sfid' => (string) $sfid, '!type' => $mapping->getSalesforceObjectType()]));
+            $this->logger()
+              ->error(dt('SFID !sfid does not match type !type', [
+                '!sfid' => (string) $sfid,
+                '!type' => $mapping->getSalesforceObjectType(),
+              ]));
             continue;
           }
         }
@@ -284,7 +293,8 @@ class SalesforcePullCommands extends SalesforceMappingCommandsBase {
       return;
     }
 
-    if (!$this->io()->confirm(dt('Ready to enqueue !count records for pull?', ['!count' => count($seen)]))) {
+    if (!$this->io()
+      ->confirm(dt('Ready to enqueue !count records for pull?', ['!count' => count($seen)]))) {
       return;
     }
 
@@ -294,17 +304,19 @@ class SalesforcePullCommands extends SalesforceMappingCommandsBase {
         SalesforceEvents::PULL_QUERY
       );
 
-      $this->logger()->info(dt('Issuing pull query: !query', ['!query' => (string) $soql]));
+      $this->logger()
+        ->info(dt('Issuing pull query: !query', ['!query' => (string) $soql]));
 
       $results = $this->client->query($soql);
 
-      if (empty($results)) {
+      if (!$results->size()) {
         $this->logger()->warning('No records found to pull.');
         continue;
       }
 
       $this->pullQueue->enqueueAllResults($mapping, $results);
-      $this->logger()->info(dt('Queued !count items for pull.', ['!count' => $results->size()]));
+      $this->logger()
+        ->info(dt('Queued !count items for pull.', ['!count' => $results->size()]));
     }
   }
 
@@ -343,10 +355,10 @@ class SalesforcePullCommands extends SalesforceMappingCommandsBase {
       else {
         $mapping->setLastPullTime(NULL);
       }
-      \Drupal::entityTypeManager()
-        ->getStorage('salesforce_mapped_object')
+      $this->etm->getStorage('salesforce_mapped_object')
         ->setForcePull($mapping);
-      $this->logger()->info(dt('Pull timestamp reset for !name', ['!name' => $name]));
+      $this->logger()
+        ->info(dt('Pull timestamp reset for !name', ['!name' => $name]));
     }
   }
 
@@ -383,7 +395,8 @@ class SalesforcePullCommands extends SalesforceMappingCommandsBase {
         $mapping->setLastPullTime($time);
       }
       $this->mappedObjectStorage->setForcePull($mapping);
-      $this->logger()->info(dt('Pull timestamp reset for !name', ['!name' => $name]));
+      $this->logger()
+        ->info(dt('Pull timestamp reset for !name', ['!name' => $name]));
     }
   }
 

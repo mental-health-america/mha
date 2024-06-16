@@ -11,6 +11,13 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 class SalesforceMappableEntityTypes implements SalesforceMappableEntityTypesInterface {
 
   /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * Constructs a new SalesforceMappableEntities object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_manager

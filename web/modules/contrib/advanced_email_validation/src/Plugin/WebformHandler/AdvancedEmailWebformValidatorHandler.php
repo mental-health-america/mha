@@ -2,13 +2,13 @@
 
 namespace Drupal\advanced_email_validation\Plugin\WebformHandler;
 
+use Drupal\advanced_email_validation\Helper\EmailValidatorHelper;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\webform\Plugin\WebformHandlerBase;
 use Drupal\webform\WebformSubmissionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\advanced_email_validation\Helper\EmailValidatorHelper;
 
 /**
  * Advanced email webform validator handler.

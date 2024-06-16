@@ -13,6 +13,7 @@ use Drupal\salesforce_mapping\MappedObjectStorage;
 use Drupal\salesforce_mapping\MappingConstants;
 use Drupal\salesforce_mapping\SalesforceMappingStorage;
 use Drupal\salesforce_pull\DeleteHandler;
+use Drupal\salesforce_pull\QueueHandler;
 use Drupal\Tests\UnitTestCase;
 use Drupal\user\Entity\User;
 use Prophecy\Argument;
@@ -30,6 +31,36 @@ class DeleteHandlerTest extends UnitTestCase {
    * @var array
    */
   protected static $modules = ['salesforce_pull'];
+
+  protected $configStorage;
+
+  protected $dh;
+
+  protected $drupalEntityStorage;
+
+  protected $ed;
+
+  protected $entity;
+
+  protected $entityId;
+
+  protected $entityRef;
+
+  protected $entityStorage;
+
+  protected $entityTypeId;
+
+  protected $etm;
+
+  protected $mappedObject;
+
+  protected $mapping;
+
+  protected $sfapi;
+
+  protected $state;
+
+  protected $pullQueue;
 
   /**
    * {@inheritdoc}
@@ -61,7 +92,8 @@ class DeleteHandlerTest extends UnitTestCase {
     $this->entity->expects($this->any())->method('id')->willReturn(1);
     $this->entity->expects($this->any())->method('label')->willReturn('foo');
 
-    $this->mapping = $this->getMockBuilder(SalesforceMappingInterface::CLASS)->getMock();
+    $this->mapping = $this->getMockBuilder(SalesforceMappingInterface::CLASS)
+      ->getMock();
     $this->mapping->expects($this->any())
       ->method('__get')
       ->with($this->equalTo('id'))
@@ -89,7 +121,8 @@ class DeleteHandlerTest extends UnitTestCase {
     $this->entityId->value = '1';
     $this->entityRef->entity = $this->mapping;
 
-    $this->mappedObject = $this->getMockBuilder(MappedObjectInterface::CLASS)->getMock();
+    $this->mappedObject = $this->getMockBuilder(MappedObjectInterface::CLASS)
+      ->getMock();
     $this->mappedObject
       ->expects($this->any())
       ->method('delete')
@@ -131,27 +164,36 @@ class DeleteHandlerTest extends UnitTestCase {
 
     // Mock EntityTypeManagerInterface.
     $prophecy = $this->prophesize(EntityTypeManagerInterface::CLASS);
-    $prophecy->getStorage('salesforce_mapping')->willReturn($this->configStorage);
-    $prophecy->getStorage('salesforce_mapped_object')->willReturn($this->entityStorage);
+    $prophecy->getStorage('salesforce_mapping')
+      ->willReturn($this->configStorage);
+    $prophecy->getStorage('salesforce_mapped_object')
+      ->willReturn($this->entityStorage);
     $prophecy->getStorage('test')->willReturn($this->drupalEntityStorage);
     $this->etm = $prophecy->reveal();
 
     // Mock state.
     $prophecy = $this->prophesize(StateInterface::CLASS);
-    $prophecy->get('salesforce.mapping_pull_info', Argument::any())->willReturn([1 => ['last_delete_timestamp' => '1485787434']]);
-    $prophecy->set('salesforce.mapping_pull_info', Argument::any())->willReturn(NULL);
+    $prophecy->get('salesforce.mapping_pull_info', Argument::any())
+      ->willReturn([1 => ['last_delete_timestamp' => '1485787434']]);
+    $prophecy->set('salesforce.mapping_pull_info', Argument::any())
+      ->willReturn(NULL);
     $this->state = $prophecy->reveal();
 
     // Mock event dispatcher.
     $prophecy = $this->prophesize(ContainerAwareEventDispatcher::CLASS);
-    $prophecy->dispatch(Argument::any(), Argument::any())->willReturnArgument(0);
+    $prophecy->dispatch(Argument::any(), Argument::any())
+      ->willReturnArgument(0);
     $this->ed = $prophecy->reveal();
+
+    $prophecy = $this->prophesize(QueueHandler::CLASS);
+    $this->pullQueue = $prophecy->reveal();
 
     $this->dh = new DeleteHandler(
       $this->sfapi,
       $this->etm,
       $this->state,
-      $this->ed
+      $this->ed,
+      $this->pullQueue
     );
   }
 

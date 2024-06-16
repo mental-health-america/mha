@@ -4,6 +4,6 @@ services:
     arguments: ['salesforce']
   salesforce_logger.event_subscriber:
     class: Drupal\salesforce_logger\EventSubscriber\SalesforceLoggerSubscriber
-    arguments: ['@logger.channel.salesforce']
+    arguments: ['@logger.channel.salesforce', '@config.factory']
     tags:
       - { name: event_subscriber }

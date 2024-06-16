@@ -28,6 +28,28 @@ class SalesforceMappingTest extends UnitTestCase {
    */
   static protected $modules = ['salesforce_mapping'];
 
+  protected $drupalBundleId;
+
+  protected $drupalEntityTypeId;
+
+  protected $entityDefinition;
+
+  protected $entityTypeId;
+
+  protected $etm;
+
+  protected $id;
+
+  protected $mapping;
+
+  protected $provider;
+
+  protected $saleforceObjectType;
+
+  protected $state;
+
+  protected $values;
+
   /**
    * {@inheritdoc}
    */
@@ -89,7 +111,8 @@ class SalesforceMappingTest extends UnitTestCase {
 
     // Mock EntityTypeManagerInterface.
     $prophecy = $this->prophesize(EntityTypeManagerInterface::CLASS);
-    $prophecy->getDefinition($this->entityTypeId)->willReturn($this->entityDefinition);
+    $prophecy->getDefinition($this->entityTypeId)
+      ->willReturn($this->entityDefinition);
     $this->etm = $prophecy->reveal();
 
     // Mock Properties SalesforceMappingField.
@@ -99,18 +122,22 @@ class SalesforceMappingTest extends UnitTestCase {
 
     // Mode field plugin manager.
     $prophecy = $this->prophesize(SalesforceMappingFieldPluginManager::CLASS);
-    $prophecy->createInstance(Argument::any(), Argument::any())->willReturn($sf_mapping_field);
+    $prophecy->createInstance(Argument::any(), Argument::any())
+      ->willReturn($sf_mapping_field);
     $field_manager = $prophecy->reveal();
 
     // Mock state.
     $prophecy = $this->prophesize(StateInterface::CLASS);
-    $prophecy->get('salesforce.mapping_pull_info', Argument::any())->willReturn([]);
-    $prophecy->get('salesforce.mapping_push_info', Argument::any())->willReturn([
-      $this->id => [
-        'last_timestamp' => 0,
-      ],
-    ]);
-    $prophecy->set('salesforce.mapping_push_info', Argument::any())->willReturn(NULL);
+    $prophecy->get('salesforce.mapping_pull_info', Argument::any())
+      ->willReturn([]);
+    $prophecy->get('salesforce.mapping_push_info', Argument::any())
+      ->willReturn([
+        $this->id => [
+          'last_timestamp' => 0,
+        ],
+      ]);
+    $prophecy->set('salesforce.mapping_push_info', Argument::any())
+      ->willReturn(NULL);
     $this->state = $prophecy->reveal();
 
     $container = new ContainerBuilder();

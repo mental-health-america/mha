@@ -44,16 +44,10 @@ function salesforce_push_entity_delete(EntityInterface $entity) {
  * @param string $op
  *   The trigger being responded to.
  *   One of push_create, push_update, push_delete.
- *
- * @todo
- *   at some point all these hook_entity_* implementations will go away. We'll
- *   create an event subscriber class to respond to entity events and delegate
- *   actions to the appropriate Push procedures. Unfortunately this point seems
- *   to be a very long ways away. https://www.drupal.org/node/2551893
  */
 function salesforce_push_entity_crud(EntityInterface $entity, $op) {
   // Don't allow mapped objects or mappings to be pushed!
-  if (!empty($entity->salesforce_pull)
+  if ($entity->isSyncing()
   || $entity instanceof MappedObjectInterface
   || $entity instanceof SalesforceMappingInterface) {
     return;

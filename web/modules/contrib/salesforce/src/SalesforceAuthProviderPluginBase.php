@@ -2,6 +2,7 @@
 
 namespace Drupal\salesforce;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\DependencyInjection\DependencySerializationTrait;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerTrait;
@@ -46,6 +47,13 @@ abstract class SalesforceAuthProviderPluginBase extends Salesforce implements Sa
   protected $storage;
 
   /**
+   * Config factory interface.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * Provider id, e.g. jwt, oauth.
    *
    * @var string
@@ -79,16 +87,19 @@ abstract class SalesforceAuthProviderPluginBase extends Salesforce implements Sa
    *   The oauth http client.
    * @param \Drupal\salesforce\Storage\SalesforceAuthTokenStorageInterface $storage
    *   Auth token storage service.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
+   *   Config factory service.
    *
    * @throws \OAuth\OAuth2\Service\Exception\InvalidScopeException
    *   Comment.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ClientInterface $httpClient, SalesforceAuthTokenStorageInterface $storage) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ClientInterface $httpClient, SalesforceAuthTokenStorageInterface $storage, ConfigFactoryInterface $configFactory) {
     $this->id = !empty($configuration['id']) ? $configuration['id'] : NULL;
     $this->configuration = $configuration;
     $this->pluginDefinition = $plugin_definition;
     $this->pluginId = $plugin_id;
     $this->credentials = $this->getCredentials();
+    $this->configFactory = $configFactory;
     parent::__construct($this->getCredentials(), $httpClient, $storage, [], new Uri($this->getCredentials()->getLoginUrl()));
   }
 
@@ -97,7 +108,7 @@ abstract class SalesforceAuthProviderPluginBase extends Salesforce implements Sa
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     $configuration = array_merge(static::defaultConfiguration(), $configuration);
-    return new static($configuration, $plugin_id, $plugin_definition, $container->get('salesforce.http_client_wrapper'), $container->get('salesforce.auth_token_storage'));
+    return new static($configuration, $plugin_id, $plugin_definition, $container->get('salesforce.http_client_wrapper'), $container->get('salesforce.auth_token_storage'), $container->get('config.factory'));
   }
 
   /**
@@ -298,22 +309,18 @@ abstract class SalesforceAuthProviderPluginBase extends Salesforce implements Sa
    * {@inheritdoc}
    */
   public function getApiVersion() {
-    $version = \Drupal::config('salesforce.settings')->get('rest_api_version.version');
-    if (empty($version) || \Drupal::config('salesforce.settings')->get('use_latest')) {
+    $version = $this->configFactory->get('salesforce.settings')->get('rest_api_version.version');
+    if (empty($version) || $this->configFactory->get('salesforce.settings')->get('use_latest')) {
       return self::LATEST_API_VERSION;
     }
-    return \Drupal::config('salesforce.settings')->get('rest_api_version.version');
+    return $this->configFactory->get('salesforce.settings')->get('rest_api_version.version');
   }
 
   /**
    * {@inheritdoc}
    */
   public function getIdentity() {
-    $identity = $this->storage->retrieveIdentity($this->id());
-    if (empty($identity)) {
-      throw new IdentityNotFoundException();
-    }
-    return $identity;
+    return $this->storage->retrieveIdentity($this->id());
   }
 
   /**

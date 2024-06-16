@@ -3,7 +3,7 @@
 namespace Drupal\salesforce\Rest;
 
 /**
- *
+ * Salesforce identity response wrapper interface.
  */
 interface SalesforceIdentityInterface {
 

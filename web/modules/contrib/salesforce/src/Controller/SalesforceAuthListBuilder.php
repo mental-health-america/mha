@@ -17,16 +17,16 @@ class SalesforceAuthListBuilder extends ConfigEntityListBuilder {
   public function buildRow(EntityInterface $entity) {
     /** @var \Drupal\salesforce\SalesforceAuthProviderInterface $plugin */
     $plugin = $entity->getPlugin();
-    $row['default'] = $entity->authManager()
-      ->getConfig() && $entity->authManager()
-      ->getConfig()
-      ->id() == $entity->id()
-      ? $this->t('Default') : '';
+    $row['default'] = $entity->authManager()->getConfig()?->id() == $entity->id()
+      ? $this->t('Default')
+      : '';
     $row['label'] = $entity->label();
-    $row['url'] = $plugin->getCredentials()->getLoginUrl();
-    $row['key'] = substr($plugin->getCredentials()->getConsumerKey(), 0, 16) . '...';
-    $row['type'] = $plugin->label();
-    $row['status'] = $plugin->hasAccessToken() ? 'Authorized' : 'Missing';
+    $row['url'] = $plugin?->getCredentials()?->getLoginUrl();
+    $row['key'] = $plugin?->getCredentials()?->getConsumerKey()
+      ? substr($plugin?->getCredentials()?->getConsumerKey(), 0, 16) . '...'
+      : NULL;
+    $row['type'] = $plugin?->label();
+    $row['status'] = $plugin?->hasAccessToken() ? 'Authorized' : 'Missing';
     return $row + parent::buildRow($entity);
   }
 
@@ -40,8 +40,8 @@ class SalesforceAuthListBuilder extends ConfigEntityListBuilder {
     // Add a "revoke" action if we have a token.
     $operations['edit']['url'] = $entity->toUrl('edit-form');
     if (!$entity instanceof SalesforceAuthConfig
-    || !$entity->getPlugin()->hasAccessToken()
-    || !$entity->hasLinkTemplate('revoke')) {
+      || !$entity->getPlugin()?->hasAccessToken()
+      || !$entity->hasLinkTemplate('revoke')) {
       return $operations;
     }
     // Add a "revoke" action if we have a token.

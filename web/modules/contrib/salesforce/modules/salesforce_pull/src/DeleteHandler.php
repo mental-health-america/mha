@@ -71,6 +71,12 @@ class DeleteHandler {
   protected $eventDispatcher;
 
   /**
+   * Salesforce pull queue.
+   * @var \Drupal\salesforce_pull\QueueHandler
+   */
+  protected $pullQueue;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\salesforce\Rest\RestClientInterface $sfapi
@@ -81,17 +87,20 @@ class DeleteHandler {
    *   State service.
    * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
    *   Event dispatcher service.
+   * @param \Drupal\salesforce_pull\QueueHandler $pullQueue
+   *   Pull queue.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function __construct(RestClientInterface $sfapi, EntityTypeManagerInterface $entity_type_manager, StateInterface $state, EventDispatcherInterface $event_dispatcher) {
+  public function __construct(RestClientInterface $sfapi, EntityTypeManagerInterface $entity_type_manager, StateInterface $state, EventDispatcherInterface $event_dispatcher, QueueHandler $pullQueue) {
     $this->sfapi = $sfapi;
     $this->etm = $entity_type_manager;
     $this->mappingStorage = $this->etm->getStorage('salesforce_mapping');
     $this->mappedObjectStorage = $this->etm->getStorage('salesforce_mapped_object');
     $this->state = $state;
     $this->eventDispatcher = $event_dispatcher;
+    $this->pullQueue = $pullQueue;
   }
 
   /**
@@ -195,7 +204,8 @@ class DeleteHandler {
           '%sfid' => $record['id'],
         ];
         $this->eventDispatcher->dispatch(new SalesforceWarningEvent(NULL, $message, $args), SalesforceEvents::WARNING);
-        // @todo should we delete a mapped object whose parent mapping no longer exists? Feels like someone else's job.
+        // @todo should we delete a mapped object whose parent mapping no longer
+        // exists? Feels like someone else's job.
         // $mapped_object->delete();
         return;
       }
@@ -204,7 +214,8 @@ class DeleteHandler {
         return;
       }
 
-      // Before attempting the final delete, give other modules a chance to disallow it.
+      // Before attempting the final delete, give other modules a chance to
+      // disallow it.
       $deleteAllowedEvent = new SalesforceDeleteAllowedEvent($mapped_object);
       $this->eventDispatcher->dispatch($deleteAllowedEvent, SalesforceEvents::DELETE_ALLOWED);
       if ($deleteAllowedEvent->isDeleteAllowed() === FALSE) {
@@ -213,7 +224,7 @@ class DeleteHandler {
 
       try {
         // Flag this entity to avoid duplicate processing.
-        $entity->salesforce_pull = TRUE;
+        $entity->setSyncing(TRUE);
 
         $entity->delete();
         $message = 'Deleted entity %label with ID: %id associated with Salesforce Object ID: %sfid';

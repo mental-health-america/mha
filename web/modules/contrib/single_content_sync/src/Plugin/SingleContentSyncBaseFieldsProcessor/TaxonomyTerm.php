@@ -74,7 +74,7 @@ class TaxonomyTerm extends SingleContentSyncBaseFieldsProcessorPluginBase implem
   /**
    * {@inheritdoc}
    */
-  public function mapBaseFieldsValues(array $values): array {
+  public function mapBaseFieldsValues(array $values, FieldableEntityInterface $entity): array {
     return [
       'name' => $values['name'],
       'weight' => $values['weight'],

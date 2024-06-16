@@ -296,7 +296,7 @@ class SalesforceMapping extends ConfigEntityBase implements SalesforceMappingInt
     // we can delete it safely.
     // @todo there's probably a way to do this with schema.yml, but I can't find it.
     $entity_array = parent::toArray();
-    foreach ($entity_array['field_mappings'] as $i => &$value) {
+    foreach ($entity_array['field_mappings'] as &$value) {
       unset($value['mapping']);
     }
     return $entity_array;
@@ -450,12 +450,12 @@ class SalesforceMapping extends ConfigEntityBase implements SalesforceMappingInt
     }
 
     // @todo #fieldMappingField
-    foreach ($this->getFieldMappings() as $i => $field_plugin) {
+    foreach ($this->getFieldMappings() as $field_plugin) {
       if ($field_plugin->get('salesforce_field') == $this->getKeyField()) {
         return $field_plugin->value($entity, $this);
       }
     }
-    throw new \Exception($this->t('Key %key not found for this mapping.', ['%key' => $this->getKeyField()]));
+    throw new \Exception('Key ' . $this->getKeyField() . ' not found for this mapping.');
   }
 
   /**

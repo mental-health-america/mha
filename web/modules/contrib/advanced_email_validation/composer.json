@@ -17,6 +17,6 @@
     "source": "http://cgit.drupalcode.org/advanced_email_validation"
   },
   "require": {
-    "stymiee/email-validator": "^1.0.1"
+    "stymiee/email-validator": "^1.1.4"
   }
 }

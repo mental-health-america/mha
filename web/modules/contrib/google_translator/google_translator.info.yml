@@ -6,7 +6,7 @@ core_version_requirement: ^9 || ^10
 dependencies:
   - drupal:block
 
-# Information added by Drupal.org packaging script on 2022-08-04
-version: '2.1.0'
+# Information added by Drupal.org packaging script on 2024-03-20
+version: '2.2.0'
 project: 'google_translator'
-datestamp: 1659583641
+datestamp: 1710954812

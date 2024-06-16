@@ -2,6 +2,7 @@
 
 namespace Drupal\salesforce_mapping_ui;
 
+use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityListBuilder;
 use Drupal\Core\Entity\EntityStorageInterface;
@@ -24,6 +25,13 @@ class MappedObjectList extends EntityListBuilder {
   protected $urlGenerator;
 
   /**
+   * Date formatter.
+   *
+   * @var \Drupal\Core\Datetime\DateFormatterInterface
+   */
+  protected $date;
+
+  /**
    * Set entityIds to show a partial listing of mapped objects.
    *
    * @var array
@@ -37,23 +45,18 @@ class MappedObjectList extends EntityListBuilder {
     return new static(
       $entity_type,
       $container->get('entity_type.manager')->getStorage($entity_type->id()),
-      $container->get('url_generator')
+      $container->get('url_generator'),
+      $container->get('date.formatter')
     );
   }
 
   /**
-   * Constructs a new MappedObjectList object.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
-   *   The entity type definition.
-   * @param \Drupal\Core\Entity\EntityStorageInterface $storage
-   *   The entity storage class.
-   * @param \Drupal\Core\Routing\UrlGeneratorInterface $url_generator
-   *   The url generator.
+   * {@inheritdoc}
    */
-  public function __construct(EntityTypeInterface $entity_type, EntityStorageInterface $storage, UrlGeneratorInterface $url_generator) {
+  public function __construct(EntityTypeInterface $entity_type, EntityStorageInterface $storage, UrlGeneratorInterface $url_generator, DateFormatterInterface $date) {
     parent::__construct($entity_type, $storage);
     $this->urlGenerator = $url_generator;
+    $this->date = $date;
   }
 
   /**
@@ -107,7 +110,7 @@ class MappedObjectList extends EntityListBuilder {
     $row['mapped_entity']['data'] = $entity->drupal_entity->first()->view();
     $row['salesforce_link']['data'] = $entity->salesforce_link->first()->view();
     $row['mapping']['data'] = $entity->salesforce_mapping->first()->view();
-    $row['changed'] = \Drupal::service('date.formatter')->format($entity->changed->value);
+    $row['changed'] = $this->date->format($entity->changed->value);
     return $row + parent::buildRow($entity);
   }
 

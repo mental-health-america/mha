@@ -95,8 +95,12 @@ function key_drush_command() {
   $items['key-provider-list'] = [
     'description' => dt('Display a list of available key providers.'),
     'options' => [
+      'tags' => [
+        'description' => dt('Optional key provider tags, separated by comma, on which to filter.'),
+        'example-value' => 'config,file',
+      ],
       'storage-method' => [
-        'description' => dt('An optional key provider storage method on which to filter.'),
+        'description' => dt('[DEPRECATED] An optional key provider storage method on which to filter.'),
         'example-value' => 'config,file',
       ],
     ],

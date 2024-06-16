@@ -2,12 +2,12 @@
 
 namespace Drupal\draggableviews;
 
+use Drupal\Component\Utility\Html;
 use Drupal\media\Entity\Media;
 use Drupal\views\ViewExecutable;
-use Drupal\Component\Utility\Html;
 
 /**
- * Class DraggableViews.
+ * Helper class to provide common functionality for indexes of results.
  */
 class DraggableViews {
 
@@ -75,7 +75,7 @@ class DraggableViews {
    * Get parent by index.
    */
   public function getParent($index) {
-    return isset($this->view->result[$index]->draggableviews_structure_parent) ? $this->view->result[$index]->draggableviews_structure_parent : 0;
+    return $this->view->result[$index]->draggableviews_structure_parent ?? 0;
   }
 
   /**

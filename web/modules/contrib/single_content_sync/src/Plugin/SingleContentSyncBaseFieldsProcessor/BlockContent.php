@@ -32,7 +32,7 @@ class BlockContent extends SingleContentSyncBaseFieldsProcessorPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function mapBaseFieldsValues(array $values): array {
+  public function mapBaseFieldsValues(array $values, FieldableEntityInterface $entity): array {
     return [
       'langcode' => $values['langcode'],
       'info' => $values['info'],
