@@ -3,18 +3,18 @@
 /**
  * @file
  */
-namespace Drupal\mha_donation\Plugin\Block;
+namespace Drupal\form_donate_monthly\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 
 /**
  * Provides a Custom Block
  * @Block(
- * id = "block_mha_donation",
- * admin_label = @Translation("MHA Donation"),
+ * id = "block_form_donate_monthly",
+ * admin_label = @Translation("Form Donate Monthly"),
  * )
  */
-class mha_donation extends BlockBase {
+class form_donate_monthly extends BlockBase {
 
   /**
    * {@inheritdoc}
@@ -22,9 +22,7 @@ class mha_donation extends BlockBase {
   public function build() {
     return array(
       '#markup' => $this->t('
-<div id="donation-form-mha">
-<a href="#XRTWEYXW" style="display: none"></a>
-</div>
+<a href="#XGGVSEVE" style="display: none"></a>
       '),
     );
 
