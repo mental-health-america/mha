@@ -3,7 +3,7 @@
 namespace Drupal\salesforce;
 
 /**
- * Class SObject.
+ * The Salesforce Object class.
  *
  * @package Drupal\salesforce
  */

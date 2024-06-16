@@ -30,7 +30,7 @@ class PropertiesExtended extends PropertiesBase {
     }
 
     if (strpos($field_name, '.')) {
-      [$field_name, $dummy] = explode('.', $field_name, 2);
+      [$field_name] = explode('.', $field_name, 2);
     }
     // Add reference field.
     if ($field = FieldConfig::loadByName($this->mapping->getDrupalEntityType(), $this->mapping->getDrupalBundle(), $field_name)) {

@@ -33,11 +33,14 @@ class HttpClientWrapper implements ClientInterface {
    */
   public function retrieveResponse(
     UriInterface $endpoint,
-    $requestBody,
+                 $requestBody,
     array $extraHeaders = [],
-    $method = 'POST'
+                 $method = 'POST'
   ) {
-    $response = $this->httpClient->request($method, $endpoint->getAbsoluteUri(), ['headers' => $extraHeaders, 'form_params' => $requestBody]);
+    $response = $this->httpClient->request($method, $endpoint->getAbsoluteUri(), [
+      'headers' => $extraHeaders,
+      'form_params' => $requestBody,
+    ]);
     return $response->getBody()->getContents();
   }
 

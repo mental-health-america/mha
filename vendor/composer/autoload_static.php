@@ -166,6 +166,7 @@ class ComposerStaticInit4c8ed02fb1b971648375da27b593a0ff
             'Drupal\\Driver\\' => 14,
             'Drupal\\Core\\' => 12,
             'Drupal\\Component\\' => 17,
+            'DrupalFinder\\' => 13,
             'DrupalCodeGenerator\\' => 20,
             'Dotenv\\' => 7,
             'Dompdf\\' => 7,
@@ -374,7 +375,7 @@ class ComposerStaticInit4c8ed02fb1b971648375da27b593a0ff
         ),
         'Svg\\' => 
         array (
-            0 => __DIR__ . '/..' . '/phenx/php-svg-lib/src/Svg',
+            0 => __DIR__ . '/..' . '/dompdf/php-svg-lib/src/Svg',
         ),
         'SelfUpdate\\' => 
         array (
@@ -471,7 +472,7 @@ class ComposerStaticInit4c8ed02fb1b971648375da27b593a0ff
         ),
         'FontLib\\' => 
         array (
-            0 => __DIR__ . '/..' . '/phenx/php-font-lib/src/FontLib',
+            0 => __DIR__ . '/..' . '/dompdf/php-font-lib/src/FontLib',
         ),
         'Firebase\\JWT\\' => 
         array (
@@ -504,6 +505,10 @@ class ComposerStaticInit4c8ed02fb1b971648375da27b593a0ff
         'Drupal\\Component\\' => 
         array (
             0 => __DIR__ . '/../..' . '/web/core/lib/Drupal/Component',
+        ),
+        'DrupalFinder\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/webflo/drupal-finder/src',
         ),
         'DrupalCodeGenerator\\' => 
         array (
@@ -629,10 +634,6 @@ class ComposerStaticInit4c8ed02fb1b971648375da27b593a0ff
         ),
     );
 
-    public static $fallbackDirsPsr0 = array (
-        0 => __DIR__ . '/..' . '/pear/pear-core-minimal/src',
-    );
-
     public static $classMap = array (
         'AllowFieldTruncationHeader' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceHeaderOptions.php',
         'AssignmentRuleHeader' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceHeaderOptions.php',
@@ -642,7 +643,6 @@ class ComposerStaticInit4c8ed02fb1b971648375da27b593a0ff
         'Datamatrix' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/barcodes/datamatrix.php',
         'Dompdf\\Cpdf' => __DIR__ . '/..' . '/dompdf/dompdf/lib/Cpdf.php',
         'Drupal' => __DIR__ . '/../..' . '/web/core/lib/Drupal.php',
-        'DrupalFinder\\DrupalFinder' => __DIR__ . '/..' . '/webflo/drupal-finder/src/DrupalFinder.php',
         'DrupalProject\\composer\\ScriptHandler' => __DIR__ . '/../..' . '/scripts/composer/ScriptHandler.php',
         'Drupal\\Component\\DependencyInjection\\Container' => __DIR__ . '/../..' . '/web/core/lib/Drupal/Component/DependencyInjection/Container.php',
         'Drupal\\Component\\DependencyInjection\\PhpArrayContainer' => __DIR__ . '/../..' . '/web/core/lib/Drupal/Component/DependencyInjection/PhpArrayContainer.php',
@@ -674,7 +674,11 @@ class ComposerStaticInit4c8ed02fb1b971648375da27b593a0ff
         'MassEmailMessage' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceEmail.php',
         'MruHeader' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceHeaderOptions.php',
         'Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
+        'OS_Guess' => __DIR__ . '/..' . '/pear/pear-core-minimal/src/OS/Guess.php',
         'PDF417' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/barcodes/pdf417.php',
+        'PEAR' => __DIR__ . '/..' . '/pear/pear-core-minimal/src/PEAR.php',
+        'PEAR_Error' => __DIR__ . '/..' . '/pear/pear-core-minimal/src/PEAR.php',
+        'PEAR_ErrorStack' => __DIR__ . '/..' . '/pear/pear-core-minimal/src/PEAR/ErrorStack.php',
         'PEAR_Exception' => __DIR__ . '/..' . '/pear/pear_exception/PEAR/Exception.php',
         'PackageVersion' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceHeaderOptions.php',
         'PackageVersionHeader' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceHeaderOptions.php',
@@ -697,6 +701,7 @@ class ComposerStaticInit4c8ed02fb1b971648375da27b593a0ff
         'SforceSoapClient' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforcePartnerClient.php',
         'SingleEmailMessage' => __DIR__ . '/..' . '/messageagency/force.com-toolkit-for-php/soapclient/SforceEmail.php',
         'Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
+        'System' => __DIR__ . '/..' . '/pear/pear-core-minimal/src/System.php',
         'TCPDF' => __DIR__ . '/..' . '/tecnickcom/tcpdf/tcpdf.php',
         'TCPDF2DBarcode' => __DIR__ . '/..' . '/tecnickcom/tcpdf/tcpdf_barcodes_2d.php',
         'TCPDFBarcode' => __DIR__ . '/..' . '/tecnickcom/tcpdf/tcpdf_barcodes_1d.php',
@@ -720,7 +725,6 @@ class ComposerStaticInit4c8ed02fb1b971648375da27b593a0ff
             $loader->prefixLengthsPsr4 = ComposerStaticInit4c8ed02fb1b971648375da27b593a0ff::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit4c8ed02fb1b971648375da27b593a0ff::$prefixDirsPsr4;
             $loader->prefixesPsr0 = ComposerStaticInit4c8ed02fb1b971648375da27b593a0ff::$prefixesPsr0;
-            $loader->fallbackDirsPsr0 = ComposerStaticInit4c8ed02fb1b971648375da27b593a0ff::$fallbackDirsPsr0;
             $loader->classMap = ComposerStaticInit4c8ed02fb1b971648375da27b593a0ff::$classMap;
 
         }, null, ClassLoader::class);

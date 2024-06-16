@@ -73,7 +73,7 @@ class PushController extends ControllerBase {
     // If standalone for this mapping is disabled, and global standalone is
     // disabled, then "Access Denied" for this mapping.
     if (!$mapping->doesPushStandalone()
-    && !\Drupal::config('salesforce.settings')->get('standalone')) {
+    && !$this->config('salesforce.settings')->get('standalone')) {
       throw new AccessDeniedHttpException();
     }
     $this->pushQueue->processQueue($mapping);

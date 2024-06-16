@@ -9,7 +9,7 @@ dependencies:
   - drupal:image
   - crop:crop
 
-# Information added by Drupal.org packaging script on 2023-07-27
-version: '2.0.2'
+# Information added by Drupal.org packaging script on 2024-05-07
+version: '2.1.0'
 project: 'focal_point'
-datestamp: 1690451622
+datestamp: 1715085295

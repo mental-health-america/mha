@@ -23,7 +23,8 @@ class SalesforceAuthForm extends EntityForm {
   public function form(array $form, FormStateInterface $form_state) {
     $auth = $this->entity;
     if (empty($auth->getPluginsAsOptions())) {
-      $this->messenger()->addError('No auth provider plugins found. Please enable an auth provider module, e.g. salesforce_jwt, before adding an auth config.');
+      $this->messenger()
+        ->addError('No auth provider plugins found. Please enable an auth provider module, e.g. salesforce_jwt, before adding an auth config.');
       $form['#access'] = FALSE;
       return $form;
     }
@@ -81,7 +82,8 @@ class SalesforceAuthForm extends EntityForm {
         ->buildConfigurationForm([], $form_state);
     }
     elseif ($form_state->getValue('provider')) {
-      $plugin = $this->entity->authManager()->createInstance($form_state->getValue('provider'));
+      $plugin = $this->entity->authManager()
+        ->createInstance($form_state->getValue('provider'));
       $form['settings']['provider_settings'] += $plugin->buildConfigurationForm([], $form_state);
     }
     elseif ($form_state->getUserInput()) {
@@ -95,7 +97,10 @@ class SalesforceAuthForm extends EntityForm {
     $form['save_default'] = [
       '#type' => 'checkbox',
       '#title' => 'Save and set default',
-      '#default_value' => $this->entity->isNew() || ($this->entity->authManager()->getProvider() && $this->entity->authManager()->getProvider()->id() == $this->entity->id()),
+      '#default_value' => $this->entity->isNew() || ($this->entity->authManager()
+            ->getProvider() && $this->entity->authManager()
+            ->getProvider()
+            ->id() == $this->entity->id()),
     ];
     return parent::form($form, $form_state);
   }
@@ -129,8 +134,12 @@ class SalesforceAuthForm extends EntityForm {
       // Don't bother processing plugin validation if we already have errors.
       return;
     }
-
-    $this->entity->getPlugin()->validateConfigurationForm($form, $form_state);
+    // Generate a new provider entity from the given settings, in case they're
+    // changing, otherwise ::getPlugin() may return the old plugin.
+    $plugin = $this->entity
+      ->authManager()
+      ->createInstance($form_state->getValue('provider'), $form_state->getValue('provider_settings'));
+    $plugin->validateConfigurationForm($form, $form_state);
   }
 
   /**
@@ -151,7 +160,7 @@ class SalesforceAuthForm extends EntityForm {
    */
   public function save(array $form, FormStateInterface $form_state) {
     parent::save($form, $form_state);
-    $this->entity->getPlugin()->save($form, $form_state);
+    $ret = $this->entity->getPlugin()->save($form, $form_state);
     if ($form_state->getValue('save_default')) {
       $this
         ->configFactory()
@@ -159,6 +168,7 @@ class SalesforceAuthForm extends EntityForm {
         ->set('salesforce_auth_provider', $this->entity->id())
         ->save();
     }
+    return $ret;
   }
 
   /**
@@ -174,7 +184,7 @@ class SalesforceAuthForm extends EntityForm {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function exists($id) {
-    $action = \Drupal::entityTypeManager()->getStorage($this->entity->getEntityTypeId())->load($id);
+    $action = $this->entityTypeManager->getStorage($this->entity->getEntityTypeId())->load($id);
     return !empty($action);
   }
 

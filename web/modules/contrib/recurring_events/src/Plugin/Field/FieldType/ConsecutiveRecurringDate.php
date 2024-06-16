@@ -141,13 +141,13 @@ class ConsecutiveRecurringDate extends DateRangeItem implements RecurringEventsF
     $user_timezone = new \DateTimeZone(date_default_timezone_get());
     $user_input = $form_state->getValues();
 
-    $time = $user_input['consecutive_recurring_date'][0]['time'];
+    $time = $user_input['consecutive_recurring_date'][0]['time'] ?? NULL;
     if (is_array($time)) {
       $temp = DrupalDateTime::createFromFormat('H:i:s', $time['time']);
       $time = $temp->format('h:i A');
     }
 
-    $end_time = $user_input['consecutive_recurring_date'][0]['end_time'];
+    $end_time = $user_input['consecutive_recurring_date'][0]['end_time'] ?? NULL;
     if (is_array($end_time)) {
       $temp = DrupalDateTime::createFromFormat('H:i:s', $end_time['time']);
       $end_time = $temp->format('h:i A');

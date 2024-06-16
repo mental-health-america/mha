@@ -17,3 +17,6 @@ domain_lists:
     - ''
   banned:
     - ''
+local_list_only:
+  disposable: false
+  free: false

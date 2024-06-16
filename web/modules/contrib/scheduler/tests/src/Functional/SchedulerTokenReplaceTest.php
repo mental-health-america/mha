@@ -20,6 +20,9 @@ class SchedulerTokenReplaceTest extends SchedulerBrowserTestBase {
     // Define timestamps for consistent use when repeated throughout this test.
     $publish_on_timestamp = $this->requestTime + 3600;
     $unpublish_on_timestamp = $this->requestTime + 7200;
+    // Derive the token type id from the entity type id. Use second parameter
+    // TRUE to fall back to the input value if the mapping is not found.
+    $tokenTypeId = \Drupal::service('token.entity_mapper')->getTokenTypeForEntityType($entityTypeId, TRUE);
 
     // Create an unpublished entity with scheduled dates.
     $entity = $this->createEntity($entityTypeId, $bundle, [
@@ -48,7 +51,7 @@ class SchedulerTokenReplaceTest extends SchedulerBrowserTestBase {
     foreach ($test_cases as $test_data) {
       // Edit the entity and set the body tokens to use the format being tested.
       $edit = [
-        "{$this->bodyField($entityTypeId)}[0][value]" => "Publish on: [{$entityTypeId}:scheduler-publish{$test_data['token_format']}]. Unpublish on: [{$entityTypeId}:scheduler-unpublish{$test_data['token_format']}].",
+        "{$this->bodyField($entityTypeId)}[0][value]" => "Publish on: [{$tokenTypeId}:scheduler-publish{$test_data['token_format']}]. Unpublish on: [{$tokenTypeId}:scheduler-unpublish{$test_data['token_format']}].",
       ];
       $this->drupalGet($entity->toUrl('edit-form'));
       $this->submitForm($edit, 'Save');
@@ -70,6 +73,26 @@ class SchedulerTokenReplaceTest extends SchedulerBrowserTestBase {
   }
 
   /**
+   * Test when token module is not installed.
+   *
+   * @see https://www.drupal.org/project/scheduler/issues/3443183
+   *
+   * @dataProvider dataSchedulerWithoutTokenModule()
+   */
+  public function testSchedulerWithoutTokenModule($entityTypeId, $bundle) {
+    // This test is not run for commerce products because that module requires
+    // the token module, so it has to be uninstalled too.
+    $this->container->get('module_installer')->uninstall(['commerce_product']);
+    $this->container->get('module_installer')->uninstall(['token']);
+
+    $this->drupalLogin($this->schedulerUser);
+    // Check that the entity add page can be accessed successfully, so show that
+    // the token.entity_mapper service is avoided when not available.
+    $this->drupalGet($this->entityAddUrl($entityTypeId, $bundle));
+    $this->assertSession()->statusCodeEquals(200);
+  }
+
+  /**
    * Provides test data for TokenReplacement test.
    *
    * This test is not run for Media entities because there is no body field.
@@ -80,6 +103,18 @@ class SchedulerTokenReplaceTest extends SchedulerBrowserTestBase {
   public function dataSchedulerTokenReplacement() {
     $data = $this->dataStandardEntityTypes();
     unset($data['#media']);
+    return $data;
+  }
+
+  /**
+   * Provides test data for testing without the Token module.
+   *
+   * @return array
+   *   Each array item has the values: [entity type id, bundle id].
+   */
+  public function dataSchedulerWithoutTokenModule() {
+    $data = $this->dataStandardEntityTypes();
+    unset($data['#commerce_product']);
     return $data;
   }
 

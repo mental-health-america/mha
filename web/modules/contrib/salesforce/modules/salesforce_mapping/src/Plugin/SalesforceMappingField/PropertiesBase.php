@@ -2,7 +2,11 @@
 
 namespace Drupal\salesforce_mapping\Plugin\SalesforceMappingField;
 
+use Drupal\Core\Datetime\DateFormatterInterface;
+use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\TypedData\ComplexDataDefinitionInterface;
 use Drupal\Core\TypedData\ComplexDataInterface;
@@ -10,11 +14,14 @@ use Drupal\Core\TypedData\DataDefinitionInterface;
 use Drupal\Core\TypedData\Exception\MissingDataException;
 use Drupal\Core\TypedData\ListDataDefinitionInterface;
 use Drupal\Core\TypedData\TypedDataInterface;
+use Drupal\salesforce\Rest\RestClientInterface;
 use Drupal\salesforce\SObject;
 use Drupal\salesforce_mapping\Entity\SalesforceMappingInterface;
 use Drupal\salesforce_mapping\SalesforceMappingFieldPluginBase;
+use Drupal\typed_data\DataFetcherInterface;
 use Drupal\typed_data\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Base class for properties plugins.
@@ -29,25 +36,26 @@ abstract class PropertiesBase extends SalesforceMappingFieldPluginBase {
   protected $dataFetcher;
 
   /**
-   *
+   * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    $plugin = parent::create($container, $configuration, $plugin_id, $plugin_definition);
-    $plugin->dataFetcher = $container->get('typed_data.data_fetcher');
-    return $plugin;
+  public function __construct(array $configuration, $plugin_id, array $plugin_definition, EntityTypeBundleInfoInterface $entity_type_bundle_info, EntityFieldManagerInterface $entity_field_manager, RestClientInterface $rest_client, EntityTypeManagerInterface $etm, DateFormatterInterface $dateFormatter, EventDispatcherInterface $event_dispatcher, DataFetcherInterface $dataFetcher) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $entity_type_bundle_info, $entity_field_manager, $rest_client, $etm, $dateFormatter, $event_dispatcher);
+    $this->dataFetcher = $dataFetcher;
   }
 
   /**
-   * Data fetcher getter.
-   *
-   * @return \Drupal\typed_data\DataFetcherInterface|mixed
-   *   Data fetcher.
+   * {@inheritdoc}
    */
-  public function dataFetcher() {
-    if (empty($this->dataFetcher)) {
-      $this->dataFetcher = \Drupal::service('typed_data.data_fetcher');
-    }
-    return $this->dataFetcher;
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static($configuration, $plugin_id, $plugin_definition,
+      $container->get('entity_type.bundle.info'),
+      $container->get('entity_field.manager'),
+      $container->get('salesforce.client'),
+      $container->get('entity_type.manager'),
+      $container->get('date.formatter'),
+      $container->get('event_dispatcher'),
+      $container->get('typed_data.data_fetcher')
+    );
   }
 
   /**
@@ -78,7 +86,7 @@ abstract class PropertiesBase extends SalesforceMappingFieldPluginBase {
         }
       }
     }
-    // @todo Should we validate the $config['drupal_field_value']['setting'] property?
+    return parent::checkFieldMappingDependency($dependencies);
   }
 
   /**
@@ -115,7 +123,7 @@ abstract class PropertiesBase extends SalesforceMappingFieldPluginBase {
     $pullValue = parent::pullValue($sf_object, $entity, $mapping);
     try {
       // Fetch the TypedData property and set its value.
-      $data = $this->dataFetcher()->fetchDataByPropertyPath($entity->getTypedData(), $field_selector);
+      $data = $this->dataFetcher->fetchDataByPropertyPath($entity->getTypedData(), $field_selector);
       $data->setValue($pullValue);
       return $data;
     }
@@ -133,7 +141,7 @@ abstract class PropertiesBase extends SalesforceMappingFieldPluginBase {
     // We descend only to the first-level fields on the entity. Cascading pull
     // values to entity references is not supported.
     $parts = explode('.', $field_selector, 4);
-
+    $field_name = $delta = $property = NULL;
     switch (count($parts)) {
       case 1:
         $entity->set($field_selector, $pullValue);
@@ -191,7 +199,7 @@ abstract class PropertiesBase extends SalesforceMappingFieldPluginBase {
     if (!strpos($this->config('drupal_field_value'), '.')) {
       return parent::getFieldDataDefinition($entity);
     }
-    $data_definition = $this->dataFetcher()->fetchDefinitionByPropertyPath($entity->getTypedData()->getDataDefinition(), $this->config('drupal_field_value'));
+    $data_definition = $this->dataFetcher->fetchDefinitionByPropertyPath($entity->getTypedData()->getDataDefinition(), $this->config('drupal_field_value'));
     if ($data_definition instanceof ListDataDefinitionInterface) {
       $data_definition = $data_definition->getItemDefinition();
     }
@@ -239,7 +247,7 @@ abstract class PropertiesBase extends SalesforceMappingFieldPluginBase {
    */
   protected function getDataValue(EntityInterface $entity, $drupal_field_value) {
     try {
-      return $this->dataFetcher()->fetchDataByPropertyPath($entity->getTypedData(), $drupal_field_value);
+      return $this->dataFetcher->fetchDataByPropertyPath($entity->getTypedData(), $drupal_field_value);
     }
     catch (\Exception $e) {
       return NULL;

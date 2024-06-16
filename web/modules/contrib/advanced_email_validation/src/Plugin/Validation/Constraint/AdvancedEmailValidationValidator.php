@@ -2,8 +2,8 @@
 
 namespace Drupal\advanced_email_validation\Plugin\Validation\Constraint;
 
-use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\advanced_email_validation\AdvancedEmailValidator;
+use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use EmailValidator\EmailValidator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Validator\Constraint;

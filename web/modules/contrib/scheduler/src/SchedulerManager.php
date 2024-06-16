@@ -3,7 +3,6 @@
 namespace Drupal\scheduler;
 
 use Drupal\Component\Datetime\TimeInterface;
-use Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher;
 use Drupal\Component\EventDispatcher\Event;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -18,7 +17,9 @@ use Drupal\Core\Link;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
+use Drupal\scheduler\Event\SchedulerEvent;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Defines a scheduler manager.
@@ -65,7 +66,7 @@ class SchedulerManager {
   /**
    * The event dispatcher.
    *
-   * @var \Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher
+   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
    */
   protected $eventDispatcher;
 
@@ -93,15 +94,16 @@ class SchedulerManager {
   /**
    * Constructs a SchedulerManager object.
    */
-  public function __construct(DateFormatterInterface $dateFormatter,
-                              LoggerInterface $logger,
-                              ModuleHandlerInterface $moduleHandler,
-                              EntityTypeManagerInterface $entityTypeManager,
-                              ConfigFactoryInterface $configFactory,
-                              ContainerAwareEventDispatcher $eventDispatcher,
-                              TimeInterface $time,
-                              EntityFieldManagerInterface $entityFieldManager,
-                              SchedulerPluginManager $pluginManager
+  public function __construct(
+    DateFormatterInterface $dateFormatter,
+    LoggerInterface $logger,
+    ModuleHandlerInterface $moduleHandler,
+    EntityTypeManagerInterface $entityTypeManager,
+    ConfigFactoryInterface $configFactory,
+    EventDispatcherInterface $eventDispatcher,
+    TimeInterface $time,
+    EntityFieldManagerInterface $entityFieldManager,
+    SchedulerPluginManager $pluginManager,
   ) {
     $this->dateFormatter = $dateFormatter;
     $this->logger = $logger;
@@ -183,7 +185,7 @@ class SchedulerManager {
    * Handles throwing exceptions.
    *
    * @param Drupal\Core\Entity\EntityInterface $entity
-   *   The entity causing the exepction.
+   *   The entity causing the exception.
    * @param string $exception_name
    *   Which exception to throw.
    * @param string $process
@@ -195,7 +197,7 @@ class SchedulerManager {
     $plugin = $this->getPlugin($entity->getEntityTypeId());
 
     // Exception messages are developer-facing and do not need to be translated
-    // from English. So it is accpetable to create words such as "{$process}ed"
+    // from English. So it is acceptable to create words such as "{$process}ed"
     // and "{$process}ing".
     switch ($exception_name) {
       case 'SchedulerEntityTypeNotEnabledException':
@@ -256,6 +258,10 @@ class SchedulerManager {
         if ($plugin->entityTypeObject()->isRevisionable()) {
           $query->latestRevision();
         }
+        // Add tags to let other modules alter the query.
+        $query->addTag('scheduler');
+        $query->addTag('scheduler_publish');
+        $query->addTag('scheduler_' . $entityTypeId . '_publish');
         $ids = $query->execute();
       }
 
@@ -347,12 +353,12 @@ class SchedulerManager {
           // hook_scheduler_{type}_publish_process() to allow other modules to
           // do the "publishing" process instead of Scheduler.
           $hook_implementations = $this->getHookImplementations('publish_process', $entity);
-          $sucessful_hooks = [];
+          $successful_hooks = [];
           $failed_hooks = [];
           foreach ($hook_implementations as $function) {
             $return = $function($entity);
             if ($return === 1) {
-              $sucessful_hooks[] = $function;
+              $successful_hooks[] = $function;
               if (stristr($function, '_action')) {
                 // If this is a legacy action hook, for safety call ->save() as
                 // this used to be done here in Scheduler 8.x-1.x.
@@ -361,7 +367,7 @@ class SchedulerManager {
             }
             $return === -1 ? $failed_hooks[] = $function : NULL;
           }
-          $processed = count($sucessful_hooks) > 0;
+          $processed = count($successful_hooks) > 0;
           $failed = count($failed_hooks) > 0;
 
           // Create a set of variables for use in the log message.
@@ -381,7 +387,7 @@ class SchedulerManager {
           $logger_variables = [
             '@type' => $entity_type->label(),
             '%title' => $entity->label(),
-            '@sucessful_hooks' => implode(', ', $sucessful_hooks),
+            '@successful_hooks' => implode(', ', $successful_hooks),
             '@failed_hooks' => implode(', ', $failed_hooks),
             'link' => implode(' ', $links),
           ];
@@ -398,7 +404,7 @@ class SchedulerManager {
           elseif ($processed) {
             // The entity was 'published' by a module implementing the hook, so
             // we only need to log this result.
-            $this->logger->notice('@type: scheduled "publish" processing of %title completed by @sucessful_hooks.', $logger_variables);
+            $this->logger->notice('@type: scheduled "publish" processing of %title completed by @successful_hooks.', $logger_variables);
           }
           else {
             // None of the above hook calls processed the entity and there were
@@ -477,6 +483,10 @@ class SchedulerManager {
         if ($plugin->entityTypeObject()->isRevisionable()) {
           $query->latestRevision();
         }
+        // Add tags to let other modules alter the query.
+        $query->addTag('scheduler');
+        $query->addTag('scheduler_unpublish');
+        $query->addTag('scheduler_' . $entityTypeId . '_unpublish');
         $ids = $query->execute();
       }
 
@@ -561,12 +571,12 @@ class SchedulerManager {
           // and hook_scheduler_{type}_unpublish_process() to allow other
           // modules to do the "unpublishing" process instead of Scheduler.
           $hook_implementations = $this->getHookImplementations('unpublish_process', $entity);
-          $sucessful_hooks = [];
+          $successful_hooks = [];
           $failed_hooks = [];
           foreach ($hook_implementations as $function) {
             $return = $function($entity);
             if ($return === 1) {
-              $sucessful_hooks[] = $function;
+              $successful_hooks[] = $function;
               if (stristr($function, '_action')) {
                 // If this is a legacy action hook, for safety call ->save() as
                 // this used to be done here in Scheduler 8.x-1.x.
@@ -575,7 +585,7 @@ class SchedulerManager {
             }
             $return === -1 ? $failed_hooks[] = $function : NULL;
           }
-          $processed = count($sucessful_hooks) > 0;
+          $processed = count($successful_hooks) > 0;
           $failed = count($failed_hooks) > 0;
 
           // Create a set of variables for use in the log message.
@@ -595,7 +605,7 @@ class SchedulerManager {
           $logger_variables = [
             '@type' => $entity_type->label(),
             '%title' => $entity->label(),
-            '@sucessful_hooks' => implode(', ', $sucessful_hooks),
+            '@successful_hooks' => implode(', ', $successful_hooks),
             '@failed_hooks' => implode(', ', $failed_hooks),
             'link' => implode(' ', $links),
           ];
@@ -612,7 +622,7 @@ class SchedulerManager {
           elseif ($processed) {
             // The entity was 'unpublished' by a module implementing the hook,
             // so we only need to log this result.
-            $this->logger->notice('@type: scheduled "unpublish" processing of %title completed by @sucessful_hooks.', $logger_variables);
+            $this->logger->notice('@type: scheduled "unpublish" processing of %title completed by @successful_hooks.', $logger_variables);
           }
           else {
             // None of the above hook calls processed the entity and there were
@@ -1143,6 +1153,9 @@ class SchedulerManager {
 
       case 'view':
         return 'view scheduled ' . ($entityTypeId == 'node' ? 'content' : $entityTypeId);
+
+      default:
+        return '* should never get this *';
     }
   }
 
@@ -1354,7 +1367,7 @@ class SchedulerManager {
    *
    * This was a design change during the development of Scheduler 2.0 and any
    * site that had installed Scheduler prior to 2.0-rc8 will have all fields
-   * enabled. Whilst this should not be a problem, it is preferrable to update
+   * enabled. Whilst this should not be a problem, it is preferable to update
    * the displays to match the scenario when the modules is freshly installed.
    * Hence this function was added and called from scheduler_update_8208().
    */

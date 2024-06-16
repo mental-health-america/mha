@@ -3,7 +3,7 @@
 namespace Drupal\salesforce\Rest;
 
 /**
- * Class RestResponseDescribe.
+ * Class RestResponseDescribe response wrapper.
  *
  * @package Drupal\salesforce\Rest
  */
@@ -14,24 +14,125 @@ class RestResponseDescribe extends RestResponse {
    *
    * @var array
    */
-  protected $fields;
+  protected array $fields;
 
   /**
    * The name of this SObject type, e.g. "Contact", "Account", "Opportunity".
    *
    * @var string
    */
-  protected $name;
+  protected string $name;
 
   /**
    * Flattened fields mapping field name => field label.
    *
    * @var array
    */
-  private $fieldOptions;
+  private array $fieldOptions;
 
   /**
-   * See https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/dome_sobject_describe.htm.
+   * The following protected properties are those we expect from Describe
+   * endpoint.
+   *
+   * For a full accounting and description of the API, refer to Salesforce
+   * documentation
+   *
+   * @see https://developer.salesforce.com/docs/atlas.en-us.246.0.api.meta/api/sforce_api_calls_describesobjects_describesobjectresult.htm
+   */
+  // phpcs:disable
+  protected array $actionOverrides;
+
+  protected bool $activateable;
+
+  protected ?string $associateEntityType;
+
+  protected ?string $associateParentEntity;
+
+  protected array $childRelationships;
+
+  protected bool $compactLayoutable;
+
+  protected bool $createable;
+
+  protected bool $custom;
+
+  protected bool $customSetting;
+
+  protected bool $dataTranslationEnabled;
+
+  protected bool $deepCloneable;
+
+  protected ?string $defaultImplementation;
+
+  protected bool $deletable;
+
+  protected bool $deprecatedAndHidden;
+
+  protected ?string $extendedBy;
+
+  protected ?string $extendsInterfaces;
+
+  protected bool $feedEnabled;
+
+  protected ?string $implementedBy;
+
+  protected ?string $implementsInterfaces;
+
+  protected bool $isInterface;
+
+  protected bool $isSubtype;
+
+  protected string $keyPrefix;
+
+  protected string $label;
+
+  protected string $labelPlural;
+
+  protected bool $layoutable;
+
+  protected bool $mergeable;
+
+  protected bool $mruEnabled;
+
+  protected array $namedLayoutInfos;
+
+  protected ?string $networkScopeFieldName;
+
+  protected bool $queryable;
+
+  protected array $recordTypeInfos;
+
+  protected bool $replicateable;
+
+  protected bool $retrieveable;
+
+  protected bool $searchLayoutable;
+
+  protected bool $searchable;
+
+  protected string $sobjectDescribeOption;
+
+  protected array $supportedScopes;
+
+  protected bool $triggerable;
+
+  protected bool $undeletable;
+
+  protected bool $updateable;
+
+  protected array $urls;
+
+  protected bool $hasSubtypes;
+
+  protected ?string $listviewable;
+
+  protected ?string $lookupLayoutable;
+
+  // phpcs:enable
+
+  /**
+   * See
+   * https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/dome_sobject_describe.htm.
    *
    * @param \Drupal\salesforce\Rest\RestResponse $response
    *   The Response.
@@ -53,6 +154,20 @@ class RestResponseDescribe extends RestResponse {
       $this->$key = $value;
     }
     $this->data = $response->data;
+  }
+
+  /**
+   * Magic getter.
+   */
+  public function __get($key) {
+    return $this->$key;
+  }
+
+  /**
+   * Magic setter.
+   */
+  public function __set($key, $value) {
+    $this->$key = $value;
   }
 
   /**
@@ -132,9 +247,7 @@ class RestResponseDescribe extends RestResponse {
    *    updateable
    *    writeRequiresMasterRead.
    *
-   * For more information @see https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_methods_system_fields_describe.htm.
-   *
-   * @param string $field_name
+   * For more information @param string $field_name
    *   A field name.
    *
    * @return array
@@ -142,6 +255,9 @@ class RestResponseDescribe extends RestResponse {
    *
    * @throws \Exception
    *   If field_name is not defined for this SObject type.
+   * @see
+   * https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_methods_system_fields_describe.htm.
+   *
    */
   public function getField($field_name) {
     if (empty($this->fields[$field_name])) {

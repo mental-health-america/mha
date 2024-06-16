@@ -120,8 +120,10 @@ class ContentSyncCommands extends DrushCommands {
    *    A comma separated string of entity id's to be exported.
    *    Combine with param $entityType in order to target the correct entities.
    *    if $all-content is used, it will take priority over this option.
+   * @option $bundle
+   *    A specific bundle for nodes or taxonomy.
    *
-   * @usage content:export node /relative/output/path --entities="1,4,17" --translate --assets --all-content --dry-run
+   * @usage content:export node /relative/output/path --entities="1,4,17" --translate --assets --all-content --dry-run --bundle="bundle_name"
    */
   public function exportEntitiesCommand(string $entityType = 'node', string $outputPath = '', array $options = [
     'translate' => FALSE,
@@ -129,6 +131,7 @@ class ContentSyncCommands extends DrushCommands {
     'all-content' => FALSE,
     'dry-run' => FALSE,
     'entities' => NULL,
+    'bundle' => '',
   ]): void {
     [
       'translate' => $include_translations,
@@ -136,6 +139,7 @@ class ContentSyncCommands extends DrushCommands {
       'all-content' => $all_allowed_content,
       'dry-run' => $is_dry_run,
       'entities' => $entity_ids_to_export,
+      'bundle' => $bundle,
     ] = $options;
     $output_dir = $this->commandHelper->getRealDirectory($outputPath);
 
@@ -145,7 +149,7 @@ class ContentSyncCommands extends DrushCommands {
     $is_dry_run && $this->output->writeln($this->t("This is a dry run. No content will be exported.\n"));
 
     // Get the entities that will be exported.
-    $entities = $this->commandHelper->getEntitiesToExport($entityType, $all_allowed_content, $entity_ids_to_export);
+    $entities = $this->commandHelper->getEntitiesToExport($entityType, $bundle, $all_allowed_content, $entity_ids_to_export);
 
     // Abort command if there are disallowed entities.
     if ($this->contentSyncHelper->containsDisallowedEntities($entities)) {

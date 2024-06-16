@@ -40,7 +40,7 @@ interface AdvancedEmailValidatorInterface {
   public function validate(string $email, array $configOverrides = []): int;
 
   /**
-   * Translates error codes into Drupal error messages that can be localised.
+   * Translates error codes into Drupal error messages that can be localized.
    *
    * @param int $errorCode
    *   @see AdvancedEmailValidatorInterface::validate()
@@ -48,7 +48,7 @@ interface AdvancedEmailValidatorInterface {
    *   Optional error messages overrides.
    *
    * @return string
-   *   The localised error message, returns an empty string if no match.
+   *   The localized error message, returns an empty string if no match.
    */
   public function errorMessageFromCode(int $errorCode, array $errorMessages = []): string;
 

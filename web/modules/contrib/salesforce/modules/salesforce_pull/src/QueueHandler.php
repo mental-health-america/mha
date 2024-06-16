@@ -4,6 +4,7 @@ namespace Drupal\salesforce_pull;
 
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Queue\QueueDatabaseFactory;
 use Drupal\Core\Utility\Error;
@@ -34,6 +35,13 @@ class QueueHandler {
    * @var \Drupal\salesforce\Rest\RestClientInterface
    */
   protected $sfapi;
+
+  /**
+   * Entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $etm;
 
   /**
    * Queue service.
@@ -71,6 +79,13 @@ class QueueHandler {
   protected $eventDispatcher;
 
   /**
+   * Time service.
+   *
+   * @var \Drupal\Component\Datetime\TimeInterface
+   */
+  protected $time;
+
+  /**
    * QueueHandler constructor.
    *
    * @param \Drupal\salesforce\Rest\RestClientInterface $sfapi
@@ -91,13 +106,11 @@ class QueueHandler {
    */
   public function __construct(RestClientInterface $sfapi, EntityTypeManagerInterface $entity_type_manager, QueueDatabaseFactory $queue_factory, ConfigFactoryInterface $config, EventDispatcherInterface $event_dispatcher, TimeInterface $time) {
     $this->sfapi = $sfapi;
+    $this->etm = $entity_type_manager;
     $this->queue = $queue_factory->get(self::PULL_QUEUE_NAME);
     $this->config = $config->get('salesforce.settings');
     $this->eventDispatcher = $event_dispatcher;
     $this->time = $time;
-    $this->mappings = $entity_type_manager
-      ->getStorage('salesforce_mapping')
-      ->loadCronPullMappings();
   }
 
   /**
@@ -119,6 +132,8 @@ class QueueHandler {
    *   TRUE if there was room to add items, FALSE otherwise.
    */
   public function getUpdatedRecords($force_pull = FALSE, $start = 0, $stop = 0) {
+    $this->mappings = $this->etm->getStorage('salesforce_mapping')
+      ->loadCronPullMappings();
     // Avoid overloading the processing queue and pass this time around if it's
     // over a configurable limit.
     $max_size = $this->config->get('pull_max_queue_size') ?: static::PULL_MAX_QUEUE_SIZE;
@@ -175,8 +190,8 @@ class QueueHandler {
     $results = $this->doSfoQuery($mapping, [], $start, $stop);
     if ($results) {
       $this->enqueueAllResults($mapping, $results, $force_pull);
-      return $results->size();
     }
+    return $results->size();
   }
 
   /**
@@ -219,7 +234,7 @@ class QueueHandler {
    *   Timestamp of ending window from which to pull records. If omitted, use
    *   "now".
    *
-   * @return \Drupal\salesforce\SelectQueryResult
+   * @return \Drupal\salesforce\SelectQueryResult|null
    *   returned result object from Salesforce
    *
    * @see SalesforceMappingInterface
@@ -290,7 +305,7 @@ class QueueHandler {
         if ($force_pull || $event->isEnqueueAllowed()) {
           $this->enqueueRecord($mapping, $record, $force_pull);
         }
-        $record_time = strtotime($record->field($triggerField));
+        $record_time = $record->field($triggerField) ? strtotime($record->field($triggerField)) : 0;
         if ($max_time < $record_time) {
           $max_time = $record_time;
           $mapping->setLastPullTime($max_time);
@@ -302,6 +317,8 @@ class QueueHandler {
       $message = '%type: @message in %function (line %line of %file).';
       $args = Error::decodeException($e);
       $this->eventDispatcher->dispatch(new SalesforceErrorEvent($e, $message, $args), SalesforceEvents::ERROR);
+      // Let's be done for now.
+      return TRUE;
     }
   }
 

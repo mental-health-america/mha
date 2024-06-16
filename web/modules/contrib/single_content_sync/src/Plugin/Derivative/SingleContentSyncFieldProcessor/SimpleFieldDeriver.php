@@ -18,6 +18,7 @@ class SimpleFieldDeriver extends DeriverBase {
   public function getDerivativeDefinitions($base_plugin_definition) {
     $simpleFieldTypes = [
       'address',
+      'address_country',
       'boolean',
       'block_field',
       'color_field_type',
@@ -26,6 +27,7 @@ class SimpleFieldDeriver extends DeriverBase {
       'decimal',
       'email',
       'float',
+      'geofield',
       'geolocation',
       'integer',
       'link',
@@ -37,6 +39,7 @@ class SimpleFieldDeriver extends DeriverBase {
       'telephone',
       'text',
       'timestamp',
+      'viewsreference',
       'weight',
       'yearonly',
     ];
