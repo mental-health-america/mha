@@ -1,0 +1,10 @@
+name: Donate Form | Turn Hope Into Help
+type: module
+description: 'Donate Form | Turn Hope Into Help'
+package: Custom
+version: 8.x
+core_version_requirement: ^8 || ^9 || ^10
+dependencies:
+  - node
+  - block
+
