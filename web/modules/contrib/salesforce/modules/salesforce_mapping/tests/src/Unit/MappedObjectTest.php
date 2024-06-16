@@ -32,6 +32,42 @@ class MappedObjectTest extends UnitTestCase {
    */
   static protected $modules = ['salesforce_mapping'];
 
+  protected $bundle;
+
+  protected $client;
+
+  protected $entity;
+
+  protected $entityType;
+
+  protected $entityTypeId;
+
+  protected $entity_id;
+
+  protected $etm;
+
+  protected $event_dispatcher;
+
+  protected $fieldTypePluginManager;
+
+  protected $mappedObjectEntityType;
+
+  protected $mapped_object;
+
+  protected $mapped_object_id;
+
+  protected $mapping;
+
+  protected $mapping_id;
+
+  protected $salesforce_id;
+
+  protected $sf_object;
+
+  protected $sfid;
+
+  protected $time;
+
   /**
    * {@inheritdoc}
    */
@@ -57,7 +93,8 @@ class MappedObjectTest extends UnitTestCase {
       ->method('__toString')
       ->willReturn($this->salesforce_id);
 
-    $this->entityType = $this->getMockBuilder(EntityTypeInterface::class)->getMock();
+    $this->entityType = $this->getMockBuilder(EntityTypeInterface::class)
+      ->getMock();
     $this->entityType->expects($this->any())
       ->method('getKeys')
       ->will($this->returnValue([
@@ -65,13 +102,15 @@ class MappedObjectTest extends UnitTestCase {
         'uuid' => 'uuid',
       ]));
 
-    $this->etm = $this->getMockBuilder(EntityTypeManagerInterface::class)->getMock();
+    $this->etm = $this->getMockBuilder(EntityTypeManagerInterface::class)
+      ->getMock();
     $this->etm->expects($this->any())
       ->method('getDefinition')
       ->with($this->entityTypeId)
       ->will($this->returnValue($this->entityType));
 
-    $this->mappedObjectEntityType = $this->getMockBuilder(EntityTypeInterface::class)->getMock();
+    $this->mappedObjectEntityType = $this->getMockBuilder(EntityTypeInterface::class)
+      ->getMock();
     $this->mappedObjectEntityType->expects($this->any())
       ->method('getKeys')
       ->will($this->returnValue([
@@ -85,9 +124,11 @@ class MappedObjectTest extends UnitTestCase {
       ->with('salesforce_mapped_object')
       ->will($this->returnValue($this->mappedObjectEntityType));
 
-    $this->event_dispatcher = $this->getMockBuilder(EventDispatcherInterface::class)->getMock();
+    $this->event_dispatcher = $this->getMockBuilder(EventDispatcherInterface::class)
+      ->getMock();
 
-    $this->client = $this->getMockBuilder(RestClientInterface::CLASS)->getMock();
+    $this->client = $this->getMockBuilder(RestClientInterface::CLASS)
+      ->getMock();
 
     $this->fieldTypePluginManager = $this->getMockBuilder('\Drupal\Core\Field\FieldTypePluginManager')
       ->disableOriginalConstructor()
@@ -113,7 +154,8 @@ class MappedObjectTest extends UnitTestCase {
     $container->set('datetime.time', $this->time);
     \Drupal::setContainer($container);
 
-    $this->entity = $this->getMockBuilder(ContentEntityInterface::class)->getMock();
+    $this->entity = $this->getMockBuilder(ContentEntityInterface::class)
+      ->getMock();
     $this->entity
       ->expects($this->any())
       ->method('id')
@@ -125,7 +167,8 @@ class MappedObjectTest extends UnitTestCase {
       ->willReturn(FALSE);
 
     // Mock salesforce mapping.
-    $this->mapping = $this->getMockBuilder(SalesforceMappingInterface::CLASS)->getMock();
+    $this->mapping = $this->getMockBuilder(SalesforceMappingInterface::CLASS)
+      ->getMock();
     $this->mapping
       ->expects($this->any())
       ->method('getFieldMappings')

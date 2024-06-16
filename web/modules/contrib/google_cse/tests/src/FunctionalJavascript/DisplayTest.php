@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\google_cse\Functional;
 
-use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
 use Drupal\Core\Url;
+use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
 use Drupal\search\Entity\SearchPage;
 
 /**
@@ -146,9 +148,23 @@ class DisplayTest extends WebDriverTestBase {
     $session->elementContains('css', '.google-cse-results-prefix', 'alert("hi");');
     $session->elementNotContains('css', '.google-cse-results-prefix', '<script>alert("hi");</script>');
     $session->elementContains('css', '.google-cse-results-suffix', '<h3>Some results suffix text</h3>');
-    $session->elementAttributeContains('css', '#search-form #edit-keys', 'size', 10);
-    $session->elementAttributeContains('css', '#search-block-form #edit-keys', 'size', 10);
+    $session->elementAttributeContains('css', '#search-form #edit-keys', 'size', '10');
+    $session->elementAttributeContains('css', '#search-block-form #edit-keys', 'size', '10');
     $session->responseContains('<link rel="stylesheet" media="all" href="/sites/default/files/custom.css">');
+
+    // 4. Query parameter can be customized.
+    $this->drupalGet($config_form_path);
+    $custom_query_key = 'customquery';
+    $page->fillField('edit-query-key', $custom_query_key);
+    $page->pressButton('Save search page');
+    $this->assertNotEmpty($session->waitForText('The Google Programmable Search search page has been updated.'));
+    $search_page_with_query = Url::fromRoute('search.view_' . $entity_id, [], [
+      'query' => [
+        $custom_query_key => $terms['keys'],
+      ],
+      'absolute' => TRUE,
+    ])->toString();
+    $this->drupalGet($search_page_with_query);
 
     // 4. Configuration can display Google search form and suppress core form.
     $this->drupalGet($config_form_path);
@@ -157,7 +173,7 @@ class DisplayTest extends WebDriverTestBase {
     $page->pressButton('Save search page');
     $this->drupalGet($search_page_with_query);
     // The Drupal search box is removed.
-    $session->elementNotExists('css', '#search-form #edit-keys');
+    $session->elementNotExists('css', '#search-form #edit-' . $custom_query_key);
     // The Google search box is now visible.
     $session->elementNotContains('css', 'form.gsc-search-box', 'display: none;');
 
@@ -213,9 +229,10 @@ class DisplayTest extends WebDriverTestBase {
     // The Google search box is not visible.
     $session->elementAttributeContains('css', 'form.gsc-search-box', 'style', 'display: none;');
     // The Drupal search box is visible.
-    $session->elementAttributeContains('css', '#google-cse-search-box-form .form-item-keys input', 'size', 10);
+    $session->elementAttributeContains('css', '#google-cse-search-box-form .form-item-' . $custom_query_key . ' input', 'size', '10');
     // Search using the Google Search block.
     $this->drupalGet('');
+    $terms = [$custom_query_key => '"dearest morsel of the earth"'];
     $this->submitForm($terms, 'Search', 'google-cse-search-box-form');
     // Module-provided block renders results on same page.
     $this->assertEquals(\Drupal::request()->getBasePath() . '/user/2', parse_url($this->getUrl(), PHP_URL_PATH), 'Submitted to correct URL.');

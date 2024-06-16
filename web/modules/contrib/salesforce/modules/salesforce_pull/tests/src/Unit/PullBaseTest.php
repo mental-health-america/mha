@@ -16,8 +16,10 @@ use Drupal\salesforce_mapping\Entity\MappedObjectInterface;
 use Drupal\salesforce_mapping\Entity\SalesforceMappingInterface;
 use Drupal\salesforce_mapping\Event\SalesforcePullEvent;
 use Drupal\salesforce_mapping\MappingConstants;
+use Drupal\salesforce_pull\Plugin\QueueWorker\CronPull;
 use Drupal\salesforce_pull\Plugin\QueueWorker\PullBase;
 use Drupal\salesforce_pull\PullQueueItem;
+use Drupal\salesforce_pull\QueueHandler;
 use Drupal\Tests\UnitTestCase;
 use Prophecy\Argument;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -35,6 +37,36 @@ class PullBaseTest extends UnitTestCase {
    * @var array
    */
   protected static $modules = ['salesforce_pull'];
+
+  protected $drupalEntityStorage;
+
+  protected $ed;
+
+  protected $entity;
+
+  protected $entityDefinition;
+
+  protected $etm;
+
+  protected $mappedObject;
+
+  protected $mappedObjectStorage;
+
+  protected $mapping;
+
+  protected $pullWorker;
+
+  protected $salesforceMappingStorage;
+
+  protected $salesforce_id;
+
+  protected $sfapi;
+
+  protected $sfid;
+
+  protected $sqr;
+
+  protected $queueHandler;
 
   /**
    * {@inheritdoc}
@@ -80,7 +112,8 @@ class PullBaseTest extends UnitTestCase {
       ->willReturn(TRUE);
 
     // Mock mapping object.
-    $this->mapping = $this->getMockBuilder(SalesforceMappingInterface::CLASS)->getMock();
+    $this->mapping = $this->getMockBuilder(SalesforceMappingInterface::CLASS)
+      ->getMock();
     $this->mapping->expects($this->any())
       ->method('__get')
       ->with($this->equalTo('id'))
@@ -101,7 +134,8 @@ class PullBaseTest extends UnitTestCase {
       ->willReturn([]);
 
     // Mock mapped object.
-    $this->mappedObject = $this->getMockBuilder(MappedObjectInterface::CLASS)->getMock();
+    $this->mappedObject = $this->getMockBuilder(MappedObjectInterface::CLASS)
+      ->getMock();
     $this->mappedObject->expects($this->any())
       ->method('getChanged')
       ->willReturn('1486490500');
@@ -200,7 +234,8 @@ class PullBaseTest extends UnitTestCase {
       ->willReturn($this->sfid);
 
     // Mock event dispatcher.
-    $this->ed = $this->getMockBuilder('\Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+    $this->ed = $this->getMockBuilder('\Symfony\Component\EventDispatcher\EventDispatcherInterface')
+      ->getMock();
     $this->ed
       ->expects($this->any())
       ->method('dispatch')
@@ -212,21 +247,14 @@ class PullBaseTest extends UnitTestCase {
     $container->set('entity_type.manager', $this->etm);
     \Drupal::setContainer($container);
 
-    $this->pullWorker = $this
-      ->getMockBuilder(PullBase::CLASS)
-      ->setMethods(['getMappedEntity'])
-      ->setConstructorArgs([
+    $this->pullWorker = new CronPull(
         $this->etm,
         $this->sfapi,
         $this->ed,
         [],
         'cron_salesforce_pull',
         ['cron' => ['time' => 180]],
-      ])
-      ->getMock();
-    $this->pullWorker->expects($this->any())
-      ->method('getMappedEntity')
-      ->willReturn($this->entity);
+      );
   }
 
   /**
@@ -280,21 +308,19 @@ class PullBaseTest extends UnitTestCase {
       ->willReturn($this->entityDefinition);
     $this->etm = $prophecy->reveal();
 
-    $this->pullWorker = $this->getMockBuilder(PullBase::CLASS)
-      ->setConstructorArgs([
-        $this->etm,
-        $this->sfapi,
-        $this->ed,
-        [],
-        'cron_salesforce_pull',
-        ['cron' => ['time' => 180]],
-      ])
-      ->setMethods(['salesforcePullEvent'])
-      ->getMockForAbstractClass();
-    $this->pullWorker->method('salesforcePullEvent')
-      ->willReturn(NULL);
+    $this->pullWorker = new CronPull(
+      $this->etm,
+      $this->sfapi,
+      $this->ed,
+      [],
+      'cron_salesforce_pull',
+      ['cron' => ['time' => 180]],
+    );
 
-    $sobject = new SObject(['id' => $this->salesforce_id, 'attributes' => ['type' => 'test']]);
+    $sobject = new SObject([
+      'id' => $this->salesforce_id,
+      'attributes' => ['type' => 'test'],
+    ]);
     $item = new PullQueueItem($sobject, $this->mapping);
 
     $this->assertEquals(MappingConstants::SALESFORCE_MAPPING_SYNC_SF_CREATE, $this->pullWorker->processItem($item));

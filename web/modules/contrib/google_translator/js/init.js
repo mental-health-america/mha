@@ -9,7 +9,7 @@
     init: function () {
       var displayMode = settings.googleTranslatorElement.displayMode;
       new google.translate.TranslateElement({
-        pageLanguage: 'en',
+        pageLanguage: settings.googleTranslatorElement.langcode,
         includedLanguages: settings.googleTranslatorElement.languages,
         layout: google.translate.TranslateElement.InlineLayout[displayMode],
       }, settings.googleTranslatorElement.id);

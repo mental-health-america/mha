@@ -55,6 +55,8 @@ class AdvancedEmailValidator implements AdvancedEmailValidatorInterface {
       'bannedList' => $domainLists[self::BANNED_DOMAIN],
       'disposableList' => $domainLists[self::DISPOSABLE_DOMAIN],
       'freeList' => $domainLists[self::FREE_DOMAIN],
+      'LocalDisposableOnly' => $moduleConfig->get('local_list_only.' . self::DISPOSABLE_DOMAIN),
+      'LocalFreeOnly' => $moduleConfig->get('local_list_only.' . self::FREE_DOMAIN),
     ];
 
     $validatorConfig = !empty($configOverrides) ? $configOverrides : $defaultConfig;

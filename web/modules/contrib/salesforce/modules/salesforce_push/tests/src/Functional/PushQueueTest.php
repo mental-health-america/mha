@@ -55,7 +55,8 @@ class PushQueueTest extends BrowserTestBase {
     $mapping->save();
 
     /** @var \Drupal\salesforce_mapping\MappedObjectStorage $mappedObjectStorage */
-    $mappedObjectStorage = \Drupal::entityTypeManager()->getStorage('salesforce_mapped_object');
+    $mappedObjectStorage = \Drupal::entityTypeManager()
+      ->getStorage('salesforce_mapped_object');
     $this->assertEquals(0, $queue->numberOfItems());
 
     $node1 = Node::create([
@@ -99,7 +100,10 @@ class PushQueueTest extends BrowserTestBase {
     $this->assertEquals(0, $queue->numberOfItems());
 
     // Make sure a new revision was created, implying the update.
-    $mappedObjectStorage->resetCache([$mappedObject1->id(), $mappedObject2->id()]);
+    $mappedObjectStorage->resetCache([
+      $mappedObject1->id(),
+      $mappedObject2->id(),
+    ]);
 
     $mappedObject1 = $mappedObjectStorage->loadByEntityAndMapping($node1, $mapping);
     $mappedObject1UpdatedVid = $mappedObject1->getRevisionId();
@@ -114,7 +118,10 @@ class PushQueueTest extends BrowserTestBase {
     $node2->delete();
 
     // Make sure the mapped object is not deleted yet.
-    $mappedObjectStorage->resetCache([$mappedObject1->id(), $mappedObject2->id()]);
+    $mappedObjectStorage->resetCache([
+      $mappedObject1->id(),
+      $mappedObject2->id(),
+    ]);
     $mappedObject1 = $mappedObjectStorage->load($mappedObject1->id());
     $this->assertNotNull($mappedObject1);
     $mappedObject2 = $mappedObjectStorage->load($mappedObject2->id());
@@ -128,7 +135,10 @@ class PushQueueTest extends BrowserTestBase {
     $this->assertEquals(0, $queue->numberOfItems());
 
     // Finally, make sure the mapped objects have been deleted.
-    $mappedObjectStorage->resetCache([$mappedObject1->id(), $mappedObject2->id()]);
+    $mappedObjectStorage->resetCache([
+      $mappedObject1->id(),
+      $mappedObject2->id(),
+    ]);
     $this->assertNull($mappedObjectStorage->load($mappedObject1->id()));
     $this->assertNull($mappedObjectStorage->load($mappedObject2->id()));
   }

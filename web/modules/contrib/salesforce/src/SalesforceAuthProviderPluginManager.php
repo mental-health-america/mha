@@ -3,6 +3,7 @@
 namespace Drupal\salesforce;
 
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
@@ -65,6 +66,13 @@ class SalesforceAuthProviderPluginManager extends DefaultPluginManager implement
   protected $authToken;
 
   /**
+   * The config factory service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * Constructor.
    *
    * @param \Traversable $namespaces
@@ -76,12 +84,15 @@ class SalesforceAuthProviderPluginManager extends DefaultPluginManager implement
    *   The module handler.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $etm
    *   Entity type manager service.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
+   *   Config service.
    */
-  public function __construct(\Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler, EntityTypeManagerInterface $etm) {
+  public function __construct(\Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler, EntityTypeManagerInterface $etm, ConfigFactoryInterface $configFactory) {
     parent::__construct('Plugin/SalesforceAuthProvider', $namespaces, $module_handler, 'Drupal\salesforce\SalesforceAuthProviderInterface');
     $this->alterInfo('salesforce_auth_provider_info');
     $this->setCacheBackend($cache_backend, 'salesforce_auth_provider');
     $this->etm = $etm;
+    $this->configFactory = $configFactory;
   }
 
   /**
@@ -119,7 +130,9 @@ class SalesforceAuthProviderPluginManager extends DefaultPluginManager implement
    */
   public function getConfig() {
     if (!$this->authConfig) {
-      $provider_id = $this->config()->get('salesforce_auth_provider');
+      $provider_id = $this->configFactory
+        ->get('salesforce.settings')
+        ->get('salesforce_auth_provider');
       if (empty($provider_id)) {
         return NULL;
       }
@@ -188,19 +201,6 @@ class SalesforceAuthProviderPluginManager extends DefaultPluginManager implement
     $token = $this->getToken() ?: new StdOAuth2Token();
     $this->authToken = $provider->refreshAccessToken($token);
     return $this->authToken;
-  }
-
-  /**
-   * Wrapper for salesforce.settings config.
-   *
-   * @return \Drupal\Core\Config\ImmutableConfig
-   *   Salesforce settings config.
-   */
-  protected function config() {
-    if (!$this->config) {
-      $this->config = \Drupal::config('salesforce.settings');
-    }
-    return $this->config;
   }
 
   /**

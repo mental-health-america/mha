@@ -103,7 +103,6 @@ class MappedObjectForm extends ContentEntityForm {
   public function buildForm(array $form, FormStateInterface $form_state) {
     // Include the parent entity on the form.
     $form = parent::buildForm($form, $form_state);
-    $entity_id = $entity_type_id = FALSE;
 
     if ($this->entity->isNew()) {
       if ($drupal_entity = $this->getDrupalEntityFromUrl()) {
@@ -179,7 +178,9 @@ class MappedObjectForm extends ContentEntityForm {
     $mapped_object
       ->set('drupal_entity', $drupal_entity_array)
       ->set('salesforce_mapping', $form_state->getValue([
-        'salesforce_mapping', 0, 'target_id',
+        'salesforce_mapping',
+        0,
+        'target_id',
       ]));
 
     if ($sfid = $form_state->getValue(['salesforce_id', 0, 'value'], FALSE)) {
@@ -197,7 +198,8 @@ class MappedObjectForm extends ContentEntityForm {
     catch (\Exception $e) {
       $mapped_object->delete();
       $this->eventDispatcher->dispatch(new SalesforceErrorEvent($e), SalesforceEvents::ERROR);
-      $this->messenger()->addError($this->t('Push failed with an exception: %exception', ['%exception' => $e->getMessage()]));
+      $this->messenger()
+        ->addError($this->t('Push failed with an exception: %exception', ['%exception' => $e->getMessage()]));
       $form_state->setRebuild();
       return;
     }
@@ -239,7 +241,8 @@ class MappedObjectForm extends ContentEntityForm {
     }
     catch (\Exception $e) {
       $this->eventDispatcher->dispatch(new SalesforceErrorEvent($e), SalesforceEvents::ERROR);
-      $this->messenger()->addError($this->t('Pull failed with an exception: %exception', ['%exception' => $e->getMessage()]));
+      $this->messenger()
+        ->addError($this->t('Pull failed with an exception: %exception', ['%exception' => $e->getMessage()]));
       $form_state->setRebuild();
       return;
     }
@@ -253,9 +256,14 @@ class MappedObjectForm extends ContentEntityForm {
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
-    $this->getEntity()->save();
-    $this->messenger()->addStatus($this->t('The mapping has been successfully saved.'));
-    $form_state->setRedirect('entity.salesforce_mapped_object.canonical', ['salesforce_mapped_object' => $this->getEntity()->id()]);
+    $ret = $this->getEntity()->save();
+    $this->messenger()
+      ->addStatus($this->t('The mapping has been successfully saved.'));
+    $form_state->setRedirect('entity.salesforce_mapped_object.canonical', [
+      'salesforce_mapped_object' => $this->getEntity()
+        ->id(),
+    ]);
+    return $ret;
   }
 
   /**

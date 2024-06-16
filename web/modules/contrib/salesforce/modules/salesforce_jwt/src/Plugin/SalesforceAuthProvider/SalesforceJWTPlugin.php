@@ -2,6 +2,8 @@
 
 namespace Drupal\salesforce_jwt\Plugin\SalesforceAuthProvider;
 
+use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\key\KeyRepositoryInterface;
@@ -39,27 +41,19 @@ class SalesforceJWTPlugin extends SalesforceAuthProviderPluginBase {
   protected $keyRepository;
 
   /**
-   * SalesforceAuthServiceBase constructor.
+   * Time service.
    *
-   * @param array $configuration
-   *   Configuration.
-   * @param string $plugin_id
-   *   Plugin id.
-   * @param mixed $plugin_definition
-   *   Plugin definition.
-   * @param \OAuth\Common\Http\Client\ClientInterface $httpClient
-   *   Http client wrapper.
-   * @param \Drupal\salesforce\Storage\SalesforceAuthTokenStorageInterface $storage
-   *   Token storage.
-   * @param \Drupal\key\KeyRepositoryInterface $keyRepository
-   *   Key repository.
-   *
-   * @throws \OAuth\OAuth2\Service\Exception\InvalidScopeException
-   *   On error.
+   * @var \Drupal\Component\Datetime\TimeInterface
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ClientInterface $httpClient, SalesforceAuthTokenStorageInterface $storage, KeyRepositoryInterface $keyRepository) {
+  protected $time;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ClientInterface $httpClient, SalesforceAuthTokenStorageInterface $storage, ConfigFactoryInterface $configFactory, KeyRepositoryInterface $keyRepository, TimeInterface $time) {
     $this->keyRepository = $keyRepository;
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $httpClient, $storage);
+    $this->time = $time;
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $httpClient, $storage, $configFactory);
   }
 
   /**
@@ -67,7 +61,7 @@ class SalesforceJWTPlugin extends SalesforceAuthProviderPluginBase {
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     $configuration = array_merge(self::defaultConfiguration(), $configuration);
-    return new static($configuration, $plugin_id, $plugin_definition, $container->get('salesforce.http_client_wrapper'), $container->get('salesforce.auth_token_storage'), $container->get('key.repository'));
+    return new static($configuration, $plugin_id, $plugin_definition, $container->get('salesforce.http_client_wrapper'), $container->get('salesforce.auth_token_storage'), $container->get('config.factory'), $container->get('key.repository'), $container->get('datetime.time'));
   }
 
   /**
@@ -93,7 +87,11 @@ class SalesforceJWTPlugin extends SalesforceAuthProviderPluginBase {
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     if (!$this->keyRepository->getKeyNamesAsOptions(['type' => 'authentication'])) {
-      $this->messenger()->addError($this->t('Please <a href="@href">add an authentication key</a> before creating a JWT Auth provider.', ['@href' => Url::fromRoute('entity.key.add_form')->toString()]));
+      $this->messenger()
+        ->addError($this->t('Please <a href="@href">add an authentication key</a> before creating a JWT Auth provider.', [
+          '@href' => Url::fromRoute('entity.key.add_form')
+            ->toString(),
+        ]));
       return $form;
     }
     $form['consumer_key'] = [
@@ -197,7 +195,9 @@ class SalesforceJWTPlugin extends SalesforceAuthProviderPluginBase {
    *   JWT Assertion.
    */
   protected function generateAssertion() {
-    $key = $this->keyRepository->getKey($this->getCredentials()->getKeyId())->getKeyValue();
+    $key = $this->keyRepository->getKey($this->getCredentials()->getKeyId()) ?
+      $this->keyRepository->getKey($this->getCredentials()->getKeyId())
+        ->getKeyValue() : '';
     $token = $this->generateAssertionClaim();
     return JWT::encode($token, $key, 'RS256');
   }
@@ -214,7 +214,7 @@ class SalesforceJWTPlugin extends SalesforceAuthProviderPluginBase {
       'iss' => $cred->getConsumerKey(),
       'sub' => $cred->getLoginUser(),
       'aud' => $cred->getLoginUrl(),
-      'exp' => \Drupal::time()->getCurrentTime() + 60,
+      'exp' => $this->time->getCurrentTime() + 60,
     ];
   }
 

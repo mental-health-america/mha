@@ -7,7 +7,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\salesforce\Entity\SalesforceAuthConfig;
 
 /**
- * Class SalesforceAuthRevokeForm.
+ * Auth revoke form.
  */
 class SalesforceAuthRevokeForm extends EntityConfirmFormBase {
 

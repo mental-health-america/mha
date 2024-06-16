@@ -1,0 +1,5 @@
+services:
+  google_cse.route_subscriber:
+    class: Drupal\google_cse\Routing\RouteSubscriber
+    tags:
+      - { name: event_subscriber }

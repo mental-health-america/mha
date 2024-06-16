@@ -10,7 +10,7 @@ use Drupal\Core\Url;
 use Drupal\Core\Link;
 use Drupal\recurring_events_registration\NotificationService;
 use Drupal\recurring_events_registration\RegistrationCreationService;
-use Drupal\Core\Extension\ModuleHandler;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
  * Provides a form for managing registration settings.
@@ -36,7 +36,7 @@ class RegistrantSettingsForm extends ConfigFormBase {
   /**
    * The module handler service.
    *
-   * @var \Drupal\Core\Extension\ModuleHandler
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
   protected $moduleHandler;
 
@@ -54,7 +54,7 @@ class RegistrantSettingsForm extends ConfigFormBase {
    *   The registration notification service.
    * @param \Drupal\recurring_events_registration\RegistrationCreationService $creation_service
    *   The registration creation service.
-   * @param \Drupal\Core\Extension\ModuleHandler $module_handler
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler service.
    * @param \Drupal\Core\Routing\RouteBuilderInterface $route_builder
    *   The route builder.
@@ -62,7 +62,7 @@ class RegistrantSettingsForm extends ConfigFormBase {
   public function __construct(
     NotificationService $notification_service,
     RegistrationCreationService $creation_service,
-    ModuleHandler $module_handler,
+    ModuleHandlerInterface $module_handler,
     RouteBuilderInterface $route_builder
   ) {
     $this->notificationService = $notification_service;

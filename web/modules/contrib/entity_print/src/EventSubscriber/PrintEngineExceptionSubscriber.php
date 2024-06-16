@@ -57,7 +57,7 @@ class PrintEngineExceptionSubscriber implements EventSubscriberInterface {
   /**
    * Handles print exceptions.
    *
-   * @param \Symfony\Component\HttpKernel\Event\ExceptionEvent|Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent $event
+   * @param \Symfony\Component\HttpKernel\Event\ExceptionEvent|\Symfony\Component\HttpKernel\Event\ExceptionEvent $event
    *   The exception event.
    *
    * @todo remove reference to
@@ -65,7 +65,7 @@ class PrintEngineExceptionSubscriber implements EventSubscriberInterface {
    *   is no longer supported and add back a type-hint for the ExceptionEvent.
    */
   public function handleException($event) {
-    assert($event instanceof GetResponseForExceptionEvent || $event instanceof ExceptionEvent);
+    assert($event instanceof \Symfony\Component\HttpKernel\Event\ExceptionEvent || $event instanceof ExceptionEvent);
     $exception = $event->getThrowable();
     if ($exception instanceof PrintEngineException) {
       $this->messenger->addError(new FormattableMarkup($exception->getPrettyMessage(), []));
@@ -110,7 +110,7 @@ class PrintEngineExceptionSubscriber implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     return [
       KernelEvents::EXCEPTION => 'handleException',
     ];

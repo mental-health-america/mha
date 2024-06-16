@@ -21,6 +21,7 @@ class AddressStreetAsTextArea extends Address {
     $element = Address::addressElements($element, $value);
     $element["address_line1"]["#type"] = "textarea";
     $element["address_line1"]["#rows"] = "2";
+    $element["address_line1"]["#maxlength"] = "255";
     $element["address_line2"]["#access"] = FALSE;
     return $element;
   }

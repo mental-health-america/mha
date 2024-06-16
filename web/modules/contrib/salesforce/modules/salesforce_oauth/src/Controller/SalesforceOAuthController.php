@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
- * SalesforceOAuthController.
+ * OAuth controller.
  */
 class SalesforceOAuthController extends ControllerBase {
 
@@ -75,9 +75,9 @@ class SalesforceOAuthController extends ControllerBase {
 
     /** @var \Drupal\salesforce\SalesforceAuthProviderInterface $oauth */
     $oauth = $config->getPlugin();
-    if (\Drupal::request()->get('code')) {
+    if ($this->request->get('code')) {
       try {
-        $oauth->requestAccessToken(\Drupal::request()->get('code'));
+        $oauth->requestAccessToken($this->request->get('code'));
         $this->messenger()
           ->addStatus($this->t('Successfully connected to Salesforce.'));
         return new RedirectResponse(Url::fromRoute('entity.salesforce_auth.collection')

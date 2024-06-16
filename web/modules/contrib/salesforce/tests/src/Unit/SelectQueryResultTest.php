@@ -21,6 +21,13 @@ class SelectQueryResultTest extends UnitTestCase {
   protected static $modules = ['salesforce'];
 
   /**
+   * Query result.
+   *
+   * @var \Drupal\salesforce\SelectQueryResult
+   */
+  protected SelectQueryResult $sqr;
+
+  /**
    * {@inheritdoc}
    */
   protected function setUp(): void {

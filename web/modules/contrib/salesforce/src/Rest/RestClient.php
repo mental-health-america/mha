@@ -7,6 +7,7 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\salesforce\IdentityNotFoundException;
@@ -25,6 +26,7 @@ use GuzzleHttp\Exception\RequestException;
 class RestClient implements RestClientInterface {
 
   use StringTranslationTrait;
+  use LoggerChannelTrait;
 
   /**
    * Response object.
@@ -32,6 +34,19 @@ class RestClient implements RestClientInterface {
    * @var \GuzzleHttp\Psr7\Response
    */
   public $response;
+
+  /**
+   * Used to capture the first response during an upsert.
+   *
+   * An upsert performs an insert or update, depending on stateful Salesforce
+   * data. Unfortunately, after an insert, upsert() does not return the ID of
+   * the newly created record. Therefore, our implementation of upsert performs
+   * two separate requests: the first, a straight upsert() call; the second, a
+   * read operation to get the id of the inserted or updated record.
+   *
+   * @var \GuzzleHttp\Psr7\Response|null
+   */
+  public $original_response;
 
   /**
    * GuzzleHttp client.
@@ -81,6 +96,13 @@ class RestClient implements RestClientInterface {
    * @var \Drupal\Component\Serialization\Json
    */
   protected $json;
+
+  /**
+   * The Time service.
+   *
+   * @var \Drupal\Component\Datetime\TimeInterface
+   */
+  protected $time;
 
   /**
    * Auth provider manager.
@@ -165,14 +187,14 @@ class RestClient implements RestClientInterface {
   }
 
   /**
-   *
+   * Getter.
    */
   public function getShortTermCacheLifetime() {
     return $this->immutableConfig->get('short_term_cache_lifetime') ?? static::CACHE_LIFETIME;
   }
 
   /**
-   *
+   * Getter.
    */
   public function getLongTermCacheLifetime() {
     return $this->immutableConfig->get('long_term_cache_lifetime') ?? static::LONGTERM_CACHE_LIFETIME;
@@ -187,8 +209,14 @@ class RestClient implements RestClientInterface {
     }
     // If authToken is not set, try refreshing it before failing init.
     if (!$this->authToken) {
-      $this->authToken = $this->authManager->refreshToken();
-      return isset($this->authToken);
+      try {
+        $this->authToken = $this->authManager->refreshToken();
+        return isset($this->authToken);
+      }
+      catch (\Exception $e) {
+        $this->getLogger('salesforce')->error('@e', ['@e' => $e->getMessage()]);
+        return FALSE;
+      }
     }
     return TRUE;
   }
@@ -198,7 +226,7 @@ class RestClient implements RestClientInterface {
    */
   public function apiCall($path, $params = [], $method = 'GET', $returnObject = FALSE, array $headers = []) {
     if (!$this->isInit()) {
-      throw new RestException(NULL, $this->t('RestClient is not initialized.'));
+      throw new RestException(NULL, 'RestClient is not initialized.');
     }
 
     if (strpos($path, '/') === 0) {
@@ -237,11 +265,7 @@ class RestClient implements RestClientInterface {
 
     if (empty($this->response)
     || ((int) floor($this->response->getStatusCode() / 100)) != 2) {
-      throw new RestException($this->response, $this->t('Unknown error occurred during API call "@call": status code @code : @reason', [
-        '@call' => $path,
-        '@code' => $this->response->getStatusCode(),
-        '@reason' => $this->response->getReasonPhrase(),
-      ]));
+      throw new RestException($this->response, 'Unknown error occurred during API call "' . $path . '": status code ' . $this->response->getStatusCode() . ' : ' . $this->response->getReasonPhrase());
     }
 
     $this->updateApiUsage($this->response);
@@ -274,7 +298,7 @@ class RestClient implements RestClientInterface {
    */
   protected function apiHttpRequest($url, $params, $method, array $headers = []) {
     if (!$this->authToken) {
-      throw new \Exception($this->t('Missing OAuth Token'));
+      throw new \Exception('Missing OAuth Token');
     }
 
     $headers['Authorization'] = 'OAuth ' . $this->authToken->getAccessToken();
@@ -292,7 +316,7 @@ class RestClient implements RestClientInterface {
    */
   public function httpRequestRaw($url) {
     if (!$this->authManager->getToken()) {
-      throw new \Exception($this->t('Missing OAuth Token'));
+      throw new \Exception('Missing OAuth Token');
     }
     $headers = [
       'Authorization' => 'OAuth ' . $this->authToken->getAccessToken(),
@@ -444,13 +468,10 @@ class RestClient implements RestClientInterface {
       $result = $this->apiCall('sobjects');
       $this->cache->set('salesforce:objects', $result, $this->getRequestTime() + $this->getShortTermCacheLifetime(), ['salesforce']);
     }
-    // print_r($result);
+
     $sobjects = [];
     // Filter the list by conditions, and assign SF table names as array keys.
-    foreach ($result['sobjects'] as $key => $object) {
-      if (empty($object['name'])) {
-        print_r($object);
-      }
+    foreach ($result['sobjects'] as $object) {
       if (!empty($conditions)) {
         foreach ($conditions as $condition => $value) {
           if ($object[$condition] == $value) {
@@ -502,7 +523,7 @@ class RestClient implements RestClientInterface {
    */
   public function objectDescribe($name, $reset = FALSE) {
     if (empty($name)) {
-      throw new \Exception($this->t('No name provided to describe'));
+      throw new \Exception('No name provided to describe');
     }
 
     if (!$reset && ($cache = $this->cache->get('salesforce:object:' . $name))) {
@@ -535,7 +556,7 @@ class RestClient implements RestClientInterface {
 
     $response = $this->apiCall("sobjects/{$name}/{$key}/{$value}", $params, 'PATCH', TRUE);
 
-    // On update, upsert method returns an empty body. Retreive object id, so
+    // On update, upsert method returns an empty body. Retrieve object id, so
     // that we can return a consistent response.
     if ($response->getStatusCode() == 204) {
       // We need a way to allow callers to distinguish updates and inserts. To

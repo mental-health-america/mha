@@ -3,7 +3,7 @@
 namespace Drupal\salesforce;
 
 /**
- * Class SFID.
+ * Class SFID (SalesForce ID).
  *
  * @package Drupal\salesforce
  */
