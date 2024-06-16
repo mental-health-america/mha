@@ -6,6 +6,7 @@ use Drupal\better_exposed_filters\BetterExposedFiltersHelper;
 use Drupal\Component\Transliteration\TransliterationInterface;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Tests\UnitTestCase;
 
 /**
@@ -26,8 +27,8 @@ class BetterExposedFiltersHelperUnitTest extends UnitTestCase {
    *
    * @covers ::rewriteOptions
    */
-  public function testRewriteOptions($options, $settings, $expected) {
-    $actual = BetterExposedFiltersHelper::rewriteOptions($options, $settings);
+  public function testRewriteOptions($options, $settings, $expected, $rewrite_based_on_key = FALSE) {
+    $actual = BetterExposedFiltersHelper::rewriteOptions($options, $settings, FALSE, $rewrite_based_on_key);
     $this->assertEquals(array_values($expected), array_values($actual));
   }
 
@@ -77,6 +78,38 @@ class BetterExposedFiltersHelperUnitTest extends UnitTestCase {
       ['foo' => '1', 'bar' => '2', 'baz' => '3'],
       "1|One\n2|Two\n3|Three",
       ['foo' => 'One', 'bar' => 'Two', 'baz' => 'Three'],
+    ];
+
+    // Key based option replacement - no options are replaced.
+    $data[] = [
+      ['foo' => '1', 'bar' => '2', 'baz' => '3'],
+      "4|Two",
+      ['foo' => '1', 'bar' => '2', 'baz' => '3'],
+      TRUE,
+    ];
+
+    // Key based option replacement - some options are replaced.
+    $data[] = [
+      ['foo' => '1', 'bar' => '2', 'baz' => '3'],
+      "foo|One\n2|Two\nbaz|Three",
+      [
+        'foo' => new TranslatableMarkup('One'),
+        'bar' => '2',
+        'baz' => new TranslatableMarkup('Three'),
+      ],
+      TRUE,
+    ];
+
+    // Key based option replacement - all options are replaced.
+    $data[] = [
+      ['foo' => '1', 'bar' => '2', 'baz' => '3'],
+      "foo|One\nbar|Two\nbaz|Three",
+      [
+        'foo' => new TranslatableMarkup('One'),
+        'bar' => new TranslatableMarkup('Two'),
+        'baz' => new TranslatableMarkup('Three'),
+      ],
+      TRUE,
     ];
 
     return $data;

@@ -55,7 +55,7 @@ class SalesforceOAuthPlugin extends SalesforceAuthProviderPluginBase {
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('http_client'),
+      $container->get('salesforce.http_client_wrapper'),
       $container->get('salesforce.auth_token_storage'),
       $container->get('config.factory'),
       $container->get('tempstore.private')

@@ -69,7 +69,7 @@ function better_exposed_filters_preprocess_views_exposed_form(array &$variables)
   }
   // Replaces tokens in description field of the exposed filter.
   foreach ($variables['form']['#info'] as $name => &$info) {
-    if (isset($info['description']) && isset($variables['form'][explode('filter-', $name)[1]]['#description'])) {
+    if (isset($info['description']) && str_starts_with($name, 'filter-') && isset($variables['form'][explode('filter-', $name)[1]]['#description'])) {
       $info['description'] = \Drupal::service('token')->replace($info['description']);
       $variables['form'][explode('filter-', $name)[1]]['#description'] = $info['description'];
     }

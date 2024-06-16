@@ -8,7 +8,7 @@ dependencies:
   - dynamic_entity_reference:dynamic_entity_reference
   - typed_data:typed_data
 
-# Information added by Drupal.org packaging script on 2024-03-13
-version: '5.0.4'
+# Information added by Drupal.org packaging script on 2024-05-22
+version: '5.0.5'
 project: 'salesforce'
-datestamp: 1710339013
+datestamp: 1716388802

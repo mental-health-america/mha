@@ -109,7 +109,7 @@ class RadioButtons extends FilterWidgetBase {
         $form[$field_id . '_wrapper'][$field_id]['#type'] = 'radios';
       }
     }
-    else {
+    elseif (!empty($form[$field_id])) {
       // Clean up filters that pass objects as options instead of strings.
       if (!empty($form[$field_id]['#options'])) {
         $form[$field_id]['#options'] = BetterExposedFiltersHelper::flattenOptions($form[$field_id]['#options']);
@@ -124,8 +124,9 @@ class RadioButtons extends FilterWidgetBase {
       // Display inline.
       $form[$field_id]['#bef_display_inline'] = $this->configuration['display_inline'];
 
-      // Render as checkboxes if filter allows multiple selections.
-      if (!empty($form[$field_id]['#multiple'])) {
+      // Render as checkboxes if filter allows multiple selections or filter
+      // is already trying to render checkboxes.
+      if (!empty($form[$field_id]['#multiple']) || $form[$field_id]['#type'] === 'checkboxes') {
         $form[$field_id]['#theme'] = 'bef_checkboxes';
         $form[$field_id]['#type'] = 'checkboxes';
 
