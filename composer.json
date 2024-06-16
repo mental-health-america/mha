@@ -75,6 +75,7 @@
         "drupal/dynamic_entity_reference": "^4.0@alpha",
         "drupal/editor_advanced_link": "^2.2",
         "drupal/embed": "^1.0",
+        "drupal/empty_page": "^3.0",
         "drupal/encrypt": "^3.0",
         "drupal/entity": "^1.0",
         "drupal/entity_clone": "^2.0@beta",
