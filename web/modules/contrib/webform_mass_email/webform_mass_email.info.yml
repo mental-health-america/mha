@@ -1,7 +1,8 @@
 name: Webform Mass Email
 type: module
 description: Send bulk email for all recipients of the webform.
-core_version_requirement: ^8 || ^9 || ^10
+core: 8.x
+core_version_requirement: ^8 || ^9
 package: Webform
 configure: webform.config.mass_email
 dependencies:
