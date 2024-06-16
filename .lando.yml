@@ -1,4 +1,4 @@
-name: mhanational
+name: mental
 recipe: drupal9
 config:
   php: '8.2'
@@ -7,15 +7,15 @@ config:
 # Services
 services:
   database:
-    portforward: 58777
+    portforward: 58177
     creds:
       user: drupal9
       password: drupal9
       database: drupal9
-  mhanational-phpmyadmin:
+  mental-phpmyadmin:
     type: phpmyadmin
 
 # Proxy
 proxy:
-  mhanational-phpmyadmin:
-    - mhanational-phpmyadmin.lndo.site
+  mental-phpmyadmin:
+    - mental-phpmyadmin.lndo.site
