@@ -119,27 +119,31 @@ abstract class SalesforceMappingFormBase extends EntityForm {
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
-    if (!$this->entity->save()) {
-      $this->messenger()->addError($this->t('An error occurred while trying to save the mapping.'));
-      return;
+    $ret = $this->entity->save();
+    if (!$ret) {
+      $this->messenger()
+        ->addError($this->t('An error occurred while trying to save the mapping.'));
     }
-
-    $this->messenger()->addStatus($this->t('The mapping has been successfully saved.'));
+    else {
+      $this->messenger()
+        ->addStatus($this->t('The mapping has been successfully saved.'));
+    }
+    return $ret;
   }
 
   /**
-   * Retreive Salesforce's information about an object type.
+   * Retrieve Salesforce's information about an object type.
    *
    * @param string $salesforce_object_type
-   *   The object type of whose records you want to retreive.
-   *
-   * @todo this should move to the Salesforce service
+   *   The object type of whose records you want to retrieve.
    *
    * @return \Drupal\salesforce\Rest\RestResponseDescribe
    *   Information about the Salesforce object as provided by Salesforce.
    *
    * @throws \Exception if $salesforce_object_type is not provided and
    *   $this->entity->salesforce_object_type is not set.
+   *
+   * @todo this should move to the Salesforce service
    */
   protected function getSalesforceObject($salesforce_object_type = '') {
     if (empty($salesforce_object_type)) {
@@ -153,7 +157,7 @@ abstract class SalesforceMappingFormBase extends EntityForm {
   }
 
   /**
-   * Helper to retreive a list of object type options.
+   * Helper to retrieve a list of object type options.
    *
    * @return array
    *   An array of values keyed by machine name of the object with the label as
@@ -164,10 +168,12 @@ abstract class SalesforceMappingFormBase extends EntityForm {
 
     // Note that we're filtering SF object types to a reasonable subset.
     $config = $this->config('salesforce.settings');
-    $filter = $config->get('show_all_objects') ? [] : [
-      'updateable' => TRUE,
-      'triggerable' => TRUE,
-    ];
+    $filter = $config->get('show_all_objects')
+      ? []
+      : [
+        'updateable' => TRUE,
+        'triggerable' => TRUE,
+      ];
     $sfobjects = $this->client->objects($filter);
     foreach ($sfobjects as $object) {
       $sfobject_options[$object['name']] = $object['label'] . ' (' . $object['name'] . ')';

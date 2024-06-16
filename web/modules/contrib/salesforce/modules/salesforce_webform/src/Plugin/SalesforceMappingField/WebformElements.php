@@ -109,8 +109,6 @@ class WebformElements extends SalesforceMappingFieldPluginBase {
    */
   public function getPluginDefinition() {
     $definition = parent::getPluginDefinition();
-    $element_parts = explode('__', (string) $this->config('drupal_field_value'));
-    $main_element_name = reset($element_parts);
     $webform = $this->entityTypeManager->getStorage('webform')->load($this->mapping->get('drupal_bundle'));
     // Unfortunately, the best we can do for webform dependencies is a single
     // dependency on the top-level webform, which is itself a monolithic config.

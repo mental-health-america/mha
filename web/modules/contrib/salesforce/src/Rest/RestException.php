@@ -6,7 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 /**
- * Class RestException.
+ * Class Rest Exception wrapper.
  *
  * @package Drupal\salesforce\Rest
  */

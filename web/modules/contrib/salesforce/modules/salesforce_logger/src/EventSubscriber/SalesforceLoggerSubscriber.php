@@ -2,6 +2,7 @@
 
 namespace Drupal\salesforce_logger\EventSubscriber;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\Core\Utility\Error;
 use Drupal\salesforce\Event\SalesforceEvents;
@@ -10,7 +11,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Class SalesforceLoggerSubscriber.
+ * Salesforce Logger Subscriber.
  *
  * @package Drupal\salesforce_logger
  */
@@ -26,13 +27,23 @@ class SalesforceLoggerSubscriber implements EventSubscriberInterface {
   protected $logger;
 
   /**
+   * The config factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $config;
+
+  /**
    * Create a new Salesforce Logger Subscriber.
    *
    * @param \Psr\Log\LoggerInterface $logger
    *   The logger.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config
+   *   Config factory.
    */
-  public function __construct(LoggerInterface $logger) {
+  public function __construct(LoggerInterface $logger, ConfigFactoryInterface $config) {
     $this->logger = $logger;
+    $this->config = $config;
   }
 
   /**
@@ -54,7 +65,7 @@ class SalesforceLoggerSubscriber implements EventSubscriberInterface {
    *   The event.
    */
   public function salesforceException(SalesforceExceptionEventInterface $event) {
-    $log_level_setting = \Drupal::configFactory()->get('salesforce_logger.settings')->get('log_level');
+    $log_level_setting = $this->config->get('salesforce_logger.settings')->get('log_level');
     $event_level = $event->getLevel();
     // Only log events whose log level is greater or equal to min log level
     // setting.

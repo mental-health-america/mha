@@ -32,6 +32,13 @@ class SalesforceDeleteAllowedEvent extends SalesforceBaseEvent {
   protected $entity;
 
   /**
+   * The Salesforce Mapping.
+   *
+   * @var \Drupal\salesforce_mapping\Entity\SalesforceMappingInterface|null
+   */
+  protected $mapping;
+
+  /**
    * SalesforceDeleteAllowedEvent dispatched before deleting an entity.
    *
    * @param \Drupal\salesforce_mapping\Entity\MappedObjectInterface $mapped_object

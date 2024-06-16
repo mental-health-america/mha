@@ -32,6 +32,13 @@ class GoogleSearch extends ConfigurableSearchPluginBase implements AccessibleInt
   protected $configuration;
 
   /**
+   * The default query parameter key for searchs
+   *
+   * @var string
+   */
+  public static $defaultQueryKey = 'keys';
+
+  /**
    * RequestStack object for getting requests.
    *
    * @var \Symfony\Component\HttpFoundation\RequestStack
@@ -98,6 +105,7 @@ class GoogleSearch extends ConfigurableSearchPluginBase implements AccessibleInt
       'results_display' => 'here',
       'custom_results_display' => 'results-only',
       'custom_css' => '',
+      'query_key' => self::$defaultQueryKey,
       'watermark' => FALSE,
       'data_attributes' => [],
     ];
@@ -192,6 +200,14 @@ class GoogleSearch extends ConfigurableSearchPluginBase implements AccessibleInt
       '#size' => 6,
       '#description' => $this->t('Enter the desired width, in characters, of the searchbox on the Google Search block.'),
       '#default_value' => $this->configuration['results_searchbox_width'] ?? $default['results_searchbox_width'],
+    ];
+
+    $form['query_key'] = [
+      '#title' => $this->t('Query parameter key'),
+      '#type' => 'textfield',
+      '#default_value' => $this->configuration['query_key'] ?? $default['query_key'],
+      '#description' => $this->t('Optionally change the query parameter displayed in the URL. For example, change <code>https://example.com/search/google?keys=streets</code> to <code>https://example.com/search/google?query=streets</code>.',),
+      '#required' => TRUE,
     ];
 
     $form['custom_css'] = [
@@ -296,6 +312,7 @@ class GoogleSearch extends ConfigurableSearchPluginBase implements AccessibleInt
     $this->configuration['results_searchbox_width'] = intval($values['results_searchbox_width']);
     $this->configuration['results_display'] = $values['results_display'];
     $this->configuration['custom_css'] = $values['custom_css'];
+    $this->configuration['query_key'] = $values['query_key'];
     $this->configuration['custom_results_display'] = $values['custom_results_display'];
     $this->configuration['watermark'] = $values['watermark'];
     $this->configuration['display_drupal_search'] = $values['display_drupal_search'];
@@ -313,6 +330,17 @@ class GoogleSearch extends ConfigurableSearchPluginBase implements AccessibleInt
       $parameters['search_conditions'] = '';
     }
     parent::setSearch($keywords, $parameters, $attributes);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildSearchUrlQuery(FormStateInterface $form_state) {
+    // Grab the keywords entered in the form and put them as 'keys' in the GET.
+    $query_key = $this->configuration['query_key'] ?? self::$defaultQueryKey;
+    $keys = trim($form_state->getValue($query_key));
+    $query = [$query_key => $keys];
+    return $query;
   }
 
   /**
@@ -400,10 +428,11 @@ class GoogleSearch extends ConfigurableSearchPluginBase implements AccessibleInt
       $output['#attached']['library'][] = 'google_cse/customCSS_' . md5($this->configuration['custom_css']);
     }
     // Noscript message.
+    $query_key = $this->configuration['query_key'] ?? self::$defaultQueryKey;
     $url = Url::fromUri('https://cse.google.com/cse', [
       'query' => [
         'cx' => $this->configuration['cx'],
-        'q' => \Drupal::request()->query->get('keys'),
+        'q' => \Drupal::request()->query->get($query_key),
       ],
     ]);
     $output['#noscript'] = $this->t('@google, or enable JavaScript to view them here.', [
@@ -434,7 +463,8 @@ class GoogleSearch extends ConfigurableSearchPluginBase implements AccessibleInt
     // Tell Google to use Drupal core search's 'keys' query parameter.
     // This is relevant for all choices except 'Google Hosted,' which
     // changes this value, below.
-    $output['#primary_attributes']['data-queryParameterName'] = 'keys';
+    $query_key = $this->configuration['query_key'] ?? self::$defaultQueryKey;
+    $output['#primary_attributes']['data-queryParameterName'] = $query_key;
     if (!empty($this->configuration['data_attributes'])) {
       foreach ($this->configuration['data_attributes'] as $attribute) {
         $output['#primary_attributes'][$attribute['key']] = $attribute['value'];
@@ -516,6 +546,7 @@ class GoogleSearch extends ConfigurableSearchPluginBase implements AccessibleInt
     // core search *block* form.
     if ($this->pluginId == 'google_cse_search') {
       if (!isset($this->configuration['display_drupal_search']) || $this->configuration['display_drupal_search'] === 1) {
+        $query_key = $this->configuration['query_key'] ?? self::$defaultQueryKey;
         $form['#attributes']['class'][] = 'google-cse';
         $form['basic']['keys']['#title'] = $this->t('Enter your keywords');
         if ($this->configuration['results_searchbox_width']) {
@@ -532,6 +563,11 @@ class GoogleSearch extends ConfigurableSearchPluginBase implements AccessibleInt
           ];
           $form['basic']['q'] = $form['basic']['keys'];
           $form['basic']['q']['#weight'] = -10;
+          unset($form['basic']['keys']);
+        }
+        elseif ($query_key !== 'keys') {
+          // Customize query key, if configured.
+          $form['basic'][$query_key] = $form['basic']['keys'];
           unset($form['basic']['keys']);
         }
       }

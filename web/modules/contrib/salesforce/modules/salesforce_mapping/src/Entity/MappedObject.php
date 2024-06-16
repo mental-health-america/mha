@@ -82,6 +82,13 @@ class MappedObject extends RevisionableContentEntityBase implements MappedObject
   protected $drupalEntityStub = NULL;
 
   /**
+   * Whether to force the pull.
+   *
+   * @var bool
+   */
+  public $force_pull;
+
+  /**
    * Overrides ContentEntityBase::__construct().
    */
   public function __construct(array $values) {
@@ -590,10 +597,11 @@ class MappedObject extends RevisionableContentEntityBase implements MappedObject
 
     // Set a flag here to indicate that a pull is happening, to avoid
     // triggering a push.
-    $drupal_entity->salesforce_pull = TRUE;
+    $drupal_entity->setSyncing(TRUE);
     $drupal_entity->save();
 
     // Update mapping object.
+    $this->setNewRevision(TRUE);
     $this
       ->set('drupal_entity', $drupal_entity)
       ->set('entity_updated', $this->getRequestTime())

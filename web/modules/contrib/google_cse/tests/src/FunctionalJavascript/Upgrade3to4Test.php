@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\google_cse\Functional;
 
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;

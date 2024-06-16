@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Class SalesforceAuthSettings.
+ * Class auth settings for salesforce.
  */
 class SalesforceAuthSettings extends ConfigFormBase {
 

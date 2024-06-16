@@ -14,7 +14,9 @@ use Drupal\key\KeyInterface;
  *   id = "env",
  *   label = @Translation("Environment"),
  *   description = @Translation("The Environment key provider allows a key to be retrieved from an environment variable."),
- *   storage_method = "env",
+ *   tags = {
+ *     "env",
+ *   },
  *   key_value = {
  *     "accepted" = FALSE,
  *     "required" = FALSE

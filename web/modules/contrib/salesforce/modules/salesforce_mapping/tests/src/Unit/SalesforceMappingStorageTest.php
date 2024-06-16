@@ -134,8 +134,6 @@ class SalesforceMappingStorageTest extends UnitTestCase {
    * @covers ::loadByDrupal
    */
   public function testLoadByDrupalEmpty() {
-    $config_object = $this->prophesize(SalesforceMapping::class);
-
     $this->salesforceMappingStorage
       ->expects($this->once())
       ->method('loadByProperties')

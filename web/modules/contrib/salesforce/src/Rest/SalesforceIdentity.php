@@ -5,10 +5,15 @@ namespace Drupal\salesforce\Rest;
 use OAuth\Common\Http\Exception\TokenResponseException;
 
 /**
- *
+ * Wrapper for Salesforce identity response.
  */
 class SalesforceIdentity implements SalesforceIdentityInterface {
 
+  /**
+   * Decoded json response data.
+   *
+   * @var array
+   */
   protected $data;
 
   /**

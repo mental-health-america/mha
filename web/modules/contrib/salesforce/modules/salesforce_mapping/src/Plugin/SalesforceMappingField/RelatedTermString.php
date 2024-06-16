@@ -69,6 +69,7 @@ class RelatedTermString extends SalesforceMappingFieldPluginBase {
       return;
     }
 
+    $referencedEntities = [];
     // Map the term name to the salesforce field.
     foreach ($field->referencedEntities() as $referencedEntity) {
       $referencedEntities[] = $referencedEntity->getName();
@@ -104,17 +105,19 @@ class RelatedTermString extends SalesforceMappingFieldPluginBase {
       return;
     }
 
-    // If this is a multi-value field, split the value from Salesforce into parts.
+    // If this is a multivalue field split the value from Salesforce into parts.
     $field_values = explode(";", $value);
 
     foreach ($field_values as $field_value) {
       // Look for a term that matches the string in the salesforce field.
-      $query = \Drupal::entityQuery('taxonomy_term');
-      $query->accessCheck(FALSE);
-      $query->condition('vid', $vocabs, 'IN');
-      $query->condition('name', $field_value);
-      $tids = $query->execute();
-
+      $tids = $this->entityTypeManager
+        ->getStorage('taxonomy_term')
+        ->getQuery()
+        ->accessCheck(FALSE)
+        ->condition('vid', $vocabs, 'IN')
+        ->condition('name', $field_value)
+        ->execute();
+      $term_ids = [];
       if (!empty($tids)) {
         $term_ids[] = reset($tids);
       }
@@ -186,6 +189,7 @@ class RelatedTermString extends SalesforceMappingFieldPluginBase {
         }
       }
     }
+    return parent::checkFieldMappingDependency($dependencies);
   }
 
 }

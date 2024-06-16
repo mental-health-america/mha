@@ -98,7 +98,7 @@ trait SchedulerSetupTrait {
   protected $database;
 
   /**
-   * The request time stored as interger for direct re-use in many tests.
+   * The request time stored as integer for direct re-use in many tests.
    *
    * @var int
    */
@@ -192,7 +192,6 @@ trait SchedulerSetupTrait {
 
     // Store the core dateFormatter service for re-use in the actual tests.
     $this->dateFormatter = $this->container->get('date.formatter');
-
   }
 
   /**
@@ -273,7 +272,7 @@ trait SchedulerSetupTrait {
 
       default:
         // Incorrect parameter values.
-        throw new \Exception(sprintf('Unrecognised combination of entityTypeId "%s" and bundle "%s" passed to createEntity()', $entityTypeId, $bundle));
+        throw new \Exception(sprintf('Unrecognized combination of entityTypeId "%s" and bundle "%s" passed to createEntity()', $entityTypeId, $bundle));
 
     }
     return $entity;
@@ -308,7 +307,7 @@ trait SchedulerSetupTrait {
 
       default:
         // Incorrect parameter value.
-        throw new \Exception(sprintf('Unrecognised entityTypeId value "%s" passed to getEntityByTitle()', $entityTypeId));
+        throw new \Exception(sprintf('Unrecognized entityTypeId value "%s" passed to getEntityByTitle()', $entityTypeId));
     }
   }
 
@@ -350,7 +349,7 @@ trait SchedulerSetupTrait {
     $bundleEntityType = $entityTypeManager->getDefinition($entityTypeId)->getBundleEntityType();
     if (!$entity_type = $entityTypeManager->getStorage($bundleEntityType)->load($bundle)) {
       // Incorrect parameter values.
-      throw new \Exception(sprintf('Unrecognised combination of entityTypeId "%s" and bundle "%s" passed to entityTypeObject()', $entityTypeId, $bundle));
+      throw new \Exception(sprintf('Unrecognized combination of entityTypeId "%s" and bundle "%s" passed to entityTypeObject()', $entityTypeId, $bundle));
     };
     return $entity_type;
   }
@@ -376,7 +375,7 @@ trait SchedulerSetupTrait {
 
       default:
         // Incorrect parameter value.
-        throw new \Exception(sprintf('Unrecognised entityTypeId "%s" passed to titleField()', $entityTypeId));
+        throw new \Exception(sprintf('Unrecognized entityTypeId "%s" passed to titleField()', $entityTypeId));
     }
   }
 
@@ -400,7 +399,7 @@ trait SchedulerSetupTrait {
 
       default:
         // Incorrect parameter value.
-        throw new \Exception(sprintf('Unrecognised entityTypeId "%s" passed to bodyField()', $entityTypeId));
+        throw new \Exception(sprintf('Unrecognized entityTypeId "%s" passed to bodyField()', $entityTypeId));
     }
   }
 
@@ -431,7 +430,7 @@ trait SchedulerSetupTrait {
 
       default:
         // Incorrect parameter value.
-        throw new \Exception(sprintf('Unrecognised entityTypeId "%s" passed to entitySavedMessage()', $entityTypeId));
+        throw new \Exception(sprintf('Unrecognized entityTypeId "%s" passed to entitySavedMessage()', $entityTypeId));
     }
   }
 
@@ -477,7 +476,7 @@ trait SchedulerSetupTrait {
 
       default:
         // Incorrect parameter values.
-        throw new \Exception(sprintf('Unrecognised combination of entityTypeId "%s" and bundle "%s" passed to entityAddUrl()', $entityTypeId, $bundle));
+        throw new \Exception(sprintf('Unrecognized combination of entityTypeId "%s" and bundle "%s" passed to entityAddUrl()', $entityTypeId, $bundle));
     }
     if (!$url = Url::fromRoute($route, [$type_parameter => $bundle])) {
       // Incorrect parameter values.
@@ -534,7 +533,7 @@ trait SchedulerSetupTrait {
     $url = $urls[$page][$entityTypeId] ?? ($urls[$page]['default'] ?? NULL);
     if (empty($url)) {
       // Incorrect parameter values.
-      throw new \Exception(sprintf('Unrecognised combination of page "%s", entityTypeId "%s" and bundle "%s" passed to adminUrl()', $page, $entityTypeId, $bundle));
+      throw new \Exception(sprintf('Unrecognized combination of page "%s", entityTypeId "%s" and bundle "%s" passed to adminUrl()', $page, $entityTypeId, $bundle));
     }
     return $url;
   }

@@ -48,9 +48,16 @@ class SalesforcePullEnqueueEvent extends SalesforceBaseEvent {
   protected $enqueueAllowed;
 
   /**
+   * Constructor.
+   *
    * @param \Drupal\salesforce_mapping\Entity\SalesforceMappingInterface $mapping
+   *   Mapping.
    * @param \Drupal\salesforce\SelectQueryResult $records
+   *   Records.
    * @param \Drupal\salesforce\SObject $record
+   *   Record.
+   * @param bool $force_pull
+   *   Whether to force pull.
    */
   public function __construct(SalesforceMappingInterface $mapping, SelectQueryResult $records, SObject $record, $force_pull) {
     $this->mapping = $mapping;
@@ -64,6 +71,7 @@ class SalesforcePullEnqueueEvent extends SalesforceBaseEvent {
    * Get Mapping Interface object.
    *
    * @return \Drupal\salesforce_mapping\Entity\SalesforceMappingInterface
+   *   Mapping.
    */
   public function getMapping() {
     return $this->mapping;
@@ -73,6 +81,7 @@ class SalesforcePullEnqueueEvent extends SalesforceBaseEvent {
    * Get all records.
    *
    * @return \Drupal\salesforce\SelectQueryResult
+   *   Result.
    */
   public function getRecords() {
     return $this->records;
@@ -82,27 +91,37 @@ class SalesforcePullEnqueueEvent extends SalesforceBaseEvent {
    * Returns SF Object Type.
    *
    * @return string
+   *   Record type.
    */
   public function getRecordType() {
     return $this->record->type();
   }
 
   /**
+   * Getter.
+   *
    * @return \Drupal\salesforce\SFID
+   *   Id.
    */
   public function getRecordId() {
     return $this->record->id();
   }
 
   /**
+   * Getter.
+   *
    * @return \Drupal\salesforce\SObject
+   *   Object.
    */
   public function getRecord() {
     return $this->record;
   }
 
   /**
+   * Getter.
+   *
    * @return array
+   *   Fields.
    */
   public function getCurrentRecordFields() {
     return $this->record->fields();

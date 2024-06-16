@@ -113,7 +113,8 @@ class SalesforcePushCommands extends SalesforceMappingCommandsBase {
     foreach ($mappings as $mapping) {
       // Process one mapping queue.
       $this->pushQueue->processQueue($mapping);
-      $this->logger()->info(dt('Finished pushing !name', ['!name' => $mapping->label()]));
+      $this->logger()
+        ->info(dt('Finished pushing !name', ['!name' => $mapping->label()]));
     }
   }
 
@@ -149,7 +150,7 @@ class SalesforcePushCommands extends SalesforceMappingCommandsBase {
   public function requeue($name, array $options = ['ids' => '']) {
     // Dummy call to create item, to ensure table exists.
     try {
-      \Drupal::service('queue.salesforce_push')->createItem(NULL);
+      $this->pushQueue->createItem(NULL);
     }
     catch (\Exception $e) {
 
@@ -216,7 +217,10 @@ class SalesforcePushCommands extends SalesforceMappingCommandsBase {
         salesforce_push_entity_crud($entity, 'push_create');
         $log[] = $entity->id();
       }
-      $this->logger->info(dt("!mapping: !count unmapped entities found and push to Salesforce attempted. See logs for more details.", ['!count' => count($log), '!mapping' => $mapping->label()]));
+      $this->logger->info(dt("!mapping: !count unmapped entities found and push to Salesforce attempted. See logs for more details.", [
+        '!count' => count($log),
+        '!mapping' => $mapping->label(),
+      ]));
     }
   }
 

@@ -183,6 +183,7 @@ class SettingsForm extends ConfigFormBase {
       'haw' => 'Hawaiian',
       'iw' => 'Hebrew',
       'hi' => 'Hindi',
+      'hmn' => 'Hmong',
       'hu' => 'Hungarian',
       'is' => 'Icelandic',
       'ig' => 'Igbo',

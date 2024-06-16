@@ -5,4 +5,4 @@ services:
 
   salesforce_pull.delete_handler:
     class: Drupal\salesforce_pull\DeleteHandler
-    arguments: ['@salesforce.client', '@entity_type.manager', '@state', '@event_dispatcher']
+    arguments: ['@salesforce.client', '@entity_type.manager', '@state', '@event_dispatcher', '@salesforce_pull.queue_handler']

@@ -77,7 +77,8 @@ class SalesforceMappingCommands extends SalesforceMappingCommandsBase {
     $config_limit = $this->salesforceConfig->get('limit_mapped_object_revisions');
     // These 2 lines give different results:
     while (TRUE) {
-      if (!$limit = $this->io()->ask('Enter a revision limit (integer). All revisions beyond this limit will be deleted, oldest first', $config_limit)) {
+      if (!$limit = $this->io()
+        ->ask('Enter a revision limit (integer). All revisions beyond this limit will be deleted, oldest first', $config_limit)) {
         throw new UserAbortException();
       }
       elseif ($limit > 0) {
@@ -117,10 +118,15 @@ class SalesforceMappingCommands extends SalesforceMappingCommandsBase {
       ->execute()
       ->fetchCol();
     if (empty($ids)) {
-      $this->logger()->warning(dt("No Mapped Objects with more than !limit revision(s). No action taken.", ['!limit' => $limit]));
+      $this->logger()
+        ->warning(dt("No Mapped Objects with more than !limit revision(s). No action taken.", ['!limit' => $limit]));
       return;
     }
-    $this->logger()->info(dt('Found !count mapped objects with excessive revisions. Will prune to revision(s) each. This may take a while.', ['!count' => count($ids), '!limit' => $limit]));
+    $this->logger()
+      ->info(dt('Found !count mapped objects with excessive revisions. Will prune to revision(s) each. This may take a while.', [
+        '!count' => count($ids),
+        '!limit' => $limit,
+      ]));
     $total = count($ids);
     $i = 0;
     $buckets = ceil($total / 20);
@@ -129,7 +135,10 @@ class SalesforceMappingCommands extends SalesforceMappingCommandsBase {
     }
     foreach ($ids as $id) {
       if ($i++ % $buckets == 0) {
-        $this->logger()->info(dt("Pruned !i of !total records.", ['!i' => $i, '!total' => $total]));
+        $this->logger()->info(dt("Pruned !i of !total records.", [
+          '!i' => $i,
+          '!total' => $total,
+        ]));
       }
       /** @var \Drupal\salesforce_mapping\Entity\MappedObject $mapped_object */
       if ($mapped_object = $this->mappedObjectStorage->load($id)) {
@@ -201,7 +210,8 @@ class SalesforceMappingCommands extends SalesforceMappingCommandsBase {
       ->execute()
       ->fetchCol();
     if (empty($entity_type_ids)) {
-      $this->logger()->info('No orphaned mapped objects found by Drupal entities.');
+      $this->logger()
+        ->info('No orphaned mapped objects found by Drupal entities.');
       return;
     }
 
@@ -219,7 +229,8 @@ class SalesforceMappingCommands extends SalesforceMappingCommandsBase {
       }
       $mapped_obj_ids = $query->execute()->fetchCol();
       if (empty($mapped_obj_ids)) {
-        $this->logger()->info('No orphaned mapped objects found for ' . $et_id . '.');
+        $this->logger()
+          ->info('No orphaned mapped objects found for ' . $et_id . '.');
         continue;
       }
       $this->purgeConfirmAndDelete($mapped_obj_ids, 'entity type: ' . $et_id);
@@ -298,7 +309,8 @@ class SalesforceMappingCommands extends SalesforceMappingCommandsBase {
         if (empty($mapped_obj_ids)) {
           continue;
         }
-        $this->logger()->warning(dt('Unknown object type for Salesforce ID prefix !prefix', ['!prefix' => $prefix]));
+        $this->logger()
+          ->warning(dt('Unknown object type for Salesforce ID prefix !prefix', ['!prefix' => $prefix]));
         $this->purgeConfirmAndDelete($mapped_obj_ids, 'prefix ' . $prefix);
         continue;
       }
@@ -327,7 +339,8 @@ class SalesforceMappingCommands extends SalesforceMappingCommandsBase {
         }
       }
       if (empty($to_delete)) {
-        $this->logger()->info(dt('No orphaned mapped objects found for SObject type !type', ['!type' => $object_types[$prefix]['name']]));
+        $this->logger()
+          ->info(dt('No orphaned mapped objects found for SObject type !type', ['!type' => $object_types[$prefix]['name']]));
         continue;
       }
       $this->purgeConfirmAndDelete(array_values($to_delete), 'SObject type *' . $object_types[$prefix]['name'] . '*');
@@ -360,7 +373,7 @@ class SalesforceMappingCommands extends SalesforceMappingCommandsBase {
     $mapping_ids = $query
       ->execute()
       ->fetchCol();
-    if (empty($entity_type_ids)) {
+    if (empty($mapping_ids)) {
       $this->logger()->info('No orphaned mapped objects found by mapping.');
       return;
     }

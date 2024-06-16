@@ -52,3 +52,11 @@ advanced_email_validation.settings:
           type: sequence
           sequence:
             type: string
+    local_list_only:
+      type: mapping
+      label: Local list only
+      mapping:
+        disposable:
+          type: boolean
+        free:
+          type: boolean
