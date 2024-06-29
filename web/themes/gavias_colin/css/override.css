@@ -1906,3 +1906,7 @@ h4.mb-3.white-text.connect {
 .btn-info {
   font-size: 1rem;
 }
+
+fieldset.webform-composite-hidden-title .fieldset-wrapper > .form-item:last-child, fieldset.webform-composite-hidden-title .fieldset-wrapper > .form-wrapper > .form-item:last-child, fieldset.webform-composite-hidden-title .fieldset-wrapper > .webform-flexbox:last-child {
+  max-width: inherit !important;
+}
