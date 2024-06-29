@@ -579,7 +579,7 @@ trait GeofieldMapFieldTrait {
         '#max' => $settings['map_zoom_and_pan']['zoom']['max'],
         '#title' => $this->t('Start Zoom'),
         '#default_value' => $settings['map_zoom_and_pan']['zoom']['initial'],
-        '#description' => $this->t('The Initial Zoom level of the Google Map.'),
+        '#description' => $this->t('The Initial Zoom level of the Map.<br>Admitted values usually range from 0 (the whole world) to 20 - 22, depending on the max zoom supported by the specific Map Tile in use.<br>As a reference consider Zoom 5 for a large country, 10 for a city, 15 for a road or a district, etc.'),
         '#element_validate' => [[get_class($this), 'zoomLevelValidate']],
       ],
       'force' => [

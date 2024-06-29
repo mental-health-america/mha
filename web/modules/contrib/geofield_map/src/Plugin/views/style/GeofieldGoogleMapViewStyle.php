@@ -1018,7 +1018,8 @@ class GeofieldGoogleMapViewStyle extends DefaultStyle implements ContainerFactor
 
                 // Define a Tooltip for the Feature.
                 $tooltip_field = $this->options['map_marker_and_infowindow']['tooltip_field'] ?? NULL;
-                $tooltip = isset($entity) && !empty($tooltip_field) ? trim(html_entity_decode(strip_tags($this->rendered_fields[$id][$tooltip_field]), ENT_QUOTES)) : NULL;
+                $tooltip = isset($entity) && !empty($tooltip_field) && isset($this->rendered_fields[$id][$tooltip_field])
+                ? trim(html_entity_decode(strip_tags((string) $this->rendered_fields[$id][$tooltip_field]), ENT_QUOTES)) : NULL;
 
                 foreach ($features as $k => &$feature) {
                   // Generate GeoJsonData Feature.
