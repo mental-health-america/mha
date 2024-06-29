@@ -90,7 +90,7 @@
         "drupal/focal_point": "^2.1",
         "drupal/fraction": "^2.1",
         "drupal/fullcalendar_view": "^5.1",
-        "drupal/geofield": "^1.54",
+        "drupal/geofield": "^1.59",
         "drupal/geofield_map": "^3.0",
         "drupal/geolocation": "^3.13",
         "drupal/google_analytics": "^4.0",
