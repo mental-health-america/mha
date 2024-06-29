@@ -116,7 +116,7 @@
         "drupal/profile": "^1.10",
         "drupal/protected_pages": "^1.6",
         "drupal/quicktabs": "^3.0@alpha",
-        "drupal/r4032login": "^2.1",
+        "drupal/r4032login": "^2.2",
         "drupal/rebuild_cache_access": "^1.9",
         "drupal/recaptcha": "^3.2",
         "drupal/recurring_events": "^2.0@RC",
