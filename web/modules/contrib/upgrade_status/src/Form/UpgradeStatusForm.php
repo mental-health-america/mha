@@ -1042,7 +1042,7 @@ MARKUP
       'data' => [
         'requirement' => [
           'class' => 'requirement-label',
-          'data' => $this->t('Drupal core will need be at least 10.3.x to upgrade (not yet available)'),
+          'data' => $this->t('Drupal core should be at least 10.3.0'),
         ],
         'status' => [
           'data' => $core_version_info,
@@ -1198,7 +1198,7 @@ MARKUP
     // Check Drush. We only detect site-local drush for now.
     if (class_exists('\\Drush\\Drush')) {
       $version = call_user_func('\\Drush\\Drush::getMajorVersion');
-      if (version_compare($version, '12') >= 0) {
+      if (version_compare($version, '13') >= 0) {
         $class = 'color-success';
       }
       else {
@@ -1216,7 +1216,7 @@ MARKUP
       'data' => [
         'requirement' => [
           'class' => 'requirement-label',
-          'data' => $this->t('When using Drush, minimum version is 12'),
+          'data' => $this->t('When using Drush, minimum version is 13'),
         ],
         'status' => [
           'data' => $label,

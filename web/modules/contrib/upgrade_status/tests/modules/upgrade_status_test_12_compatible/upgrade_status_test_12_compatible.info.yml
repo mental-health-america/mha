@@ -1,8 +1,8 @@
-name: 'Upgrade status test 11 compatible'
+name: 'Upgrade status test 12 compatible'
 type: module
 description: 'Support module for upgrade status module testing.'
 package: Testing
-core_version_requirement: ^9 || ^10 || ^11
+core_version_requirement: ^9 || ^10 || ^11 || ^12
 
 # Information added by Drupal.org packaging script on 2024-07-04
 version: '4.3.4'
