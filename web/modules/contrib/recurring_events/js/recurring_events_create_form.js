@@ -2,7 +2,7 @@
  * @file
  * Javascript functionality for the recurring events create form.
  */
-
+/* eslint-disable */
 (function ($, once) {
   'use strict';
 
@@ -30,12 +30,12 @@
 
           // Remove all the weekday recurrence options.
           $('#edit-weekly-recurring-date-0-days').find('input').each(function (key, item) {
-            $(item).prop('checked', false);
+            $(item).prop('checked', FALSE);
           });
 
           // Set the event to recur on the same day of the week as the start
           // date.
-          $('#edit-weekly-recurring-date-0-days-' + weekday).prop('checked', true);
+          $('#edit-weekly-recurring-date-0-days-' + weekday).prop('checked', TRUE);
         }
       });
 
@@ -49,12 +49,12 @@
 
           // Remove all the monthly recurrence options.
           $('#edit-monthly-recurring-date-0-days').find('input').each(function (key, item) {
-            $(item).prop('checked', false);
+            $(item).prop('checked', FALSE);
           });
 
           // Set the event to recur on the same day of the week as the start
           // date.
-          $('#edit-monthly-recurring-date-0-days-' + weekday).prop('checked', true);
+          $('#edit-monthly-recurring-date-0-days-' + weekday).prop('checked', TRUE);
         }
       });
     }

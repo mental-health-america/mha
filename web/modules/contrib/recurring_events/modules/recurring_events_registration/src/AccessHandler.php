@@ -2,14 +2,14 @@
 
 namespace Drupal\recurring_events_registration;
 
-use Drupal\Core\StringTranslation\TranslationInterface;
-use Drupal\Core\Session\AccountInterface;
-use Symfony\Component\Routing\Route;
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\recurring_events\EventInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Symfony\Component\Routing\Route;
 
 /**
  * AccessHandler class definition.

@@ -98,6 +98,7 @@ class EventICalTest extends KernelTestBase {
     $this->assertPreamble($iCal);
     $this->assertSame('DTSTART:20220101T000000Z', $iCal[6]);
     $this->assertSame('DTEND:20220101T003000Z', $iCal[7]);
+    // cspell:ignore Seriousl
     $this->assertSame('SUMMARY:Test event with a title that is longer than 75 characters. Seriousl', $iCal[8]);
     $this->assertSame(' y, it just keeps going and going.', $iCal[9]);
     $this->assertSame('END:VEVENT', $iCal[10]);

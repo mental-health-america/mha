@@ -2,17 +2,17 @@
 
 namespace Drupal\recurring_events_registration;
 
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Datetime\DrupalDateTime;
-use Drupal\Core\Logger\LoggerChannelFactoryInterface;
-use Drupal\recurring_events\Entity\EventInstance;
-use Drupal\recurring_events\Entity\EventSeries;
-use Drupal\Core\Messenger\Messenger;
-use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Messenger\Messenger;
+use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Utility\Token;
+use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
+use Drupal\recurring_events\Entity\EventInstance;
+use Drupal\recurring_events\Entity\EventSeries;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -273,7 +273,7 @@ class RegistrationCreationService {
   }
 
   /**
-   * Retreive all registered parties for a series.
+   * Retrieve all registered parties for a series.
    *
    * @param bool $future_only
    *   Whether to only return registered parties for future events.
@@ -430,7 +430,7 @@ class RegistrationCreationService {
   }
 
   /**
-   * Retreive all waitlisted users.
+   * Retrieve all waitlisted users.
    *
    * @return array
    *   An array of Drupal\recurring_events_registration\Entity\Registrant users.
@@ -445,7 +445,7 @@ class RegistrationCreationService {
   }
 
   /**
-   * Retreive first user on the waitlist.
+   * Retrieve first user on the waitlist.
    *
    * @return \Drupal\recurring_events_registration\Entity\RegistrantInterface
    *   A fully loaded registrant entity.

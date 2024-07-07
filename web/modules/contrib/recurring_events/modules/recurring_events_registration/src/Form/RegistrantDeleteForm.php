@@ -2,17 +2,16 @@
 
 namespace Drupal\recurring_events_registration\Form;
 
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Entity\ContentEntityDeleteForm;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
-use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Url;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Messenger\Messenger;
 use Drupal\Core\Render\Renderer;
+use Drupal\Core\Url;
 use Drupal\recurring_events_registration\RegistrationCreationService;
-use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a form for deleting Registrant entities.
@@ -43,13 +42,6 @@ class RegistrantDeleteForm extends ContentEntityDeleteForm {
   protected $creationService;
 
   /**
-   * The cache tags invalidator.
-   *
-   * @var \Drupal\Core\Cache\CacheTagsInvalidatorInterface
-   */
-  protected $cacheTagsInvalidator;
-
-  /**
    * Constructs a RegistrantDeleteForm object.
    *
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
@@ -64,15 +56,12 @@ class RegistrantDeleteForm extends ContentEntityDeleteForm {
    *   The renderer service.
    * @param \Drupal\recurring_events_registration\RegistrationCreationService $creation_service
    *   The creation service.
-   * @param \Drupal\Core\Cache\CacheTagsInvalidatorInterface $cache_tags_invalidator
-   *   The cache tags invalidator.
    */
-  public function __construct(EntityRepositoryInterface $entity_repository, EntityTypeBundleInfoInterface $entity_type_bundle_info = NULL, TimeInterface $time = NULL, Messenger $messenger, Renderer $renderer, RegistrationCreationService $creation_service, CacheTagsInvalidatorInterface $cache_tags_invalidator) {
+  public function __construct(EntityRepositoryInterface $entity_repository, EntityTypeBundleInfoInterface $entity_type_bundle_info = NULL, TimeInterface $time = NULL, Messenger $messenger, Renderer $renderer, RegistrationCreationService $creation_service) {
     parent::__construct($entity_repository, $entity_type_bundle_info, $time);
     $this->messenger = $messenger;
     $this->renderer = $renderer;
     $this->creationService = $creation_service;
-    $this->cacheTagsInvalidator = $cache_tags_invalidator;
   }
 
   /**
@@ -85,8 +74,7 @@ class RegistrantDeleteForm extends ContentEntityDeleteForm {
       $container->get('datetime.time'),
       $container->get('messenger'),
       $container->get('renderer'),
-      $container->get('recurring_events_registration.creation_service'),
-      $container->get('cache_tags.invalidator')
+      $container->get('recurring_events_registration.creation_service')
     );
   }
 
@@ -158,7 +146,6 @@ class RegistrantDeleteForm extends ContentEntityDeleteForm {
     $entity = $this->entity;
     $entity->delete();
     $eventinstance = $entity->getEventInstance();
-    $eventseries = $entity->getEventSeries();
 
     $form_state->setRedirectUrl($eventinstance->toUrl('canonical'));
 
@@ -169,20 +156,6 @@ class RegistrantDeleteForm extends ContentEntityDeleteForm {
 
     $this->messenger->addMessage($this->getDeletionMessage());
     $this->logDeletionMessage();
-
-    // Invalidate tags to ensure that views count fields are updated.
-    $tags = [];
-    switch ($this->creationService->getRegistrationType()) {
-      case 'series':
-        $tags[] = 'eventseries:' . $eventseries->id();
-        break;
-
-      case 'instance':
-      default:
-        $tags[] = 'eventinstance:' . $eventinstance->id();
-        break;
-    }
-    $this->cacheTagsInvalidator->invalidateTags($tags);
   }
 
   /**

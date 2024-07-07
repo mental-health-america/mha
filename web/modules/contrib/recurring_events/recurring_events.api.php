@@ -165,9 +165,9 @@ function hook_recurring_events_recur_field_types(&$fields) {
  *   The instances.
  */
 function hook_recurring_events_save_pre_instances_deletion_alter(array &$instances):void {
-  foreach($instances as $k => $instance) {
+  foreach ($instances as $k => $instance) {
     $is_published = $instance->get('status')->value;
-    if($is_published) {
+    if ($is_published) {
       unset($instances[$k]);
     }
   }

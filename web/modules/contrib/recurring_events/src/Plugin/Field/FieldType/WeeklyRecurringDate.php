@@ -2,14 +2,14 @@
 
 namespace Drupal\recurring_events\Plugin\Field\FieldType;
 
-use Drupal\Core\Field\FieldStorageDefinitionInterface;
-use Drupal\Core\TypedData\DataDefinition;
-use Drupal\recurring_events\RecurringEventsFieldTypeInterface;
-use Drupal\recurring_events\Entity\EventSeries;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\TypedData\DataDefinition;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
+use Drupal\recurring_events\Entity\EventSeries;
 use Drupal\recurring_events\Plugin\RecurringEventsFieldTrait;
+use Drupal\recurring_events\RecurringEventsFieldTypeInterface;
 
 /**
  * Plugin implementation of the 'weekly_recurring_date' field type.
@@ -224,7 +224,7 @@ class WeeklyRecurringDate extends DailyRecurringDate implements RecurringEventsF
 
     // If the start date is not the weekday we are seeking, jump to the next
     // instance of that weekday.
-    if ($start->format('l') != ucwords($weekday)) {
+    if ($start->getPhpDateTime()->format('l') != ucwords($weekday)) {
       $start->modify('next ' . $weekday);
     }
 

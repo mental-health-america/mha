@@ -53,6 +53,7 @@ class EntityEventSeriesTest extends EntityTestBase {
 
     // Configure the mocked entity storage to create mocked entities.
     $entity = $this->prophesize(ContentEntityInterface::class);
+    $entity->setSyncing(TRUE)->willReturn($entity->reveal());
     $entity->isValidationRequired()->willReturn(FALSE);
     $entity->validate()->willReturn([]);
     $entity->save()->willReturn(self::SAVED_NEW);

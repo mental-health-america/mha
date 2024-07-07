@@ -3,14 +3,14 @@
 namespace Drupal\recurring_events\Form;
 
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Url;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Messenger\Messenger;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Url;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a form for deleting a eventinstance revision.

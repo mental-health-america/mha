@@ -2,9 +2,9 @@
 
 namespace Drupal\recurring_events\Plugin\FullcalendarViewProcessor;
 
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\fullcalendar_view\Plugin\FullcalendarViewProcessorBase;
 use Drupal\recurring_events\Entity\EventInstance;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Recurring Events Full Calendar View Processor plugin.

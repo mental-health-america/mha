@@ -2,14 +2,15 @@
 
 namespace Drupal\recurring_events\Plugin\views\argument;
 
-use \Drupal\Core\Database\Query\Condition;
-use \Drupal\Core\Entity\EntityFieldManagerInterface;
-use \Drupal\Core\Entity\EntityStorageInterface;
-use \Drupal\Core\Entity\EntityTypeBundleInfoInterface;
-use \Drupal\Core\Form\FormStateInterface;
-use \Drupal\field\Entity\FieldConfig;
-use \Drupal\taxonomy\Plugin\views\argument\IndexTidDepth;
-use \Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Database\Connection;
+use Drupal\Core\Database\Query\Condition;
+use Drupal\Core\Entity\EntityFieldManagerInterface;
+use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\taxonomy\Plugin\views\argument\IndexTidDepth;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Argument handler for event series with taxonomy terms with depth.
@@ -37,9 +38,16 @@ class IndexTidEventSeriesDepth extends IndexTidDepth {
   /**
    * The entity field manager.
    *
-   * @var \Drupal\Core\Entity\EntityFieldManagerInterface $entity_field_manager
+   * @var \Drupal\Core\Entity\EntityFieldManagerInterface
    */
   protected $entityFieldManager;
+
+  /**
+   * The database service.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $database;
 
   /**
    * The entity type.
@@ -56,6 +64,8 @@ class IndexTidEventSeriesDepth extends IndexTidDepth {
   protected $entityTypeLabel = 'Event Series';
 
   /**
+   * Construct an instance of the plugin.
+   *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
    * @param string $plugin_id
@@ -68,11 +78,14 @@ class IndexTidEventSeriesDepth extends IndexTidDepth {
    *   The entity type bundle service.
    * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entity_field_manager
    *   The entity field manager.
+   * @param \Drupal\Core\Database\Connection $database
+   *   The database service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityStorageInterface $term_storage, EntityTypeBundleInfoInterface $entity_type_bundle_info, EntityFieldManagerInterface $entity_field_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityStorageInterface $term_storage, EntityTypeBundleInfoInterface $entity_type_bundle_info, EntityFieldManagerInterface $entity_field_manager, Connection $database) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $term_storage);
     $this->entityTypeBundleInfo = $entity_type_bundle_info;
     $this->entityFieldManager = $entity_field_manager;
+    $this->database = $database;
   }
 
   /**
@@ -85,24 +98,22 @@ class IndexTidEventSeriesDepth extends IndexTidDepth {
       $plugin_definition,
       $container->get('entity_type.manager')->getStorage('taxonomy_term'),
       $container->get('entity_type.bundle.info'),
-      $container->get('entity_field.manager')
+      $container->get('entity_field.manager'),
+      $container->get('database')
     );
   }
 
   /**
    * Extend options.
-   *
-   * @return array
    */
-  protected function defineOptions() {
+  protected function defineOptions(): array {
     $options = parent::defineOptions();
     $options['reference_field'] = ['default' => FALSE];
     return $options;
   }
 
-
   /**
-   * @inheritdoc
+   * {@inheritdoc}
    */
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
     $bundles = array_keys($this->entityTypeBundleInfo->getBundleInfo($this->entityType));
@@ -131,7 +142,7 @@ class IndexTidEventSeriesDepth extends IndexTidDepth {
   }
 
   /**
-   * @inheritdoc
+   * {@inheritdoc}
    */
   public function query($group_by = FALSE) {
     // Get the DB table and reference column name from the reference field name.
@@ -155,7 +166,7 @@ class IndexTidEventSeriesDepth extends IndexTidDepth {
     }
 
     // Now build the subqueries.
-    $subquery = \Drupal::database()->select($ref_field_table, 'es');
+    $subquery = $this->database->select($ref_field_table, 'es');
     $subquery->addField('es', 'entity_id');
     $where = new Condition('OR');
     $where->condition('es.' . $ref_field_name, $tids, $operator);
@@ -183,7 +194,7 @@ class IndexTidEventSeriesDepth extends IndexTidDepth {
   }
 
   /**
-   * @inheritdoc
+   * {@inheritdoc}
    */
   public function title() {
     $term = $this->termStorage->load($this->argument);
@@ -193,4 +204,5 @@ class IndexTidEventSeriesDepth extends IndexTidDepth {
     }
     return $this->t('No name');
   }
+
 }

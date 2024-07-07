@@ -27,4 +27,5 @@ class TaxonomyIndexTidEventInstanceDepth extends TaxonomyIndexTidEventSeriesDept
    * @var \string
    */
   protected $entityTypeLabel = 'Event Instance';
+
 }

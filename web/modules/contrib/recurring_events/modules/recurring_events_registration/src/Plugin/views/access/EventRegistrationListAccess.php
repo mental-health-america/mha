@@ -2,11 +2,11 @@
 
 namespace Drupal\recurring_events_registration\Plugin\views\access;
 
-use Drupal\views\Plugin\views\access\AccessPluginBase;
 use Drupal\Core\Session\AccountInterface;
-use Symfony\Component\Routing\Route;
 use Drupal\recurring_events_registration\AccessHandler;
+use Drupal\views\Plugin\views\access\AccessPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Routing\Route;
 
 /**
  * Custom access plugin for Event Registration views.

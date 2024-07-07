@@ -4,8 +4,8 @@ namespace Drupal\recurring_events\Form;
 
 use Drupal\Core\Entity\EntityConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Url;
 use Drupal\Core\Messenger\Messenger;
+use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -88,7 +88,7 @@ class EventSeriesTypeDeleteForm extends EntityConfirmFormBase {
     $this->entity->delete();
 
     $this->messenger->addMessage(
-      $this->t('Succesfully deleted @type: @label.',
+      $this->t('Successfully deleted @type: @label.',
         [
           '@type' => $this->entity->bundle(),
           '@label' => $this->entity->label(),

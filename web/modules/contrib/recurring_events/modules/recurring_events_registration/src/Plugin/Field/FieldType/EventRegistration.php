@@ -194,8 +194,8 @@ class EventRegistration extends DateRangeItem {
       ->setDescription(t('Select whether to prevent a single email address from registering multiple times for the same event.'));
 
     $properties['permitted_roles'] = DataDefinition::create('string')
-    ->setLabel(t('Which roles can register for this series?'))
-    ->setDescription(t('Provide a comma-separated list of machine names for the roles that have permission to register for this series.  Leave blank to allow anybody to register.'));
+      ->setLabel(t('Which roles can register for this series?'))
+      ->setDescription(t('Provide a comma-separated list of machine names for the roles that have permission to register for this series.  Leave blank to allow anybody to register.'));
 
     return $properties;
   }

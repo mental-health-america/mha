@@ -2,15 +2,15 @@
 
 namespace Drupal\recurring_events_registration\Form;
 
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Routing\RouteBuilderInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Url;
 use Drupal\Core\Link;
+use Drupal\Core\Routing\RouteBuilderInterface;
+use Drupal\Core\Url;
 use Drupal\recurring_events_registration\NotificationService;
 use Drupal\recurring_events_registration\RegistrationCreationService;
-use Drupal\Core\Extension\ModuleHandlerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a form for managing registration settings.

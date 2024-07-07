@@ -31,7 +31,7 @@ trait RecurringEventsFieldTrait {
       $min_time = DrupalDateTime::createFromFormat('h:ia', $min_time);
       $max_time = DrupalDateTime::createFromFormat('h:ia', $max_time);
 
-      // Convert the mininum time to a number of seconds after midnight.
+      // Convert the minimum time to a number of seconds after midnight.
       $lower_hour = $min_time->format('H') * 60 * 60;
       $lower_minute = $min_time->format('i') * 60;
       $lower = $lower_hour + $lower_minute;

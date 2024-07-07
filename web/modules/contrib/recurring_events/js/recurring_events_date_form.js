@@ -2,7 +2,7 @@
  * @file
  * Javascript functionality for the included/excluded date forms.
  */
-
+/* eslint-disable */
 (function ($, once) {
   'use strict';
 

@@ -19,13 +19,6 @@ eventseries.delete_form:
   title: Delete
   weight: 10
 
-# Event Series revisions link.
-entity.eventseries.version_history:
-  route_name: entity.eventseries.version_history
-  base_route: entity.eventseries.canonical
-  title: 'Revisions'
-  weight: 11
-
 # Event Series clone link.
 eventseries.clone_form:
   route_name:  entity.eventseries.clone_form
@@ -71,13 +64,6 @@ eventinstance.delete_form:
   base_route:  entity.eventinstance.canonical
   title: Delete
   weight: 10
-
-# Event Instance revisions link.
-entity.eventinstance.version_history:
-  route_name: entity.eventinstance.version_history
-  base_route: entity.eventinstance.canonical
-  title: 'Revisions'
-  weight: 11
 
 # Event Instance clone link.
 eventinstance.clone_form:

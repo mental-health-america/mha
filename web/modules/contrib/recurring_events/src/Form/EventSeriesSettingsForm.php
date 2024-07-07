@@ -4,8 +4,8 @@ namespace Drupal\recurring_events\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Url;
 use Drupal\Core\Link;
+use Drupal\Core\Url;
 use Drupal\recurring_events\EventCreationService;
 use Drupal\recurring_events\EventInstanceCreatorPluginManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;

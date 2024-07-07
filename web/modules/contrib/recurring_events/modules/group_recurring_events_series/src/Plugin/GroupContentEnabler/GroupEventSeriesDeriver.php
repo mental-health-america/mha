@@ -2,9 +2,9 @@
 
 namespace Drupal\group_recurring_events_series\Plugin\GroupContentEnabler;
 
-use Drupal\recurring_events\Entity\EventSeriesType;
 use Drupal\Component\Plugin\Derivative\DeriverBase;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\recurring_events\Entity\EventSeriesType;
 
 /**
  * Provides a deriver for group event series entities.

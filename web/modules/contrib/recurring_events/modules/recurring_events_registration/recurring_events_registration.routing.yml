@@ -46,7 +46,7 @@ entity.registrant.canonical:
 entity.registrant.add_form:
   path: '/events/{eventinstance}/registrations/add'
   defaults:
-  # Calls the form.add controller, defined in the Registrant entity.
+    # Calls the form.add controller, defined in the Registrant entity.
     _entity_form: registrant.add
     _title: 'Add Registration'
   requirements:
@@ -60,7 +60,7 @@ entity.registrant.add_form:
 entity.registrant.edit_form:
   path: '/events/{eventinstance}/registrations/{registrant}/edit'
   defaults:
-  # Calls the form.edit controller, defined in the Registrant entity.
+    # Calls the form.edit controller, defined in the Registrant entity.
     _entity_form: registrant.edit
     _title: 'Edit Registration'
   requirements:
@@ -107,7 +107,7 @@ entity.registrant.resend_form:
 entity.registrant.anon_edit_form:
   path: '/events/{eventinstance}/registrations/{registrant}/{uuid}/edit'
   defaults:
-  # Calls the form.edit controller, defined in the Registrant entity.
+    # Calls the form.edit controller, defined in the Registrant entity.
     _entity_form: registrant.edit
   requirements:
     _entity_access: 'registrant.anon-update'
@@ -125,7 +125,7 @@ entity.registrant.anon_edit_form:
 entity.registrant.anon_delete_form:
   path: '/events/{eventinstance}/registrations/{registrant}/{uuid}/delete'
   defaults:
-  # Calls the form.delete controller, defined in the Registrant entity.
+    # Calls the form.delete controller, defined in the Registrant entity.
     _entity_form: registrant.delete
   requirements:
     _entity_access: 'registrant.anon-delete'

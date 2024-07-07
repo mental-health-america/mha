@@ -2,8 +2,8 @@
 
 namespace Drupal\recurring_events_registration\Plugin\views\filter;
 
-use Drupal\views\Plugin\views\filter\FilterPluginBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\views\Plugin\views\filter\FilterPluginBase;
 
 /**
  * Filter handler to show the availability of registrations for event instances.

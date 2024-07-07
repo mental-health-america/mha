@@ -2,15 +2,15 @@
 
 namespace Drupal\recurring_events\Form;
 
-use Drupal\Core\Entity\ContentEntityDeleteForm;
-use Drupal\Core\Form\FormStateInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Entity\EntityRepositoryInterface;
-use Drupal\Core\Url;
-use Drupal\Core\Messenger\Messenger;
-use Drupal\Core\Datetime\DateFormatter;
 use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\Datetime\DateFormatter;
+use Drupal\Core\Entity\ContentEntityDeleteForm;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Messenger\Messenger;
+use Drupal\Core\Url;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a form for deleting an eventinstance entity.

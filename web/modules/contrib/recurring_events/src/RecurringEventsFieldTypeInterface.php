@@ -2,8 +2,8 @@
 
 namespace Drupal\recurring_events;
 
-use Drupal\recurring_events\Entity\EventSeries;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\recurring_events\Entity\EventSeries;
 
 /**
  * Provides an interface for recurring event type fields.
