@@ -2,23 +2,23 @@
 
 namespace Drupal\recurring_events\Form;
 
-use Drupal\Core\Entity\ContentEntityForm;
-use Drupal\Core\Form\FormStateInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\recurring_events\EventCreationService;
-use Drupal\Core\Entity\EntityStorageInterface;
-use Drupal\Core\Messenger\Messenger;
-use Drupal\Core\Datetime\DateFormatter;
-use Drupal\Core\Entity\EntityFieldManager;
-use Drupal\Core\Field\FieldTypePluginManager;
-use Drupal\recurring_events\Plugin\Field\FieldWidget\ConsecutiveRecurringDateWidget;
-use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
-use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Component\Datetime\TimeInterface;
-use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Config\ConfigFactory;
+use Drupal\Core\Datetime\DateFormatter;
+use Drupal\Core\Entity\ContentEntityForm;
+use Drupal\Core\Entity\EntityFieldManager;
+use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Field\FieldTypePluginManager;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Messenger\Messenger;
+use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\recurring_events\EventCreationService;
+use Drupal\recurring_events\Plugin\Field\FieldWidget\ConsecutiveRecurringDateWidget;
 use Drupal\user\UserInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Form controller for the eventseries entity create form.

@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\recurring_events\Kernel;
 
-use Drupal\KernelTests\KernelTestBase;
 use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\KernelTests\KernelTestBase;
 use Drupal\recurring_events\Plugin\Field\FieldType\ConsecutiveRecurringDate;
 
 /**

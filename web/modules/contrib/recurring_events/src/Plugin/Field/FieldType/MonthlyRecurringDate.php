@@ -2,14 +2,14 @@
 
 namespace Drupal\recurring_events\Plugin\Field\FieldType;
 
-use Drupal\Core\Field\FieldStorageDefinitionInterface;
-use Drupal\Core\TypedData\DataDefinition;
-use Drupal\recurring_events\RecurringEventsFieldTypeInterface;
-use Drupal\recurring_events\Entity\EventSeries;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\TypedData\DataDefinition;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
+use Drupal\recurring_events\Entity\EventSeries;
 use Drupal\recurring_events\Plugin\RecurringEventsFieldTrait;
+use Drupal\recurring_events\RecurringEventsFieldTypeInterface;
 
 /**
  * Plugin implementation of the 'monthly_recurring_date' field type.
@@ -77,7 +77,7 @@ class MonthlyRecurringDate extends WeeklyRecurringDate implements RecurringEvent
 
     $properties['day_occurrence'] = DataDefinition::create('string')
       ->setLabel(t('Day Occurrence'))
-      ->setDescription(t('Which occurence of the day(s) of the week should event take place'));
+      ->setDescription(t('Which occurrence of the day(s) of the week should event take place'));
 
     $properties['day_of_month'] = DataDefinition::create('string')
       ->setLabel(t('Day of Month'))

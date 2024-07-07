@@ -2,11 +2,11 @@
 
 namespace Drupal\recurring_events_registration\Plugin\Field\FieldWidget;
 
+use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Field\FieldItemListInterface;
-use Drupal\datetime_range\Plugin\Field\FieldWidget\DateRangeDefaultWidget;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\datetime_range\Plugin\Field\FieldWidget\DateRangeDefaultWidget;
 use Drupal\user\Entity\Role;
 
 /**
@@ -424,7 +424,7 @@ class EventRegistrationWidget extends DateRangeDefaultWidget {
    * Custom validation.
    */
   public static function validateSeriesRegistration($element, FormStateInterface $form_state, array $form) {
-    // check if Series Registration and Scheduled Registration dates are set
+    // Check if Series Registration and Scheduled Registration dates are set.
     $registration = $form_state->getValue('event_registration');
 
     if (

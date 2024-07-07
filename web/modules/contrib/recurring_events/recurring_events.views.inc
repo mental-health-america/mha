@@ -59,7 +59,7 @@ function recurring_events_views_data_alter(array &$data) {
     'filter' => [
       'title' => t('Event Series has taxonomy term ID (with depth)'),
       'id' => 'taxonomy_index_tid_eventseries_depth',
-    ]
+    ],
   ];
 
   // Set the default field for a view based on eventinstances.
@@ -76,7 +76,7 @@ function recurring_events_views_data_alter(array &$data) {
     'filter' => [
       'title' => t('Event Instance has taxonomy term ID (with depth)'),
       'id' => 'taxonomy_index_tid_eventinstance_depth',
-    ]
+    ],
   ];
 
   // @todo Remove these declarations when

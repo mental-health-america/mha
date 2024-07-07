@@ -2,14 +2,14 @@
 
 namespace Drupal\recurring_events_registration;
 
+use Drupal\Core\Config\ConfigFactory;
+use Drupal\Core\Entity\EntityFieldManager;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityListBuilder;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Config\ConfigFactory;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Drupal\Core\Entity\EntityFieldManager;
 
 /**
  * Defines a class to build a listing of Registrant entities.

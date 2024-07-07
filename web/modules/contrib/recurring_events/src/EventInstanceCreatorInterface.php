@@ -20,8 +20,9 @@ interface EventInstanceCreatorInterface {
   /**
    * Process the instances for a particular series.
    *
-   * @param EventSeries $series
+   * @param \Drupal\recurring_events\Entity\EventSeries $series
    *   The series for which to process instances.
    */
   public function processInstances(EventSeries $series);
+
 }

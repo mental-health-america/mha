@@ -4,9 +4,9 @@ namespace Drupal\recurring_events_registration\Plugin\ComputedField;
 
 use Drupal\Core\Field\FieldItemList;
 use Drupal\Core\TypedData\ComputedItemListTrait;
-use Drupal\recurring_events_registration\Traits\RegistrationCreationServiceTrait;
 use Drupal\Core\TypedData\DataDefinitionInterface;
 use Drupal\Core\TypedData\TypedDataInterface;
+use Drupal\recurring_events_registration\Traits\RegistrationCreationServiceTrait;
 
 /**
  * A computed field that provides the waitlist count of an Event Instance.

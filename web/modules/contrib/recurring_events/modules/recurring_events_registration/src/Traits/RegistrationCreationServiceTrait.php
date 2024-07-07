@@ -2,35 +2,35 @@
 
 namespace Drupal\recurring_events_registration\Traits;
 
-use Drupal\recurring_events\Entity\EventInstance;
 use Drupal\recurring_events_registration\RegistrationCreationService;
 
 /**
- * Trait RegistrationCreationServiceTrait.
+ * A trait for standard Registration functionality.
  *
  * @package Drupal\recurring_events_registration\Traits
  */
 trait RegistrationCreationServiceTrait {
 
   /**
-   * @var RegistrationCreationService
+   * The registration creation service.
+   *
+   * @var \Drupal\recurring_events_registration\RegistrationCreationService
    */
-  protected $registration_creation_service;
+  protected $registrationCreationService;
 
   /**
    * Helper to get a registration creation service given an event instance.
    *
-   * @param EventInstance $entity
-   *
-   * @return RegistrationCreationService
+   * @param \Drupal\recurring_events\Entity\EventInstance $entity
+   *   The event instance entity.
    */
-  protected function getRegistrationCreationService($entity) {
-    if (!$this->registration_creation_service) {
-      $this->registration_creation_service = \Drupal::service('recurring_events_registration.creation_service');
-      $this->registration_creation_service->setEventInstance($entity);
+  protected function getRegistrationCreationService($entity): RegistrationCreationService {
+    if (!$this->registrationCreationService) {
+      $this->registrationCreationService = \Drupal::service('recurring_events_registration.creation_service');
+      $this->registrationCreationService->setEventInstance($entity);
     }
 
-    return $this->registration_creation_service;
+    return $this->registrationCreationService;
   }
 
 }

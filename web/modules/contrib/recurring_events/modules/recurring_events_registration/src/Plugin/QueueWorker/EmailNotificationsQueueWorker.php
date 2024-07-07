@@ -2,14 +2,14 @@
 
 namespace Drupal\recurring_events_registration\Plugin\QueueWorker;
 
-use Drupal\Core\Queue\QueueWorkerBase;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Mail\MailManagerInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Queue\QueueWorkerBase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Defines 'recurring_events_registration_email_notifications_queue_worker' queue worker.
+ * The 'recurring_events_registration_email_notifications_queue_worker'.
  *
  * @QueueWorker(
  *   id = "recurring_events_registration_email_notifications_queue_worker",
@@ -41,6 +41,7 @@ class EmailNotificationsQueueWorker extends QueueWorkerBase implements Container
    * @param string $plugin_id
    *   The plugin_id for the plugin instance.
    * @param array $plugin_definition
+   *   The plugin definition array.
    * @param \Drupal\Core\Mail\MailManagerInterface $mail_manager
    *   The mail manager.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager

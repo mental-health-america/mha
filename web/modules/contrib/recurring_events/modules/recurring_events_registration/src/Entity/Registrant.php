@@ -2,15 +2,15 @@
 
 namespace Drupal\recurring_events_registration\Entity;
 
-use Drupal\Core\Entity\EntityStorageInterface;
-use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Entity\EditorialContentEntityBase;
 use Drupal\Core\Entity\EntityChangedTrait;
+use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\user\UserInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\recurring_events\Entity\EventInstance;
 use Drupal\recurring_events\Entity\EventSeries;
 use Drupal\recurring_events_registration\Plugin\Field\ComputedRegistrantTitleFieldItemList;
+use Drupal\user\UserInterface;
 
 /**
  * Defines the Registrant entity.
@@ -97,7 +97,8 @@ class Registrant extends EditorialContentEntityBase implements RegistrantInterfa
     }
 
     if ($update) {
-      // if originally on waitlist and was promoted, send the promotion notification
+      // If originally on waitlist and was promoted, send the promotion
+      // notification.
       if ($this->original->getWaitlist() && !$this->getWaitlist()) {
         $key = 'promotion_notification';
         recurring_events_registration_send_notification($key, $this);
@@ -383,6 +384,19 @@ class Registrant extends EditorialContentEntityBase implements RegistrantInterfa
       $uri_route_parameters['uuid'] = $this->uuid->value;
     }
     return $uri_route_parameters;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTagsToInvalidate() {
+    // Also invalidate the cache tags for the event instance and series (in case
+    // the registration is for a series). This ensures the counters are updated.
+    return array_merge(
+      parent::getCacheTagsToInvalidate(),
+      $this->getEventInstance()->getCacheTagsToInvalidate(),
+      $this->getRegistrationType() === 'series' ? $this->getEventSeries()->getCacheTagsToInvalidate() : [],
+    );
   }
 
 }

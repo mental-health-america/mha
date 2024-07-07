@@ -5,22 +5,22 @@
  * Contains recurring_events.module.
  */
 
-use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Component\Utility\Html;
+use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
-use Drupal\Core\Render\Element;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Link;
+use Drupal\Core\Render\Element;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Url;
+use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\recurring_events\Entity\EventSeries;
 use Drupal\recurring_events\EventInterface;
-use Drupal\Core\Datetime\DrupalDateTime;
-use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
-use Drupal\Core\Entity\FieldableEntityInterface;
-use Drupal\Core\Field\FieldStorageDefinitionInterface;
-use Drupal\Core\Url;
-use Drupal\Core\Link;
-use Drupal\Core\Entity\EntityForm;
-use Drupal\Component\Utility\Html;
 use Drupal\recurring_events\Plugin\ComputedField\EventInstances;
 
 /**
@@ -104,7 +104,7 @@ function template_preprocess_eventinstance(array &$variables) {
   // Set the eventinstance object to be accessible in the template.
   $variables['eventinstance'] = $variables['elements']['#eventinstance'];
 
-  // Set a class on the eventinstance to differentiate between viewmodes.
+  // Set a class on the eventinstance to differentiate between view modes.
   $variables['view_mode'] = $variables['elements']['#view_mode'];
   $variables['attributes']['class'][] = 'eventinstance-' . $variables['view_mode'];
 
@@ -121,7 +121,7 @@ function template_preprocess_eventseries(array &$variables) {
   // Set the eventseries object to be accessible in the template.
   $variables['eventseries'] = $variables['elements']['#eventseries'];
 
-  // Set a class on the eventseries to differentiate between viewmodes.
+  // Set a class on the eventseries to differentiate between view modes.
   $variables['view_mode'] = $variables['elements']['#view_mode'];
   $variables['attributes']['class'][] = 'eventseries-' . $variables['view_mode'];
 

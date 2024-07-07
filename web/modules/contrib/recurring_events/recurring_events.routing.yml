@@ -104,7 +104,7 @@ entity.eventseries.collection:
     _entity_list: 'eventseries'
     _title: 'Event Series'
   requirements:
-  # Checks for permission directly.
+    # Checks for permission directly.
     _permission: 'access eventseries overview'
 
 # Event Instances.
@@ -174,7 +174,7 @@ entity.eventinstance.collection:
     _entity_list: 'eventinstance'
     _title: 'Events'
   requirements:
-  # Checks for permission directly.
+    # Checks for permission directly.
     _permission: 'access eventinstance overview'
 
 # Admin Pages.
@@ -231,7 +231,7 @@ entity.eventseries.admin_collection:
     _entity_list: 'eventseries'
     _title: 'Event Series'
   requirements:
-  # Checks for permission directly.
+    # Checks for permission directly.
     _permission: 'access eventseries overview'
   options:
     _admin_route: TRUE
@@ -243,7 +243,7 @@ entity.eventinstance.admin_collection:
     _entity_list: 'eventinstance'
     _title: 'Event Instances'
   requirements:
-  # Checks for permission directly.
+    # Checks for permission directly.
     _permission: 'access eventinstance overview'
   options:
     _admin_route: TRUE

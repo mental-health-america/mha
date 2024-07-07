@@ -8,7 +8,7 @@ use Drupal\Core\Messenger\Messenger;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a form for editing a registant type.
+ * Provides a form for editing a registrant type.
  */
 class RegistrantTypeForm extends EntityForm {
 

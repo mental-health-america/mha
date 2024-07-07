@@ -7,7 +7,7 @@ dependencies:
   - drupal:views
   - recurring_events:recurring_events
 
-# Information added by Drupal.org packaging script on 2024-02-28
-version: '2.0.1'
+# Information added by Drupal.org packaging script on 2024-06-20
+version: '2.0.2'
 project: 'recurring_events'
-datestamp: 1709083051
+datestamp: 1718917021

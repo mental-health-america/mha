@@ -2,17 +2,17 @@
 
 namespace Drupal\recurring_events\Controller;
 
+use Drupal\Component\Utility\Xss;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
-use Drupal\Core\Render\RendererInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\system\SystemManager;
-use Drupal\recurring_events\EventInterface;
-use Drupal\Component\Utility\Xss;
-use Drupal\Core\Url;
-use Drupal\Core\Link;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Link;
+use Drupal\Core\Render\RendererInterface;
+use Drupal\Core\Url;
+use Drupal\recurring_events\EventInterface;
+use Drupal\system\SystemManager;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * The EventInstanceController class.
