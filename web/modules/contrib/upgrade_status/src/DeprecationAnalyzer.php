@@ -242,16 +242,7 @@ final class DeprecationAnalyzer {
     $this->vendorPath = $this->finder->getVendorDir();
     $this->binPath = $this->findBinPath();
 
-    if (function_exists('file_directory_temp')) {
-      // This is fallback code for 8.7.x and below. It's not called on later
-      // versions, so we don't nee to "fix" it.
-      // @noRector
-      // @phpstan-ignore-next-line
-      $system_temporary = file_directory_temp();
-    }
-    else {
-      $system_temporary = $this->fileSystem->getTempDirectory();
-    }
+    $system_temporary = $this->fileSystem->getTempDirectory();
     $this->temporaryDirectory = $system_temporary . '/upgrade_status';
     if (!file_exists($this->temporaryDirectory)) {
       $this->prepareTempDirectory();
@@ -382,39 +373,67 @@ final class DeprecationAnalyzer {
     $process = new Process($command, DRUPAL_ROOT, NULL, NULL, NULL);
     $process->run();
 
-    $json = json_decode($process->getOutput(), TRUE);
-    if (json_last_error() !== JSON_ERROR_NONE) {
-      $stdout = trim($process->getOutput()) ?: 'Empty.';
-      $stderr = trim($process->getErrorOutput()) ?: 'Empty.';
+    // If there was an error about lack of files, that is fine for us, an
+    // extension does not neccessarily need PHP files. Use a standard
+    // empty resultset for this case.
+    $stderr = trim($process->getErrorOutput()) ?: 'Empty.';
+    if (strpos($stderr, 'No files found to analyse.') !== FALSE) {
       $json = [
         'files' => [],
+        'errors' => [],
         'totals' => [
           'errors' => 0,
           'file_errors' => 0,
         ],
       ];
-      if (strpos($stderr, 'No files found to analyse.') === FALSE) {
-        // 'No files found to analyse,' is reported as an error, but for us it is a valid
-        // situation that an extension may not have any PHP files.
-        $formatted_error =
-          "<h6>PHPStan command failed:</h6> <p>" . implode(" ", $command) .
-          "</p> <h6>Command output:</h6> <p>" . $stdout .
-          "</p> <h6>Command error:</h6> <p>" . $stderr . '</p>';
-        $this->logger->error('%phpstan_fail', ['%phpstan_fail' => strip_tags($formatted_error)]);
-        // Add a failure message with the nonexistent 'PHPStan failed'
-        // filename, so the error conforms to the expected format.
-        $json['files']['PHPStan failed'] = [
-          'messages' => [
-            [
-              'message' => $formatted_error,
-              'line' => 0,
-            ],
+    }
+    else {
+      $json = json_decode($process->getOutput(), TRUE);
+    }
+
+    // If there was a JSON parsing error, that may be a fatal that
+    // PHPStan did not catch, so report the raw output as error.
+    if (json_last_error() !== JSON_ERROR_NONE) {
+      $stdout = trim($process->getOutput()) ?: 'Empty.';
+      $json = [
+        'files' => [],
+        'errors' => [],
+        'totals' => [
+          'errors' => 0,
+          'file_errors' => 0,
+        ],
+      ];
+      $formatted_error =
+        "<h6>PHPStan command failed:</h6> <p>" . implode(" ", $command) .
+        "</p> <h6>Command output:</h6> <p>" . $stdout .
+        "</p> <h6>Command error:</h6> <p>" . $stderr . '</p>';
+      $this->logger->error('%phpstan_fail', ['%phpstan_fail' => strip_tags($formatted_error)]);
+      // Add a failure message with the nonexistent 'PHPStan failed'
+      // filename, so the error conforms to the expected format.
+      $json['files']['PHPStan failed'] = [
+        'messages' => [
+          [
+            'message' => $formatted_error,
+            'line' => 0,
           ],
-        ];
-        $json['totals']['errors']++;
+        ],
+      ];
+      $json['totals']['errors']++;
+      $json['totals']['file_errors']++;
+    }
+
+    // Convert "non-file" errors to file errors
+    foreach ($json['errors'] as $error) {
+      if (preg_match('!^(.+) on line (\d+) while analysing file (.+)$!', $error, $parts)) {
         $json['totals']['file_errors']++;
+        @$json['files'][$parts[3]]['messages'][] = [
+          'message' => $parts[1],
+          'line' => $parts[2],
+        ];
       }
     }
+
+    // Add analyzer info.
     foreach ($json['files'] as &$errors) {
       foreach ($errors['messages'] as &$error) {
         $error['analyzer'] = 'PHPStan';
@@ -664,6 +683,13 @@ final class DeprecationAnalyzer {
       }
     }
 
+    // Check for "guzzlehttp/guzzle:8.0" and ignore those errors. That major is not
+    // released yet, so compatibility cannot be proven. Stop ignoring this error from
+    // Drupal 11 as a safeguard.
+    if (strpos($error, 'guzzlehttp/guzzle:8.0') !== FALSE && ProjectCollector::getDrupalCoreMajorVersion() < 11) {
+      $category = 'ignore';
+    }
+
     return [$error, $category];
   }
 
@@ -889,11 +915,26 @@ final class DeprecationAnalyzer {
       // 0.20.0
       'Call to deprecated method getResource() of class Drupal\system\Plugin\ImageToolkit\GDToolkit. Deprecated in drupal:10.2.0 and is removed from drupal:11.0.0. Use Drupal\system\Plugin\ImageToolkit\GDToolkit::getImage() instead.',
       'Call to deprecated method setResource() of class Drupal\system\Plugin\ImageToolkit\GDToolkit. Deprecated in drupal:10.2.0 and is removed from drupal:11.0.0. Use Drupal\system\Plugin\ImageToolkit\GDToolkit::setImage() instead.',
+      // Symfony level was added, adding support for multiple non-drupal deprecations
+      'Fetching deprecated class constant MASTER_REQUEST of interface Symfony\Component\HttpKernel\HttpKernelInterface: since symfony/http-kernel 5.3, use MAIN_REQUEST instead. To ease the migration, this constant won\'t be removed until Symfony 7.0.',
+      'Call to deprecated method getContentType() of class Symfony\Component\HttpFoundation\Request: since Symfony 6.2, use getContentTypeFormat() instead',
+      'Call to deprecated method enableAnnotationMapping() of class Symfony\Component\Validator\ValidatorBuilder: since Symfony 6.4, use "enableAttributeMapping()" instead.',
+      'Call to deprecated method attachPart() of class Symfony\Component\Mime\Email: since Symfony 6.2, use addPart() instead',
+      'Class [redacted] implements deprecated interface Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface: since Symfony 6.2, implement ValueResolverInterface instead',
 
-      // 0.21.0
+      // 0.20.1
       'Symfony\Cmf\Component\Routing\RouteObjectInterface::ROUTE_OBJECT is deprecated and removed in Drupal 10. Use Drupal\Core\Routing\RouteObjectInterface::ROUTE_OBJECT instead.',
       'Symfony\Cmf\Component\Routing\RouteObjectInterface::ROUTE_NAME is deprecated and removed in Drupal 10. Use Drupal\Core\Routing\RouteObjectInterface::ROUTE_NAME instead.',
       'Symfony\Cmf\Component\Routing\RouteObjectInterface::CONTROLLER_NAME is deprecated and removed in Drupal 10. Use Drupal\Core\Routing\RouteObjectInterface::CONTROLLER_NAME instead.',
+
+      // 0.20.2
+      'Call to deprecated function _drupal_flush_css_js(). Deprecated in drupal:10.2.0 and is removed from drupal:11.0.0. Use Use Drupal\Core\Asset\AssetQueryStringInterface::reset() instead.',
+      'drupal_theme_rebuild() is deprecated in drupal:10.1.0 and is removed from drupal:11.0.0. Use theme.registry service reset() method instead. See https://www.drupal.org/node/3348853',
+
+      // 0.20.3
+      'Call to deprecated function file_icon_class(). Deprecated in drupal:10.3.0 and is removed from drupal:11.0.0. Use Drupal\file\IconMimeTypes::getIconClass() instead.',
+      'Call to deprecated method setMethods() of class PHPUnit\Framework\MockObject\MockBuilder: https://github.com/sebastianbergmann/phpunit/pull/3687',
+
     ];
     return
       in_array($string, $rector_covered) ||

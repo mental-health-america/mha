@@ -605,8 +605,10 @@ class ProjectCollector {
       case 9:
         return '9.5';
       case 10:
-        return '10.1';
-      }
+        return '10.2';
+      case 11:
+        return '11.0';
+    }
     return '';
   }
 
