@@ -155,7 +155,7 @@
         "drupal/webform_submission_export_import": "^6.0",
         "drupal/webform_ui": "^5.0",
         "drupal/webform_validation": "^2.0@RC",
-        "drupal/webform_views": "^5.2",
+        "drupal/webform_views": "^5.4",
         "drupal/webp": "^1.0@RC",
         "drupal/yaml_editor": "^1.1",
         "drupal/yoast_seo": "^2.0@alpha",
