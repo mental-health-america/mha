@@ -27,6 +27,7 @@ class ConditionAddForm extends ConditionFormBase {
   public function __construct(ConditionManager $condition_manager, ContextRepositoryInterface $context_repository) {
     $this->conditionManager = $condition_manager;
     $this->contextRepository = $context_repository;
+    parent::__construct($context_repository);
   }
 
   /**

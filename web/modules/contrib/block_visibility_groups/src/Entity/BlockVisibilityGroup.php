@@ -40,8 +40,6 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *     "allow_other_conditions",
  *   },
  *   links = {
- *     "canonical" =
- *     "/admin/structure/block/block-visibility-group/{block_visibility_group}",
  *     "edit-form" =
  *     "/admin/structure/block/block-visibility-group/{block_visibility_group}/edit",
  *     "delete-form" =
