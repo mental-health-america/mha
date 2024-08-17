@@ -5,8 +5,13 @@ namespace Drupal\Tests\entity_clone\Functional;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\node\Entity\Node;
-use Drupal\Tests\field\Traits\EntityReferenceTestTrait;
+use Drupal\Tests\field\Traits\EntityReferenceFieldCreationTrait;
 use Drupal\Tests\node\Functional\NodeTestBase;
+
+// Workaround to support tests against Drupal 8, 9, 10 and 11.
+if (!trait_exists(EntityReferenceFieldCreationTrait::class)) {
+  class_alias('\Drupal\Tests\field\Traits\EntityReferenceTestTrait', EntityReferenceFieldCreationTrait::class);
+}
 
 /**
  * Create a content and test a clone.
@@ -15,7 +20,7 @@ use Drupal\Tests\node\Functional\NodeTestBase;
  */
 class EntityCloneContentTest extends NodeTestBase {
 
-  use EntityReferenceTestTrait;
+  use EntityReferenceFieldCreationTrait;
   use StringTranslationTrait;
 
   /**
@@ -84,7 +89,7 @@ class EntityCloneContentTest extends NodeTestBase {
     $node->save();
     $this->drupalGet('entity_clone/node/' . $node->id());
 
-    $this->submitForm([], $this->t('Clone'));
+    $this->submitForm([], 'Clone');
 
     $nodes = \Drupal::entityTypeManager()
       ->getStorage('node')
@@ -144,7 +149,7 @@ class EntityCloneContentTest extends NodeTestBase {
     $this->drupalGet('entity_clone/node/' . $original_node->id());
 
     // Clone the node.
-    $this->submitForm([], $this->t('Clone'));
+    $this->submitForm([], 'Clone');
 
     // Find the cloned node.
     $nodes = \Drupal::entityTypeManager()
@@ -201,7 +206,7 @@ class EntityCloneContentTest extends NodeTestBase {
     $node->save();
 
     $this->drupalGet('entity_clone/node/' . $node->id());
-    $this->submitForm(['edit-all-translations' => TRUE], $this->t('Clone'));
+    $this->submitForm(['edit-all-translations' => TRUE], 'Clone');
 
     $nodes = \Drupal::entityTypeManager()
       ->getStorage('node')
@@ -237,7 +242,7 @@ class EntityCloneContentTest extends NodeTestBase {
       'edit-all-translations' => FALSE,
       'edit-es' => FALSE,
       'edit-fr' => TRUE,
-    ], $this->t('Clone'));
+    ], 'Clone');
 
     $nodes = \Drupal::entityTypeManager()
       ->getStorage('node')
@@ -262,7 +267,7 @@ class EntityCloneContentTest extends NodeTestBase {
     $node->addTranslation('fr', $node->toArray());
     $node->save();
     $this->drupalGet('fr/entity_clone/node/' . $node->id());
-    $this->submitForm(['edit-current-translation' => TRUE], $this->t('Clone'));
+    $this->submitForm(['edit-current-translation' => TRUE], 'Clone');
 
     $nodes = \Drupal::entityTypeManager()
       ->getStorage('node')
@@ -287,7 +292,7 @@ class EntityCloneContentTest extends NodeTestBase {
     $node->addTranslation('es', $node->toArray());
     $node->save();
     $this->drupalGet('fr/entity_clone/node/' . $node->id());
-    $this->submitForm(['edit-current-translation' => FALSE], $this->t('Clone'));
+    $this->submitForm(['edit-current-translation' => FALSE], 'Clone');
 
     $nodes = \Drupal::entityTypeManager()
       ->getStorage('node')

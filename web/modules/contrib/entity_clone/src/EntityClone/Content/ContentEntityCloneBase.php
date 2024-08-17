@@ -74,11 +74,7 @@ class ContentEntityCloneBase implements EntityHandlerInterface, EntityCloneInter
    * @param \Drupal\entity_clone\EntityCloneClonableFieldInterface $entity_clone_clonable_field
    *   The entity clone clonable field service.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager,
-  $entity_type_id,
-  TimeInterface $time_service,
-  AccountProxyInterface $current_user,
-  EntityCloneClonableFieldInterface $entity_clone_clonable_field) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, string $entity_type_id, TimeInterface $time_service, AccountProxyInterface $current_user, EntityCloneClonableFieldInterface $entity_clone_clonable_field) {
     $this->entityTypeManager = $entity_type_manager;
     $this->entityTypeId = $entity_type_id;
     $this->timeService = $time_service;
@@ -89,8 +85,7 @@ class ContentEntityCloneBase implements EntityHandlerInterface, EntityCloneInter
   /**
    * {@inheritdoc}
    */
-  public static function createInstance(ContainerInterface $container,
-  EntityTypeInterface $entity_type) {
+  public static function createInstance(ContainerInterface $container, EntityTypeInterface $entity_type) {
     return new static(
       $container->get('entity_type.manager'),
       $entity_type->id(),
@@ -165,9 +160,7 @@ class ContentEntityCloneBase implements EntityHandlerInterface, EntityCloneInter
    * @param array $properties
    *   The properties array.
    */
-  protected function setClonedEntityLabel(EntityInterface $original_entity,
-  EntityInterface $cloned_entity,
-  array $properties) {
+  protected function setClonedEntityLabel(EntityInterface $original_entity, EntityInterface $cloned_entity, array $properties) {
     $label_key = $this->entityTypeManager->getDefinition($this->entityTypeId)->getKey('label');
     if ($label_key && $cloned_entity->hasField($label_key)) {
       if (isset($properties['no_suffix']) && $properties['no_suffix'] === 1) {

@@ -2,11 +2,9 @@
 
 namespace Drupal\entity_clone\Form;
 
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\entity_clone\EntityCloneSettingsManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -23,22 +21,12 @@ class EntityCloneSettingsForm extends ConfigFormBase implements ContainerInjecti
 
   /**
    * {@inheritdoc}
-   *
-   * @var \Drupal\entity_clone\EntityCloneSettingsManager $entity_clone_settings_manager
-   */
-  public function __construct(ConfigFactoryInterface $config_factory, EntityCloneSettingsManager $entity_clone_settings_manager) {
-    parent::__construct($config_factory);
-    $this->entityCloneSettingsManager = $entity_clone_settings_manager;
-  }
-
-  /**
-   * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('config.factory'),
-      $container->get('entity_clone.settings.manager')
-    );
+    $instance = parent::create($container);
+    $instance->entityCloneSettingsManager = $container->get('entity_clone.settings.manager');
+
+    return $instance;
   }
 
   /**
@@ -68,8 +56,8 @@ class EntityCloneSettingsForm extends ConfigFormBase implements ContainerInjecti
       '#description' => $this->t("
         For each type of child entity (the entity that's referenced by the entity being
         cloned), please set your cloning preferences. This will affect the clone form presented to users when they
-        clone entities. Default behaviour for whether or not the child entities should be cloned is specified in
-        the left-most column.  To prevent users from altering behaviour for each type when they're actually cloning
+        clone entities. Default behavior for whether or not the child entities should be cloned is specified in
+        the left-most column.  To prevent users from altering behavior for each type when they're actually cloning
         (but still allowing them to see what will happen), use the middle column. The right-most column can be used
         to hide the form options from users completely. This will run the clone operation with the defaults set here
         (in the left-most column). See the clone form (by cloning an entity) for more information.

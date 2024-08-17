@@ -73,7 +73,7 @@ class EntityCloneMenuTest extends BrowserTestBase {
       'id' => 'test-menu-cloned',
     ];
     $this->drupalGet('entity_clone/menu/' . $menu->id());
-    $this->submitForm($edit, $this->t('Clone'));
+    $this->submitForm($edit, 'Clone');
 
     $menus = \Drupal::entityTypeManager()
       ->getStorage('menu')

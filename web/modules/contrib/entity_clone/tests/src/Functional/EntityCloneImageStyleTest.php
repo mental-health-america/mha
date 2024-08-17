@@ -65,7 +65,7 @@ class EntityCloneImageStyleTest extends BrowserTestBase {
       'name' => 'test_image_style_for_clone',
     ];
     $this->drupalGet("admin/config/media/image-styles/add");
-    $this->submitForm($edit, $this->t('Create new style'));
+    $this->submitForm($edit, 'Create new style');
 
     $image_styles = \Drupal::entityTypeManager()
       ->getStorage('image_style')
@@ -75,11 +75,11 @@ class EntityCloneImageStyleTest extends BrowserTestBase {
     $image_style = reset($image_styles);
 
     $edit = [
-      'id' => 'test_iamge_style_cloned',
+      'id' => 'test_image_style_cloned',
       'label' => 'Test image_style cloned',
     ];
     $this->drupalGet('entity_clone/image_style/' . $image_style->id());
-    $this->submitForm($edit, $this->t('Clone'));
+    $this->submitForm($edit, 'Clone');
 
     $image_styles = \Drupal::entityTypeManager()
       ->getStorage('image_style')
@@ -94,7 +94,7 @@ class EntityCloneImageStyleTest extends BrowserTestBase {
       'label' => 'Test image style clone with a really long name that is longer than the max length',
     ];
     $this->drupalGet('entity_clone/image_style/' . $image_style->id());
-    $this->submitForm($edit, $this->t('Clone'));
+    $this->submitForm($edit, 'Clone');
 
     $this->assertSession()->pageTextContains('New Id cannot be longer than 64 characters');
   }

@@ -65,11 +65,8 @@ class EntityCloneContentModerationTest extends NodeTestBase {
   protected function setUp(): void {
     parent::setUp();
 
-    ConfigurableLanguage::createFromLangcode('fr')->save();
-    \Drupal::service('content_translation.manager')->setEnabled('node', 'page', TRUE);
     $workflow = $this->createEditorialWorkflow();
     $this->addEntityTypeAndBundleToWorkflow($workflow, 'node', 'page');
-
     $this->adminUser = $this->drupalCreateUser($this->permissions);
     $this->drupalLogin($this->adminUser);
   }
@@ -78,6 +75,31 @@ class EntityCloneContentModerationTest extends NodeTestBase {
    * Test content entity clone.
    */
   public function testContentModerationEntityClone() {
+    // Create a node in published state and change the state to
+    // draft as part of the clone process.
+    $node = Node::create([
+      'type' => 'page',
+      'title' => 'A single node',
+      'moderation_state' => 'published',
+    ]);
+    $node->save();
+    $node = Node::load($node->id());
+    $this->drupalGet(Url::fromUserInput('/entity_clone/node/' . $node->id()));
+    $this->submitForm(['edit-moderation-state' => 'draft'], 'Clone');
+
+    $nodes = \Drupal::entityTypeManager()
+      ->getStorage('node')
+      ->loadByProperties([
+        'title' => 'A single node - Cloned',
+      ]);
+    $clone = reset($nodes);
+    $this->assertInstanceOf(Node::class, $clone, 'Test node cloned found in database.');
+    $clone_moderation_state = ContentModerationStateEntity::loadFromModeratedEntity($clone);
+    $this->assertEquals('draft', $clone->get('moderation_state')->getString());
+
+    // Now test with multiple configured languages.
+    \Drupal::service('content_translation.manager')->setEnabled('node', 'page', TRUE);
+    ConfigurableLanguage::createFromLangcode('fr')->save();
     $node = Node::create([
       'type' => 'page',
       'title' => 'My node',
@@ -105,7 +127,7 @@ class EntityCloneContentModerationTest extends NodeTestBase {
     // Clone the node and assert that the moderation state is cloned and has
     // a translation for each language.
     $this->drupalGet(Url::fromUserInput('/entity_clone/node/' . $node->id()));
-    $this->submitForm([], $this->t('Clone'));
+    $this->submitForm([], 'Clone');
 
     $nodes = \Drupal::entityTypeManager()
       ->getStorage('node')
@@ -145,7 +167,7 @@ class EntityCloneContentModerationTest extends NodeTestBase {
     // Clone the node and assert that the moderation state is cloned and has
     // a translation for each language.
     $this->drupalGet(Url::fromUserInput('/entity_clone/node/' . $node->id()));
-    $this->submitForm([], $this->t('Clone'));
+    $this->submitForm([], 'Clone');
 
     $nodes = \Drupal::entityTypeManager()
       ->getStorage('node')
@@ -194,7 +216,7 @@ class EntityCloneContentModerationTest extends NodeTestBase {
     // Clone the node and assert that the moderation state is reset to draft
     // for both languages.
     $this->drupalGet(Url::fromUserInput('/entity_clone/node/' . $node->id()));
-    $this->submitForm([], $this->t('Clone'));
+    $this->submitForm([], 'Clone');
 
     $nodes = \Drupal::entityTypeManager()
       ->getStorage('node')
@@ -227,7 +249,7 @@ class EntityCloneContentModerationTest extends NodeTestBase {
     $node = Node::load($node->id());
     $this->assertCount(2, $node->getTranslationLanguages());
     $this->drupalGet(Url::fromUserInput('/fr/entity_clone/node/' . $node->id()));
-    $this->submitForm([], $this->t('Clone'));
+    $this->submitForm([], 'Clone');
 
     $clone = Node::load($node->id() + 1);
     $this->assertInstanceOf(Node::class, $clone, 'Test node cloned found in database.');
@@ -258,7 +280,7 @@ class EntityCloneContentModerationTest extends NodeTestBase {
     $this->assertTrue($node->getTranslation('en')->isPublished());
     $this->assertTrue($node->getTranslation('fr')->isPublished());
     $this->drupalGet(Url::fromUserInput('/entity_clone/node/' . $node->id()));
-    $this->submitForm([], $this->t('Clone'));
+    $this->submitForm([], 'Clone');
 
     $nodes = \Drupal::entityTypeManager()
       ->getStorage('node')
@@ -287,7 +309,7 @@ class EntityCloneContentModerationTest extends NodeTestBase {
     $this->assertTrue($node->getTranslation('en')->isPublished());
     $this->assertTrue($node->getTranslation('fr')->isPublished());
     $this->drupalGet(Url::fromUserInput('/fr/entity_clone/node/' . $node->id()));
-    $this->submitForm(['edit-current-translation' => TRUE], $this->t('Clone'));
+    $this->submitForm(['edit-current-translation' => TRUE], 'Clone');
 
     $nodes = \Drupal::entityTypeManager()
       ->getStorage('node')
