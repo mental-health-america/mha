@@ -103,7 +103,7 @@ class SchemaMetatagManagerTest extends UnitTestCase {
    */
   public function testEncodeJsonld($original, $desired) {
     $processed = SchemaMetatagManager::encodeJsonld($original);
-    // Elmininate spacing and line breaks that don't matter.
+    // Eliminate spacing and line breaks that don't matter.
     $processed = str_replace(["\n", '  '], "", $processed);
     $this->assertEquals($desired, $processed);
   }

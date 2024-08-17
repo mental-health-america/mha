@@ -12,7 +12,7 @@ abstract class ChartAxisBase extends RenderElement {
   /**
    * {@inheritdoc}
    */
-  public function getInfo() {
+  public function getInfo(): array {
     return [
       // Options: linear, logarithmic, datetime, labels.
       '#axis_type' => '',
