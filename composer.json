@@ -138,7 +138,7 @@
         "drupal/smtp": "^1.4",
         "drupal/social_media_links": "^2.9",
         "drupal/superfish": "^1.8",
-        "drupal/token": "^1.12",
+        "drupal/token": "^1.15",
         "drupal/token_filter": "^2.0",
         "drupal/twig_tweak": "^3.1",
         "drupal/typed_data": "^1.0@beta",
