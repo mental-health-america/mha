@@ -17,7 +17,7 @@ class FullcalendarViewPreprocess {
   protected  static $viewIndex = 0;
 
   /**
-   * The language manager.
+   * The language manager object for retrieving the correct language code.
    *
    * @var \Drupal\Core\Language\LanguageManagerInterface
    */
@@ -48,7 +48,7 @@ class FullcalendarViewPreprocess {
    * Constructor.
    *
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
-   *   The language manager.
+   *   The language manager object for retrieving the correct language code.
    * @param \Drupal\Core\Access\CsrfTokenGenerator $token_generator
    *   The CSRF token generator.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -483,7 +483,36 @@ class FullcalendarViewPreprocess {
         // The options of the pop-up modal dialog object.
         'dialog_modal_options' => json_encode($dialog_modal_options),
       ];
+
+
+      if (!empty($options['fetchGoogleHolidays'])) {
+        $options['googleHolidaysSettings']['googleCalendarGroup'] = $this->localizeGoogleCalendarId(
+          $options['googleHolidaysSettings']['googleCalendarGroup'],
+          $this->languageManager->getCurrentLanguage()->getId(),
+        );
+
+        $variables['#attached']['library'][] = 'fullcalendar_view/libraries.fullcalendar.google_calendar';
+        $variables['#attached']['drupalSettings']['fullCalendarView'][$view_index] += [
+          'fetchGoogleHolidays' => !empty($options['fetchGoogleHolidays']),
+          'googleCalendarAPIKey' => $options['googleHolidaysSettings']['googleCalendarAPIKey'] ?? '',
+          'googleCalendarGroup' => $options['googleHolidaysSettings']['googleCalendarGroup'] ?? '',
+          'renderGoogleHolidaysAsBackground' => !empty($options['googleHolidaysSettings']['renderGoogleHolidaysAsBackground']),
+        ];
+      }
     }
+  }
+
+/**
+   * @param string $calendar_id
+   * @param string $langcode
+   *
+   * @return string
+   */
+  protected function localizeGoogleCalendarId($calendar_id, $langcode) {
+    $parts = explode('.', $calendar_id);
+    $parts[0] = $langcode;
+
+    return implode('.', $parts);
   }
 
   /**

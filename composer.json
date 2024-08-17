@@ -91,7 +91,7 @@
         "drupal/flag": "^4.0@beta",
         "drupal/focal_point": "^2.1",
         "drupal/fraction": "^2.1",
-        "drupal/fullcalendar_view": "^5.1",
+        "drupal/fullcalendar_view": "^5.2",
         "drupal/geofield": "^1.60",
         "drupal/geofield_map": "^3.0",
         "drupal/geolocation": "^3.13",
