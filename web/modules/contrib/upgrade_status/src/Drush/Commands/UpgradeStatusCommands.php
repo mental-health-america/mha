@@ -424,11 +424,6 @@ class UpgradeStatusCommands extends DrushCommands {
 
       $table[] = str_pad('', 80, '-');
     }
-
-    if (!empty($result['plans'])) {
-      $table[] = '';
-      $table[] = DrupalUtil::drushRender($result['plans']);
-    }
     $table[] = '';
 
     return ['table' => $table, 'found_issue' => TRUE];

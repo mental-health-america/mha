@@ -110,7 +110,7 @@ class UpgradeStatusUiTest extends UpgradeStatusTestBase {
       $this->assertSession()->pageTextContains('Upgrade status test 11 compatible');
       $this->assertSession()->pageTextContains('Upgrade status test error');
       $this->assertSession()->pageTextNotContains('Upgrade status test root module');
-      $this->assertSession()->pageTextNotContains('Upgrade status test contrib 11 compatbile');
+      $this->assertSession()->pageTextNotContains('Upgrade status test contrib 11 compatible');
       $this->assertSession()->pageTextContains('2 errors found. ' . ($this->getDrupalCoreMajorVersion() < 10 ? '4' : '5') . ' warnings found.');
       $this->assertSession()->pageTextContains('Call to deprecated function upgrade_status_test_contrib_error_function_9_to_10(). Deprecated in drupal:9.1.0 and is removed from drupal:10.0.0. Use the replacement instead.');
     }
