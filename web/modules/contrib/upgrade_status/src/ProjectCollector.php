@@ -331,7 +331,7 @@ class ProjectCollector {
         $extension->info['upgrade_status_next'] = self::NEXT_UPDATE;
       }
       elseif ($extension->info['upgrade_status_type'] == self::TYPE_CONTRIB) {
-        // For installed contributed modules that do not have compatile updates, collaborate.
+        // For installed contributed modules that do not have compatible updates, collaborate.
         $extension->info['upgrade_status_next'] = self::NEXT_COLLABORATE;
       }
       else {
@@ -457,47 +457,6 @@ class ProjectCollector {
     // because scan result saving happens in different HTTP requests for most
     // cases (when analysis was successful).
     return \Drupal::service('keyvalue')->get('upgrade_status_scan_results')->get($project_machine_name) ?: NULL;
-  }
-
-  /**
-   * Get the Drupal 10 plan for a project, either explicitly fetched or cached.
-   *
-   * @param string $project_machine_name
-   *   Machine name for project.
-   *
-   * @return NULL|string
-   *   Either NULL or the Drupal 10 plan for the project.
-   */
-  public function getPlan(string $project_machine_name) {
-    // Drupal 9 plans are discontinued, return NULL on Drupal 8.
-    if ($this->getDrupalCoreMajorVersion() < 9) {
-      return NULL;
-    }
-
-    // Return explicitly fetched Drupal 10 plan if available.
-    $result = $this->getResults($project_machine_name);
-    if (!empty($result) && !empty($result['plans'])) {
-      return $result['plans'];
-    }
-
-    // Read our shipped snapshot of Drupal 10 plans to find this one.
-    if (function_exists('drupal_get_path')) {
-      // @todo remove compatibility layer with Drupal 9.3.0 when removing Drupal 9 compatibility.
-      $module_path = drupal_get_path('module', 'upgrade_status');
-    }
-    else {
-      $module_path = \Drupal::service('extension.list.module')->getPath('upgrade_status');
-    }
-    $file = fopen($module_path . '/project_plans.csv', 'r');
-    while ($line = fgetcsv($file, 0, ";")) {
-      if ($line[0] == $project_machine_name) {
-        fclose($file);
-        // Replace drupal.org link formatting with actual links.
-        return preg_replace('!\[#(\d+)\]!', '<a href="https://drupal.org/node/\1">[#\1]</a>', $line[1]);
-      }
-    }
-    fclose($file);
-    return NULL;
   }
 
   /**
