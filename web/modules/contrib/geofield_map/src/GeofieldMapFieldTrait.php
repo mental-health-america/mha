@@ -3,8 +3,9 @@
 namespace Drupal\geofield_map;
 
 use Drupal\Component\Utility\UrlHelper;
-use Drupal\Core\Url;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Logger\LoggerChannelTrait;
+use Drupal\Core\Url;
 use Drupal\geofield\Plugin\Field\FieldType\GeofieldItem;
 
 /**
@@ -15,6 +16,8 @@ use Drupal\geofield\Plugin\Field\FieldType\GeofieldItem;
  * @package Drupal\geofield_map
  */
 trait GeofieldMapFieldTrait {
+
+  use LoggerChannelTrait;
 
   /**
    * Google Map Types Options.
@@ -295,7 +298,7 @@ trait GeofieldMapFieldTrait {
    * @param array $map_settings
    *   The map settings.
    */
-  protected function preProcessMapSettings(array &$map_settings) {
+  protected function preProcessMapSettings(array &$map_settings): void {
     $config = $this->config;
     $geofield_map_settings = $config->getEditable('geofield_map.settings');
 
@@ -324,9 +327,9 @@ trait GeofieldMapFieldTrait {
    *   The Geofield Data Value.
    * @param int $entity_id
    *   The Entity Id.
-   * @param string $description
+   * @param string|null $description
    *   The description value.
-   * @param string $tooltip
+   * @param string|null $tooltip
    *   The tooltip value.
    * @param array $additional_data
    *   Additional data to be added to the feature properties, i.e.
@@ -335,7 +338,7 @@ trait GeofieldMapFieldTrait {
    * @return array
    *   The datum for the current feature, including Geojson and additional data.
    */
-  protected function getGeoJsonData($item, $entity_id, $description = NULL, $tooltip = NULL, array $additional_data = NULL) {
+  protected function getGeoJsonData(mixed $item, int $entity_id, string $description = NULL, string $tooltip = NULL, array $additional_data = NULL) {
 
     $datum = [];
     $value = ($item instanceof GeofieldItem) ? $item->value : $item;
@@ -355,8 +358,8 @@ trait GeofieldMapFieldTrait {
         ];
       }
     }
-    catch (\Exception $exception) {
-      watchdog_exception('Geofield Map getGeoJsonData', $exception);
+    catch (\Exception $e) {
+      $this->getLogger('Geofield Map')->warning($e->getMessage());
     }
 
     return $datum;
@@ -844,7 +847,7 @@ trait GeofieldMapFieldTrait {
       $entities_fields_options = array_merge_recursive($entities_fields_options, $this->entityFieldManager->getFieldMapByFieldType($field_type));
     }
 
-    // Setup the tokens for views fields.
+    // Set up the tokens for views fields.
     // Code is snatched from Drupal\views\Plugin\views\field\FieldPluginBase.
     if (!isset($this->fieldDefinition)) {
       $elements['map_marker_and_infowindow']['icon_image_path']['#description'] .= '<br>' . $this->t('Twig notation allows you to define per-row icons (@see this @icon_image_path_issue).', [
@@ -987,7 +990,7 @@ trait GeofieldMapFieldTrait {
     $default_view_mode = !empty($settings['view_mode']) ? $settings['view_mode'] : (!empty($settings['map_marker_and_infowindow']['view_mode']) ? $settings['map_marker_and_infowindow']['view_mode'] : NULL);
 
     if (isset($this->fieldDefinition)) {
-      // Get the human readable labels for the entity view modes.
+      // Get the human-readable labels for the entity view modes.
       $view_mode_options = [];
       foreach ($this->entityDisplayRepository->getViewModes($this->fieldDefinition->getTargetEntityTypeId()) as $key => $view_mode) {
         $view_mode_options[$key] = $view_mode['label'];
@@ -1011,7 +1014,7 @@ trait GeofieldMapFieldTrait {
     }
 
     elseif ($this->entityType) {
-      // Get the human readable labels for the entity view modes.
+      // Get the human-readable labels for the entity view modes.
       $view_mode_options = [];
       foreach ($this->entityDisplay->getViewModes($this->entityType) as $key => $view_mode) {
         $view_mode_options[$key] = $view_mode['label'];
@@ -1119,7 +1122,7 @@ trait GeofieldMapFieldTrait {
       '#type' => 'textarea',
       '#rows' => 5,
       '#title' => $this->t('Map Geometries Options'),
-      '#description' => $this->t('Set here options that will be applied to the rendering of Map Geometries (Lines & Polylines, Polygons, Multipolygons, etc.).<br>Refer to the @polygons_documentation.<br>@token_replacement_disclaimer', [
+      '#description' => $this->t('Set here options that will be applied to the rendering of Map Geometries (Lines & Polylines, Polygons, Multi-polygons, etc.).<br>Refer to the @polygons_documentation.<br>@token_replacement_disclaimer', [
         '@polygons_documentation' => $this->link->generate($this->t('Google Maps Polygons Documentation'), Url::fromUri('https://developers.google.com/maps/documentation/javascript/reference/polygon#PolylineOptions', [
           'absolute' => TRUE,
           'attributes' => ['target' => 'blank'],
@@ -1336,7 +1339,7 @@ trait GeofieldMapFieldTrait {
       '#type' => 'textarea',
       '#rows' => 4,
       '#title' => $this->t('Marker Cluster Additional Options'),
-      '#description' => $this->t('An object literal of additional marker cluster options, that comply with the Marker Clusterer Google Maps JavaScript Library.<br>The syntax should respect the javascript object notation (json) format.<br>As suggested in the field placeholder, always use double quotes (") both for the indexes and the string values.<br><u>Hint:</u> it is possible to define the "imagePath" property to point the folder where are stored custom 1.png, 2.png, etc. marker clusters icons, such as: "imagePath":"\/themes\/custom\/THEMENAME\/images\/"'),
+      '#description' => $this->t('An object literal of additional marker cluster options, that comply with the Marker Clusterer Google Maps JavaScript Library.<br>The syntax should respect the javascript object notation (json) format.<br>As suggested in the field placeholder, always use double quotes (") both for the indexes and the string values.<br><u>Hint:</u> it is possible to define the "imagePath" property to point the folder where are stored custom 1.png, 2.png, etc. marker clusters icons, such as: "imagePath":"\/themes\/custom\/THEME-NAME\/images\/"'),
       '#default_value' => $settings['map_markercluster']['markercluster_additional_options'] ?? $default_settings['map_markercluster']['markercluster_additional_options'],
       '#placeholder' => '{"maxZoom":12,"gridSize":50}',
       '#element_validate' => [[get_class($this), 'jsonValidate']],
@@ -1465,7 +1468,7 @@ trait GeofieldMapFieldTrait {
       $geocoder_provider = \Drupal::service('plugin.manager.geocoder.provider');
       $element['map_geocoder']['settings']['providers'] = $geocoder_provider->providersPluginsTableList($enabled_providers);
 
-      // Set a validation for the providers selection.
+      // Set a validation for the providers' selection.
       $element['map_geocoder']['settings']['providers']['#element_validate'] = [
         [
           get_class($this),
@@ -1557,10 +1560,14 @@ trait GeofieldMapFieldTrait {
       '#title' => $this->t('Lazy Loading'),
     ];
 
+    $intersection_observer_compatibility_link = $this->link->generate('check IntersectionObserver Browser Compatibility', Url::fromUri('https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver#browser_compatibility', ['attributes' => ['target' => 'blank']]));
+
     $elements['map_lazy_load']['lazy_load'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Lazy load map'),
-      '#description' => $this->t("If checked, the map will be loaded when it enters the user's viewport. This can be useful to reduce unnecessary load time or API calls."),
+      '#description' => $this->t('If checked, the map will be loaded when it enters the user\'s viewport. This can be useful to reduce unnecessary load time or API calls.<br><u>Note:This will only work with not too old browsers, that support "Intersection Observer API"</u> (link: @intersection_observer_compatibility_link).', [
+        '@intersection_observer_compatibility_link' => $intersection_observer_compatibility_link,
+      ]),
       '#default_value' => !empty($settings['map_lazy_load']['lazy_load']) ? $settings['map_lazy_load']['lazy_load'] : 0,
       '#return_value' => 1,
     ];
@@ -1574,7 +1581,7 @@ trait GeofieldMapFieldTrait {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state.
    */
-  public static function validateGeocoderProviders(array $element, FormStateInterface &$form_state) {
+  public static function validateGeocoderProviders(array $element, FormStateInterface $form_state) {
     $form_state_input = $form_state->getUserInput();
     if (isset($form_state_input['style_options'])) {
       $geocoder_control = $form_state_input['style_options']['map_geocoder']['control'];
