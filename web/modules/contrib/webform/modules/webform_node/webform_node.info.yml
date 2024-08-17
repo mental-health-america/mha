@@ -11,7 +11,7 @@ dependencies:
   - 'drupal:user'
   - 'webform:webform'
 
-# Information added by Drupal.org packaging script on 2024-06-25
-version: '6.2.3'
+# Information added by Drupal.org packaging script on 2024-07-19
+version: '6.2.6'
 project: 'webform'
-datestamp: 1719330030
+datestamp: 1721424730
