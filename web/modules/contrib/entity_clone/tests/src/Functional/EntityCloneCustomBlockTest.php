@@ -8,7 +8,7 @@ use Drupal\Tests\block_content\Functional\BlockContentTestBase;
 use Drupal\user\Entity\Role;
 
 /**
- * Creat ea block and test a clone.
+ * Create a block and test a clone.
  *
  * @group entity_clone
  */
@@ -59,7 +59,7 @@ class EntityCloneCustomBlockTest extends BlockContentTestBase {
     $edit['info[0][value]'] = 'Test block ready to clone';
     $edit['body[0][value]'] = $this->randomMachineName(16);
     $this->drupalGet('block/add/basic');
-    $this->submitForm($edit, $this->t('Save'));
+    $this->submitForm($edit, 'Save');
 
     $blocks = \Drupal::entityTypeManager()
       ->getStorage('block_content')
@@ -70,7 +70,7 @@ class EntityCloneCustomBlockTest extends BlockContentTestBase {
     $this->assertInstanceOf(BlockContent::class, $block, 'Test Block for clone found in database.');
     $this->drupalGet('entity_clone/block_content/' . $block->id());
 
-    $this->submitForm([], $this->t('Clone'));
+    $this->submitForm([], 'Clone');
 
     $blocks = \Drupal::entityTypeManager()
       ->getStorage('block_content')

@@ -67,7 +67,7 @@ class EntityCloneFilterFormatTest extends BrowserTestBase {
       'format' => 'test_filter_format_for_clone',
     ];
     $this->drupalGet("admin/config/content/formats/add");
-    $this->submitForm($edit, $this->t('Save configuration'));
+    $this->submitForm($edit, 'Save configuration');
 
     $filter_formats = \Drupal::entityTypeManager()
       ->getStorage('filter_format')
@@ -81,7 +81,7 @@ class EntityCloneFilterFormatTest extends BrowserTestBase {
       'label' => 'Test filter format cloned',
     ];
     $this->drupalGet('entity_clone/filter_format/' . $filter_format->id());
-    $this->submitForm($edit, $this->t('Clone'));
+    $this->submitForm($edit, 'Clone');
 
     $filter_formats = \Drupal::entityTypeManager()
       ->getStorage('filter_format')

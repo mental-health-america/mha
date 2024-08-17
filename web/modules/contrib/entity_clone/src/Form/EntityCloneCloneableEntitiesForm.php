@@ -2,9 +2,7 @@
 
 namespace Drupal\entity_clone\Form;
 
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -30,23 +28,15 @@ class EntityCloneCloneableEntitiesForm extends ConfigFormBase implements Contain
 
   /**
    * {@inheritdoc}
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   */
-  public function __construct(ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager) {
-    parent::__construct($config_factory);
-    $this->entityTypeManager = $entity_type_manager;
-    $this->config = $config_factory->getEditable('entity_clone.cloneable_entities');
-  }
-
-  /**
-   * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('config.factory'),
-      $container->get('entity_type.manager')
-    );
+    $instance = parent::create($container);
+    $instance->entityTypeManager = $container->get('entity_type.manager');
+    $config_factory = $container->get('config.factory');
+    $instance->config = $config_factory->getEditable('entity_clone.cloneable_entities');
+
+    return $instance;
+
   }
 
   /**
