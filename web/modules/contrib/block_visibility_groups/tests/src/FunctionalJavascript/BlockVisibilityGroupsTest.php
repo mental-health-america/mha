@@ -38,20 +38,20 @@ class BlockVisibilityGroupsTest extends WebDriverTestBase {
       'administer block visibility groups',
     ]));
 
-    \Drupal::service('theme_installer')->install(['seven']);
+    \Drupal::service('theme_installer')->install(['olivero']);
   }
 
   /**
    * Tests that the condition_group plugin can be properly serialized.
    *
-   * The condition plugins are serialised when the form state is cached. To
+   * The condition plugins are serialized when the form state is cached. To
    * trigger that, we use an AJAX element in the block add route.
    */
   public function testFormSerialization(): void {
     $assert_session = $this->assertSession();
     $this->drupalGet('admin/structure/block/add/system_powered_by_block');
     $assert_session->optionExists('Region', 'Left sidebar');
-    $assert_session->selectExists('Theme')->selectOption('Seven');
+    $assert_session->selectExists('Theme')->selectOption('Olivero');
     $assert_session->assertWaitOnAjaxRequest();
     $assert_session->optionNotExists('Region', 'Left sidebar');
     $assert_session->selectExists('Theme')->selectOption('Stark');

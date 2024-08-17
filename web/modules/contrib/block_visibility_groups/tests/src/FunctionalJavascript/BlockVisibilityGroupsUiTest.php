@@ -24,6 +24,11 @@ class BlockVisibilityGroupsUiTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
+  protected $defaultTheme = 'stark';
+
+  /**
+   * {@inheritdoc}
+   */
   protected function setUp(): void {
     parent::setUp();
     // Create and login with user who can administer blocks.
@@ -44,14 +49,17 @@ class BlockVisibilityGroupsUiTest extends WebDriverTestBase {
 
     $this->drupalGet('admin/structure/block');
     $this->getSession()->getPage()->selectFieldOption('edit-select', $group->label());
-    $this->assertSession()->assertWaitOnAjaxRequest();
 
     // Add condition.
+    $this->assertSession()->waitForElementVisible('css', '#edit-conditions-section summary');
     $conditions = $this->getSession()->getPage()->find('css', '#edit-conditions-section summary');
     $conditions->click();
+    $this->assertSession()->waitForElementVisible('css', '#edit-conditions');
+
     $this->assertSession()->elementContains('css', '#edit-conditions', 'There are no conditions.');
     $this->getSession()->getPage()->clickLink('Add new condition');
-    $this->assertSession()->assertWaitOnAjaxRequest();
+
+    $this->assertSession()->waitForElementVisible('css', '#drupal-modal');
     $this->assertSession()->assertVisibleInViewport('css', '#drupal-modal');
 
     $this->getSession()->getPage()->clickLink('User Role');
@@ -59,7 +67,6 @@ class BlockVisibilityGroupsUiTest extends WebDriverTestBase {
     $this->getSession()->getPage()->checkField('Authenticated user');
     $button = $buttonpane->findButton('Add condition');
     $button->press();
-    $this->assertSession()->assertWaitOnAjaxRequest();
 
     // Assert condition as added.
     $this->assertPageTextContains('The @condition condition has been added.', ['@condition' => 'User Role']);
@@ -68,12 +75,13 @@ class BlockVisibilityGroupsUiTest extends WebDriverTestBase {
     // Edit condition.
     $conditions_table = $this->assertSession()->elementExists('css', '#edit-conditions');
     $conditions_table->clickLink('Edit');
-    $this->assertSession()->assertWaitOnAjaxRequest();
+
+    $this->assertSession()->waitForElementVisible('css', '[role="dialog"]');
     $this->getSession()->getPage()->checkField('Anonymous user');
     $button = $buttonpane->findButton('Update condition');
     $button->press();
-    $this->assertSession()->assertWaitOnAjaxRequest();
 
+    $this->assertSession()->waitForText('The User Role condition has been updated.');
     // Assert condition as updated.
     $this->assertPageTextContains('The @condition condition has been updated.', ['@condition' => 'User Role']);
     $this->assertSession()->elementContains('css', '#edit-conditions', 'The user is a member of Anonymous user, Authenticated user');
@@ -83,7 +91,8 @@ class BlockVisibilityGroupsUiTest extends WebDriverTestBase {
     // Make delete link visible.
     $arrow->click();
     $conditions_table->clickLink('Delete');
-    $this->assertSession()->assertWaitOnAjaxRequest();
+    $this->assertSession()->waitForElementVisible('css', '[role="dialog"]');
+
     $this->assertSession()->elementContains('css', '#drupal-modal', 'This action cannot be undone.');
 
     $button = $buttonpane->findButton('Delete');
@@ -107,26 +116,26 @@ class BlockVisibilityGroupsUiTest extends WebDriverTestBase {
 
     // Assert "All Blocks" values.
     $this->getSession()->getPage()->selectFieldOption('edit-select', '- All Blocks -');
-    $this->assertSession()->assertWaitOnAjaxRequest();
+
     $this->assertSession()->elementExists('css', "tr[data-drupal-selector=\"edit-blocks-{$block_1->id()}\"]");
     $this->assertSession()->elementExists('css', "tr[data-drupal-selector=\"edit-blocks-{$block_2->id()}\"]");
 
     // Assert "Global Blocks" values.
     $this->getSession()->getPage()->selectFieldOption('edit-select', '- Global blocks -');
-    $this->assertSession()->assertWaitOnAjaxRequest();
+
     $this->assertSession()->elementNotExists('css', "tr[data-drupal-selector=\"edit-blocks-{$block_1->id()}\"]");
     $this->assertSession()->elementExists('css', "tr[data-drupal-selector=\"edit-blocks-{$block_2->id()}\"]");
 
     // Assert "Specific Group" values.
     $this->getSession()->getPage()->selectFieldOption('edit-select', $group->label());
-    $this->assertSession()->assertWaitOnAjaxRequest();
+
     $this->assertSession()->checkboxChecked('Show Global Blocks');
     $this->assertSession()->elementContains('css', "tr[data-drupal-selector=\"edit-blocks-{$block_1->id()}\"]", $group->label());
     $this->assertSession()->elementContains('css', "tr[data-drupal-selector=\"edit-blocks-{$block_2->id()}\"]", 'Global');
 
     // Filter out global blocks.
     $this->getSession()->getPage()->uncheckField('Show Global Blocks');
-    $this->assertSession()->assertWaitOnAjaxRequest();
+
     $this->assertSession()->elementExists('css', "tr[data-drupal-selector=\"edit-blocks-{$block_1->id()}\"]");
     $this->assertSession()->elementNotExists('css', "tr[data-drupal-selector=\"edit-blocks-{$block_2->id()}\"]");
   }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\block_visibility_groups_admin\Tests;
+namespace Drupal\Tests\block_visibility_groups_admin\Functional;
 
 use Drupal\Tests\BrowserTestBase;
 
@@ -21,6 +21,11 @@ class GroupListerTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
+  protected $defaultTheme = 'stark';
+
+  /**
+   * {@inheritdoc}
+   */
   public static function getInfo() {
     return [
       'name' => "block_visibility_groups_admin GroupLister's controller functionality",
@@ -34,7 +39,7 @@ class GroupListerTest extends BrowserTestBase {
    */
   public function testGroupLister() {
     // Check that the basic functions of module block_visibility_groups_admin.
-    $this->assertEquals(TRUE, TRUE, 'Test Unit Generated via App Console.');
+    self::assertEquals(TRUE, TRUE, 'Test Unit Generated via App Console.');
   }
 
 }
