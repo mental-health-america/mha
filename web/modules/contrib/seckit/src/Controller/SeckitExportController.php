@@ -5,9 +5,9 @@ namespace Drupal\seckit\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Example page controller.
@@ -48,7 +48,7 @@ class SeckitExportController extends ControllerBase implements ContainerInjectio
     // or application/json (the latter to support older user agents).
     // n.b. The CSP spec (1.0, 1.1) mandates this Content-Type header/value.
     // n.b. Content-Length is optional, so we don't check it.
-    // @TODO replace with custom access checker?
+    // @todo Consider replacing the following code with a custom access checker.
     if (empty($_SERVER['CONTENT_TYPE']) || empty($_SERVER['REQUEST_METHOD'])) {
       throw new NotFoundHttpException();
     }
@@ -69,7 +69,12 @@ class SeckitExportController extends ControllerBase implements ContainerInjectio
 
     // Log the report data.
     foreach ($reports as $report) {
-      if (!isset($report->{'violated-directive'})) {
+      if (
+        !isset($report->{'violated-directive'})
+        || !is_string($report->{'violated-directive'})
+        || !isset($report->{'blocked-uri'})
+        || !is_string($report->{'blocked-uri'})
+      ) {
         continue;
       }
       $info = [
