@@ -229,10 +229,13 @@ class ContentSyncHelper implements ContentSyncHelperInterface {
    * {@inheritdoc}
    */
   public function access(EntityInterface $entity): bool {
-    $config = $this->configFactory->get('single_content_sync.settings')->get('allowed_entity_types');
+    $allowed_entity_types = $this->configFactory->get('single_content_sync.settings')->get('allowed_entity_types');
     $entity_type_id = $entity->getEntityTypeId();
 
-    return $entity->getEntityType()->hasLinkTemplate('single-content:export') && $entity->access('single-content:export') && (isset($config[$entity_type_id]) && (!$config[$entity_type_id] || isset($config[$entity_type_id][$entity->bundle()])));
+    return $entity->getEntityType()->hasLinkTemplate('single-content:export') &&
+      $entity->access('single-content:export') &&
+      array_key_exists($entity_type_id, $allowed_entity_types) &&
+      ($allowed_entity_types[$entity_type_id] === [] || in_array($entity->bundle(), $allowed_entity_types[$entity_type_id], TRUE));
   }
 
   /**
@@ -256,7 +259,7 @@ class ContentSyncHelper implements ContentSyncHelperInterface {
     $allowed_entity_types = $this->configFactory->get('single_content_sync.settings')->get('allowed_entity_types');
     foreach ($entities as $entity) {
       $entity_type_id = $entity->getEntityTypeId();
-      if (!isset($allowed_entity_types[$entity_type_id]) || ($allowed_entity_types[$entity_type_id] && !isset($allowed_entity_types[$entity_type_id][$entity->bundle()]))) {
+      if (!array_key_exists($entity_type_id, $allowed_entity_types) || !in_array($entity->bundle(), $allowed_entity_types[$entity_type_id], TRUE)) {
         return TRUE;
       }
     }

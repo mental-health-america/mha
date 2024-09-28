@@ -2,15 +2,15 @@
 
 namespace Drupal\recurring_events\Plugin\Field\FieldType;
 
-use Drupal\Core\Field\FieldStorageDefinitionInterface;
-use Drupal\Core\TypedData\DataDefinition;
-use Drupal\datetime_range\Plugin\Field\FieldType\DateRangeItem;
-use Drupal\recurring_events\RecurringEventsFieldTypeInterface;
-use Drupal\recurring_events\Entity\EventSeries;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\TypedData\DataDefinition;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
+use Drupal\datetime_range\Plugin\Field\FieldType\DateRangeItem;
+use Drupal\recurring_events\Entity\EventSeries;
 use Drupal\recurring_events\Plugin\RecurringEventsFieldTrait;
+use Drupal\recurring_events\RecurringEventsFieldTypeInterface;
 
 /**
  * Plugin implementation of the 'consecutive_recurring_date' field type.
@@ -255,7 +255,7 @@ class ConsecutiveRecurringDate extends DateRangeItem implements RecurringEventsF
     $events_to_create = [];
     $utc_timezone = new \DateTimeZone(DateTimeItemInterface::STORAGE_TIMEZONE);
 
-    if(!empty($form_data['start_date']) && !empty($form_data['end_date'])) {
+    if (!empty($form_data['start_date']) && !empty($form_data['end_date'])) {
       $daily_dates = static::findDailyDatesBetweenDates($form_data['start_date'], $form_data['end_date']);
       $time_parts = static::convertTimeTo24hourFormat($form_data['time']);
 

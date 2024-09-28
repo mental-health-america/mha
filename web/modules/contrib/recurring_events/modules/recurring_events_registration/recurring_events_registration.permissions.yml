@@ -25,16 +25,16 @@ delete registrant entities anonymously:
   description: 'Delete a registrant using the UUID path'
 modify registrant waitlist:
   title: 'Modify registrant waitlist value'
-  decription: 'Allow a role to set and override the waitlist value of a registrant'
+  description: 'Allow a role to set and override the waitlist value of a registrant'
 modify registrant author:
   title: 'Modify registrant author value'
-  decription: 'Allow a role to set and override the author value of a registrant'
+  description: 'Allow a role to set and override the author value of a registrant'
 resend registrant emails:
   title: 'Resend registrant emails'
   description: 'Allow a role to resent the registration confirmation emails'
 contact registrants:
   title: 'Contact registrants'
-  decription: 'Allow a role to set contact registrants'
+  description: 'Allow a role to set contact registrants'
 administer registrant entity:
   title: 'Administer registrant entities'
   description: 'Allow to access the administration form to configure registrant entities'

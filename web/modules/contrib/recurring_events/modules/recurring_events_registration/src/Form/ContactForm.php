@@ -4,16 +4,16 @@ namespace Drupal\recurring_events_registration\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Link;
+use Drupal\Core\Mail\MailManager;
+use Drupal\Core\Messenger\Messenger;
+use Drupal\Core\Url;
+use Drupal\recurring_events_registration\NotificationService;
+use Drupal\recurring_events_registration\RegistrationCreationService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Drupal\recurring_events_registration\RegistrationCreationService;
-use Drupal\recurring_events_registration\NotificationService;
-use Drupal\Core\Messenger\Messenger;
-use Drupal\Core\Mail\MailManager;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Drupal\Core\Link;
-use Drupal\Core\Url;
-use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
  * Registrant contact form.

@@ -3,6 +3,7 @@
 namespace Drupal\block_visibility_groups_admin\Plugin\ConditionCreator;
 
 use Drupal\block_visibility_groups_admin\Plugin\ConditionCreatorBase;
+use Drupal\user\Entity\Role;
 
 /**
  * A condition creator to be used in creating user role condition.
@@ -30,10 +31,20 @@ class RolesConditionCreator extends ConditionCreatorBase {
       '#tree' => TRUE,
     ];
     // @todo Dynamically create condition for by call ConditionPluginBase::buildConfigurationForm?
+    // Backwards compatibility for the user_role_names() function being
+    // deprecated in Drupal 10.2 and removed in D11.
+    // @todo Drop this when the module requires 10.2.
+    if (function_exists('user_role_names')) {
+      // phpcs:ignore -- This function is deprecated in D10.2.
+      $roles = user_role_names();
+    }
+    else {
+      $roles = Role::loadMultiple();
+    }
     $elements['condition_config']['roles'] = [
       '#type' => 'checkboxes',
       '#title' => $this->t('When the user has the following roles'),
-      '#options' => array_map('\Drupal\Component\Utility\Html::escape', user_role_names()),
+      '#options' => array_map('\Drupal\Component\Utility\Html::escape', $roles),
       // '#description' => $this->t('If you select no roles, the condition will evaluate to TRUE for all users.'),
     ];
     return $elements;

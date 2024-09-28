@@ -66,7 +66,7 @@ class EntityCloneDateFormatTest extends BrowserTestBase {
       'date_format_pattern' => 'Y m d',
     ];
     $this->drupalGet("admin/config/regional/date-time/formats/add");
-    $this->submitForm($edit, $this->t('Add format'));
+    $this->submitForm($edit, 'Add format');
 
     $date_formats = \Drupal::entityTypeManager()
       ->getStorage('date_format')
@@ -80,7 +80,7 @@ class EntityCloneDateFormatTest extends BrowserTestBase {
       'label' => 'Test date format cloned',
     ];
     $this->drupalGet('entity_clone/date_format/' . $date_format->id());
-    $this->submitForm($edit, $this->t('Clone'));
+    $this->submitForm($edit, 'Clone');
 
     $date_formats = \Drupal::entityTypeManager()
       ->getStorage('date_format')

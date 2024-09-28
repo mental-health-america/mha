@@ -2,15 +2,15 @@
 
 namespace Drupal\recurring_events_registration\Controller;
 
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Render\RendererInterface;
-use Drupal\recurring_events_registration\Entity\RegistrantInterface;
-use Drupal\Core\Access\AccessResult;
-use Drupal\recurring_events\Entity\EventInstance;
-use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Render\RendererInterface;
+use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\recurring_events\Entity\EventInstance;
+use Drupal\recurring_events_registration\Entity\RegistrantInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * The RegistrantController class.

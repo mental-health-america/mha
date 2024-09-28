@@ -66,7 +66,7 @@ class EntityCloneSearchPageTest extends BrowserTestBase {
       'path' => 'test_search_page_for_clone_url',
     ];
     $this->drupalGet("/admin/config/search/pages/add/node_search");
-    $this->submitForm($edit, $this->t('Save'));
+    $this->submitForm($edit, 'Save');
 
     $search_pages = \Drupal::entityTypeManager()
       ->getStorage('search_page')
@@ -80,7 +80,7 @@ class EntityCloneSearchPageTest extends BrowserTestBase {
       'label' => 'Test search page cloned',
     ];
     $this->drupalGet('entity_clone/search_page/' . $search_page->id());
-    $this->submitForm($edit, $this->t('Clone'));
+    $this->submitForm($edit, 'Clone');
 
     $search_pages = \Drupal::entityTypeManager()
       ->getStorage('search_page')

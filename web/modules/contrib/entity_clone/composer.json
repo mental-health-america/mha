@@ -8,6 +8,6 @@
         "drupal/entity_browser": "2.x-dev",
         "drupal/entity_usage": "2.x-dev",
         "drupal/paragraphs": "^1.0",
-        "drupal/search_api": "~1.0"
+        "drupal/search_api": "^1.0"
     }
 }

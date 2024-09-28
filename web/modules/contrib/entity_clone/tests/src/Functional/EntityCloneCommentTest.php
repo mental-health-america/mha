@@ -77,7 +77,7 @@ class EntityCloneCommentTest extends CommentTestBase {
     $comment = $this->postComment($this->node, $body, $subject, TRUE);
     $this->drupalGet('entity_clone/comment/' . $comment->id());
 
-    $this->submitForm([], $this->t('Clone'));
+    $this->submitForm([], 'Clone');
 
     $comments = \Drupal::entityTypeManager()
       ->getStorage('comment')

@@ -4,7 +4,7 @@
  */
 
 // Jquery wrapper for drupal to avoid conflicts between libraries.
-(function ($) {
+(function ($, Drupal, drupalSettings) {
   var initialLocaleCode = 'en';
   // Dialog index.
   var dialogIndex = 0;
@@ -14,11 +14,25 @@
   var slotDate;
 
   /**
+   * @see https://fullcalendar.io/docs/v4/eventSourceSuccess
+   */
+  function eventSourceSuccessRenderingBackground(content) {
+    for(let i = 0; i < content.length; i++){
+      content[i].rendering = 'background';
+    }
+  }
+
+  /**
    * Event render handler
    */
   function eventRender (info) {
-    let viewIndex = parseInt(this.el.getAttribute("data-calendar-view-index"));
+    let viewIndex = parseInt(this.el.getAttribute('data-calendar-view-index'));
     let viewSettings = drupalSettings.fullCalendarView[viewIndex];
+
+    if (info.el.classList.contains('fc-bgevent')) {
+      info.el.setAttribute('title', Drupal.checkPlain(info.event.title));
+    }
+
     // Event title html markup.
     let eventTitleEle = info.el.getElementsByClassName('fc-title');
     if(eventTitleEle.length > 0) {
@@ -28,7 +42,7 @@
     let eventListTitleEle = info.el.getElementsByClassName('fc-list-item-title');
     if(eventListTitleEle.length > 0) {
       if (info.event.url) {
-        eventListTitleEle[0].innerHTML = '<a href="' + info.event.url + '">' + info.event.title + '</a>';
+        eventListTitleEle[0].innerHTML = '<a href="' + encodeURI(info.event.url) + '">' + info.event.title + '</a>';
       }
       else {
         eventListTitleEle[0].innerHTML = info.event.title;
@@ -93,7 +107,7 @@
       // to ensure the day stored in Drupal
       // is the same as when it appears in
       // the calendar.
-      if (end.getHours() == 0 && end.getMinutes() == 0 && end.getSeconds() == 0) {
+      if (end.getUTCHours() == 0 && end.getUTCMinutes() == 0 && end.getUTCSeconds() == 0) {
         end.setDate(end.getDate() - 1);
       }
       // String of the end date.
@@ -178,6 +192,7 @@
 
       dialogs[dialogIndex].show();
       dialogIndex++;
+      Drupal.ajax.bindAjaxLinks(document.body);
 
       return false;
     }
@@ -230,7 +245,7 @@
       // to ensure the day stored in Drupal
       // is the same as when it appears in
       // the calendar.
-      if (end.getHours() == 0 && end.getMinutes() == 0 && end.getSeconds() == 0) {
+      if (end.getUTCHours() == 0 && end.getUTCMinutes() == 0 && end.getUTCSeconds() == 0) {
         end.setDate(end.getDate() - 1);
       }
       // String of the end date.
@@ -316,12 +331,28 @@
       calendarOptions.datesDestroy = datesDestroy;
       // Language select element.
       var localeSelectorEl = document.getElementById('locale-selector-' + viewIndex);
+
+      if (viewSettings.fetchGoogleHolidays === true) {
+        calendarOptions.plugins = calendarOptions.plugins || [];
+        calendarOptions.plugins.push('googleCalendar');
+        calendarOptions.googleCalendarApiKey = viewSettings.googleCalendarAPIKey;
+        calendarOptions.eventSources = calendarOptions.eventSources || [];
+
+        calendarOptions.eventSources.push({
+          id: viewSettings.googleCalendarGroup,
+          googleCalendarId: viewSettings.googleCalendarGroup,
+          rendering: viewSettings.renderGoogleHolidaysAsBackground ? 'background' : '',
+          success: viewSettings.renderGoogleHolidaysAsBackground ? eventSourceSuccessRenderingBackground : null,
+        });
+      }
+
       // Allow passing a default date via query string.
       const params = (new URL(document.location)).searchParams;
       const initialDate = params.get('initialDate')
       if (initialDate) {
         calendarOptions.defaultDate = initialDate;
       }
+
       // Initial the calendar.
       if (calendarEl) {
         if (drupalSettings.calendar) {
@@ -420,5 +451,5 @@
       buildCalendars();
     }
   });
-
-})(jQuery, Drupal);
+ 
+})(jQuery, Drupal, drupalSettings);

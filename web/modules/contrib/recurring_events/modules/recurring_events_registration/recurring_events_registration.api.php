@@ -31,11 +31,12 @@ function hook_recurring_events_registration_first_waitlist_alter(Registrant $reg
 }
 
 /**
- * Alter whether a notification will be sent based on properties of the Registrant.
+ * Alter if a notification will be sent based on properties of the Registrant.
  *
  * @param bool $send_email
  *   Whether the notification email is sent.
  * @param Drupal\recurring_events_registration\Entity\RegistrantInterface $registrant
+ *   The registrant entity.
  */
 function hook_recurring_events_registration_send_notification_alter(bool &$send_email, RegistrantInterface $registrant) {
   if ($registrant->id() == 100) {

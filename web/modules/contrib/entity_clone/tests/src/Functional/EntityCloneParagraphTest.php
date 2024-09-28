@@ -94,7 +94,7 @@ class EntityCloneParagraphTest extends NodeTestBase {
     ];
     $this->drupalGet('entity_clone/node/' . $node->id());
 
-    $this->submitForm($clone_options, $this->t('Clone'));
+    $this->submitForm($clone_options, 'Clone');
 
     $clones = \Drupal::entityTypeManager()
       ->getStorage('node')

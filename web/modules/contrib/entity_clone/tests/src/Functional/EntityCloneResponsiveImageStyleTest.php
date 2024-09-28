@@ -67,7 +67,7 @@ class EntityCloneResponsiveImageStyleTest extends BrowserTestBase {
       'fallback_image_style' => 'large',
     ];
     $this->drupalGet("admin/config/media/responsive-image-style/add");
-    $this->submitForm($edit, $this->t('Save'));
+    $this->submitForm($edit, 'Save');
 
     $responsive_image_styles = \Drupal::entityTypeManager()
       ->getStorage('responsive_image_style')
@@ -81,7 +81,7 @@ class EntityCloneResponsiveImageStyleTest extends BrowserTestBase {
       'label' => 'Test responsive image style cloned',
     ];
     $this->drupalGet('entity_clone/responsive_image_style/' . $responsive_image_style->id());
-    $this->submitForm($edit, $this->t('Clone'));
+    $this->submitForm($edit, 'Clone');
 
     $responsive_image_styles = \Drupal::entityTypeManager()
       ->getStorage('responsive_image_style')

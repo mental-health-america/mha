@@ -33,14 +33,14 @@ class BlockVisibilityGroupsUiTest extends BlockVisibilityGroupsTestBase {
 
     $this->drupalGet('admin/structure/block/manage/' . $block->id());
     $selected = $this->assertSession()->elementExists('css', '#edit-visibility-condition-group-block-visibility-group option:selected');
-    $this->assertEquals($selected->getText(), $group->label());
+    self::assertEquals($selected->getText(), $group->label());
 
     $block = \Drupal::service('entity_type.manager')
       ->getStorage('block')
       ->load($block->id());
 
     $actual = $block->getVisibility();
-    $this->assertEquals($actual['condition_group']['block_visibility_group'], $group->id());
+    self::assertEquals($actual['condition_group']['block_visibility_group'], $group->id());
   }
 
   /**
@@ -68,7 +68,7 @@ class BlockVisibilityGroupsUiTest extends BlockVisibilityGroupsTestBase {
       'label' => $this->randomMachineName(),
       'id' => 'test_block_visibility_groups',
     ];
-    $this->submitForm($edit, t('Save'));
+    $this->submitForm($edit, 'Save');
 
     // Block visibility created successfully or not.
     $this->assertPageTextContains('Saved the @group Block Visibility Group.', ['@group' => $edit['label']]);
@@ -76,8 +76,8 @@ class BlockVisibilityGroupsUiTest extends BlockVisibilityGroupsTestBase {
       ->getStorage('block_visibility_group')
       ->load($edit['id']);
 
-    $this->assertEquals($block_visibility_group->id(), $edit['id']);
-    $this->assertEquals($block_visibility_group->label(), $edit['label']);
+    self::assertEquals($block_visibility_group->id(), $edit['id']);
+    self::assertEquals($block_visibility_group->label(), $edit['label']);
   }
 
   /**
@@ -104,7 +104,7 @@ class BlockVisibilityGroupsUiTest extends BlockVisibilityGroupsTestBase {
     $group = BlockVisibilityGroup::load($group->id());
     /** @var \Drupal\Core\Condition\ConditionPluginCollection $conditions */
     $conditions = $group->getConditions();
-    $this->assertCount(1, $conditions);
+    self::assertCount(1, $conditions);
     $ids = $conditions->getInstanceIds();
     $condition_id = end($ids);
 
@@ -166,7 +166,7 @@ class BlockVisibilityGroupsUiTest extends BlockVisibilityGroupsTestBase {
     $this->drupalGet('admin/structure/block/manage/' . $block->id());
     $tabs = $this->assertSession()->elementExists('css', "div[data-drupal-selector=\"edit-visibility-tabs\"]");
     $items = $tabs->findAll('css', 'summary');
-    $this->assertEquals('Condition Group', $items[0]->getText());
+    self::assertEquals('Condition Group', $items[0]->getText());
     $this->assertSession()->fieldValueEquals('Block Visibility Groups', '');
 
     $group = $this->createGroup();
@@ -198,14 +198,14 @@ class BlockVisibilityGroupsUiTest extends BlockVisibilityGroupsTestBase {
     $ul->clickLink('Manage Blocks');
 
     $selected = $this->assertSession()->elementExists('css', '#block-admin-display-form option:selected');
-    $this->assertEquals($group->label(), $selected->getText());
+    self::assertEquals($group->label(), $selected->getText());
 
     // Find the block's row and visit it's configuration page.
     $row = $this->assertSession()->elementExists('css', "tr[data-drupal-selector=\"edit-blocks-{$block->id()}\"]");
     $row->clickLink('Configure');
 
     $select = $this->assertSession()->elementExists('css', '#edit-visibility-condition-group-block-visibility-group');
-    $this->assertTrue($select->hasAttribute('disabled'));
+    self::assertTrue($select->hasAttribute('disabled'));
   }
 
   /**
@@ -228,7 +228,7 @@ class BlockVisibilityGroupsUiTest extends BlockVisibilityGroupsTestBase {
     $row->clickLink('Configure');
 
     $selected = $this->assertSession()->elementExists('css', '#edit-visibility-condition-group-block-visibility-group option:selected');
-    $this->assertEquals($selected->getText(), $group->label());
+    self::assertEquals($selected->getText(), $group->label());
 
     $this->getSession()->getPage()->pressButton('Save block');
 
@@ -254,11 +254,11 @@ class BlockVisibilityGroupsUiTest extends BlockVisibilityGroupsTestBase {
 
     $tabs = $this->assertSession()->elementExists('css', "div[data-drupal-selector=\"edit-visibility-tabs\"]");
     $items = $tabs->findAll('css', 'summary');
-    $this->assertCount(1, $items);
-    $this->assertEquals('Condition Group', $items[0]->getText());
+    self::assertCount(1, $items);
+    self::assertEquals('Condition Group', $items[0]->getText());
     $item = $tabs->find('css', '.form-item-visibility-condition-group-block-visibility-group');
     $label = $item->find('css', 'label');
-    $this->assertEquals('Block Visibility Groups', $label->getText());
+    self::assertEquals('Block Visibility Groups', $label->getText());
     $this->assertSession()->fieldValueEquals('Block Visibility Groups', $group->id());
   }
 
@@ -276,9 +276,9 @@ class BlockVisibilityGroupsUiTest extends BlockVisibilityGroupsTestBase {
   protected function assertConditionConfigInGroupUi(string $condition_id, array $expected) {
     $row = $this->assertSession()->elementExists('css', "tr[data-drupal-selector=\"edit-conditions-$condition_id\"]");
     $cells = $row->findAll('css', 'td');
-    $this->assertCount(3, $cells);
-    $this->assertEquals($expected['label'], $cells[0]->getText());
-    $this->assertEquals($expected['description'], $cells[1]->getText());
+    self::assertCount(3, $cells);
+    self::assertEquals($expected['label'], $cells[0]->getText());
+    self::assertEquals($expected['description'], $cells[1]->getText());
     $this->assertSession()->elementExists('css', 'ul.dropbutton', $row);
 
     return $row;

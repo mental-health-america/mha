@@ -68,3 +68,16 @@ function single_content_sync_update_9132(&$sandbox) {
     ->set('site_uuid_check', TRUE)
     ->save();
 }
+
+/**
+ * Restructure single_content_sync.setting:allowed_entity_types.
+ */
+function single_content_sync_update_9133(&$sandbox): void {
+  $config = \Drupal::configFactory()->getEditable('single_content_sync.settings');
+  $allowed_entity_types = [];
+  foreach ($config->get('allowed_entity_types') as $entity_type => $bundles) {
+    $allowed_entity_types[$entity_type] = array_keys($bundles);
+  }
+  $config->set('allowed_entity_types', $allowed_entity_types);
+  $config->save(TRUE);
+}

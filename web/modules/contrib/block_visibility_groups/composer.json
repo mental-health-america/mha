@@ -3,12 +3,14 @@
   "type": "drupal-module",
   "description": "Block Visibility Groups",
   "keywords": ["Drupal"],
-  "license": "GPL-2.0+",
+  "license": "GPL-2.0-or-later",
   "homepage": "https://www.drupal.org/project/block_visibility_groups",
   "minimum-stability": "dev",
   "support": {
     "issues": "https://www.drupal.org/project/issues/block_visibility_groups",
     "source": "https://git.drupalcode.org/project/block_visibility_groups"
   },
-  "require": { }
+  "require": {
+    "drupal/core": "^9 || ^10 || ^11"
+  }
 }

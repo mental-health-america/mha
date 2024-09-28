@@ -65,7 +65,7 @@ class EntityCloneViewTest extends BrowserTestBase {
       'label' => 'Test view cloned',
     ];
     $this->drupalGet('entity_clone/view/who_s_new');
-    $this->submitForm($edit, $this->t('Clone'));
+    $this->submitForm($edit, 'Clone');
 
     $views = \Drupal::entityTypeManager()
       ->getStorage('view')

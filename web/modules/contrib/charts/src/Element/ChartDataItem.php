@@ -14,7 +14,7 @@ class ChartDataItem extends RenderElement {
   /**
    * {@inheritdoc}
    */
-  public function getInfo() {
+  public function getInfo(): array {
     return [
       '#data' => NULL,
       '#color' => NULL,

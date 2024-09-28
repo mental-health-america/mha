@@ -8,6 +8,9 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\user\UserInterface;
 
+/**
+ * A trait for common Event User functionality.
+ */
 trait EventUserTrait {
 
   /**

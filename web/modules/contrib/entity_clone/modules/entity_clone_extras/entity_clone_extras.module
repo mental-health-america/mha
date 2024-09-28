@@ -34,7 +34,7 @@ function entity_clone_extras_entity_operation_alter(array &$operations, EntityIn
   if ($entity->hasLinkTemplate('clone-form')) {
     // If it does, get the current user.
     $user = \Drupal::currentUser();
-    $entity_types = _entity_clone_extra_supported_entity_types();
+    $entity_types = entity_clone_extras_supported_entity_types();
     if (in_array($entity->getEntityTypeId(), $entity_types)) {
       if (!$user->hasPermission('clone ' . $entity->getEntityTypeId() . ' entity')) {
         // If we are dealing with a supported entity type, we handle permissions
@@ -55,7 +55,7 @@ function entity_clone_extras_entity_operation_alter(array &$operations, EntityIn
  * Implements hook_entity_access().
  */
 function entity_clone_extras_entity_access(EntityInterface $entity, $operation, AccountInterface $account) {
-  $entity_types = _entity_clone_extra_supported_entity_types();
+  $entity_types = entity_clone_extras_supported_entity_types();
   if ($operation === 'clone' && in_array($entity->getEntityTypeId(), $entity_types)) {
     return AccessResult::allowedIfHasPermission($account, 'clone ' . $entity->bundle() . ' ' . $entity->getEntityTypeId() . ' entities');
   }
@@ -68,7 +68,7 @@ function entity_clone_extras_entity_access(EntityInterface $entity, $operation, 
  * @return string[]
  *   The entity types.
  */
-function _entity_clone_extra_supported_entity_types() {
+function entity_clone_extras_supported_entity_types() {
   $entity_types = ['node'];
   // Support media entities when media module is installed.
   if (\Drupal::moduleHandler()->moduleExists('media')) {

@@ -40,7 +40,7 @@ class VisibilityTest extends BlockVisibilityGroupsTestBase {
   public function testSingleConditions() {
     $group = $this->createGroup([
       [
-        'id' => 'node_type',
+        'id' => 'entity_bundle:node',
         'bundles' => ['page' => 'page'],
         'context_mapping' => [
           'node' => '@node.node_route_context:node',

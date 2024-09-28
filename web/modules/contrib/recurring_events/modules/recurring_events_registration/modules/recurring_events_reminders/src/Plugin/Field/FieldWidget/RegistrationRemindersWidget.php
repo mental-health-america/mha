@@ -2,13 +2,13 @@
 
 namespace Drupal\recurring_events_reminders\Plugin\Field\FieldWidget;
 
+use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
-use Drupal\text\Plugin\Field\FieldWidget\TextareaWidget;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\recurring_events_registration\RegistrationCreationService;
+use Drupal\text\Plugin\Field\FieldWidget\TextareaWidget;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Field\FieldDefinitionInterface;
 
 /**
  * Plugin implementation of the 'event registration reminders' widget.

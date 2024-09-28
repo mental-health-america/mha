@@ -2,22 +2,22 @@
 
 namespace Drupal\recurring_events;
 
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Datetime\DrupalDateTime;
-use Drupal\Core\Logger\LoggerChannelFactoryInterface;
-use Drupal\recurring_events\Entity\EventSeries;
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Messenger\Messenger;
-use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\Core\Entity\EntityFieldManager;
-use Drupal\Core\Field\FieldTypePluginManager;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Field\FieldTypePluginManager;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\KeyValueStore\KeyValueFactoryInterface;
-use Drupal\recurring_events\Entity\EventInstance;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Messenger\Messenger;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\StringTranslation\TranslationInterface;
+use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\field_inheritance\Entity\FieldInheritanceInterface;
+use Drupal\recurring_events\Entity\EventInstance;
+use Drupal\recurring_events\Entity\EventSeries;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -269,8 +269,9 @@ class EventCreationService {
   }
 
   /**
-   * Normalize an array for equality checks, without having to worry about order
-   * or casing discrepencies.
+   * Normalize an array for equality checks.
+   *
+   * Do not worry about order or casing discrepancies.
    *
    * @param array $input
    *   The array to clean and sort.
@@ -402,7 +403,7 @@ class EventCreationService {
   public function clearEventInstances(EventSeries $event) {
     // Allow other modules to react prior to the deletion of all instances.
     $this->moduleHandler->invokeAll('recurring_events_save_pre_instances_deletion', [
-      $event
+      $event,
     ]);
 
     // Find all the instances and delete them.
@@ -444,7 +445,7 @@ class EventCreationService {
 
     // Allow other modules to react after the deletion of all instances.
     $this->moduleHandler->invokeAll('recurring_events_save_post_instances_deletion', [
-      $event
+      $event,
     ]);
 
     $this->entityTypeManager->getStorage('eventseries')->resetCache([$event->id()]);

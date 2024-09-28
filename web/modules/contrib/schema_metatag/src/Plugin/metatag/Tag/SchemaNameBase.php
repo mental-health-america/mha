@@ -3,12 +3,12 @@
 namespace Drupal\schema_metatag\Plugin\metatag\Tag;
 
 use Drupal\Component\Render\PlainTextOutput;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\metatag\Plugin\metatag\Tag\MetaNameBase;
 use Drupal\schema_metatag\Plugin\schema_metatag\PropertyTypeManager;
 use Drupal\schema_metatag\SchemaMetatagManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * All Schema.org tags should extend this class.
@@ -235,7 +235,13 @@ class SchemaNameBase extends MetaNameBase implements ContainerFactoryPluginInter
   }
 
   /**
-   * @todo Document this method.
+   * Function to pivot the nested items.
+   *
+   * @param array $array
+   *   List of items.
+   *
+   * @return array
+   *   An array of values.
    */
   public function pivotItem(array $array) {
     // See if any nested items need to be pivoted.
@@ -260,7 +266,7 @@ class SchemaNameBase extends MetaNameBase implements ContainerFactoryPluginInter
    */
   protected function neverExplode() {
     return [
-      'name',      
+      'name',
       'streetAddress',
       'reviewBody',
       'recipeInstructions',
@@ -268,7 +274,7 @@ class SchemaNameBase extends MetaNameBase implements ContainerFactoryPluginInter
   }
 
   /**
-   * @todo Document this method.
+   * Function to process items.
    */
   protected function processItem(&$value, $key = 0) {
     if ($key === 0) {

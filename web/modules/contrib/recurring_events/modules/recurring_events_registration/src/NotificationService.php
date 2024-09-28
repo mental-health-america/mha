@@ -2,15 +2,15 @@
 
 namespace Drupal\recurring_events_registration;
 
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Config\ConfigFactory;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Messenger\Messenger;
+use Drupal\Core\Queue\QueueFactory;
+use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Utility\Token;
 use Drupal\recurring_events_registration\Entity\RegistrantInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Queue\QueueFactory;
 
 /**
  * Provides a service with helper functions to facilitate notifications.
@@ -263,7 +263,7 @@ class NotificationService {
       $this->messenger->addError($this->translation->translate('No key defined for @module notifications.', [
         '@module' => 'recurring_events_registration',
       ]));
-      $this->loggerFactory->error('No key defined @module notifications. Call @function before proceding.', [
+      $this->loggerFactory->error('No key defined @module notifications. Call @function before proceeding.', [
         '@module' => 'recurring_events_registration',
         '@function' => 'NotificationService::setKey()',
       ]);
@@ -283,7 +283,7 @@ class NotificationService {
       $this->messenger->addError($this->translation->translate('No config name defined for @module notifications.', [
         '@module' => 'recurring_events_registration',
       ]));
-      $this->loggerFactory->error('No config name defined for @module notifications. Call @function before proceding.', [
+      $this->loggerFactory->error('No config name defined for @module notifications. Call @function before proceeding.', [
         '@module' => 'recurring_events_registration',
         '@function' => 'NotificationService::setConfigName()',
       ]);
@@ -460,7 +460,7 @@ class NotificationService {
   public function addEmailNotificationToQueue($key, RegistrantInterface $registrant) {
     $config = $this->configFactory->get('recurring_events_registration.registrant.config');
     $send_email = $config->get('email_notifications');
-    $send_email_key = $config->get('notifications' . '.' . $key . '.enabled');
+    $send_email_key = $config->get('notifications.' . $key . '.enabled');
 
     // Modify $send_email if necessary.
     if ($registrant instanceof RegistrantInterface) {
@@ -494,7 +494,7 @@ class NotificationService {
         'body' => $message,
         'from' => $from,
       ];
-      // Allow modules to add data to the `$params`. Developers can get data 
+      // Allow modules to add data to the `$params`. Developers can get data
       // from `$registrant`. Those `$params` can be used later as the
       // `$params` in `hook_mail()` and `$message['params']` in
       // `hook_mail_alter()`.

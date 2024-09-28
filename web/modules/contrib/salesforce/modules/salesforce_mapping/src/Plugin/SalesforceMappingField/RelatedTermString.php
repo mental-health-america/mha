@@ -107,7 +107,7 @@ class RelatedTermString extends SalesforceMappingFieldPluginBase {
 
     // If this is a multivalue field split the value from Salesforce into parts.
     $field_values = explode(";", $value);
-
+    $term_ids = [];
     foreach ($field_values as $field_value) {
       // Look for a term that matches the string in the salesforce field.
       $tids = $this->entityTypeManager
@@ -117,7 +117,6 @@ class RelatedTermString extends SalesforceMappingFieldPluginBase {
         ->condition('vid', $vocabs, 'IN')
         ->condition('name', $field_value)
         ->execute();
-      $term_ids = [];
       if (!empty($tids)) {
         $term_ids[] = reset($tids);
       }

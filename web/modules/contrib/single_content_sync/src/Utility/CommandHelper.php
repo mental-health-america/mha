@@ -122,7 +122,7 @@ class CommandHelper implements CommandHelperInterface {
     if ($all_allowed_content) {
       $allowed_entity_types = $this->configFactory->get('single_content_sync.settings')->get('allowed_entity_types');
       $entities = array_reduce($this->entityTypeManager->getDefinitions(), function ($carry, $entity_type) use ($allowed_entity_types) {
-        if (isset($allowed_entity_types[$entity_type->id()])) {
+        if (array_key_exists($entity_type->id(), $allowed_entity_types)) {
           return array_merge($carry, $this->entityTypeManager->getStorage($entity_type->id())->loadMultiple());
         }
         return $carry;

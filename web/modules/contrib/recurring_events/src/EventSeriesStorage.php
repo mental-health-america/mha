@@ -3,8 +3,8 @@
 namespace Drupal\recurring_events;
 
 use Drupal\Core\Entity\Sql\SqlContentEntityStorage;
-use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Language\LanguageInterface;
+use Drupal\Core\Session\AccountInterface;
 
 /**
  * Defines the storage handler class for eventseries entities.

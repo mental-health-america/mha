@@ -2,15 +2,15 @@
 
 namespace Drupal\recurring_events\Plugin\Field\FieldType;
 
-use Drupal\Core\Field\FieldStorageDefinitionInterface;
-use Drupal\Core\TypedData\DataDefinition;
-use Drupal\datetime_range\Plugin\Field\FieldType\DateRangeItem;
-use Drupal\recurring_events\RecurringEventsFieldTypeInterface;
-use Drupal\recurring_events\Entity\EventSeries;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\TypedData\DataDefinition;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
+use Drupal\datetime_range\Plugin\Field\FieldType\DateRangeItem;
+use Drupal\recurring_events\Entity\EventSeries;
 use Drupal\recurring_events\Plugin\RecurringEventsFieldTrait;
+use Drupal\recurring_events\RecurringEventsFieldTypeInterface;
 
 /**
  * Plugin implementation of the 'daily_recurring_date' field type.
