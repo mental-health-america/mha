@@ -2,10 +2,10 @@ name: Salesforce Integration
 type: module
 description: Modules to integrate Drupal and Salesforce
 package: Salesforce
-core_version_requirement: ^9 || ^10
+core_version_requirement: ">=9 <= 10.2"
 configure: salesforce.admin_config_salesforce
 
-# Information added by Drupal.org packaging script on 2024-05-22
-version: '5.0.5'
+# Information added by Drupal.org packaging script on 2024-09-06
+version: '5.0.6'
 project: 'salesforce'
-datestamp: 1716388802
+datestamp: 1725651998
