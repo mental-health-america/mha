@@ -7071,18 +7071,18 @@
         },
         {
             "name": "drupal/rebuild_cache_access",
-            "version": "1.10.0",
-            "version_normalized": "1.10.0.0",
+            "version": "1.11.0",
+            "version_normalized": "1.11.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/rebuild_cache_access.git",
-                "reference": "8.x-1.10"
+                "reference": "8.x-1.11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/rebuild_cache_access-8.x-1.10.zip",
-                "reference": "8.x-1.10",
-                "shasum": "1c05ba1b97dd76c8de00c64abaf0df1a6203bd1b"
+                "url": "https://ftp.drupal.org/files/projects/rebuild_cache_access-8.x-1.11.zip",
+                "reference": "8.x-1.11",
+                "shasum": "5303c616685d1d24afd6f6bbd7ba4c74e19efe63"
             },
             "require": {
                 "drupal/core": "^8 || ^9 || ^10"
@@ -7090,8 +7090,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.10",
-                    "datestamp": "1717763740",
+                    "version": "8.x-1.11",
+                    "datestamp": "1724235916",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -7398,23 +7398,23 @@
         },
         {
             "name": "drupal/salesforce",
-            "version": "5.0.5",
-            "version_normalized": "5.0.5.0",
+            "version": "5.0.6",
+            "version_normalized": "5.0.6.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/salesforce.git",
-                "reference": "5.0.5"
+                "reference": "5.0.6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/salesforce-5.0.5.zip",
-                "reference": "5.0.5",
-                "shasum": "ef545592507745424184823b249365f446e75b89"
+                "url": "https://ftp.drupal.org/files/projects/salesforce-5.0.6.zip",
+                "reference": "5.0.6",
+                "shasum": "4c0912db601919324806ce77f1451a5606f26c8b"
             },
             "require": {
                 "consolidation/output-formatters": "^3.2.0 || ^4.1",
                 "drupal/address": "^1.8 || ^2.0",
-                "drupal/core": "^9 || ^10",
+                "drupal/core": ">=9 <= 10.2",
                 "drupal/dynamic_entity_reference": "^1.9 || ^2.0 || ^3 || ^4",
                 "drupal/key": "^1.14",
                 "drupal/typed_data": "^1.0-beta2",
@@ -7446,8 +7446,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "5.0.5",
-                    "datestamp": "1716388798",
+                    "version": "5.0.6",
+                    "datestamp": "1725651996",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -7950,18 +7950,18 @@
         },
         {
             "name": "drupal/single_content_sync",
-            "version": "1.4.5",
-            "version_normalized": "1.4.5.0",
+            "version": "1.4.6",
+            "version_normalized": "1.4.6.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/single_content_sync.git",
-                "reference": "1.4.5"
+                "reference": "1.4.6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/single_content_sync-1.4.5.zip",
-                "reference": "1.4.5",
-                "shasum": "e5e3fe3684e389def4283767a6c5fdcfd852d81d"
+                "url": "https://ftp.drupal.org/files/projects/single_content_sync-1.4.6.zip",
+                "reference": "1.4.6",
+                "shasum": "ed341103812f72e602a71f476bf4bba7085fc3e6"
             },
             "require": {
                 "drupal/core": "^9.3 || ^10",
@@ -7988,8 +7988,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.4.5",
-                    "datestamp": "1714647618",
+                    "version": "1.4.6",
+                    "datestamp": "1726823290",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -11172,17 +11172,17 @@
         },
         {
             "name": "mglaman/phpstan-drupal",
-            "version": "1.2.12",
-            "version_normalized": "1.2.12.0",
+            "version": "1.3.1",
+            "version_normalized": "1.3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mglaman/phpstan-drupal.git",
-                "reference": "346bdddda169a56b6ebb7dc17893f0ac8f33a4f1"
+                "reference": "2bc25a59b53c8f3990f168efd71241d9c25ea0c3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mglaman/phpstan-drupal/zipball/346bdddda169a56b6ebb7dc17893f0ac8f33a4f1",
-                "reference": "346bdddda169a56b6ebb7dc17893f0ac8f33a4f1",
+                "url": "https://api.github.com/repos/mglaman/phpstan-drupal/zipball/2bc25a59b53c8f3990f168efd71241d9c25ea0c3",
+                "reference": "2bc25a59b53c8f3990f168efd71241d9c25ea0c3",
                 "shasum": ""
             },
             "require": {
@@ -11191,7 +11191,7 @@
                 "phpstan/phpstan-deprecation-rules": "^1.1.4",
                 "symfony/finder": "^4.2 || ^5.0 || ^6.0 || ^7.0",
                 "symfony/yaml": "^4.2|| ^5.0 || ^6.0 || ^7.0",
-                "webflo/drupal-finder": "^1.2"
+                "webflo/drupal-finder": "^1.3.1"
             },
             "require-dev": {
                 "behat/mink": "^1.8",
@@ -11210,7 +11210,7 @@
                 "phpstan/phpstan-deprecation-rules": "For catching deprecations, especially in Drupal core.",
                 "phpstan/phpstan-phpunit": "PHPUnit extensions and rules for PHPStan."
             },
-            "time": "2024-08-07T21:15:21+00:00",
+            "time": "2024-09-27T08:54:16+00:00",
             "type": "phpstan-extension",
             "extra": {
                 "branch-alias": {
@@ -11259,7 +11259,7 @@
             "description": "Drupal extension and rules for PHPStan",
             "support": {
                 "issues": "https://github.com/mglaman/phpstan-drupal/issues",
-                "source": "https://github.com/mglaman/phpstan-drupal/tree/1.2.12"
+                "source": "https://github.com/mglaman/phpstan-drupal/tree/1.3.1"
             },
             "funding": [
                 {
@@ -11429,17 +11429,17 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v5.1.0",
-            "version_normalized": "5.1.0.0",
+            "version": "v5.2.0",
+            "version_normalized": "5.2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "683130c2ff8c2739f4822ff7ac5c873ec529abd1"
+                "reference": "23c79fbbfb725fb92af9bcf41065c8e9a0d49ddb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/683130c2ff8c2739f4822ff7ac5c873ec529abd1",
-                "reference": "683130c2ff8c2739f4822ff7ac5c873ec529abd1",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/23c79fbbfb725fb92af9bcf41065c8e9a0d49ddb",
+                "reference": "23c79fbbfb725fb92af9bcf41065c8e9a0d49ddb",
                 "shasum": ""
             },
             "require": {
@@ -11452,7 +11452,7 @@
                 "ircmaxell/php-yacc": "^0.0.7",
                 "phpunit/phpunit": "^9.0"
             },
-            "time": "2024-07-01T20:03:41+00:00",
+            "time": "2024-09-15T16:40:33+00:00",
             "bin": [
                 "bin/php-parse"
             ],
@@ -11484,7 +11484,7 @@
             ],
             "support": {
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v5.1.0"
+                "source": "https://github.com/nikic/PHP-Parser/tree/v5.2.0"
             },
             "install-path": "../nikic/php-parser"
         },
@@ -11815,17 +11815,17 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.11.10",
-            "version_normalized": "1.11.10.0",
+            "version": "1.12.5",
+            "version_normalized": "1.12.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "640410b32995914bde3eed26fa89552f9c2c082f"
+                "reference": "7e6c6cb7cecb0a6254009a1a8a7d54ec99812b17"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/640410b32995914bde3eed26fa89552f9c2c082f",
-                "reference": "640410b32995914bde3eed26fa89552f9c2c082f",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/7e6c6cb7cecb0a6254009a1a8a7d54ec99812b17",
+                "reference": "7e6c6cb7cecb0a6254009a1a8a7d54ec99812b17",
                 "shasum": ""
             },
             "require": {
@@ -11834,7 +11834,7 @@
             "conflict": {
                 "phpstan/phpstan-shim": "*"
             },
-            "time": "2024-08-08T09:02:50+00:00",
+            "time": "2024-09-26T12:45:22+00:00",
             "bin": [
                 "phpstan",
                 "phpstan.phar"
@@ -11876,29 +11876,29 @@
         },
         {
             "name": "phpstan/phpstan-deprecation-rules",
-            "version": "1.2.0",
-            "version_normalized": "1.2.0.0",
+            "version": "1.2.1",
+            "version_normalized": "1.2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-deprecation-rules.git",
-                "reference": "fa8cce7720fa782899a0aa97b6a41225d1bb7b26"
+                "reference": "f94d246cc143ec5a23da868f8f7e1393b50eaa82"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-deprecation-rules/zipball/fa8cce7720fa782899a0aa97b6a41225d1bb7b26",
-                "reference": "fa8cce7720fa782899a0aa97b6a41225d1bb7b26",
+                "url": "https://api.github.com/repos/phpstan/phpstan-deprecation-rules/zipball/f94d246cc143ec5a23da868f8f7e1393b50eaa82",
+                "reference": "f94d246cc143ec5a23da868f8f7e1393b50eaa82",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2 || ^8.0",
-                "phpstan/phpstan": "^1.11"
+                "phpstan/phpstan": "^1.12"
             },
             "require-dev": {
                 "php-parallel-lint/php-parallel-lint": "^1.2",
                 "phpstan/phpstan-phpunit": "^1.0",
                 "phpunit/phpunit": "^9.5"
             },
-            "time": "2024-04-20T06:39:48+00:00",
+            "time": "2024-09-11T15:52:35+00:00",
             "type": "phpstan-extension",
             "extra": {
                 "phpstan": {
@@ -11920,7 +11920,7 @@
             "description": "PHPStan rules for detecting usage of deprecated classes, methods, properties, constants and traits.",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan-deprecation-rules/issues",
-                "source": "https://github.com/phpstan/phpstan-deprecation-rules/tree/1.2.0"
+                "source": "https://github.com/phpstan/phpstan-deprecation-rules/tree/1.2.1"
             },
             "install-path": "../phpstan/phpstan-deprecation-rules"
         },
@@ -13236,17 +13236,17 @@
         },
         {
             "name": "symfony/filesystem",
-            "version": "v6.4.9",
-            "version_normalized": "6.4.9.0",
+            "version": "v6.4.12",
+            "version_normalized": "6.4.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "b51ef8059159330b74a4d52f68e671033c0fe463"
+                "reference": "f810e3cbdf7fdc35983968523d09f349fa9ada12"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/b51ef8059159330b74a4d52f68e671033c0fe463",
-                "reference": "b51ef8059159330b74a4d52f68e671033c0fe463",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/f810e3cbdf7fdc35983968523d09f349fa9ada12",
+                "reference": "f810e3cbdf7fdc35983968523d09f349fa9ada12",
                 "shasum": ""
             },
             "require": {
@@ -13257,7 +13257,7 @@
             "require-dev": {
                 "symfony/process": "^5.4|^6.4|^7.0"
             },
-            "time": "2024-06-28T09:49:33+00:00",
+            "time": "2024-09-16T16:01:33+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -13285,7 +13285,7 @@
             "description": "Provides basic utilities for the filesystem",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/filesystem/tree/v6.4.9"
+                "source": "https://github.com/symfony/filesystem/tree/v6.4.12"
             },
             "funding": [
                 {
@@ -13305,17 +13305,17 @@
         },
         {
             "name": "symfony/finder",
-            "version": "v6.4.10",
-            "version_normalized": "6.4.10.0",
+            "version": "v6.4.11",
+            "version_normalized": "6.4.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
-                "reference": "af29198d87112bebdd397bd7735fbd115997824c"
+                "reference": "d7eb6daf8cd7e9ac4976e9576b32042ef7253453"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/finder/zipball/af29198d87112bebdd397bd7735fbd115997824c",
-                "reference": "af29198d87112bebdd397bd7735fbd115997824c",
+                "url": "https://api.github.com/repos/symfony/finder/zipball/d7eb6daf8cd7e9ac4976e9576b32042ef7253453",
+                "reference": "d7eb6daf8cd7e9ac4976e9576b32042ef7253453",
                 "shasum": ""
             },
             "require": {
@@ -13324,7 +13324,7 @@
             "require-dev": {
                 "symfony/filesystem": "^6.0|^7.0"
             },
-            "time": "2024-07-24T07:06:38+00:00",
+            "time": "2024-08-13T14:27:37+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -13352,7 +13352,7 @@
             "description": "Finds files and directories via an intuitive fluent interface",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/finder/tree/v6.4.10"
+                "source": "https://github.com/symfony/finder/tree/v6.4.11"
             },
             "funding": [
                 {
