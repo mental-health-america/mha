@@ -142,13 +142,4 @@ class SimplePopupBlocksController extends ControllerBase {
 
     return $build;
   }
-
-  /**
-   * Delete page controller.
-   */
-  public function delete($uid) {
-    $config = \Drupal::service('config.factory')->getEditable('simple_popup_blocks.popup_'.$uid);
-    $config->delete();
-    return $this->redirect('simple_popup_blocks.manage');
-  }
 }

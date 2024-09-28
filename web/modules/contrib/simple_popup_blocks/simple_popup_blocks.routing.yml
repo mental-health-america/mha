@@ -30,7 +30,8 @@ simple_popup_blocks.edit:
 simple_popup_blocks.delete:
   path: 'admin/config/media/simple-popup-blocks/delete/{uid}'
   defaults:
-    _controller: '\Drupal\simple_popup_blocks\Controller\SimplePopupBlocksController::delete'
+    _title: 'Delete Popup Blocks'
+    _form: '\Drupal\simple_popup_blocks\Form\SimplePopupBlocksDeleteForm'
   requirements:
     _permission: 'administer simple_popup_blocks'
   options:
