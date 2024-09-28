@@ -4639,18 +4639,18 @@
         },
         {
             "name": "drupal/fullcalendar_view",
-            "version": "5.2.1",
-            "version_normalized": "5.2.1.0",
+            "version": "5.2.3",
+            "version_normalized": "5.2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/fullcalendar_view.git",
-                "reference": "5.2.1"
+                "reference": "5.2.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/fullcalendar_view-5.2.1.zip",
-                "reference": "5.2.1",
-                "shasum": "e1424d4f701f4f90b6c006f9de2a5488efaa4d81"
+                "url": "https://ftp.drupal.org/files/projects/fullcalendar_view-5.2.3.zip",
+                "reference": "5.2.3",
+                "shasum": "4840371fa77d335038651c6e56885671eba6d5da"
             },
             "require": {
                 "drupal/core": "^9.2.0 || ^10 || ^11"
@@ -4658,8 +4658,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "5.2.1",
-                    "datestamp": "1723181912",
+                    "version": "5.2.3",
+                    "datestamp": "1726662266",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -4673,7 +4673,7 @@
             ],
             "authors": [
                 {
-                    "name": "KarinG",
+                    "name": "karing",
                     "homepage": "https://www.drupal.org/user/787114"
                 },
                 {
