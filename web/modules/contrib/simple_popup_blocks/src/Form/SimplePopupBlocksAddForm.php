@@ -4,7 +4,7 @@ namespace Drupal\simple_popup_blocks\Form;
 
 use Drupal\Core\Database\Connection;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
-use Drupal\Core\Entity\EntityTypeManager;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Messenger\Messenger;
 use Drupal\Core\Url;
 use Drupal\Core\Form\ConfigFormBase;
@@ -21,9 +21,9 @@ class SimplePopupBlocksAddForm extends ConfigFormBase {
   use StringTranslationTrait;
 
   /**
-   * Object of EntityTypeManager.
+   * Object of EntityTypeManagerInterface.
    *
-   * @var EntityTypeManager
+   * @var EntityTypeManagerInterface
    */
   protected $typeManager;
 
@@ -44,11 +44,11 @@ class SimplePopupBlocksAddForm extends ConfigFormBase {
   /**
    * SimplePopupBlocksAddForm constructor.
    *
-   * @param EntityTypeManager $typeManager
+   * @param EntityTypeManagerInterface $typeManager
    * @param Messenger $messenger
    * @param Connection $database
    */
-  public function __construct(EntityTypeManager $typeManager, Messenger $messenger, Connection $database ) {
+  public function __construct(EntityTypeManagerInterface $typeManager, Messenger $messenger, Connection $database ) {
     $this->typeManager = $typeManager;
     $this->messenger = $messenger;
     $this->database = $database;
@@ -59,9 +59,9 @@ class SimplePopupBlocksAddForm extends ConfigFormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-        $container->get('entity_type.manager'),
-        $container->get('messenger'),
-        $container->get('database')
+      $container->get('entity_type.manager'),
+      $container->get('messenger'),
+      $container->get('database')
     );
   }
 
@@ -86,7 +86,7 @@ class SimplePopupBlocksAddForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $visit_counts = [];
-    $block_ids = $this->typeManager->getStorage('block')->getQuery()->execute();
+    $block_ids = $this->typeManager->getStorage('block')->getQuery()->accessCheck()->execute();
 
     $form = [];
     for ($i = 0; $i < 101; $i++) {
