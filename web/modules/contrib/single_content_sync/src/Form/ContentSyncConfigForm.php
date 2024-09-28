@@ -101,7 +101,7 @@ class ContentSyncConfigForm extends ConfigFormBase {
       $allowed_types[$entity_type_id]['enabled'] = [
         '#type' => 'checkbox',
         '#title' => $entity_type->getLabel(),
-        '#default_value' => isset($config->get('allowed_entity_types')[$entity_type_id]),
+        '#default_value' => array_key_exists($entity_type_id, $config->get('allowed_entity_types')),
       ];
 
       $bundles = $this->entityTypeBundleInfo->getBundleInfo($entity_type_id);
@@ -114,7 +114,7 @@ class ContentSyncConfigForm extends ConfigFormBase {
           '#type' => 'checkboxes',
           '#title' => $entity_type->getBundleLabel(),
           '#options' => $bundles_as_options,
-          '#default_value' => array_keys($config->get('allowed_entity_types')[$entity_type_id] ?? []),
+          '#default_value' => $config->get('allowed_entity_types')[$entity_type_id] ?? [],
           '#description_display' => 'before',
           '#description' => $this->t('Leave empty to enable on all @plural_label.', [
             '@plural_label' => $entity_type->getPluralLabel(),
@@ -141,7 +141,7 @@ class ContentSyncConfigForm extends ConfigFormBase {
     foreach ($source as $entity_type_id => $info) {
       if ($info['enabled']) {
         $bundles = $info['bundles'] ?? [];
-        $allowed_types[$entity_type_id] = array_filter($bundles);
+        $allowed_types[$entity_type_id] = array_keys(array_filter($bundles));
       }
     }
 
