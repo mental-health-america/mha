@@ -2,13 +2,13 @@
 
 namespace Drupal\recurring_events\Plugin\Field\FieldWidget;
 
-use Drupal\Core\Field\FieldItemListInterface;
-use Drupal\datetime_range\Plugin\Field\FieldWidget\DateRangeDefaultWidget;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Datetime\DrupalDateTime;
-use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
-use Drupal\recurring_events\Plugin\RecurringEventsFieldTrait;
+use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
+use Drupal\datetime_range\Plugin\Field\FieldWidget\DateRangeDefaultWidget;
+use Drupal\recurring_events\Plugin\RecurringEventsFieldTrait;
 
 /**
  * Plugin implementation of the 'daily recurring date' widget.
@@ -162,7 +162,7 @@ class DailyRecurringDateWidget extends DateRangeDefaultWidget {
       if (!empty($item['time']) && $item['time'] instanceof DrupalDateTime) {
         $item['time'] = $item['time']->format('h:i A');
       }
-      if (!empty($item['end_time']['time'])) {
+      if (isset($item['end_time']['time'])) {
         if ($item['end_time']['time'] instanceof DrupalDateTime) {
           $item['end_time'] = $item['end_time']['time']->format('h:i A');
         }

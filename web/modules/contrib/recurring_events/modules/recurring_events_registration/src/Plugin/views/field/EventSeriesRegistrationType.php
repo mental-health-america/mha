@@ -2,10 +2,10 @@
 
 namespace Drupal\recurring_events_registration\Plugin\views\field;
 
+use Drupal\recurring_events_registration\RegistrationCreationService;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\views\ResultRow;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\recurring_events_registration\RegistrationCreationService;
 
 /**
  * Field handler to show the type of registration for event series.

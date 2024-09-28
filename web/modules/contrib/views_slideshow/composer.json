@@ -16,6 +16,6 @@
     "source": "https://git.drupalcode.org/project/views_slideshow"
   },
   "require": {
-    "drupal/core": "^9 || ^10"
+    "drupal/core": "^9 || ^10 || ^11"
   }
 }

@@ -2,14 +2,14 @@
 
 namespace Drupal\geofield_map\Form;
 
+use Drupal\Component\Utility\Environment;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Config\ConfigFactoryInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 use Drupal\Core\Utility\LinkGeneratorInterface;
-use Drupal\Core\Site\Settings;
-use Drupal\Component\Utility\Environment;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Implements the GeofieldMapSettingsForm controller.

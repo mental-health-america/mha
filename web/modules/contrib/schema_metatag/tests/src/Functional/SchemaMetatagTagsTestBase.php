@@ -17,7 +17,7 @@ abstract class SchemaMetatagTagsTestBase extends BrowserTestBase {
   protected $propertyTypeManager;
 
   /**
-   * The Metatg Manager.
+   * The Metatag Manager.
    *
    * @var \Drupal\metatag\MetatagTagPluginManager
    */
@@ -323,7 +323,7 @@ abstract class SchemaMetatagTagsTestBase extends BrowserTestBase {
    * // Global options.
    * [
    *   'admin/config/search/metatag/global',
-   *   'somepath/that/must/exist',
+   *   'path/that/must/exist',
    *   'Saved the Global Metatag defaults.',
    * ],
    * // The front page.

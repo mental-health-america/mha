@@ -68,7 +68,7 @@ class ConfigEntityCloneFormBase implements EntityHandlerInterface, EntityCloneFo
       ];
     }
 
-    // In common casse, config entities IDs are limited to 64 characters ...
+    // In common case, config entities IDs are limited to 64 characters ...
     $max_length = 64;
     if ($entity->getEntityType()->getBundleOf()) {
       // ... Except for bundle definition, that are limited to 32 characters.

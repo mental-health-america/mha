@@ -61,7 +61,7 @@ class EntityCloneUserTest extends BrowserTestBase {
    */
   public function testUserEntityClone() {
     $this->drupalGet('entity_clone/user/' . $this->adminUser->id());
-    $this->submitForm([], $this->t('Clone'));
+    $this->submitForm([], 'Clone');
 
     $users = \Drupal::entityTypeManager()
       ->getStorage('user')

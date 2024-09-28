@@ -13,7 +13,12 @@ use Drupal\link\Plugin\Field\FieldType\LinkItem;
  *   description = @Translation("A link to an event's iCalendar download."),
  *   default_widget = "link_default",
  *   default_formatter = "event_ical_link",
- *   constraints = {"LinkType" = {}, "LinkAccess" = {}, "LinkExternalProtocols" = {}, "LinkNotExistingInternal" = {}}
+ *   constraints = {
+ *     "LinkType" = {},
+ *     "LinkAccess" = {},
+ *     "LinkExternalProtocols" = {},
+ *     "LinkNotExistingInternal" = {},
+ *   }
  * )
  */
 class EventICalLinkItem extends LinkItem {

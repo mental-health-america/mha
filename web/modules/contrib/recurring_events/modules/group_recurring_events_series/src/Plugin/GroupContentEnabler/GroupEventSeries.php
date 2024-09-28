@@ -2,11 +2,11 @@
 
 namespace Drupal\group_recurring_events_series\Plugin\GroupContentEnabler;
 
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 use Drupal\group\Entity\GroupInterface;
 use Drupal\group\Plugin\GroupContentEnablerBase;
 use Drupal\recurring_events\Entity\EventSeriesType;
-use Drupal\Core\Url;
-use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Provides a content enabler for event series.

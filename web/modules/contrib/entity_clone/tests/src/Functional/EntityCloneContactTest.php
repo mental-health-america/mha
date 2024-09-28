@@ -67,7 +67,7 @@ class EntityCloneContactTest extends BrowserTestBase {
       'recipients' => 'test@recipient.com',
     ];
     $this->drupalGet('admin/structure/contact/add');
-    $this->submitForm($edit, $this->t('Save'));
+    $this->submitForm($edit, 'Save');
 
     $contact_forms = \Drupal::entityTypeManager()
       ->getStorage('contact_form')
@@ -81,7 +81,7 @@ class EntityCloneContactTest extends BrowserTestBase {
       'id' => 'test_contact_form_cloned',
     ];
     $this->drupalGet('entity_clone/contact_form/' . $contact_form->id());
-    $this->submitForm($edit, $this->t('Clone'));
+    $this->submitForm($edit, 'Clone');
 
     $contact_forms = \Drupal::entityTypeManager()
       ->getStorage('contact_form')
@@ -96,7 +96,7 @@ class EntityCloneContactTest extends BrowserTestBase {
       'label' => 'Test contact form clone with a really long name that is longer than the bundle max length',
     ];
     $this->drupalGet('entity_clone/contact_form/' . $contact_form->id());
-    $this->submitForm($edit, $this->t('Clone'));
+    $this->submitForm($edit, 'Clone');
 
     $this->assertSession()->pageTextContains('New Id cannot be longer than 32 characters');
   }

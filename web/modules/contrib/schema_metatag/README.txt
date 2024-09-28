@@ -128,6 +128,15 @@ Using this module, the code in the head might end up looking like this:
 </code>
 
 
+Contributing
+--------------------------------------------------------------------------------
+The composer.json file should be kept normalized using
+ergebnis/composer-normalize:
+
+* composer require --dev ergebnis/composer-normalize
+* composer normalize modules/contrib/schema_metatag/composer.json
+
+
 Credits
 --------------------------------------------------------------------------------
 The initial development was by Karen Stevenson [2].

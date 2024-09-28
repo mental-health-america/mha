@@ -3,21 +3,22 @@
 namespace Drupal\fullcalendar_view;
 
 use Drupal\Component\Utility\Xss;
-use Drupal\Core\Datetime\DrupalDateTime;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Access\CsrfTokenGenerator;
+use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\fullcalendar_view\TimezoneService;
+use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
+/**
+ *
+ */
 class FullcalendarViewPreprocess {
   use StringTranslationTrait;
 
-  protected  static $viewIndex = 0;
+  protected static $viewIndex = 0;
 
   /**
-   * The language manager.
+   * The language manager object for retrieving the correct language code.
    *
    * @var \Drupal\Core\Language\LanguageManagerInterface
    */
@@ -48,7 +49,7 @@ class FullcalendarViewPreprocess {
    * Constructor.
    *
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
-   *   The language manager.
+   *   The language manager object for retrieving the correct language code.
    * @param \Drupal\Core\Access\CsrfTokenGenerator $token_generator
    *   The CSRF token generator.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -70,7 +71,7 @@ class FullcalendarViewPreprocess {
    *   Template variables.
    */
   public function process(array &$variables) {
-    /* @var \Drupal\views\ViewExecutable $view */
+    /** @var \Drupal\views\ViewExecutable $view */
     $view = $variables['view'];
     // View index.
     $view_index = self::$viewIndex++;
@@ -120,7 +121,7 @@ class FullcalendarViewPreprocess {
     // or if this feature is turn off.
     $variables['showAddEvent'] = $dbl_click_to_create
     && $options['createEventLink'];
-    // Time format
+    // Time format.
     $timeFormat = $options['timeFormat'];
     // Field machine name of start date.
     $start_field = $options['start'];
@@ -133,9 +134,9 @@ class FullcalendarViewPreprocess {
     // Field machine name of taxonomy field.
     $tax_field = $options['tax_field'];
     // Field machine name of event duration.
-    $duration_field = isset($options['duration']) ? $options['duration'] : NULL;
+    $duration_field = $options['duration'] ?? NULL;
     // Field machine name of excluding dates field.
-    $rrule_field = isset($options['rrule']) ? $options['rrule'] : NULL;
+    $rrule_field = $options['rrule'] ?? NULL;
 
     // Default date of the calendar.
     switch ($options['default_date_source']) {
@@ -180,7 +181,7 @@ class FullcalendarViewPreprocess {
       // Allowed tags for title markup.
       $title_allowed_tags = Xss::getAdminTagList();
       // Remove the 'a' tag from allowed list.
-      if (($tag_key = array_search('a', $title_allowed_tags)) !== false) {
+      if (($tag_key = array_search('a', $title_allowed_tags)) !== FALSE) {
         unset($title_allowed_tags[$tag_key]);
       }
       // Timezone conversion service.
@@ -245,7 +246,7 @@ class FullcalendarViewPreprocess {
         $link_url = strstr($title, 'href="');
         if ($link_url) {
           $link_url = substr($link_url, 6);
-          $link_url = strstr($link_url, '"', true);
+          $link_url = strstr($link_url, '"', TRUE);
         }
         else {
           $link_url = '';
@@ -256,7 +257,7 @@ class FullcalendarViewPreprocess {
           foreach ($start_dates as $i => $start_date) {
             $idkey = $row->index . '-' . $i;
             $entry = [
-              'title' =>  Xss::filter($title, $title_allowed_tags),
+              'title' => Xss::filter($title, $title_allowed_tags),
               'id' => $idkey,
               'eid' => $entity_id,
               'url' => $link_url,
@@ -281,8 +282,8 @@ class FullcalendarViewPreprocess {
                 }
                 else {
                   $valid = FALSE;
-                  // checking supported field types form plugin defintions
-                  foreach($variables['fullcalendar_fieldtypes'] as $fieldtype) {
+                  // Checking supported field types form plugin defintions.
+                  foreach ($variables['fullcalendar_fieldtypes'] as $fieldtype) {
                     if (strpos($start_field_option['type'], $fieldtype) === 0) {
                       $valid = TRUE;
                       break;
@@ -311,7 +312,7 @@ class FullcalendarViewPreprocess {
 
               if ($all_day) {
                 $entry['start'] = $start_date_value;
-                $entry['allDay'] = true;
+                $entry['allDay'] = TRUE;
               }
               else {
                 // Drupal store date time in UTC timezone.
@@ -351,7 +352,7 @@ class FullcalendarViewPreprocess {
                   // which is not what we want. So we need one day offset.
                   $end->modify('+1 day');
                   $entry['end'] = $end->format('Y-m-d');
-                  $entry['allDay'] = true;
+                  $entry['allDay'] = TRUE;
                 }
                 else {
                   // Drupal store date time in UTC timezone.
@@ -367,9 +368,11 @@ class FullcalendarViewPreprocess {
             // Set the color for this event.
             if (isset($event_type) && isset($color_tax[$event_type])) {
               $entry['backgroundColor'] = $color_tax[$event_type];
+              $entry['borderColor'] = $color_tax[$event_type];
             }
             elseif (isset($color_content[$entity_bundle])) {
               $entry['backgroundColor'] = $color_content[$entity_bundle];
+              $entry['borderColor'] = $color_content[$entity_bundle];
             }
             // Recurring event.
             if (!empty($rrule_field)) {
@@ -390,16 +393,16 @@ class FullcalendarViewPreprocess {
       unset($view->row_index);
       // Fullcalendar options.
       $calendar_options = [
-        'plugins' => [ 'moment','interaction', 'dayGrid', 'timeGrid', 'list', 'rrule' ],
+        'plugins' => ['moment', 'interaction', 'dayGrid', 'timeGrid', 'list', 'rrule'],
         'timeZone' => $timezone,
-        'defaultView' => isset($options['default_view']) ? $options['default_view'] : 'dayGridMonth',
-        'defaultMobileView' => isset($options['default_mobile_view']) ? $options['default_mobile_view'] : 'listYear',
-        'mobileWidth' => isset($options['mobile_width']) ? $options['mobile_width'] : 768,
+        'defaultView' => $options['default_view'] ?? 'dayGridMonth',
+        'defaultMobileView' => $options['default_mobile_view'] ?? 'listYear',
+        'mobileWidth' => $options['mobile_width'] ?? 768,
         'defaultDate' => empty($default_date) ? date('Y-m-d') : $default_date,
         'header' => [
           'left' => $left_buttons,
           'center' => 'title',
-          'right' => $right_buttons ?? 'dayGridMonth,timeGridWeek,timeGridDay,listYear'
+          'right' => $right_buttons ?? 'dayGridMonth,timeGridWeek,timeGridDay,listYear',
         ],
         'eventTimeFormat' => $timeFormat,
         'firstDay' => $first_day,
@@ -423,12 +426,14 @@ class FullcalendarViewPreprocess {
         'top' => 0,
         'width' => 640,
         'height' => 480,
-        'movable' => true, //Enable to be moved by mouse
-        'resizable' => true, //Enable to be resized by mouse
-        'style' =>  [
+      // Enable to be moved by mouse.
+        'movable' => TRUE,
+      // Enable to be resized by mouse.
+        'resizable' => TRUE,
+        'style' => [
           'backgroundColor' => 'rgba(255,255,255,0.9)',
-          'font-size' => '1rem'
-        ]
+          'font-size' => '1rem',
+        ],
       ];
       // Modal options.
       $dialog_modal_options = [
@@ -471,7 +476,7 @@ class FullcalendarViewPreprocess {
         // Entity type.
         'entityType' => $entity_type->id(),
         // URL of the new event form.
-        'addForm' => isset($add_form) ? $add_form : '',
+        'addForm' => $add_form ?? '',
         // CSRF token.
         'token' => $token,
         // Show an event details in a new window (tab).
@@ -483,7 +488,35 @@ class FullcalendarViewPreprocess {
         // The options of the pop-up modal dialog object.
         'dialog_modal_options' => json_encode($dialog_modal_options),
       ];
+
+      if (!empty($options['fetchGoogleHolidays'])) {
+        $options['googleHolidaysSettings']['googleCalendarGroup'] = $this->localizeGoogleCalendarId(
+          $options['googleHolidaysSettings']['googleCalendarGroup'],
+          $this->languageManager->getCurrentLanguage()->getId(),
+        );
+
+        $variables['#attached']['library'][] = 'fullcalendar_view/libraries.fullcalendar.google_calendar';
+        $variables['#attached']['drupalSettings']['fullCalendarView'][$view_index] += [
+          'fetchGoogleHolidays' => !empty($options['fetchGoogleHolidays']),
+          'googleCalendarAPIKey' => $options['googleHolidaysSettings']['googleCalendarAPIKey'] ?? '',
+          'googleCalendarGroup' => $options['googleHolidaysSettings']['googleCalendarGroup'] ?? '',
+          'renderGoogleHolidaysAsBackground' => !empty($options['googleHolidaysSettings']['renderGoogleHolidaysAsBackground']),
+        ];
+      }
     }
+  }
+
+  /**
+   * @param string $calendar_id
+   * @param string $langcode
+   *
+   * @return string
+   */
+  protected function localizeGoogleCalendarId($calendar_id, $langcode) {
+    $parts = explode('.', $calendar_id);
+    $parts[0] = $langcode;
+
+    return implode('.', $parts);
   }
 
   /**
@@ -499,15 +532,19 @@ class FullcalendarViewPreprocess {
     switch ($langcode) {
       case "en-x-simple":
         return "en";
+
       case "pt-pt":
         return "pt";
+
       case "zh-hans":
         return "zh-cn";
+
       case "zh-hant":
         return "zh-tw";
+
       default:
         return $langcode;
     }
   }
-}
 
+}

@@ -13,22 +13,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class EventInstanceRegistrationAvailabilityCount extends NumericArgument {
 
   /**
-   * Constructs a new EventInstanceRegistrationAvailability object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin ID for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
-  }
-
-  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
@@ -54,7 +38,7 @@ class EventInstanceRegistrationAvailabilityCount extends NumericArgument {
     // Remove any instances of this filter from the filters.
     if (!empty($filters)) {
       foreach ($filters as $key => $filter) {
-        if ($filter instanceof \Drupal\recurring_events_registration\Plugin\views\argument\EventInstanceRegistrationAvailabilityCount) {
+        if ($filter instanceof EventInstanceRegistrationAvailabilityCount) {
           unset($view->argument[$key]);
         }
       }
@@ -70,12 +54,14 @@ class EventInstanceRegistrationAvailabilityCount extends NumericArgument {
       $break = static::breakString($this->argument, FALSE);
       $this->value = $break->value;
       $this->operator = $break->operator;
-    } else {
+    }
+    else {
       $this->value = [$this->argument];
     }
 
     if (!empty($view->result)) {
-      // Loop through results, evaluate result's availability re: filter settings.
+      // Loop through results, evaluate result's availability re: filter
+      // settings.
       foreach ($view->result as $key => $result) {
         $availability = $result->_entity->availability_count->getValue()[0]['value'] ?? -1;
 

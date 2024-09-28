@@ -3,14 +3,14 @@
 namespace Drupal\recurring_events\Plugin\Field\FieldWidget;
 
 use Drupal\Component\Utility\Html;
-use Drupal\Core\Field\FieldItemListInterface;
-use Drupal\datetime_range\Plugin\Field\FieldWidget\DateRangeDefaultWidget;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Datetime\DrupalDateTime;
-use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
-use Drupal\recurring_events\Plugin\RecurringEventsFieldTrait;
-use Drupal\recurring_events\Plugin\Field\FieldType\ConsecutiveRecurringDate;
+use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
+use Drupal\datetime_range\Plugin\Field\FieldWidget\DateRangeDefaultWidget;
+use Drupal\recurring_events\Plugin\Field\FieldType\ConsecutiveRecurringDate;
+use Drupal\recurring_events\Plugin\RecurringEventsFieldTrait;
 
 /**
  * Plugin implementation of the 'consecutive recurring date' widget.

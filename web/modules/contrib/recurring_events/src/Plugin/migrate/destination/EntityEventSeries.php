@@ -3,10 +3,12 @@
 namespace Drupal\recurring_events\Plugin\migrate\destination;
 
 use Drupal\migrate\Plugin\migrate\destination\EntityContentBase;
+use Drupal\migrate\Plugin\MigrationInterface;
 use Drupal\migrate\Row;
 use Drupal\recurring_events\Entity\EventSeries;
 use Drupal\recurring_events\Plugin\migrate\process\RecurringDate;
 use Drupal\recurring_events\Plugin\migrate\process\RRuleHelper;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * The 'entity:eventseries' destination plugin for Recurring Events.
@@ -72,6 +74,22 @@ use Drupal\recurring_events\Plugin\migrate\process\RRuleHelper;
  * )
  */
 class EntityEventSeries extends EntityContentBase {
+
+  /**
+   * Module handler service.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition, MigrationInterface $migration = NULL) {
+    $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition, $migration);
+    $instance->moduleHandler = $container->get('module_handler');
+    return $instance;
+  }
 
   /**
    * {@inheritdoc}
@@ -154,14 +172,14 @@ class EntityEventSeries extends EntityContentBase {
       $instances = $entity->event_instances->referencedEntities();
       // Allow other modules to react prior to deleting all instances after a
       // date configuration change.
-      \Drupal::moduleHandler()->invokeAll('recurring_events_pre_delete_instances', [$entity]);
+      $this->moduleHandler->invokeAll('recurring_events_pre_delete_instances', [$entity]);
       // Loop through all instances and remove them.
       foreach ($instances as $instance) {
         $instance->delete();
       }
       // Allow other modules to react after deleting all instances after a date
       // configuration change.
-      \Drupal::moduleHandler()->invokeAll('recurring_events_post_delete_instances', [$entity]);
+      $this->moduleHandler->invokeAll('recurring_events_post_delete_instances', [$entity]);
     }
     parent::rollback($destination_identifier);
   }

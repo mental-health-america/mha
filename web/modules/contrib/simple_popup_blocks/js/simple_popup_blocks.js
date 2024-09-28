@@ -1,4 +1,4 @@
-(function ($, Drupal) {
+(function ($, Drupal, once) {
 
   'use strict'
 
@@ -51,10 +51,10 @@
           read_cookie = readCookie('spb_' + block_id)
           if (read_cookie) {
             cookie_val = + read_cookie + 1
-            createCookie('spb_' + block_id, cookie_val, 100)
+            createCookie('spb_' + block_id, cookie_val, cookie_days)
           }
           else {
-            createCookie('spb_' + block_id, cookie_val, 100)
+            createCookie('spb_' + block_id, cookie_val, cookie_days)
           }
           // Match cookie
           cookie_val = cookie_val.toString()
@@ -86,11 +86,11 @@
 
             // Create new cookie for popup.
             if (match === 1) {
-              createCookie('spb_time' + block_id, next_popup, 100)
+              createCookie('spb_time' + block_id, next_popup, cookie_days)
             }
           }
           else {
-            createCookie('spb_time' + block_id, next_popup, 100)
+            createCookie('spb_time' + block_id, next_popup, cookie_days)
           }
           }
         }
@@ -110,10 +110,13 @@
         modal_minimized_class = block_id + '-modal-minimized'
         layout_class = '.' + modal_class + ' .spb-popup-main-wrapper'
         // Wrap arround elements
-		$(css_identity + block_id).once().
-          wrap($('<div class="' + modal_class + '"></div>'))
+        once('wrap-arround', css_identity + block_id).forEach(function(elem) {
+          $(elem).wrap($('<div class="' + modal_class + '"></div>'))
+        });
         // Hide the popup initially
-        $('.' + modal_class).once().hide()
+        once('hide-popup', '.' + modal_class).forEach(function(elem) {
+          $(elem).hide()
+        })
 
         // Wrap remaining elements
         if ($(css_identity + block_id).closest('.spb-popup-main-wrapper').length) {
@@ -226,6 +229,7 @@
         // Automatic trigger with delay
         if (values.trigger_method == 0 && values.delay > 0) {
           delays = values.delay * 1000
+          $(css_identity + block_id).show()
           $('.' + modal_class).delay(delays).fadeIn('slow')
             if (values.overlay == 1) {
               setTimeout(stopTheScroll, delays)
@@ -357,4 +361,4 @@
     return null
   }
 
-})(jQuery, Drupal)
+})(jQuery, Drupal, once)

@@ -6,10 +6,12 @@ use Drupal\Core\Entity\EntityDefinitionUpdateManagerInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountProxyInterface;
@@ -19,6 +21,7 @@ use Drupal\entity_clone\EntityCloneSettingsManager;
 use Drupal\entity_clone\Event\EntityCloneEvent;
 use Drupal\entity_clone\Event\EntityCloneEvents;
 use Drupal\entity_clone\Services\EntityCloneServiceProvider;
+use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -42,7 +45,7 @@ class EntityCloneForm extends FormBase {
   protected $entity;
 
   /**
-   * The entity type définition.
+   * The entity type definition.
    *
    * @var \Drupal\Core\Entity\EntityTypeInterface
    */
@@ -105,6 +108,13 @@ class EntityCloneForm extends FormBase {
   protected $serviceProvider;
 
   /**
+   * The language manager service.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * Constructs a new Entity Clone form.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -127,34 +137,25 @@ class EntityCloneForm extends FormBase {
    *   The module handler service.
    * @param \Drupal\Core\Entity\EntityDefinitionUpdateManagerInterface $entity_definition_update_manager
    *   The entity definition update manager.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   The language manager service.
    *
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function __construct(
-    EntityTypeManagerInterface $entity_type_manager,
-    RouteMatchInterface $route_match,
-    TranslationManager $string_translation,
-    EventDispatcherInterface $eventDispatcher,
-    MessengerInterface $messenger,
-    AccountProxyInterface $currentUser,
-    EntityCloneSettingsManager $entity_clone_settings_manager,
-    EntityCloneServiceProvider $service_provider,
-    ModuleHandlerInterface $module_handler,
-    EntityDefinitionUpdateManagerInterface $entity_definition_update_manager) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, RouteMatchInterface $route_match, TranslationManager $string_translation, EventDispatcherInterface $eventDispatcher, MessengerInterface $messenger, AccountProxyInterface $currentUser, EntityCloneSettingsManager $entity_clone_settings_manager, EntityCloneServiceProvider $service_provider, ModuleHandlerInterface $module_handler, EntityDefinitionUpdateManagerInterface $entity_definition_update_manager, LanguageManagerInterface $language_manager) {
     $this->entityTypeManager = $entity_type_manager;
     $this->stringTranslationManager = $string_translation;
     $this->eventDispatcher = $eventDispatcher;
     $this->messenger = $messenger;
-
     $parameter_name = $route_match->getRouteObject()->getOption('_entity_clone_entity_type_id');
     $this->entity = $route_match->getParameter($parameter_name);
-
     $this->entityTypeDefinition = $entity_type_manager->getDefinition($this->entity->getEntityTypeId());
     $this->currentUser = $currentUser;
     $this->entityCloneSettingsManager = $entity_clone_settings_manager;
     $this->serviceProvider = $service_provider;
     $this->moduleHandler = $module_handler;
     $this->entityDefinitionUpdateManager = $entity_definition_update_manager;
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -171,7 +172,8 @@ class EntityCloneForm extends FormBase {
       $container->get('entity_clone.settings.manager'),
       $container->get('entity_clone.service_provider'),
       $container->get('module_handler'),
-      $container->get('entity.definition_update_manager')
+      $container->get('entity.definition_update_manager'),
+      $container->get('language_manager')
     );
   }
 
@@ -195,6 +197,7 @@ class EntityCloneForm extends FormBase {
         $form = array_merge($form, $entity_clone_form_handler->formElement($entity));
       }
       $entityType = $entity->getEntityTypeId();
+      // Take ownership and no suffix.
       if ($this->serviceProvider->entityTypeHasOwnerTrait($this->getEntity()->getEntityType()) && $this->currentUser->hasPermission('take_ownership_on_clone ' . $entityType . ' entity')) {
         $form['take_ownership'] = [
           '#type' => 'checkbox',
@@ -211,16 +214,36 @@ class EntityCloneForm extends FormBase {
         ];
       }
 
+      // Moderation.
       $has_content_translation_status_field = $this->moduleHandler->moduleExists('content_translation') && $this->entityDefinitionUpdateManager->getFieldStorageDefinition('content_translation_status', $this->entityTypeDefinition->id());
-      if ($this->entity instanceof EntityPublishedInterface || $has_content_translation_status_field) {
+      $moderation_states = $this->getModerationStateOptions();
+      // Only provide a moderation state selection if the current user has
+      // permission and there won't be cloned language translations. This
+      // latter condition preserves the existing business logic to default
+      // cloned translations to 'draft' regardless of current state.
+      if (!empty($moderation_states)) {
+        $form['moderation_state'] = [
+          '#type' => 'select',
+          '#options' => $moderation_states,
+          '#title' => $this->stringTranslationManager->translate('Moderation state for cloned @entity_type', ['@entity_type' => $this->entityTypeDefinition->getLabel()]),
+          '#description' => $this->stringTranslationManager->translate('What state the cloned entity should start as.'),
+          '#default_value' => $entity->get('moderation_state')->getString(),
+        ];
+        $form['status'] = [
+          '#type' => 'hidden',
+          '#default_value' => FALSE,
+        ];
+      }
+      elseif ($entity instanceof EntityPublishedInterface || $has_content_translation_status_field) {
         $form['status'] = [
           '#type' => 'checkbox',
           '#title' => $this->stringTranslationManager->translate('Save cloned @entity_type as published', ['@entity_type' => $this->entityTypeDefinition->getLabel()]),
-          '#description' => $this->stringTranslationManager->translate('If the cloned entity should be save as a published entity.'),
+          '#description' => $this->stringTranslationManager->translate('If the cloned entity should be saved as a published entity.'),
           '#default_value' => FALSE,
         ];
       }
 
+      // Translations.
       if ($entity instanceof TranslatableInterface) {
         $translation_languages = $entity->getTranslationLanguages();
         if (count($translation_languages) > 1) {
@@ -258,10 +281,11 @@ class EntityCloneForm extends FormBase {
 
           $entity_original_language = $entity->getTranslation('x-default')->language()->getId();
           foreach ($translation_languages as $translation_language) {
+            $translated_language = $translation_language->getName();
             if ($entity_original_language === $translation_language->getId()) {
               $form['translations'][$translation_language->getId()] = [
                 '#type' => 'checkbox',
-                '#title' => $this->t($translation_language->getName() . ' (Original language)'),
+                '#title' => $this->t('@translated_language (Original language)', ['@translated_language' => $translated_language]),
                 '#default_value' => TRUE,
                 '#disabled' => TRUE,
               ];
@@ -269,10 +293,28 @@ class EntityCloneForm extends FormBase {
             else {
               $form['translations'][$translation_language->getId()] = [
                 '#type' => 'checkbox',
-                '#title' => $this->t($translation_language->getName()),
+                '#title' => $this->t('@translated_language', ['@translated_language' => $translated_language]),
                 '#default_value' => FALSE,
               ];
             }
+          }
+        }
+      }
+
+      // Comments.
+      if ($this->moduleHandler->moduleExists('comment') && $this->entity instanceof NodeInterface) {
+        foreach ($this->entity->getFieldDefinitions() as $field_name => $field_definition) {
+          if ($field_definition->getType() === 'comment') {
+            $comments = $this->entity->get($field_name)->getValue();
+            if (!empty($comments)) {
+              $form['comment_cloned'] = [
+                '#type' => 'checkbox',
+                '#title' => $this->stringTranslationManager->translate('Save cloned comments'),
+                '#description' => $this->stringTranslationManager->translate('If the original entity has comments, it should also be possible to clone it.'),
+                '#default_value' => FALSE,
+              ];
+            }
+            break;
           }
         }
       }
@@ -335,13 +377,28 @@ class EntityCloneForm extends FormBase {
       }
     }
 
-    if ($this->moduleHandler->moduleExists('content_moderation') && $properties['status'] && $duplicate->hasField('moderation_state')) {
-      $duplicate->set('moderation_state', 'published');
+    if ($this->moduleHandler->moduleExists('content_moderation') && isset($properties['moderation_state']) && $duplicate->hasField('moderation_state')) {
+      $duplicate->set('moderation_state', $properties['moderation_state']);
     }
 
     $this->eventDispatcher->dispatch(new EntityCloneEvent($this->entity, $duplicate, $properties), EntityCloneEvents::PRE_CLONE);
     $cloned_entity = $entity_clone_handler->cloneEntity($this->entity, $duplicate, $properties);
     $this->eventDispatcher->dispatch(new EntityCloneEvent($this->entity, $duplicate, $properties), EntityCloneEvents::POST_CLONE);
+
+    if ($form_state->getValue('comment_cloned')) {
+      $comments = $this->entityTypeManager
+        ->getStorage('comment')
+        ->loadByProperties([
+          'entity_type' => $this->entity->getEntityType()
+            ->id(),
+          'entity_id' => $this->entity->id(),
+        ]);
+      foreach ($comments as $comment) {
+        $clonedComment = $comment->createDuplicate();
+        $clonedComment->set('entity_id', $cloned_entity->id());
+        $clonedComment->save();
+      }
+    }
 
     $this->messenger->addMessage($this->stringTranslationManager->translate('The entity <em>@entity (@entity_id)</em> of type <em>@type</em> was cloned.', [
       '@entity' => $this->entity->label(),
@@ -389,6 +446,42 @@ class EntityCloneForm extends FormBase {
    */
   public function getEntity() {
     return $this->entity;
+  }
+
+  /**
+   * Gets the current user's permitted workflow states for this entity type.
+   *
+   * @return array
+   *   The available workflow states.
+   */
+  public function getModerationStateOptions() {
+    $moderation_states = [];
+    if (!$this->moduleHandler->moduleExists('content_moderation') || !$this->entity instanceof FieldableEntityInterface || !$this->entity->hasField('moderation_state')) {
+      return [];
+    }
+    // \Drupal\language\Plugin\LanguageNegotiation\LanguageNegotiationUrl::getLangcode().
+    $languages = $this->languageManager->getLanguages();
+    if (count($languages) > 1) {
+      return [];
+    }
+
+    /** @var \Drupal\content_moderation\ModerationInformationInterface $moderation_info */
+    // @phpstan-ignore-next-line as its used on purpose.
+    $moderation_info = \Drupal::service('content_moderation.moderation_information');
+    if (!$moderation_info->isModeratedEntity($this->entity)) {
+      return [];
+    }
+
+    /** @var \Drupal\content_moderation\StateTransitionValidation $transition_validation */
+    // @phpstan-ignore-next-line as its used on purpose.
+    $transition_validation = \Drupal::service('content_moderation.state_transition_validation');
+    $permitted_transition_targets = $transition_validation->getValidTransitions($this->entity, $this->currentUser);
+    if (!empty($permitted_transition_targets)) {
+      foreach ($permitted_transition_targets as $transition) {
+        $moderation_states[$transition->to()->id()] = $transition->to()->label();
+      }
+    }
+    return $moderation_states;
   }
 
 }

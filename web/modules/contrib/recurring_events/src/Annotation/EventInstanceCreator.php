@@ -12,7 +12,7 @@ use Drupal\Component\Annotation\Plugin;
 class EventInstanceCreator extends Plugin {
 
   /**
-   * Description of plugin
+   * Description of plugin.
    *
    * @var \Drupal\Core\Annotation\Translation
    *

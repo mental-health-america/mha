@@ -2,13 +2,13 @@
 
 namespace Drupal\recurring_events\Form;
 
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\recurring_events\EventInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Component\Datetime\TimeInterface;
 
 /**
  * Provides form to revert an eventseries revision for a single translation.

@@ -72,7 +72,7 @@ class EntityCloneFileTest extends BrowserTestBase {
     $file->save();
     $this->drupalGet('entity_clone/file/' . $file->id());
 
-    $this->submitForm([], $this->t('Clone'));
+    $this->submitForm([], 'Clone');
 
     $files = \Drupal::entityTypeManager()
       ->getStorage('file')

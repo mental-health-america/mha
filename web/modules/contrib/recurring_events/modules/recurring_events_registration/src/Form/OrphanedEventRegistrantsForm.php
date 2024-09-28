@@ -8,7 +8,6 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\recurring_events_registration\Entity\RegistrantInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -147,7 +146,7 @@ class OrphanedEventRegistrantsForm extends FormBase {
   /**
    * Get all the orphaned registrants.
    *
-   * @return RegistrantInterface[]|array
+   * @return \Drupal\recurring_events_registration\Entity\RegistrantInterface[]|array
    *   An array of event instance entities, or an empty array.
    */
   protected function getOrphanedRegistrants() {
@@ -168,4 +167,5 @@ class OrphanedEventRegistrantsForm extends FormBase {
     }
     return $registrants;
   }
+
 }

@@ -127,7 +127,7 @@ class BlockVisibilityGroupedListBuilder extends BlockListBuilder {
       $description .= ' ' . $this->t('No Groups have been created yet.');
       $form['block_visibility_group']['create'] = [
         '#type' => 'link',
-        '#title' => t('Create a Group'),
+        '#title' => $this->t('Create a Group'),
         '#url' => Url::fromRoute('entity.block_visibility_group.add_form'),
       ];
     }
@@ -432,7 +432,7 @@ class BlockVisibilityGroupedListBuilder extends BlockListBuilder {
       ],
       'edit' => [
         '#type' => 'link',
-        '#title' => t('Edit Group Settings'),
+        '#title' => $this->t('Edit Group Settings'),
         '#url' => $group->toUrl('edit-form'),
       ],
     ];

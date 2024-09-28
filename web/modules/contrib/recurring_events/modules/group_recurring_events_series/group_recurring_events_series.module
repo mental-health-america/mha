@@ -6,13 +6,13 @@
  */
 
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\recurring_events\Entity\EventSeriesTypeInterface;
 use Drupal\Core\Url;
+use Drupal\recurring_events\Entity\EventSeriesTypeInterface;
 
 /**
  * Implements hook_ENTITY_TYPE_insert().
  */
-function group_recurring_events_series_eventseries_type_insert(EventSeriesTypeInterface $eventserices_type) {
+function group_recurring_events_series_eventseries_type_insert(EventSeriesTypeInterface $eventseries_type) {
   if (\Drupal::isConfigSyncing()) {
     return;
   }
@@ -43,11 +43,11 @@ function group_recurring_events_series_entity_operation(EntityInterface $entity)
   return $operations;
 }
 
-/*
- * hook_entity_type_build
+/**
+ * Implements hook_entity_type_build().
  */
 function group_recurring_events_series_entity_type_build(array &$entity_types) {
-    if(isset($entity_types['eventinstance'])) {
-        $entity_types['eventinstance']->setHandlerClass('access', 'Drupal\group_recurring_events_series\Access\GroupEventInstanceHandler');
-    }
+  if (isset($entity_types['eventinstance'])) {
+    $entity_types['eventinstance']->setHandlerClass('access', 'Drupal\group_recurring_events_series\Access\GroupEventInstanceHandler');
+  }
 }

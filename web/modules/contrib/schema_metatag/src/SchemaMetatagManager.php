@@ -2,9 +2,9 @@
 
 namespace Drupal\schema_metatag;
 
-use Drupal\metatag\MetatagManager;
 use Drupal\Component\Utility\Random;
 use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\metatag\MetatagManager;
 
 /**
  * The SchemaMetatag Manager.
@@ -23,14 +23,14 @@ class SchemaMetatagManager implements SchemaMetatagManagerInterface {
   /**
    * SchemaMetatag Manager constructor.
    *
-   * @param \Drupal\Core\Render\Renderer $renderer
-   *   The renderer.
+   * @param \Drupal\metatag\MetatagManager $metatag_manager
+   *   The metatag manager.
    */
   public function __construct(MetatagManager $metatag_manager) {
     $this->metatagManager = $metatag_manager;
   }
 
-  /*
+  /**
    * See if separator code is available on the parent class.
    *
    * @return bool
@@ -121,7 +121,7 @@ class SchemaMetatagManager implements SchemaMetatagManagerInterface {
   }
 
   /**
-   * {@inheritdoc}
+   * {@inheritDoc}
    */
   public static function getRenderedJsonld($entity = NULL, $entity_type = NULL) {
     // If nothing was passed in, assume the current entity.

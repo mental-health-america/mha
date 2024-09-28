@@ -7,7 +7,7 @@ view eventseries entity:
   description: 'View existing event series entities'
 view unpublished eventseries entity:
   title: 'View unpublished eventseries entity'
-  description: 'View exisiting unpublished event series entities'
+  description: 'View existing unpublished event series entities'
 edit eventseries entity:
   title: 'Edit eventseries entity'
   description: 'Modify existing event series entities'
@@ -39,7 +39,7 @@ view eventinstance entity:
   description: 'View existing event instance entities'
 view unpublished eventinstance entity:
   title: 'View unpublished eventinstance entity'
-  description: 'View exisiting unpublished event instance entities'
+  description: 'View existing unpublished event instance entities'
 edit eventinstance entity:
   title: 'Edit eventinstance entity'
   description: 'Modify existing event instance entities'

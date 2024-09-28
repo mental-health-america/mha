@@ -19,7 +19,7 @@ single_content_sync.settings:
       sequence:
         type: sequence
         sequence:
-          type: boolean
+          type: string
     site_uuid_check:
       type: boolean
       label: 'Site UUID check'

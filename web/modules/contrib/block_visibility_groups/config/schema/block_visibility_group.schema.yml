@@ -17,8 +17,8 @@ block_visibility_groups.block_visibility_group.*:
       type: sequence
       label: 'Conditions'
       sequence:
-        - type: condition.plugin.[id]
-          label: 'Condition'
+        type: condition.plugin.[id]
+        label: 'Condition'
     allow_other_conditions:
       type: boolean
       label: 'Allow Other Conditions'

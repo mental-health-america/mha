@@ -15,22 +15,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class EventInstanceRegistrationAvailabilityCount extends NumericFilter {
 
   /**
-   * Constructs a new EventInstanceRegistrationAvailability object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin ID for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
-  }
-
-  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
@@ -74,7 +58,8 @@ class EventInstanceRegistrationAvailabilityCount extends NumericFilter {
     $max = $this->value['max'] ?? NULL;
 
     if (!empty($view->result)) {
-      // Loop through results, evaluate result's availability re: filter settings.
+      // Loop through results, evaluate result's availability re: filter
+      // settings.
       foreach ($view->result as $key => $result) {
         $availability = (int) $result->_entity->availability_count->getValue()[0]['value'] ?? -1;
 
@@ -84,33 +69,43 @@ class EventInstanceRegistrationAvailabilityCount extends NumericFilter {
           case '<':
             $filter_result = ($availability === -1) ? FALSE : $availability < $value;
             break;
+
           case '<=':
             $filter_result = ($availability === -1) ? FALSE : $availability <= $value;
             break;
+
           case '=':
             $filter_result = $availability == $value;
             break;
+
           case '!=':
             $filter_result = $availability != $value;
             break;
+
           case '>=':
             $filter_result = ($availability === -1) ? TRUE : $availability >= $value;
             break;
+
           case '>':
             $filter_result = ($availability === -1) ? TRUE : $availability > $value;
             break;
+
           case 'between':
             $filter_result = ($availability === -1) ? FALSE : ($min <= $availability && $availability <= $max);
             break;
+
           case 'not between':
             $filter_result = ($availability === -1) ? TRUE : !($min <= $availability && $availability <= $max);
             break;
+
           case 'regular_expression':
             $filter_result = preg_match($value, $availability);
             break;
+
           case 'empty':
             $filter_result = ($availability === -1) ? FALSE : !$availability;
             break;
+
           case 'not empty':
             $filter_result = ($availability === -1) ? TRUE : !!$availability;
             break;

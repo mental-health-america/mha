@@ -75,7 +75,7 @@ class EntityCloneActionTest extends BrowserTestBase {
       'message' => 'test message',
     ];
     $this->drupalGet("admin/config/system/actions/add/$action_key");
-    $this->submitForm($edit, $this->t('Save'));
+    $this->submitForm($edit, 'Save');
 
     $actions = \Drupal::entityTypeManager()
       ->getStorage('action')
@@ -89,7 +89,7 @@ class EntityCloneActionTest extends BrowserTestBase {
       'id' => 'test_send_email_cloned',
     ];
     $this->drupalGet('entity_clone/action/' . $action->id());
-    $this->submitForm($edit, $this->t('Clone'));
+    $this->submitForm($edit, 'Clone');
 
     $actions = \Drupal::entityTypeManager()
       ->getStorage('action')

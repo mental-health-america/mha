@@ -4,7 +4,6 @@ namespace Drupal\recurring_events;
 
 use Drupal\Component\Plugin\PluginBase;
 use Drupal\recurring_events\Entity\EventSeries;
-use Drupal\recurring_events\EventCreationService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
