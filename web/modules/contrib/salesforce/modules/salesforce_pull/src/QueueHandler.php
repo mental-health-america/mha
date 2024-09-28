@@ -190,8 +190,10 @@ class QueueHandler {
     $results = $this->doSfoQuery($mapping, [], $start, $stop);
     if ($results) {
       $this->enqueueAllResults($mapping, $results, $force_pull);
+      return $results->size();
     }
-    return $results->size();
+    // Query failed & no results size can be obtained.
+    return FALSE;
   }
 
   /**
