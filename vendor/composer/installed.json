@@ -8833,27 +8833,27 @@
         },
         {
             "name": "drupal/views_slideshow",
-            "version": "5.0.0",
-            "version_normalized": "5.0.0.0",
+            "version": "5.0.1",
+            "version_normalized": "5.0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/views_slideshow.git",
-                "reference": "5.0.0"
+                "reference": "5.0.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/views_slideshow-5.0.0.zip",
-                "reference": "5.0.0",
-                "shasum": "9a8806f2390a054214ad593ee7b0242dca145440"
+                "url": "https://ftp.drupal.org/files/projects/views_slideshow-5.0.1.zip",
+                "reference": "5.0.1",
+                "shasum": "f181dd86f40f0a65186ee818daded06a98e5d510"
             },
             "require": {
-                "drupal/core": "^9 || ^10"
+                "drupal/core": "^9 || ^10 || ^11"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "5.0.0",
-                    "datestamp": "1673475707",
+                    "version": "5.0.1",
+                    "datestamp": "1724040371",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -8872,7 +8872,7 @@
                     "role": "Maintainer"
                 },
                 {
-                    "name": "NickDickinsonWilde",
+                    "name": "nickdickinsonwilde",
                     "homepage": "https://www.drupal.org/user/3094661"
                 },
                 {
