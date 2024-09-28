@@ -325,8 +325,10 @@ trait GeofieldMapFieldTrait {
    *
    * @param mixed $item
    *   The Geofield Data Value.
-   * @param int $entity_id
+   * @param int|null $entity_id
    *   The Entity Id.
+   *   This could be null in Layout Builder preview.
+   *   (@see https://www.drupal.org/project/geofield_map/issues/3471769).
    * @param string|null $description
    *   The description value.
    * @param string|null $tooltip
@@ -338,7 +340,7 @@ trait GeofieldMapFieldTrait {
    * @return array
    *   The datum for the current feature, including Geojson and additional data.
    */
-  protected function getGeoJsonData(mixed $item, int $entity_id, string $description = NULL, string $tooltip = NULL, array $additional_data = NULL) {
+  protected function getGeoJsonData(mixed $item, ?int $entity_id, string $description = NULL, string $tooltip = NULL, array $additional_data = NULL) {
 
     $datum = [];
     $value = ($item instanceof GeofieldItem) ? $item->value : $item;
@@ -542,7 +544,7 @@ trait GeofieldMapFieldTrait {
         '#type' => 'checkbox',
         '#title' => $this->t('Force the Map Center'),
         '#description' => $this->t('The Map will generally focus center on the input Geofields.<br>This option will instead force the Map Center notwithstanding the Geofield Values'),
-        '#default_value' => $settings['map_center']['center_force'],
+        '#default_value' => $settings['map_center']['center_force'] ?? NULL,
         '#return_value' => 1,
       ],
     ];
@@ -589,7 +591,7 @@ trait GeofieldMapFieldTrait {
         '#type' => 'checkbox',
         '#title' => $this->t('Force the Start Zoom'),
         '#description' => $this->t('In case of multiple GeoMarkers, the Map will naturally focus zoom on the input Geofields bounds.<br>This option will instead force the Map Zoom on the input Start Zoom value'),
-        '#default_value' => $settings['map_zoom_and_pan']['zoom']['force'],
+        '#default_value' => $settings['map_zoom_and_pan']['zoom']['force'] ?? NULL,
         '#return_value' => 1,
         '#states' => [
           'visible' => [
@@ -701,14 +703,14 @@ trait GeofieldMapFieldTrait {
       '#type' => 'checkbox',
       '#title' => $this->t('Disable Default UI'),
       '#description' => $this->t('This property disables any automatic UI behavior and Control from the Google Map'),
-      '#default_value' => $settings['map_controls']['disable_default_ui'],
+      '#default_value' => $settings['map_controls']['disable_default_ui'] ?? NULL,
       '#return_value' => 1,
     ];
     $elements['map_controls']['zoom_control'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Zoom Control'),
       '#description' => $this->t('The enabled/disabled state of the Zoom control.'),
-      '#default_value' => $settings['map_controls']['zoom_control'],
+      '#default_value' => $settings['map_controls']['zoom_control'] ?? NULL,
       '#return_value' => 1,
       '#states' => [
         'visible' => [
@@ -920,7 +922,7 @@ trait GeofieldMapFieldTrait {
         ->getCardinality();
 
       foreach ($entities_fields_options[$this->fieldDefinition->getTargetEntityTypeId()] as $k => $field) {
-        if (!empty(array_intersect($field['bundles'], [$form['#bundle']])) &&
+        if (isset($form['#bundle']) && !empty(array_intersect($field['bundles'], [$form['#bundle']])) &&
           !in_array($k, ['title', 'revision_log'])) {
           $this_entity_fields_options[$k] = $k;
           /** @var \\Drupal\Core\Field\BaseFieldDefinition $fields_configurations[$k] */
@@ -1231,7 +1233,7 @@ trait GeofieldMapFieldTrait {
         ])),
       ]),
       '#description' => $this->t('This option allows to create a new map type, which the user can select from the map type control. The map type includes custom styles.'),
-      '#default_value' => $settings['custom_style_map']['custom_style_control'],
+      '#default_value' => $settings['custom_style_map']['custom_style_control'] ?? NULL,
       '#return_value' => 1,
     ];
     $elements['custom_style_map']['custom_style_name'] = [
@@ -1276,7 +1278,7 @@ trait GeofieldMapFieldTrait {
       '#type' => 'checkbox',
       '#title' => $this->t('Force the Custom Map Style as Default'),
       '#description' => $this->t('The Custom Map Style will be the Default starting one.'),
-      '#default_value' => $settings['custom_style_map']['custom_style_default'],
+      '#default_value' => $settings['custom_style_map']['custom_style_default'] ?? NULL,
       '#return_value' => 1,
     ];
 
@@ -1413,7 +1415,7 @@ trait GeofieldMapFieldTrait {
     if ($this->moduleHandler->moduleExists('geocoder') && class_exists('\Drupal\geocoder\Controller\GeocoderApiEnpoints')) {
       $default_settings = $this::getDefaultSettings();
 
-      $map_geocoder_control = isset($settings['map_geocoder']) ? $settings['map_geocoder']['control'] : FALSE;
+      $map_geocoder_control = $settings['map_geocoder']['control'] ?? FALSE;
 
       $element['map_geocoder']['access_warning'] = [
         '#type' => 'html_tag',
