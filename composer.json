@@ -130,7 +130,7 @@
         "drupal/scheduler": "^2.1",
         "drupal/schema_metatag": "*",
         "drupal/seckit": "^2.0",
-        "drupal/simple_popup_blocks": "^3.3",
+        "drupal/simple_popup_blocks": "^3.4",
         "drupal/simple_timeline": "^2.0",
         "drupal/simplenews": "^4.0@alpha",
         "drupal/single_content_sync": "^1.4",

@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Component\Utility\Html;
 
 /**
  * Implements hook_help().
@@ -55,7 +56,18 @@ function simple_popup_blocks_page_attachments(array &$attachments) {
         $visit_counts = unserialize($data['visit_counts']);
         $data['visit_counts'] = implode(",", $visit_counts);
         // Sanitize each entry.
-        $popup_settings[] = array_map('Drupal\Component\Utility\Html::escape', $data);
+        $settings_to_add = [];
+        foreach ($data as $key => $val) {
+          if (!is_array($val)) {
+            if (!empty($val)) {
+              $settings_to_add[$key] = Html::escape($val);
+            }
+            else {
+              $settings_to_add[$key] = $val;
+            }
+          }
+        }
+        $popup_settings[] = $settings_to_add;
       }
     }
 
