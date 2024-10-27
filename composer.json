@@ -77,7 +77,7 @@
         "drupal/editor_advanced_link": "^2.2",
         "drupal/embed": "^1.9",
         "drupal/empty_page": "^3.0",
-        "drupal/encrypt": "^3.0",
+        "drupal/encrypt": "^3.2",
         "drupal/entity": "^1.0",
         "drupal/entity_clone": "^2.1@beta",
         "drupal/entity_print": "^2.15",
