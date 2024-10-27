@@ -1,4 +1,4 @@
-name: mental
+name: mhanational
 recipe: drupal9
 config:
   php: '8.2'
@@ -17,5 +17,5 @@ services:
 
 # Proxy
 proxy:
-  mental-phpmyadmin:
-    - mental-phpmyadmin.lndo.site
+  mhanational-phpmyadmin:
+    - mhanational-phpmyadmin.lndo.site
