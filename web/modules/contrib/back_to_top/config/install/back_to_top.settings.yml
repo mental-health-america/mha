@@ -9,3 +9,4 @@ back_to_top_bg_color: '#F7F7F7'
 back_to_top_border_color: '#CCCCCC'
 back_to_top_hover_color: '#EEEEEE'
 back_to_top_text_color: '#333333'
+back_to_top_speed: 1200

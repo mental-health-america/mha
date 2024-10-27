@@ -60,12 +60,11 @@ class ConditionGroup extends ConditionPluginBase implements ContainerFactoryPlug
    *   TRUE if the condition has been met, FALSE otherwise.
    */
   public function evaluate() {
-    $block_visibility_group_id = $this->configuration['block_visibility_group'];
-    if (empty($block_visibility_group_id)) {
+    if (empty($this->configuration['block_visibility_group'])) {
       return TRUE;
     }
     /** @var \Drupal\block_visibility_groups\Entity\BlockVisibilityGroup $block_visibility_group */
-    if ($block_visibility_group = $this->entityStorage->load($block_visibility_group_id)) {
+    if ($block_visibility_group = $this->entityStorage->load($this->configuration['block_visibility_group'])) {
       return $this->groupEvaluator->evaluateGroup($block_visibility_group);
     }
     else {
