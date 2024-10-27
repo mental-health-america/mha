@@ -37,25 +37,33 @@ class BackToTopSettingsForm extends ConfigFormBase {
       '#type' => 'checkbox',
       '#title' => $this->t('Prevent on mobile and touch devices'),
       '#description' => $this->t('Don´t show Back To Top-button on screen width up to 760px.'),
-      '#default_value' => $settings['back_to_top_prevent_on_mobile'],
+      '#default_value' => isset($settings['back_to_top_prevent_on_mobile']) ? $settings['back_to_top_prevent_on_mobile'] : '',
     ];
     $form['back_to_top_prevent_in_admin'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Prevent on administration pages and node edit'),
       '#description' => $this->t('Do you want to prevent Back To Top on admin pages?'),
-      '#default_value' => $settings['back_to_top_prevent_in_admin'],
+      '#default_value' => isset($settings['back_to_top_prevent_in_admin']) ? $settings['back_to_top_prevent_in_admin'] : '',
     ];
     $form['back_to_top_prevent_in_front'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Prevent on front page'),
       '#description' => $this->t('Do you want to prevent Back To Top on front page?'),
-      '#default_value' => $settings['back_to_top_prevent_in_front'],
+      '#default_value' => isset($settings['back_to_top_prevent_in_front']) ? $settings['back_to_top_prevent_in_front'] : '',
     ];
     $form['back_to_top_button_trigger'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Trigger'),
-      '#description' => $this->t('Set the number of pixel which trigger the Back To Top button default 100'),
-      '#default_value' => $settings['back_to_top_button_trigger'],
+      '#description' => $this->t('Set the number of pixel which trigger the Back To Top button (Default 100)'),
+      '#default_value' => isset($settings['back_to_top_button_trigger']) ? $settings['back_to_top_button_trigger'] : '',
+      '#size' => 10,
+      '#maxlength' => 4,
+    ];
+    $form['back_to_top_speed'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Speed'),
+      '#description' => $this->t('Set the speed of the scroll in miliseconds (Default 1200)'),
+      '#default_value' => isset($settings['back_to_top_speed']) ? $settings['back_to_top_speed'] : '',
       '#size' => 10,
       '#maxlength' => 4,
     ];
@@ -74,13 +82,13 @@ class BackToTopSettingsForm extends ConfigFormBase {
         8 => $this->t('Mid left'),
         9 => $this->t('Mid center'),
       ],
-      '#default_value' => $settings['back_to_top_button_place'],
+      '#default_value' => isset($settings['back_to_top_button_place']) ? $settings['back_to_top_button_place'] : 1,
     ];
     $form['back_to_top_button_text'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Button text'),
       '#description' => $this->t('Set the text of the Back To Top button'),
-      '#default_value' => $settings['back_to_top_button_text'],
+      '#default_value' => isset($settings['back_to_top_button_text']) ? $settings['back_to_top_button_text'] : '',
       '#size' => 30,
       '#maxlength' => 30,
     ];
@@ -91,7 +99,7 @@ class BackToTopSettingsForm extends ConfigFormBase {
         'image' => $this->t('Image (default)'),
         'text' => $this->t('Text/Css'),
       ],
-      '#default_value' => $settings['back_to_top_button_type'],
+      '#default_value' => isset($settings['back_to_top_button_type']) ? $settings['back_to_top_button_type'] : 'image',
     ];
 
     // Wrap Text/Css button settings in a fieldset.
@@ -105,7 +113,7 @@ class BackToTopSettingsForm extends ConfigFormBase {
       '#type' => 'textfield',
       '#title' => $this->t('Background color'),
       '#description' => $this->t('Button background color default #F7F7F7'),
-      '#default_value' => $settings['back_to_top_bg_color'],
+      '#default_value' => isset($settings['back_to_top_bg_color']) ? $settings['back_to_top_bg_color'] : '',
       '#size' => 10,
       '#maxlength' => 7,
       '#suffix' => '<div class="color-field" id="back_to_top_bg_color"></div>',
@@ -114,7 +122,7 @@ class BackToTopSettingsForm extends ConfigFormBase {
       '#type' => 'textfield',
       '#title' => $this->t('Border color'),
       '#description' => $this->t('Border color default #CCCCCC'),
-      '#default_value' => $settings['back_to_top_border_color'],
+      '#default_value' => isset($settings['back_to_top_border_color']) ? $settings['back_to_top_border_color'] : '',
       '#size' => 10,
       '#maxlength' => 7,
       '#suffix' => '<div class="color-field" id="back_to_top_border_color"></div>',
@@ -123,7 +131,7 @@ class BackToTopSettingsForm extends ConfigFormBase {
       '#type' => 'textfield',
       '#title' => $this->t('Hover color'),
       '#description' => $this->t('Hover color default #EEEEEE'),
-      '#default_value' => $settings['back_to_top_hover_color'],
+      '#default_value' => isset($settings['back_to_top_hover_color']) ? $settings['back_to_top_hover_color'] : '',
       '#size' => 10,
       '#maxlength' => 7,
       '#suffix' => '<div class="color-field" id="back_to_top_hover_color"></div>',
@@ -132,7 +140,7 @@ class BackToTopSettingsForm extends ConfigFormBase {
       '#type' => 'textfield',
       '#title' => $this->t('Text color'),
       '#description' => $this->t('Text color default #333333'),
-      '#default_value' => $settings['back_to_top_text_color'],
+      '#default_value' => isset($settings['back_to_top_text_color']) ? $settings['back_to_top_text_color'] : '',
       '#size' => 10,
       '#maxlength' => 7,
       '#suffix' => '<div class="color-field" id="back_to_top_text_color"></div>',
@@ -147,10 +155,11 @@ class BackToTopSettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->configFactory->getEditable('back_to_top.settings');
     $form_values = $form_state->getValues();
-    $config->set('back_to_top_prevent_on_mobile', $form_values['back_to_top_prevent_on_mobile'])
+    $config->set('back_to_top_prevent_on_mobile', isset($form_values['back_to_top_prevent_on_mobile']) ? $form_values['back_to_top_prevent_on_mobile'] : '')
       ->set('back_to_top_prevent_in_admin', $form_values['back_to_top_prevent_in_admin'])
       ->set('back_to_top_prevent_in_front', $form_values['back_to_top_prevent_in_front'])
       ->set('back_to_top_button_trigger', $form_values['back_to_top_button_trigger'])
+      ->set('back_to_top_speed', $form_values['back_to_top_speed'])
       ->set('back_to_top_button_place', $form_values['back_to_top_button_place'])
       ->set('back_to_top_button_text', $form_values['back_to_top_button_text'])
       ->set('back_to_top_button_type', $form_values['back_to_top_button_type'])

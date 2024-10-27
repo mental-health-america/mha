@@ -139,17 +139,14 @@
         // Minimize button wrap
         if (values.minimize === "1") {
           $("#"+spb_popup_id + " .spb-controls").
-            prepend($('<span class="' + modal_minimize_class +
-              ' spb_minimize">-</span>'))
+            prepend($('<button type="button" aria-label="Dismiss modal" class="' + modal_minimize_class + ' spb_minimize">&minus;</button>'))
           $('.' + modal_class).
-            before($('<span class="' + modal_minimized_class +
-              ' spb_minimized"></span>'))
+            before($('<button type="button" aria-label="Open modal" class="' + modal_minimized_class + ' spb_minimized">&plus;</button>'))
         }
         // Close button wrap
         if (values.close == 1) {
           $("#"+spb_popup_id + " .spb-controls").
-            prepend($('<span class="' + modal_close_class +
-              ' spb_close">&times;</span>'))
+            prepend($('<button type="button" aria-label="Close modal" class="' + modal_close_class + ' spb_close">&times;</button>'))
         }
         // Overlay
         if (values.overlay == 1) {
