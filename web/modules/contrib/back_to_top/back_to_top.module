@@ -14,10 +14,12 @@ function back_to_top_page_attachments(array &$attachments) {
   $config = \Drupal::config('back_to_top.settings');
   $settings = $config->get();
   $button_settings = [
-    'back_to_top_prevent_on_mobile' => $settings['back_to_top_prevent_on_mobile'],
-    'back_to_top_prevent_in_admin' => $settings['back_to_top_prevent_in_admin'],
-    'back_to_top_button_type' => $settings['back_to_top_button_type'],
-    'back_to_top_button_text' => $settings['back_to_top_button_text'],
+    'back_to_top_prevent_on_mobile' => isset($settings['back_to_top_prevent_on_mobile']) ? $settings['back_to_top_prevent_on_mobile'] : '',
+    'back_to_top_prevent_in_admin' => isset($settings['back_to_top_prevent_in_admin']) ? $settings['back_to_top_prevent_in_admin'] : '',
+    'back_to_top_button_type' => isset($settings['back_to_top_button_type']) ? $settings['back_to_top_button_type'] : '',
+    'back_to_top_button_text' => isset($settings['back_to_top_button_text']) ? $settings['back_to_top_button_text'] : '',
+    'back_to_top_speed' => isset($settings['back_to_top_speed']) ? $settings['back_to_top_speed'] : '',
+    
   ];
   if ($settings['back_to_top_prevent_in_admin'] && (is_adminpage())) {
     return FALSE;
@@ -30,6 +32,7 @@ function back_to_top_page_attachments(array &$attachments) {
 
   $attachments['#attached']['library'][] = 'back_to_top/back_to_top_js';
   $attachments['#attached']['drupalSettings']['back_to_top']['back_to_top_button_trigger'] = $settings['back_to_top_button_trigger'];
+  $attachments['#attached']['drupalSettings']['back_to_top']['back_to_top_speed'] = $settings['back_to_top_speed'];
 
   // Add stylesheet for image or text/css button.
   if (($settings['back_to_top_button_type']) == "text") {
@@ -117,7 +120,7 @@ function is_adminpage() {
 function back_to_top_help($route_name, RouteMatchInterface $route_match) {
   switch ($route_name) {
     case 'help.page.back_to_top':
-      $text = file_get_contents(dirname(__FILE__) . "/README.txt");
+      $text = file_get_contents(dirname(__FILE__) . "/README.md");
       if (!\Drupal::moduleHandler()->moduleExists('markdown')) {
         return '<pre>' . $text . '</pre>';
       }

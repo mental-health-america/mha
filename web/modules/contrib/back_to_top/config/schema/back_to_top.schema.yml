@@ -16,6 +16,9 @@ back_to_top.settings:
     back_to_top_button_trigger:
       type: float
       label: 'Trigger'
+    back_to_top_speed:
+      type: float
+      label: 'Speed'
     back_to_top_button_place:
       type: integer
       label: 'Placement'
