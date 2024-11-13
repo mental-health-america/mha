@@ -1,0 +1,10 @@
+name: Donate Form 2024
+type: module
+description: 'Donate Form 2024.'
+package: Custom
+version: 8.x
+core_version_requirement: ^8 || ^9 || ^10
+dependencies:
+  - node
+  - block
+
