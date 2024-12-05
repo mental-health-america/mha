@@ -16,11 +16,11 @@ interface SingleContentSyncBaseFieldsProcessorPluginManagerInterface extends Plu
    *   The entity type.
    *
    * @return \Drupal\single_content_sync\SingleContentSyncBaseFieldsProcessorInterface|null
-   *   The base field processor plugin or NULL if none found.
+   *   The base field processor plugin.
    *
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    *   If the instance cannot be created, such as if the ID is invalid.
    */
-  public function getEntityPluginInstance(string $entityType): ?SingleContentSyncBaseFieldsProcessorInterface;
+  public function getEntityPluginInstance(string $entityType): SingleContentSyncBaseFieldsProcessorInterface;
 
 }

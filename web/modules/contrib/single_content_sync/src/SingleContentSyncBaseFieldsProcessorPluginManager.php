@@ -100,12 +100,12 @@ class SingleContentSyncBaseFieldsProcessorPluginManager extends DefaultPluginMan
   /**
    * {@inheritdoc}
    */
-  public function getEntityPluginInstance(string $entityType): ?SingleContentSyncBaseFieldsProcessorInterface {
+  public function getEntityPluginInstance(string $entityType): SingleContentSyncBaseFieldsProcessorInterface {
     $pluginDefinition = $this->findEntityPluginDefinition($entityType);
 
     return $pluginDefinition
       ? $this->createInstance($pluginDefinition['id'])
-      : NULL;
+      : $this->createInstance('generic');
   }
 
   /**

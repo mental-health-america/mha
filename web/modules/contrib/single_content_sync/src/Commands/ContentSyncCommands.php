@@ -117,7 +117,7 @@ class ContentSyncCommands extends DrushCommands {
    * @option $all-content Will export all entity types.
    * @option $dry-run Will run the command in 'dry-run mode' and will not export anything.
    * @option $entities
-   *    A comma separated string of entity id's to be exported.
+   *    A comma separated string of entity id's or uuids to be exported.
    *    Combine with param $entityType in order to target the correct entities.
    *    if $all-content is used, it will take priority over this option.
    * @option $bundle

@@ -101,12 +101,12 @@ class SingleContentSyncFieldProcessorPluginManager extends DefaultPluginManager 
     string $entityType,
     string $bundle,
     string $fieldName
-  ): ?SingleContentSyncFieldProcessorInterface {
+  ): SingleContentSyncFieldProcessorInterface {
     $pluginDefinition = $this->findFieldPluginDefinition($entityType, $bundle, $fieldName);
 
     return $pluginDefinition
       ? $this->createInstance($pluginDefinition['id'])
-      : NULL;
+      : $this->createInstance('generic');
   }
 
   /**

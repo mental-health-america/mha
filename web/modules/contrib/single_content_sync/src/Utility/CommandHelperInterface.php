@@ -37,7 +37,7 @@ interface CommandHelperInterface {
    * @param bool $all_allowed_content
    *   Will export all entity types if set to TRUE.
    * @param string|null $entity_ids_to_export
-   *   A comma separated string of entity type ids to export, e.g. "1,2,5".
+   *   A comma separated string of entity ids or uuids to export, e.g. "1,2,5".
    *
    * @return array
    *   Returns an array of entities to export.

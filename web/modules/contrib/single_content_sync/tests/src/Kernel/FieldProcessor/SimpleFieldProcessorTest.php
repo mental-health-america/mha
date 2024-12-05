@@ -60,7 +60,7 @@ class SimpleFieldProcessorTest extends FieldProcessorTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function importFieldValueDataProvider(): array {
+  public static function importFieldValueDataProvider(): array {
     return [
       'address' => [
         [
@@ -252,6 +252,17 @@ class SimpleFieldProcessorTest extends FieldProcessorTestBase {
         NULL,
         ['options'],
       ],
+      'paragraph_view_mode' => [
+        [
+          'type' => 'paragraph_view_mode',
+          'settings' => [
+            'max_length' => 255,
+          ],
+        ],
+        [0 => ['value' => 'teaser']],
+        NULL,
+        ['paragraph_view_mode'],
+      ],
       'string' => [
         [
           'type' => 'string',
@@ -306,6 +317,12 @@ class SimpleFieldProcessorTest extends FieldProcessorTestBase {
         NULL,
         ['viewsreference', 'views'],
       ],
+      'video_embed_field' => [
+        ['type' => 'video_embed_field'],
+        [0 => ['value' => 'video-url']],
+        NULL,
+        ['video_embed_field'],
+      ],
       'weight' => [
         ['type' => 'weight'],
         [0 => ['value' => '10']],
@@ -324,7 +341,7 @@ class SimpleFieldProcessorTest extends FieldProcessorTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function exportFieldValueDataProvider(): array {
+  public static function exportFieldValueDataProvider(): array {
     return [
       'address' => [
         [
@@ -537,6 +554,17 @@ class SimpleFieldProcessorTest extends FieldProcessorTestBase {
         [0 => ['value' => 'one']],
         ['options'],
       ],
+      'paragraph_view_mode' => [
+        [
+          'type' => 'paragraph_view_mode',
+          'settings' => [
+            'max_length' => 255,
+          ],
+        ],
+        'teaser',
+        [0 => ['value' => 'teaser']],
+        ['paragraph_view_mode'],
+      ],
       'string' => [
         [
           'type' => 'string',
@@ -597,6 +625,12 @@ class SimpleFieldProcessorTest extends FieldProcessorTestBase {
           ],
         ],
         ['viewsreference', 'views'],
+      ],
+      'video_embed_field' => [
+        ['type' => 'video_embed_field'],
+        'video-url',
+        [0 => ['value' => 'video-url']],
+        ['video_embed_field'],
       ],
       'weight' => [
         ['type' => 'weight'],

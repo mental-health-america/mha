@@ -38,8 +38,8 @@ interface SingleContentSyncFieldProcessorPluginManagerInterface extends PluginMa
    * @param string $fieldName
    *   The field name.
    *
-   * @return \Drupal\single_content_sync\SingleContentSyncFieldProcessorInterface|null
-   *   The field processor plugin or NULL if none found.
+   * @return \Drupal\single_content_sync\SingleContentSyncFieldProcessorInterface
+   *   The field processor plugin.
    *
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    *   If the instance cannot be created, such as if the ID is invalid.
@@ -48,6 +48,6 @@ interface SingleContentSyncFieldProcessorPluginManagerInterface extends PluginMa
     string $entityType,
     string $bundle,
     string $fieldName
-  ): ?SingleContentSyncFieldProcessorInterface;
+  ): SingleContentSyncFieldProcessorInterface;
 
 }

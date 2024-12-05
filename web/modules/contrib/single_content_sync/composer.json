@@ -24,12 +24,14 @@
         "drupal/weight": "*",
         "drupal/yearonly": "*",
         "drupal/paragraphs": "*",
+        "drupal/paragraph_view_mode": "*",
         "drupal/webform": "*",
         "drupal/section_library": "*",
         "drupal/metatag": "*",
         "drupal/dynamic_entity_reference": "*",
         "drupal/svg_image_field": "*",
-        "drupal/viewsreference": "*"
+        "drupal/viewsreference": "*",
+        "drupal/video_embed_field": "*"
     },
     "support": {
         "issues": "https://drupal.org/project/issues/single_content_sync",

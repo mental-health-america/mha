@@ -12,7 +12,7 @@ class AddressZoneTest extends FieldProcessorTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function importFieldValueDataProvider(): array {
+  public static function importFieldValueDataProvider(): array {
     return [
       'address_zone' => [
         [
@@ -61,7 +61,7 @@ class AddressZoneTest extends FieldProcessorTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function exportFieldValueDataProvider(): array {
+  public static function exportFieldValueDataProvider(): array {
     return [
       'address_zone' => [
         [

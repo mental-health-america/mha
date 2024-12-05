@@ -63,12 +63,21 @@ class ContentImportForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
+    $validators = [];
+
+    // Still support older drupal version than 10.2 with old file extension
+    // validator approach.
+    if (floatval(\Drupal::VERSION) < 10.2) {
+      $validators['file_validate_extensions'] = ['zip yml'];
+    }
+    else {
+      $validators['FileExtension'] = ['zip yml'];
+    }
+
     $form['upload_fid'] = [
       '#type' => 'managed_file',
       '#upload_location' => "temporary://import/zip",
-      '#upload_validators' => [
-        'file_validate_extensions' => ['zip yml'],
-      ],
+      '#upload_validators' => $validators,
       '#title' => $this->t('Upload a file with content to import'),
       '#description' => $this->t('Upload a Zip or YAML file with the previously exported content.'),
     ];

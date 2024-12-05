@@ -3,6 +3,7 @@
 namespace Drupal\single_content_sync\Utility;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\file\FileInterface;
@@ -57,6 +58,13 @@ class CommandHelper implements CommandHelperInterface {
   protected string $root;
 
   /**
+   * The entity repository.
+   *
+   * @var \Drupal\Core\Entity\EntityRepositoryInterface
+   */
+  protected EntityRepositoryInterface $entityRepository;
+
+  /**
    * Constructor of ContentSyncCommands.
    *
    * @param \Drupal\single_content_sync\ContentImporterInterface $content_importer
@@ -69,6 +77,8 @@ class CommandHelper implements CommandHelperInterface {
    *   The content sync helper.
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   The file system.
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
+   *   The entity repository.
    * @param string $root
    *   The app root.
    */
@@ -78,6 +88,7 @@ class CommandHelper implements CommandHelperInterface {
     EntityTypeManagerInterface $entity_type_manager,
     ContentSyncHelperInterface $content_sync_helper,
     FileSystemInterface $file_system,
+    EntityRepositoryInterface $entity_repository,
     string $root
   ) {
     $this->contentImporter = $content_importer;
@@ -85,6 +96,7 @@ class CommandHelper implements CommandHelperInterface {
     $this->entityTypeManager = $entity_type_manager;
     $this->contentSyncHelper = $content_sync_helper;
     $this->fileSystem = $file_system;
+    $this->entityRepository = $entity_repository;
     $this->root = $root;
   }
 
@@ -122,8 +134,13 @@ class CommandHelper implements CommandHelperInterface {
     if ($all_allowed_content) {
       $allowed_entity_types = $this->configFactory->get('single_content_sync.settings')->get('allowed_entity_types');
       $entities = array_reduce($this->entityTypeManager->getDefinitions(), function ($carry, $entity_type) use ($allowed_entity_types) {
-        if (array_key_exists($entity_type->id(), $allowed_entity_types)) {
-          return array_merge($carry, $this->entityTypeManager->getStorage($entity_type->id())->loadMultiple());
+        $entity_type_id = $entity_type->id();
+        if (array_key_exists($entity_type_id, $allowed_entity_types)) {
+          $list = $entity_type_id === 'block_content'
+            ? $this->entityTypeManager->getStorage($entity_type_id)->loadByProperties(['reusable' => TRUE])
+            : $this->entityTypeManager->getStorage($entity_type_id)->loadMultiple();
+
+          return array_merge($carry, $list);
         }
         return $carry;
       }, []);
@@ -145,23 +162,18 @@ class CommandHelper implements CommandHelperInterface {
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public function getSelectedEntities(string $entity_type, string $ids_to_export): array {
     $entity_ids = explode(',', $ids_to_export);
     $entities = [];
-    $invalid_ids = array_filter($entity_ids, function ($id) {
-      return !intval($id);
-    });
 
-    if (!empty($invalid_ids)) {
-      $err_out = implode(', ', $invalid_ids);
-      throw new \Exception("The export couldn't be completed because the --entities contain invalid ids: {$err_out}");
-    }
-
+    $storage = $this->entityTypeManager->getStorage($entity_type);
     foreach ($entity_ids as $id) {
-      $entity = $this->entityTypeManager->getStorage($entity_type)
-        ->load($id);
+      $entity = is_numeric($id)
+        ? $storage->load($id)
+        : $this->entityRepository->loadEntityByUuid($entity_type, $id);
+
       if (!$entity) {
         throw new \Exception("The export couldn't be completed because the --entities contain invalid id: {$id}");
       }

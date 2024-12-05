@@ -308,10 +308,6 @@ class ContentExporter implements ContentExporterInterface {
     $entityProcessor = $this->entityBaseFieldsProcessorPluginManager
       ->getEntityPluginInstance($entity->getEntityTypeId());
 
-    if (!$entityProcessor) {
-      return [];
-    }
-
     $base_fields = $entityProcessor->exportBaseValues($entity);
 
     // Support moderation state for multiple entity types.

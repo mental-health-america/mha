@@ -69,4 +69,5 @@ services:
       - '@entity_type.manager'
       - '@single_content_sync.helper'
       - '@file_system'
+      - '@entity.repository'
       - '%app.root%'

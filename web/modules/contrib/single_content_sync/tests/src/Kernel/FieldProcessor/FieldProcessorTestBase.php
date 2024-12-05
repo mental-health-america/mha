@@ -55,7 +55,7 @@ abstract class FieldProcessorTestBase extends KernelTestBase {
    * @return array
    *   An array of test data.
    */
-  abstract protected function exportFieldValueDataProvider(): array;
+  abstract public static function exportFieldValueDataProvider(): array;
 
   /**
    * @covers ::exportFieldValue
@@ -104,7 +104,7 @@ abstract class FieldProcessorTestBase extends KernelTestBase {
    * @return array
    *   An array of test data.
    */
-  abstract protected function importFieldValueDataProvider(): array;
+  abstract public static function importFieldValueDataProvider(): array;
 
   /**
    * @covers ::importFieldValue
