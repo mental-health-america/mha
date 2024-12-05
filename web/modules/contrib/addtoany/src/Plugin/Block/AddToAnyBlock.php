@@ -46,7 +46,7 @@ class AddToAnyBlock extends BlockBase {
     }
 
     $build = [
-      '#addtoany_html'              => $block_options['addtoany_html'],
+      '#addtoany_html'              => addtoany_strip_whitespace($block_options['addtoany_html']),
       '#link_url'                   => $block_options['link_url'],
       '#link_title'                 => $block_options['link_title'],
       '#button_setting'             => $data['button_setting'],

@@ -3,6 +3,7 @@
 namespace Drupal\addtoany\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Entity\ContentEntityType;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Extension\ExtensionList;
@@ -43,6 +44,8 @@ class AddToAnySettingsForm extends ConfigFormBase {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
+   * @param \Drupal\Core\Config\TypedConfigManagerInterface $typed_config_manager
+   *  The typed config manager.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler to invoke the alter hook with.
    * @param \Drupal\Core\Extension\ExtensionList $module_extension_list
@@ -50,8 +53,8 @@ class AddToAnySettingsForm extends ConfigFormBase {
    * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $entity_type_bundle_info
    *   The entity type bundle info service.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, ExtensionList $module_extension_list, EntityTypeBundleInfoInterface $entity_type_bundle_info) {
-    parent::__construct($config_factory);
+  public function __construct(ConfigFactoryInterface $config_factory, TypedConfigManagerInterface $typed_config_manager, ModuleHandlerInterface $module_handler, ExtensionList $module_extension_list, EntityTypeBundleInfoInterface $entity_type_bundle_info) {
+    parent::__construct($config_factory, $typed_config_manager);
     $this->moduleHandler = $module_handler;
     $this->moduleExtensionList = $module_extension_list;
     $this->entityTypeBundleInfo = $entity_type_bundle_info;
@@ -63,6 +66,7 @@ class AddToAnySettingsForm extends ConfigFormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
+      $container->get('config.typed'),
       $container->get('module_handler'),
       $container->get('extension.list.module'),
       $container->get('entity_type.bundle.info')

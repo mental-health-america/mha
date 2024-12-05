@@ -1,7 +1,7 @@
 addtoany.front:
   version: VERSION
   js:
-    https://static.addtoany.com/menu/page.js: { attributes: { async: true }, type: external, minified: true }
+    https://static.addtoany.com/menu/page.js: { attributes: { defer: true }, type: external, minified: true }
     js/addtoany.js: { }
   css:
     theme:

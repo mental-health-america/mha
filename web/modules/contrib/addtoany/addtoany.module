@@ -5,6 +5,7 @@
  * Handle AddToAny integration.
  */
 
+use Drupal\Component\Utility\DeprecationHelper;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
@@ -237,7 +238,7 @@ function addtoany_page_attachments(&$page) {
 }
 
 /**
- * Generate data for AddToAny buttons for an entity.
+ * Generates data for AddToAny buttons for an entity.
  *
  * @param \Drupal\Core\Entity\ContentEntityInterface $entity
  *   The entity object to create the buttons for.
@@ -261,7 +262,7 @@ function addtoany_create_entity_data(ContentEntityInterface $entity, $config = N
 }
 
 /**
- * Generate data for AddToAny buttons.
+ * Generates data for AddToAny buttons.
  *
  * @param string $url
  *   If present this will be used as the URL.
@@ -280,7 +281,7 @@ function addtoany_create_data($url = NULL, $title = NULL, $config = NULL) {
     $config = \Drupal::config('addtoany.settings');
   }
 
-  $additional_html = rtrim($config->get('additional_html'));
+  $additional_html = addtoany_strip_whitespace($config->get('additional_html'));
   $universal_button_placement = $config->get('universal_button_placement');
 
   $is_front = \Drupal::service('path.matcher')->isFrontPage();
@@ -319,8 +320,15 @@ function addtoany_create_data($url = NULL, $title = NULL, $config = NULL) {
 
       // Expecting array|string|null from getTitle.
       if (is_array($title)) {
+        /** @var \Drupal\Core\Render\RendererInterface $renderer */
+        $renderer = \Drupal::service('renderer');
         $title['#allowed_tags'] = [];
-        $title = \Drupal::service('renderer')->renderPlain($title);
+        $title = DeprecationHelper::backwardsCompatibleCall(
+          currentVersion: \Drupal::VERSION,
+          deprecatedVersion: '10.3',
+          currentCallable: fn() => $renderer->renderInIsolation($title),
+          deprecatedCallable: fn() => $renderer->renderPlain($title),
+        );
       }
     }
 
@@ -351,4 +359,17 @@ function addtoany_create_data($url = NULL, $title = NULL, $config = NULL) {
   ];
 
   return $info;
+}
+
+/**
+ * Removes whitespace between HTML tags for even spacing between buttons.
+ *
+ * @param string $html
+ *   The HTML to strip whitespace from.
+ *
+ * @return string
+ *   The HTML with whitespace removed.
+ */
+function addtoany_strip_whitespace($html) {
+  return preg_replace('/>\s+</m', '><', trim($html));
 }

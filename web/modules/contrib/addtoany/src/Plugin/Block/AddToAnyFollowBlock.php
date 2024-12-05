@@ -27,7 +27,7 @@ class AddToAnyFollowBlock extends BlockBase {
     $addtoany_html = $this->configuration['addtoany_html'];
 
     $build = [
-      '#addtoany_html' => $addtoany_html,
+      '#addtoany_html' => addtoany_strip_whitespace($addtoany_html),
       '#buttons_size' => $buttons_size,
       '#theme' => 'addtoany_follow',
     ];
