@@ -3,7 +3,7 @@
         'name' => 'drupal-composer/drupal-project',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => 'a0fd6dd80dd027e9d9f20071fc5e4dda84a146eb',
+        'reference' => '3fd85d74f3685caffc537c4765ac1711c75e40c9',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -238,7 +238,7 @@
         'drupal-composer/drupal-project' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'a0fd6dd80dd027e9d9f20071fc5e4dda84a146eb',
+            'reference' => '3fd85d74f3685caffc537c4765ac1711c75e40c9',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -1412,9 +1412,9 @@
             'dev_requirement' => false,
         ),
         'drupal/yaml_editor' => array(
-            'pretty_version' => '1.2.0',
-            'version' => '1.2.0.0',
-            'reference' => '8.x-1.2',
+            'pretty_version' => '1.3.0',
+            'version' => '1.3.0.0',
+            'reference' => '8.x-1.3',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../web/modules/contrib/yaml_editor',
             'aliases' => array(),
@@ -1768,8 +1768,8 @@
         'psr/container-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '1.0',
-                1 => '^1.0',
+                0 => '^1.0',
+                1 => '1.0',
             ),
         ),
         'psr/event-dispatcher-implementation' => array(
