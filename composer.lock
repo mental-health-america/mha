@@ -4463,17 +4463,17 @@
         },
         {
             "name": "drupal/fullcalendar_view",
-            "version": "5.2.3",
+            "version": "5.2.4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/fullcalendar_view.git",
-                "reference": "5.2.3"
+                "reference": "5.2.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/fullcalendar_view-5.2.3.zip",
-                "reference": "5.2.3",
-                "shasum": "4840371fa77d335038651c6e56885671eba6d5da"
+                "url": "https://ftp.drupal.org/files/projects/fullcalendar_view-5.2.4.zip",
+                "reference": "5.2.4",
+                "shasum": "cb13b70d38c7f9b299b8661d3e8e03624d5079db"
             },
             "require": {
                 "drupal/core": "^9.2.0 || ^10 || ^11"
@@ -4481,8 +4481,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "5.2.3",
-                    "datestamp": "1726662266",
+                    "version": "5.2.4",
+                    "datestamp": "1734475570",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
