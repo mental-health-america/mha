@@ -1,11 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Method Drupal\\\\yoast_seo\\\\Controller\\\\SettingsController\\:\\:index\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Controller/SettingsController.php
-
-		-
 			message: "#^Method Drupal\\\\yoast_seo\\\\EntityAnalyser\\:\\:createEntityPreview\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/EntityAnalyser.php
@@ -22,6 +17,11 @@ parameters:
 
 		-
 			message: "#^Method Drupal\\\\yoast_seo\\\\EntityAnalyser\\:\\:replaceContextAwareTokens\\(\\) has parameter \\$metatags with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/EntityAnalyser.php
+
+		-
+			message: "#^Property Drupal\\\\yoast_seo\\\\EntityAnalyser\\:\\:\\$defaultTheme \\(string\\) does not accept mixed\\.$#"
 			count: 1
 			path: src/EntityAnalyser.php
 
@@ -61,17 +61,12 @@ parameters:
 			path: src/Form/AnalysisFormHandler.php
 
 		-
-			message: "#^Method Drupal\\\\yoast_seo\\\\Plugin\\\\Field\\\\FieldFormatter\\\\YoastSeoEmptyFormatter\\:\\:viewElements\\(\\) has parameter \\$items with generic interface Drupal\\\\Core\\\\Field\\\\FieldItemListInterface but does not specify its types\\: T$#"
-			count: 1
-			path: src/Plugin/Field/FieldFormatter/YoastSeoEmptyFormatter.php
-
-		-
 			message: "#^Method Drupal\\\\yoast_seo\\\\Plugin\\\\Field\\\\FieldFormatter\\\\YoastSeoEmptyFormatter\\:\\:viewElements\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Plugin/Field/FieldFormatter/YoastSeoEmptyFormatter.php
 
 		-
-			message: "#^Method Drupal\\\\yoast_seo\\\\Plugin\\\\Field\\\\FieldFormatter\\\\YoastSeoFormatter\\:\\:viewElements\\(\\) has parameter \\$items with generic interface Drupal\\\\Core\\\\Field\\\\FieldItemListInterface but does not specify its types\\: T$#"
+			message: "#^Access to an undefined property Drupal\\\\Core\\\\TypedData\\\\TypedDataInterface\\:\\:\\$status\\.$#"
 			count: 1
 			path: src/Plugin/Field/FieldFormatter/YoastSeoFormatter.php
 
@@ -86,22 +81,27 @@ parameters:
 			path: src/Plugin/Field/FieldType/YoastSeoItem.php
 
 		-
-			message: "#^Access to an undefined property Drupal\\\\Core\\\\TypedData\\\\TypedDataInterface\\:\\:\\$description\\.$#"
+			message: "#^Access to an undefined property Drupal\\\\Core\\\\Extension\\\\Extension\\:\\:\\$info\\.$#"
 			count: 1
 			path: src/Plugin/Field/FieldWidget/YoastSeoWidget.php
 
 		-
-			message: "#^Access to an undefined property Drupal\\\\Core\\\\TypedData\\\\TypedDataInterface\\:\\:\\$focus_keyword\\.$#"
+			message: "#^Cannot access property \\$description on mixed\\.$#"
 			count: 1
 			path: src/Plugin/Field/FieldWidget/YoastSeoWidget.php
 
 		-
-			message: "#^Access to an undefined property Drupal\\\\Core\\\\TypedData\\\\TypedDataInterface\\:\\:\\$status\\.$#"
+			message: "#^Cannot access property \\$focus_keyword on mixed\\.$#"
+			count: 1
+			path: src/Plugin/Field/FieldWidget/YoastSeoWidget.php
+
+		-
+			message: "#^Cannot access property \\$status on mixed\\.$#"
 			count: 2
 			path: src/Plugin/Field/FieldWidget/YoastSeoWidget.php
 
 		-
-			message: "#^Access to an undefined property Drupal\\\\Core\\\\TypedData\\\\TypedDataInterface\\:\\:\\$title\\.$#"
+			message: "#^Cannot access property \\$title on mixed\\.$#"
 			count: 1
 			path: src/Plugin/Field/FieldWidget/YoastSeoWidget.php
 
@@ -132,11 +132,6 @@ parameters:
 
 		-
 			message: "#^Method Drupal\\\\yoast_seo\\\\Plugin\\\\Field\\\\FieldWidget\\\\YoastSeoWidget\\:\\:formElement\\(\\) has parameter \\$form with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Plugin/Field/FieldWidget/YoastSeoWidget.php
-
-		-
-			message: "#^Method Drupal\\\\yoast_seo\\\\Plugin\\\\Field\\\\FieldWidget\\\\YoastSeoWidget\\:\\:formElement\\(\\) has parameter \\$items with generic interface Drupal\\\\Core\\\\Field\\\\FieldItemListInterface but does not specify its types\\: T$#"
 			count: 1
 			path: src/Plugin/Field/FieldWidget/YoastSeoWidget.php
 
@@ -181,17 +176,17 @@ parameters:
 			path: src/Plugin/Field/FieldWidget/YoastSeoWidget.php
 
 		-
+			message: "#^Parameter \\#1 \\$theme of method Drupal\\\\Core\\\\Extension\\\\ThemeHandlerInterface\\:\\:getName\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: src/Plugin/Field/FieldWidget/YoastSeoWidget.php
+
+		-
 			message: "#^Property Drupal\\\\yoast_seo\\\\Plugin\\\\Field\\\\FieldWidget\\\\YoastSeoWidget\\:\\:\\$jsTargets type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Plugin/Field/FieldWidget/YoastSeoWidget.php
 
 		-
 			message: "#^Method Drupal\\\\yoast_seo\\\\SeoManager\\:\\:getEnabledBundles\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/SeoManager.php
-
-		-
-			message: "#^Method Drupal\\\\yoast_seo\\\\SeoManager\\:\\:getSeoField\\(\\) return type with generic interface Drupal\\\\Core\\\\Field\\\\FieldItemListInterface does not specify its types\\: T$#"
 			count: 1
 			path: src/SeoManager.php
 
@@ -222,11 +217,16 @@ parameters:
 
 		-
 			message: "#^Cannot call method invalidateContainer\\(\\) on mixed\\.$#"
-			count: 1
+			count: 2
 			path: tests/src/Context/Setup.php
 
 		-
 			message: "#^Cannot call method rebuildContainer\\(\\) on mixed\\.$#"
+			count: 2
+			path: tests/src/Context/Setup.php
+
+		-
+			message: "#^Method Drupal\\\\Tests\\\\yoast_seo\\\\Context\\\\Setup\\:\\:updateSetting\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/src/Context/Setup.php
 
@@ -297,11 +297,6 @@ parameters:
 
 		-
 			message: "#^Function yoast_seo_entity_field_access\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: yoast_seo.module
-
-		-
-			message: "#^Function yoast_seo_entity_field_access\\(\\) has parameter \\$items with generic interface Drupal\\\\Core\\\\Field\\\\FieldItemListInterface but does not specify its types\\: T$#"
 			count: 1
 			path: yoast_seo.module
 

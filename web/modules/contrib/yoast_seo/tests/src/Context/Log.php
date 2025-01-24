@@ -28,7 +28,7 @@ class Log extends RawMinkContext {
    * Only contains levels we care about in tests (we ignore debug or info level
    * logs).
    *
-   * @return array<int,string>
+   * @return array<int, string>
    *   An array of log level labels.
    */
   protected static function getLogLevelLabelMap() : array {

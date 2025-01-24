@@ -37,7 +37,6 @@ function yoast_seo_entity_field_access($operation, FieldDefinitionInterface $fie
   if ($field_definition->getType() == 'yoast_seo') {
     return AccessResult::forbiddenIf(
       !($account->hasPermission('use yoast seo') || $account->hasPermission('administer yoast seo'))
-      || !($account->hasPermission('create url aliases') || $account->hasPermission('administer url aliases'))
       // Such edit meta tags permission doesn't exist anymore, and administer
       // meta tags is too restrictive.
       // Wait or changes.
