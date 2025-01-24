@@ -1,5 +1,6 @@
 # Drupal components, module names and programming terms
 commerceproduct
+commerceguys
 mediatype
 nodetype
 taxonomyterm
@@ -13,6 +14,10 @@ drupalspoons
 backported
 tnid
 randomstring
+logfile
+oneline
+mkdocs
+testgroup
 
 # Scheduler words
 timecheck
@@ -32,3 +37,6 @@ Wenlock
 
 # Real words missing from dictionary
 unrequired
+
+# Other
+Rnnn
