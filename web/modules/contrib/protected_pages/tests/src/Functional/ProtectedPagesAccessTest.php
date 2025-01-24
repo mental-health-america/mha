@@ -2,15 +2,15 @@
 
 namespace Drupal\Tests\protected_pages\Functional;
 
-use Drupal\node\Entity\Node;
 use Drupal\Tests\BrowserTestBase;
+use Drupal\node\Entity\Node;
 
 /**
  * Provides functional Drupal tests for access to protected pages and config.
  *
  * @group protected_pages
  */
-class ProtectedPagesAccess extends BrowserTestBase {
+class ProtectedPagesAccessTest extends BrowserTestBase {
   /**
    * Modules to install.
    *
@@ -49,12 +49,13 @@ class ProtectedPagesAccess extends BrowserTestBase {
     // Protect created node.
     $page_data = [
       'password' => bin2hex(random_bytes(9)),
+      'title' => 'This is a Node Title',
       'path' => '/node/' . $node->id(),
     ];
     $storage = \Drupal::service('protected_pages.storage');
     $storage->insertProtectedPage($page_data);
 
-    $page_path = 'node/' . $node->id();
+    $page_path = '/node/' . $node->id();
 
     // Enable page caching.
     $config = $this->config('system.performance');
@@ -84,7 +85,12 @@ class ProtectedPagesAccess extends BrowserTestBase {
     $this->drupalGet($page_path);
     $this->assertSession()->statusCodeEquals(200);
     $this->assertSession()->pageTextContains('Enter Password');
-    $this->assertSession()->addressEquals('protected-page?destination=/node/1&protected_page=1');
+    // When running tests on a local machine, remove '/web' from the
+    // Destination. This part of the Destination string is necessary
+    // for the tests to run correctly using Drupal GitLab Ci and
+    // depends on the behavior of the Drupal core.
+    // @todo Remove '/web' when destination will be build without it.
+    $this->assertSession()->addressEquals('protected-page?destination=/web/node/1&protected_page=1');
     $this->drupalLogout($user);
   }
 
