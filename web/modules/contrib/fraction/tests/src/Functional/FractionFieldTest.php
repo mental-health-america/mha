@@ -2,10 +2,10 @@
 
 namespace Drupal\Tests\fraction\Functional;
 
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\Tests\BrowserTestBase;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Tests the creation of fraction fields.
@@ -137,7 +137,10 @@ class FractionFieldTest extends BrowserTestBase {
       "{$field_name}[0][decimal]" => $max + 0.123,
     ];
     $this->submitForm($edit, $this->t('Save'));
-    $this->assertSession()->responseContains($this->t('%name: the value may be no greater than %maximum.', ['%name' => $field_name, '%maximum' => $max]));
+    $this->assertSession()->responseContains($this->t('%name: the value may be no greater than %maximum.', [
+      '%name' => $field_name,
+      '%maximum' => $max,
+    ]));
 
     // Try to set a value below the minimum value.
     $this->drupalGet('entity_test/add');
@@ -145,7 +148,10 @@ class FractionFieldTest extends BrowserTestBase {
       "{$field_name}[0][decimal]" => $min - 0.123,
     ];
     $this->submitForm($edit, $this->t('Save'));
-    $this->assertSession()->responseContains($this->t('%name: the value may be no less than %minimum.', ['%name' => $field_name, '%minimum' => $min]));
+    $this->assertSession()->responseContains($this->t('%name: the value may be no less than %minimum.', [
+      '%name' => $field_name,
+      '%minimum' => $min,
+    ]));
 
     // Test the fraction decimal element limits.
     $this->drupalGet('entity_test/add');
@@ -257,7 +263,10 @@ class FractionFieldTest extends BrowserTestBase {
       "{$field_name}[0][fraction][denominator]" => 10,
     ];
     $this->submitForm($edit, $this->t('Save'));
-    $this->assertSession()->responseContains($this->t('%name: the value may be no greater than %maximum.', ['%name' => $field_name, '%maximum' => $max]));
+    $this->assertSession()->responseContains($this->t('%name: the value may be no greater than %maximum.', [
+      '%name' => $field_name,
+      '%maximum' => $max,
+    ]));
 
     // Try to set a value below the minimum value.
     $this->drupalGet('entity_test/add');
@@ -266,7 +275,10 @@ class FractionFieldTest extends BrowserTestBase {
       "{$field_name}[0][fraction][denominator]" => 10,
     ];
     $this->submitForm($edit, $this->t('Save'));
-    $this->assertSession()->responseContains($this->t('%name: the value may be no less than %minimum.', ['%name' => $field_name, '%minimum' => $min]));
+    $this->assertSession()->responseContains($this->t('%name: the value may be no less than %minimum.', [
+      '%name' => $field_name,
+      '%minimum' => $min,
+    ]));
 
     // Empty denominator.
     $this->drupalGet('entity_test/add');
@@ -317,11 +329,12 @@ class FractionFieldTest extends BrowserTestBase {
     $page = $this->getSession()->getPage();
     $assert_session = $this->assertSession();
     $this->drupalGet('/admin/structure/types/manage/article/fields/add-field');
-    $page->selectFieldOption('new_storage_type', 'fraction');
+    $page->selectFieldOption('new_storage_type', 'number');
+    $page->pressButton('Continue');
     $page->fillField('label', 'Fraction field');
     $page->fillField('field_name', 'fraction_field');
-    $page->pressButton('Save and continue');
-    $page->pressButton('Save field settings');
+    $page->fillField('group_field_options_wrapper', 'fraction');
+    $page->pressButton('Continue');
     $page->fillField('settings[min]', 10.5);
     $page->fillField('settings[max]', 100.5);
     $page->pressButton('Save settings');

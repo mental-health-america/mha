@@ -2,10 +2,10 @@
 
 namespace Drupal\fraction\Plugin\migrate\process;
 
-use Drupal\migrate\ProcessPluginBase;
-use Drupal\migrate\MigrateExecutableInterface;
-use Drupal\migrate\Row;
 use Drupal\fraction\Fraction;
+use Drupal\migrate\MigrateExecutableInterface;
+use Drupal\migrate\ProcessPluginBase;
+use Drupal\migrate\Row;
 
 /**
  * Provides a 'DecimalFraction' migrate process plugin.

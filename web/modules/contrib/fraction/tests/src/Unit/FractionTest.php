@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\fraction\Unit;
 
-use Drupal\Tests\UnitTestCase;
 use Drupal\fraction\Fraction;
+use Drupal\Tests\UnitTestCase;
 
 /**
  * Provides tests for the Fraction class.

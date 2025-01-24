@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\fraction\Unit\process;
 
-use Drupal\Tests\migrate\Unit\process\MigrateProcessTestCase;
 use Drupal\fraction\Plugin\migrate\process\DecimalFraction;
+use Drupal\Tests\migrate\Unit\process\MigrateProcessTestCase;
 
 /**
  * Tests the decimal fraction process plugin.

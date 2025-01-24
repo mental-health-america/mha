@@ -51,11 +51,17 @@ class Fraction extends NumericFilter {
   protected function opBetween($field) {
     if ($this->operator == 'between') {
       $expression = $field . ' BETWEEN :min AND :max';
-      $this->query->addWhereExpression($this->options['group'], $expression, [':min' => $this->value['min'], ':max' => $this->value['max']]);
+      $this->query->addWhereExpression($this->options['group'], $expression, [
+        ':min' => $this->value['min'],
+        ':max' => $this->value['max'],
+      ]);
     }
     else {
       $expression = $field . ' <= :min OR ' . $field . ' >= :max';
-      $this->query->addWhereExpression($this->options['group'], $expression, [':min' => $this->value['min'], ':max' => $this->value['max']]);
+      $this->query->addWhereExpression($this->options['group'], $expression, [
+        ':min' => $this->value['min'],
+        ':max' => $this->value['max'],
+      ]);
     }
   }
 

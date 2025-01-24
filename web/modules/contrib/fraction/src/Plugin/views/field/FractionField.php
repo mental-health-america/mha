@@ -2,8 +2,8 @@
 
 namespace Drupal\fraction\Plugin\views\field;
 
-use Drupal\views\Plugin\views\field\EntityField;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\views\Plugin\views\field\EntityField;
 
 /**
  * Field handler for Fraction fields.

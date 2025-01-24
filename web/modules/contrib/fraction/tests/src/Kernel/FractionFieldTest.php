@@ -4,7 +4,6 @@ namespace Drupal\Tests\fraction\Kernel;
 
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
-use Drupal\fraction\Fraction;
 use Drupal\fraction\Plugin\Field\FieldType\FractionItem;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
