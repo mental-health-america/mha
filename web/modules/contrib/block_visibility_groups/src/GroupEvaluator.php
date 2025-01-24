@@ -88,6 +88,14 @@ class GroupEvaluator implements GroupEvaluatorInterface {
       if ($condition instanceof ContextAwarePluginInterface) {
         try {
           $contexts = $this->contextRepository->getRuntimeContexts(array_values($condition->getContextMapping()));
+
+          // Skip when any of the contexts is not set.
+          foreach ($contexts as $context) {
+            if ($context->getContextData()->getValue() === NULL) {
+              return FALSE;
+            }
+          }
+
           $this->contextHandler->applyContextMapping($condition, $contexts);
           $have_1_testable_condition = TRUE;
         }
