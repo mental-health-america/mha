@@ -395,6 +395,12 @@ class SettingsForm extends ConfigFormBase {
       '#type' => 'checkbox',
       '#default_value' => $config->get('overlay_default_collapse'),
     ];
+
+    $form['overlay']['overlay_cookie_secure'] = [
+      '#title' => $this->t('Set "secure" attribute on overlay cookie'),
+      '#type' => 'checkbox',
+      '#default_value' => $config->get('overlay_cookie_secure'),
+    ];
     // Invalidate siteimprove_toolbar cache tag to ensure that the toolbar's
     // cache is properly invalidated.
     Cache::invalidateTags(['siteimprove_toolbar']);
@@ -472,6 +478,7 @@ class SettingsForm extends ConfigFormBase {
       ->set('domain_plugin_id', $domain_plugin)
       ->set('prepublish_enabled', $form_state->getValue('prepublish_enabled'))
       ->set('overlay_default_collapse', $form_state->getValue('overlay_default_collapse'))
+      ->set('overlay_cookie_secure', $form_state->getValue('overlay_cookie_secure'))
       ->set('api_username', $form_state->getValue('api_username'))
       ->set('api_key', $form_state->getValue('api_key'))
       ->set('enabled_content_types', $form_state->getValue('enabled_content_types'))

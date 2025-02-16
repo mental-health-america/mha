@@ -29,10 +29,13 @@ siteimprove.settings:
     enabled_group_types:
       type: sequence
       sequence:
-        - type: string        
+        - type: string
     overlay_default_collapse:
       type: boolean
       label: 'Siteimprove overlay collapse by default'
+    overlay_cookie_secure:
+      type: boolean
+      label: 'Set "secure" attribute for overlay cookie'
     use_latest_experience:
       type: boolean
       label: 'Use latest experience'

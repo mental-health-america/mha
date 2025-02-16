@@ -8,7 +8,7 @@ dependencies:
   - siteimprove:siteimprove
   - domain:domain_access
 
-# Information added by Drupal.org packaging script on 2024-01-04
-version: '2.0.2'
+# Information added by Drupal.org packaging script on 2025-02-07
+version: '2.0.3'
 project: 'siteimprove'
-datestamp: 1704376528
+datestamp: 1738928592

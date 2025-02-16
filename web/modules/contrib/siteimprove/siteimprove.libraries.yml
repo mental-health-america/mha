@@ -5,24 +5,21 @@ siteimprove:
     - core/drupal
     - core/jquery
     - core/once
-    - core/js-cookie
+    - js_cookie/js-cookie
 siteimprove.overlay:
   license:
     name: GPL-2.0+
+    url: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
   js:
     https://cdn.siteimprove.net/cms/overlay-v1.js:
       type: external
 siteimprove.overlay_latest:
   license:
     name: GPL-2.0+
+    url: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
   js:
     https://cdn.siteimprove.net/cms/overlay-latest.js:
       type: external
-siteimprove.prepublish:
-  version: VERSION
-  css:
-    theme:
-      css/siteimprove.prepublish.css: {}
 siteimprove.settings:
   css:
     theme:
@@ -31,3 +28,4 @@ siteimprove.toolbar:
   css:
     theme:
       css/siteimprove.toolbar.css: {}
+

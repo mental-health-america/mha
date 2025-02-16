@@ -58,3 +58,16 @@ function siteimprove_update_8103() {
   $settings->set('use_latest_experience', TRUE);
   $settings->save();
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ * Make sure that the reduired dependency for js_cookie can be met,
+ * and is enabled.
+ */
+function siteimprove_update_8104() {
+  $moduleHandler = \Drupal::service('module_handler');
+  if (!$moduleHandler->moduleExists('js_cookie')) {
+    \Drupal::service('module_installer')->install(['js_cookie']);
+  }
+}

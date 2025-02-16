@@ -4,8 +4,10 @@ description: 'Siteimprove allows users to continuously test, fix and optimize th
 core_version_requirement: ^9.2 || ^10
 package: Siteimprove
 configure: siteimprove.settings_form
+dependencies:
+  - js_cookie:js_cookie
 
-# Information added by Drupal.org packaging script on 2024-01-04
-version: '2.0.2'
+# Information added by Drupal.org packaging script on 2025-02-07
+version: '2.0.3'
 project: 'siteimprove'
-datestamp: 1704376528
+datestamp: 1738928592

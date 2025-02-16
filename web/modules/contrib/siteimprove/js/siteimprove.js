@@ -10,12 +10,103 @@
   if (typeof NodeList !== 'undefined' && NodeList.prototype && !NodeList.prototype.forEach) {
     NodeList.prototype.forEach = Array.prototype.forEach;
   }
+
+   function convertRelativeToAbsolute(baseUrl, relativeUrl) {
+     // Create an anchor element to parse URLs
+     const anchor = document.createElement('a')
+     anchor.href = relativeUrl
+
+     // If the URL is already absolute, return it
+     if (anchor.protocol && anchor.hostname) {
+       return relativeUrl
+     }
+
+     // Otherwise, create the absolute URL
+     return new URL(relativeUrl, baseUrl).href
+   }
+
+   // Function to update all image src attributes to absolute URLs
+   function updateImageUrlsToAbsolute(dom = document, win = window) {
+     // Get all image elements
+     const images = dom.querySelectorAll('img')
+
+     // Iterate through each image element
+     images.forEach(function (img) {
+       // Convert the src to an absolute URL
+       img.src = convertRelativeToAbsolute(win.location.href, img.src)
+     })
+   }
+
+   const getDom = async function (url, nonce) {
+     const iframeContainer = document.createElement('div')
+     iframeContainer.setAttribute('id', 'div_iframe')
+     document.body.appendChild(iframeContainer)
+     const separator = url.includes('?') ? '&' : '?'
+     iframeContainer.innerHTML = `<iframe id='domIframe' src=${url}${separator}si_preview_nonce=${nonce} style='height:100vh; width:100%'></iframe>`
+     const iframe = document.getElementById('domIframe')
+     const promise = new Promise(function (resolve, reject) {
+       iframe.addEventListener(
+         'load',
+         () => {
+           iframe.contentWindow.document.querySelector(
+             '#toolbar-administration'
+           ).innerHTML = ''
+           iframe.contentWindow.document
+             .querySelectorAll('iframe')
+             .forEach(function (item) {
+               item.innerHTML = ''
+               item.src = ''
+             })
+           iframe.contentWindow.document
+             .querySelectorAll('.contextual')
+             .forEach(function (item) {
+               item.innerHTML = ''
+             })
+           iframe.contentWindow.document
+             .querySelectorAll('.contextual-links')
+             .forEach(function (item) {
+               item.innerHTML = ''
+             })
+           iframe.contentWindow.document
+             .querySelectorAll('.node-preview-container')
+             .forEach(function (item) {
+               item.innerHTML = ''
+             })
+           iframe.contentWindow.document
+             .querySelectorAll('.si-toggle-container')
+             .forEach(function (item) {
+               item.innerHTML = ''
+             })
+           iframe.contentWindow.document
+             .querySelectorAll('.si-iframe-container')
+             .forEach(function (item) {
+               item.innerHTML = ''
+             })
+
+           updateImageUrlsToAbsolute(
+             iframe.contentWindow.document,
+             iframe.contentWindow
+           )
+           const cleanDom = iframe.contentWindow.document
+           document.body.removeChild(iframeContainer)
+           resolve(cleanDom)
+         },
+         {once: true}
+       )
+     })
+
+     const documentReturned = await promise
+     $('.si-overlay').remove()
+     return documentReturned
+   }
+
   var siteimprove = {
     input: function () {
       this.url = drupalSettings.siteimprove.input.url;
       this.method = 'input';
       this.common();
     },
+
     domain: function () {
       this.url = drupalSettings.siteimprove.domain.url;
       this.method = 'domain';
@@ -49,6 +140,21 @@
         _si.push([self.method, self.cleanHtml(document_), url, drupalSettings.siteimprove.token, function () { console.log('Pre-publish check ordered (flat dom version)'); }]);
       });
     },
+    registerPrepublishCallback: function () {
+      this.urls = drupalSettings.siteimprove.input && drupalSettings.siteimprove.input.url ? drupalSettings.siteimprove.input.url : drupalSettings.siteimprove.domain.url;
+      if (!Array.isArray(this.urls)) {
+        this.urls = [this.urls];
+      }
+      this.method = 'registerPrepublishCallback';
+      var _si = window._si || [];
+      var self = this;
+      this.urls.forEach(function (url) {
+        const getDomCallback = function () {
+          return getDom(url);
+        }
+        _si.push([self.method, getDomCallback]);
+      });
+    },
     onhighlight: function () {
       // Creating "highlight" event for other modules / themes to react on.
       let event;
@@ -57,14 +163,7 @@
       this.method = 'onHighlight';
       var _si = window._si || [];
       _si.push([this.method, function (highlightInfo) {
-        // Remove existing highlight css class from html.
-        document.querySelectorAll('.siteimprove-prepublish-highlight').forEach(function (item) { item.classList.remove('siteimprove-prepublish-highlight'); });
-
-        // Add highlight class and scroll to highlighted html.
-        let highlightSelector = highlightInfo.highlights[0].selector;
-        let highlight = document.querySelector(highlightSelector);
-        highlight.classList.add('siteimprove-prepublish-highlight');
-        highlight.scrollIntoView({behavior: 'smooth', block: 'center'});
+        _si.push(['applyDefaultHighlighting', highlightInfo, document, window]);
 
         // Dispatch highlight event.
         event.highlightSelector = highlightSelector;
@@ -80,11 +179,15 @@
       var self = this;
       this.urls.forEach(function (url) {
         _si.push([self.method, url, drupalSettings.siteimprove.token]);
+        self.onhighlight();
+        self.registerPrepublishCallback();
       });
     },
     // Clean html for contextual links, toolbar, etc.
     cleanHtml: function (origHtml) {
-      origHtml.querySelector('#toolbar-administration').innerHTML = '';
+      if (origHtml.querySelector('#toolbar-administration')) {
+        origHtml.querySelector('#toolbar-administration').innerHTML = '';
+      }
       origHtml.querySelectorAll('iframe').forEach(function (item) { item.innerHTML = ''; item.src = ''; });
       origHtml.querySelectorAll('.contextual').forEach(function (item) { item.innerHTML = ''; });
       origHtml.querySelectorAll('.contextual-links').forEach(function (item) { item.innerHTML = ''; });
@@ -131,6 +234,10 @@
             siteimprove.events.contentcheck();
           }, 200);
         }
+
+        let $buttons = $('.contextual-region .siteimprove-contentcheck-button, .contextual-region .siteimprove-recheck-button');
+        $buttons.removeClass('is-active');
+        $buttons.parent().removeClass('is-active');
 
         $('.siteimprove-contentcheck-button').click(function (event) {
           event.preventDefault();
@@ -182,16 +289,31 @@
       var sicmsplugin = cookies.get('sicmsplugin');
 
       if (!sicmsplugin) {
-        let siOverlaySettings = drupalSettings?.siteimprove?.overlay_default_collapse ?? null;
+        let siOverlaySettings = null;
+        let secure = false;
+
+        if (drupalSettings && drupalSettings.siteimprove) {
+          if ('overlay_default_collapse' in drupalSettings.siteimprove) {
+            siOverlaySettings = drupalSettings.siteimprove.overlay_default_collapse;
+          }
+          if ('overlay_cookie_secure' in drupalSettings.siteimprove) {
+            secure = drupalSettings.siteimprove.overlay_cookie_secure;
+          }
+        }
+
+        // let siOverlaySettings = drupalSettings?.siteimprove?.overlay_default_collapse ?? null;
+        // let secure = drupalSettings?.siteimprove?.overlay_cookie_secure ?? false;
         if (siOverlaySettings) {
           cookies.set('sicmsplugin', OVERLAY_COLLAPSED, {
             domain: document.domain,
-            path: '/'
+            path: '/',
+            secure: secure
           });
         } else {
           cookies.set('sicmsplugin', OVERLAY_OPEN, {
             domain: document.domain,
-            path: '/'
+            path: '/',
+            secure: secure
           });
         }
       }

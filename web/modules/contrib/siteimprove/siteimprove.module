@@ -102,6 +102,7 @@ function siteimprove_toolbar() {
   // Set overlay collapse value for js.
   $toolbar_items = [];
   $toolbar_items['siteimprove_toolbar']['tray']['#attached']['drupalSettings']['siteimprove']['overlay_default_collapse'] = $config->get('overlay_default_collapse');
+  $toolbar_items['siteimprove_toolbar']['tray']['#attached']['drupalSettings']['siteimprove']['overlay_cookie_secure'] = $config->get('overlay_cookie_secure');
 
   // Prepublish should be available for an enabled taxonomy, content type or
   // group type.
@@ -117,9 +118,6 @@ function siteimprove_toolbar() {
       '#url' => Url::fromUserInput('#'),
       '#attributes' => [
         'class' => ['siteimprove-contentcheck-button'],
-      ],
-      '#wrapper_attributes' => [
-        'class' => ['menu-item'],
       ],
     ];
   }
@@ -145,9 +143,6 @@ function siteimprove_toolbar() {
       '#attributes' => [
         'class' => ['siteimprove-recheck-button'],
       ],
-      '#wrapper_attributes' => [
-        'class' => ['menu-item'],
-      ],
     ];
     $toolbar_items['siteimprove_toolbar']['tray']['#attached']['drupalSettings']['siteimprove']['recheck'] = \Drupal::service('siteimprove.utils')->getSiteimproveSettings($urls, 'recheck', FALSE);
   }
@@ -158,9 +153,6 @@ function siteimprove_toolbar() {
       '#type' => 'link',
       '#title' => 'Configuration',
       '#url' => Url::fromRoute('siteimprove.settings_form'),
-      '#wrapper_attributes' => [
-        'class' => ['menu-item'],
-      ],
     ];
   }
 
@@ -307,24 +299,8 @@ function siteimprove_page_attachments(array &$attachments) {
       $method = $use_latest_experience ? 'clear' : 'domain';
     }
 
-    $type = '';
-    $bundle = '';
+    
     $parameters = $route_match->getParameters();
-    foreach ($parameters as $parameter) {
-      if (is_object($parameter) && $parameter instanceof Node) {
-        $type = 'enabled_content_types';
-        $bundle = $parameter->bundle();
-      }
-      elseif (is_object($parameter) && $parameter instanceof Term) {
-        $type = 'enabled_taxonomies';
-        $bundle = $parameter->bundle();
-      }
-    }
-    $conf = $type ? $config->get($type) : [];
-    $enabled = $type && isset($conf[$bundle]) && $conf[$bundle];
-    if (\Drupal::currentUser()->hasPermission('use siteimprove prepublish') && $bundle && $enabled) {
-      $attachments['#attached']['library'][] = 'siteimprove/siteimprove.prepublish';
-    }
     if (!empty($method)) {
       $parameters = \Drupal::routeMatch()->getParameters();
       foreach ($parameters as $param) {
@@ -356,3 +332,4 @@ function siteimprove_page_attachments(array &$attachments) {
     }
   }
 }
+
