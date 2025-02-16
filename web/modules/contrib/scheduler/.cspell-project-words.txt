@@ -18,6 +18,7 @@ logfile
 oneline
 mkdocs
 testgroup
+ksection
 
 # Scheduler words
 timecheck

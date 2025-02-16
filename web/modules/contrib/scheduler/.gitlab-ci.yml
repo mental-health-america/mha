@@ -23,12 +23,12 @@ variables:
   OPT_IN_TEST_NEXT_MAJOR: 1
   OPT_IN_TEST_DRUPAL9: 1
   OPT_IN_TEST_DRUPAL8: 1
-  RUN_JOB_UPGRADE_STATUS: 1
 
   _SHOW_ENVIRONMENT_VARIABLES: 1
   _PHPUNIT_CONCURRENT: 1
   _PHPUNIT_TESTGROUPS: ''
   _CSPELL_EXTRA: '--dot'
+  _ALL_VALIDATE_ALLOW_FAILURE: 0
 
 ################
 # Job overrides
@@ -85,7 +85,11 @@ variables:
     # Show the last two commits. Current directory /builds/project/scheduler ($CI_PROJECT_DIR) is correct.
     - git show -2 --stat --oneline
     - |
-      [[ $CI_PIPELINE_SOURCE == "merge_request_event" ]] && BASELINE=${CI_MERGE_REQUEST_TARGET_BRANCH_SHA:-$CI_MERGE_REQUEST_DIFF_BASE_SHA} && git diff --stat $BASELINE && git diff $BASELINE -- .gitlab-ci.yml | head -n 30 || true
+      if [ $CI_PIPELINE_SOURCE == "merge_request_event" ]; then
+        BASELINE=${CI_MERGE_REQUEST_TARGET_BRANCH_SHA:-$CI_MERGE_REQUEST_DIFF_BASE_SHA}
+        git diff --stat $BASELINE
+        git diff $BASELINE -- .gitlab-ci.yml | head -n 30
+      fi
     - *show-variables
     # - cat composer.json
     - COLUMNS=130 composer show | grep -E '\/(core |rules|commerce|entity|inline_entity_form|workbench|drush|devel_generate|address|coder)'
@@ -113,8 +117,7 @@ composer (previous major):
 composer (next minor):
   rules:
     - !reference [ .opt-in-next-minor-rule ]
-    - when: manual
-      allow_failure: true
+    - *manual-if-not-mr-rule
 
 composer (next major):
   rules:
@@ -173,27 +176,20 @@ mkdocs:
 # -------------------------------- VALIDATE ------------------------------------
 
 eslint:
-  allow_failure: false
   after_script:
+    - echo -e "\e[0Ksection_start:`date +%s`:eslint_files[collapsed=true]\r\e[0KShow ESLINT and PRETTIER files"
     - echo "Change to directory above the project"
     - cd $CI_PROJECT_DIR/$_WEB_ROOT/modules/custom
     - ls -lG .{eslint,prettier}* || true
     - echo "Change to the project directory"
     - cd $CI_PROJECT_DIR/$_WEB_ROOT/modules/custom/$CI_PROJECT_NAME
     - ls -lG .{eslint,prettier}* || true
-    - test -f .eslintignore && echo "===  This is .eslintignore  ===" && cat .eslintignore || true
-    - test -f .prettierignore && echo "=== This is .prettierignore ===" && cat .prettierignore || true
-
-stylelint:
-  allow_failure: false
-
-phpcs:
-  allow_failure: false
+    - echo -e "\e[0Ksection_end:`date +%s`:eslint_files\r\e[0K"
 
 phpstan:
   after_script:
-    - test -f phpstan.neon && echo "=== This is phpstan.neon ===" && cat phpstan.neon
-    - php $CI_PROJECT_DIR/scripts/phpstan-baseline-summary.php phpstan-baseline-to-fix.neon
+    - pwd && ls -l phpstan* && test -f phpstan.neon && echo "=== This is phpstan.neon ===" && cat phpstan.neon
+    - php $CI_PROJECT_DIR/scripts/phpstan-baseline-summary.php phpstan-baseline-to-fix.neon || true
 
 # -------------------------------- TEST ----------------------------------------
 
@@ -201,7 +197,7 @@ phpstan:
   # Run some test groups manually not automatically.
   # @todo put back "scheduler_drush" when https://www.drupal.org/project/scheduler/issues/3359998 is solved.
   # @todo put back "scheduler_workbench" when https://www.drupal.org/project/scheduler/issues/3495229 is solved.
-  - if: $_MATRIX_VALUE == "scheduler_drush" || $_MATRIX_VALUE == "scheduler_workbench"
+  - if: $_MATRIX_VALUE =~ /(drush|workbench)/
     when: manual
     allow_failure: true
   - when: on_success

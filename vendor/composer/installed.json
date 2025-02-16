@@ -7615,18 +7615,18 @@
         },
         {
             "name": "drupal/scheduler",
-            "version": "2.2.0",
-            "version_normalized": "2.2.0.0",
+            "version": "2.2.1",
+            "version_normalized": "2.2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/scheduler.git",
-                "reference": "2.2.0"
+                "reference": "2.2.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/scheduler-2.2.0.zip",
-                "reference": "2.2.0",
-                "shasum": "b33463ea677f5e14e4f5602a261b3d86360ddc14"
+                "url": "https://ftp.drupal.org/files/projects/scheduler-2.2.1.zip",
+                "reference": "2.2.1",
+                "shasum": "ce9a9405ea88140fbdd53f1e3ed3741b6f27266c"
             },
             "require": {
                 "drupal/core": "^8 || ^9 || ^10 || ^11"
@@ -7642,8 +7642,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.2.0",
-                    "datestamp": "1736417382",
+                    "version": "2.2.1",
+                    "datestamp": "1738771365",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
