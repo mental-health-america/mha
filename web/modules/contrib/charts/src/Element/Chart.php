@@ -5,6 +5,7 @@ namespace Drupal\charts\Element;
 use Drupal\charts\ChartManager;
 use Drupal\charts\Plugin\chart\Library\ChartBase;
 use Drupal\charts\Plugin\chart\Library\ChartInterface;
+use Drupal\charts\Plugin\chart\Library\LibraryRetrieverTrait;
 use Drupal\charts\TypeManager;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -23,6 +24,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class Chart extends RenderElement implements ContainerFactoryPluginInterface {
 
   use StringTranslationTrait;
+  use LibraryRetrieverTrait;
 
   /**
    * The config factory service.
@@ -280,29 +282,6 @@ class Chart extends RenderElement implements ContainerFactoryPluginInterface {
         unset($array[$key]);
       }
     }
-  }
-
-  /**
-   * Get the library.
-   *
-   * @param string $library
-   *   The library.
-   *
-   * @return string
-   *   The library.
-   */
-  private function getLibrary($library) {
-    $definitions = $this->chartsManager->getDefinitions();
-    if (!$library || $library === 'site_default') {
-      $charts_settings = $this->configFactory->get('charts.settings');
-      $default_settings_library = $charts_settings->get('charts_default_settings.library');
-      $library = !empty($default_settings_library) ? $default_settings_library : key($definitions);
-    }
-    elseif (!isset($definitions[$library])) {
-      $library = key($definitions);
-    }
-
-    return $library;
   }
 
   /**
