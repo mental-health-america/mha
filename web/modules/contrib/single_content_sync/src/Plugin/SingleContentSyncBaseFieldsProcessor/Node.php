@@ -108,7 +108,6 @@ class Node extends SingleContentSyncBaseFieldsProcessorPluginBase implements Con
       'langcode' => $entity->language()->getId(),
       'created' => $entity->getCreatedTime(),
       'author' => $owner ? $owner->getEmail() : NULL,
-      'url' => $entity->hasField('path') ? $entity->get('path')->alias : NULL,
       'revision_log_message' => $entity->getRevisionLogMessage(),
       'revision_uid' => $entity->getRevisionUserId(),
     ];
@@ -141,14 +140,6 @@ class Node extends SingleContentSyncBaseFieldsProcessorPluginBase implements Con
       'created' => $values['created'],
       'status' => $values['status'],
     ];
-
-    // We check if node url alias is filled in.
-    if (isset($values['url'])) {
-      $baseFields['path'] = [
-        'alias' => $values['url'],
-        'pathauto' => empty($values['url']),
-      ];
-    }
 
     // Load node author.
     $account_provided = !empty($values['author']);

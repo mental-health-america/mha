@@ -127,13 +127,4 @@ interface ContentSyncHelperInterface {
    */
   public function getSiteUuid(): string;
 
-  /**
-   * Returns TRUE if the provided entities contain disallowed entities.
-   *
-   * @return bool
-   *   Returns TRUE if the provided entities contain disallowed entities,
-   *   else returns FALSE.
-   */
-  public function containsDisallowedEntities(array $entities): bool;
-
 }

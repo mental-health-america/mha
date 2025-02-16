@@ -2,8 +2,10 @@
 
 namespace Drupal\single_content_sync\Form;
 
+use Drupal\Component\Utility\Environment;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\ByteSizeMarkup;
 use Drupal\single_content_sync\ContentImporterInterface;
 use Drupal\single_content_sync\ContentSyncHelperInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -69,9 +71,11 @@ class ContentImportForm extends FormBase {
     // validator approach.
     if (floatval(\Drupal::VERSION) < 10.2) {
       $validators['file_validate_extensions'] = ['zip yml'];
+      $max_upload_size = format_size(Environment::getUploadMaxSize());
     }
     else {
       $validators['FileExtension'] = ['zip yml'];
+      $max_upload_size = ByteSizeMarkup::create(Environment::getUploadMaxSize());
     }
 
     $form['upload_fid'] = [
@@ -79,7 +83,10 @@ class ContentImportForm extends FormBase {
       '#upload_location' => "temporary://import/zip",
       '#upload_validators' => $validators,
       '#title' => $this->t('Upload a file with content to import'),
-      '#description' => $this->t('Upload a Zip or YAML file with the previously exported content.'),
+      '#description' => $this->t(
+        'Upload a Zip or YAML file with the previously exported content. Maximum file size: @size.',
+        ['@size' => $max_upload_size]
+      ),
     ];
     $form['content'] = [
       '#type' => 'textarea',

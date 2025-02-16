@@ -98,10 +98,6 @@ class TextField extends SingleContentSyncFieldProcessorPluginBase implements Con
     foreach ($value as &$item) {
       $text = $item['value'];
 
-      if (stristr($text, '<drupal-media') === FALSE) {
-        continue;
-      }
-
       $dom = Html::load($text);
       $xpath = new \DOMXPath($dom);
       $embed_entities = [];
@@ -117,6 +113,26 @@ class TextField extends SingleContentSyncFieldProcessorPluginBase implements Con
         }
       }
 
+      foreach ($xpath->query('//a[normalize-space(@href)!="" and normalize-space(@data-entity-type)!="" and normalize-space(@data-entity-uuid)!=""]') as $element) {
+        /** @var \DOMElement $element */
+        $entity_type_id = $element->getAttribute('data-entity-type');
+        $uuid = $element->getAttribute('data-entity-uuid');
+        $linked_entity = $this->entityRepository->loadEntityByUuid($entity_type_id, $uuid);
+        assert($linked_entity === NULL || $linked_entity instanceof FieldableEntityInterface);
+
+        if (!$this->exporter->isReferenceCached($linked_entity)) {
+          $embed_entities[] = $this->exporter->doExportToArray($linked_entity);
+        }
+        else {
+          $embed_entities[] = [
+            'uuid' => $linked_entity->uuid(),
+            'entity_type' => $linked_entity->getEntityTypeId(),
+            'base_fields' => $this->exporter->exportBaseValues($linked_entity),
+            'bundle' => $linked_entity->bundle(),
+          ];
+        }
+      }
+
       $item['embed_entities'] = $embed_entities;
     }
 
@@ -127,11 +143,52 @@ class TextField extends SingleContentSyncFieldProcessorPluginBase implements Con
    * {@inheritdoc}
    */
   public function importFieldValue(FieldableEntityInterface $entity, string $fieldName, array $value): void {
-    foreach ($value as $item) {
+    foreach ($value as $delta => $item) {
       $embed_entities = $item['embed_entities'] ?? [];
 
+      if (array_key_exists('embed_entities', $item)) {
+        unset($value[$delta]['embed_entities']);
+      }
+
       foreach ($embed_entities as $embed_entity) {
-        $this->importer->doImport($embed_entity);
+        if ($this->importer->isFullEntity($embed_entity)) {
+          $this->importer->doImport($embed_entity);
+        }
+        else {
+          $referenced_entity = $this
+            ->entityRepository
+            ->loadEntityByUuid($embed_entity['entity_type'], $embed_entity['uuid']);
+
+          // Create a stub entity without custom field values.
+          if (!$referenced_entity) {
+            $this->importer->createStubEntity($embed_entity);
+          }
+        }
+      }
+
+      $text = $item['value'];
+      $dom = Html::load($text);
+      $xpath = new \DOMXPath($dom);
+      $needs_update = FALSE;
+
+      foreach ($xpath->query('//a[normalize-space(@href)!="" and normalize-space(@data-entity-type)!="" and normalize-space(@data-entity-uuid)!=""]') as $element) {
+        /** @var \DOMElement $element */
+        $entity_type_id = $element->getAttribute('data-entity-type');
+        $uuid = $element->getAttribute('data-entity-uuid');
+        $linked_entity = $this->entityRepository->loadEntityByUuid($entity_type_id, $uuid);
+        assert($linked_entity === NULL || $linked_entity instanceof FieldableEntityInterface);
+
+        if ($linked_entity) {
+          $needs_update = TRUE;
+          $element->setAttribute('href', $linked_entity->toUrl('canonical', [
+            'alias' => TRUE,
+            'path_processing' => FALSE,
+          ])->toString());
+        }
+      }
+
+      if ($needs_update) {
+        $value[$delta]['value'] = Html::serialize($dom);
       }
     }
 

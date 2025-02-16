@@ -151,9 +151,8 @@ class ContentSyncCommands extends DrushCommands {
     // Get the entities that will be exported.
     $entities = $this->commandHelper->getEntitiesToExport($entityType, $bundle, $all_allowed_content, $entity_ids_to_export);
 
-    // Abort command if there are disallowed entities.
-    if ($this->contentSyncHelper->containsDisallowedEntities($entities)) {
-      $this->messenger->addError($this->t("The export couldn't be completed since it contains disallowed content. Please check the configuration of the Single Content Sync module, or export only allowed content."));
+    if (!$entities) {
+      $this->messenger->addWarning($this->t('Nothing to export. Please check if your content is allowed to be exported in the configuration page of the module.'));
       return;
     }
 

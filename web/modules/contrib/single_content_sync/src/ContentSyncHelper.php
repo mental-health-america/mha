@@ -184,13 +184,13 @@ class ContentSyncHelper implements ContentSyncHelperInterface {
     // Validate that entity type and bundle exists.
     $definition = $this->entityTypeManager->getDefinition($content['entity_type']);
     if (!$definition) {
-      throw new \Exception('The content of the YAML file is not valid. Make sure that entity type of the imported content does exist on your site.');
+      throw new \Exception(sprintf('The content of the YAML file is not valid. Make sure that entity type "%s" of the imported content does exist on your site.', $content['entity_type']));
     }
     else {
       // Validate that bundle exists.
       $available_bundles = $this->entityTypeBundleInfo->getBundleInfo($content['entity_type']);
       if (empty($available_bundles[$content['bundle']])) {
-        throw new \Exception('The content of the YAML file is not valid. Make sure that bundle of the imported content does exist on your site.');
+        throw new \Exception(sprintf('The content of the YAML file is not valid. Make sure that bundle "%s" of the imported content with entity type "%s" does exist on your site.', $content['bundle'], $content['entity_type']));
       }
     }
 
@@ -250,22 +250,6 @@ class ContentSyncHelper implements ContentSyncHelperInterface {
    */
   public function getSiteUuid(): string {
     return $this->configFactory->get('system.site')->get('uuid');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function containsDisallowedEntities(array $entities): bool {
-    $allowed_entity_types = $this->configFactory->get('single_content_sync.settings')->get('allowed_entity_types');
-    foreach ($entities as $entity) {
-      $entity_type_id = $entity->getEntityTypeId();
-      $allow = array_key_exists($entity_type_id, $allowed_entity_types) && ($allowed_entity_types[$entity_type_id] === [] || in_array($entity->bundle(), $allowed_entity_types[$entity_type_id], TRUE));
-
-      if (!$allow) {
-        return TRUE;
-      }
-    }
-    return FALSE;
   }
 
 }

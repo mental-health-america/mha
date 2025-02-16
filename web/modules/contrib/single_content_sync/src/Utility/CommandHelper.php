@@ -128,36 +128,63 @@ class CommandHelper implements CommandHelperInterface {
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
-  public function getEntitiesToExport(string $entityType = 'node', string $bundle = '', bool $all_allowed_content = FALSE, string $entity_ids_to_export = NULL): array {
-    if ($all_allowed_content) {
-      $allowed_entity_types = $this->configFactory->get('single_content_sync.settings')->get('allowed_entity_types');
-      $entities = array_reduce($this->entityTypeManager->getDefinitions(), function ($carry, $entity_type) use ($allowed_entity_types) {
-        $entity_type_id = $entity_type->id();
-        if (array_key_exists($entity_type_id, $allowed_entity_types)) {
-          $list = $entity_type_id === 'block_content'
-            ? $this->entityTypeManager->getStorage($entity_type_id)->loadByProperties(['reusable' => TRUE])
-            : $this->entityTypeManager->getStorage($entity_type_id)->loadMultiple();
+  public function getEntitiesToExport(string $entity_type = 'node', string $bundle = '', bool $all_allowed_content = FALSE, string $entity_ids_to_export = NULL): array {
+    $allowed_entity_types = $this->configFactory->get('single_content_sync.settings')->get('allowed_entity_types');
 
-          return array_merge($carry, $list);
+    if ($entity_ids_to_export) {
+      return isset($allowed_entity_types[$entity_type])
+        ? $this->getSelectedEntities($entity_type, $entity_ids_to_export)
+        : [];
+    }
+
+    // Check if specific entity type is allowed.
+    if (!$all_allowed_content) {
+      if (isset($allowed_entity_types[$entity_type])) {
+        $allowed_bundles = $allowed_entity_types[$entity_type];
+        $allowed_entity_types = [$entity_type => $allowed_bundles];
+
+        // Check if specific bundle of specific entity type is allowed.
+        if ($bundle) {
+          $is_bundle_allowed = !$allowed_bundles || in_array($bundle, $allowed_bundles, TRUE);
+          $allowed_entity_types = $is_bundle_allowed
+            ? [$entity_type => [$bundle]]
+            : [];
         }
-        return $carry;
-      }, []);
+
+      }
+      else {
+        // Specific entity type is not allowed, nothing to export.
+        $allowed_entity_types = [];
+      }
     }
-    elseif ($entity_ids_to_export) {
-      $entities = $this->getSelectedEntities($entityType, $entity_ids_to_export);
+
+    $entities = [];
+    foreach ($allowed_entity_types as $entity_type_id => $bundles) {
+      $properties = [];
+
+      // Do not export inline blocks (it's exported as part of LB field).
+      if ($entity_type_id === 'block_content') {
+        $properties['reusable'] = TRUE;
+      }
+
+      // Filter content by specific bundles.
+      if ($bundles) {
+        $definition = $this->entityTypeManager->getDefinition($entity_type_id);
+        if (!$definition->hasKey('bundle')) {
+          throw new \Exception("The entity type {$entity_type_id} does not have bundles");
+        }
+
+        $properties[$definition->getKey('bundle')] = $bundles;
+      }
+
+      $entities = array_merge(
+        $entities,
+        $this->entityTypeManager->getStorage($entity_type_id)->loadByProperties($properties)
+      );
     }
-    elseif (!empty($bundle)) {
-      $bundle_names = [
-        'node' => 'type',
-        'taxonomy_term' => 'vid',
-      ];
-      $entities = $this->entityTypeManager->getStorage($entityType)->loadByProperties([$bundle_names[$entityType] => $bundle]);
-    }
-    else {
-      $entities = $this->entityTypeManager->getStorage($entityType)->loadMultiple();
-    }
+
     return $entities;
   }
 
@@ -184,7 +211,7 @@ class CommandHelper implements CommandHelperInterface {
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public function moveFile(FileInterface $file, string $output_dir, string $file_target): string {
     if (!$output_dir) {
@@ -193,13 +220,12 @@ class CommandHelper implements CommandHelperInterface {
 
     $target_base_name = basename($file_target);
     $moved_file_path = "{$output_dir}/{$target_base_name}";
-    $this->fileSystem->move($file->getFileUri(), $moved_file_path);
 
-    return $moved_file_path;
+    return $this->fileSystem->move($file->getFileUri(), $moved_file_path);
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public function getRealDirectory(string $output_path): string {
     $grandparent_path = $this->root;

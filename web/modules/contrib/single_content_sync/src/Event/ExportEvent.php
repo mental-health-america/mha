@@ -3,7 +3,7 @@
 namespace Drupal\single_content_sync\Event;
 
 use Drupal\Component\EventDispatcher\Event;
-use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
 
 /**
  * The event dispatched when the entity is exported.
@@ -13,9 +13,9 @@ class ExportEvent extends Event {
   /**
    * The entity being exported.
    *
-   * @var \Drupal\Core\Entity\ContentEntityInterface
+   * @var \Drupal\Core\Entity\FieldableEntityInterface
    */
-  protected ContentEntityInterface $entity;
+  protected FieldableEntityInterface $entity;
 
   /**
    * The content being exported.
@@ -25,25 +25,45 @@ class ExportEvent extends Event {
   protected array $content;
 
   /**
+   * The translation flag.
+   *
+   * @var bool
+   */
+  protected bool $isTranslation;
+
+  /**
    * Constructs a new ExportEvent object.
    *
-   * @param \Drupal\Core\Entity\ContentEntityInterface $entity
+   * @param \Drupal\Core\Entity\FieldableEntityInterface $entity
    *   The entity being exported.
    * @param array $content
    *   The content being exported.
+   * @param bool $is_translation
+   *   The translation flag.
    */
-  public function __construct(ContentEntityInterface $entity, array $content) {
+  public function __construct(FieldableEntityInterface $entity, array $content, bool $is_translation = FALSE) {
     $this->entity = $entity;
     $this->content = $content;
+    $this->isTranslation = $is_translation;
+  }
+
+  /**
+   * Whether the export is translation.
+   *
+   * @return bool
+   *   The translation flag.
+   */
+  public function isTranslation(): bool {
+    return $this->isTranslation;
   }
 
   /**
    * Gets the entity being exported.
    *
-   * @return \Drupal\Core\Entity\ContentEntityInterface
+   * @return \Drupal\Core\Entity\FieldableEntityInterface
    *   The entity being exported.
    */
-  public function getEntity(): ContentEntityInterface {
+  public function getEntity(): FieldableEntityInterface {
     return $this->entity;
   }
 
@@ -52,9 +72,9 @@ class ExportEvent extends Event {
    *
    * @return array
    *   The exported content. The array keys are:
-   *   - 'entity_type': The entity type.
-   *   - 'bundle': The entity bundle.
-   *   - 'uuid': The entity UUID.
+   *   - 'entity_type': The entity type. Not available for translation export.
+   *   - 'bundle': The entity bundle. Not available for translation export.
+   *   - 'uuid': The entity UUID. Not available for translation export.
    *   - 'base_fields': The entity base fields.
    *   - 'custom_fields': The entity custom fields.
    */

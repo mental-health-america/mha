@@ -233,8 +233,10 @@ class ContentImporterTest extends KernelTestBase {
 
     // Finally, set the body field and make sure it's set.
     $importer->setFieldValue($node, 'body', [
-      'value' => 'test node body',
-      'format' => 'plain_text',
+      [
+        'value' => 'test node body',
+        'format' => 'plain_text',
+      ],
     ]);
     $this->assertEquals('test node body', $node->body->value);
     $this->assertEquals('plain_text', $node->body->format);
@@ -280,8 +282,10 @@ class ContentImporterTest extends KernelTestBase {
     if ($includeCustomFields) {
       $data['custom_fields'] = [
         'body' => [
-          'value' => 'test node body',
-          'format' => 'plain_text',
+          0 => [
+            'value' => 'test node body',
+            'format' => 'plain_text',
+          ],
         ],
       ];
     }

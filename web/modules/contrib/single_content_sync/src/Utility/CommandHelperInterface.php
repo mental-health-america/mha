@@ -30,7 +30,7 @@ interface CommandHelperInterface {
   /**
    * Get the entities to export.
    *
-   * @param string $entityType
+   * @param string $entity_type
    *   The entity type to export, e.g. 'node'.
    * @param string $bundle
    *   The specific bundle for nodes or taxonomy terms.
@@ -42,7 +42,7 @@ interface CommandHelperInterface {
    * @return array
    *   Returns an array of entities to export.
    */
-  public function getEntitiesToExport(string $entityType = 'node', string $bundle = '', bool $all_allowed_content = FALSE, string $entity_ids_to_export = NULL): array;
+  public function getEntitiesToExport(string $entity_type = 'node', string $bundle = '', bool $all_allowed_content = FALSE, string $entity_ids_to_export = NULL): array;
 
   /**
    * Get selected entities.

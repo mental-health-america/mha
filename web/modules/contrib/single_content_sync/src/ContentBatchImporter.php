@@ -21,7 +21,12 @@ class ContentBatchImporter {
    * Import content operation.
    */
   public static function batchImportFile($original_file_path, &$context): void {
-    $context['results'][] = self::contentImporter()->importFromFile($original_file_path);
+    try {
+      $context['results'][] = self::contentImporter()->importFromFile($original_file_path);
+    }
+    catch (\Throwable $exception) {
+      \Drupal::messenger()->addError($exception->getMessage());
+    }
   }
 
   /**

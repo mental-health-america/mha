@@ -2,6 +2,7 @@
 
 namespace Drupal\single_content_sync\Plugin\SingleContentSyncFieldProcessor;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Field\FieldItemListInterface;
@@ -9,6 +10,7 @@ use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\TempStore\PrivateTempStore;
 use Drupal\file\FileInterface;
+use Drupal\focal_point\FocalPointManagerInterface;
 use Drupal\single_content_sync\ContentSyncHelperInterface;
 use Drupal\single_content_sync\SingleContentSyncFieldProcessorPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -52,6 +54,20 @@ class FileAsset extends SingleContentSyncFieldProcessorPluginBase implements Con
   protected FileSystemInterface $fileSystem;
 
   /**
+   * The config factory service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected ConfigFactoryInterface $configFactory;
+
+  /**
+   * The focal_point manager.
+   *
+   * @var \Drupal\focal_point\FocalPointManagerInterface
+   */
+  protected FocalPointManagerInterface $focalPointManager;
+
+  /**
    * Constructs new FileAsset plugin instance.
    *
    * @param array $configuration
@@ -68,6 +84,10 @@ class FileAsset extends SingleContentSyncFieldProcessorPluginBase implements Con
    *   The content sync helper service.
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   The file system.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The config factory.
+   * @param \Drupal\focal_point\FocalPointManagerInterface|null $focal_point_manager
+   *   The focal_point manager.
    */
   public function __construct(
     array $configuration,
@@ -76,7 +96,9 @@ class FileAsset extends SingleContentSyncFieldProcessorPluginBase implements Con
     EntityTypeManagerInterface $entity_type_manager,
     PrivateTempStore $private_temp_store,
     ContentSyncHelperInterface $content_sync_helper,
-    FileSystemInterface $file_system
+    FileSystemInterface $file_system,
+    ConfigFactoryInterface $config_factory,
+    FocalPointManagerInterface $focal_point_manager = NULL,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
@@ -84,6 +106,11 @@ class FileAsset extends SingleContentSyncFieldProcessorPluginBase implements Con
     $this->privateTempStore = $private_temp_store;
     $this->contentSyncHelper = $content_sync_helper;
     $this->fileSystem = $file_system;
+    $this->configFactory = $config_factory;
+
+    if ($focal_point_manager) {
+      $this->focalPointManager = $focal_point_manager;
+    }
   }
 
   /**
@@ -97,7 +124,9 @@ class FileAsset extends SingleContentSyncFieldProcessorPluginBase implements Con
       $container->get('entity_type.manager'),
       $container->get('single_content_sync.store'),
       $container->get('single_content_sync.helper'),
-      $container->get('file_system')
+      $container->get('file_system'),
+      $container->get('config.factory'),
+      $container->get('focal_point.manager', ContainerInterface::NULL_ON_INVALID_REFERENCE)
     );
   }
 
@@ -122,6 +151,24 @@ class FileAsset extends SingleContentSyncFieldProcessorPluginBase implements Con
         'uri' => $file->getFileUri(),
         'url' => $file->createFileUrl(FALSE),
       ];
+
+      // Export focal point.
+      if (isset($this->focalPointManager) && $this->configFactory->get('focal_point.settings')) {
+        $crop_type = $this->configFactory->get('focal_point.settings')->get('crop_type');
+        $crop = $this->focalPointManager->getCropEntity($file, $crop_type);
+        if (!$crop->isNew() && !$crop->get('x')->isEmpty() && !$crop->get('y')->isEmpty()) {
+          $file_item['crop'] = [
+            'width' => $field->width ?? 0,
+            'height' => $field->height ?? 0,
+          ];
+          $file_item['crop'] += $this->focalPointManager->absoluteToRelative(
+            $crop->get('x')->value,
+            $crop->get('y')->value,
+            $file_item['crop']['width'],
+            $file_item['crop']['height'],
+          );
+        }
+      }
 
       $assets[] = $file_item['uri'];
 
@@ -196,6 +243,20 @@ class FileAsset extends SingleContentSyncFieldProcessorPluginBase implements Con
 
       if (isset($file_item['alt'])) {
         $file_value['alt'] = $file_item['alt'];
+      }
+
+      // Import focal point metadata.
+      if (isset($file_item['crop']) && isset($this->focalPointManager)) {
+        $crop_type = $this->configFactory->get('focal_point.settings')->get('crop_type');
+        $crop = $this->focalPointManager->getCropEntity($file, $crop_type);
+
+        $this->focalPointManager->saveCropEntity(
+          $file_item['crop']['x'],
+          $file_item['crop']['y'],
+          $file_item['crop']['width'],
+          $file_item['crop']['height'],
+          $crop
+        );
       }
 
       if (isset($file_item['title'])) {

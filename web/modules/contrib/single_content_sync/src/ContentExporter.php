@@ -13,6 +13,7 @@ use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\field\FieldConfigInterface;
 use Drupal\single_content_sync\Event\ExportEvent;
+use Drupal\single_content_sync\Event\ExportFieldEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -277,6 +278,10 @@ class ContentExporter implements ContentExporterInterface {
 
           $output['translations'][$language->getId()]['base_fields'] = $this->exportBaseValues($translated_entity);
           $output['translations'][$language->getId()]['custom_fields'] = $this->exportCustomValues($translated_entity, TRUE);
+
+          $exportEvent = new ExportEvent($translated_entity, $output['translations'][$language->getId()], TRUE);
+          $this->eventDispatcher->dispatch($exportEvent);
+          $output['translations'][$language->getId()] = $exportEvent->getContent();
         }
       }
     }
@@ -315,6 +320,11 @@ class ContentExporter implements ContentExporterInterface {
       $base_fields['moderation_state'] = $entity->get('moderation_state')->value;
     }
 
+    // Support path field for multiple entity types.
+    if ($entity->hasField('path')) {
+      $base_fields['url'] = $entity->get('path')->alias;
+    }
+
     return $base_fields;
   }
 
@@ -346,25 +356,16 @@ class ContentExporter implements ContentExporterInterface {
         $field->getName()
       );
 
-    // Retrieve the exportable value, if plugin exists.
-    $value = $fieldProcessor
-      ? $fieldProcessor->exportFieldValue($field)
-      : NULL;
+    // If field type is not supported, it will simply get the value as it is.
+    $value = $fieldProcessor->exportFieldValue($field);
+
+    // Trigger event to alter the field export.
+    $event = new ExportFieldEvent($field, $value);
+    $this->eventDispatcher->dispatch($event);
+    $value = $event->getFieldValue();
 
     // Alter value by using hook_content_export_field_value_alter().
-    // Note that hook is executed even if plugin does not exist; thus, it is
-    // possible to provide some value even if the field type is not supported.
-    $this->moduleHandler->alterDeprecated('Deprecated as of single_content_sync 1.4.0; implement SingleContentSyncFieldProcessor plugin instead to provide support for new field types.', 'content_export_field_value', $value, $field);
-
-    // Display a message about non-supported field types.
-    if (!$fieldProcessor && $value === NULL) {
-      $field_definition = $field->getFieldDefinition();
-
-      $this->messenger->addWarning($this->t('The value of %field_label is empty because field type "@field_type" is not exportable out-of-the-box. Check README for a workaround.', [
-        '%field_label' => $field_definition->getLabel(),
-        '@field_type' => $field_definition->getType(),
-      ]));
-    }
+    $this->moduleHandler->alterDeprecated('Deprecated as of single_content_sync 1.4.0; implement SingleContentSyncFieldProcessor plugin instead to provide support for new field types or subscribe to ExportFieldEvent event in your event subscriber.', 'content_export_field_value', $value, $field);
 
     return $value;
   }

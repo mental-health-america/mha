@@ -152,15 +152,15 @@ class ContentFileGenerator implements ContentFileGeneratorInterface {
     foreach ($assets as $file_uri) {
       // Add file to the zip.
       $file_full_path = $this->fileSystem->realpath($file_uri);
-      $file_relative_path = explode('://', $file_uri)[1];
+      [$scheme, $file_relative_path] = explode('://', $file_uri);
 
       // Don't add external files as it can be imported by absolute url.
       if ($file_full_path) {
-        $zip->getArchive()->addFile($file_full_path, "assets/{$file_relative_path}");
+        $zip->getArchive()->addFile($file_full_path, "assets/{$scheme}/{$file_relative_path}");
       }
       elseif ($data = file_get_contents($file_uri)) {
         // Add file contents to the ZIP archive with the same relative path.
-        $zip->getArchive()->addFromString("assets/{$file_relative_path}", $data);
+        $zip->getArchive()->addFromString("assets/{$scheme}/{$file_relative_path}", $data);
       }
     }
 

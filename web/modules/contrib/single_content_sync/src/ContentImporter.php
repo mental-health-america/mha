@@ -11,9 +11,11 @@ use Drupal\Core\Entity\RevisionableInterface;
 use Drupal\Core\Entity\RevisionLogInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\File\FileSystemInterface;
+use Drupal\Core\StreamWrapper\StreamWrapperManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\TypedData\TranslatableInterface;
 use Drupal\single_content_sync\Event\ImportEvent;
+use Drupal\single_content_sync\Event\ImportFieldEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -87,6 +89,13 @@ class ContentImporter implements ContentImporterInterface {
   protected EventDispatcherInterface $eventDispatcher;
 
   /**
+   * The stream wrapper manager.
+   *
+   * @var \Drupal\Core\StreamWrapper\StreamWrapperManagerInterface
+   */
+  protected StreamWrapperManagerInterface $streamWrapperManager;
+
+  /**
    * ContentExporter constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -107,6 +116,8 @@ class ContentImporter implements ContentImporterInterface {
    *   The entity base field processor plugin manager.
    * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
    *   The event dispatcher.
+   * @param \Drupal\Core\StreamWrapper\StreamWrapperManagerInterface $stream_wrapper_manager
+   *  The stream wrapper manager.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
@@ -117,7 +128,8 @@ class ContentImporter implements ContentImporterInterface {
     TimeInterface $time,
     SingleContentSyncFieldProcessorPluginManagerInterface $field_processor_plugin_manager,
     SingleContentSyncBaseFieldsProcessorPluginManagerInterface $entity_base_fields_processor_plugin_manager,
-    EventDispatcherInterface $event_dispatcher
+    EventDispatcherInterface $event_dispatcher,
+    StreamWrapperManagerInterface $stream_wrapper_manager
   ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->entityRepository = $entity_repository;
@@ -128,6 +140,7 @@ class ContentImporter implements ContentImporterInterface {
     $this->fieldProcessorPluginManager = $field_processor_plugin_manager;
     $this->entityBaseFieldsProcessorPluginManager = $entity_base_fields_processor_plugin_manager;
     $this->eventDispatcher = $event_dispatcher;
+    $this->streamWrapperManager = $stream_wrapper_manager;
   }
 
   /**
@@ -263,15 +276,19 @@ class ContentImporter implements ContentImporterInterface {
     $entityProcessor = $this->entityBaseFieldsProcessorPluginManager
       ->getEntityPluginInstance($entity->getEntityTypeId());
 
-    if (!$entityProcessor) {
-      throw new \Exception(sprintf('"%s" does not have entity field base processor defined.', $entity->getEntityTypeId()));
-    }
-
     $values = $entityProcessor->mapBaseFieldsValues($fields, $entity);
 
     // Set moderation state if it is supported for multiple entities.
     if (isset($fields['moderation_state'])) {
       $values['moderation_state'] = $fields['moderation_state'];
+    }
+
+    // Handle url alias if entity type supports it.
+    if ($entity->hasField('path')) {
+      $values['path'] = [
+        'alias' => $fields['url'] ?? NULL,
+        'pathauto' => 0,
+      ];
     }
 
     // It's possible to export a single translation of the entity. In this case,
@@ -307,14 +324,17 @@ class ContentImporter implements ContentImporterInterface {
         $entity->bundle(),
         $field_name
       );
-    if ($fieldProcessor) {
-      $fieldProcessor->importFieldValue($entity, $field_name, $field_value);
-    }
+
+    // If field type is not supported, it will simply set value as it is.
+    $fieldProcessor->importFieldValue($entity, $field_name, $field_value);
+
+    // But you can alter it by implementing an event subscriber.
+    $event = new ImportFieldEvent($entity, $field_name, $field_value);
+    $this->eventDispatcher->dispatch($event);
 
     // Alter setting a field value during the import by using
     // hook_content_import_field_value().
-    // This hook was previously used to support importing new field types.
-    $this->moduleHandler->alterDeprecated('Deprecated as of single_content_sync 1.4.0; implement SingleContentSyncFieldProcessor plugin instead to provide support for new field types.', 'content_import_field_value', $entity, $field_name, $field_value);
+    $this->moduleHandler->alterDeprecated('Deprecated as of single_content_sync 1.4.0; use ImportFieldEvent to update fields value before setting into the entity, implement SingleContentSyncFieldProcessor plugin instead to provide support for new field types.', 'content_import_field_value', $entity, $field_name, $field_value);
   }
 
   /**
@@ -432,7 +452,20 @@ class ContentImporter implements ContentImporterInterface {
    * {@inheritdoc}
    */
   public function importAssets(string $extracted_file_path, string $zip_file_path): void {
-    $destination = str_replace('assets/', 'public://', $zip_file_path);
+    // Validate schema dynamically based on folder structure.
+    // For example assets/{schema}/file.png.
+    if (preg_match('/^assets\/([^\/]*)\//', $zip_file_path, $matches)) {
+      // Check if subfolder name represents a file schema.
+      if ($this->streamWrapperManager->isValidScheme($matches[1])) {
+        $destination = str_replace("assets/{$matches[1]}/", "{$matches[1]}://", $zip_file_path);
+      }
+    }
+
+    // Fallback to public schema destination.
+    if (!isset($destination)) {
+      $destination = str_replace('assets/', 'public://', $zip_file_path);
+    }
+
     $directory = $this->fileSystem->dirname($destination);
     $this->contentSyncHelper->prepareFilesDirectory($directory);
     $this->fileSystem->move($extracted_file_path, $destination, FileSystemInterface::EXISTS_REPLACE);

@@ -21,6 +21,7 @@
         "drupal/color_field": "*",
         "drupal/geofield": "*",
         "drupal/geolocation": "*",
+        "drupal/focal_point": "*",
         "drupal/weight": "*",
         "drupal/yearonly": "*",
         "drupal/paragraphs": "*",
